@@ -38,7 +38,7 @@ class _WorkItemState extends State<WorkItem> {
           width: 200,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           decoration: BoxDecoration(
-            color: primaryColor.withOpacity(0.1),
+            color: AppColor.secondary,
             borderRadius: BorderRadius.circular(5),
           ),
           child: Text(title),

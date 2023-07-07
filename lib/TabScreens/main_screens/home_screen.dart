@@ -4,7 +4,7 @@ import 'package:yes_broker/constants/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/widgets/calendar_view.dart';
 import 'package:yes_broker/widgets/timeline_view.dart';
-import 'package:yes_broker/widgets/todo_list_view.dart';
+import 'package:yes_broker/widgets/todo/todo_list_view.dart';
 import 'package:yes_broker/widgets/workitems_list.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -16,13 +16,13 @@ class HomeScreen extends StatelessWidget {
     Size _size = MediaQuery.of(context).size;
 
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: primaryColor.withOpacity(0.1),
+            color: AppColor.secondary,
             spreadRadius: 12,
             blurRadius: 4,
-            offset: const Offset(5, 5),
+            offset: Offset(5, 5),
           ),
         ],
         color: Colors.white,
@@ -54,11 +54,11 @@ class HomeScreen extends StatelessWidget {
                   child: CustomCalendarView(),
                 ),
                 Expanded(
-                  flex: 3,
+                  flex: 4,
                   child: Container(
                     margin: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      color: primaryColor.withOpacity(0.1),
+                      color: AppColor.secondary,
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: const Column(

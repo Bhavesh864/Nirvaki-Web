@@ -16,7 +16,7 @@ class TodoListView extends StatelessWidget {
       child: SingleChildScrollView(
         child: Container(
           decoration: BoxDecoration(
-              color: primaryColor.withOpacity(0.1),
+              color: AppColor.secondary.withOpacity(0.1),
               borderRadius: BorderRadius.circular(15)),
           padding: const EdgeInsets.all(5),
           margin: EdgeInsets.symmetric(

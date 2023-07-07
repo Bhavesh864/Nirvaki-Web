@@ -6,6 +6,8 @@ import 'package:yes_broker/constants/colors.dart';
 class CustomTextInput extends StatefulWidget {
   final TextEditingController controller;
   final String? labelText;
+  final Widget? label;
+  final bool enabled;
   final String hintText;
   final IconData? leftIcon;
   final bool? obscureText;
@@ -36,7 +38,9 @@ class CustomTextInput extends StatefulWidget {
       this.initialvalue,
       this.maxLines = 1,
       this.minLines = 1,
-      this.readonly = false})
+      this.readonly = false,
+      this.label,
+      this.enabled = true})
       : super(key: key);
 
   @override
@@ -57,13 +61,15 @@ class CustomTextInputState extends State<CustomTextInput> {
     return SizedBox(
       height: 50,
       child: TextFormField(
+        enabled: widget.enabled,
         style: const TextStyle(
-          color: primaryColor,
+          color: AppColor.primary,
         ),
         controller: widget.controller,
         decoration: InputDecoration(
+          label: widget.label,
           contentPadding:
-              const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+              const EdgeInsets.symmetric(vertical: 13, horizontal: 10),
           labelText: widget.labelText,
           hintText: widget.hintText,
           hintStyle: widget.hintstyle,
@@ -79,13 +85,13 @@ class CustomTextInputState extends State<CustomTextInput> {
                 )
               : null,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(6),
           ),
           isDense: true,
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: const BorderSide(
-              color: primaryColor,
+              color: AppColor.primary,
             ),
           ),
         ),
@@ -123,7 +129,7 @@ class CustomButton extends StatefulWidget {
       required this.text,
       required this.onPressed,
       this.fontsize = 16,
-      this.buttonColor = primaryColor,
+      this.buttonColor = AppColor.primary,
       this.textColor = Colors.white,
       this.rightIcon,
       this.leftIcon,
@@ -206,12 +212,14 @@ class CustomCheckbox extends StatefulWidget {
   final bool value;
   final ValueChanged<bool>? onChanged;
   final String? label;
+  final Color? fillColor;
 
   const CustomCheckbox({
     Key? key,
     required this.value,
     this.onChanged,
     this.label,
+    this.fillColor,
   }) : super(key: key);
 
   @override
@@ -227,11 +235,43 @@ class CustomCheckboxState extends State<CustomCheckbox> {
     _value = widget.value;
   }
 
+  // checkboxlisttile -------------==
+  // Theme(
+  //   data: ThemeData(
+  //       splashColor: Colors.transparent,
+  //       highlightColor: Colors.transparent,
+  //       hoverColor: Colors.transparent),
+  //   child: ListTileTheme(
+  //     horizontalTitleGap: 0,
+  //     contentPadding: const EdgeInsets.all(0),
+  //     child: CheckboxListTile(
+  //       value: isChecked,
+  //       dense: true,
+  //       onChanged: (newVal) {
+  //         setState(() {
+  //           isChecked = newVal!;
+  //         });
+  //       },
+  //       contentPadding: const EdgeInsets.only(bottom: 15),
+  //       visualDensity:
+  //           const VisualDensity(horizontal: 0, vertical: -4),
+  //       fillColor: const MaterialStatePropertyAll(AppColor.primary),
+  //       title:
+  //           const CustomText(title: 'Use Same number for whatsapp'),
+  //       controlAffinity: ListTileControlAffinity.leading,
+  //       checkboxShape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(3),
+  //       ),
+  //     ),
+  //   ),
+  // ),
+
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Checkbox(
+          fillColor: MaterialStatePropertyAll(widget.fillColor),
           value: _value,
           onChanged: (value) {
             setState(() {

@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:yes_broker/TabScreens/main_screens/chat_screen.dart';
 import 'package:yes_broker/TabScreens/main_screens/inventroy_screen.dart';
 import 'package:yes_broker/TabScreens/main_screens/lead_screen.dart';
 import 'package:yes_broker/constants/colors.dart';
 import 'package:yes_broker/constants/constants.dart';
+import 'package:yes_broker/controllers/menu_controller.dart';
 import 'package:yes_broker/widgets/app/app_bar.dart';
+import 'package:yes_broker/widgets/app/speed_dial_button.dart';
 import 'package:yes_broker/widgets/calendar_view.dart';
-import 'package:yes_broker/widgets/todo_list_view.dart';
+import 'package:yes_broker/widgets/todo/todo_list_view.dart';
 
-class SmallScreen extends StatefulWidget {
-  const SmallScreen({super.key});
+class SmallScreen extends StatelessWidget {
+  final SideMenuController menuController = Get.put(SideMenuController());
 
-  @override
-  State<SmallScreen> createState() => _SmallScreenState();
-}
+  SmallScreen({super.key});
 
-class _SmallScreenState extends State<SmallScreen> {
   final List<Widget> _pages = [
     const SingleChildScrollView(
       physics: ClampingScrollPhysics(),
@@ -31,78 +31,37 @@ class _SmallScreenState extends State<SmallScreen> {
     const ChatScreen(),
   ];
 
-  int _selectedPageIndex = 0;
-
-  void _selectPage(int index) {
-    setState(() {
-      _selectedPageIndex = index;
-    });
-  }
+  // int menuController.selectedMobilePageIndex.value = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: MobileAppBar(context, GlobalKey()),
-      bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor: const Color.fromARGB(255, 158, 153, 153),
-        selectedItemColor: primaryColor,
-        showUnselectedLabels: false,
-        currentIndex: _selectedPageIndex,
-        onTap: _selectPage,
-        backgroundColor: Colors.white,
-        items: List.generate(
-          bottomBarItems.length,
-          (index) => BottomNavigationBarItem(
-            icon: Icon(
-              bottomBarItems[index]["icon"],
-              color: index == _selectedPageIndex ? primaryColor : Colors.black,
+    return Obx(
+      () => Scaffold(
+        appBar: MobileAppBar(context, GlobalKey()),
+        bottomNavigationBar: BottomNavigationBar(
+          unselectedItemColor: const Color.fromARGB(255, 158, 153, 153),
+          selectedItemColor: AppColor.primary,
+          showUnselectedLabels: false,
+          currentIndex: menuController.selectedMobilePageIndex.value,
+          onTap: (value) => menuController.selectMobilePage(value),
+          backgroundColor: Colors.white,
+          items: List.generate(
+            bottomBarItems.length,
+            (index) => BottomNavigationBarItem(
+              icon: Icon(
+                bottomBarItems[index]["icon"],
+                color: index == menuController.selectedMobilePageIndex.value
+                    ? AppColor.primary
+                    : Colors.black,
+              ),
+              label: bottomBarItems[index]['title'],
             ),
-            label: bottomBarItems[index]['title'],
           ),
         ),
+        body: _pages[menuController.selectedMobilePageIndex.value],
+        floatingActionButton: CustomSpeedDialButton(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
-      body: _pages[_selectedPageIndex],
-      // floatingActionButton: _buildBottomBar(),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
-
-  // Widget _buildBottomBar() {
-  //   return Container(
-  //     height: 55,
-  //     width: double.infinity,
-  //     // margin: EdgeInsets.symmetric(horizontal: 15),
-  //     decoration: BoxDecoration(
-  //       color: AppColor.bottomBarColor,
-  //       // borderRadius: BorderRadius.circular(20),
-  //       boxShadow: [
-  //         BoxShadow(
-  //           color: AppColor.shadowColor.withOpacity(0.1),
-  //           blurRadius: 1,
-  //           spreadRadius: 1,
-  //           offset: const Offset(0, 1),
-  //         )
-  //       ],
-  //     ),
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //       crossAxisAlignment: CrossAxisAlignment.end,
-  //       children: List.generate(
-  //         barItems.length,
-  //         (index) => BottomBarItem(
-  //           activeTab == index
-  //               ? barItems[index]["active_icon"]
-  //               : barItems[index]["icon"],
-  //           isActive: activeTab == index,
-  //           activeColor: AppColor.primary,
-  //           onTap: () {
-  //             setState(() {
-  //               activeTab = index;
-  //             });
-  //           },
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }

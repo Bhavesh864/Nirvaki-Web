@@ -11,7 +11,7 @@ class ChatScreen extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: primaryColor.withOpacity(0.1),
+            color: AppColor.secondary,
             spreadRadius: 12,
             blurRadius: 4,
             offset: const Offset(5, 5),
@@ -19,7 +19,7 @@ class ChatScreen extends StatelessWidget {
         ],
         color: Colors.white,
       ),
-      child: Center(
+      child: const Center(
         child: Text('Chat Screen'),
       ),
     );
