@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "868897852943",
+    "project_id": "brokr-in",
+    "storage_bucket": "brokr-in.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:868897852943:android:da6e9a154a1d6117979d7a",
+        "android_client_info": {
+          "package_name": "com.example.yes_broker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "868897852943-e4g4uopjbpvg22qkhtqccflahs6vbvcc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUeJdbgyHJrlipvGFe6Jz4HY3Ftrw2tmI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "868897852943-e4g4uopjbpvg22qkhtqccflahs6vbvcc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

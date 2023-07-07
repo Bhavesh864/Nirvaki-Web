@@ -34,7 +34,7 @@ class CustomTimeLineView extends StatelessWidget {
                         ? TimelineTile(
                             isFirst: index == 0 ? true : false,
                             indicatorStyle: const IndicatorStyle(
-                              color: AppColor.primary,
+                              color: primaryColor,
                               height: 8,
                               width: 8,
                               padding: EdgeInsets.only(
@@ -42,7 +42,7 @@ class CustomTimeLineView extends StatelessWidget {
                               ),
                             ),
                             beforeLineStyle: const LineStyle(
-                              color: AppColor.primary,
+                              color: primaryColor,
                               thickness: 2,
                             ),
                             alignment: TimelineAlign.start,
@@ -52,7 +52,7 @@ class CustomTimeLineView extends StatelessWidget {
                             isLast: true,
                             indicatorStyle: const IndicatorStyle(
                               indicator: CircleAvatar(
-                                backgroundColor: AppColor.primary,
+                                backgroundColor: primaryColor,
                                 child: Icon(
                                   Icons.add,
                                   size: 14,
@@ -64,7 +64,7 @@ class CustomTimeLineView extends StatelessWidget {
                               ),
                             ),
                             beforeLineStyle: const LineStyle(
-                              color: AppColor.primary,
+                              color: primaryColor,
                               thickness: 2,
                             ),
                             alignment: TimelineAlign.start,

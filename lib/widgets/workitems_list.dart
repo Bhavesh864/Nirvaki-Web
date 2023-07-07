@@ -15,7 +15,7 @@ class WorkItemsList extends StatelessWidget {
       child: SingleChildScrollView(
         child: Container(
           decoration: BoxDecoration(
-            color: AppColor.secondary,
+            color: primaryColor.withOpacity(0.1),
             borderRadius: BorderRadius.circular(15),
           ),
           padding: const EdgeInsets.all(5),
@@ -43,19 +43,6 @@ class WorkItemsList extends StatelessWidget {
                     : Container(),
                 SizedBox(
                   // height: height! * 0.8,
-                  // child: ListView.builder(
-                  //   shrinkWrap: true,
-                  //   physics: Responsive.isMobile(context)
-                  //       ? const NeverScrollableScrollPhysics()
-                  //       : const ClampingScrollPhysics(),
-                  //   itemCount: workItemData.length,
-                  //   itemBuilder: (context, index) {
-                  //     return CustomCard(
-                  //       index: index,
-                  //       isTodoItem: false,
-                  //     );
-                  //   },
-                  // ),
                   child: WorkItem(),
                 ),
               ],

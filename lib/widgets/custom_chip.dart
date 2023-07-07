@@ -2,20 +2,17 @@
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/constants/colors.dart';
 
 class CustomChip extends StatelessWidget {
   final Widget label;
-  final Color? color;
+  final Color color;
   final Widget? avatar;
-  final double? paddingHorizontal;
 
   const CustomChip({
     Key? key,
     required this.label,
-    this.color = AppColor.chipGreyColor,
+    required this.color,
     this.avatar,
-    this.paddingHorizontal,
   }) : super(key: key);
 
   @override
@@ -25,18 +22,14 @@ class CustomChip extends StatelessWidget {
           left: Responsive.isMobile(context) ? 0 : 1,
           right: Responsive.isMobile(context) ? 8 : 1),
       child: Chip(
-        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        avatar: avatar,
-        padding: EdgeInsets.symmetric(
-            horizontal: paddingHorizontal ?? 0, vertical: 0),
-        labelPadding: const EdgeInsets.symmetric(horizontal: 3),
-        side: BorderSide.none,
-        backgroundColor: color,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-        ),
-        label: label,
-      ),
+          avatar: avatar,
+          labelPadding: const EdgeInsets.only(left: 4),
+          side: BorderSide.none,
+          backgroundColor: color,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+          label: label),
     );
   }
 }
