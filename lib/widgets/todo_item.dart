@@ -1,29 +1,40 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:yes_broker/Customs/responsive.dart';
 
 import 'package:yes_broker/constants/colors.dart';
 import 'package:yes_broker/constants/constants.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/Customs/responsive.dart';
 
-class AppImage {
-  String? image;
-  String? task;
-  String? subtitle;
-  String? name;
-  String? time;
+import 'package:yes_broker/constants/firebase/random_uid.dart';
+import 'package:yes_broker/constants/firebase/user_firebase.dart' as user;
 
-  AppImage({this.image, this.task, this.subtitle, this.name, this.time});
-}
-
-class WorkItem extends StatefulWidget {
-  const WorkItem({super.key});
+class TodoItem extends StatefulWidget {
+  const TodoItem({super.key});
 
   @override
-  State<WorkItem> createState() => _WorkItemState();
+  State<TodoItem> createState() => _TodoItemState();
 }
 
-class _WorkItemState extends State<WorkItem> {
+class _TodoItemState extends State<TodoItem> {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getdata(context);
+  }
+
+  getdata(context) async {
+    final String uid = generateUid();
+    print('uid1======>$uid');
+    print('uid2======>$uid');
+    print('uid3======>$uid');
+    // // Read the user
+  }
+
   PopupMenuItem popupMenuItem(String title) {
     return PopupMenuItem(
       onTap: () {
@@ -49,12 +60,13 @@ class _WorkItemState extends State<WorkItem> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return ListView.builder(
       shrinkWrap: true,
       physics: Responsive.isMobile(context)
           ? const NeverScrollableScrollPhysics()
           : const ClampingScrollPhysics(),
-      itemCount: workItemData.length,
+      itemCount: userData.length,
       itemBuilder: ((context, index) => Card(
             color: Colors.white,
             shape: RoundedRectangleBorder(
@@ -66,12 +78,9 @@ class _WorkItemState extends State<WorkItem> {
               bottom: 15,
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 10,
-                horizontal: 10,
-              ),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               child: SizedBox(
-                height: Responsive.isMobile(context) ? 170 : 140,
+                height: Responsive.isMobile(context) ? 150 : 140,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -80,11 +89,12 @@ class _WorkItemState extends State<WorkItem> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           SizedBox(
-                            // height: 30,
-                            width: 260,
+                            height: 30,
+                            width: Responsive.isMobile(context) ? 170 : 150,
                             child: ListView(
+                              physics: ClampingScrollPhysics(),
                               scrollDirection: Axis.horizontal,
-                              shrinkWrap: true,
+                              // shrinkWrap: true,
                               children: [
                                 customChipWidget(
                                   Icon(
@@ -97,39 +107,19 @@ class _WorkItemState extends State<WorkItem> {
                                     size: 18,
                                     // weight: 10.12,
                                   ),
-                                  AppColor.red.withOpacity(0.1),
+                                  userData[index].isLead
+                                      ? Colors.pink.withOpacity(0.1)
+                                      : Colors.purple.withOpacity(0.1),
                                 ),
                                 customChipWidget(
                                   CustomText(
-                                    title: workItemData[index].bhk,
+                                    title: userData[index].todoType,
                                     size: 10,
+                                    color: AppColor.blue,
                                   ),
-                                  Colors.grey.withOpacity(0.2),
-                                ),
-                                customChipWidget(
-                                  CustomText(
-                                    title: workItemData[index].area,
-                                    size: 10,
-                                  ),
-                                  Colors.grey.withOpacity(0.2),
-                                ),
-                                customChipWidget(
-                                  CustomText(
-                                    title: workItemData[index].price,
-                                    size: 10,
-                                  ),
-                                  Colors.grey.withOpacity(0.2),
-                                ),
-                                customChipWidget(
-                                  CustomText(
-                                    title: workItemData[index].type,
-                                    size: 10,
-                                  ),
-                                  Colors.grey.withOpacity(0.2),
+                                  AppColor.blue.withOpacity(0.1),
                                 ),
                                 PopupMenuButton(
-                                  tooltip: '',
-                                  enableFeedback: false,
                                   initialValue: selectedOption,
                                   splashRadius: 0,
                                   padding: EdgeInsets.zero,
@@ -163,9 +153,38 @@ class _WorkItemState extends State<WorkItem> {
                             ),
                           ),
                           const Spacer(),
-                          const Icon(
-                            Icons.chevron_right,
-                            size: 20,
+                          Row(
+                            children: [
+                              Chip(
+                                padding: EdgeInsets.zero,
+                                labelPadding:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                side: BorderSide.none,
+                                backgroundColor: Colors.grey.withOpacity(0.2),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                label: const Row(
+                                  children: [
+                                    Icon(
+                                      Icons.calendar_month_outlined,
+                                      color: Colors.black,
+                                      size: 12,
+                                    ),
+                                    FittedBox(
+                                      child: CustomText(
+                                        title: '23 May 2023',
+                                        size: 10,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Icon(
+                                Icons.chevron_right,
+                                size: 20,
+                              )
+                            ],
                           )
                         ],
                       ),
@@ -173,20 +192,24 @@ class _WorkItemState extends State<WorkItem> {
                     const SizedBox(
                       height: 10,
                     ),
-                    CustomText(
-                      title: workItemData[index].title!,
-                      size: 14,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
+                    Text(
+                      userData[index].task!,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     const SizedBox(
                       height: 5,
                     ),
-                    CustomText(
-                      title: workItemData[index].subtitle!,
-                      size: 12,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.w500,
+                    Text(
+                      userData[index].subtitle!,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     const SizedBox(
                       height: 10,
@@ -194,11 +217,13 @@ class _WorkItemState extends State<WorkItem> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        CustomText(
-                          title: workItemData[index].name!,
-                          size: 14,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
+                        Text(
+                          userData[index].name!,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                         customChipWidget(
                           const Icon(
@@ -236,8 +261,9 @@ class _WorkItemState extends State<WorkItem> {
                           Colors.grey.withOpacity(0.2),
                           paddingHorizontal: 8,
                         ),
-                        const Spacer(),
+                        Spacer(),
                         Container(
+                          margin: EdgeInsets.only(right: 5),
                           height: 20,
                           width: 20,
                           decoration: BoxDecoration(
@@ -260,7 +286,9 @@ class _WorkItemState extends State<WorkItem> {
   Widget customChipWidget(Widget label, Color color,
       {double paddingHorizontal = 3}) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 2, vertical: 0),
+      margin: EdgeInsets.only(
+          left: Responsive.isMobile(context) ? 0 : 1,
+          right: Responsive.isMobile(context) ? 0 : 8),
       child: Chip(
           padding:
               EdgeInsets.symmetric(horizontal: paddingHorizontal, vertical: 0),

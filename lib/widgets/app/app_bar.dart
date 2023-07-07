@@ -8,9 +8,8 @@ AppBar MobileAppBar(BuildContext context, GlobalKey<ScaffoldState> key) {
   // final width = MediaQuery.of(context).size.width;
 
   return AppBar(
-    foregroundColor: Colors.black,
     scrolledUnderElevation: 0.0,
-    // toolbarHeight: 50,
+    toolbarHeight: 60,
     backgroundColor: Colors.white,
     title: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -22,9 +21,10 @@ AppBar MobileAppBar(BuildContext context, GlobalKey<ScaffoldState> key) {
             title: 'YesBroker',
             fontWeight: FontWeight.bold,
             size: 16,
+            color: darkTheme,
           ),
-          // tablet: (p0) => largeScreenView(),
-          // desktop: (p0) => largeScreenView(),
+          tablet: (p0) => largeScreenView(),
+          desktop: (p0) => largeScreenView(),
         ),
       ],
     ),
@@ -32,11 +32,13 @@ AppBar MobileAppBar(BuildContext context, GlobalKey<ScaffoldState> key) {
       PopupMenuButton(
         color: Colors.white.withOpacity(1),
         offset: const Offset(200, 40),
-        itemBuilder: (context) => menuItems.map(
-          (e) {
-            return popupMenuItem(e);
-          },
-        ).toList(),
+        itemBuilder: (context) => [
+          popupMenuItem('Profile'),
+          popupMenuItem('Team'),
+          popupMenuItem('Settings'),
+          popupMenuItem('Help'),
+          popupMenuItem('Logout'),
+        ],
         child: Container(
           height: 30,
           width: 30,
@@ -61,11 +63,46 @@ PopupMenuItem popupMenuItem(String title) {
         width: 200,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(
-          color: AppColor.secondary,
+          color: primaryColor.withOpacity(0.1),
           borderRadius: BorderRadius.circular(5),
         ),
         child: Text(title),
       ),
+    ),
+  );
+}
+
+Widget largeScreenView() {
+  return Center(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const CustomText(
+          title: 'Good morning, Ketki',
+          fontWeight: FontWeight.bold,
+          color: darkTheme,
+        ),
+        Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const InkWell(
+                child: Icon(Icons.home_outlined),
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 5),
+                child: const CustomText(
+                  title: 'Home',
+                  fontWeight: FontWeight.w600,
+                  color: primaryColor,
+                  size: 15,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     ),
   );
 }

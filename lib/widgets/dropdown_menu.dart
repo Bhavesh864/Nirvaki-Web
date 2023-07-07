@@ -13,8 +13,7 @@ class CustomDropDownMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PopupMenuItem popupMenuItem(String title,
-        {Color color = AppColor.primary}) {
+    PopupMenuItem popupMenuItem(String title, {Color color = primaryColor}) {
       return PopupMenuItem(
         height: 5,
         padding: const EdgeInsets.symmetric(vertical: 2),

@@ -40,7 +40,6 @@ class TimeLineItem extends StatelessWidget {
                       ? Icons.person_pin_outlined
                       : Icons.person_outline,
                   color: timeLine['isInventory'] ? Colors.purple : Colors.pink,
-                  size: 16,
                 ),
               ),
               CustomText(

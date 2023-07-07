@@ -32,7 +32,6 @@ List<IconData> sideBarIcons = [
   Icons.person_search_outlined,
   Icons.chat_outlined,
   Icons.calendar_month_outlined,
-  // Icons.person_pin_circle,
 ];
 
 final List bottomBarItems = [
@@ -280,56 +279,4 @@ List<Map<String, dynamic>> timelineData = [
     'isFollowUp': false,
     'id': 'LD 235'
   },
-];
-
-final List<Map<String, dynamic>> inventoryFilterOtpion = [
-  {
-    "title": 'Swimming Pool',
-    'selected': false,
-  },
-  {
-    "title": 'Gym',
-    'selected': true,
-  },
-  {
-    "title": 'Gated Community',
-    'selected': false,
-  },
-  {
-    "title": 'Parking',
-    'selected': true,
-  },
-  {
-    "title": 'Washing Machine',
-    'selected': true,
-  },
-  {
-    "title": 'Dryer',
-    'selected': false,
-  },
-  {
-    "title": 'Pet Friendly',
-    'selected': false,
-  },
-  {
-    "title": 'Power Backup',
-    'selected': false,
-  },
-  {
-    "title": 'Smoke Alarm',
-    'selected': true,
-  },
-  {
-    "title": 'Front Garden',
-    'selected': true,
-  },
-];
-
-List<String> menuItems = [
-  'Profile',
-  'Team',
-  'Settings',
-  'Subscription',
-  'Help',
-  'Logout',
 ];
