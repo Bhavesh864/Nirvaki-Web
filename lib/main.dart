@@ -48,9 +48,8 @@ class MyApp extends StatelessWidget {
       ),
       home: LayoutView(),
       routes: {
-        HomeScreen.routeName: (context) => Responsive.isMobile(context)
-            ? const SmallScreen()
-            : const LargeScreen(),
+        HomeScreen.routeName: (context) =>
+            Responsive.isMobile(context) ? SmallScreen() : LargeScreen(),
         ForgetPassword.routeName: (context) => const ForgetPassword(),
       },
     );
