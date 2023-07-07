@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-
-import 'package:yes_broker/constants/colors.dart';
-=======
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
@@ -10,7 +6,6 @@ import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/colors.dart';
 import 'package:yes_broker/widgets/todo/todo_filter_view.dart';
 import 'package:yes_broker/widgets/todo/todo_list_view.dart';
->>>>>>> 2ab590c9ff4537099f67fd61496a3d966619937a
 
 class TodoTabScreen extends StatelessWidget {
   const TodoTabScreen({super.key});
@@ -21,11 +16,7 @@ class TodoTabScreen extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-<<<<<<< HEAD
-            color: primaryColor.withOpacity(0.1),
-=======
             color: AppColor.secondary,
->>>>>>> 2ab590c9ff4537099f67fd61496a3d966619937a
             spreadRadius: 12,
             blurRadius: 4,
             offset: const Offset(5, 5),
@@ -33,10 +24,6 @@ class TodoTabScreen extends StatelessWidget {
         ],
         color: Colors.white,
       ),
-<<<<<<< HEAD
-      child: const Center(
-        child: Text('Todo Screen'),
-=======
       child: Row(
         children: [
           Expanded(
@@ -142,7 +129,6 @@ class TodoTabScreen extends StatelessWidget {
                 )
               : Container(),
         ],
->>>>>>> 2ab590c9ff4537099f67fd61496a3d966619937a
       ),
     );
   }

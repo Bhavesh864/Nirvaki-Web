@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/colors.dart';
-import 'package:yes_broker/widgets/app/nav_bar.dart';
 
 import '../../Customs/responsive.dart';
 import '../../constants/constants.dart';

@@ -7,6 +7,7 @@ class CustomText extends StatelessWidget {
   final double? size;
   final FontWeight? fontWeight;
   final TextAlign? textAlign;
+  final bool? softWrap;
 
   const CustomText({
     Key? key,
@@ -15,6 +16,7 @@ class CustomText extends StatelessWidget {
     this.size,
     this.fontWeight,
     this.textAlign,
+    this.softWrap = false,
   }) : super(key: key);
 
   @override
@@ -22,6 +24,7 @@ class CustomText extends StatelessWidget {
     return Text(
       title,
       textAlign: textAlign ?? TextAlign.start,
+      softWrap: softWrap,
       style: TextStyle(
         color: color ?? Colors.black,
         fontSize: size ?? 16,
