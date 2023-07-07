@@ -41,7 +41,7 @@ class WorkItemsList extends StatelessWidget {
                         ),
                       )
                     : Container(),
-                SizedBox(
+                const SizedBox(
                   // height: height! * 0.8,
                   // child: ListView.builder(
                   //   shrinkWrap: true,

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:yes_broker/TabScreens/account_screens/profile_screen.dart';
-
 import 'package:yes_broker/TabScreens/main_screens/caledar_screen.dart';
 import 'package:yes_broker/TabScreens/main_screens/chat_screen.dart';
 import 'package:yes_broker/TabScreens/main_screens/inventroy_screen.dart';
@@ -11,8 +9,6 @@ import 'package:yes_broker/TabScreens/main_screens/todo_screen.dart';
 import 'package:yes_broker/constants/colors.dart';
 import 'package:yes_broker/constants/constants.dart';
 import 'package:yes_broker/controllers/menu_controller.dart';
-import 'package:yes_broker/pages/add_inventory.dart';
-
 import 'package:yes_broker/widgets/app/side_menu.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/TabScreens/main_screens/home_screen.dart';
