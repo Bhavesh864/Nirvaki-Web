@@ -31,9 +31,9 @@ class _SideMenuState extends State<SideMenu> {
         height: MediaQuery.of(context).size.height,
         width: 201.0,
         alignment: Alignment.center,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
+        // decoration: const BoxDecoration(
+        //   color: Colors.black,
+        // ),
         child: SingleChildScrollView(
           child: Container(
             alignment: Alignment.center,
@@ -158,12 +158,12 @@ class _NavBarItemState extends State<NavBarItem> with TickerProviderStateMixin {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: hovered && !widget.selected
-                    ? primaryColor.withOpacity(0.1)
+                    ? AppColor.secondary
                     : Colors.transparent),
             child: Center(
               child: Icon(
                 widget.icon,
-                color: !widget.selected ? Colors.black : primaryColor,
+                color: !widget.selected ? Colors.black : AppColor.primary,
                 size: !widget.selected ? 23 : 28,
               ),
             ),

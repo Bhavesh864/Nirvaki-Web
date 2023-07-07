@@ -99,7 +99,7 @@ class ForgetPassword extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       SizedBox(
@@ -124,18 +124,19 @@ class ForgetPassword extends StatelessWidget {
                       SizedBox(
                         width: w,
                         child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             CustomText(
-                              title: 'Don’t Have an account?',
+                              title: 'Don’t Have an account? ',
                               color: Colors.grey,
                             ),
                             CustomText(
-                              title: 'Signup Now.',
-                              color: primaryColor,
+                              title: ' Signup Now.',
+                              color: AppColor.primary,
                             ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   )),
             ),

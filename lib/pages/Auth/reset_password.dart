@@ -130,7 +130,7 @@ class ResetPasswordScreen extends StatelessWidget {
                             ),
                             CustomText(
                               title: 'Signup Now.',
-                              color: primaryColor,
+                              color: AppColor.primary,
                             ),
                           ],
                         ),
