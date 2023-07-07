@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/constants.dart';
+import 'package:yes_broker/constants/firebase/inventory_questions.dart';
 import 'package:yes_broker/widgets/card/chip_button_card.dart';
-import 'package:yes_broker/widgets/card/dropdown_card.dart';
 
 class AddInventory extends StatefulWidget {
   static const routeName = '/add-inventory';
@@ -16,6 +16,7 @@ class AddInventory extends StatefulWidget {
 class _AddInventoryState extends State<AddInventory> {
   var _indexQuestion = 0;
   var selectedOption = '';
+  List<String> allAnswers = [];
 
   final _questions = [
     'Which Property Category does this inventory Fall under ?',
@@ -52,6 +53,8 @@ class _AddInventoryState extends State<AddInventory> {
       _questions.removeAt(_indexQuestion);
     }
     selectedOption = selectedAnswer;
+    allAnswers.add(selectedAnswer);
+    print(allAnswers);
     setState(() {
       var lastIndex = _questions.length - 1;
       if (_indexQuestion < lastIndex) {
@@ -91,11 +94,19 @@ class _AddInventoryState extends State<AddInventory> {
                   ),
                 ),
               ),
-              child: ChipButtonCard(
-                questions: _questions,
-                currentQuestionIndex: _indexQuestion,
-                answers: answers,
-                onSelect: _next,
+              child: FutureBuilder(
+                future: InventoryQuestions.getQuestions(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ChipButtonCard(
+                      questions: _questions,
+                      currentQuestionIndex: _indexQuestion,
+                      answers: answers,
+                      onSelect: _next,
+                    );
+                  }
+                  return const SizedBox();
+                },
               ),
               // child: DropDownCard(),
             ),
