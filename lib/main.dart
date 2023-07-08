@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/TabScreens/main_screens/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:yes_broker/constants/theme.dart';
 import 'package:yes_broker/pages/add_inventory.dart';
 import 'TabScreens/account_screens/profile_screen.dart';
 import 'firebase_options.dart';
@@ -29,26 +31,8 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: const MaterialColor(
-          0xFF4460EF,
-          <int, Color>{
-            50: Color(0x1A4460EF),
-            100: Color(0x334460EF),
-            200: Color(0x4D4460EF),
-            300: Color(0x664460EF),
-            400: Color(0x804460EF),
-            500: Color(0xFF4460EF),
-            600: Color(0x994460EF),
-            700: Color(0xB34460EF),
-            800: Color(0xCC4460EF),
-            900: Color(0xE64460EF),
-          },
-        ),
-        textTheme: GoogleFonts.dmSansTextTheme(
-          Theme.of(context).textTheme,
-        ),
-      ),
+      theme: TAppTheme.lightTheme,
+      // darkTheme: TAppTheme.darkTheme,
       home: LayoutView(),
       routes: {
         HomeScreen.routeName: (context) =>

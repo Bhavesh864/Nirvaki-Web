@@ -21,9 +21,10 @@ class CustomChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(
-          left: Responsive.isMobile(context) ? 0 : 1,
-          right: Responsive.isMobile(context) ? 8 : 1),
+      // margin: EdgeInsets.only(
+      //     left: Responsive.isMobile(context) ? 0 : 1,
+      //     right: Responsive.isMobile(context) ? 8 : 1),
+      margin: EdgeInsets.symmetric(horizontal: 2),
       child: Chip(
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         avatar: avatar,
