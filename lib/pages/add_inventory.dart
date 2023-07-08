@@ -18,21 +18,20 @@ class _AddInventoryState extends State<AddInventory> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
     setquestion();
   }
 
   setquestion() async {
-    final InventoryQuestions item = InventoryQuestions(
-        id: 6,
-        question: 'Type of Villa?*',
-        type: 'chip',
-        options: [
-          "Simplex",
-          "Duplex",
-          "Triplex",
-          "Floor-wise",
-        ]);
+    // final InventoryQuestions item = InventoryQuestions(
+    //     id: 6,
+    //     question: 'Type of Villa?*',
+    //     type: 'chip',
+    //     options: [
+    //       "Simplex",
+    //       "Duplex",
+    //       "Triplex",
+    //       "Floor-wise",
+    //     ]);
 
     // await InventoryQuestions.addItem(item);
   }
