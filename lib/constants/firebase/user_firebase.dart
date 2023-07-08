@@ -11,7 +11,8 @@ final FirebaseAuth auth = FirebaseAuth.instance;
 class User {
   String brokerId;
   String userId;
-  String name;
+  String userfirstname;
+  String userlastname;
   int mobile;
   String email;
   String role;
@@ -21,7 +22,8 @@ class User {
   User(
       {required this.brokerId,
       required this.status,
-      required this.name,
+      required this.userfirstname,
+      required this.userlastname,
       required this.userId,
       required this.mobile,
       required this.email,
@@ -32,7 +34,8 @@ class User {
   Map<String, dynamic> toMap() {
     return {
       'brokerId': brokerId,
-      'name': name,
+      'userfirstname': userfirstname,
+      'userlastname': userlastname,
       'mobile': mobile,
       'email': email,
       'role': role,
@@ -46,7 +49,8 @@ class User {
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
         brokerId: map['brokerId'],
-        name: map['name'],
+        userfirstname: map['userfirstname'],
+        userlastname: map['userlastname'],
         mobile: map['mobile'],
         email: map["email"],
         role: map['role'],
