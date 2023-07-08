@@ -18,45 +18,16 @@ class _AddInventoryState extends State<AddInventory> {
   var selectedOption = '';
   List<String> allAnswers = [];
 
-  final _questions = [
-    'Which Property Category does this inventory Fall under ?',
-    'What Category does this inventory belong to?',
-    'What is the specific type of Property?',
-    'From where did you source this inventory?',
-    'What kind of property would you like to list?',
-  ];
-
-  List answers = [
-    ['Residential', 'Commercial'],
-    ['Rent', 'Sell'],
-    ['Direct', 'Broker'],
-    [
-      '99Acers',
-      'Magic Bricks',
-      'Housing.com',
-      'Social Media',
-      'Data Calling',
-      'Other',
-    ],
-    [
-      'Apartment',
-      'Independent House/Villa ',
-      'Builder Floor ',
-      'Plot',
-      'Farm House',
-    ],
-  ];
-
-  _next(String selectedAnswer) {
-    if (selectedAnswer == 'Direct') {
-      answers.removeAt(_indexQuestion);
-      _questions.removeAt(_indexQuestion);
-    }
+  _next(String selectedAnswer, List<InventoryQuestions> question) {
+    // if (selectedAnswer == 'Direct') {
+    //   answers.removeAt(_indexQuestion);
+    //   _questions.removeAt(_indexQuestion);
+    // }
     selectedOption = selectedAnswer;
     allAnswers.add(selectedAnswer);
-    print(allAnswers);
+    print(question);
     setState(() {
-      var lastIndex = _questions.length - 1;
+      var lastIndex = question.length - 1;
       if (_indexQuestion < lastIndex) {
         _indexQuestion++;
       } else {
@@ -99,9 +70,8 @@ class _AddInventoryState extends State<AddInventory> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return ChipButtonCard(
-                      questions: _questions,
+                      data: snapshot.data!,
                       currentQuestionIndex: _indexQuestion,
-                      answers: answers,
                       onSelect: _next,
                     );
                   }
