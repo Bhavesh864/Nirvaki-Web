@@ -6,6 +6,7 @@ import 'package:yes_broker/constants/colors.dart';
 import 'package:yes_broker/constants/constants.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/constants/firebase/inventory_new_details.dart';
 
 import 'package:yes_broker/constants/firebase/random_uid.dart';
 import 'package:yes_broker/constants/firebase/user_firebase.dart' as user;
@@ -24,15 +25,6 @@ class _TodoItemState extends State<TodoItem> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getdata(context);
-  }
-
-  getdata(context) async {
-    final String uid = generateUid();
-    print('uid1======>$uid');
-    print('uid2======>$uid');
-    print('uid3======>$uid');
-    // // Read the user
   }
 
   PopupMenuItem popupMenuItem(String title) {

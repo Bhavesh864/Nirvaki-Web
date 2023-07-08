@@ -3,12 +3,44 @@ import 'package:get/get.dart';
 
 import 'package:yes_broker/constants/constants.dart';
 import 'package:yes_broker/constants/firebase/broker_info.dart';
+import 'package:yes_broker/constants/firebase/inventory_new_details.dart';
+import 'package:yes_broker/constants/firebase/random_uid.dart';
 import 'package:yes_broker/controllers/menu_controller.dart';
 import '../../constants/colors.dart';
 import '../../Customs/custom_text.dart';
 
-class LargeScreenNavBar extends StatelessWidget {
+class LargeScreenNavBar extends StatefulWidget {
   LargeScreenNavBar({super.key});
+
+  @override
+  State<LargeScreenNavBar> createState() => _LargeScreenNavBarState();
+}
+
+class _LargeScreenNavBarState extends State<LargeScreenNavBar> {
+  @override
+  void initState() {
+    super.initState();
+    getdata();
+  }
+
+  getdata() async {
+    final String uid = generateUid();
+    print('uid1======>$uid');
+    print('uid2======>$uid');
+    print('uid3======>$uid');
+
+    final InventoryNewDetails item = InventoryNewDetails(
+        brokerid: auth.currentUser!.uid,
+        inventoryStatus: 'new',
+        propertyrent: Propertyrent(rentamount: 'dd'),
+        inventoryId: uid);
+    // // Read the user
+
+    await InventoryNewDetails.addItem(item);
+    final received = await InventoryNewDetails.getInventoryDetails(
+        'e7101ed3-646a-43fc-9bee-5979a882e809');
+    print(received?.inventoryId);
+  }
 
   final SideMenuController menuController = Get.put(SideMenuController());
 
