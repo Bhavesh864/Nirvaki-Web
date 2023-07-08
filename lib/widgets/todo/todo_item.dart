@@ -41,6 +41,8 @@ class _TodoItemState extends State<TodoItem> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return ListView.builder(
       shrinkWrap: true,
       physics: Responsive.isMobile(context)
@@ -172,22 +174,14 @@ class _TodoItemState extends State<TodoItem> {
                   ),
                   Text(
                     userData[index].task!,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: textTheme.titleMedium,
                   ),
                   const SizedBox(
                     height: 5,
                   ),
                   Text(
                     userData[index].subtitle!,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    style: textTheme.titleSmall,
                   ),
                   const SizedBox(
                     height: 10,
