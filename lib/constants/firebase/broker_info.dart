@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
-final CollectionReference BrokerInfosCollection =
-    FirebaseFirestore.instance.collection('BrokerInfos');
+final CollectionReference brokerInfosCollection =
+    FirebaseFirestore.instance.collection('users');
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -58,7 +58,8 @@ class BrokerInfo {
 
   static Future<void> addBrokerInfo(BrokerInfo brokerInfo) async {
     try {
-      await BrokerInfosCollection.doc(brokerInfo.brokerid)
+      await brokerInfosCollection
+          .doc(brokerInfo.brokerid)
           .set(brokerInfo.toMap());
       print('BrokerInfo added successfully');
     } catch (error) {
@@ -66,10 +67,10 @@ class BrokerInfo {
     }
   }
 
-  static Future<BrokerInfo?> getBrokerInfo(String BrokerInfoId) async {
+  static Future<BrokerInfo?> getBrokerInfo(String brokerInfo) async {
     try {
       final DocumentSnapshot documentSnapshot =
-          await BrokerInfosCollection.doc(BrokerInfoId).get();
+          await brokerInfosCollection.doc(brokerInfo).get();
       if (documentSnapshot.exists) {
         final Map<String, dynamic> data =
             documentSnapshot.data() as Map<String, dynamic>;
@@ -87,7 +88,8 @@ class BrokerInfo {
 
   static Future<void> updateBrokerInfo(BrokerInfo updatedBrokerInfo) async {
     try {
-      await BrokerInfosCollection.doc(updatedBrokerInfo.brokerid)
+      await brokerInfosCollection
+          .doc(updatedBrokerInfo.brokerid)
           .update(updatedBrokerInfo.toMap());
       print('BrokerInfo updated successfully');
     } catch (error) {
@@ -97,7 +99,7 @@ class BrokerInfo {
 
   static Future<void> deleteBrokerInfo(String brokerid) async {
     try {
-      await BrokerInfosCollection.doc(brokerid).delete();
+      await brokerInfosCollection.doc(brokerid).delete();
       print('BrokerInfo deleted successfully');
     } catch (error) {
       print('Failed to delete BrokerInfo: $error');
@@ -105,7 +107,7 @@ class BrokerInfo {
   }
 }
 
-Future<String?> signinwith(email, password) async {
+Future<String?> signinwithbroker(email, password) async {
   String res = 'Something went wrong';
   try {
     await auth.signInWithEmailAndPassword(email: email, password: password);
@@ -124,20 +126,25 @@ Future<String?> signinwith(email, password) async {
   // return null;
 }
 
-Future<String> signUpwith(email, password) async {
+Future<String> signUpwithbroker(email, password, others) async {
   String res = 'Something went wrong';
   try {
     await auth.createUserWithEmailAndPassword(email: email, password: password);
-    // final BrokerInfo item = BrokerInfo(
-    //     brokerId: auth.currentBrokerInfo!.uid,
-    //     status: 'accepted',
-    //     name: 'testing',
-    //     BrokerInfoId: auth.currentBrokerInfo!.uid,
-    //     mobile: 123456789,
-    //     email: email,
-    //     role: 'broker',
-    //     image: '');
-    // await BrokerInfo.addBrokerInfo(item);
+    final BrokerInfo item = BrokerInfo(
+        brokerid: auth.currentUser?.uid,
+        role: 'broker',
+        companyname: 'bhavesh',
+        brokercompanynumber: 1234333445,
+        brokercompanywhatsapp: 12345678765,
+        brokercompanyemail: email,
+        brokerlogo: "",
+        brokercompanyaddress: {
+          "Addressline1": 'pawan-puri',
+          "Addressline2": 'nursing home',
+          "city": "bikaner",
+          "state": "rajasthan"
+        });
+    await BrokerInfo.addBrokerInfo(item);
     res = "success";
     return res;
   } catch (er) {
