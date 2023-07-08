@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:yes_broker/constants/constants.dart';
+import 'package:yes_broker/constants/firebase/broker_info.dart';
 import 'package:yes_broker/controllers/menu_controller.dart';
 import '../../constants/colors.dart';
 import '../../Customs/custom_text.dart';
@@ -27,34 +28,45 @@ class LargeScreenNavBar extends StatelessWidget {
         ],
         color: Colors.white,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          largeScreenView(),
-          PopupMenuButton(
-            onSelected: (value) {
-              if (value == 'Profile') {
-                menuController.selectPage(6);
-              }
-            },
-            color: Colors.white.withOpacity(1),
-            offset: const Offset(200, 40),
-            itemBuilder: (contex) => menuItems.map(
-              (e) {
-                return popupMenuItem(e);
-              },
-            ).toList(),
-            child: Container(
-              height: 30,
-              width: 30,
-              margin: const EdgeInsets.only(right: 10),
-              decoration: BoxDecoration(
-                image: const DecorationImage(image: AssetImage(profileImage)),
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          ),
-        ],
+      child: FutureBuilder(
+        future: BrokerInfo.getBrokerInfo(auth.currentUser!.uid),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                largeScreenView(snapshot.data?.companyname),
+                PopupMenuButton(
+                  onSelected: (value) {
+                    if (value == 'Profile') {
+                      menuController.selectPage(6);
+                    }
+                  },
+                  color: Colors.white.withOpacity(1),
+                  offset: const Offset(200, 40),
+                  itemBuilder: (contex) => menuItems.map(
+                    (e) {
+                      return popupMenuItem(e);
+                    },
+                  ).toList(),
+                  child: Container(
+                    height: 30,
+                    width: 30,
+                    margin: const EdgeInsets.only(right: 10),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(
+                              snapshot.data!.brokerlogo.toString())),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+          return const SizedBox();
+        },
       ),
     );
   }
@@ -80,7 +92,7 @@ PopupMenuItem popupMenuItem(String title) {
   );
 }
 
-Widget largeScreenView() {
+Widget largeScreenView(name) {
   final SideMenuController menuController = Get.put(SideMenuController());
   return Container(
     padding: const EdgeInsets.only(left: 10),
@@ -88,8 +100,8 @@ Widget largeScreenView() {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const CustomText(
-          title: 'Good morning, Ketki',
+        CustomText(
+          title: 'Good morning, $name',
           fontWeight: FontWeight.bold,
         ),
         Center(

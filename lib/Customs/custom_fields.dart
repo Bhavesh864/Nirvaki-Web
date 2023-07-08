@@ -87,7 +87,7 @@ class CustomTextInputState extends State<CustomTextInput> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6),
           ),
-          isDense: true,
+          // isDense: true,
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: const BorderSide(
