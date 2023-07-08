@@ -333,3 +333,33 @@ List<String> menuItems = [
   'Help',
   'Logout',
 ];
+
+
+// final _questions = [
+  //   'Which Property Category does this inventory Fall under ?',
+  //   'What Category does this inventory belong to?',
+  //   'What is the specific type of Property?',
+  //   'From where did you source this inventory?',
+  //   'What kind of property would you like to list?',
+  // ];
+
+  // List answers = [
+  //   ['Residential', 'Commercial'],
+  //   ['Rent', 'Sell'],
+  //   ['Direct', 'Broker'],
+  //   [
+  //     '99Acers',
+  //     'Magic Bricks',
+  //     'Housing.com',
+  //     'Social Media',
+  //     'Data Calling',
+  //     'Other',
+  //   ],
+  //   [
+  //     'Apartment',
+  //     'Independent House/Villa ',
+  //     'Builder Floor ',
+  //     'Plot',
+  //     'Farm House',
+  //   ],
+  // ];
