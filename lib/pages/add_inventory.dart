@@ -14,37 +14,61 @@ class AddInventory extends StatefulWidget {
 }
 
 class _AddInventoryState extends State<AddInventory> {
-  var _indexQuestion = 0;
+  PageController? pageController;
+
+  int currentIndex = 0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    pageController = PageController(initialPage: currentIndex);
+  }
+
+  final arr = [
+    {
+      'question': '',
+      'options': ['', '', ''],
+      "type": 'chip',
+      "id": 2
+    },
+    {
+      'question': '',
+      'options': ['', '', ''],
+      "type": 'chip',
+      "id": 2
+    },
+    {
+      'question': '',
+      'options': ['', '', ''],
+      "type": 'chip',
+      "id": 2
+    },
+  ];
+
   var selectedOption = '';
   List<String> allAnswers = [];
 
-  _next(String selectedAnswer, List<InventoryQuestions> question) {
-    // if (selectedAnswer == 'Direct') {
-    //   answers.removeAt(_indexQuestion);
-    //   _questions.removeAt(_indexQuestion);
-    // }
-    selectedOption = selectedAnswer;
-    allAnswers.add(selectedAnswer);
-    print(question);
-    setState(() {
-      var lastIndex = question.length - 1;
-      if (_indexQuestion < lastIndex) {
-        _indexQuestion++;
-      } else {
-        // Is the last question
-      }
-    });
+  _next(String selectedAnswer, String question, List<InventoryQuestions> data) {
+    if (currentIndex < data.length - 1) {
+      currentIndex++;
+      allAnswers.add(selectedAnswer);
+      pageController?.animateToPage(
+        currentIndex,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeIn,
+      );
+    }
   }
 
   _back() {
-    setState(() {
-      var firstIndex = 0;
-      if (_indexQuestion > firstIndex) {
-        _indexQuestion--;
-      } else {
-        // Is the firstz question
-      }
-    });
+    if (currentIndex != 0) {
+      currentIndex--;
+      pageController?.animateToPage(
+        currentIndex,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeIn,
+      );
+    }
   }
 
   @override
@@ -68,14 +92,31 @@ class _AddInventoryState extends State<AddInventory> {
               child: FutureBuilder(
                 future: InventoryQuestions.getQuestions(),
                 builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return ChipButtonCard(
-                      data: snapshot.data!,
-                      currentQuestionIndex: _indexQuestion,
-                      onSelect: _next,
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
                     );
                   }
-                  return const SizedBox();
+                  if (snapshot.hasData) {
+                    final questionsArr = snapshot.data!;
+                    return PageView.builder(
+                      controller: pageController,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: questionsArr.length,
+                      itemBuilder: (context, index) {
+                        return ChipButtonCard(
+                          question: questionsArr[index].question,
+                          options: questionsArr[index].options,
+                          data: questionsArr,
+                          currentIndex: currentIndex,
+                          onSelect: _next,
+                        );
+                      },
+                    );
+                  }
+                  return Container(
+                    color: Colors.amber,
+                  );
                 },
               ),
               // child: DropDownCard(),

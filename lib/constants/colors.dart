@@ -6,6 +6,13 @@ class AppColor {
 
   static const cardColor = Color(0xFFFFFFFF);
   static const chipGreyColor = Color(0x0D200E32);
+
+  static const inventoryChipColor = Color(0x0DF72586);
+  static const inventoryIconColor = Color(0xFFF72586);
+
+  static const leadChipColor = Color(0x0D7109B6);
+  static const leadIconColor = Color(0xFF7109B6);
+
   static const mainColor = Color(0xFF000000);
   static const appBgColor = Color(0xFFFAFAFA);
   static const shadowColor = Colors.black87;

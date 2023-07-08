@@ -124,21 +124,20 @@ class InventoryItem {
   }
 }
 
-
 // use this type
-  // void initState() {
-  //   super.initState();
-  //   fetchInventoryItems();
-  // }
+// void initState() {
+//   super.initState();
+//   fetchInventoryItems();
+// }
 
-  // Future<void> fetchInventoryItems() async {
-  //   // Fetch Inventory items from Firestore
-  //   final List<InventoryItem> items = await InventoryItem.getInventoryItems();
+// Future<void> fetchInventoryItems() async {
+//   // Fetch Inventory items from Firestore
+//   final List<InventoryItem> items = await InventoryItem.getInventoryItems();
 
-  //   setState(() {
-  //     InventoryItems = items;
-  //   });
-  // }
+//   setState(() {
+//     InventoryItems = items;
+//   });
+// }
 
 // Usage example:
 
@@ -165,7 +164,7 @@ class InventoryItem {
 
 //   await newItemByEmployee.addItem();
 
-  // Get Inventory items for a specific broker
+// Get Inventory items for a specific broker
 //   final List<InventoryItem> InventoryItems =
 //       await InventoryItem.getInventoryItemsForBroker('broker1');
 //   InventoryItems.forEach((item) {
@@ -173,3 +172,5 @@ class InventoryItem {
 //     print('Description: ${item.description}');
 //   });
 // }
+
+

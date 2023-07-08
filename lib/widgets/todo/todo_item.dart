@@ -85,13 +85,13 @@ class _TodoItemState extends State<TodoItem> {
                                       ? Icons.person_pin_outlined
                                       : Icons.person_outline,
                                   color: userData[index].isLead
-                                      ? Colors.pink
-                                      : Colors.purple,
+                                      ? AppColor.inventoryIconColor
+                                      : AppColor.leadIconColor,
                                   size: 18,
                                 ),
                                 color: userData[index].isLead
-                                    ? Colors.pink.withOpacity(0.1)
-                                    : Colors.purple.withOpacity(0.1),
+                                    ? AppColor.inventoryChipColor
+                                    : AppColor.leadChipColor,
                               ),
                               CustomChip(
                                 label: CustomText(
