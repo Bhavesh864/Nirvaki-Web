@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yes_broker/constants/colors.dart';
 
 import 'package:yes_broker/constants/constants.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
@@ -33,13 +34,16 @@ class TimeLineItem extends StatelessWidget {
                   size: 12,
                 ),
                 color: timeLine['isInventory']
-                    ? Colors.purple.withOpacity(0.1)
-                    : Colors.pink.withOpacity(0.1),
+                    ? AppColor.leadChipColor
+                    : AppColor.inventoryChipColor,
                 avatar: Icon(
                   timeLine['isInventory']
                       ? Icons.person_pin_outlined
                       : Icons.person_outline,
-                  color: timeLine['isInventory'] ? Colors.purple : Colors.pink,
+                  color: timeLine['isInventory']
+                      ? AppColor.leadIconColor
+                      : AppColor.inventoryIconColor,
+                  size: 14,
                 ),
               ),
               CustomText(

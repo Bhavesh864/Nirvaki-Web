@@ -92,8 +92,8 @@ class _WorkItemState extends State<WorkItem> {
                                         ? Icons.person_pin_outlined
                                         : Icons.person_outline,
                                     color: userData[index].isLead
-                                        ? Colors.pink
-                                        : Colors.purple,
+                                        ? AppColor.inventoryIconColor
+                                        : AppColor.leadIconColor,
                                     size: 18,
                                     // weight: 10.12,
                                   ),
