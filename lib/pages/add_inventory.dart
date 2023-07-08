@@ -14,6 +14,29 @@ class AddInventory extends StatefulWidget {
 }
 
 class _AddInventoryState extends State<AddInventory> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    setquestion();
+  }
+
+  setquestion() async {
+    final InventoryQuestions item = InventoryQuestions(
+        id: 6,
+        question: 'Type of Villa?*',
+        type: 'chip',
+        options: [
+          "Simplex",
+          "Duplex",
+          "Triplex",
+          "Floor-wise",
+        ]);
+
+    // await InventoryQuestions.addItem(item);
+  }
+
   var _indexQuestion = 0;
   var selectedOption = '';
   List<String> allAnswers = [];
@@ -25,7 +48,6 @@ class _AddInventoryState extends State<AddInventory> {
     // }
     selectedOption = selectedAnswer;
     allAnswers.add(selectedAnswer);
-    print(question);
     setState(() {
       var lastIndex = question.length - 1;
       if (_indexQuestion < lastIndex) {
@@ -34,6 +56,7 @@ class _AddInventoryState extends State<AddInventory> {
         // Is the last question
       }
     });
+    print(allAnswers);
   }
 
   _back() {

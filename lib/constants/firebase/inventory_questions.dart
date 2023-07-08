@@ -6,17 +6,19 @@ final CollectionReference inventoryDetails =
 class InventoryQuestions {
   final String question;
   final String type;
+  final int id;
   final List<String> options;
 
   InventoryQuestions({
     required this.question,
     required this.type,
+    required this.id,
     required this.options,
   });
 
   // Convert Inventory_questions object to a map
   Map<String, dynamic> toMap() {
-    return {"question": question, "type": type, "options": options};
+    return {"question": question, "type": type, "options": options, 'id': id};
   }
 
   // Create Inventory_questions object from a map
@@ -24,14 +26,25 @@ class InventoryQuestions {
     return InventoryQuestions(
       question: map['question'],
       type: map['type'],
+      id: map['id'],
       options: List<String>.from(map['options']),
     );
+  }
+
+  static Future<void> addItem(InventoryQuestions inventory) async {
+    try {
+      await inventoryDetails.doc().set(inventory.toMap());
+      print('Inventory item added successfully');
+    } catch (error) {
+      print('Failed to add Inventory item: $error');
+    }
   }
 
   // Get Inventory items added by the broker or employees under the broker
   static Future<List<InventoryQuestions>> getQuestions() async {
     try {
-      final QuerySnapshot querySnapshot = await inventoryDetails.get();
+      final QuerySnapshot querySnapshot =
+          await inventoryDetails.orderBy("id").get();
       final List<InventoryQuestions> inventoryQuestionss =
           querySnapshot.docs.map((doc) {
         final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
