@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:yes_broker/constants/firebase/inventory_questions.dart';
 
 import '../../Customs/custom_text.dart';
 import '../../Customs/responsive.dart';
 import '../../constants/colors.dart';
 
 class ChipButtonCard extends StatelessWidget {
-  final List<String> questions;
+  final List<InventoryQuestions> data;
   final int currentQuestionIndex;
-  final List answers;
-  final void Function(String) onSelect;
-  const ChipButtonCard(
-      {super.key,
-      required this.questions,
-      required this.answers,
-      required this.onSelect,
-      required this.currentQuestionIndex});
+  final void Function(String, List<InventoryQuestions>) onSelect;
+
+  const ChipButtonCard({
+    super.key,
+    required this.onSelect,
+    required this.currentQuestionIndex,
+    required this.data,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,18 +41,18 @@ class ChipButtonCard extends StatelessWidget {
                 softWrap: true,
                 textAlign: TextAlign.center,
                 size: 30,
-                title: questions[currentQuestionIndex],
+                title: data[currentQuestionIndex].question,
                 fontWeight: FontWeight.bold,
               ),
               const SizedBox(
                 height: 15,
               ),
-              for (var answer in answers[currentQuestionIndex])
+              for (var answer in data[currentQuestionIndex].options)
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 5),
                   child: InkWell(
                     onTap: () => {
-                      onSelect(answer),
+                      onSelect(answer, data),
                     },
                     borderRadius: BorderRadius.circular(10),
                     child: Container(
