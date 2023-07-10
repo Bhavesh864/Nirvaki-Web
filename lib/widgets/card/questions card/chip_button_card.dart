@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/custom_fields.dart';
+import 'package:yes_broker/constants/firebase/inventory_question.dart';
 import 'package:yes_broker/constants/firebase/inventory_questions.dart';
 
 import '../../../Customs/custom_text.dart';

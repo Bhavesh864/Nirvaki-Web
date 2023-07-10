@@ -1,0 +1,16 @@
+{
+    "question":"string",
+    "options":[],
+    "type":"chip",
+    "id":1,
+    "dropdown": [
+        {
+            "roomconfig":"string",
+            "values":["array","array"]
+        },
+        {
+            "roomconfig":"string",
+            "values":["array","array"]
+        }
+    ]
+}

@@ -7,7 +7,7 @@
      "cardDescription":"string",
      "propertyarea":"string",
      "plotarea":"string",
-      "cardId": "string-required",
+     "cardId": "string-required",
      "cardStatus": "String-required",
      "brokerid": "int-required",
      "assignedto": [
@@ -49,5 +49,11 @@
     "propertyprice":{
         "unit": "string",
         "price":"string"
+    },
+    "roomconfig": {
+        "bedroom": "string",
+        "additionalroom":["array"] ,
+        "bathroom": "string",
+        "balconies": "int"
     }
 }
