@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/constants.dart';
+import 'package:yes_broker/constants/firebase/inventory_question.dart';
 import 'package:yes_broker/constants/firebase/inventory_questions.dart';
 import 'package:yes_broker/widgets/card/questions%20card/chip_button_card.dart';
 import 'package:yes_broker/widgets/card/questions%20card/dropdown_card.dart';
@@ -177,7 +178,9 @@ class _AddInventoryState extends State<AddInventory> {
           fieldsPlaceholder: questionsArr[index].options,
         );
       case 9:
-        return DropDownCard();
+        return DropDownCard(
+          values: questionsArr[index].dropdownList,
+        );
       default:
         // return Text('data');
         return ChipButtonCard(
