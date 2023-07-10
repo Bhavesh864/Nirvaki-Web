@@ -7,18 +7,26 @@ class InventoryQuestions {
   final String question;
   final String type;
   final int id;
-  final List<String> options;
+  final List<dynamic>? dropdownList;
+  final List<dynamic> options;
 
   InventoryQuestions({
     required this.question,
     required this.type,
     required this.id,
     required this.options,
+    this.dropdownList,
   });
 
   // Convert Inventory_questions object to a map
   Map<String, dynamic> toMap() {
-    return {"question": question, "type": type, "options": options, 'id': id};
+    return {
+      "question": question,
+      "type": type,
+      "options": options,
+      'id': id,
+      "dropdownList": dropdownList
+    };
   }
 
   // Create Inventory_questions object from a map
@@ -27,7 +35,8 @@ class InventoryQuestions {
       question: map['question'],
       type: map['type'],
       id: map['id'],
-      options: List<String>.from(map['options']),
+      dropdownList: List<dynamic>.from(map['dropdownList']),
+      options: List<dynamic>.from(map['options']),
     );
   }
 

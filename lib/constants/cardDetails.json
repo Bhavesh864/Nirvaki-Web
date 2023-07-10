@@ -1,0 +1,53 @@
+
+{   
+     "cardType":"string  example = todo , inventory  , lead",     
+     "cardCategory":"string example = sell or rent  ",
+     "cardTodoType" : "string example = reminder , task ,followup",
+     "cardTitle":"string" ,
+     "cardDescription":"string",
+     "propertyarea":"string",
+     "plotarea":"string",
+      "cardId": "string-required",
+     "cardStatus": "String-required",
+     "brokerid": "int-required",
+     "assignedto": [
+        {
+            "userid": "string",
+            "firstname": "string",
+            "lastname": "string",
+            "image": "string",
+            "assignedon": "timestamp",
+            "assignedby":"string"
+        },
+        {
+            "userid": "string",
+            "firstname": "string",
+            "lastname": "string",
+            "image": "string",
+            "assignedon": "timestamp",
+            "assignedby":"string"
+        }
+    ],
+    "createdate": "timestamp-required",
+    "updatedby": "string",
+    "updatedate": "timestamp",
+    "createdby": {
+        "userid": "string",
+        "userfirstname": "string-required",
+        "userlastname": "string-required",
+        "userimage": "string"
+    },
+    "customerinfo": {
+        "firstname": "string-required",
+        "lastname": "string-required",
+        "title": "string-required",
+        "mobile": "int",
+        "whatsapp": "int",
+        "email": "string",
+        "companyname": "string-required"
+    },
+    "propertyprice":{
+        "unit": "string",
+        "price":"string"
+    }
+}
