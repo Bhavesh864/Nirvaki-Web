@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class TAppTheme {
   static ThemeData lightTheme = ThemeData(
+    fontFamily: GoogleFonts.dmSans().fontFamily,
     brightness: Brightness.light,
     primarySwatch: const MaterialColor(
       0xFF4460EF,
@@ -19,7 +20,7 @@ class TAppTheme {
         900: Color(0xE64460EF),
       },
     ),
-    // textTheme: GoogleFonts.dmSansTextTheme(
+    // textTheme: Googlefon.dmSansTextTheme(
     //   Theme.of(context).textTheme,
     // ),
     textTheme: const TextTheme(

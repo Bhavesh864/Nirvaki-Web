@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/constants/firebase/inventory_questions.dart';
 
-import '../../Customs/custom_text.dart';
-import '../../Customs/responsive.dart';
-import '../../constants/colors.dart';
+import '../../../Customs/custom_text.dart';
+import '../../../Customs/responsive.dart';
+import '../../../constants/colors.dart';
 
 class ChipButtonCard extends StatelessWidget {
   final String question;
@@ -25,7 +25,7 @@ class ChipButtonCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
-    final h = MediaQuery.of(context).size.height;
+
     return Center(
       child: Card(
         color: Colors.white,

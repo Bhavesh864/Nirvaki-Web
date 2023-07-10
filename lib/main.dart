@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/TabScreens/main_screens/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:yes_broker/constants/colors.dart';
 import 'package:yes_broker/constants/theme.dart';
 import 'package:yes_broker/pages/add_inventory.dart';
 import 'TabScreens/account_screens/profile_screen.dart';
@@ -32,7 +34,35 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: TAppTheme.lightTheme,
-      // darkTheme: TAppTheme.darkTheme,
+      // theme: FlexThemeData.light(
+      //   scheme: FlexScheme.materialBaseline,
+      //   surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
+      //   blendLevel: 7,
+      //   subThemesData: const FlexSubThemesData(
+      //     blendOnLevel: 10,
+      //     blendOnColors: false,
+      //     useTextTheme: true,
+      //     useM2StyleDividerInM3: true,
+      //   ),
+      //   visualDensity: FlexColorScheme.comfortablePlatformDensity,
+      //   useMaterial3: true,
+      //   swapLegacyOnMaterial3: true,
+      //   fontFamily: GoogleFonts.dmSans().fontFamily,
+      // ),
+      // darkTheme: FlexThemeData.dark(
+      //   scheme: FlexScheme.materialBaseline,
+      //   surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
+      //   blendLevel: 13,
+      //   subThemesData: const FlexSubThemesData(
+      //     blendOnLevel: 20,
+      //     useTextTheme: true,
+      //     useM2StyleDividerInM3: true,
+      //   ),
+      //   visualDensity: FlexColorScheme.comfortablePlatformDensity,
+      //   useMaterial3: true,
+      //   swapLegacyOnMaterial3: true,
+      // ),
+      // themeMode: ThemeMode.light,
       home: LayoutView(),
       routes: {
         HomeScreen.routeName: (context) =>

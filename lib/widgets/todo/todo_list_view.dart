@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:yes_broker/constants/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/constants/constants.dart';
-import 'package:yes_broker/widgets/card/custom_card.dart';
 import 'package:yes_broker/widgets/todo/todo_item.dart';
 
 class TodoListView extends StatelessWidget {

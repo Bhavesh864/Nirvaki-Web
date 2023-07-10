@@ -4,11 +4,12 @@ import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/colors.dart';
 import 'package:yes_broker/constants/constants.dart';
 
-import '../../Customs/label_text_field.dart';
-import '../../Customs/responsive.dart';
+import '../../../Customs/label_text_field.dart';
+import '../../../Customs/responsive.dart';
 
 class TextFormCard extends StatefulWidget {
-  const TextFormCard({super.key});
+  final List<String> fieldsPlaceholder;
+  const TextFormCard({super.key, required this.fieldsPlaceholder});
 
   @override
   State<TextFormCard> createState() => _TextFormCardState();
@@ -20,7 +21,7 @@ class _TextFormCardState extends State<TextFormCard> {
   @override
   Widget build(BuildContext context) {
     TextEditingController inputController = TextEditingController();
-    final w = MediaQuery.of(context).size.width;
+    // final w = MediaQuery.of(context).size.width;
 
     return Center(
       child: Card(
@@ -44,13 +45,16 @@ class _TextFormCardState extends State<TextFormCard> {
                 size: 22,
               ),
               LabelTextInputField(
-                  inputController: inputController, labelText: 'First Name'),
+                  inputController: inputController,
+                  labelText: widget.fieldsPlaceholder[0]),
               LabelTextInputField(
-                  inputController: inputController, labelText: 'Last Name'),
+                  inputController: inputController,
+                  labelText: widget.fieldsPlaceholder[1]),
               LabelTextInputField(
-                  inputController: inputController, labelText: 'Mobile'),
+                  inputController: inputController,
+                  labelText: widget.fieldsPlaceholder[2]),
               Padding(
-                padding: const EdgeInsets.only(bottom: 15.0),
+                padding: const EdgeInsets.only(bottom: 7.0),
                 child: CustomCheckbox(
                   fillColor: AppColor.primary,
                   value: isChecked,
@@ -71,6 +75,16 @@ class _TextFormCardState extends State<TextFormCard> {
                   inputController: inputController, labelText: 'Email'),
               LabelTextInputField(
                   inputController: inputController, labelText: 'Company Name'),
+              Container(
+                alignment: Alignment.centerRight,
+                margin: EdgeInsets.only(top: 8),
+                child: CustomButton(
+                  width: 73,
+                  text: 'Next',
+                  onPressed: () {},
+                  height: 39,
+                ),
+              )
             ],
           ),
         ),
