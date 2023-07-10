@@ -17,24 +17,31 @@ class LabelTextInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8, left: 2),
-          child: CustomText(
-            title: labelText,
-            fontWeight: FontWeight.w600,
-            textAlign: TextAlign.left,
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 8, right: 8, left: 2),
+            child: CustomText(
+              title: labelText,
+              fontWeight: FontWeight.w500,
+              textAlign: TextAlign.left,
+            ),
           ),
-        ),
-        CustomTextInput(
-          enabled: isDropDown ? false : true,
-          rightIcon: isDropDown ? Icons.arrow_drop_down_sharp : null,
-          controller: inputController,
-          hintText: labelText,
-        ),
-      ],
+          SizedBox(
+            height: 40,
+            child: CustomTextInput(
+              // indense: true,
+              enabled: isDropDown ? false : true,
+              rightIcon: isDropDown ? Icons.arrow_drop_down_sharp : null,
+              controller: inputController,
+              hintText: labelText,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

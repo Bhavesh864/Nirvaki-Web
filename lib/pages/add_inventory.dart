@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/constants.dart';
 import 'package:yes_broker/constants/firebase/inventory_questions.dart';
-import 'package:yes_broker/widgets/card/chip_button_card.dart';
+import 'package:yes_broker/widgets/card/questions%20card/chip_button_card.dart';
+import 'package:yes_broker/widgets/card/questions%20card/textform_card.dart';
 
 class AddInventory extends StatefulWidget {
   static const routeName = '/add-inventory';
@@ -24,7 +25,7 @@ class _AddInventoryState extends State<AddInventory> {
     pageController = PageController(initialPage: currentIndex);
   }
 
-  final arr = [
+  final List arr = [
     {
       'question': '',
       'options': ['', '', ''],
@@ -43,6 +44,28 @@ class _AddInventoryState extends State<AddInventory> {
       "type": 'chip',
       "id": 2
     },
+    {
+      'question': '',
+      'options': ['', '', ''],
+      "type": 'chip',
+      "id": 2
+    },
+    {
+      'question': '',
+      'options': ['', '', ''],
+      "type": 'chip',
+      "id": 2
+    },
+    // {
+    //   'question': '',
+    //   'listItem': ['No of bedrrom?', 'Additional Rooms'],
+    //   'options': [
+    //     ['', '', ''],
+    //     ['', '', ''],
+    //   ],
+    //   "type": 'chip',
+    //   "id": 2
+    // },
   ];
 
   var selectedOption = '';
@@ -104,13 +127,8 @@ class _AddInventoryState extends State<AddInventory> {
                       scrollDirection: Axis.horizontal,
                       itemCount: questionsArr.length,
                       itemBuilder: (context, index) {
-                        return ChipButtonCard(
-                          question: questionsArr[index].question,
-                          options: questionsArr[index].options,
-                          data: questionsArr,
-                          currentIndex: currentIndex,
-                          onSelect: _next,
-                        );
+                        return displayDifferentCards(
+                            questionsArr, index, questionsArr[index].type);
                       },
                     );
                   }
@@ -148,5 +166,32 @@ class _AddInventoryState extends State<AddInventory> {
         ],
       ),
     );
+  }
+
+  Widget displayDifferentCards(
+      List<InventoryQuestions> questionsArr, int index, String type) {
+    switch (index) {
+      case 0:
+        return ChipButtonCard(
+          question: questionsArr[index].question,
+          options: questionsArr[index].options,
+          data: questionsArr,
+          currentIndex: currentIndex,
+          onSelect: _next,
+        );
+      case 4:
+        return TextFormCard(
+          fieldsPlaceholder: questionsArr[index].options,
+        );
+      default:
+        // return Text('data');
+        return ChipButtonCard(
+          question: questionsArr[index].question,
+          options: questionsArr[index].options,
+          data: questionsArr,
+          currentIndex: currentIndex,
+          onSelect: _next,
+        );
+    }
   }
 }
