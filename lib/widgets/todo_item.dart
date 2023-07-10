@@ -6,7 +6,6 @@ import 'package:yes_broker/constants/colors.dart';
 import 'package:yes_broker/constants/constants.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/constants/firebase/inventory_new_details.dart';
 
 import 'package:yes_broker/constants/firebase/random_uid.dart';
 import 'package:yes_broker/constants/firebase/user_firebase.dart' as user;
@@ -84,7 +83,7 @@ class _TodoItemState extends State<TodoItem> {
                             height: 30,
                             width: Responsive.isMobile(context) ? 170 : 150,
                             child: ListView(
-                              physics: ClampingScrollPhysics(),
+                              physics: const ClampingScrollPhysics(),
                               scrollDirection: Axis.horizontal,
                               // shrinkWrap: true,
                               children: [
