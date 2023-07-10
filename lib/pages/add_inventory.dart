@@ -4,6 +4,7 @@ import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/constants.dart';
 import 'package:yes_broker/constants/firebase/inventory_questions.dart';
 import 'package:yes_broker/widgets/card/questions%20card/chip_button_card.dart';
+import 'package:yes_broker/widgets/card/questions%20card/dropdown_card.dart';
 import 'package:yes_broker/widgets/card/questions%20card/textform_card.dart';
 
 class AddInventory extends StatefulWidget {
@@ -127,8 +128,8 @@ class _AddInventoryState extends State<AddInventory> {
                       scrollDirection: Axis.horizontal,
                       itemCount: questionsArr.length,
                       itemBuilder: (context, index) {
-                        return displayDifferentCards(
-                            questionsArr, index, questionsArr[index].type);
+                        return displayDifferentCards(questionsArr, index,
+                            questionsArr[index].type, questionsArr[index].id);
                       },
                     );
                   }
@@ -169,20 +170,14 @@ class _AddInventoryState extends State<AddInventory> {
   }
 
   Widget displayDifferentCards(
-      List<InventoryQuestions> questionsArr, int index, String type) {
-    switch (index) {
-      case 0:
-        return ChipButtonCard(
-          question: questionsArr[index].question,
-          options: questionsArr[index].options,
-          data: questionsArr,
-          currentIndex: currentIndex,
-          onSelect: _next,
-        );
-      case 4:
+      List<InventoryQuestions> questionsArr, int index, String type, int id) {
+    switch (id) {
+      case 5:
         return TextFormCard(
           fieldsPlaceholder: questionsArr[index].options,
         );
+      case 9:
+        return DropDownCard();
       default:
         // return Text('data');
         return ChipButtonCard(
