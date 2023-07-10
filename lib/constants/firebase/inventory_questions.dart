@@ -8,7 +8,7 @@ class InventoryQuestions {
   final String type;
   final int id;
   final List<dynamic>? dropdownList;
-  final List<dynamic> options;
+  final List<String> options;
 
   InventoryQuestions({
     required this.question,
@@ -36,7 +36,7 @@ class InventoryQuestions {
       type: map['type'],
       id: map['id'],
       dropdownList: List<dynamic>.from(map['dropdownList']),
-      options: List<dynamic>.from(map['options']),
+      options: List<String>.from(map['options']),
     );
   }
 
