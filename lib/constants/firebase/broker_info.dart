@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/foundation.dart';
 
-final CollectionReference brokerInfosCollection =
-    FirebaseFirestore.instance.collection('users');
+import 'package:yes_broker/constants/firebase/user_firebase.dart';
 
-final FirebaseAuth auth = FirebaseAuth.instance;
+final CollectionReference brokerInfosCollection =
+    FirebaseFirestore.instance.collection('brokerInfo');
+
+final auth.FirebaseAuth authentication = auth.FirebaseAuth.instance;
 
 class BrokerInfo {
   String? brokerid;
@@ -110,10 +112,11 @@ class BrokerInfo {
 Future<String?> signinwithbroker(email, password) async {
   String res = 'Something went wrong';
   try {
-    await auth.signInWithEmailAndPassword(email: email, password: password);
+    await authentication.signInWithEmailAndPassword(
+        email: email, password: password);
     res = "success";
     return res;
-  } on FirebaseAuthException catch (e) {
+  } on auth.FirebaseAuthException catch (e) {
     if (e.code == 'BrokerInfo-not-found') {
       return 'No BrokerInfo found for that email.';
     } else if (e.code == 'wrong-password') {
@@ -129,9 +132,10 @@ Future<String?> signinwithbroker(email, password) async {
 Future<String> signUpwithbroker(email, password, others) async {
   String res = 'Something went wrong';
   try {
-    await auth.createUserWithEmailAndPassword(email: email, password: password);
+    await authentication.createUserWithEmailAndPassword(
+        email: email, password: password);
     final BrokerInfo item = BrokerInfo(
-        brokerid: auth.currentUser?.uid,
+        brokerid: authentication.currentUser?.uid,
         role: 'broker',
         companyname: 'bhavesh',
         brokercompanynumber: 1234333445,
@@ -144,6 +148,17 @@ Future<String> signUpwithbroker(email, password, others) async {
           "city": "bikaner",
           "state": "rajasthan"
         });
+    final User items = User(
+        brokerId: authentication.currentUser!.uid,
+        status: 'accepted',
+        userfirstname: 'bhavesh',
+        userlastname: 'khatri',
+        userId: authentication.currentUser!.uid,
+        mobile: 3333333,
+        email: email,
+        role: 'broker',
+        image: '');
+    await User.addUser(items);
     await BrokerInfo.addBrokerInfo(item);
     res = "success";
     return res;

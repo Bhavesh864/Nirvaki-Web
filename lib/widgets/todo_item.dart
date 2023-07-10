@@ -79,7 +79,7 @@ class _TodoItemState extends State<TodoItem> {
                             height: 30,
                             width: Responsive.isMobile(context) ? 170 : 150,
                             child: ListView(
-                              physics: ClampingScrollPhysics(),
+                              physics: const ClampingScrollPhysics(),
                               scrollDirection: Axis.horizontal,
                               // shrinkWrap: true,
                               children: [

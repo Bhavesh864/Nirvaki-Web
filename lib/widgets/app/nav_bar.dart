@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:yes_broker/constants/constants.dart';
-import 'package:yes_broker/constants/firebase/broker_info.dart';
-import 'package:yes_broker/constants/firebase/inventory_new_details.dart';
-import 'package:yes_broker/constants/firebase/random_uid.dart';
 import 'package:yes_broker/controllers/menu_controller.dart';
 import '../../constants/colors.dart';
 import '../../Customs/custom_text.dart';
+import '../../constants/firebase/user_firebase.dart';
 
 class LargeScreenNavBar extends StatefulWidget {
-  LargeScreenNavBar({super.key});
+  const LargeScreenNavBar({super.key});
 
   @override
   State<LargeScreenNavBar> createState() => _LargeScreenNavBarState();
@@ -20,27 +18,10 @@ class _LargeScreenNavBarState extends State<LargeScreenNavBar> {
   @override
   void initState() {
     super.initState();
-    getdata();
+    getstate();
   }
 
-  getdata() async {
-    final String uid = generateUid();
-    print('uid1======>$uid');
-    print('uid2======>$uid');
-    print('uid3======>$uid');
-
-    final InventoryNewDetails item = InventoryNewDetails(
-        brokerid: auth.currentUser!.uid,
-        inventoryStatus: 'new',
-        propertyrent: Propertyrent(rentamount: 'dd'),
-        inventoryId: uid);
-    // // Read the user
-
-    await InventoryNewDetails.addItem(item);
-    final received = await InventoryNewDetails.getInventoryDetails(
-        'e7101ed3-646a-43fc-9bee-5979a882e809');
-    print(received?.inventoryId);
-  }
+  getstate() async {}
 
   final SideMenuController menuController = Get.put(SideMenuController());
 
@@ -61,13 +42,13 @@ class _LargeScreenNavBarState extends State<LargeScreenNavBar> {
         color: Colors.white,
       ),
       child: FutureBuilder(
-        future: BrokerInfo.getBrokerInfo(auth.currentUser!.uid),
+        future: User.getUser(auth.currentUser!.uid),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                largeScreenView(snapshot.data?.companyname),
+                largeScreenView(snapshot.data?.userfirstname),
                 PopupMenuButton(
                   onSelected: (value) {
                     if (value == 'Profile') {
@@ -88,8 +69,7 @@ class _LargeScreenNavBarState extends State<LargeScreenNavBar> {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: NetworkImage(
-                              snapshot.data!.brokerlogo.toString())),
+                          image: NetworkImage(snapshot.data!.image.toString())),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
