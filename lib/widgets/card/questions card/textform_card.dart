@@ -3,13 +3,19 @@ import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/colors.dart';
 import 'package:yes_broker/constants/constants.dart';
+import 'package:yes_broker/constants/firebase/inventory_questions.dart';
 
 import '../../../Customs/label_text_field.dart';
 import '../../../Customs/responsive.dart';
 
 class TextFormCard extends StatefulWidget {
   final List<String> fieldsPlaceholder;
-  const TextFormCard({super.key, required this.fieldsPlaceholder});
+  final VoidCallback onSelect;
+  const TextFormCard({
+    super.key,
+    required this.fieldsPlaceholder,
+    required this.onSelect,
+  });
 
   @override
   State<TextFormCard> createState() => _TextFormCardState();
@@ -81,10 +87,12 @@ class _TextFormCardState extends State<TextFormCard> {
                 child: CustomButton(
                   width: 73,
                   text: 'Next',
-                  onPressed: () {},
+                  onPressed: () {
+                    widget.onSelect();
+                  },
                   height: 39,
                 ),
-              )
+              ),
             ],
           ),
         ),

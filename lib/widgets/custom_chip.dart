@@ -28,15 +28,12 @@ class CustomChip extends StatelessWidget {
       child: Chip(
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         avatar: avatar,
-        padding: EdgeInsets.symmetric(
-            horizontal: paddingHorizontal ?? 0, vertical: 0),
-        // labelPadding: const EdgeInsets.symmetric(horizontal: 3),
+        // padding: EdgeInsets.symmetric(
+        //     horizontal: paddingHorizontal ?? 0, vertical: 0),
+        labelPadding: EdgeInsets.symmetric(
+            horizontal: paddingHorizontal ?? 1, vertical: 0),
         // padding: EdgeInsets.symmetric(vertical: 3, horizontal: 3),
-        side: BorderSide.none,
         backgroundColor: color,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
-        ),
         label: label,
       ),
     );
