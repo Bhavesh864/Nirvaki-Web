@@ -72,7 +72,7 @@ class _AddInventoryState extends State<AddInventory> {
   var selectedOption = '';
   List<String> allAnswers = [];
 
-  _next(String selectedAnswer, String question, List<InventoryQuestions> data) {
+  _next(String selectedAnswer, List<InventoryQuestions> data) {
     if (currentIndex < data.length - 1) {
       currentIndex++;
       allAnswers.add(selectedAnswer);
@@ -124,6 +124,7 @@ class _AddInventoryState extends State<AddInventory> {
                   if (snapshot.hasData) {
                     final questionsArr = snapshot.data!;
                     return PageView.builder(
+                      physics: NeverScrollableScrollPhysics(),
                       controller: pageController,
                       scrollDirection: Axis.horizontal,
                       itemCount: questionsArr.length,
@@ -175,6 +176,14 @@ class _AddInventoryState extends State<AddInventory> {
       case 5:
         return TextFormCard(
           fieldsPlaceholder: questionsArr[index].options,
+          onSelect: () {
+            currentIndex++;
+            pageController?.animateToPage(
+              currentIndex,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeIn,
+            );
+          },
         );
       case 9:
         return DropDownCard();
