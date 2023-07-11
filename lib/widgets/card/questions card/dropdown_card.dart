@@ -96,7 +96,7 @@ class _DropDownCardState extends State<DropDownCard> {
                                 child: DropdownButton(
                                   // isDense: true,
                                   itemHeight: null,
-                                  focusColor: Colors.white,
+                                  focusColor: Colors.transparent,
                                   hint: const CustomText(
                                     title: '--Select--',
                                     color: Colors.grey,
