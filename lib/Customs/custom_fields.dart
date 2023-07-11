@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/constants/colors.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
 
 //-------------------------------------------TextformField-------------------------------------->
 class CustomTextInput extends StatefulWidget {
@@ -65,7 +65,7 @@ class CustomTextInputState extends State<CustomTextInput> {
       child: TextFormField(
         enabled: widget.enabled,
         style: const TextStyle(
-          color: AppColor.primary,
+          color: Colors.black,
         ),
         controller: widget.controller,
         decoration: InputDecoration(

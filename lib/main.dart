@@ -1,20 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flex_color_scheme/flex_color_scheme.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/TabScreens/main_screens/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:yes_broker/constants/colors.dart';
-import 'package:yes_broker/constants/theme.dart';
-import 'package:yes_broker/pages/add_inventory.dart';
-import 'TabScreens/account_screens/profile_screen.dart';
+import 'package:yes_broker/constants/utils/theme.dart';
+import 'package:yes_broker/routes/routes.dart';
 import 'firebase_options.dart';
 import 'package:yes_broker/layout.dart';
-import 'package:yes_broker/pages/Auth/forget_password.dart';
-import 'package:yes_broker/pages/largescreen_dashboard.dart';
-import 'package:yes_broker/pages/smallscreen_dashboard.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -64,13 +55,7 @@ class MyApp extends StatelessWidget {
       // ),
       // themeMode: ThemeMode.light,
       home: LayoutView(),
-      routes: {
-        HomeScreen.routeName: (context) =>
-            Responsive.isMobile(context) ? SmallScreen() : LargeScreen(),
-        ForgetPassword.routeName: (context) => const ForgetPassword(),
-        ProfileScreen.routeName: (context) => const ProfileScreen(),
-        AddInventory.routeName: (context) => const AddInventory(),
-      },
+      routes: AppRoutes.routes,
     );
   }
 }

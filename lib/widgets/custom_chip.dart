@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/constants/colors.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
 
 class CustomChip extends StatelessWidget {
   final Widget label;

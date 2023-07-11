@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:yes_broker/constants/colors.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
 
-import 'package:yes_broker/constants/constants.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/widgets/custom_chip.dart';
+
+import '../constants/utils/image_constants.dart';
 
 class TimeLineItem extends StatelessWidget {
   final int index;

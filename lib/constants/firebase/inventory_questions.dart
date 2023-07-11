@@ -7,15 +7,15 @@ class InventoryQuestions {
   final String question;
   final String type;
   final int id;
-  final List<dynamic>? dropdownList;
   final List<String> options;
-
+  final List<dynamic> dropdownList;
   InventoryQuestions({
     required this.question,
+    required this.dropdownList,
     required this.type,
     required this.id,
     required this.options,
-    this.dropdownList,
+    // this.dropdownList,
   });
 
   // Convert Inventory_questions object to a map
@@ -35,7 +35,7 @@ class InventoryQuestions {
       question: map['question'],
       type: map['type'],
       id: map['id'],
-      dropdownList: List<dynamic>.from(map['dropdownList']),
+      dropdownList: map['dropdownList'],
       options: List<String>.from(map['options']),
     );
   }
@@ -67,21 +67,20 @@ class InventoryQuestions {
   }
 }
 
-
 // use this type
-  // void initState() {
-  //   super.initState();
-  //   fetchInventory_questionss();
-  // }
+// void initState() {
+//   super.initState();
+//   fetchInventory_questionss();
+// }
 
-  // Future<void> fetchInventory_questionss() async {
-  //   // Fetch Inventory items from Firestore
-  //   final List<Inventory_questions> items = await Inventory_questions.getInventory_questionss();
+// Future<void> fetchInventory_questionss() async {
+//   // Fetch Inventory items from Firestore
+//   final List<Inventory_questions> items = await Inventory_questions.getInventory_questionss();
 
-  //   setState(() {
-  //     Inventory_questionss = items;
-  //   });
-  // }
+//   setState(() {
+//     Inventory_questionss = items;
+//   });
+// }
 
 // Usage example:
 
@@ -108,7 +107,7 @@ class InventoryQuestions {
 
 //   await newItemByEmployee.addItem();
 
-  // Get Inventory items for a specific broker
+// Get Inventory items for a specific broker
 //   final List<Inventory_questions> Inventory_questionss =
 //       await Inventory_questions.getInventory_questionssForBroker('broker1');
 //   Inventory_questionss.forEach((item) {
@@ -117,3 +116,28 @@ class InventoryQuestions {
 //   });
 // }
 
+class Dropdown {
+  String? roomconfig;
+  List<String>? values;
+
+  Dropdown({this.roomconfig, this.values});
+
+  Dropdown.fromJson(Map<String, dynamic> json) {
+    if (json["roomconfig"] is String) {
+      roomconfig = json["roomconfig"];
+    }
+    if (json["values"] is List) {
+      values =
+          json["values"] == null ? null : List<String>.from(json["values"]);
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["roomconfig"] = roomconfig;
+    if (values != null) {
+      _data["values"] = values;
+    }
+    return _data;
+  }
+}

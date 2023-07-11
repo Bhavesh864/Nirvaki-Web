@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/constants/colors.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/widgets/custom_chip.dart';
 
 class TodoFilterView extends StatelessWidget {
@@ -23,21 +23,20 @@ class TodoFilterView extends StatelessWidget {
                 fontWeight: FontWeight.w700,
                 size: 18,
               ),
-              IconButton(onPressed: () {}, icon: Icon(Icons.close)),
+              IconButton(onPressed: () {}, icon: const Icon(Icons.close)),
             ],
           ),
           // Spacer(),
           const SizedBox(
             height: 30,
           ),
-          SingleChildScrollView(
-            child: SizedBox(
-              height: 300,
+          const Expanded(
+            child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.symmetric(vertical: 5.0),
                     child: CustomText(
                       title: 'To do Type',
@@ -50,21 +49,21 @@ class TodoFilterView extends StatelessWidget {
                     child: Row(
                       children: [
                         CustomChip(
-                          label: const CustomText(
+                          label: CustomText(
                             title: 'Task',
                             size: 10,
                           ),
                           color: AppColor.chipGreyColor,
                         ),
                         CustomChip(
-                          label: const CustomText(
+                          label: CustomText(
                             title: 'Follow up',
                             size: 10,
                           ),
                           color: AppColor.chipGreyColor,
                         ),
                         CustomChip(
-                          label: const CustomText(
+                          label: CustomText(
                             title: 'Reminder',
                             size: 10,
                           ),
@@ -73,10 +72,10 @@ class TodoFilterView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 20,
                   ),
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.symmetric(vertical: 5.0),
                     child: CustomText(
                       title: 'Linked to',
@@ -89,14 +88,14 @@ class TodoFilterView extends StatelessWidget {
                     child: Row(
                       children: [
                         CustomChip(
-                          label: const CustomText(
+                          label: CustomText(
                             title: 'Inventory',
                             size: 10,
                           ),
                           color: AppColor.chipGreyColor,
                         ),
                         CustomChip(
-                          label: const CustomText(
+                          label: CustomText(
                             title: 'Lead',
                             size: 10,
                           ),
@@ -105,10 +104,10 @@ class TodoFilterView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 20,
                   ),
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.symmetric(vertical: 5.0),
                     child: CustomText(
                       title: 'Status',
@@ -121,21 +120,21 @@ class TodoFilterView extends StatelessWidget {
                     child: Row(
                       children: [
                         CustomChip(
-                          label: const CustomText(
+                          label: CustomText(
                             title: 'New',
                             size: 10,
                           ),
                           color: AppColor.chipGreyColor,
                         ),
                         CustomChip(
-                          label: const CustomText(
+                          label: CustomText(
                             title: 'In Progress',
                             size: 10,
                           ),
                           color: AppColor.chipGreyColor,
                         ),
                         CustomChip(
-                          label: const CustomText(
+                          label: CustomText(
                             title: 'Closed',
                             size: 10,
                           ),
@@ -148,10 +147,12 @@ class TodoFilterView extends StatelessWidget {
               ),
             ),
           ),
-          const Spacer(),
-          CustomButton(
-            text: 'Apply Filters',
-            onPressed: () {},
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: CustomButton(
+              text: 'Apply Filters',
+              onPressed: () {},
+            ),
           ),
         ],
       ),

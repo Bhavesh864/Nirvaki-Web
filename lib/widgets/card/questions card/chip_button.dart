@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../Customs/custom_text.dart';
-import '../../../constants/colors.dart';
+import '../../../constants/utils/colors.dart';
 
 class ChipButton extends StatelessWidget {
   final double width;

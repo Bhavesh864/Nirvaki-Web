@@ -3,7 +3,7 @@ import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 
-import 'package:yes_broker/constants/colors.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/widgets/inventory/inventory_filter_view.dart';
 import 'package:yes_broker/widgets/workitems_list.dart';
 
@@ -13,13 +13,13 @@ class LeadScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         boxShadow: [
           BoxShadow(
             color: AppColor.secondary,
             spreadRadius: 12,
             blurRadius: 4,
-            offset: const Offset(5, 5),
+            offset: Offset(5, 5),
           ),
         ],
         color: Colors.white,

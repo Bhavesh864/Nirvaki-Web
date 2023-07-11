@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:yes_broker/constants/constants.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 
 import '../../../Customs/custom_text.dart';
 import '../../../Customs/responsive.dart';
 
 class DropDownCard extends StatefulWidget {
-  const DropDownCard({super.key});
+  final List<dynamic>? values;
+  const DropDownCard({super.key, this.values});
 
   @override
   State<DropDownCard> createState() => _DropDownCardState();
@@ -21,8 +22,25 @@ class _DropDownCardState extends State<DropDownCard> {
     'Option 4'
   ];
 
+  List<Map<String, dynamic>> list = [
+    {
+      "name": 'bedroom1',
+      "values": ["1", "2", "3"]
+    },
+    {
+      "name": 'bedroom2',
+      "values": ["1", "2", "3"]
+    },
+    {
+      "name": 'bedroom3',
+      "values": ["1", "2", "3"]
+    },
+  ];
+  List<String> selectedValues = [];
+
   @override
   Widget build(BuildContext context) {
+    print(widget.values?.length);
     return Center(
       child: Card(
         color: Colors.white,
@@ -54,35 +72,67 @@ class _DropDownCardState extends State<DropDownCard> {
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     hoverColor: Colors.transparent),
-                child: DropdownButtonHideUnderline(
-                  child: InputDecorator(
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.all(0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      isDense: true,
-                    ),
-                    child: DropdownButton(
-                      borderRadius: BorderRadius.circular(6),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      value: selectedValue,
-                      onChanged: (newValue) {
-                        setState(() {
-                          selectedValue = newValue!;
-                        });
-                      },
-                      items: options.map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ),
-              ),
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: widget.values?.length,
+                    itemBuilder: (context, index) {
+                      List values = widget.values![index]["values"];
+                      return Container(
+                        margin: const EdgeInsets.symmetric(vertical: 5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomText(
+                                title: widget.values![index]['roomconfig']),
+                            DropdownButtonHideUnderline(
+                              child: InputDecorator(
+                                decoration: InputDecoration(
+                                  contentPadding: const EdgeInsets.all(0),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  isDense: true,
+                                ),
+                                child: DropdownButton(
+                                  // isDense: true,
+                                  itemHeight: null,
+                                  focusColor: Colors.white,
+                                  hint: const CustomText(
+                                    title: '--Select--',
+                                    color: Colors.grey,
+                                  ),
+                                  icon: const Icon(Icons.expand_more),
+                                  isExpanded: true,
+                                  borderRadius: BorderRadius.circular(6),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 0),
+                                  value: selectedValues.length > index
+                                      ? selectedValues[index]
+                                      : null,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      if (selectedValues.length > index) {
+                                        selectedValues[index] = newValue!;
+                                      } else {
+                                        selectedValues.add(newValue!);
+                                      }
+                                    });
+                                  },
+                                  items: values.map((value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  // items: [],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
+              )
               // LabelTextInputField(
               //   isDropDown: true,
               //   inputController: TextEditingController(),

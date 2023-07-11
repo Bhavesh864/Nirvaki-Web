@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:yes_broker/constants/constants.dart';
-import '../../constants/colors.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
+import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
+import '../../constants/utils/image_constants.dart';
 
 AppBar MobileAppBar(BuildContext context, GlobalKey<ScaffoldState> key) {
   // final width = MediaQuery.of(context).size.width;

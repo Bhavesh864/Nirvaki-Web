@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/constants/colors.dart';
-import 'package:yes_broker/constants/constants.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 
 class InventoryCheckBoxOptions extends StatefulWidget {
   const InventoryCheckBoxOptions({super.key});
@@ -31,20 +31,18 @@ class _InventoryCheckBoxOptionsState extends State<InventoryCheckBoxOptions> {
               itemCount: inventoryFilterOtpion.length,
               itemBuilder: (context, index) {
                 return Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CustomText(title: inventoryFilterOtpion[index]['title']),
-                      Checkbox(
-                        activeColor: AppColor.primary,
-                        value: inventoryFilterOtpion[index]['selected'],
-                        onChanged: (value) {
-                          setState(() {
-                            inventoryFilterOtpion[index]['selected'] = value;
-                          });
-                        },
-                      )
-                    ],
+                  margin: const EdgeInsets.only(bottom: 14),
+                  height: 20,
+                  child: CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: CustomText(
+                        title: inventoryFilterOtpion[index]['title']),
+                    value: inventoryFilterOtpion[index]['selected'],
+                    onChanged: (value) {
+                      setState(() {
+                        inventoryFilterOtpion[index]['selected'] = value;
+                      });
+                    },
                   ),
                 );
               },

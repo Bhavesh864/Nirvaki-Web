@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:yes_broker/constants/constants.dart';
+
+import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/pages/Auth/login_screen.dart';
 
 class LayoutView extends StatelessWidget {
