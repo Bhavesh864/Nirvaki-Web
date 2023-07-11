@@ -21,25 +21,27 @@ class CardDetails {
   Createdby? createdby;
   Customerinfo? customerinfo;
   Propertyprice? propertyprice;
+  Roomconfig? roomconfig;
 
   CardDetails(
-      {required this.cardType,
-      required this.cardCategory,
+      {this.cardType,
+      this.cardCategory,
       this.cardTodoType,
       this.cardTitle,
       this.cardDescription,
       this.propertyarea,
       this.plotarea,
-      required this.cardId,
-      required this.cardStatus,
-      required this.brokerid,
+      this.cardId,
+      this.cardStatus,
+      this.brokerid,
       this.assignedto,
       this.createdate,
       this.updatedby,
       this.updatedate,
       this.createdby,
       this.customerinfo,
-      this.propertyprice});
+      this.propertyprice,
+      this.roomconfig});
 
   CardDetails.fromJson(Map<String, dynamic> json) {
     if (json["cardType"] is String) {
@@ -103,6 +105,11 @@ class CardDetails {
           ? null
           : Propertyprice.fromJson(json["propertyprice"]);
     }
+    if (json["roomconfig"] is Map) {
+      roomconfig = json["roomconfig"] == null
+          ? null
+          : Roomconfig.fromJson(json["roomconfig"]);
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -132,6 +139,9 @@ class CardDetails {
     if (propertyprice != null) {
       _data["propertyprice"] = propertyprice?.toJson();
     }
+    if (roomconfig != null) {
+      _data["roomconfig"] = roomconfig?.toJson();
+    }
     return _data;
   }
 
@@ -145,8 +155,7 @@ class CardDetails {
   }
 
   // Get Inventory items added by the broker or employees under the broker
-  static Future<List<CardDetails>> getInventoryItemsForBroker(
-      String brokerId) async {
+  static Future<List<CardDetails>> getCardDetails(String brokerId) async {
     try {
       final QuerySnapshot querySnapshot = await usersCollection.get();
       final List<CardDetails> inventoryItems = querySnapshot.docs.map((doc) {
@@ -181,6 +190,44 @@ class CardDetails {
   }
 }
 
+class Roomconfig {
+  String? bedroom;
+  List<String>? additionalroom;
+  String? bathroom;
+  String? balconies;
+
+  Roomconfig(
+      {this.bedroom, this.additionalroom, this.bathroom, this.balconies});
+
+  Roomconfig.fromJson(Map<String, dynamic> json) {
+    if (json["bedroom"] is String) {
+      bedroom = json["bedroom"];
+    }
+    if (json["additionalroom"] is List) {
+      additionalroom = json["additionalroom"] == null
+          ? null
+          : List<String>.from(json["additionalroom"]);
+    }
+    if (json["bathroom"] is String) {
+      bathroom = json["bathroom"];
+    }
+    if (json["balconies"] is String) {
+      balconies = json["balconies"];
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["bedroom"] = bedroom;
+    if (additionalroom != null) {
+      _data["additionalroom"] = additionalroom;
+    }
+    _data["bathroom"] = bathroom;
+    _data["balconies"] = balconies;
+    return _data;
+  }
+}
+
 class Propertyprice {
   String? unit;
   String? price;
@@ -197,10 +244,10 @@ class Propertyprice {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data["unit"] = unit;
-    data["price"] = price;
-    return data;
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["unit"] = unit;
+    _data["price"] = price;
+    return _data;
   }
 }
 
