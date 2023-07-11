@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
-import '../../constants/colors.dart';
+import '../../constants/utils/colors.dart';
 import '../../pages/add_inventory.dart';
 
 class CustomSpeedDialButton extends StatelessWidget {

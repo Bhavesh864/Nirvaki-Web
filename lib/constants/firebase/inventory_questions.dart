@@ -1,7 +1,4 @@
-import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:yes_broker/constants/firebase/dropdownlist.dart';
 
 final CollectionReference inventoryDetails =
     FirebaseFirestore.instance.collection('inventoryQuestions');
@@ -136,11 +133,11 @@ class Dropdown {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["roomconfig"] = roomconfig;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["roomconfig"] = roomconfig;
     if (values != null) {
-      _data["values"] = values;
+      data["values"] = values;
     }
-    return _data;
+    return data;
   }
 }

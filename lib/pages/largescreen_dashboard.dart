@@ -6,8 +6,8 @@ import 'package:yes_broker/TabScreens/main_screens/chat_screen.dart';
 import 'package:yes_broker/TabScreens/main_screens/inventroy_screen.dart';
 import 'package:yes_broker/TabScreens/main_screens/lead_screen.dart';
 import 'package:yes_broker/TabScreens/main_screens/todo_screen.dart';
-import 'package:yes_broker/constants/colors.dart';
-import 'package:yes_broker/constants/constants.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/controllers/menu_controller.dart';
 import 'package:yes_broker/widgets/app/side_menu.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
@@ -83,7 +83,7 @@ class LargeScreen extends StatelessWidget {
               flex: 20,
               child: Column(
                 children: [
-                  LargeScreenNavBar(),
+                  const LargeScreenNavBar(),
                   Expanded(
                     child: _pages[menuController.selectedPageIndex.value],
                   ),

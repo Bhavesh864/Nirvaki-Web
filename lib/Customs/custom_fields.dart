@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/constants/colors.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
 
 //-------------------------------------------TextformField-------------------------------------->
 class CustomTextInput extends StatefulWidget {
@@ -65,7 +65,7 @@ class CustomTextInputState extends State<CustomTextInput> {
       child: TextFormField(
         enabled: widget.enabled,
         style: const TextStyle(
-          color: AppColor.primary,
+          color: Colors.black,
         ),
         controller: widget.controller,
         decoration: InputDecoration(
@@ -296,6 +296,50 @@ class CustomCheckboxState extends State<CustomCheckbox> {
     );
   }
 }
+
+class CustomChoiceChip extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final Function(bool) onSelected;
+  final Color? selectedColor;
+  final Color? bgcolor;
+  final Color labelColor;
+
+  const CustomChoiceChip(
+      {super.key,
+      required this.label,
+      required this.selected,
+      required this.onSelected,
+      this.selectedColor = AppColor.primary,
+      required this.labelColor,
+      this.bgcolor = AppColor.secondary});
+
+  @override
+  Widget build(BuildContext context) {
+    return ChoiceChip(
+      label: Text(
+        label,
+        style: TextStyle(
+          color: labelColor,
+        ),
+      ),
+      selected: selected,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      labelPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+      onSelected: onSelected,
+      selectedColor: selectedColor,
+      backgroundColor: bgcolor,
+    );
+  }
+}
+
+
+
+
+
+
+
+
 
 
 // pickImage(ImageSource source) async {

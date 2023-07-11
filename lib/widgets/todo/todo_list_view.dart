@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:yes_broker/constants/colors.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/widgets/todo/todo_item.dart';
@@ -41,7 +41,7 @@ class TodoListView extends StatelessWidget {
                         ),
                       )
                     : Container(),
-                SizedBox(
+                const SizedBox(
                   // height: Responsive.isMobile(context) ? height * 0.70 : 600,
                   // child: ListView.builder(
                   //   shrinkWrap: true,

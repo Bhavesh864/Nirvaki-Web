@@ -1,19 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/custom_fields.dart';
-import 'package:yes_broker/constants/firebase/inventory_question.dart';
 import 'package:yes_broker/constants/firebase/inventory_questions.dart';
+import 'package:yes_broker/widgets/card/questions%20card/chip_button.dart';
 
 import '../../../Customs/custom_text.dart';
 import '../../../Customs/responsive.dart';
-import '../../../constants/colors.dart';
 
 class ChipButtonCard extends StatelessWidget {
   final String question;
   final List<String> options;
   final int currentIndex;
   final List<InventoryQuestions> data;
-  final void Function(String, String, List<InventoryQuestions>) onSelect;
+  final void Function(String, List<InventoryQuestions>) onSelect;
 
   const ChipButtonCard({
     super.key,
@@ -54,24 +52,11 @@ class ChipButtonCard extends StatelessWidget {
                 height: 15,
               ),
               for (var option in options)
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 5),
-                  child: InkWell(
-                    onTap: () => {
-                      onSelect(option, question, data),
-                    },
-                    borderRadius: BorderRadius.circular(10),
-                    child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: AppColor.secondary,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: CustomText(
-                          title: option,
-                        )),
-                  ),
+                ChipButton(
+                  text: option,
+                  onSelect: () => {
+                    onSelect(option, data),
+                  },
                 ),
               const SizedBox(
                 height: 10,

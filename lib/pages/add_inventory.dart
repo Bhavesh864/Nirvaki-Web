@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/constants/constants.dart';
-import 'package:yes_broker/constants/firebase/inventory_question.dart';
 import 'package:yes_broker/constants/firebase/inventory_questions.dart';
 import 'package:yes_broker/widgets/card/questions%20card/chip_button_card.dart';
 import 'package:yes_broker/widgets/card/questions%20card/dropdown_card.dart';
 import 'package:yes_broker/widgets/card/questions%20card/textform_card.dart';
+
+import '../constants/utils/image_constants.dart';
 
 class AddInventory extends StatefulWidget {
   static const routeName = '/add-inventory';
@@ -22,7 +22,6 @@ class _AddInventoryState extends State<AddInventory> {
   int currentIndex = 0;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     pageController = PageController(initialPage: currentIndex);
   }
@@ -31,7 +30,7 @@ class _AddInventoryState extends State<AddInventory> {
 
   List<String> allAnswers = [];
 
-  _next(String selectedAnswer, String question, List<InventoryQuestions> data) {
+  _next(String selectedAnswer, List<InventoryQuestions> data) {
     if (currentIndex < data.length - 1) {
       currentIndex++;
       allAnswers.add(selectedAnswer);
@@ -88,8 +87,12 @@ class _AddInventoryState extends State<AddInventory> {
                       scrollDirection: Axis.horizontal,
                       itemCount: questionsArr.length,
                       itemBuilder: (context, index) {
-                        return displayDifferentCards(questionsArr, index,
-                            questionsArr[index].type, questionsArr[index].id);
+                        return displayDifferentCards(
+                            questionsArr,
+                            index,
+                            questionsArr[index].type,
+                            questionsArr[index].id,
+                            questionsArr[index].question);
                       },
                     );
                   }
@@ -129,17 +132,26 @@ class _AddInventoryState extends State<AddInventory> {
     );
   }
 
-  Widget displayDifferentCards(
-      List<InventoryQuestions> questionsArr, int index, String type, int id) {
+  Widget displayDifferentCards(List<InventoryQuestions> questionsArr, int index,
+      String type, int id, String question) {
     switch (id) {
       case 5:
         return TextFormCard(
           fieldsPlaceholder: questionsArr[index].options,
+          onSelect: () {
+            currentIndex++;
+            pageController?.animateToPage(
+              currentIndex,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeIn,
+            );
+          },
         );
-      case 9:
+      case 9 || 10:
         return DropDownCard(
-          values: questionsArr[index].dropdownList,
-        );
+            values: questionsArr[index].dropdownList,
+            question: question,
+            id: id);
       default:
         // return Text('data');
         return ChipButtonCard(
