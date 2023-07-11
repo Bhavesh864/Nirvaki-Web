@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import 'package:yes_broker/constants/colors.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 
 class CustomCalendarView extends StatelessWidget {
@@ -10,7 +10,7 @@ class CustomCalendarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       child: Container(
         decoration: BoxDecoration(
           color: AppColor.secondary,
@@ -42,7 +42,7 @@ class CustomCalendarView extends StatelessWidget {
                 headerHeight: 0,
                 view: CalendarView.timelineWeek,
                 timeSlotViewSettings:
-                    TimeSlotViewSettings(startHour: 9, endHour: 18),
+                    const TimeSlotViewSettings(startHour: 9, endHour: 18),
                 showTodayButton: true,
                 showNavigationArrow: true,
                 backgroundColor: Colors.white,

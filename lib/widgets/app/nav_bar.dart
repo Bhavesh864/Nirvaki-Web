@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:yes_broker/constants/constants.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/controllers/menu_controller.dart';
-import '../../constants/colors.dart';
+import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/firebase/user_firebase.dart';
 

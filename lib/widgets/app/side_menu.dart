@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yes_broker/constants/colors.dart';
-import 'package:yes_broker/constants/constants.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({super.key});

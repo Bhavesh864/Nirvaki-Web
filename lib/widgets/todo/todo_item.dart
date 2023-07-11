@@ -2,14 +2,16 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:yes_broker/constants/colors.dart';
-import 'package:yes_broker/constants/constants.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/widgets/custom_chip.dart';
 
+import '../../constants/utils/image_constants.dart';
+
 class TodoItem extends StatefulWidget {
-  TodoItem({super.key});
+  const TodoItem({super.key});
 
   @override
   State<TodoItem> createState() => _TodoItemState();
@@ -133,34 +135,47 @@ class _TodoItemState extends State<TodoItem> {
                           ),
                         ),
                         const Spacer(),
-                        Row(
+                        const Row(
                           children: [
-                            Chip(
-                              padding: EdgeInsets.zero,
-                              labelPadding:
-                                  const EdgeInsets.symmetric(horizontal: 4),
-                              side: BorderSide.none,
-                              backgroundColor: const Color(0x0D200E32),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
+                            // Chip(
+                            //   padding: EdgeInsets.zero,
+                            //   labelPadding:
+                            //       const EdgeInsets.symmetric(horizontal: 4),
+                            //   side: BorderSide.none,
+                            //   backgroundColor: const Color(0x0D200E32),
+                            //   shape: RoundedRectangleBorder(
+                            //     borderRadius: BorderRadius.circular(5),
+                            //   ),
+                            //   label: const Row(
+                            //     children: [
+                            //       Icon(
+                            //         Icons.calendar_month_outlined,
+                            //         color: Colors.black,
+                            //         size: 12,
+                            //       ),
+                            //       FittedBox(
+                            //         child: CustomText(
+                            //           title: '23 May 2023',
+                            //           size: 10,
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                            CustomChip(
+                              avatar: Icon(
+                                Icons.calendar_month_outlined,
+                                color: Colors.black,
+                                size: 14,
                               ),
-                              label: const Row(
-                                children: [
-                                  Icon(
-                                    Icons.calendar_month_outlined,
-                                    color: Colors.black,
-                                    size: 12,
-                                  ),
-                                  FittedBox(
-                                    child: CustomText(
-                                      title: '23 May 2023',
-                                      size: 10,
-                                    ),
-                                  ),
-                                ],
+                              label: FittedBox(
+                                child: CustomText(
+                                  title: '23 May 2023',
+                                  size: 10,
+                                ),
                               ),
                             ),
-                            const Icon(
+                            Icon(
                               Icons.chevron_right,
                               size: 20,
                             )

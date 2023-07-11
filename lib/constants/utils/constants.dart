@@ -10,19 +10,6 @@ import 'package:yes_broker/Customs/custom_text.dart';
 double? height;
 double? width;
 
-//Images
-const String profileImage = 'assets/images/profile.png';
-const String authBgImage = 'assets/images/tree.jpg';
-const String appLogo = 'assets/images/image1.png';
-const String illustration3 = 'assets/images/illustration3.png';
-const String google = 'assets/images/google.png';
-const String fb = 'assets/images/fb.png';
-const String cocacola = 'assets/images/cocacola.png';
-const String samsung = 'assets/images/samsung.png';
-const String dashboard = 'assets/images/dashboard.png';
-const String vector1 = 'assets/images/vector.png';
-const String vector2 = 'assets/images/vector1.png';
-
 // App constants
 
 List<IconData> sideBarIcons = [
@@ -62,7 +49,7 @@ final List bottomBarItems = [
   },
 ];
 
-class todoItemModal {
+class TodoItemModal {
   String? image;
   String? task;
   String? subtitle;
@@ -72,7 +59,7 @@ class todoItemModal {
   String todoStatus;
   bool isLead;
 
-  todoItemModal({
+  TodoItemModal({
     this.image,
     this.task,
     this.subtitle,
@@ -84,7 +71,7 @@ class todoItemModal {
   });
 }
 
-class workItemModal {
+class WorkItemModal {
   String bhk;
   String area;
   String price;
@@ -95,7 +82,7 @@ class workItemModal {
   String todoStatus;
   bool isLead;
 
-  workItemModal({
+  WorkItemModal({
     required this.bhk,
     required this.area,
     required this.price,
@@ -108,8 +95,8 @@ class workItemModal {
   });
 }
 
-final List<todoItemModal> userData = [
-  todoItemModal(
+final List<TodoItemModal> userData = [
+  TodoItemModal(
     image: "user1",
     name: "Riya Sharma",
     task: "Collects documents from kishore",
@@ -120,7 +107,7 @@ final List<todoItemModal> userData = [
     todoStatus: 'New',
     isLead: true,
   ),
-  todoItemModal(
+  TodoItemModal(
     image: "user4",
     name: "Priya Singh",
     task: "Call to schedule physical visit",
@@ -130,7 +117,7 @@ final List<todoItemModal> userData = [
     todoStatus: 'In progress',
     isLead: false,
   ),
-  todoItemModal(
+  TodoItemModal(
     image: "user3",
     name: "Ganesh Gupta",
     task: "Collect copy of agreement",
@@ -140,7 +127,7 @@ final List<todoItemModal> userData = [
     todoStatus: 'In progress',
     isLead: true,
   ),
-  todoItemModal(
+  TodoItemModal(
     image: "user2",
     name: "",
     task: "Discuss about physical visit",
@@ -150,7 +137,7 @@ final List<todoItemModal> userData = [
     todoStatus: 'New',
     isLead: false,
   ),
-  todoItemModal(
+  TodoItemModal(
     image: "user2",
     name: "Priya Singh",
     task: "Collect copy of agreement",
@@ -162,8 +149,8 @@ final List<todoItemModal> userData = [
   ),
 ];
 
-List<workItemModal> workItemData = [
-  workItemModal(
+List<WorkItemModal> workItemData = [
+  WorkItemModal(
     bhk: '2BHK',
     area: '2000 sq ft',
     price: '2.5cr',
@@ -175,7 +162,7 @@ List<workItemModal> workItemData = [
     subtitle:
         'Looking for 360 sq yrd villa, preferred location Rohini and park facing.',
   ),
-  workItemModal(
+  WorkItemModal(
     bhk: '3BHK',
     area: '2000 sq ft',
     price: '2.5cr',
@@ -187,7 +174,7 @@ List<workItemModal> workItemData = [
     subtitle:
         'Looking for 360 sq yrd villa, preferred location Rohini and park facing.',
   ),
-  workItemModal(
+  WorkItemModal(
     bhk: '4BHK',
     area: '2000 sq ft',
     price: '2.5cr',
@@ -199,7 +186,7 @@ List<workItemModal> workItemData = [
     subtitle:
         'Looking for 360 sq yrd villa, preferred location Rohini and park facing.',
   ),
-  workItemModal(
+  WorkItemModal(
     bhk: '2BHK',
     area: '2000 sq ft',
     price: '2.5cr',
@@ -211,7 +198,7 @@ List<workItemModal> workItemData = [
     subtitle:
         'Looking for 360 sq yrd villa, preferred location Rohini and park facing.',
   ),
-  workItemModal(
+  WorkItemModal(
     bhk: '5BHK',
     area: '2000 sq ft',
     price: '2.5cr',

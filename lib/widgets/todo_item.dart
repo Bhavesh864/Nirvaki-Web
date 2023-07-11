@@ -2,10 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:yes_broker/constants/colors.dart';
-import 'package:yes_broker/constants/constants.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
+
+import '../constants/utils/image_constants.dart';
 
 class TodoItem extends StatefulWidget {
   const TodoItem({super.key});
@@ -16,12 +18,6 @@ class TodoItem extends StatefulWidget {
 
 class _TodoItemState extends State<TodoItem> {
   final FirebaseAuth auth = FirebaseAuth.instance;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   PopupMenuItem popupMenuItem(String title) {
     return PopupMenuItem(
@@ -248,9 +244,9 @@ class _TodoItemState extends State<TodoItem> {
                           Colors.grey.withOpacity(0.2),
                           paddingHorizontal: 8,
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Container(
-                          margin: EdgeInsets.only(right: 5),
+                          margin: const EdgeInsets.only(right: 5),
                           height: 20,
                           width: 20,
                           decoration: BoxDecoration(

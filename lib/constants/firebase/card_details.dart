@@ -113,36 +113,36 @@ class CardDetails {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["cardType"] = cardType;
-    _data["cardCategory"] = cardCategory;
-    _data["cardTodoType"] = cardTodoType;
-    _data["cardTitle"] = cardTitle;
-    _data["cardDescription"] = cardDescription;
-    _data["propertyarea"] = propertyarea;
-    _data["plotarea"] = plotarea;
-    _data["cardId"] = cardId;
-    _data["cardStatus"] = cardStatus;
-    _data["brokerid"] = brokerid;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["cardType"] = cardType;
+    data["cardCategory"] = cardCategory;
+    data["cardTodoType"] = cardTodoType;
+    data["cardTitle"] = cardTitle;
+    data["cardDescription"] = cardDescription;
+    data["propertyarea"] = propertyarea;
+    data["plotarea"] = plotarea;
+    data["cardId"] = cardId;
+    data["cardStatus"] = cardStatus;
+    data["brokerid"] = brokerid;
     if (assignedto != null) {
-      _data["assignedto"] = assignedto?.map((e) => e.toJson()).toList();
+      data["assignedto"] = assignedto?.map((e) => e.toJson()).toList();
     }
-    _data["createdate"] = createdate;
-    _data["updatedby"] = updatedby;
-    _data["updatedate"] = updatedate;
+    data["createdate"] = createdate;
+    data["updatedby"] = updatedby;
+    data["updatedate"] = updatedate;
     if (createdby != null) {
-      _data["createdby"] = createdby?.toJson();
+      data["createdby"] = createdby?.toJson();
     }
     if (customerinfo != null) {
-      _data["customerinfo"] = customerinfo?.toJson();
+      data["customerinfo"] = customerinfo?.toJson();
     }
     if (propertyprice != null) {
-      _data["propertyprice"] = propertyprice?.toJson();
+      data["propertyprice"] = propertyprice?.toJson();
     }
     if (roomconfig != null) {
-      _data["roomconfig"] = roomconfig?.toJson();
+      data["roomconfig"] = roomconfig?.toJson();
     }
-    return _data;
+    return data;
   }
 
   static Future<void> addItem(CardDetails inventory) async {
@@ -217,14 +217,14 @@ class Roomconfig {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["bedroom"] = bedroom;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["bedroom"] = bedroom;
     if (additionalroom != null) {
-      _data["additionalroom"] = additionalroom;
+      data["additionalroom"] = additionalroom;
     }
-    _data["bathroom"] = bathroom;
-    _data["balconies"] = balconies;
-    return _data;
+    data["bathroom"] = bathroom;
+    data["balconies"] = balconies;
+    return data;
   }
 }
 
@@ -244,10 +244,10 @@ class Propertyprice {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["unit"] = unit;
-    _data["price"] = price;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["unit"] = unit;
+    data["price"] = price;
+    return data;
   }
 }
 
@@ -294,15 +294,15 @@ class Customerinfo {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["firstname"] = firstname;
-    _data["lastname"] = lastname;
-    _data["title"] = title;
-    _data["mobile"] = mobile;
-    _data["whatsapp"] = whatsapp;
-    _data["email"] = email;
-    _data["companyname"] = companyname;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["firstname"] = firstname;
+    data["lastname"] = lastname;
+    data["title"] = title;
+    data["mobile"] = mobile;
+    data["whatsapp"] = whatsapp;
+    data["email"] = email;
+    data["companyname"] = companyname;
+    return data;
   }
 }
 
@@ -331,12 +331,12 @@ class Createdby {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["userid"] = userid;
-    _data["userfirstname"] = userfirstname;
-    _data["userlastname"] = userlastname;
-    _data["userimage"] = userimage;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["userid"] = userid;
+    data["userfirstname"] = userfirstname;
+    data["userlastname"] = userlastname;
+    data["userimage"] = userimage;
+    return data;
   }
 }
 
@@ -378,13 +378,13 @@ class Assignedto {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["userid"] = userid;
-    _data["firstname"] = firstname;
-    _data["lastname"] = lastname;
-    _data["image"] = image;
-    _data["assignedon"] = assignedon;
-    _data["assignedby"] = assignedby;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["userid"] = userid;
+    data["firstname"] = firstname;
+    data["lastname"] = lastname;
+    data["image"] = image;
+    data["assignedon"] = assignedon;
+    data["assignedby"] = assignedby;
+    return data;
   }
 }

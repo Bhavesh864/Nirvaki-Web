@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:yes_broker/TabScreens/main_screens/chat_screen.dart';
 import 'package:yes_broker/TabScreens/main_screens/inventroy_screen.dart';
 import 'package:yes_broker/TabScreens/main_screens/lead_screen.dart';
-import 'package:yes_broker/constants/colors.dart';
-import 'package:yes_broker/constants/constants.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/controllers/menu_controller.dart';
 import 'package:yes_broker/widgets/app/app_bar.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';
@@ -37,7 +37,7 @@ class SmallScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
-        appBar: MobileAppBar(context, GlobalKey()),
+        appBar: mobileAppBar(context, GlobalKey()),
         bottomNavigationBar: BottomNavigationBar(
           unselectedItemColor: const Color.fromARGB(255, 158, 153, 153),
           selectedItemColor: AppColor.primary,
@@ -59,7 +59,7 @@ class SmallScreen extends StatelessWidget {
           ),
         ),
         body: _pages[menuController.selectedMobilePageIndex.value],
-        floatingActionButton: CustomSpeedDialButton(),
+        floatingActionButton: const CustomSpeedDialButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
     );

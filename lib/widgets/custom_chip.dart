@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/constants/colors.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
 
 class CustomChip extends StatelessWidget {
   final Widget label;
@@ -28,15 +28,12 @@ class CustomChip extends StatelessWidget {
       child: Chip(
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         avatar: avatar,
-        padding: EdgeInsets.symmetric(
-            horizontal: paddingHorizontal ?? 0, vertical: 0),
-        // labelPadding: const EdgeInsets.symmetric(horizontal: 3),
+        // padding: EdgeInsets.symmetric(
+        //     horizontal: paddingHorizontal ?? 0, vertical: 0),
+        labelPadding: EdgeInsets.symmetric(
+            horizontal: paddingHorizontal ?? 1, vertical: 0),
         // padding: EdgeInsets.symmetric(vertical: 3, horizontal: 3),
-        side: BorderSide.none,
         backgroundColor: color,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
-        ),
         label: label,
       ),
     );

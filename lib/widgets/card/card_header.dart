@@ -2,10 +2,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/constants/colors.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
 
 import '../../Customs/responsive.dart';
-import '../../constants/constants.dart';
+import '../../constants/utils/constants.dart';
 import '../app/app_bar.dart';
 import '../custom_chip.dart';
 

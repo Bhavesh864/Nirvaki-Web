@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 
-import 'package:yes_broker/constants/colors.dart';
-import 'package:yes_broker/constants/constants.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/widgets/custom_chip.dart';
+
+import '../constants/utils/image_constants.dart';
 
 class AppImage {
   String? image;
@@ -56,7 +59,7 @@ class _WorkItemState extends State<WorkItem> {
           : const ClampingScrollPhysics(),
       itemCount: workItemData.length,
       itemBuilder: ((context, index) => Card(
-            color: Colors.white,
+            color: AppColor.cardColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0),
             ),
@@ -86,8 +89,8 @@ class _WorkItemState extends State<WorkItem> {
                               scrollDirection: Axis.horizontal,
                               shrinkWrap: true,
                               children: [
-                                customChipWidget(
-                                  Icon(
+                                CustomChip(
+                                  label: Icon(
                                     userData[index].isLead
                                         ? Icons.person_pin_outlined
                                         : Icons.person_outline,
@@ -97,39 +100,36 @@ class _WorkItemState extends State<WorkItem> {
                                     size: 18,
                                     // weight: 10.12,
                                   ),
-                                  AppColor.red.withOpacity(0.1),
+                                  color: userData[index].isLead
+                                      ? AppColor.inventoryChipColor
+                                      : AppColor.leadChipColor,
                                 ),
-                                customChipWidget(
-                                  CustomText(
+                                CustomChip(
+                                  label: CustomText(
                                     title: workItemData[index].bhk,
                                     size: 10,
                                   ),
-                                  Colors.grey.withOpacity(0.2),
                                 ),
-                                customChipWidget(
-                                  CustomText(
+                                CustomChip(
+                                  label: CustomText(
                                     title: workItemData[index].area,
                                     size: 10,
                                   ),
-                                  Colors.grey.withOpacity(0.2),
                                 ),
-                                customChipWidget(
-                                  CustomText(
+                                CustomChip(
+                                  label: CustomText(
                                     title: workItemData[index].price,
                                     size: 10,
                                   ),
-                                  Colors.grey.withOpacity(0.2),
                                 ),
-                                customChipWidget(
-                                  CustomText(
+                                CustomChip(
+                                  label: CustomText(
                                     title: workItemData[index].type,
                                     size: 10,
                                   ),
-                                  Colors.grey.withOpacity(0.2),
                                 ),
                                 PopupMenuButton(
                                   tooltip: '',
-                                  enableFeedback: false,
                                   initialValue: selectedOption,
                                   splashRadius: 0,
                                   padding: EdgeInsets.zero,
@@ -138,8 +138,8 @@ class _WorkItemState extends State<WorkItem> {
                                   itemBuilder: (context) => dropDownListData
                                       .map((e) => popupMenuItem(e.toString()))
                                       .toList(),
-                                  child: customChipWidget(
-                                    Row(
+                                  child: CustomChip(
+                                    label: Row(
                                       children: [
                                         CustomText(
                                           title: selectedOption,
@@ -155,7 +155,7 @@ class _WorkItemState extends State<WorkItem> {
                                         ),
                                       ],
                                     ),
-                                    taskStatusColor(selectedOption)
+                                    color: taskStatusColor(selectedOption)
                                         .withOpacity(0.1),
                                   ),
                                 ),
@@ -200,41 +200,37 @@ class _WorkItemState extends State<WorkItem> {
                           color: Colors.black,
                           fontWeight: FontWeight.w600,
                         ),
-                        customChipWidget(
-                          const Icon(
+                        const CustomChip(
+                          label: Icon(
                             Icons.call_outlined,
                             color: Colors.black,
-                            size: 12,
+                            size: 14,
                           ),
-                          Colors.grey.withOpacity(0.2),
-                          paddingHorizontal: 8,
+                          paddingHorizontal: 4,
                         ),
-                        customChipWidget(
-                          const FaIcon(
+                        const CustomChip(
+                          label: FaIcon(
                             FontAwesomeIcons.whatsapp,
                             color: Colors.black,
-                            size: 12,
+                            size: 14,
                           ),
-                          Colors.grey.withOpacity(0.2),
-                          paddingHorizontal: 8,
+                          paddingHorizontal: 4,
                         ),
-                        customChipWidget(
-                          const Icon(
+                        const CustomChip(
+                          label: Icon(
                             Icons.edit_outlined,
                             color: Colors.black,
-                            size: 12,
+                            size: 14,
                           ),
-                          Colors.grey.withOpacity(0.2),
-                          paddingHorizontal: 8,
+                          paddingHorizontal: 4,
                         ),
-                        customChipWidget(
-                          const Icon(
+                        const CustomChip(
+                          label: Icon(
                             Icons.share_outlined,
                             color: Colors.black,
-                            size: 12,
+                            size: 14,
                           ),
-                          Colors.grey.withOpacity(0.2),
-                          paddingHorizontal: 8,
+                          paddingHorizontal: 4,
                         ),
                         const Spacer(),
                         Container(
@@ -260,7 +256,7 @@ class _WorkItemState extends State<WorkItem> {
   Widget customChipWidget(Widget label, Color color,
       {double paddingHorizontal = 3}) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 2, vertical: 0),
+      margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 0),
       child: Chip(
           padding:
               EdgeInsets.symmetric(horizontal: paddingHorizontal, vertical: 0),
