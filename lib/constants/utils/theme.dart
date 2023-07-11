@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:yes_broker/constants/colors.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
 
 class TAppTheme {
   static ThemeData lightTheme = ThemeData(

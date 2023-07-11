@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
-import 'package:yes_broker/constants/colors.dart';
-import 'package:yes_broker/constants/constants.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/widgets/timeline_item.dart';
 
 class CustomTimeLineView extends StatelessWidget {

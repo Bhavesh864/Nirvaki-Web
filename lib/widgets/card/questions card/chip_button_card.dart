@@ -5,7 +5,6 @@ import 'package:yes_broker/widgets/card/questions%20card/chip_button.dart';
 
 import '../../../Customs/custom_text.dart';
 import '../../../Customs/responsive.dart';
-import '../../../constants/colors.dart';
 
 class ChipButtonCard extends StatelessWidget {
   final String question;

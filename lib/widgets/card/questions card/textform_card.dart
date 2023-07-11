@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/constants/colors.dart';
-import 'package:yes_broker/constants/constants.dart';
-import 'package:yes_broker/constants/firebase/inventory_questions.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 
 import '../../../Customs/label_text_field.dart';
 import '../../../Customs/responsive.dart';
@@ -57,19 +55,30 @@ class _TextFormCardState extends State<TextFormCard> {
                   inputController: inputController,
                   labelText: widget.fieldsPlaceholder[1]),
               LabelTextInputField(
-                  inputController: inputController,
-                  labelText: widget.fieldsPlaceholder[2]),
+                inputController: inputController,
+                labelText: widget.fieldsPlaceholder[2],
+              ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 7.0),
-                child: CustomCheckbox(
-                  fillColor: AppColor.primary,
-                  value: isChecked,
-                  label: 'Use Same number for whatsapp',
-                  onChanged: (newVal) {
+                child: GestureDetector(
+                  onTap: () {
                     setState(() {
-                      isChecked = newVal;
+                      isChecked = !isChecked;
                     });
                   },
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        value: isChecked,
+                        onChanged: (newVal) {
+                          setState(() {
+                            isChecked = newVal!;
+                          });
+                        },
+                      ),
+                      const CustomText(title: 'Use Same number for whatsapp'),
+                    ],
+                  ),
                 ),
               ),
               !isChecked
@@ -83,7 +92,7 @@ class _TextFormCardState extends State<TextFormCard> {
                   inputController: inputController, labelText: 'Company Name'),
               Container(
                 alignment: Alignment.centerRight,
-                margin: EdgeInsets.only(top: 8),
+                margin: const EdgeInsets.only(top: 8),
                 child: CustomButton(
                   width: 73,
                   text: 'Next',
