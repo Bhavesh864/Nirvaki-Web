@@ -31,7 +31,7 @@ class SideMenuController extends GetxController {
       case 5:
         return ' > Calendar';
       default:
-        return 'Home';
+        return '';
     }
   }
 
