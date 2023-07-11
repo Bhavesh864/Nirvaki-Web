@@ -27,50 +27,8 @@ class _AddInventoryState extends State<AddInventory> {
     pageController = PageController(initialPage: currentIndex);
   }
 
-  final List arr = [
-    {
-      'question': '',
-      'options': ['', '', ''],
-      "type": 'chip',
-      "id": 2
-    },
-    {
-      'question': '',
-      'options': ['', '', ''],
-      "type": 'chip',
-      "id": 2
-    },
-    {
-      'question': '',
-      'options': ['', '', ''],
-      "type": 'chip',
-      "id": 2
-    },
-    {
-      'question': '',
-      'options': ['', '', ''],
-      "type": 'chip',
-      "id": 2
-    },
-    {
-      'question': '',
-      'options': ['', '', ''],
-      "type": 'chip',
-      "id": 2
-    },
-    // {
-    //   'question': '',
-    //   'listItem': ['No of bedrrom?', 'Additional Rooms'],
-    //   'options': [
-    //     ['', '', ''],
-    //     ['', '', ''],
-    //   ],
-    //   "type": 'chip',
-    //   "id": 2
-    // },
-  ];
-
   var selectedOption = '';
+
   List<String> allAnswers = [];
 
   _next(String selectedAnswer, String question, List<InventoryQuestions> data) {
@@ -125,6 +83,7 @@ class _AddInventoryState extends State<AddInventory> {
                   if (snapshot.hasData) {
                     final questionsArr = snapshot.data!;
                     return PageView.builder(
+                      // physics: const NeverScrollableScrollPhysics(),
                       controller: pageController,
                       scrollDirection: Axis.horizontal,
                       itemCount: questionsArr.length,

@@ -85,6 +85,7 @@ class _DropDownCardState extends State<DropDownCard> {
                                       ? selectedValues[index]
                                       : null,
                                   onChanged: (newValue) {
+                                    print('values====>$selectedValues');
                                     setState(() {
                                       if (selectedValues.length > index) {
                                         selectedValues[index] = newValue!;

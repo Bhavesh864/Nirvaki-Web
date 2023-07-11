@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/constants/firebase/inventory_question.dart';
@@ -26,7 +27,6 @@ class ChipButtonCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
-
     return Center(
       child: Card(
         color: Colors.white,
