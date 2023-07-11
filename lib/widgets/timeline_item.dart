@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 
 import 'package:yes_broker/constants/utils/constants.dart';
@@ -40,8 +41,8 @@ class TimeLineItem extends StatelessWidget {
                     : AppColor.inventoryChipColor,
                 avatar: Icon(
                   timeLine['isInventory']
-                      ? Icons.person_pin_outlined
-                      : Icons.person_outline,
+                      ? MaterialSymbols.location_home_outlined
+                      : MaterialSymbols.location_away,
                   color: timeLine['isInventory']
                       ? AppColor.leadIconColor
                       : AppColor.inventoryIconColor,

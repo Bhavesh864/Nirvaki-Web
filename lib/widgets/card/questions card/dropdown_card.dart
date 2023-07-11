@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 
+import '../../../Customs/custom_fields.dart';
 import '../../../Customs/custom_text.dart';
 import '../../../Customs/responsive.dart';
 
@@ -14,33 +15,11 @@ class DropDownCard extends StatefulWidget {
 
 class _DropDownCardState extends State<DropDownCard> {
   String? selectedValue = 'Select a item';
-  List<String> options = [
-    'Select a item',
-    'Option 1',
-    'Option 2',
-    'Option 3',
-    'Option 4'
-  ];
 
-  List<Map<String, dynamic>> list = [
-    {
-      "name": 'bedroom1',
-      "values": ["1", "2", "3"]
-    },
-    {
-      "name": 'bedroom2',
-      "values": ["1", "2", "3"]
-    },
-    {
-      "name": 'bedroom3',
-      "values": ["1", "2", "3"]
-    },
-  ];
   List<String> selectedValues = [];
 
   @override
   Widget build(BuildContext context) {
-    print(widget.values?.length);
     return Center(
       child: Card(
         color: Colors.white,
@@ -83,7 +62,10 @@ class _DropDownCardState extends State<DropDownCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomText(
-                                title: widget.values![index]['roomconfig']),
+                              fontWeight: FontWeight.w500,
+                              size: 16,
+                              title: widget.values![index]['roomconfig'],
+                            ),
                             DropdownButtonHideUnderline(
                               child: InputDecorator(
                                 decoration: InputDecoration(
@@ -132,12 +114,17 @@ class _DropDownCardState extends State<DropDownCard> {
                         ),
                       );
                     }),
+              ),
+              Container(
+                alignment: Alignment.centerRight,
+                margin: const EdgeInsets.only(top: 8),
+                child: CustomButton(
+                  width: 73,
+                  text: 'Next',
+                  onPressed: () {},
+                  height: 39,
+                ),
               )
-              // LabelTextInputField(
-              //   isDropDown: true,
-              //   inputController: TextEditingController(),
-              //   labelText: 'No. of Bedrooms?',
-              // )
             ],
           ),
         ),
