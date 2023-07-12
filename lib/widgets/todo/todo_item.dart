@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
@@ -84,8 +85,8 @@ class _TodoItemState extends State<TodoItem> {
                               CustomChip(
                                 label: Icon(
                                   userData[index].isLead
-                                      ? Icons.person_pin_outlined
-                                      : Icons.person_outline,
+                                      ? MaterialSymbols.location_home_outlined
+                                      : MaterialSymbols.location_away,
                                   color: userData[index].isLead
                                       ? AppColor.inventoryIconColor
                                       : AppColor.leadIconColor,
@@ -224,7 +225,7 @@ class _TodoItemState extends State<TodoItem> {
                         paddingHorizontal: 4,
                       ),
                       const CustomChip(
-                        label: FaIcon(
+                        label: Icon(
                           FontAwesomeIcons.whatsapp,
                           color: Colors.black,
                           size: 14,
@@ -250,15 +251,65 @@ class _TodoItemState extends State<TodoItem> {
                       const Spacer(),
                       Container(
                         margin: const EdgeInsets.only(right: 5),
-                        height: 20,
-                        width: 20,
+                        height: 24,
+                        width: 24,
                         decoration: BoxDecoration(
                           image: const DecorationImage(
                               image: AssetImage(profileImage)),
                           borderRadius: BorderRadius.circular(40),
                         ),
-                        // child: Text(width.toString()),
                       ),
+                      // SizedBox(
+                      //   width: 50,
+                      //   child: Stack(
+                      //     alignment: Alignment.center,
+                      //     children: [
+                      //       Align(
+                      //         alignment: Alignment.centerLeft,
+                      //         child: Container(
+                      //           margin: const EdgeInsets.only(right: 5),
+                      //           height: 24,
+                      //           width: 24,
+                      //           decoration: BoxDecoration(
+                      //             image: const DecorationImage(
+                      //                 image: AssetImage(profileImage)),
+                      //             borderRadius: BorderRadius.circular(40),
+                      //           ),
+                      //           // child: Text(width.toString()),
+                      //         ),
+                      //       ),
+                      //       Container(
+                      //         margin: const EdgeInsets.only(right: 5),
+                      //         height: 24,
+                      //         width: 24,
+                      //         decoration: BoxDecoration(
+                      //           image: const DecorationImage(
+                      //               image: AssetImage(profileImage)),
+                      //           borderRadius: BorderRadius.circular(40),
+                      //         ),
+                      //         alignment: Alignment.center,
+                      //       ),
+                      //       Align(
+                      //         alignment: Alignment.centerRight,
+                      //         child: Container(
+                      //           width: 24,
+                      //           padding: const EdgeInsets.only(
+                      //               left: 5, top: 5, right: 6, bottom: 5),
+                      //           decoration: BoxDecoration(
+                      //             color: AppColor.chipGreyColor,
+                      //             borderRadius: BorderRadius.circular(40),
+                      //           ),
+                      //           child: const Text(
+                      //             "+2",
+                      //             overflow: TextOverflow.ellipsis,
+                      //             textAlign: TextAlign.left,
+                      //             style: TextStyle(color: Colors.white),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                     ],
                   ),
                 ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:yes_broker/TabScreens/account_screens/profile_screen.dart';
 import 'package:yes_broker/TabScreens/main_screens/caledar_screen.dart';
 import 'package:yes_broker/TabScreens/main_screens/chat_screen.dart';
@@ -8,16 +9,19 @@ import 'package:yes_broker/TabScreens/main_screens/lead_screen.dart';
 import 'package:yes_broker/TabScreens/main_screens/todo_screen.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
-import 'package:yes_broker/controllers/menu_controller.dart';
 import 'package:yes_broker/widgets/app/side_menu.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/TabScreens/main_screens/home_screen.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';
 
-class LargeScreen extends StatelessWidget {
+final currentIndexProvider = StateProvider<int>((ref) {
+  return 0;
+});
+
+class LargeScreen extends ConsumerWidget {
   LargeScreen({super.key});
 
-  final SideMenuController menuController = Get.put(SideMenuController());
+  // final SideMenuController menuController = Get.put(SideMenuController());
 
   void select(int n) {
     for (int i = 0; i < 5; i++) {
@@ -41,57 +45,63 @@ class LargeScreen extends StatelessWidget {
 
   // int _selectedPageIndex = 0;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentIndex = ref.watch(currentIndexProvider);
+
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Obx(
-        () => Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // const Expanded(
-            //   flex: 1,
-            //   child: SideMenu(),
-            // ),
-            SingleChildScrollView(
-              child: Container(
-                color: Colors.white,
-                height: 600,
-                padding: EdgeInsets.only(top: height! * 0.2),
-                child: NavigationRail(
-                  backgroundColor: Colors.white,
-                  minWidth: 60,
-                  useIndicator: false,
-                  onDestinationSelected: (index) {
-                    menuController.selectPage(index);
-                  },
-                  destinations: sideBarIcons
-                      .map(
-                        (e) => NavigationRailDestination(
-                          icon: Icon(e),
-                          selectedIcon: Icon(e, color: AppColor.primary),
-                          label: const Text('Yes Broker'),
-                        ),
-                      )
-                      .toList(),
-                  selectedIndex: menuController.selectedPageIndex.value > 5
-                      ? 0
-                      : menuController.selectedPageIndex.value,
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // const Expanded(
+          //   flex: 1,
+          //   child: SideMenu(),
+          // ),
+          SingleChildScrollView(
+            child: Container(
+              color: Colors.white,
+              height: 600,
+              padding: EdgeInsets.only(top: height! * 0.2),
+              child: NavigationRail(
+                backgroundColor: Colors.white,
+                minWidth: 60,
+                useIndicator: false,
+                onDestinationSelected: (index) {
+                  ref
+                      .read(currentIndexProvider.notifier)
+                      .update((state) => index);
+                },
+                destinations: sideBarIcons
+                    .map(
+                      (e) => NavigationRailDestination(
+                        icon: Icon(e),
+                        selectedIcon: Icon(e, color: AppColor.primary),
+                        label: const Text('Yes Broker'),
+                      ),
+                    )
+                    .toList(),
+                selectedIndex: currentIndex > 5 ? 0 : currentIndex,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 20,
+            child: Column(
+              children: [
+                LargeScreenNavBar((selectedVal) {
+                  if (selectedVal == 'Profile') {
+                    ref
+                        .read(currentIndexProvider.notifier)
+                        .update((state) => 6);
+                  }
+                }),
+                Expanded(
+                  child: _pages[currentIndex],
                 ),
-              ),
+              ],
             ),
-            Expanded(
-              flex: 20,
-              child: Column(
-                children: [
-                  const LargeScreenNavBar(),
-                  Expanded(
-                    child: _pages[menuController.selectedPageIndex.value],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
       floatingActionButton: const Column(
         mainAxisAlignment: MainAxisAlignment.end,

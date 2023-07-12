@@ -5,8 +5,10 @@ import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/utils/image_constants.dart';
 
-AppBar mobileAppBar(BuildContext context, GlobalKey<ScaffoldState> key) {
+AppBar MobileAppBar(
+    BuildContext context, void Function(String) onOptionSelect) {
   // final width = MediaQuery.of(context).size.width;
+  print('appbar');
 
   return AppBar(
     foregroundColor: Colors.black,
@@ -31,11 +33,14 @@ AppBar mobileAppBar(BuildContext context, GlobalKey<ScaffoldState> key) {
     ),
     actions: [
       PopupMenuButton(
+        onSelected: (value) {
+          onOptionSelect(value);
+        },
         color: Colors.white.withOpacity(1),
         offset: const Offset(200, 40),
         itemBuilder: (context) => menuItems.map(
           (e) {
-            return popupMenuItem(e);
+            return popupMenuItem(e, onOptionSelect);
           },
         ).toList(),
         child: Container(
@@ -53,8 +58,12 @@ AppBar mobileAppBar(BuildContext context, GlobalKey<ScaffoldState> key) {
   );
 }
 
-PopupMenuItem popupMenuItem(String title) {
+PopupMenuItem popupMenuItem(
+    String title, void Function(String) onOptionSelect) {
   return PopupMenuItem(
+    onTap: () {
+      onOptionSelect(title);
+    },
     height: 5,
     padding: const EdgeInsets.symmetric(vertical: 2),
     child: Center(
