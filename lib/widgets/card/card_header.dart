@@ -77,7 +77,7 @@ class CardHeader extends StatelessWidget {
                 color: Colors.white.withOpacity(1),
                 offset: const Offset(10, 40),
                 itemBuilder: (context) => dropDownListData
-                    .map((e) => popupMenuItem(e.toString()))
+                    .map((e) => popupMenuItem(e.toString(), (s) {}))
                     .toList(),
                 child: CustomChip(
                   label: Row(
