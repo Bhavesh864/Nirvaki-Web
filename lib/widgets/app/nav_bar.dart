@@ -5,7 +5,7 @@ import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/controllers/menu_controller.dart';
 import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
-import '../../constants/firebase/user_firebase.dart';
+import '../../constants/firebase/user_info.dart';
 
 class LargeScreenNavBar extends StatefulWidget {
   const LargeScreenNavBar({super.key});

@@ -58,6 +58,7 @@ class User {
         status: map['status'],
         image: map['image']);
   }
+//  -----------------------------Methods------------------------------------------------------------------->
 
   static Future<void> addUser(User user) async {
     try {
@@ -179,3 +180,13 @@ Future<String> signUpwith(email, password) async {
 // // Delete the user
 // await userCRUD.deleteUser('1');
 // }
+
+
+
+
+
+
+
+
+
+

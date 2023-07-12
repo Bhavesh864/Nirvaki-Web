@@ -11,7 +11,9 @@ class DropDownCard extends StatefulWidget {
   final List<dynamic>? values;
   final String? question;
   final int? id;
-  const DropDownCard({super.key, this.values, this.question, this.id});
+  final VoidCallback? onSelect;
+  const DropDownCard(
+      {super.key, this.values, this.question, this.id, this.onSelect});
 
   @override
   State<DropDownCard> createState() => _DropDownCardState();
@@ -166,7 +168,7 @@ class _DropDownCardState extends State<DropDownCard> {
                   child: CustomButton(
                     width: 73,
                     text: 'Next',
-                    onPressed: () {},
+                    onPressed: () => {widget.onSelect!()},
                     height: 39,
                   ),
                 )
