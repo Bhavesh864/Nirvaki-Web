@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
+
 import 'package:yes_broker/constants/firebase/inventory_questions.dart';
+import 'package:yes_broker/constants/firebase/random_uid.dart';
+
 import 'package:yes_broker/widgets/card/questions%20card/chip_button_card.dart';
 import 'package:yes_broker/widgets/card/questions%20card/dropdown_card.dart';
 import 'package:yes_broker/widgets/card/questions%20card/textform_card.dart';
@@ -26,8 +29,8 @@ class _AddInventoryState extends State<AddInventory> {
     pageController = PageController(initialPage: currentIndex);
   }
 
+  final randomuid = generateUid();
   var selectedOption = '';
-
   List<String> allAnswers = [];
 
   _next(String selectedAnswer, List<InventoryQuestions> data) {
@@ -82,7 +85,7 @@ class _AddInventoryState extends State<AddInventory> {
                   if (snapshot.hasData) {
                     final questionsArr = snapshot.data!;
                     return PageView.builder(
-                      // physics: const NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       controller: pageController,
                       scrollDirection: Axis.horizontal,
                       itemCount: questionsArr.length,
@@ -151,6 +154,14 @@ class _AddInventoryState extends State<AddInventory> {
         return DropDownCard(
             values: questionsArr[index].dropdownList,
             question: question,
+            onSelect: () {
+              currentIndex++;
+              pageController?.animateToPage(
+                currentIndex,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeIn,
+              );
+            },
             id: id);
       default:
         // return Text('data');

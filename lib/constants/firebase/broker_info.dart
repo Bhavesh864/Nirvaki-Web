@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/foundation.dart';
 
-import 'package:yes_broker/constants/firebase/user_firebase.dart';
+import 'package:yes_broker/constants/firebase/user_info.dart';
 
 final CollectionReference brokerInfosCollection =
     FirebaseFirestore.instance.collection('brokerInfo');
@@ -57,6 +57,7 @@ class BrokerInfo {
       brokercompanyaddress: map['brokercompanyaddress'],
     );
   }
+//  -----------------------------Methods------------------------------------------------------------------->
 
   static Future<void> addBrokerInfo(BrokerInfo brokerInfo) async {
     try {
@@ -138,8 +139,8 @@ Future<String> signUpwithbroker(email, password, others) async {
         brokerid: authentication.currentUser?.uid,
         role: 'broker',
         companyname: 'bhavesh',
-        brokercompanynumber: 1234333445,
-        brokercompanywhatsapp: 12345678765,
+        brokercompanynumber: 1234567890,
+        brokercompanywhatsapp: 1234567890,
         brokercompanyemail: email,
         brokerlogo: "",
         brokercompanyaddress: {
@@ -154,7 +155,7 @@ Future<String> signUpwithbroker(email, password, others) async {
         userfirstname: 'bhavesh',
         userlastname: 'khatri',
         userId: authentication.currentUser!.uid,
-        mobile: 3333333,
+        mobile: 1234567890,
         email: email,
         role: 'broker',
         image: '');
