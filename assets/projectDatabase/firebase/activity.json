@@ -1,0 +1,15 @@
+{
+    "--------------------Activity----------------": "",
+    "activityText": "string",
+    "activityId":"int",
+    "brokerId": "int",
+    "managerId": "int",
+    "userId": "int",
+    "linkedItemId":"int",
+    "createdDate": "timestamp",
+    "createdBy":{
+        "id":"int",
+        "name":"string",
+        "image":"string"
+    }  
+}

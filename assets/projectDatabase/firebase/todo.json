@@ -1,0 +1,51 @@
+{
+    "--------------------Todo----------------": "",
+    "todoType": "string",
+    "todoId":"int",
+    "brokerId": "int",
+    "managerId": "int",
+    "todoName": "string",
+    "todoDescription": "string",
+    "dueDate": "timestamp",
+    "createdDate": "timestamp",
+    "createdBy": "string",
+    "todoStatus": "string",
+    "customerId": "int",
+    "assignedTo": [
+        {
+            "employeId": "int",
+            "employeName": "string",
+            "employeImage": "string"
+        },
+        {
+            "employeId": "int",
+            "employeName": "string",
+            "employeImage": "string"
+        }
+    ],
+    "linkedWorkItem": [
+        {
+            "workItemId": "string",
+            "workItemType":"string",
+            "workItemTitle":"string",
+            "workItemDescription":"string"
+        }
+    ],
+    "attachments": [
+        {
+            "title": "string",
+            "type": "string",
+            "path": "string",
+            "createdby": "int",
+            "createdate": "timestamp"
+        },
+        {
+            "title": "string",
+            "type": "string",
+            "path": "string",
+            "createdby": "int",
+            "createdate": "timestamp"
+        }
+    ]
+    
+}
