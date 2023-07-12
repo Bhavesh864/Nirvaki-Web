@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/constants/firebase/inventory_details.dart';
 
 import 'package:yes_broker/constants/firebase/inventory_questions.dart';
 import 'package:yes_broker/constants/firebase/random_uid.dart';
+import 'package:yes_broker/constants/firebase/user_info.dart';
 
 import 'package:yes_broker/widgets/card/questions%20card/chip_button_card.dart';
 import 'package:yes_broker/widgets/card/questions%20card/dropdown_card.dart';
@@ -32,6 +34,20 @@ class _AddInventoryState extends State<AddInventory> {
   final randomuid = generateUid();
   var selectedOption = '';
   List<String> allAnswers = [];
+
+  // submit() async {
+  //   final InventoryDetails item = InventoryDetails(
+  //       inventoryTitle: 'inventoryTitle',
+  //       inventoryDescription: 'inventoryDescription',
+  //       inventoryId: 'inventoryId',
+  //       inventoryStatus: "new",
+  //       brokerid: auth.currentUser!.uid,
+  //       inventorycategory: 'array'[0],
+  //       customerinfo: Customerinfo(firstname: "maish", lastname: "", email: ""),
+  //       createdby: Createdby());
+
+  //   await InventoryDetails.addInventoryDetails(item);
+  // }
 
   _next(String selectedAnswer, List<InventoryQuestions> data) {
     if (currentIndex < data.length - 1) {
