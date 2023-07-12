@@ -36,6 +36,6 @@ class AppRoutes {
         Responsive.isMobile(context) ? SmallScreen() : LargeScreen(),
     ForgetPassword.routeName: (context) => const ForgetPassword(),
     ProfileScreen.routeName: (context) => const ProfileScreen(),
-    AddInventory.routeName: (context) => const AddInventory(),
+    AddInventory.routeName: (context) => AddInventory(),
   };
 }

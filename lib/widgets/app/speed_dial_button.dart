@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 import '../../constants/utils/colors.dart';
@@ -28,7 +29,7 @@ class CustomSpeedDialButton extends StatelessWidget {
             )
           ],
           child: const Icon(
-            Icons.person_pin_outlined,
+            MaterialSymbols.location_home_outlined,
             color: Colors.white,
           ),
           label: 'Inventory',

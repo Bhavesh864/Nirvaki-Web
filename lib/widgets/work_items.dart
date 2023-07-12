@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 
@@ -92,8 +93,8 @@ class _WorkItemState extends State<WorkItem> {
                                 CustomChip(
                                   label: Icon(
                                     userData[index].isLead
-                                        ? Icons.person_pin_outlined
-                                        : Icons.person_outline,
+                                        ? MaterialSymbols.location_home_outlined
+                                        : MaterialSymbols.location_away,
                                     color: userData[index].isLead
                                         ? AppColor.inventoryIconColor
                                         : AppColor.leadIconColor,

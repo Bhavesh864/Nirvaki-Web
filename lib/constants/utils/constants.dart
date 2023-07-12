@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 
@@ -15,11 +16,11 @@ double? width;
 List<IconData> sideBarIcons = [
   Icons.home_outlined,
   Icons.list_outlined,
-  Icons.person_pin_outlined,
-  Icons.person_search_outlined,
+  MaterialSymbols.location_home,
+  MaterialSymbols.location_away,
   Icons.chat_outlined,
   Icons.calendar_month_outlined,
-  // Icons.person_pin_circle,
+  // MaterialSymbols.location_home_circle,
 ];
 
 final List bottomBarItems = [
@@ -31,13 +32,13 @@ final List bottomBarItems = [
   },
   {
     "title": 'Inventory',
-    "icon": Icons.person_pin_outlined,
+    "icon": MaterialSymbols.location_home,
     "active_icon": Icons.search,
     "page": const CustomText(title: 'Lead'),
   },
   {
     "title": 'Lead',
-    "icon": Icons.person_search_outlined,
+    "icon": MaterialSymbols.location_away,
     "active_icon": Icons.favorite_outlined,
     "page": const CustomText(title: 'Inventory'),
   },

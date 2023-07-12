@@ -1,32 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/constants/utils/constants.dart';
-import 'package:yes_broker/controllers/menu_controller.dart';
 import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/firebase/user_info.dart';
 
-class LargeScreenNavBar extends StatefulWidget {
-  const LargeScreenNavBar({super.key});
+final currentIndexProvider = StateProvider<int>((ref) {
+  return 0;
+});
+
+class LargeScreenNavBar extends ConsumerWidget {
+  final void Function(String) onOptionSelect;
+  const LargeScreenNavBar(this.onOptionSelect, {super.key});
+
+  // final SideMenuController menuController = Get.put(SideMenuController());
 
   @override
-  State<LargeScreenNavBar> createState() => _LargeScreenNavBarState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    // final currentIndex = ref.watch(currentIndexProvider);
 
-class _LargeScreenNavBarState extends State<LargeScreenNavBar> {
-  @override
-  void initState() {
-    super.initState();
-    getstate();
-  }
-
-  getstate() async {}
-
-  final SideMenuController menuController = Get.put(SideMenuController());
-
-  @override
-  Widget build(BuildContext context) {
     return Container(
       height: 70,
       margin: const EdgeInsets.only(bottom: 5, right: 5),
@@ -44,6 +37,9 @@ class _LargeScreenNavBarState extends State<LargeScreenNavBar> {
       child: FutureBuilder(
         future: User.getUser(auth.currentUser!.uid),
         builder: (context, snapshot) {
+          // if (snapshot.connectionState == ConnectionState.waiting) {
+          //   return const Center(child: CircularProgressIndicator());
+          // }
           if (snapshot.hasData) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -51,9 +47,8 @@ class _LargeScreenNavBarState extends State<LargeScreenNavBar> {
                 largeScreenView(snapshot.data?.userfirstname),
                 PopupMenuButton(
                   onSelected: (value) {
-                    if (value == 'Profile') {
-                      menuController.selectPage(6);
-                    }
+                    print(value);
+                    onOptionSelect(value);
                   },
                   color: Colors.white.withOpacity(1),
                   offset: const Offset(200, 40),
@@ -105,7 +100,7 @@ PopupMenuItem popupMenuItem(String title) {
 }
 
 Widget largeScreenView(name) {
-  final SideMenuController menuController = Get.put(SideMenuController());
+  // final SideMenuController menuController = Get.put(SideMenuController());
   return Container(
     padding: const EdgeInsets.only(left: 10),
     child: Column(
@@ -126,30 +121,13 @@ Widget largeScreenView(name) {
                   size: 18,
                 ),
               ),
-              Obx(
-                () => Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Row(
-                    children: [
-                      CustomText(
-                        title: 'Home',
-                        fontWeight: FontWeight.w600,
-                        color: menuController.titleForEachTab(
-                                    menuController.selectedPageIndex.value) ==
-                                ''
-                            ? AppColor.primary
-                            : Colors.grey,
-                        size: 13,
-                      ),
-                      CustomText(
-                        title: menuController.titleForEachTab(
-                            menuController.selectedPageIndex.value),
-                        fontWeight: FontWeight.w600,
-                        color: AppColor.primary,
-                        size: 13,
-                      ),
-                    ],
-                  ),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 5),
+                child: const CustomText(
+                  title: 'Home',
+                  fontWeight: FontWeight.w600,
+                  color: AppColor.primary,
+                  size: 13,
                 ),
               ),
             ],
