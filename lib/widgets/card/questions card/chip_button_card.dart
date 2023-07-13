@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/constants/firebase/inventory_questions.dart';
+import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/card/questions%20card/chip_button.dart';
 
 import '../../../Customs/custom_text.dart';
@@ -62,10 +64,18 @@ class ChipButtonCard extends StatelessWidget {
                 height: 10,
               ),
               data.length == currentIndex + 1
-                  ? CustomButton(
-                      text: 'Save',
-                      onPressed: () {},
-                      height: 40,
+                  ? Consumer(
+                      builder: (context, ref, child) {
+                        return CustomButton(
+                          text: 'Save',
+                          onPressed: () {
+                            ref
+                                .watch(allChipSelectedAnwersProvider.notifier)
+                                .submitInventoryDetails();
+                          },
+                          height: 40,
+                        );
+                      },
                     )
                   : Container(),
             ],

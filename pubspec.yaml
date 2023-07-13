@@ -44,6 +44,7 @@ dependencies:
   flex_color_scheme: ^7.1.2
   flutter_material_symbols: ^0.0.1
   flutter_riverpod: ^2.3.6
+  random_string: ^2.3.1
   
 
 dev_dependencies:

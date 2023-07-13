@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:yes_broker/Customs/custom_text.dart';
-
 import 'package:yes_broker/constants/firebase/inventory_questions.dart';
 import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
-import 'package:yes_broker/constants/firebase/random_uid.dart';
-
 import 'package:yes_broker/widgets/card/questions%20card/chip_button_card.dart';
 import 'package:yes_broker/widgets/card/questions%20card/dropdown_card.dart';
 import 'package:yes_broker/widgets/card/questions%20card/textform_card.dart';
-
 import '../constants/utils/image_constants.dart';
 
 class AddInventory extends ConsumerStatefulWidget {
@@ -31,18 +26,33 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     super.initState();
     pageController = PageController(initialPage: currentIndex);
   }
+  // final randomuid = generateUid();
 
-  final randomuid = generateUid();
   var selectedOption = '';
   List<String> allAnswers = [];
 
+  // submit() async {
+  //   final InventoryDetails item = InventoryDetails(
+  //       inventoryTitle: 'inventoryTitle',
+  //       inventoryDescription: 'inventoryDescription',
+  //       inventoryId: 'inventoryId',
+  //       inventoryStatus: "new",
+  //       brokerid: auth.currentUser!.uid,
+  //       inventorycategory: 'array'[0],
+  //       customerinfo: Customerinfo(firstname: "maish", lastname: "", email: ""),
+  //       createdby: Createdby());
+
+  //   await InventoryDetails.addInventoryDetails(item);
+  // }
+
   _next(String selectedAnswer, List<InventoryQuestions> data, int id) {
     if (currentIndex < data.length - 1) {
+      selectedOption = selectedAnswer;
       currentIndex++;
       // allAnswers.add(selectedAnswer);
       ref.read(allChipSelectedAnwersProvider.notifier).add({
         'id': id,
-        'selectedAnwer': selectedAnswer,
+        'selectedAnswer': selectedAnswer,
       });
 
       pageController?.animateToPage(
@@ -55,11 +65,12 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
 
   _back() {
     if (currentIndex != 0) {
+      ref.read(allChipSelectedAnwersProvider.notifier).remove(selectedOption);
       currentIndex--;
-      ref
-          .read(allChipSelectedAnwersProvider.notifier)
-          .state
-          .removeAt(currentIndex);
+      // ref
+      //     .read(allChipSelectedAnwersProvider.notifier)
+      //     .state
+      //     .removeAt(currentIndex);
       pageController?.animateToPage(
         currentIndex,
         duration: const Duration(milliseconds: 300),
@@ -91,7 +102,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator.adaptive(),
                     );
                   }
                   if (snapshot.hasData) {
@@ -172,6 +183,10 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
           values: questionsArr[index].dropdownList,
           question: question,
           onSelect: () {
+            // ref.read().add({
+            //   'id': id,
+            //   'selectedAnwer': selectedAnswer,
+            // });
             currentIndex++;
             pageController?.animateToPage(
               currentIndex,

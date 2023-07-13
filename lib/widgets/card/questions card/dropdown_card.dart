@@ -28,6 +28,8 @@ class _DropDownCardState extends State<DropDownCard> {
   int? selectIndex;
   @override
   Widget build(BuildContext context) {
+    print(widget.values);
+    print(widget.question);
     return Center(
       child: SingleChildScrollView(
         child: Card(
