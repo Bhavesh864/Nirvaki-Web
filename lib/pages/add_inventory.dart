@@ -18,6 +18,7 @@ class AddInventory extends ConsumerStatefulWidget {
   const AddInventory({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _AddInventoryState createState() => _AddInventoryState();
 }
 
@@ -55,6 +56,10 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   _back() {
     if (currentIndex != 0) {
       currentIndex--;
+      ref
+          .read(allChipSelectedAnwersProvider.notifier)
+          .state
+          .removeAt(currentIndex);
       pageController?.animateToPage(
         currentIndex,
         duration: const Duration(milliseconds: 300),
