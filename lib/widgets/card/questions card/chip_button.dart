@@ -7,10 +7,11 @@ class ChipButton extends StatelessWidget {
   final double width;
   final String text;
   final VoidCallback onSelect;
-
+  final TextAlign? textAlign;
   const ChipButton({
     super.key,
     this.width = double.infinity,
+    this.textAlign,
     required this.text,
     required this.onSelect,
   });
@@ -32,6 +33,7 @@ class ChipButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
           child: CustomText(
+            textAlign: textAlign,
             title: text,
           ),
         ),

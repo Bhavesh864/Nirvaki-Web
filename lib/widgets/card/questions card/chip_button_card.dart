@@ -11,7 +11,7 @@ class ChipButtonCard extends StatelessWidget {
   final List<String> options;
   final int currentIndex;
   final List<InventoryQuestions> data;
-  final void Function(String, List<InventoryQuestions>) onSelect;
+  final void Function(String, List<InventoryQuestions>, int) onSelect;
 
   const ChipButtonCard({
     super.key,
@@ -25,7 +25,6 @@ class ChipButtonCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
-
     return Center(
       child: Card(
         color: Colors.white,
@@ -56,7 +55,7 @@ class ChipButtonCard extends StatelessWidget {
                 ChipButton(
                   text: option,
                   onSelect: () => {
-                    onSelect(option, data),
+                    onSelect(option, data, data[currentIndex].id),
                   },
                 ),
               const SizedBox(

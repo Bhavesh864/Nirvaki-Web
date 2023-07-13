@@ -1,12 +1,25 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final allSelectedAnswersProvider =
-    StateNotifierProvider<AllSelectedAnwersNotifier, List<String>>(
-  (ref) => AllSelectedAnwersNotifier(),
+final allChipSelectedAnwersProvider =
+    StateNotifierProvider<AllChipSelectedAnwers, List<Map<String, dynamic>>>(
+  (ref) => AllChipSelectedAnwers(),
 );
 
-class AllSelectedAnwersNotifier extends StateNotifier<List<String>> {
-  AllSelectedAnwersNotifier() : super([]);
+class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
+  AllChipSelectedAnwers() : super([]);
+
+  void add(Map<String, dynamic> selectedValue) {
+    state = [...state, selectedValue];
+  }
+}
+
+final allDropDownSelectedAnswers =
+    StateNotifierProvider<AllDropdownSelectedAnwers, List<String>>(
+  (ref) => AllDropdownSelectedAnwers(),
+);
+
+class AllDropdownSelectedAnwers extends StateNotifier<List<String>> {
+  AllDropdownSelectedAnwers() : super([]);
 
   void add(String selectedValue) {
     state = [...state, selectedValue];

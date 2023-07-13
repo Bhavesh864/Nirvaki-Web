@@ -41,7 +41,7 @@ class TodoListView extends StatelessWidget {
                         ),
                       )
                     : Container(),
-                SizedBox(
+                const SizedBox(
                   // height: Responsive.isMobile(context) ? height * 0.70 : 600,
                   // child: ListView.builder(
                   //   shrinkWrap: true,
