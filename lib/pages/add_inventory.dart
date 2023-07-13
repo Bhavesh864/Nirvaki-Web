@@ -13,6 +13,7 @@ class AddInventory extends ConsumerStatefulWidget {
   const AddInventory({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _AddInventoryState createState() => _AddInventoryState();
 }
 
@@ -25,8 +26,8 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     super.initState();
     pageController = PageController(initialPage: currentIndex);
   }
-
   // final randomuid = generateUid();
+
   var selectedOption = '';
   List<String> allAnswers = [];
 
@@ -44,11 +45,16 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   //   await InventoryDetails.addInventoryDetails(item);
   // }
 
-  _next(String selectedAnswer, List<InventoryQuestions> data) {
+  _next(String selectedAnswer, List<InventoryQuestions> data, int id) {
     if (currentIndex < data.length - 1) {
+      selectedOption = selectedAnswer;
       currentIndex++;
       // allAnswers.add(selectedAnswer);
-      ref.read(allSelectedAnswersProvider.notifier).add(selectedAnswer);
+      ref.read(allChipSelectedAnwersProvider.notifier).add({
+        'id': id,
+        'selectedAnswer': selectedAnswer,
+      });
+
       pageController?.animateToPage(
         currentIndex,
         duration: const Duration(milliseconds: 300),
@@ -59,7 +65,12 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
 
   _back() {
     if (currentIndex != 0) {
+      ref.read(allChipSelectedAnwersProvider.notifier).remove(selectedOption);
       currentIndex--;
+      // ref
+      //     .read(allChipSelectedAnwersProvider.notifier)
+      //     .state
+      //     .removeAt(currentIndex);
       pageController?.animateToPage(
         currentIndex,
         duration: const Duration(milliseconds: 300),
@@ -134,11 +145,16 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                 },
                 icon: const Icon(Icons.arrow_back),
               ),
-              title: const CustomText(
-                title: 'Add Inventory',
-                fontWeight: FontWeight.w700,
-                size: 20,
-                color: Colors.white,
+              title: Consumer(
+                builder: (context, ref, child) {
+                  final val = ref.watch(allChipSelectedAnwersProvider);
+                  return CustomText(
+                    title: 'Add Inventory $val',
+                    fontWeight: FontWeight.w700,
+                    size: 20,
+                    color: Colors.white,
+                  );
+                },
               ),
             ),
           ),
@@ -164,17 +180,22 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
         );
       case 9 || 10:
         return DropDownCard(
-            values: questionsArr[index].dropdownList,
-            question: question,
-            onSelect: () {
-              currentIndex++;
-              pageController?.animateToPage(
-                currentIndex,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeIn,
-              );
-            },
-            id: id);
+          values: questionsArr[index].dropdownList,
+          question: question,
+          onSelect: () {
+            // ref.read().add({
+            //   'id': id,
+            //   'selectedAnwer': selectedAnswer,
+            // });
+            currentIndex++;
+            pageController?.animateToPage(
+              currentIndex,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeIn,
+            );
+          },
+          id: id,
+        );
       default:
         // return Text('data');
         return ChipButtonCard(

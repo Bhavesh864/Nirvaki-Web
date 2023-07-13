@@ -65,22 +65,22 @@ class ActivityDetails {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["ActivityID"] = activityId;
-    _data["ActivityStatus"] = activityStatus;
-    _data["itemtype"] = itemtype;
-    _data["itemid"] = itemid;
-    _data["brokerid"] = brokerid;
-    _data["managerid"] = managerid;
-    _data["userid"] = userid;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["ActivityID"] = activityId;
+    data["ActivityStatus"] = activityStatus;
+    data["itemtype"] = itemtype;
+    data["itemid"] = itemid;
+    data["brokerid"] = brokerid;
+    data["managerid"] = managerid;
+    data["userid"] = userid;
     if (createdby != null) {
-      _data["createdby"] = createdby?.toJson();
+      data["createdby"] = createdby?.toJson();
     }
-    _data["createdate"] = createdate;
+    data["createdate"] = createdate;
     if (activitybody != null) {
-      _data["activitybody"] = activitybody?.toJson();
+      data["activitybody"] = activitybody?.toJson();
     }
-    return _data;
+    return data;
   }
 }
 
@@ -121,17 +121,17 @@ class Activitybody {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["activitytitle"] = activitytitle;
-    _data["layouttype"] = layouttype;
-    _data["paragraphtext"] = paragraphtext;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["activitytitle"] = activitytitle;
+    data["layouttype"] = layouttype;
+    data["paragraphtext"] = paragraphtext;
     if (chipoptions != null) {
-      _data["chipoptions"] = chipoptions;
+      data["chipoptions"] = chipoptions;
     }
     if (cardoptions != null) {
-      _data["cardoptions"] = cardoptions?.toJson();
+      data["cardoptions"] = cardoptions?.toJson();
     }
-    return _data;
+    return data;
   }
 
   //  -----------------------------Methods------------------------------------------------------------------->
@@ -146,7 +146,7 @@ class Activitybody {
 
       return inventoryItems;
     } catch (error) {
-      print('Failed to get Inventory items: $error');
+      // print('Failed to get Inventory items: $error');
       return [];
     }
   }
@@ -156,9 +156,9 @@ class Activitybody {
       await activityDetailsCollection
           .doc(inventory.activityId)
           .set(inventory.toJson());
-      print('Inventory item added successfully');
+      // print('Inventory item added successfully');
     } catch (error) {
-      print('Failed to add Inventory item: $error');
+      // print('Failed to add Inventory item: $error');
     }
   }
 
@@ -167,9 +167,9 @@ class Activitybody {
       await activityDetailsCollection
           .doc(item.activityId)
           .update(item.toJson());
-      print('Inventory item updated successfully');
+      // print('Inventory item updated successfully');
     } catch (error) {
-      print('Failed to update Inventory item: $error');
+      // print('Failed to update Inventory item: $error');
     }
   }
 }
@@ -190,10 +190,10 @@ class Cardoptions {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["cardtitle"] = cardtitle;
-    _data["carddetail"] = carddetail;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["cardtitle"] = cardtitle;
+    data["carddetail"] = carddetail;
+    return data;
   }
 }
 
@@ -222,11 +222,11 @@ class Createdby {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["userid"] = userid;
-    _data["userfirstname"] = userfirstname;
-    _data["userlastname"] = userlastname;
-    _data["userimage"] = userimage;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["userid"] = userid;
+    data["userfirstname"] = userfirstname;
+    data["userlastname"] = userlastname;
+    data["userimage"] = userimage;
+    return data;
   }
 }

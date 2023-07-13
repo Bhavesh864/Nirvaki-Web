@@ -40,8 +40,7 @@ class SmallScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = ref.watch(currentIndexProvider);
     return Scaffold(
-      appBar: MobileAppBar(context, (selectedVal) {
-        print(selectedVal);
+      appBar: mobileAppBar(context, (selectedVal) {
         if (selectedVal == 'Profile') {
           ref.read(currentIndexProvider.notifier).update((state) => 3);
         }
