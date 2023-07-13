@@ -11,6 +11,16 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
   void add(Map<String, dynamic> selectedValue) {
     state = [...state, selectedValue];
   }
+
+  void remove(String selectedValue) {
+    final index = state
+        .indexWhere((element) => element['selectedAnswer'] == selectedValue);
+    state.removeAt(index);
+  }
+
+  void submitInventoryDetails() {
+    print('state $state');
+  }
 }
 
 final allDropDownSelectedAnswers =

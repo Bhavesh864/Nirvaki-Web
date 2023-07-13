@@ -7,7 +7,8 @@ import 'package:yes_broker/constants/utils/colors.dart';
 
 import '../../Customs/responsive.dart';
 import '../../constants/utils/constants.dart';
-import '../app/app_bar.dart';
+
+import '../app/nav_bar.dart';
 import '../custom_chip.dart';
 
 class CardHeader extends StatelessWidget {
@@ -77,7 +78,7 @@ class CardHeader extends StatelessWidget {
                 color: Colors.white.withOpacity(1),
                 offset: const Offset(10, 40),
                 itemBuilder: (context) => dropDownListData
-                    .map((e) => popupMenuItem(e.toString(), (s) {}))
+                    .map((e) => popupMenuItem(e.toString()))
                     .toList(),
                 child: CustomChip(
                   label: Row(
