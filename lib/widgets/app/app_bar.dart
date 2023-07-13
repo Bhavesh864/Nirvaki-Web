@@ -5,10 +5,9 @@ import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/utils/image_constants.dart';
 
-AppBar MobileAppBar(
+AppBar mobileAppBar(
     BuildContext context, void Function(String) onOptionSelect) {
   // final width = MediaQuery.of(context).size.width;
-  print('appbar');
 
   return AppBar(
     foregroundColor: Colors.black,

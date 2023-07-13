@@ -63,9 +63,9 @@ class User {
   static Future<void> addUser(User user) async {
     try {
       await usersCollection.doc(user.userId).set(user.toMap());
-      print('User added successfully');
+      // print('User added successfully');
     } catch (error) {
-      print('Failed to add user: $error');
+      // print('Failed to add user: $error');
     }
   }
 
@@ -82,7 +82,7 @@ class User {
       }
     } catch (error) {
       if (kDebugMode) {
-        print('Failed to get user: $error');
+        // print('Failed to get user: $error');
       }
       return null;
     }
@@ -93,18 +93,18 @@ class User {
       await usersCollection
           .doc(updatedUser.brokerId)
           .update(updatedUser.toMap());
-      print('User updated successfully');
+      // print('User updated successfully');
     } catch (error) {
-      print('Failed to update user: $error');
+      // print('Failed to update user: $error');
     }
   }
 
   static Future<void> deleteUser(String userId) async {
     try {
       await usersCollection.doc(userId).delete();
-      print('User deleted successfully');
+      // print('User deleted successfully');
     } catch (error) {
-      print('Failed to delete user: $error');
+      // print('Failed to delete user: $error');
     }
   }
 }
@@ -145,7 +145,7 @@ Future<String> signUpwith(email, password) async {
     res = "success";
     return res;
   } catch (er) {
-    print(er);
+    // print(er);
     return er.toString();
   }
 }

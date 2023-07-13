@@ -95,30 +95,30 @@ class TodoDetails {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["todoType"] = todoType;
-    _data["todoId"] = todoId;
-    _data["brokerId"] = brokerId;
-    _data["managerId"] = managerId;
-    _data["todoName"] = todoName;
-    _data["todoDescription"] = todoDescription;
-    _data["dueDate"] = dueDate;
-    _data["createDate"] = createDate;
-    _data["createdBy"] = createdBy;
-    _data["todoStatus"] = todoStatus;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["todoType"] = todoType;
+    data["todoId"] = todoId;
+    data["brokerId"] = brokerId;
+    data["managerId"] = managerId;
+    data["todoName"] = todoName;
+    data["todoDescription"] = todoDescription;
+    data["dueDate"] = dueDate;
+    data["createDate"] = createDate;
+    data["createdBy"] = createdBy;
+    data["todoStatus"] = todoStatus;
     if (customerinfo != null) {
-      _data["customerinfo"] = customerinfo?.toJson();
+      data["customerinfo"] = customerinfo?.toJson();
     }
     if (assignedto != null) {
-      _data["assignedto"] = assignedto?.map((e) => e.toJson()).toList();
+      data["assignedto"] = assignedto?.map((e) => e.toJson()).toList();
     }
     if (linkedWorkItem != null) {
-      _data["linkedWorkItem"] = linkedWorkItem?.map((e) => e.toJson()).toList();
+      data["linkedWorkItem"] = linkedWorkItem?.map((e) => e.toJson()).toList();
     }
     if (attachments != null) {
-      _data["attachments"] = attachments?.map((e) => e.toJson()).toList();
+      data["attachments"] = attachments?.map((e) => e.toJson()).toList();
     }
-    return _data;
+    return data;
   }
 
   //  -----------------------------Methods------------------------------------------------------------------->
@@ -131,7 +131,7 @@ class TodoDetails {
           documentSnapshot.data() as Map<String, dynamic>;
       return TodoDetails.fromJson(data);
     } catch (error) {
-      print('Failed to get Inventory items: $error');
+      // print('Failed to get Inventory items: $error');
       return null;
     }
   }
@@ -139,18 +139,18 @@ class TodoDetails {
   static Future<void> addTodoDetails(TodoDetails inventory) async {
     try {
       await todoDetailsCollection.doc(inventory.todoId).set(inventory.toJson());
-      print('Inventory item added successfully');
+      // print('Inventory item added successfully');
     } catch (error) {
-      print('Failed to add Inventory item: $error');
+      // print('Failed to add Inventory item: $error');
     }
   }
 
   static Future<void> updateTodoDetails(TodoDetails item) async {
     try {
       await todoDetailsCollection.doc(item.todoId).update(item.toJson());
-      print('Inventory item updated successfully');
+      // print('Inventory item updated successfully');
     } catch (error) {
-      print('Failed to update Inventory item: $error');
+      // print('Failed to update Inventory item: $error');
     }
   }
 }
@@ -184,13 +184,13 @@ class Attachments {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["title"] = title;
-    _data["type"] = type;
-    _data["path"] = path;
-    _data["createdby"] = createdby;
-    _data["createdate"] = createdate;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["title"] = title;
+    data["type"] = type;
+    data["path"] = path;
+    data["createdby"] = createdby;
+    data["createdate"] = createdate;
+    return data;
   }
 }
 
@@ -222,12 +222,12 @@ class LinkedWorkItem {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["workItemId"] = workItemId;
-    _data["workItemType"] = workItemType;
-    _data["workItemTitle"] = workItemTitle;
-    _data["workItemDescription"] = workItemDescription;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["workItemId"] = workItemId;
+    data["workItemType"] = workItemType;
+    data["workItemTitle"] = workItemTitle;
+    data["workItemDescription"] = workItemDescription;
+    return data;
   }
 }
 
@@ -269,14 +269,14 @@ class Assignedto {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["userid"] = userid;
-    _data["firstname"] = firstname;
-    _data["lastname"] = lastname;
-    _data["image"] = image;
-    _data["assignedon"] = assignedon;
-    _data["assignedby"] = assignedby;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["userid"] = userid;
+    data["firstname"] = firstname;
+    data["lastname"] = lastname;
+    data["image"] = image;
+    data["assignedon"] = assignedon;
+    data["assignedby"] = assignedby;
+    return data;
   }
 }
 
@@ -318,13 +318,13 @@ class Customerinfo {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["firstname"] = firstname;
-    _data["lastname"] = lastname;
-    _data["title"] = title;
-    _data["mobile"] = mobile;
-    _data["whatsapp"] = whatsapp;
-    _data["email"] = email;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["firstname"] = firstname;
+    data["lastname"] = lastname;
+    data["title"] = title;
+    data["mobile"] = mobile;
+    data["whatsapp"] = whatsapp;
+    data["email"] = email;
+    return data;
   }
 }

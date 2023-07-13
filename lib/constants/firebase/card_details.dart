@@ -144,9 +144,9 @@ class CardDetails {
       await cardDetailsCollection
           .doc(inventory.workitemId)
           .set(inventory.toJson());
-      print('Inventory item added successfully');
+      // print('Inventory item added successfully');
     } catch (error) {
-      print('Failed to add Inventory item: $error');
+      // print('Failed to add Inventory item: $error');
     }
   }
 
@@ -161,7 +161,7 @@ class CardDetails {
 
       return inventoryItems;
     } catch (error) {
-      print('Failed to get Inventory items: $error');
+      // print('Failed to get Inventory items: $error');
       return [];
     }
   }
@@ -169,9 +169,9 @@ class CardDetails {
   static Future<void> updateCardDetails(CardDetails item) async {
     try {
       await cardDetailsCollection.doc(item.workitemId).update(item.toJson());
-      print('Inventory item updated successfully');
+      // print('Inventory item updated successfully');
     } catch (error) {
-      print('Failed to update Inventory item: $error');
+      // print('Failed to update Inventory item: $error');
     }
   }
 
@@ -179,9 +179,9 @@ class CardDetails {
   static Future<void> deleteCardDetails(String id) async {
     try {
       await cardDetailsCollection.doc(id).delete();
-      print('Inventory item deleted successfully');
+      // print('Inventory item deleted successfully');
     } catch (error) {
-      print('Failed to delete Inventory item: $error');
+      // print('Failed to delete Inventory item: $error');
     }
   }
 }

@@ -47,7 +47,6 @@ class LargeScreenNavBar extends ConsumerWidget {
                 largeScreenView(snapshot.data?.userfirstname),
                 PopupMenuButton(
                   onSelected: (value) {
-                    print(value);
                     onOptionSelect(value);
                   },
                   color: Colors.white.withOpacity(1),
