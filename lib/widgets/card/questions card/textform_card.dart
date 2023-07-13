@@ -25,7 +25,6 @@ class _TextFormCardState extends State<TextFormCard> {
   @override
   Widget build(BuildContext context) {
     TextEditingController inputController = TextEditingController();
-    // final w = MediaQuery.of(context).size.width;
 
     return Center(
       child: Card(

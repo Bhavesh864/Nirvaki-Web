@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
+
 import 'package:yes_broker/constants/firebase/inventory_questions.dart';
 import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
+import 'package:yes_broker/constants/firebase/random_uid.dart';
+
 import 'package:yes_broker/widgets/card/questions%20card/chip_button_card.dart';
 import 'package:yes_broker/widgets/card/questions%20card/dropdown_card.dart';
 import 'package:yes_broker/widgets/card/questions%20card/textform_card.dart';
@@ -24,19 +27,23 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   int currentIndex = 0;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     pageController = PageController(initialPage: currentIndex);
   }
 
+  final randomuid = generateUid();
   var selectedOption = '';
   List<String> allAnswers = [];
 
-  _next(String selectedAnswer, List<InventoryQuestions> data) {
+  _next(String selectedAnswer, List<InventoryQuestions> data, int id) {
     if (currentIndex < data.length - 1) {
       currentIndex++;
       // allAnswers.add(selectedAnswer);
-      ref.read(allSelectedAnswersProvider.notifier).add(selectedAnswer);
+      ref.read(allChipSelectedAnwersProvider.notifier).add({
+        'id': id,
+        'selectedAnwer': selectedAnswer,
+      });
+
       pageController?.animateToPage(
         currentIndex,
         duration: const Duration(milliseconds: 300),
@@ -90,8 +97,12 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                       scrollDirection: Axis.horizontal,
                       itemCount: questionsArr.length,
                       itemBuilder: (context, index) {
-                        return displayDifferentCards(questionsArr, index,
-                            questionsArr[index].type, questionsArr[index].id);
+                        return displayDifferentCards(
+                            questionsArr,
+                            index,
+                            questionsArr[index].type,
+                            questionsArr[index].id,
+                            questionsArr[index].question);
                       },
                     );
                   }
@@ -118,11 +129,16 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                 },
                 icon: const Icon(Icons.arrow_back),
               ),
-              title: const CustomText(
-                title: 'Add Inventory',
-                fontWeight: FontWeight.w700,
-                size: 20,
-                color: Colors.white,
+              title: Consumer(
+                builder: (context, ref, child) {
+                  final val = ref.watch(allChipSelectedAnwersProvider);
+                  return CustomText(
+                    title: 'Add Inventory $val',
+                    fontWeight: FontWeight.w700,
+                    size: 20,
+                    color: Colors.white,
+                  );
+                },
               ),
             ),
           ),
@@ -131,8 +147,8 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     );
   }
 
-  Widget displayDifferentCards(
-      List<InventoryQuestions> questionsArr, int index, String type, int id) {
+  Widget displayDifferentCards(List<InventoryQuestions> questionsArr, int index,
+      String type, int id, String question) {
     switch (id) {
       case 5:
         return TextFormCard(
@@ -146,9 +162,19 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
             );
           },
         );
-      case 9:
+      case 9 || 10:
         return DropDownCard(
           values: questionsArr[index].dropdownList,
+          question: question,
+          onSelect: () {
+            currentIndex++;
+            pageController?.animateToPage(
+              currentIndex,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeIn,
+            );
+          },
+          id: id,
         );
       default:
         // return Text('data');

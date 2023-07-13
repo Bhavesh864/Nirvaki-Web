@@ -8,20 +8,20 @@ import '../pages/add_inventory.dart';
 import '../pages/largescreen_dashboard.dart';
 import '../pages/smallscreen_dashboard.dart';
 
-const HomeScreenPageRoute = 'Home';
-const TodoPageRoute = 'Todo';
-const InventoryPageRoute = 'Inventory';
-const LeadPageRoute = 'Lead';
-const CalendarPageRoute = 'Calendar';
-const ChatPageRoute = 'Chat';
+const homeScreenPageRoute = 'Home';
+const todoPageRoute = 'Todo';
+const inventoryPageRoute = 'Inventory';
+const leadPageRoute = 'Lead';
+const calendarPageRoute = 'Calendar';
+const chatPageRoute = 'Chat';
 
 List menuItems = [
-  HomeScreenPageRoute,
-  TodoPageRoute,
-  InventoryPageRoute,
-  LeadPageRoute,
-  CalendarPageRoute,
-  ChatPageRoute,
+  homeScreenPageRoute,
+  todoPageRoute,
+  inventoryPageRoute,
+  leadPageRoute,
+  calendarPageRoute,
+  chatPageRoute,
 ];
 
 class AppRoutes {
@@ -36,6 +36,6 @@ class AppRoutes {
         Responsive.isMobile(context) ? SmallScreen() : LargeScreen(),
     ForgetPassword.routeName: (context) => const ForgetPassword(),
     ProfileScreen.routeName: (context) => const ProfileScreen(),
-    AddInventory.routeName: (context) => AddInventory(),
+    AddInventory.routeName: (context) => const AddInventory(),
   };
 }

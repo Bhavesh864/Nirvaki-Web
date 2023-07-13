@@ -12,7 +12,7 @@ import 'package:yes_broker/widgets/custom_chip.dart';
 import '../../constants/utils/image_constants.dart';
 
 class TodoItem extends StatefulWidget {
-  TodoItem({super.key});
+  const TodoItem({super.key});
 
   @override
   State<TodoItem> createState() => _TodoItemState();

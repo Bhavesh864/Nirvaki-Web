@@ -8,13 +8,13 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         boxShadow: [
           BoxShadow(
             color: AppColor.secondary,
             spreadRadius: 12,
             blurRadius: 4,
-            offset: const Offset(5, 5),
+            offset: Offset(5, 5),
           ),
         ],
         color: Colors.white,

@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/foundation.dart';
 
-import 'package:yes_broker/constants/firebase/user_firebase.dart';
+import 'package:yes_broker/constants/firebase/user_info.dart';
 
 final CollectionReference brokerInfosCollection =
     FirebaseFirestore.instance.collection('brokerInfo');
@@ -57,15 +57,16 @@ class BrokerInfo {
       brokercompanyaddress: map['brokercompanyaddress'],
     );
   }
+//  -----------------------------Methods------------------------------------------------------------------->
 
   static Future<void> addBrokerInfo(BrokerInfo brokerInfo) async {
     try {
       await brokerInfosCollection
           .doc(brokerInfo.brokerid)
           .set(brokerInfo.toMap());
-      print('BrokerInfo added successfully');
+      // print('BrokerInfo added successfully');
     } catch (error) {
-      print('Failed to add BrokerInfo: $error');
+      // print('Failed to add BrokerInfo: $error');
     }
   }
 
@@ -93,18 +94,18 @@ class BrokerInfo {
       await brokerInfosCollection
           .doc(updatedBrokerInfo.brokerid)
           .update(updatedBrokerInfo.toMap());
-      print('BrokerInfo updated successfully');
+      // print('BrokerInfo updated successfully');
     } catch (error) {
-      print('Failed to update BrokerInfo: $error');
+      // print('Failed to update BrokerInfo: $error');
     }
   }
 
   static Future<void> deleteBrokerInfo(String brokerid) async {
     try {
       await brokerInfosCollection.doc(brokerid).delete();
-      print('BrokerInfo deleted successfully');
+      // print('BrokerInfo deleted successfully');
     } catch (error) {
-      print('Failed to delete BrokerInfo: $error');
+      // print('Failed to delete BrokerInfo: $error');
     }
   }
 }
@@ -138,8 +139,8 @@ Future<String> signUpwithbroker(email, password, others) async {
         brokerid: authentication.currentUser?.uid,
         role: 'broker',
         companyname: 'bhavesh',
-        brokercompanynumber: 1234333445,
-        brokercompanywhatsapp: 12345678765,
+        brokercompanynumber: 1234567890,
+        brokercompanywhatsapp: 1234567890,
         brokercompanyemail: email,
         brokerlogo: "",
         brokercompanyaddress: {
@@ -154,7 +155,7 @@ Future<String> signUpwithbroker(email, password, others) async {
         userfirstname: 'bhavesh',
         userlastname: 'khatri',
         userId: authentication.currentUser!.uid,
-        mobile: 3333333,
+        mobile: 1234567890,
         email: email,
         role: 'broker',
         image: '');
@@ -163,7 +164,7 @@ Future<String> signUpwithbroker(email, password, others) async {
     res = "success";
     return res;
   } catch (er) {
-    print(er);
+    // print(er);
     return er.toString();
   }
 }

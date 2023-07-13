@@ -10,7 +10,7 @@ class CustomCalendarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       child: Container(
         decoration: BoxDecoration(
           color: AppColor.secondary,
@@ -42,7 +42,7 @@ class CustomCalendarView extends StatelessWidget {
                 headerHeight: 0,
                 view: CalendarView.timelineWeek,
                 timeSlotViewSettings:
-                    TimeSlotViewSettings(startHour: 9, endHour: 18),
+                    const TimeSlotViewSettings(startHour: 9, endHour: 18),
                 showTodayButton: true,
                 showNavigationArrow: true,
                 backgroundColor: Colors.white,

@@ -1,55 +1,56 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-final CollectionReference usersCollection =
+final CollectionReference cardDetailsCollection =
     FirebaseFirestore.instance.collection('cardDetails');
 
 class CardDetails {
   String? cardType;
+  String? workitemId;
+  String? status;
   String? cardCategory;
-  String? cardTodoType;
   String? cardTitle;
   String? cardDescription;
-  String? propertyarea;
-  String? plotarea;
-  String? cardId;
   String? cardStatus;
   String? brokerid;
+  String? managerid;
   List<Assignedto>? assignedto;
-  String? createdate;
-  String? updatedby;
-  String? updatedate;
+  Roomconfig? roomconfig;
+  Propertyarearange? propertyarearange;
+  Propertypricerange? propertypricerange;
+  String? duedate;
   Createdby? createdby;
   Customerinfo? customerinfo;
-  Propertyprice? propertyprice;
 
   CardDetails(
-      {required this.cardType,
-      required this.cardCategory,
-      this.cardTodoType,
+      {this.cardType,
+      this.workitemId,
+      this.status,
+      this.cardCategory,
       this.cardTitle,
       this.cardDescription,
-      this.propertyarea,
-      this.plotarea,
-      required this.cardId,
-      required this.cardStatus,
-      required this.brokerid,
+      this.cardStatus,
+      this.brokerid,
+      this.managerid,
       this.assignedto,
-      this.createdate,
-      this.updatedby,
-      this.updatedate,
+      this.roomconfig,
+      this.propertyarearange,
+      this.propertypricerange,
+      this.duedate,
       this.createdby,
-      this.customerinfo,
-      this.propertyprice});
+      this.customerinfo});
 
   CardDetails.fromJson(Map<String, dynamic> json) {
     if (json["cardType"] is String) {
       cardType = json["cardType"];
     }
+    if (json["workitemId"] is String) {
+      workitemId = json["workitemId"];
+    }
+    if (json["Status"] is String) {
+      status = json["Status"];
+    }
     if (json["cardCategory"] is String) {
       cardCategory = json["cardCategory"];
-    }
-    if (json["cardTodoType"] is String) {
-      cardTodoType = json["cardTodoType"];
     }
     if (json["cardTitle"] is String) {
       cardTitle = json["cardTitle"];
@@ -57,20 +58,14 @@ class CardDetails {
     if (json["cardDescription"] is String) {
       cardDescription = json["cardDescription"];
     }
-    if (json["propertyarea"] is String) {
-      propertyarea = json["propertyarea"];
-    }
-    if (json["plotarea"] is String) {
-      plotarea = json["plotarea"];
-    }
-    if (json["cardId"] is String) {
-      cardId = json["cardId"];
-    }
     if (json["cardStatus"] is String) {
       cardStatus = json["cardStatus"];
     }
     if (json["brokerid"] is String) {
       brokerid = json["brokerid"];
+    }
+    if (json["managerid"] is String) {
+      managerid = json["managerid"];
     }
     if (json["assignedto"] is List) {
       assignedto = json["assignedto"] == null
@@ -79,14 +74,23 @@ class CardDetails {
               .map((e) => Assignedto.fromJson(e))
               .toList();
     }
-    if (json["createdate"] is String) {
-      createdate = json["createdate"];
+    if (json["roomconfig"] is Map) {
+      roomconfig = json["roomconfig"] == null
+          ? null
+          : Roomconfig.fromJson(json["roomconfig"]);
     }
-    if (json["updatedby"] is String) {
-      updatedby = json["updatedby"];
+    if (json["propertyarearange"] is Map) {
+      propertyarearange = json["propertyarearange"] == null
+          ? null
+          : Propertyarearange.fromJson(json["propertyarearange"]);
     }
-    if (json["updatedate"] is String) {
-      updatedate = json["updatedate"];
+    if (json["propertypricerange"] is Map) {
+      propertypricerange = json["propertypricerange"] == null
+          ? null
+          : Propertypricerange.fromJson(json["propertypricerange"]);
+    }
+    if (json["duedate"] is String) {
+      duedate = json["duedate"];
     }
     if (json["createdby"] is Map) {
       createdby = json["createdby"] == null
@@ -98,57 +102,58 @@ class CardDetails {
           ? null
           : Customerinfo.fromJson(json["customerinfo"]);
     }
-    if (json["propertyprice"] is Map) {
-      propertyprice = json["propertyprice"] == null
-          ? null
-          : Propertyprice.fromJson(json["propertyprice"]);
-    }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["cardType"] = cardType;
-    _data["cardCategory"] = cardCategory;
-    _data["cardTodoType"] = cardTodoType;
-    _data["cardTitle"] = cardTitle;
-    _data["cardDescription"] = cardDescription;
-    _data["propertyarea"] = propertyarea;
-    _data["plotarea"] = plotarea;
-    _data["cardId"] = cardId;
-    _data["cardStatus"] = cardStatus;
-    _data["brokerid"] = brokerid;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["cardType"] = cardType;
+    data["workitemId"] = workitemId;
+    data["Status"] = status;
+    data["cardCategory"] = cardCategory;
+    data["cardTitle"] = cardTitle;
+    data["cardDescription"] = cardDescription;
+    data["cardStatus"] = cardStatus;
+    data["brokerid"] = brokerid;
+    data["managerid"] = managerid;
     if (assignedto != null) {
-      _data["assignedto"] = assignedto?.map((e) => e.toJson()).toList();
+      data["assignedto"] = assignedto?.map((e) => e.toJson()).toList();
     }
-    _data["createdate"] = createdate;
-    _data["updatedby"] = updatedby;
-    _data["updatedate"] = updatedate;
+    if (roomconfig != null) {
+      data["roomconfig"] = roomconfig?.toJson();
+    }
+    if (propertyarearange != null) {
+      data["propertyarearange"] = propertyarearange?.toJson();
+    }
+    if (propertypricerange != null) {
+      data["propertypricerange"] = propertypricerange?.toJson();
+    }
+    data["duedate"] = duedate;
     if (createdby != null) {
-      _data["createdby"] = createdby?.toJson();
+      data["createdby"] = createdby?.toJson();
     }
     if (customerinfo != null) {
-      _data["customerinfo"] = customerinfo?.toJson();
+      data["customerinfo"] = customerinfo?.toJson();
     }
-    if (propertyprice != null) {
-      _data["propertyprice"] = propertyprice?.toJson();
-    }
-    return _data;
+    return data;
   }
 
-  static Future<void> addItem(CardDetails inventory) async {
+  // -----------------------------Methods------------------------------------------------------------------->
+
+  static Future<void> addCardDetails(CardDetails inventory) async {
     try {
-      await usersCollection.doc(inventory.cardId).set(inventory.toJson());
-      print('Inventory item added successfully');
+      await cardDetailsCollection
+          .doc(inventory.workitemId)
+          .set(inventory.toJson());
+      // print('Inventory item added successfully');
     } catch (error) {
-      print('Failed to add Inventory item: $error');
+      // print('Failed to add Inventory item: $error');
     }
   }
 
   // Get Inventory items added by the broker or employees under the broker
-  static Future<List<CardDetails>> getInventoryItemsForBroker(
-      String brokerId) async {
+  static Future<List<CardDetails>> getCardDetails(String brokerId) async {
     try {
-      final QuerySnapshot querySnapshot = await usersCollection.get();
+      final QuerySnapshot querySnapshot = await cardDetailsCollection.get();
       final List<CardDetails> inventoryItems = querySnapshot.docs.map((doc) {
         final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         return CardDetails.fromJson(data);
@@ -156,51 +161,28 @@ class CardDetails {
 
       return inventoryItems;
     } catch (error) {
-      print('Failed to get Inventory items: $error');
+      // print('Failed to get Inventory items: $error');
       return [];
     }
   }
 
-  static Future<void> updateItem(CardDetails item) async {
+  static Future<void> updateCardDetails(CardDetails item) async {
     try {
-      await usersCollection.doc(item.cardId).update(item.toJson());
-      print('Inventory item updated successfully');
+      await cardDetailsCollection.doc(item.workitemId).update(item.toJson());
+      // print('Inventory item updated successfully');
     } catch (error) {
-      print('Failed to update Inventory item: $error');
+      // print('Failed to update Inventory item: $error');
     }
   }
 
   // Delete a Inventory item
-  static Future<void> deleteItem(String id) async {
+  static Future<void> deleteCardDetails(String id) async {
     try {
-      await usersCollection.doc(id).delete();
-      print('Inventory item deleted successfully');
+      await cardDetailsCollection.doc(id).delete();
+      // print('Inventory item deleted successfully');
     } catch (error) {
-      print('Failed to delete Inventory item: $error');
+      // print('Failed to delete Inventory item: $error');
     }
-  }
-}
-
-class Propertyprice {
-  String? unit;
-  String? price;
-
-  Propertyprice({this.unit, this.price});
-
-  Propertyprice.fromJson(Map<String, dynamic> json) {
-    if (json["unit"] is String) {
-      unit = json["unit"];
-    }
-    if (json["price"] is String) {
-      price = json["price"];
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data["unit"] = unit;
-    data["price"] = price;
-    return data;
   }
 }
 
@@ -211,7 +193,6 @@ class Customerinfo {
   String? mobile;
   String? whatsapp;
   String? email;
-  String? companyname;
 
   Customerinfo(
       {this.firstname,
@@ -219,8 +200,7 @@ class Customerinfo {
       this.title,
       this.mobile,
       this.whatsapp,
-      this.email,
-      this.companyname});
+      this.email});
 
   Customerinfo.fromJson(Map<String, dynamic> json) {
     if (json["firstname"] is String) {
@@ -241,21 +221,17 @@ class Customerinfo {
     if (json["email"] is String) {
       email = json["email"];
     }
-    if (json["companyname"] is String) {
-      companyname = json["companyname"];
-    }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["firstname"] = firstname;
-    _data["lastname"] = lastname;
-    _data["title"] = title;
-    _data["mobile"] = mobile;
-    _data["whatsapp"] = whatsapp;
-    _data["email"] = email;
-    _data["companyname"] = companyname;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["firstname"] = firstname;
+    data["lastname"] = lastname;
+    data["title"] = title;
+    data["mobile"] = mobile;
+    data["whatsapp"] = whatsapp;
+    data["email"] = email;
+    return data;
   }
 }
 
@@ -284,12 +260,95 @@ class Createdby {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["userid"] = userid;
-    _data["userfirstname"] = userfirstname;
-    _data["userlastname"] = userlastname;
-    _data["userimage"] = userimage;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["userid"] = userid;
+    data["userfirstname"] = userfirstname;
+    data["userlastname"] = userlastname;
+    data["userimage"] = userimage;
+    return data;
+  }
+}
+
+class Propertypricerange {
+  String? unit;
+  String? arearangestart;
+  String? arearangeend;
+
+  Propertypricerange({this.unit, this.arearangestart, this.arearangeend});
+
+  Propertypricerange.fromJson(Map<String, dynamic> json) {
+    if (json["unit"] is String) {
+      unit = json["unit"];
+    }
+    if (json["arearangestart"] is String) {
+      arearangestart = json["arearangestart"];
+    }
+    if (json["arearangeend"] is String) {
+      arearangeend = json["arearangeend"];
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["unit"] = unit;
+    data["arearangestart"] = arearangestart;
+    data["arearangeend"] = arearangeend;
+    return data;
+  }
+}
+
+class Propertyarearange {
+  String? unit;
+  String? arearangestart;
+  String? arearangeend;
+
+  Propertyarearange({this.unit, this.arearangestart, this.arearangeend});
+
+  Propertyarearange.fromJson(Map<String, dynamic> json) {
+    if (json["unit"] is String) {
+      unit = json["unit"];
+    }
+    if (json["arearangestart"] is String) {
+      arearangestart = json["arearangestart"];
+    }
+    if (json["arearangeend"] is String) {
+      arearangeend = json["arearangeend"];
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["unit"] = unit;
+    data["arearangestart"] = arearangestart;
+    data["arearangeend"] = arearangeend;
+    return data;
+  }
+}
+
+class Roomconfig {
+  String? bedroom;
+  List<String>? additionalroom;
+
+  Roomconfig({this.bedroom, this.additionalroom});
+
+  Roomconfig.fromJson(Map<String, dynamic> json) {
+    if (json["bedroom"] is String) {
+      bedroom = json["bedroom"];
+    }
+    if (json["additionalroom"] is List) {
+      additionalroom = json["additionalroom"] == null
+          ? null
+          : List<String>.from(json["additionalroom"]);
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["bedroom"] = bedroom;
+    if (additionalroom != null) {
+      data["additionalroom"] = additionalroom;
+    }
+    return data;
   }
 }
 
@@ -331,13 +390,13 @@ class Assignedto {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["userid"] = userid;
-    _data["firstname"] = firstname;
-    _data["lastname"] = lastname;
-    _data["image"] = image;
-    _data["assignedon"] = assignedon;
-    _data["assignedby"] = assignedby;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["userid"] = userid;
+    data["firstname"] = firstname;
+    data["lastname"] = lastname;
+    data["image"] = image;
+    data["assignedon"] = assignedon;
+    data["assignedby"] = assignedby;
+    return data;
   }
 }

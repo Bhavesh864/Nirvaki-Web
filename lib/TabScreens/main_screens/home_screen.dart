@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
 
     return Container(
       decoration: const BoxDecoration(
@@ -30,15 +30,15 @@ class HomeScreen extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            flex: _size.width > 1340 ? 3 : 5,
+            flex: size.width > 1340 ? 3 : 5,
             child: const Padding(
               padding: EdgeInsets.only(top: 8, left: 0),
               child: TodoListView(),
             ),
           ),
-          _size.width > 1200
+          size.width > 1200
               ? Expanded(
-                  flex: _size.width > 1340 ? 3 : 5,
+                  flex: size.width > 1340 ? 3 : 5,
                   child: const Padding(
                     padding: EdgeInsets.only(top: 10),
                     child: WorkItemsList(),
@@ -46,7 +46,7 @@ class HomeScreen extends StatelessWidget {
                 )
               : Container(),
           Expanded(
-            flex: _size.width > 1340 ? 4 : 6,
+            flex: size.width > 1340 ? 4 : 6,
             child: Column(
               children: [
                 const Expanded(

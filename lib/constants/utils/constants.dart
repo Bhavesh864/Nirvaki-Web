@@ -50,7 +50,7 @@ final List bottomBarItems = [
   },
 ];
 
-class todoItemModal {
+class TodoItemModal {
   String? image;
   String? task;
   String? subtitle;
@@ -60,7 +60,7 @@ class todoItemModal {
   String todoStatus;
   bool isLead;
 
-  todoItemModal({
+  TodoItemModal({
     this.image,
     this.task,
     this.subtitle,
@@ -72,7 +72,7 @@ class todoItemModal {
   });
 }
 
-class workItemModal {
+class WorkItemModal {
   String bhk;
   String area;
   String price;
@@ -83,7 +83,7 @@ class workItemModal {
   String todoStatus;
   bool isLead;
 
-  workItemModal({
+  WorkItemModal({
     required this.bhk,
     required this.area,
     required this.price,
@@ -96,8 +96,8 @@ class workItemModal {
   });
 }
 
-final List<todoItemModal> userData = [
-  todoItemModal(
+final List<TodoItemModal> userData = [
+  TodoItemModal(
     image: "user1",
     name: "Riya Sharma",
     task: "Collects documents from kishore",
@@ -108,7 +108,7 @@ final List<todoItemModal> userData = [
     todoStatus: 'New',
     isLead: true,
   ),
-  todoItemModal(
+  TodoItemModal(
     image: "user4",
     name: "Priya Singh",
     task: "Call to schedule physical visit",
@@ -118,7 +118,7 @@ final List<todoItemModal> userData = [
     todoStatus: 'In progress',
     isLead: false,
   ),
-  todoItemModal(
+  TodoItemModal(
     image: "user3",
     name: "Ganesh Gupta",
     task: "Collect copy of agreement",
@@ -128,7 +128,7 @@ final List<todoItemModal> userData = [
     todoStatus: 'In progress',
     isLead: true,
   ),
-  todoItemModal(
+  TodoItemModal(
     image: "user2",
     name: "",
     task: "Discuss about physical visit",
@@ -138,7 +138,7 @@ final List<todoItemModal> userData = [
     todoStatus: 'New',
     isLead: false,
   ),
-  todoItemModal(
+  TodoItemModal(
     image: "user2",
     name: "Priya Singh",
     task: "Collect copy of agreement",
@@ -150,8 +150,8 @@ final List<todoItemModal> userData = [
   ),
 ];
 
-List<workItemModal> workItemData = [
-  workItemModal(
+List<WorkItemModal> workItemData = [
+  WorkItemModal(
     bhk: '2BHK',
     area: '2000 sq ft',
     price: '2.5cr',
@@ -163,7 +163,7 @@ List<workItemModal> workItemData = [
     subtitle:
         'Looking for 360 sq yrd villa, preferred location Rohini and park facing.',
   ),
-  workItemModal(
+  WorkItemModal(
     bhk: '3BHK',
     area: '2000 sq ft',
     price: '2.5cr',
@@ -175,7 +175,7 @@ List<workItemModal> workItemData = [
     subtitle:
         'Looking for 360 sq yrd villa, preferred location Rohini and park facing.',
   ),
-  workItemModal(
+  WorkItemModal(
     bhk: '4BHK',
     area: '2000 sq ft',
     price: '2.5cr',
@@ -187,7 +187,7 @@ List<workItemModal> workItemData = [
     subtitle:
         'Looking for 360 sq yrd villa, preferred location Rohini and park facing.',
   ),
-  workItemModal(
+  WorkItemModal(
     bhk: '2BHK',
     area: '2000 sq ft',
     price: '2.5cr',
@@ -199,7 +199,7 @@ List<workItemModal> workItemData = [
     subtitle:
         'Looking for 360 sq yrd villa, preferred location Rohini and park facing.',
   ),
-  workItemModal(
+  WorkItemModal(
     bhk: '5BHK',
     area: '2000 sq ft',
     price: '2.5cr',
