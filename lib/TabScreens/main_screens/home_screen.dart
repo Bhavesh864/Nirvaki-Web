@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yes_broker/constants/firebase/questions.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
@@ -7,9 +8,52 @@ import 'package:yes_broker/widgets/timeline_view.dart';
 import 'package:yes_broker/widgets/todo/todo_list_view.dart';
 import 'package:yes_broker/widgets/workitems_list.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   static const routeName = '/home';
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getstate();
+  }
+
+  getstate() async {
+    // List<Questions> screensList = [
+    //   Questions(
+    //     screens: [
+    //       Screens(
+    //           questions: [
+    //             Questions1(
+    //               questionId: 1,
+    //               questionOptionType: "chip",
+    //               questionTitle:
+    //                   "Which Property Category does this inventory Fall under ?",
+    //               questionOption: ["Residential", "Commercial"],
+    //             ),
+    //           ],
+    //           isActive: true,
+    //           nextScreenId: "S2",
+    //           previousScreenId: "",
+    //           screenId: "S1"),
+    //       Screens(questions: [Questions1()]),
+    //       Screens(questions: [Questions1()])
+    //     ],
+    //   ),
+    // ];
+
+    // await Questions.addScreens(screensList);
+
+    // final Future<List<Questions>> ques =
+    //     (await Questions.getallquestions()) as Future<List<Questions>>;
+    // print(ques);
+  }
 
   @override
   Widget build(BuildContext context) {
