@@ -184,7 +184,7 @@ Future<String> signUpwith(email, password) async {
 dynamic getDataById(List<dynamic> dataArray, int id) {
   for (var data in dataArray) {
     if (data['id'] == id) {
-      return data["select"];
+      return data["selectedAnswer"];
     }
   }
   return null;
