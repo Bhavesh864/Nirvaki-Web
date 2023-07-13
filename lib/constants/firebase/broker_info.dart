@@ -118,10 +118,14 @@ Future<String?> signinwithbroker(email, password) async {
     res = "success";
     return res;
   } on auth.FirebaseAuthException catch (e) {
-    if (e.code == 'BrokerInfo-not-found') {
-      return 'No BrokerInfo found for that email.';
+    if (e.code == 'user-not-found') {
+      return 'No user found for that email.';
     } else if (e.code == 'wrong-password') {
-      return 'Wrong password provided.';
+      return 'Wrong password provided for that user.';
+    } else if (e.code == "email-already-in-use") {
+      return "The account already exists for that email";
+    } else if (e.code == "weak-password") {
+      return "The password provided is too weak.";
     }
     return e.toString();
   } catch (E) {

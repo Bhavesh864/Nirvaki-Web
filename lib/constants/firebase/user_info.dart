@@ -179,14 +179,21 @@ Future<String> signUpwith(email, password) async {
 
 // // Delete the user
 // await userCRUD.deleteUser('1');
-// }
+// // }
 
+dynamic getDataById(List<dynamic> dataArray, int id) {
+  for (var data in dataArray) {
+    if (data['id'] == id) {
+      return data["select"];
+    }
+  }
+  return null;
+}
 
-
-
-
-
-
-
-
-
+getbyid() {
+  final data = getDataById([
+    {"id": 1, "select": "hello"},
+    {"id": 2, "select": "manish"}
+  ], 1);
+  print(data);
+}
