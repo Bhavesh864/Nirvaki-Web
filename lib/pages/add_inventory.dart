@@ -47,7 +47,6 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
 
   _next(String selectedAnswer, List<InventoryQuestions> data, int id) {
     if (currentIndex < data.length - 1) {
-      selectedOption = selectedAnswer;
       currentIndex++;
       // allAnswers.add(selectedAnswer);
       ref.read(allChipSelectedAnwersProvider.notifier).add({
@@ -63,14 +62,10 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     }
   }
 
-  _back() {
+  _back(int id) {
     if (currentIndex != 0) {
-      ref.read(allChipSelectedAnwersProvider.notifier).remove(selectedOption);
       currentIndex--;
-      // ref
-      //     .read(allChipSelectedAnwersProvider.notifier)
-      //     .state
-      //     .removeAt(currentIndex);
+      ref.read(allChipSelectedAnwersProvider.notifier).remove(id);
       pageController?.animateToPage(
         currentIndex,
         duration: const Duration(milliseconds: 300),
@@ -82,32 +77,32 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          SafeArea(
-            child: Container(
-              // height: h,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(authBgImage),
-                  fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                    Colors.black38,
-                    BlendMode.darken,
-                  ),
-                ),
-              ),
-              child: FutureBuilder(
-                future: InventoryQuestions.getQuestions(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator.adaptive(),
-                    );
-                  }
-                  if (snapshot.hasData) {
-                    final questionsArr = snapshot.data!;
-                    return PageView.builder(
+      body: FutureBuilder(
+        future: InventoryQuestions.getQuestions(),
+        builder: (context, snapshop) {
+          if (snapshop.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator.adaptive(),
+            );
+          }
+          if (snapshop.hasData) {
+            final questionsArr = snapshop.data!;
+            return Stack(
+              children: [
+                SafeArea(
+                  child: Container(
+                    // height: h,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(authBgImage),
+                        fit: BoxFit.cover,
+                        colorFilter: ColorFilter.mode(
+                          Colors.black38,
+                          BlendMode.darken,
+                        ),
+                      ),
+                    ),
+                    child: PageView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       controller: pageController,
                       scrollDirection: Axis.horizontal,
@@ -120,45 +115,45 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                             questionsArr[index].id,
                             questionsArr[index].question);
                       },
-                    );
-                  }
-                  return Container(
-                    color: Colors.amber,
-                  );
-                },
-              ),
-              // child: DropDownCard(),
-            ),
-          ),
-          Positioned(
-            top: 0.0,
-            left: 0.0,
-            right: 0.0,
-            child: AppBar(
-              elevation: 0,
-              iconTheme: const IconThemeData(color: Colors.white),
-              backgroundColor: Colors.transparent,
-              centerTitle: true,
-              leading: IconButton(
-                onPressed: () {
-                  _back();
-                },
-                icon: const Icon(Icons.arrow_back),
-              ),
-              title: Consumer(
-                builder: (context, ref, child) {
-                  final val = ref.watch(allChipSelectedAnwersProvider);
-                  return CustomText(
-                    title: 'Add Inventory $val',
-                    fontWeight: FontWeight.w700,
-                    size: 20,
-                    color: Colors.white,
-                  );
-                },
-              ),
-            ),
-          ),
-        ],
+                    ),
+                    // child: DropDownCard(),
+                  ),
+                ),
+                Positioned(
+                  top: 0.0,
+                  left: 0.0,
+                  right: 0.0,
+                  child: AppBar(
+                    elevation: 0,
+                    iconTheme: const IconThemeData(color: Colors.white),
+                    backgroundColor: Colors.transparent,
+                    centerTitle: true,
+                    leading: IconButton(
+                      onPressed: () {
+                        _back(questionsArr[currentIndex].id);
+                      },
+                      icon: const Icon(Icons.arrow_back),
+                    ),
+                    title: Consumer(
+                      builder: (context, ref, child) {
+                        final val = ref.watch(allChipSelectedAnwersProvider);
+                        return CustomText(
+                          title: 'Add Inventory $val',
+                          fontWeight: FontWeight.w700,
+                          size: 20,
+                          color: Colors.white,
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+          return Container(
+            color: Colors.amber,
+          );
+        },
       ),
     );
   }

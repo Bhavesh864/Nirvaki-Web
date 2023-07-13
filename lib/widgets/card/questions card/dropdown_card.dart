@@ -112,13 +112,19 @@ class _DropDownCardState extends State<DropDownCard> {
                                           }
                                         });
                                       },
-                                      items: values.map((value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                      // items: [],
+                                      // items: values.map((value) {
+                                      //   return DropdownMenuItem<String>(
+                                      //     value: value,
+                                      //     child: Text(value),
+                                      //   );
+                                      // }).toList(),
+                                      items: List.generate(
+                                        values.length,
+                                        (index) => DropdownMenuItem<String>(
+                                          value: values[index],
+                                          child: Text(values[index]),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
