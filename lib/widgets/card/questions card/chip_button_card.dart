@@ -13,7 +13,7 @@ class ChipButtonCard extends StatelessWidget {
   final List<String> options;
   final int currentIndex;
   final List<InventoryQuestions> data;
-  final void Function(String, List<InventoryQuestions>, int) onSelect;
+  final void Function(String) onSelect;
 
   const ChipButtonCard({
     super.key,
@@ -57,7 +57,7 @@ class ChipButtonCard extends StatelessWidget {
                 ChipButton(
                   text: option,
                   onSelect: () => {
-                    onSelect(option, data, data[currentIndex].id),
+                    onSelect(option),
                   },
                 ),
               const SizedBox(
