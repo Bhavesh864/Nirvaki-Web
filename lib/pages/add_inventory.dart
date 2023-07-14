@@ -18,12 +18,14 @@ class AddInventory extends ConsumerStatefulWidget {
 }
 
 class _AddInventoryState extends ConsumerState<AddInventory> {
+  late Future<List<InventoryQuestions>> getQuestions;
   PageController? pageController;
 
   int currentIndex = 0;
   @override
   void initState() {
     super.initState();
+    getQuestions = InventoryQuestions.getQuestions();
     pageController = PageController(initialPage: currentIndex);
   }
   // final randomuid = generateUid();
@@ -45,12 +47,15 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   //   await InventoryDetails.addInventoryDetails(item);
   // }
 
-  _next(String selectedAnswer, List<InventoryQuestions> data, int id) {
+  _next(String selectedAnswer) async {
+    final data = await getQuestions;
+    final selectedItemId = data[currentIndex].id;
+
     if (currentIndex < data.length - 1) {
       currentIndex++;
       // allAnswers.add(selectedAnswer);
       ref.read(allChipSelectedAnwersProvider.notifier).add({
-        'id': id,
+        'id': selectedItemId,
         'selectedAnswer': selectedAnswer,
       });
 
@@ -77,8 +82,8 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-        future: InventoryQuestions.getQuestions(),
+      body: FutureBuilder<List<InventoryQuestions>>(
+        future: getQuestions,
         builder: (context, snapshop) {
           if (snapshop.connectionState == ConnectionState.waiting) {
             return const Center(
