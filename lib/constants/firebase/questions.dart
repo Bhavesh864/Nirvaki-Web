@@ -1,39 +1,43 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 final CollectionReference questionsCollection =
-    FirebaseFirestore.instance.collection('questions');
+    FirebaseFirestore.instance.collection('InventoryQuestions');
 
 class Questions {
-  List<Screens>? screens;
+  List<Screen> screens;
 
-  Questions({this.screens});
+  Questions({required this.screens});
 
-  Questions.fromJson(Map<String, dynamic> json) {
-    if (json["screens"] is List) {
-      screens = json["screens"] == null
-          ? null
-          : (json["screens"] as List).map((e) => Screens.fromJson(e)).toList();
-    }
+  factory Questions.fromJson(Map<String, dynamic> json) {
+    List<Screen> screens = List<Screen>.from(
+        json['screens'].map((screen) => Screen.fromJson(screen)).toList());
+    return Questions(screens: screens);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    if (screens != null) {
-      _data["screens"] = screens?.map((e) => e.toJson()).toList();
-    }
-    return _data;
+    return {
+      'screens': screens.map((screen) => screen.toJson()).toList(),
+    };
   }
 
-  // Future<void> addQuestions(List<Questions> questions) async {
-  //   try {
-  //     final DocumentReference documentReference = await questionsCollection.add(
-  //         {'screens': questions.map((question) => question.toJson()).toList()});
-
-  //     print('Document added with ID: ${documentReference.id}');
-  //   } catch (e) {
-  //     print('Error adding questions: $e');
-  //   }
-  // }
+  // Get all Questions data from Firestore
+  static Future<List<Questions>> getAllQuestionssFromFirestore() async {
+    final List<Questions> questionss = [];
+    try {
+      QuerySnapshot querySnapshot = await questionsCollection.get();
+      for (var doc in querySnapshot.docs) {
+        Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
+        if (data != null) {
+          Questions questions = Questions.fromJson(data);
+          questionss.add(questions);
+        }
+      }
+      return questionss;
+    } catch (e) {
+      print('Error getting Questions data: $e');
+    }
+    return questionss;
+  }
 
   static Future<void> addScreens(List<Questions> screens) async {
     try {
@@ -46,119 +50,78 @@ class Questions {
       print('Error adding screens to Firestore: $e');
     }
   }
-
-  // static Future<Questions> getAllScreens() async {
-  //   try {
-  //     final QuerySnapshot querySnapshot = await questionsCollection.get();
-  //     final List<Questions> screensList = querySnapshot.docs.map((doc) {
-  //       return Questions.fromJson(doc.data() as Map<String, dynamic>);
-  //     }).toList();
-
-  //     return screensList;
-  //   } catch (e) {
-  //     print('Error getting screens: $e');
-  //     return [];
-  //   }
-  // }
-
-  static Future<List<Questions>> getallquestions() async {
-    try {
-      final QuerySnapshot querySnapshot = await questionsCollection.get();
-      final List<Questions> screensList = querySnapshot.docs.map((doc) {
-        return Questions.fromJson(doc.data() as Map<String, dynamic>);
-      }).toList();
-      return screensList;
-    } catch (error) {
-      // print('Failed to get Inventory items: $error');
-      return [];
-    }
-  }
 }
 
-class Screens {
-  String? screenId;
-  List<Questions1>? questions;
-  String? previousScreenId;
-  String? nextScreenId;
-  bool? isActive;
+class Screen {
+  String screenId;
+  List<Question> questions;
+  String previousScreenId;
+  String nextScreenId;
+  bool isActive;
+  String? title;
 
-  Screens(
-      {this.screenId,
-      this.questions,
-      this.previousScreenId,
-      this.nextScreenId,
-      this.isActive});
+  Screen({
+    required this.screenId,
+    required this.questions,
+    required this.previousScreenId,
+    required this.nextScreenId,
+    required this.isActive,
+    this.title,
+  });
 
-  Screens.fromJson(Map<String, dynamic> json) {
-    if (json["screenId"] is String) {
-      screenId = json["screenId"];
-    }
-    if (json["questions"] is List) {
-      questions = json["questions"] == null
-          ? null
-          : (json["questions"] as List)
-              .map((e) => Questions1.fromJson(e))
-              .toList();
-    }
-    if (json["previousScreenId"] is String) {
-      previousScreenId = json["previousScreenId"];
-    }
-    if (json["nextScreenId"] is String) {
-      nextScreenId = json["nextScreenId"];
-    }
-    if (json["isActive"] is bool) {
-      isActive = json["isActive"];
-    }
+  factory Screen.fromJson(Map<String, dynamic> json) {
+    List<Question> questions = List<Question>.from(json['questions']
+        .map((question) => Question.fromJson(question))
+        .toList());
+    return Screen(
+        screenId: json['screenId'],
+        questions: questions,
+        previousScreenId: json['previousScreenId'],
+        nextScreenId: json['nextScreenId'],
+        isActive: json['isActive'],
+        title: json["title"]);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["screenId"] = screenId;
-    if (questions != null) {
-      _data["questions"] = questions?.map((e) => e.toJson()).toList();
-    }
-    _data["previousScreenId"] = previousScreenId;
-    _data["nextScreenId"] = nextScreenId;
-    _data["isActive"] = isActive;
-    return _data;
+    return {
+      'screenId': screenId,
+      'questions': questions.map((question) => question.toJson()).toList(),
+      'previousScreenId': previousScreenId,
+      'nextScreenId': nextScreenId,
+      'isActive': isActive,
+      "title": title
+    };
   }
 }
 
-class Questions1 {
-  int? questionId;
-  String? questionTitle;
-  String? questionOptionType;
-  List<String>? questionOption;
+class Question {
+  int questionId;
+  String questionTitle;
+  String questionOptionType;
+  dynamic questionOption;
 
-  Questions1(
-      {this.questionId,
-      this.questionTitle,
-      this.questionOptionType,
-      this.questionOption});
+  Question({
+    required this.questionId,
+    required this.questionTitle,
+    required this.questionOptionType,
+    required this.questionOption,
+  });
 
-  Questions1.fromJson(Map<String, dynamic> json) {
-    if (json["questionId"] is int) {
-      questionId = json["questionId"];
-    }
-    if (json["questionTitle"] is String) {
-      questionTitle = json["questionTitle"];
-    }
-    if (json["questionOptionType"] is String) {
-      questionOptionType = json["questionOptionType"];
-    }
-    if (json["questionOption"] is List) {
-      questionOption = json["questionOption"] == null
-          ? null
-          : List<String>.from(json["servantroom"]);
-    }
+  factory Question.fromJson(Map<String, dynamic> json) {
+    return Question(
+      questionId: json['questionId'],
+      questionTitle: json['questionTitle'],
+      questionOptionType: json['questionOptionType'],
+      questionOption: json['questionOption'],
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data["questionId"] = questionId;
-    data["questionTitle"] = questionTitle;
-    data["questionOptionType"] = questionOptionType;
-    data["questionOption"] = questionOption;
-    return data;
+    return {
+      'questionId': questionId,
+      'questionTitle': questionTitle,
+      'questionOptionType': questionOptionType,
+      'questionOption': questionOption,
+    };
   }
 }

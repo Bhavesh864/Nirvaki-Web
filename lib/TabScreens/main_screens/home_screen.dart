@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:yes_broker/constants/firebase/questions.dart';
 
@@ -25,34 +26,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   getstate() async {
-    // List<Questions> screensList = [
-    //   Questions(
-    //     screens: [
-    //       Screens(
-    //           questions: [
-    //             Questions1(
-    //               questionId: 1,
-    //               questionOptionType: "chip",
-    //               questionTitle:
-    //                   "Which Property Category does this inventory Fall under ?",
-    //               questionOption: ["Residential", "Commercial"],
-    //             ),
-    //           ],
-    //           isActive: true,
-    //           nextScreenId: "S2",
-    //           previousScreenId: "",
-    //           screenId: "S1"),
-    //       Screens(questions: [Questions1()]),
-    //       Screens(questions: [Questions1()])
-    //     ],
-    //   ),
-    // ];
-
+    // final List<Questions> item =
+    //     await Questions.getAllQuestionssFromFirestore();
+    // print(item[0].screens[0].isActive);
     // await Questions.addScreens(screensList);
-
-    // final Future<List<Questions>> ques =
-    //     (await Questions.getallquestions()) as Future<List<Questions>>;
-    // print(ques);
   }
 
   @override
