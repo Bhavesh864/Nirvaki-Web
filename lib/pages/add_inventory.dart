@@ -36,7 +36,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   final randomuid = generateUid();
   var selectedOption = '';
   List<String> allAnswers = [];
-
+// dd
   // submit() async {
   //   final InventoryDetails item = InventoryDetails(
   //       inventoryTitle: 'inventoryTitle',
