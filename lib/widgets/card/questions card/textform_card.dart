@@ -57,28 +57,13 @@ class _TextFormCardState extends State<TextFormCard> {
                 inputController: inputController,
                 labelText: widget.fieldsPlaceholder[2],
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 7.0),
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isChecked = !isChecked;
-                    });
-                  },
-                  child: Row(
-                    children: [
-                      Checkbox(
-                        value: isChecked,
-                        onChanged: (newVal) {
-                          setState(() {
-                            isChecked = newVal!;
-                          });
-                        },
-                      ),
-                      const CustomText(title: 'Use Same number for whatsapp'),
-                    ],
-                  ),
-                ),
+              CustomCheckboxListTile(
+                onSelected: () {
+                  setState(() {
+                    isChecked = !isChecked;
+                  });
+                },
+                isChecked: true,
               ),
               !isChecked
                   ? LabelTextInputField(
