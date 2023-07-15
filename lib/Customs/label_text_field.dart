@@ -37,7 +37,7 @@ class LabelTextInputField extends StatelessWidget {
               enabled: isDropDown ? false : true,
               rightIcon: isDropDown ? Icons.arrow_drop_down_sharp : null,
               controller: inputController,
-              hintText: labelText,
+              hintText: 'Type here..',
             ),
           ),
         ],

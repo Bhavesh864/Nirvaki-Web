@@ -16,14 +16,14 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
 
   void add(Map<String, dynamic> selectedValue) {
     state = [...state, selectedValue];
-    print('state, $state');
+    // print('state, $state');
   }
 
   void remove(int id) {
     state.retainWhere(
       (element) => element['id'] != id,
     );
-    print(state);
+    // print(state);
   }
 
   final randomId = randomNumeric(5);
@@ -74,8 +74,8 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
             userid: authentication.currentUser!.uid,
             userlastname: "khatri"));
     // await InventoryDetails.addInventoryDetails(inventory);
-    print('category $inventoryCategory');
-    print('type $propertyCategory');
+    // print('category $inventoryCategory');
+    // print('type $propertyCategory');
   }
 }
 
