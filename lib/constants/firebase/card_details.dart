@@ -23,13 +23,13 @@ class CardDetails {
 
   CardDetails(
       {this.cardType,
-      this.workitemId,
-      this.status,
-      this.cardCategory,
+      required this.workitemId,
+      required this.status,
+      required this.cardCategory,
       this.cardTitle,
       this.cardDescription,
       this.cardStatus,
-      this.brokerid,
+      required this.brokerid,
       this.managerid,
       this.assignedto,
       this.roomconfig,

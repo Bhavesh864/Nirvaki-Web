@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/constants/firebase/inventory_questions.dart';
-import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
-import 'package:yes_broker/widgets/card/questions%20card/chip_button_card.dart';
-import 'package:yes_broker/widgets/card/questions%20card/dropdown_card.dart';
-import 'package:yes_broker/widgets/card/questions%20card/textform_card.dart';
+import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/constants/firebase/questions.dart';
+import 'package:yes_broker/constants/functions/get_inventory_questions.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
+import '../Customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
 
 class AddInventory extends ConsumerStatefulWidget {
@@ -18,110 +19,160 @@ class AddInventory extends ConsumerStatefulWidget {
 }
 
 class _AddInventoryState extends ConsumerState<AddInventory> {
-  late Future<List<InventoryQuestions>> getQuestions;
+  late Future<List<Questions>> getQuestions;
   PageController? pageController;
-
   int currentIndex = 0;
+
   @override
   void initState() {
     super.initState();
-    getQuestions = InventoryQuestions.getQuestions();
+    getQuestions = Questions.getAllQuestionssFromFirestore();
     pageController = PageController(initialPage: currentIndex);
   }
-  // final randomuid = generateUid();
 
-  var selectedOption = '';
-  List<String> allAnswers = [];
-
-  // submit() async {
-  //   final InventoryDetails item = InventoryDetails(
-  //       inventoryTitle: 'inventoryTitle',
-  //       inventoryDescription: 'inventoryDescription',
-  //       inventoryId: 'inventoryId',
-  //       inventoryStatus: "new",
-  //       brokerid: auth.currentUser!.uid,
-  //       inventorycategory: 'array'[0],
-  //       customerinfo: Customerinfo(firstname: "maish", lastname: "", email: ""),
-  //       createdby: Createdby());
-
-  //   await InventoryDetails.addInventoryDetails(item);
-  // }
-
-  _next(String selectedAnswer) async {
-    final data = await getQuestions;
-    final selectedItemId = data[currentIndex].id;
-
-    if (currentIndex < data.length - 1) {
-      currentIndex++;
-      // allAnswers.add(selectedAnswer);
-      ref.read(allChipSelectedAnwersProvider.notifier).add({
-        'id': selectedItemId,
-        'selectedAnswer': selectedAnswer,
+  nextQuestion(List<Screen> screens) {
+    if (currentIndex < screens.length - 1) {
+      setState(() {
+        currentIndex++; // Increment the current index
+        pageController!.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
       });
-
-      pageController?.animateToPage(
-        currentIndex,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeIn,
-      );
+    } else {
+      // Handle reaching the last question or any other action
     }
   }
 
-  _back(int id) {
-    if (currentIndex != 0) {
-      currentIndex--;
-      ref.read(allChipSelectedAnwersProvider.notifier).remove(id);
-      pageController?.animateToPage(
-        currentIndex,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeIn,
-      );
+  goBack() {
+    if (currentIndex > 0) {
+      setState(() {
+        currentIndex--; // Decrement the current index
+        pageController!.previousPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      });
+    } else {
+      Navigator.pop(context); // Go back to the previous screen
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<List<InventoryQuestions>>(
+      body: FutureBuilder<List<Questions>>(
         future: getQuestions,
-        builder: (context, snapshop) {
-          if (snapshop.connectionState == ConnectionState.waiting) {
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: CircularProgressIndicator.adaptive(),
-            );
-          }
-          if (snapshop.hasData) {
-            final questionsArr = snapshop.data!;
+                child: CircularProgressIndicator
+                    .adaptive()); // Display a loading indicator while waiting
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else {
+            List<Questions> screenData = snapshot.data as List<Questions>;
+            List<Screen> screens = screenData[0].screens;
+
             return Stack(
               children: [
-                SafeArea(
-                  child: Container(
-                    // height: h,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(authBgImage),
-                        fit: BoxFit.cover,
-                        colorFilter: ColorFilter.mode(
-                          Colors.black38,
-                          BlendMode.darken,
-                        ),
+                Container(
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(authBgImage),
+                      fit: BoxFit.cover,
+                      colorFilter: ColorFilter.mode(
+                        Colors.black38,
+                        BlendMode.darken,
                       ),
                     ),
-                    child: PageView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      controller: pageController,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: questionsArr.length,
-                      itemBuilder: (context, index) {
-                        return displayDifferentCards(
-                            questionsArr,
-                            index,
-                            questionsArr[index].type,
-                            questionsArr[index].id,
-                            questionsArr[index].question);
-                      },
-                    ),
-                    // child: DropDownCard(),
+                  ),
+                  child: PageView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    controller: pageController,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: screens.length,
+                    itemBuilder: (context, index) {
+                      return Center(
+                        child: Card(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Container(
+                            constraints: const BoxConstraints(
+                              minHeight: 0,
+                              maxHeight: double.infinity,
+                            ),
+                            width: Responsive.isMobile(context)
+                                ? width! * 0.9
+                                : 650,
+                            padding: const EdgeInsets.all(25),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (screens[index].title != null)
+                                  CustomText(
+                                    softWrap: true,
+                                    textAlign: TextAlign.center,
+                                    size: 30,
+                                    title: screens[index].title.toString(),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                for (var i = 0;
+                                    i < screens[index].questions.length;
+                                    i++)
+                                  Column(
+                                    children: [
+                                      if (screens[index].title == null)
+                                        CustomText(
+                                          softWrap: true,
+                                          textAlign: TextAlign.center,
+                                          size: 30,
+                                          title: screens[index]
+                                              .questions[i]
+                                              .questionTitle,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      // buildQuestionWidget(
+                                      //   screens[index].questions[i],
+                                      //   screens,
+                                      // ),
+                                      buildQuestionWidget(
+                                        screens[index].questions[i],
+                                        screens,
+                                        currentIndex,
+                                        selectedOption,
+                                        pageController!,
+                                      ),
+                                      if (i ==
+                                              screens[index].questions.length -
+                                                  1 &&
+                                          screens[index]
+                                                  .questions[i]
+                                                  .questionOptionType !=
+                                              'chip')
+                                        Container(
+                                          margin:
+                                              const EdgeInsets.only(top: 10),
+                                          alignment: Alignment.centerRight,
+                                          child: CustomButton(
+                                            text: 'Next',
+                                            onPressed: () {
+                                              nextQuestion(screens);
+                                            },
+                                            width: 73,
+                                            height: 39,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 Positioned(
@@ -135,15 +186,14 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                     centerTitle: true,
                     leading: IconButton(
                       onPressed: () {
-                        _back(questionsArr[currentIndex].id);
+                        goBack();
                       },
                       icon: const Icon(Icons.arrow_back),
                     ),
                     title: Consumer(
                       builder: (context, ref, child) {
-                        final val = ref.watch(allChipSelectedAnwersProvider);
-                        return CustomText(
-                          title: 'Add Inventory $val',
+                        return const CustomText(
+                          title: 'Add Inventory ',
                           fontWeight: FontWeight.w700,
                           size: 20,
                           color: Colors.white,
@@ -155,56 +205,8 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
               ],
             );
           }
-          return Container(
-            color: Colors.amber,
-          );
         },
       ),
     );
-  }
-
-  Widget displayDifferentCards(List<InventoryQuestions> questionsArr, int index,
-      String type, int id, String question) {
-    switch (id) {
-      case 5:
-        return TextFormCard(
-          fieldsPlaceholder: questionsArr[index].options,
-          onSelect: () {
-            currentIndex++;
-            pageController?.animateToPage(
-              currentIndex,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeIn,
-            );
-          },
-        );
-      case 9 || 10:
-        return DropDownCard(
-          values: questionsArr[index].dropdownList,
-          question: question,
-          onSelect: () {
-            // ref.read().add({
-            //   'id': id,
-            //   'selectedAnwer': selectedAnswer,
-            // });
-            currentIndex++;
-            pageController?.animateToPage(
-              currentIndex,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeIn,
-            );
-          },
-          id: id,
-        );
-      default:
-        // return Text('data');
-        return ChipButtonCard(
-          question: questionsArr[index].question,
-          options: questionsArr[index].options,
-          data: questionsArr,
-          currentIndex: currentIndex,
-          onSelect: _next,
-        );
-    }
   }
 }

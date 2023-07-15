@@ -6,6 +6,7 @@ import 'package:yes_broker/constants/utils/colors.dart';
 class CustomTextInput extends StatefulWidget {
   final TextEditingController controller;
   final String? labelText;
+  final double contentPadding;
   final Widget? label;
   final bool enabled;
   final String hintText;
@@ -42,7 +43,8 @@ class CustomTextInput extends StatefulWidget {
       this.minLines = 1,
       this.readonly = false,
       this.label,
-      this.enabled = true})
+      this.enabled = true,
+      this.contentPadding = 13})
       : super(key: key);
 
   @override
@@ -60,8 +62,10 @@ class CustomTextInputState extends State<CustomTextInput> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
+    return Container(
+      constraints: const BoxConstraints(
+        minHeight: 50, // Adjust the height value as per your requirement
+      ),
       child: TextFormField(
         enabled: widget.enabled,
         style: const TextStyle(
@@ -69,10 +73,10 @@ class CustomTextInputState extends State<CustomTextInput> {
         ),
         controller: widget.controller,
         decoration: InputDecoration(
-          isDense: widget.indense,
+          // isDense: widget.indense,
           label: widget.label,
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 13, horizontal: 10),
+          contentPadding: EdgeInsets.symmetric(
+              vertical: widget.contentPadding, horizontal: 10),
           labelText: widget.labelText,
           hintText: widget.hintText,
           hintStyle: widget.hintstyle,
@@ -291,7 +295,7 @@ class CustomCheckboxState extends State<CustomCheckbox> {
           CustomText(
             title: widget.label!,
             size: 16,
-          )
+          ),
       ],
     );
   }
@@ -300,27 +304,35 @@ class CustomCheckboxState extends State<CustomCheckbox> {
 class CustomChoiceChip extends StatelessWidget {
   final String label;
   final bool selected;
+  final bool isSmall;
   final Function(bool) onSelected;
   final Color? selectedColor;
   final Color? bgcolor;
   final Color labelColor;
 
-  const CustomChoiceChip(
-      {super.key,
-      required this.label,
-      required this.selected,
-      required this.onSelected,
-      this.selectedColor = AppColor.primary,
-      required this.labelColor,
-      this.bgcolor = AppColor.secondary});
+  const CustomChoiceChip({
+    super.key,
+    required this.label,
+    required this.selected,
+    required this.onSelected,
+    this.selectedColor = AppColor.primary,
+    required this.labelColor,
+    this.bgcolor = AppColor.secondary,
+    this.isSmall = true,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ChoiceChip(
-      label: Text(
-        label,
-        style: TextStyle(
-          color: labelColor,
+      label: Container(
+        constraints: BoxConstraints(
+          minWidth: isSmall ? 80 : double.infinity,
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: labelColor,
+          ),
         ),
       ),
       selected: selected,
@@ -333,14 +345,36 @@ class CustomChoiceChip extends StatelessWidget {
   }
 }
 
+class CustomCheckboxListTile extends StatelessWidget {
+  final void Function() onSelected;
+  final bool isChecked;
+  const CustomCheckboxListTile({
+    super.key,
+    required this.onSelected,
+    this.isChecked = true,
+  });
 
-
-
-
-
-
-
-
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 7.0),
+      child: GestureDetector(
+        onTap: onSelected,
+        child: Row(
+          children: [
+            Checkbox(
+              value: isChecked,
+              onChanged: (newVal) {
+                onSelected();
+              },
+            ),
+            const CustomText(title: 'Use Same number for whatsapp'),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 // pickImage(ImageSource source) async {
 //   final ImagePicker _imagePicker = ImagePicker();

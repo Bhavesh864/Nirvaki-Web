@@ -7,9 +7,28 @@ import 'package:yes_broker/widgets/timeline_view.dart';
 import 'package:yes_broker/widgets/todo/todo_list_view.dart';
 import 'package:yes_broker/widgets/workitems_list.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   static const routeName = '/home';
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getstate();
+  }
+
+  getstate() async {
+    // final List<Questions> item =
+    //     await Questions.getAllQuestionssFromFirestore();
+    // print(item[0].screens[0].isActive);
+    // await Questions.addScreens(screensList);
+  }
 
   @override
   Widget build(BuildContext context) {
