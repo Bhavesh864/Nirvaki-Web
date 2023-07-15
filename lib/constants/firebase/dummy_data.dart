@@ -168,34 +168,6 @@
 //             questions: [
 //               Question(
 //                 questionId: 14,
-//                 questionOptionType: "chip",
-//                 questionTitle: "What is the transaction Type?",
-//                 questionOption: ["Resell", "New booking"],
-//               ),
-//             ],
-//             isActive: true,
-//             previousScreenId: "S8",
-//             screenId: "S9",
-//             nextScreenId: "S10",
-//           ),
-//           Screen(
-//             questions: [
-//               Question(
-//                 questionId: 15,
-//                 questionOptionType: "chip",
-//                 questionTitle: "What is the transaction Type?",
-//                 questionOption: ["Resell", "New booking"],
-//               ),
-//             ],
-//             isActive: true,
-//             previousScreenId: "S9",
-//             screenId: "S10",
-//             nextScreenId: "S11",
-//           ),
-//           Screen(
-//             questions: [
-//               Question(
-//                 questionId: 16,
 //                 questionOptionType: "dropdown",
 //                 questionTitle: "No of Bedrooms?",
 //                 questionOption: [
@@ -212,19 +184,19 @@
 //                 ],
 //               ),
 //               Question(
-//                 questionId: 17,
+//                 questionId: 15,
 //                 questionOptionType: "multichip",
 //                 questionTitle: "Additional Rooms?",
 //                 questionOption: ["Study", "Servant", "Office", "Puja"],
 //               ),
 //               Question(
-//                 questionId: 18,
+//                 questionId: 16,
 //                 questionOptionType: "dropdown",
 //                 questionTitle: "No of Bathrooms?",
 //                 questionOption: ["1", "2", "3", "4", "5"],
 //               ),
 //               Question(
-//                 questionId: 19,
+//                 questionId: 17,
 //                 questionOptionType: "dropdown",
 //                 questionTitle: "No of Balconies?",
 //                 questionOption: ["1", "2", "3", "4", "5"],
@@ -232,20 +204,20 @@
 //             ],
 //             title: "Room Details",
 //             isActive: true,
-//             previousScreenId: "S10",
-//             screenId: "S11",
-//             nextScreenId: "S12",
+//             previousScreenId: "S8",
+//             screenId: "S9",
+//             nextScreenId: "S10",
 //           ),
 //           Screen(
 //             questions: [
 //               Question(
-//                 questionId: 20,
+//                 questionId: 18,
 //                 questionOptionType: "dropdown",
 //                 questionTitle: "Is there a boundary around the plot?",
 //                 questionOption: ["Yes", "No"],
 //               ),
 //               Question(
-//                 questionId: 21,
+//                 questionId: 19,
 //                 questionOptionType: "chip",
 //                 questionTitle: "No of open Sides?",
 //                 questionOption: ["1", "2", "3", "4"],
@@ -253,14 +225,14 @@
 //             ],
 //             isActive: true,
 //             title: "Plot Details",
-//             previousScreenId: "S11",
-//             screenId: "S12",
-//             nextScreenId: "S13",
+//             previousScreenId: "S9",
+//             screenId: "S10",
+//             nextScreenId: "S11",
 //           ),
 //           Screen(
 //             questions: [
 //               Question(
-//                 questionId: 22,
+//                 questionId: 20,
 //                 questionOptionType: "chip",
 //                 questionTitle: "Expected time possession ?",
 //                 questionOption: [
@@ -273,14 +245,14 @@
 //               ),
 //             ],
 //             isActive: true,
-//             previousScreenId: "S12",
-//             screenId: "S13",
-//             nextScreenId: "S14",
+//             previousScreenId: "S10",
+//             screenId: "S11",
+//             nextScreenId: "S12",
 //           ),
 //           Screen(
 //             questions: [
 //               Question(
-//                 questionId: 23,
+//                 questionId: 21,
 //                 questionOptionType: "mutlichip",
 //                 questionTitle:
 //                     "What are the amenities available with this property?",
@@ -296,14 +268,14 @@
 //               ),
 //             ],
 //             isActive: true,
-//             previousScreenId: "S13",
-//             screenId: "S14",
-//             nextScreenId: "S15",
+//             previousScreenId: "S11",
+//             screenId: "S12",
+//             nextScreenId: "S13",
 //           ),
 //           Screen(
 //             questions: [
 //               Question(
-//                 questionId: 24,
+//                 questionId: 22,
 //                 questionOptionType: "dropdown",
 //                 questionTitle: "No of Reserved Parkings?",
 //                 questionOption: ["1", "2", "3", "4", "5"],
@@ -311,31 +283,70 @@
 //             ],
 //             isActive: true,
 //             title: "No of reserved Parking?",
-//             previousScreenId: "S14",
-//             screenId: "S15",
-//             nextScreenId: "S16",
+//             previousScreenId: "S12",
+//             screenId: "S13",
+//             nextScreenId: "S14",
 //           ),
 //           Screen(
 //             questions: [
 //               Question(
-//                 questionId: 25,
+//                 questionId: 23,
 //                 questionOptionType: "chip",
-//                 questionTitle: "No of Reserved Parkings?",
+//                 questionTitle: "Property Area",
 //                 questionOption: ["Sq ft", "Sq yard", "Acre"],
 //               ),
 //               Question(
-//                 questionId: 26,
+//                 questionId: 24,
 //                 questionOptionType: "textfield",
 //                 questionTitle: "Super Area",
 //                 questionOption: "",
 //               ),
 //               Question(
-//                 questionId: 27,
+//                 questionId: 25,
 //                 questionOptionType: "textfield",
 //                 questionTitle: "Carpet Area",
 //                 questionOption: "",
 //               ),
 //             ],
+//             isActive: true,
+//             previousScreenId: "S13",
+//             screenId: "S14",
+//             nextScreenId: "S15",
+//           ),
+//           Screen(
+//             questions: [
+//               Question(
+//                 questionId: 26,
+//                 questionOptionType: "dropdown",
+//                 questionTitle: "State",
+//                 questionOption: [],
+//               ),
+//               Question(
+//                 questionId: 27,
+//                 questionOptionType: "dropdown",
+//                 questionTitle: "City",
+//                 questionOption: [],
+//               ),
+//               Question(
+//                 questionId: 28,
+//                 questionOptionType: "textfield",
+//                 questionTitle: "Address Line 1",
+//                 questionOption: "",
+//               ),
+//               Question(
+//                 questionId: 29,
+//                 questionOptionType: "textfield",
+//                 questionTitle: "Address Line 2",
+//                 questionOption: "",
+//               ),
+//               Question(
+//                 questionId: 30,
+//                 questionOptionType: "textfield",
+//                 questionTitle: "Floor Number",
+//                 questionOption: "",
+//               ),
+//             ],
+//             title: "Property Address",
 //             isActive: true,
 //             previousScreenId: "S14",
 //             screenId: "S15",
@@ -344,37 +355,12 @@
 //           Screen(
 //             questions: [
 //               Question(
-//                 questionId: 28,
-//                 questionOptionType: "dropdown",
-//                 questionTitle: "State",
-//                 questionOption: [],
-//               ),
-//               Question(
-//                 questionId: 29,
-//                 questionOptionType: "dropdown",
-//                 questionTitle: "City",
-//                 questionOption: [],
-//               ),
-//               Question(
-//                 questionId: 30,
-//                 questionOptionType: "textfield",
-//                 questionTitle: "Address Line 1",
-//                 questionOption: "",
-//               ),
-//               Question(
 //                 questionId: 31,
-//                 questionOptionType: "textfield",
-//                 questionTitle: "Address Line 2",
-//                 questionOption: "",
-//               ),
-//               Question(
-//                 questionId: 32,
-//                 questionOptionType: "textfield",
-//                 questionTitle: "Floor Number",
+//                 questionOptionType: "map",
+//                 questionTitle: "Pin Property on Map",
 //                 questionOption: "",
 //               ),
 //             ],
-//             title: "Property Address",
 //             isActive: true,
 //             previousScreenId: "S15",
 //             screenId: "S16",
@@ -383,21 +369,7 @@
 //           Screen(
 //             questions: [
 //               Question(
-//                 questionId: 33,
-//                 questionOptionType: "map",
-//                 questionTitle: "Pin Property on Map",
-//                 questionOption: "",
-//               ),
-//             ],
-//             isActive: true,
-//             previousScreenId: "S16",
-//             screenId: "S17",
-//             nextScreenId: "S18",
-//           ),
-//           Screen(
-//             questions: [
-//               Question(
-//                 questionId: 34,
+//                 questionId: 32,
 //                 questionOptionType: "chip",
 //                 questionTitle: "Which Direction Does the property Face?",
 //                 questionOption: [
@@ -420,7 +392,7 @@
 //           Screen(
 //             questions: [
 //               Question(
-//                 questionId: 35,
+//                 questionId: 33,
 //                 questionOptionType: "photo",
 //                 questionTitle: "Photos",
 //                 questionOption: "",
@@ -434,23 +406,9 @@
 //           Screen(
 //             questions: [
 //               Question(
-//                 questionId: 36,
+//                 questionId: 34,
 //                 questionOptionType: "video",
 //                 questionTitle: "Video",
-//                 questionOption: "",
-//               ),
-//             ],
-//             isActive: true,
-//             previousScreenId: "S17",
-//             screenId: "S18",
-//             nextScreenId: "S19",
-//           ),
-//           Screen(
-//             questions: [
-//               Question(
-//                 questionId: 37,
-//                 questionOptionType: "textarea",
-//                 questionTitle: "Add Note Or comment",
 //                 questionOption: "",
 //               ),
 //             ],
@@ -462,7 +420,21 @@
 //           Screen(
 //             questions: [
 //               Question(
-//                 questionId: 38,
+//                 questionId: 35,
+//                 questionOptionType: "textarea",
+//                 questionTitle: "Add Note Or comment",
+//                 questionOption: "",
+//               ),
+//             ],
+//             isActive: true,
+//             previousScreenId: "S19",
+//             screenId: "S20",
+//             nextScreenId: "S21",
+//           ),
+//           Screen(
+//             questions: [
+//               Question(
+//                 questionId: 36,
 //                 questionOptionType: "textfield",
 //                 questionTitle: "Assign to",
 //                 questionOption: "",
@@ -470,10 +442,10 @@
 //             ],
 //             isActive: true,
 //             title: "Assign to",
-//             previousScreenId: "S18",
-//             screenId: "S19",
-//             nextScreenId: "S20",
+//             previousScreenId: "S20",
+//             screenId: "S21",
+//             nextScreenId: "S22",
 //           ),
 //         ],
 //       ),
-//     ];
+//     // ]
