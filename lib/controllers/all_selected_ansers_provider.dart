@@ -49,9 +49,9 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
         customerinfo: cards.Customerinfo(),
         cardStatus: "New",
         createdby: cards.Createdby(
-            userfirstname: "jack",
+            userfirstname: "bhavesh",
             userid: authentication.currentUser!.uid,
-            userlastname: "adam"),
+            userlastname: "khatri"),
         propertyarearange: cards.Propertyarearange(arearangestart: ""),
         roomconfig: cards.Roomconfig(bedroom: ''),
         propertypricerange: cards.Propertypricerange(arearangestart: '50L'));
@@ -70,9 +70,9 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
         inventoryType: inventoryType,
         inventorysource: inventorySource,
         createdby: Createdby(
-            userfirstname: "jack",
+            userfirstname: "bhavesh",
             userid: authentication.currentUser!.uid,
-            userlastname: "adam"));
+            userlastname: "khatri"));
     // await InventoryDetails.addInventoryDetails(inventory);
     print('category $inventoryCategory');
     print('type $propertyCategory');

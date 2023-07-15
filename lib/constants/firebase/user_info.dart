@@ -176,7 +176,6 @@ Future<String> signUpwith(email, password) async {
 
 //   await userCRUD.updateUser(retrievedUser);
 // }
-
 // // Delete the user
 // await userCRUD.deleteUser('1');
 // // }
@@ -188,12 +187,4 @@ dynamic getDataById(List<dynamic> dataArray, int id) {
     }
   }
   return null;
-}
-
-getbyid() {
-  final data = getDataById([
-    {"id": 1, "select": "hello"},
-    {"id": 2, "select": "manish"}
-  ], 1);
-  print(data);
 }
