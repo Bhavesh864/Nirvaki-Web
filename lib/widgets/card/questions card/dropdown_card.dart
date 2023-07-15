@@ -20,16 +20,14 @@ class DropDownCard extends StatefulWidget {
 }
 
 class _DropDownCardState extends State<DropDownCard> {
-  String? selectedValue = 'Select a item';
+  // String? selectedItem;
 
-  List<String> selectedValues = [];
+  Map<int, String> selectedValues = {};
   List<String> selectedChoices = [];
 
   int? selectIndex;
   @override
   Widget build(BuildContext context) {
-    print(widget.values);
-    print(widget.question);
     return Center(
       child: SingleChildScrollView(
         child: Card(
@@ -66,16 +64,18 @@ class _DropDownCardState extends State<DropDownCard> {
                       shrinkWrap: true,
                       itemCount: widget.values?.length,
                       itemBuilder: (context, index) {
-                        List values = widget.values![index]["values"];
+                        List optionsList = widget.values![index]["values"];
+
                         return Container(
                           margin: const EdgeInsets.symmetric(vertical: 5),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               CustomText(
-                                  fontWeight: FontWeight.w500,
-                                  size: 16,
-                                  title: widget.values![index]['roomconfig']),
+                                fontWeight: FontWeight.w500,
+                                size: 16,
+                                title: widget.values![index]['roomconfig'],
+                              ),
                               if (widget.values![index]['type'] == "dropdown")
                                 DropdownButtonHideUnderline(
                                   child: InputDecorator(
@@ -99,38 +99,24 @@ class _DropDownCardState extends State<DropDownCard> {
                                       borderRadius: BorderRadius.circular(6),
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 10, vertical: 0),
-                                      value: selectedValues.length > index
-                                          ? selectedValues[index]
-                                          : null,
+                                      value: selectedValues[index],
                                       onChanged: (newValue) {
                                         setState(() {
-                                          if (selectedValues.length > index) {
-                                            selectedValues[index] = newValue!;
-                                          } else {
-                                            selectedValues.add(newValue!);
-                                            // selectedValues[index] = newValue!;
-                                          }
+                                          selectedValues[index] = newValue!;
                                         });
                                       },
-                                      // items: values.map((value) {
-                                      //   return DropdownMenuItem<String>(
-                                      //     value: value,
-                                      //     child: Text(value),
-                                      //   );
-                                      // }).toList(),
-                                      items: List.generate(
-                                        values.length,
-                                        (index) => DropdownMenuItem<String>(
-                                          value: values[index],
-                                          child: Text(values[index]),
-                                        ),
-                                      ),
+                                      items: optionsList.map((value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
                                     ),
                                   ),
                                 ),
                               if (widget.values![index]["type"] == "chip")
                                 Wrap(
-                                  children: values.map((value) {
+                                  children: optionsList.map((value) {
                                     if (widget.id == 10) {
                                       return Container(
                                         margin: const EdgeInsets.symmetric(
