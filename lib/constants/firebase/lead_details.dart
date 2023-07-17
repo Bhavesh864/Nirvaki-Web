@@ -289,7 +289,7 @@ class LeadDetails {
           documentSnapshot.data() as Map<String, dynamic>;
       return LeadDetails.fromJson(data);
     } catch (error) {
-      print('Failed to get Inventory items: $error');
+      // print('Failed to get Inventory items: $error');
       return null;
     }
   }
@@ -297,18 +297,18 @@ class LeadDetails {
   static Future<void> addLeadDetails(LeadDetails lead) async {
     try {
       await usersCollection.doc(lead.leadId).set(lead.toJson());
-      print('Inventory item added successfully');
+      // print('Inventory item added successfully');
     } catch (error) {
-      print('Failed to add Inventory item: $error');
+      // print('Failed to add Inventory item: $error');
     }
   }
 
   static Future<void> updateLeadDetails(LeadDetails item) async {
     try {
       await usersCollection.doc(item.leadId).update(item.toJson());
-      print('Inventory item updated successfully');
+      // print('Inventory item updated successfully');
     } catch (error) {
-      print('Failed to update Inventory item: $error');
+      // print('Failed to update Inventory item: $error');
     }
   }
 }

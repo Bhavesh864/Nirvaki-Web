@@ -43,9 +43,9 @@ class InventoryQuestions {
   static Future<void> addItem(InventoryQuestions inventory) async {
     try {
       await inventoryDetails.doc().set(inventory.toMap());
-      print('Inventory item added successfully');
+      // print('Inventory item added successfully');
     } catch (error) {
-      print('Failed to add Inventory item: $error');
+      // print('Failed to add Inventory item: $error');
     }
   }
 
@@ -61,7 +61,7 @@ class InventoryQuestions {
       }).toList();
       return inventoryQuestionss;
     } catch (error) {
-      print('Failed to get Inventory items: $error');
+      // print('Failed to get Inventory items: $error');
       return [];
     }
   }

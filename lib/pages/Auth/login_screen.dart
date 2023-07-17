@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     }),
                     ScaffoldMessenger.of(context)
                         .showSnackBar(SnackBar(content: Text(value!))),
-                    print('please enter correct info')
+                    // print('please enter correct info')
                   }
               });
     }

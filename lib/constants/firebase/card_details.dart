@@ -23,13 +23,13 @@ class CardDetails {
 
   CardDetails(
       {this.cardType,
-      this.workitemId,
-      this.status,
-      this.cardCategory,
+      required this.workitemId,
+      required this.status,
+      required this.cardCategory,
       this.cardTitle,
       this.cardDescription,
       this.cardStatus,
-      this.brokerid,
+      required this.brokerid,
       this.managerid,
       this.assignedto,
       this.roomconfig,
@@ -105,36 +105,36 @@ class CardDetails {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["cardType"] = cardType;
-    _data["workitemId"] = workitemId;
-    _data["Status"] = status;
-    _data["cardCategory"] = cardCategory;
-    _data["cardTitle"] = cardTitle;
-    _data["cardDescription"] = cardDescription;
-    _data["cardStatus"] = cardStatus;
-    _data["brokerid"] = brokerid;
-    _data["managerid"] = managerid;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["cardType"] = cardType;
+    data["workitemId"] = workitemId;
+    data["Status"] = status;
+    data["cardCategory"] = cardCategory;
+    data["cardTitle"] = cardTitle;
+    data["cardDescription"] = cardDescription;
+    data["cardStatus"] = cardStatus;
+    data["brokerid"] = brokerid;
+    data["managerid"] = managerid;
     if (assignedto != null) {
-      _data["assignedto"] = assignedto?.map((e) => e.toJson()).toList();
+      data["assignedto"] = assignedto?.map((e) => e.toJson()).toList();
     }
     if (roomconfig != null) {
-      _data["roomconfig"] = roomconfig?.toJson();
+      data["roomconfig"] = roomconfig?.toJson();
     }
     if (propertyarearange != null) {
-      _data["propertyarearange"] = propertyarearange?.toJson();
+      data["propertyarearange"] = propertyarearange?.toJson();
     }
     if (propertypricerange != null) {
-      _data["propertypricerange"] = propertypricerange?.toJson();
+      data["propertypricerange"] = propertypricerange?.toJson();
     }
-    _data["duedate"] = duedate;
+    data["duedate"] = duedate;
     if (createdby != null) {
-      _data["createdby"] = createdby?.toJson();
+      data["createdby"] = createdby?.toJson();
     }
     if (customerinfo != null) {
-      _data["customerinfo"] = customerinfo?.toJson();
+      data["customerinfo"] = customerinfo?.toJson();
     }
-    return _data;
+    return data;
   }
 
   // -----------------------------Methods------------------------------------------------------------------->
@@ -144,9 +144,9 @@ class CardDetails {
       await cardDetailsCollection
           .doc(inventory.workitemId)
           .set(inventory.toJson());
-      print('Inventory item added successfully');
+      // print('Inventory item added successfully');
     } catch (error) {
-      print('Failed to add Inventory item: $error');
+      // print('Failed to add Inventory item: $error');
     }
   }
 
@@ -161,7 +161,7 @@ class CardDetails {
 
       return inventoryItems;
     } catch (error) {
-      print('Failed to get Inventory items: $error');
+      // print('Failed to get Inventory items: $error');
       return [];
     }
   }
@@ -169,9 +169,9 @@ class CardDetails {
   static Future<void> updateCardDetails(CardDetails item) async {
     try {
       await cardDetailsCollection.doc(item.workitemId).update(item.toJson());
-      print('Inventory item updated successfully');
+      // print('Inventory item updated successfully');
     } catch (error) {
-      print('Failed to update Inventory item: $error');
+      // print('Failed to update Inventory item: $error');
     }
   }
 
@@ -179,9 +179,9 @@ class CardDetails {
   static Future<void> deleteCardDetails(String id) async {
     try {
       await cardDetailsCollection.doc(id).delete();
-      print('Inventory item deleted successfully');
+      // print('Inventory item deleted successfully');
     } catch (error) {
-      print('Failed to delete Inventory item: $error');
+      // print('Failed to delete Inventory item: $error');
     }
   }
 }
@@ -224,14 +224,14 @@ class Customerinfo {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["firstname"] = firstname;
-    _data["lastname"] = lastname;
-    _data["title"] = title;
-    _data["mobile"] = mobile;
-    _data["whatsapp"] = whatsapp;
-    _data["email"] = email;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["firstname"] = firstname;
+    data["lastname"] = lastname;
+    data["title"] = title;
+    data["mobile"] = mobile;
+    data["whatsapp"] = whatsapp;
+    data["email"] = email;
+    return data;
   }
 }
 
@@ -260,12 +260,12 @@ class Createdby {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["userid"] = userid;
-    _data["userfirstname"] = userfirstname;
-    _data["userlastname"] = userlastname;
-    _data["userimage"] = userimage;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["userid"] = userid;
+    data["userfirstname"] = userfirstname;
+    data["userlastname"] = userlastname;
+    data["userimage"] = userimage;
+    return data;
   }
 }
 
@@ -289,11 +289,11 @@ class Propertypricerange {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["unit"] = unit;
-    _data["arearangestart"] = arearangestart;
-    _data["arearangeend"] = arearangeend;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["unit"] = unit;
+    data["arearangestart"] = arearangestart;
+    data["arearangeend"] = arearangeend;
+    return data;
   }
 }
 
@@ -317,11 +317,11 @@ class Propertyarearange {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["unit"] = unit;
-    _data["arearangestart"] = arearangestart;
-    _data["arearangeend"] = arearangeend;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["unit"] = unit;
+    data["arearangestart"] = arearangestart;
+    data["arearangeend"] = arearangeend;
+    return data;
   }
 }
 
@@ -343,12 +343,12 @@ class Roomconfig {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["bedroom"] = bedroom;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["bedroom"] = bedroom;
     if (additionalroom != null) {
-      _data["additionalroom"] = additionalroom;
+      data["additionalroom"] = additionalroom;
     }
-    return _data;
+    return data;
   }
 }
 
@@ -390,13 +390,13 @@ class Assignedto {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["userid"] = userid;
-    _data["firstname"] = firstname;
-    _data["lastname"] = lastname;
-    _data["image"] = image;
-    _data["assignedon"] = assignedon;
-    _data["assignedby"] = assignedby;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["userid"] = userid;
+    data["firstname"] = firstname;
+    data["lastname"] = lastname;
+    data["image"] = image;
+    data["assignedon"] = assignedon;
+    data["assignedby"] = assignedby;
+    return data;
   }
 }

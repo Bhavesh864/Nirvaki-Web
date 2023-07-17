@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 
@@ -92,6 +93,7 @@ class _NavBarItemState extends State<NavBarItem> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+
     _controller1 = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 250),
