@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/constants/firebase/questions.dart';
+import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/constants/functions/get_inventory_questions.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import '../Customs/custom_fields.dart';
