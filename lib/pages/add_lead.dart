@@ -3,33 +3,33 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 
-import 'package:yes_broker/constants/functions/get_inventory_questions.dart';
+import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
+import 'package:yes_broker/constants/functions/get_lead_questions.dart';
+
+// import 'package:yes_broker/constants/functions/get_inventory_questions.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import '../Customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
 
-final objectArrayProvider = Provider<List<Object>>((ref) => []);
-
-class AddInventory extends ConsumerStatefulWidget {
-  static const routeName = '/add-inventory';
-  const AddInventory({super.key});
+class AddLead extends ConsumerStatefulWidget {
+  static const routeName = '/add-lead';
+  const AddLead({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _AddInventoryState createState() => _AddInventoryState();
+  _AddLeadState createState() => _AddLeadState();
 }
 
-class _AddInventoryState extends ConsumerState<AddInventory> {
-  late Future<List<InventoryQuestions>> getQuestions;
+class _AddLeadState extends ConsumerState<AddLead> {
+  late Future<List<LeadQuestions>> getQuestions;
   PageController? pageController;
   int currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    getQuestions = InventoryQuestions.getAllQuestionssFromFirestore();
+    getQuestions = LeadQuestions.getAllQuestionssFromFirestore();
     pageController = PageController(initialPage: currentIndex);
   }
 
@@ -64,7 +64,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<List<InventoryQuestions>>(
+      body: FutureBuilder<List<LeadQuestions>>(
         future: getQuestions,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -74,8 +74,8 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
-            List<InventoryQuestions> screenData =
-                snapshot.data as List<InventoryQuestions>;
+            List<LeadQuestions> screenData =
+                snapshot.data as List<LeadQuestions>;
             List<Screen> screens = screenData[0].screens;
 
             return Stack(
@@ -142,7 +142,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                       //   screens[index].questions[i],
                                       //   screens,
                                       // ),
-                                      buildQuestionWidget(
+                                      buildQuestionWidgetForLead(
                                         screens[index].questions[i],
                                         screens,
                                         currentIndex,
@@ -197,7 +197,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                     title: Consumer(
                       builder: (context, ref, child) {
                         return const CustomText(
-                          title: 'Add Inventory ',
+                          title: 'Add Lead ',
                           fontWeight: FontWeight.w700,
                           size: 20,
                           color: Colors.white,

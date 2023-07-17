@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
-import '../../constants/firebase/user_info.dart';
+import '../../constants/firebase/userModel/user_info.dart';
 
 final currentIndexProvider = StateProvider<int>((ref) {
   return 0;

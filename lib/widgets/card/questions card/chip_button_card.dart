@@ -13,7 +13,7 @@ class ChipButtonCard extends StatelessWidget {
   final String question;
   final List<String> options;
   final int currentIndex;
-  final List<Questions> data;
+  final List<InventoryQuestions> data;
   final void Function(String) onSelect;
 
   const ChipButtonCard({

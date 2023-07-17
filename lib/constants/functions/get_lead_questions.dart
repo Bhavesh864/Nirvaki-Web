@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
+import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
 
 import '../../Customs/custom_fields.dart';
 import '../../Customs/custom_text.dart';
@@ -8,13 +8,8 @@ import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
 import '../utils/colors.dart';
 
-Widget buildQuestionWidget(
-  Question question,
-  List<Screen> screens,
-  int currentIndex,
-  selectedOption,
-  PageController pageController,
-) {
+Widget buildQuestionWidgetForLead(Question question, List<Screen> screens,
+    int currentIndex, selectedOption, PageController pageController) {
   if (question.questionOptionType == 'textfield') {
     TextEditingController controller = TextEditingController();
     bool isChecked = true;
