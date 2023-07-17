@@ -5,7 +5,7 @@ import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/broker_info.dart';
-import 'package:yes_broker/pages/Auth/forget_password.dart';
+
 import 'package:yes_broker/TabScreens/main_screens/home_screen.dart';
 
 import '../../constants/utils/image_constants.dart';
@@ -198,8 +198,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           Center(
                             child: InkWell(
                               onTap: () {
-                                Navigator.of(context)
-                                    .pushNamed(ForgetPassword.routeName);
+                                // Navigator.of(context)
+                                //     .pushNamed(ForgetPassword.routeName);
                               },
                               child: const CustomText(
                                 title: 'Forget password?',
