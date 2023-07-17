@@ -22,21 +22,21 @@ class Questions {
 
   // Get all Questions data from Firestore
   static Future<List<Questions>> getAllQuestionssFromFirestore() async {
-    final List<Questions> questionss = [];
+    final List<Questions> questionssArr = [];
     try {
       QuerySnapshot querySnapshot = await questionsCollection.get();
       for (var doc in querySnapshot.docs) {
         Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
         if (data != null) {
           Questions questions = Questions.fromJson(data);
-          questionss.add(questions);
+          questionssArr.add(questions);
         }
       }
-      return questionss;
+      return questionssArr;
     } catch (e) {
       print('Error getting Questions data: $e');
     }
-    return questionss;
+    return questionssArr;
   }
 
   static Future<void> addScreens(List<Questions> screens) async {
@@ -70,12 +70,12 @@ class Screen {
   });
 
   factory Screen.fromJson(Map<String, dynamic> json) {
-    List<Question> questions = List<Question>.from(json['questions']
+    List<Question> Questions = List<Question>.from(json['Questions']
         .map((question) => Question.fromJson(question))
         .toList());
     return Screen(
         screenId: json['screenId'],
-        questions: questions,
+        questions: Questions,
         previousScreenId: json['previousScreenId'],
         nextScreenId: json['nextScreenId'],
         isActive: json['isActive'],
@@ -85,7 +85,7 @@ class Screen {
   Map<String, dynamic> toJson() {
     return {
       'screenId': screenId,
-      'questions': questions.map((question) => question.toJson()).toList(),
+      'Questions': questions.map((question) => question.toJson()).toList(),
       'previousScreenId': previousScreenId,
       'nextScreenId': nextScreenId,
       'isActive': isActive,

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 
 import '../../Customs/custom_fields.dart';
 import '../../Customs/custom_text.dart';
 import '../../Customs/dropdown_field.dart';
 import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
-import '../firebase/questions.dart';
+
 import '../utils/colors.dart';
 
 Widget buildQuestionWidget(
