@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
-
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/constants/firebase/broker_info.dart';
-
+import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 import 'package:yes_broker/TabScreens/main_screens/home_screen.dart';
-
 import '../../constants/utils/image_constants.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
-
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }

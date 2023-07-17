@@ -218,7 +218,7 @@
     //           ),
     //           Question(
     //             questionId: 19,
-    //             questionOptionType: "chip",
+    //             questionOptionType: "smallchip",
     //             questionTitle: "No of open Sides?",
     //             questionOption: ["1", "2", "3", "4"],
     //           ),
@@ -253,7 +253,7 @@
     //         questions: [
     //           Question(
     //             questionId: 21,
-    //             questionOptionType: "mutlichip",
+    //             questionOptionType: "multichip",
     //             questionTitle:
     //                 "What are the amenities available with this property?",
     //             questionOption: [
@@ -291,7 +291,7 @@
     //         questions: [
     //           Question(
     //             questionId: 23,
-    //             questionOptionType: "chip",
+    //             questionOptionType: "smallchip",
     //             questionTitle: "Property Area",
     //             questionOption: ["Sq ft", "Sq yard", "Acre"],
     //           ),
@@ -423,7 +423,7 @@
     //             questionId: 35,
     //             questionOptionType: "textarea",
     //             questionTitle: "Add Note Or comment",
-    //             questionOption: "",
+    //             questionOption: "Add Note Or comment",
     //           ),
     //         ],
     //         isActive: true,

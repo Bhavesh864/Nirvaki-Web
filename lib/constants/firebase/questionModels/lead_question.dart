@@ -1,17 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 final CollectionReference questionsCollection =
-    FirebaseFirestore.instance.collection('InventoryQuestions');
+    FirebaseFirestore.instance.collection('LeadQuestions');
 
-class InventoryQuestions {
+class LeadQuestions {
   List<Screen> screens;
 
-  InventoryQuestions({required this.screens});
+  LeadQuestions({required this.screens});
 
-  factory InventoryQuestions.fromJson(Map<String, dynamic> json) {
+  factory LeadQuestions.fromJson(Map<String, dynamic> json) {
     List<Screen> screens = List<Screen>.from(
         json['screens'].map((screen) => Screen.fromJson(screen)).toList());
-    return InventoryQuestions(screens: screens);
+    return LeadQuestions(screens: screens);
   }
 
   Map<String, dynamic> toJson() {
@@ -21,15 +21,14 @@ class InventoryQuestions {
   }
 
   // Get all Questions data from Firestore
-  static Future<List<InventoryQuestions>>
-      getAllQuestionssFromFirestore() async {
-    final List<InventoryQuestions> questionss = [];
+  static Future<List<LeadQuestions>> getAllQuestionssFromFirestore() async {
+    final List<LeadQuestions> questionss = [];
     try {
       QuerySnapshot querySnapshot = await questionsCollection.get();
       for (var doc in querySnapshot.docs) {
         Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
         if (data != null) {
-          InventoryQuestions questions = InventoryQuestions.fromJson(data);
+          LeadQuestions questions = LeadQuestions.fromJson(data);
           questionss.add(questions);
         }
       }
@@ -40,9 +39,9 @@ class InventoryQuestions {
     return questionss;
   }
 
-  static Future<void> addScreens(List<InventoryQuestions> screens) async {
+  static Future<void> addScreens(List<LeadQuestions> screens) async {
     try {
-      for (InventoryQuestions screen in screens) {
+      for (LeadQuestions screen in screens) {
         final DocumentReference documentReference =
             await questionsCollection.add(screen.toJson());
         print('Screen added with ID: ${documentReference.id}');

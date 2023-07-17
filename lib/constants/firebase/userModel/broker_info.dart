@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/foundation.dart';
 
-import 'package:yes_broker/constants/firebase/user_info.dart';
+import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
 final CollectionReference brokerInfosCollection =
     FirebaseFirestore.instance.collection('brokerInfo');
