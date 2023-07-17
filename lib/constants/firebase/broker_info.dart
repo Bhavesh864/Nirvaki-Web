@@ -64,9 +64,9 @@ class BrokerInfo {
       await brokerInfosCollection
           .doc(brokerInfo.brokerid)
           .set(brokerInfo.toMap());
-      print('BrokerInfo added successfully');
+      // print('BrokerInfo added successfully');
     } catch (error) {
-      print('Failed to add BrokerInfo: $error');
+      // print('Failed to add BrokerInfo: $error');
     }
   }
 
@@ -94,18 +94,18 @@ class BrokerInfo {
       await brokerInfosCollection
           .doc(updatedBrokerInfo.brokerid)
           .update(updatedBrokerInfo.toMap());
-      print('BrokerInfo updated successfully');
+      // print('BrokerInfo updated successfully');
     } catch (error) {
-      print('Failed to update BrokerInfo: $error');
+      // print('Failed to update BrokerInfo: $error');
     }
   }
 
   static Future<void> deleteBrokerInfo(String brokerid) async {
     try {
       await brokerInfosCollection.doc(brokerid).delete();
-      print('BrokerInfo deleted successfully');
+      // print('BrokerInfo deleted successfully');
     } catch (error) {
-      print('Failed to delete BrokerInfo: $error');
+      // print('Failed to delete BrokerInfo: $error');
     }
   }
 }
@@ -118,10 +118,14 @@ Future<String?> signinwithbroker(email, password) async {
     res = "success";
     return res;
   } on auth.FirebaseAuthException catch (e) {
-    if (e.code == 'BrokerInfo-not-found') {
-      return 'No BrokerInfo found for that email.';
+    if (e.code == 'user-not-found') {
+      return 'No user found for that email.';
     } else if (e.code == 'wrong-password') {
-      return 'Wrong password provided.';
+      return 'Wrong password provided for that user.';
+    } else if (e.code == "email-already-in-use") {
+      return "The account already exists for that email";
+    } else if (e.code == "weak-password") {
+      return "The password provided is too weak.";
     }
     return e.toString();
   } catch (E) {
@@ -164,7 +168,7 @@ Future<String> signUpwithbroker(email, password, others) async {
     res = "success";
     return res;
   } catch (er) {
-    print(er);
+    // print(er);
     return er.toString();
   }
 }

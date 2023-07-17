@@ -4,16 +4,18 @@ import '../../../Customs/custom_text.dart';
 import '../../../constants/utils/colors.dart';
 
 class ChipButton extends StatelessWidget {
-  final double width;
+  final bool isSmall;
   final String text;
+  final double width;
   final VoidCallback onSelect;
   final TextAlign? textAlign;
   const ChipButton({
     super.key,
-    this.width = double.infinity,
+    this.isSmall = false,
     this.textAlign,
     required this.text,
     required this.onSelect,
+    this.width = double.infinity,
   });
 
   @override
@@ -26,7 +28,9 @@ class ChipButton extends StatelessWidget {
         },
         borderRadius: BorderRadius.circular(10),
         child: Container(
-          width: width,
+          constraints: BoxConstraints(
+            minWidth: isSmall ? 140 : double.infinity,
+          ),
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: AppColor.secondary,
