@@ -22,7 +22,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   late Future<List<Questions>> getQuestions;
   PageController? pageController;
   int currentIndex = 0;
-
+  int currentPage = 0;
   @override
   void initState() {
     super.initState();
@@ -30,8 +30,8 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     pageController = PageController(initialPage: currentIndex);
   }
 
-  nextQuestion(List<Screen> screens) {
-    if (currentIndex < screens.length - 1) {
+  nextQuestion({List<Screen>? screens}) {
+    if (currentIndex < screens!.length - 1) {
       setState(() {
         currentIndex++; // Increment the current index
         pageController!.nextPage(
@@ -40,7 +40,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
         );
       });
     } else {
-      // Handle reaching the last question or any other action
+      // Handle reaching the last question or any other
     }
   }
 
@@ -54,7 +54,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
         );
       });
     } else {
-      Navigator.pop(context); // Go back to the previous screen
+      Navigator.pop(context);
     }
   }
 
@@ -92,6 +92,11 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                     controller: pageController,
                     scrollDirection: Axis.horizontal,
                     itemCount: screens.length,
+                    onPageChanged: (index) {
+                      setState(() {
+                        currentPage = index;
+                      });
+                    },
                     itemBuilder: (context, index) {
                       return Center(
                         child: Card(
@@ -134,10 +139,6 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                               .questionTitle,
                                           fontWeight: FontWeight.bold,
                                         ),
-                                      // buildQuestionWidget(
-                                      //   screens[index].questions[i],
-                                      //   screens,
-                                      // ),
                                       buildQuestionWidget(
                                         screens[index].questions[i],
                                         screens,
@@ -159,7 +160,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                           child: CustomButton(
                                             text: 'Next',
                                             onPressed: () {
-                                              nextQuestion(screens);
+                                              nextQuestion(screens: screens);
                                             },
                                             width: 73,
                                             height: 39,

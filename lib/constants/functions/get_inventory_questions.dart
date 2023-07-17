@@ -8,8 +8,13 @@ import '../../widgets/card/questions card/chip_button.dart';
 import '../firebase/questions.dart';
 import '../utils/colors.dart';
 
-Widget buildQuestionWidget(Question question, screens, int currentIndex,
-    selectedOption, PageController pageController) {
+Widget buildQuestionWidget(
+  Question question,
+  screens,
+  int currentIndex,
+  selectedOption,
+  PageController pageController,
+) {
   if (question.questionOptionType == 'textfield') {
     TextEditingController controller = TextEditingController();
     bool isChecked = true;
