@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yes_broker/TabScreens/main_screens/home_screen.dart';
+import 'package:yes_broker/pages/add_lead.dart';
 import '../Customs/responsive.dart';
 import '../TabScreens/account_screens/profile_screen.dart';
 import '../pages/Auth/forget_password.dart';
@@ -36,5 +37,6 @@ class AppRoutes {
     ForgetPassword.routeName: (context) => const ForgetPassword(),
     ProfileScreen.routeName: (context) => const ProfileScreen(),
     AddInventory.routeName: (context) => const AddInventory(),
+    AddLead.routeName: (context) => const AddLead()
   };
 }

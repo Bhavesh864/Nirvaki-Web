@@ -1,17 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 final CollectionReference questionsCollection =
-    FirebaseFirestore.instance.collection('InventoryQuestions');
+    FirebaseFirestore.instance.collection('LeadQuestions');
 
-class Questions {
+class LeadQuestions {
   List<Screen> screens;
 
-  Questions({required this.screens});
+  LeadQuestions({required this.screens});
 
-  factory Questions.fromJson(Map<String, dynamic> json) {
+  factory LeadQuestions.fromJson(Map<String, dynamic> json) {
     List<Screen> screens = List<Screen>.from(
         json['screens'].map((screen) => Screen.fromJson(screen)).toList());
-    return Questions(screens: screens);
+    return LeadQuestions(screens: screens);
   }
 
   Map<String, dynamic> toJson() {
@@ -21,14 +21,14 @@ class Questions {
   }
 
   // Get all Questions data from Firestore
-  static Future<List<Questions>> getAllQuestionssFromFirestore() async {
-    final List<Questions> questionss = [];
+  static Future<List<LeadQuestions>> getAllQuestionssFromFirestore() async {
+    final List<LeadQuestions> questionss = [];
     try {
       QuerySnapshot querySnapshot = await questionsCollection.get();
       for (var doc in querySnapshot.docs) {
         Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
         if (data != null) {
-          Questions questions = Questions.fromJson(data);
+          LeadQuestions questions = LeadQuestions.fromJson(data);
           questionss.add(questions);
         }
       }
@@ -39,9 +39,9 @@ class Questions {
     return questionss;
   }
 
-  static Future<void> addScreens(List<Questions> screens) async {
+  static Future<void> addScreens(List<LeadQuestions> screens) async {
     try {
-      for (Questions screen in screens) {
+      for (LeadQuestions screen in screens) {
         final DocumentReference documentReference =
             await questionsCollection.add(screen.toJson());
         print('Screen added with ID: ${documentReference.id}');

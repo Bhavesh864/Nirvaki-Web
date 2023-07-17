@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:random_string/random_string.dart';
-import 'package:yes_broker/constants/firebase/broker_info.dart';
-import 'package:yes_broker/constants/firebase/card_details.dart' as cards;
-import 'package:yes_broker/constants/firebase/inventory_details.dart';
-
-import 'package:yes_broker/constants/firebase/user_info.dart';
+import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart'
+    as cards;
+import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
+import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
 final allChipSelectedAnwersProvider =
     StateNotifierProvider<AllChipSelectedAnwers, List<Map<String, dynamic>>>(
