@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
-
 import '../../Customs/custom_fields.dart';
 import '../../Customs/custom_text.dart';
 import '../../Customs/dropdown_field.dart';
@@ -8,13 +7,8 @@ import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
 import '../utils/colors.dart';
 
-Widget buildQuestionWidget(
-  Question question,
-  List<Screen> screens,
-  int currentIndex,
-  selectedOption,
-  PageController pageController,
-) {
+Widget buildQuestionWidget(Question question, List<Screen> screens,
+    int currentIndex, selectedOption, PageController pageController, notify) {
   if (question.questionOptionType == 'textfield') {
     TextEditingController controller = TextEditingController();
     bool isChecked = true;
@@ -34,6 +28,11 @@ Widget buildQuestionWidget(
               ),
               if (!isChecked)
                 LabelTextInputField(
+                  onChanged: (newvalue) {
+                    print("newvalue");
+                    notify.state
+                        .add({"id": question.questionId, "item": newvalue});
+                  },
                   inputController: controller,
                   labelText: question.questionTitle,
                 )
@@ -56,6 +55,7 @@ Widget buildQuestionWidget(
               onSelect: () {
                 // print(option);
                 if (currentIndex < screens.length - 1) {
+                  notify.state.add({"id": question.questionId, "item": option});
                   setState(() {
                     currentIndex++; // Increment the current index
                     pageController.nextPage(

@@ -16,7 +16,7 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
 
   void add(Map<String, dynamic> selectedValue) {
     state = [...state, selectedValue];
-    // print('state, $state');
+    print('state, $state');
   }
 
   void remove(int id) {
@@ -24,6 +24,11 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
       (element) => element['id'] != id,
     );
     // print(state);
+  }
+
+  Map<String, dynamic> _data = {};
+  void updateTextFields(Map<String, String> textFields) {
+    _data['textFields'] = textFields;
   }
 
   final randomId = randomNumeric(5);
@@ -37,7 +42,6 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
     final String propertyKind = getDataById(state, 6);
     final String villaType = getDataById(state, 7);
     final String transactionType = getDataById(state, 8);
-
     final cards.CardDetails card = cards.CardDetails(
         workitemId: "IN$randomId",
         status: "New",

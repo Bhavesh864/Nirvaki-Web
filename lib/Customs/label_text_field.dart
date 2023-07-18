@@ -9,11 +9,13 @@ class LabelTextInputField extends StatelessWidget {
     required this.inputController,
     required this.labelText,
     this.isDropDown = false,
+    this.onChanged,
   });
 
   final String labelText;
   final bool isDropDown;
   final TextEditingController inputController;
+  final Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +40,7 @@ class LabelTextInputField extends StatelessWidget {
               rightIcon: isDropDown ? Icons.arrow_drop_down_sharp : null,
               controller: inputController,
               hintText: 'Type here..',
+              onChanged: onChanged,
             ),
           ),
         ],

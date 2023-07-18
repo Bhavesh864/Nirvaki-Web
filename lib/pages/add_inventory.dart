@@ -9,8 +9,10 @@ import 'package:yes_broker/constants/functions/get_inventory_questions.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import '../Customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
+import '../controllers/all_selected_ansers_provider.dart';
 
-final objectArrayProvider = Provider<List<Object>>((ref) => []);
+final myArrayProvider =
+    StateProvider<AllChipSelectedAnwers>((ref) => AllChipSelectedAnwers());
 
 class AddInventory extends ConsumerStatefulWidget {
   static const routeName = '/add-inventory';
@@ -33,8 +35,8 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     pageController = PageController(initialPage: currentIndex);
   }
 
-  nextQuestion(List<Screen> screens) {
-    if (currentIndex < screens.length - 1) {
+  nextQuestion({List<Screen>? screens}) {
+    if (currentIndex < screens!.length - 1) {
       setState(() {
         currentIndex++; // Increment the current index
         pageController!.nextPage(
@@ -63,6 +65,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
 
   @override
   Widget build(BuildContext context) {
+    final notify = ref.read(myArrayProvider.notifier);
     return Scaffold(
       body: FutureBuilder<List<InventoryQuestions>>(
         future: getQuestions,
@@ -77,7 +80,6 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
             List<InventoryQuestions> screenData =
                 snapshot.data as List<InventoryQuestions>;
             List<Screen> screens = screenData[0].screens;
-
             return Stack(
               children: [
                 Container(
@@ -143,12 +145,12 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                       //   screens,
                                       // ),
                                       buildQuestionWidget(
-                                        screens[index].questions[i],
-                                        screens,
-                                        currentIndex,
-                                        selectedOption,
-                                        pageController!,
-                                      ),
+                                          screens[index].questions[i],
+                                          screens,
+                                          currentIndex,
+                                          selectedOption,
+                                          pageController!,
+                                          notify),
                                       if (i ==
                                               screens[index].questions.length -
                                                   1 &&
@@ -163,7 +165,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                           child: CustomButton(
                                             text: 'Next',
                                             onPressed: () {
-                                              nextQuestion(screens);
+                                              nextQuestion(screens: screens);
                                             },
                                             width: 73,
                                             height: 39,
