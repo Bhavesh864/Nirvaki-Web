@@ -28,14 +28,13 @@ Widget buildQuestionWidget(Question question, List<Screen> screens,
               ),
               if (!isChecked)
                 LabelTextInputField(
-                  onChanged: (newvalue) {
-                    print("newvalue");
-                    notify.state
-                        .add({"id": question.questionId, "item": newvalue});
-                  },
-                  inputController: controller,
-                  labelText: question.questionTitle,
-                )
+                    onChanged: (newvalue) {
+                      print("newvalue");
+                      notify.state
+                          .add({"id": question.questionId, "item": newvalue});
+                    },
+                    inputController: controller,
+                    labelText: question.questionTitle)
             ],
           );
         },
@@ -44,6 +43,16 @@ Widget buildQuestionWidget(Question question, List<Screen> screens,
     return LabelTextInputField(
       inputController: controller,
       labelText: question.questionTitle,
+      onChanged: (newvalue) {
+        print("newvalue");
+        notify.state.add({"id": question.questionId, "item": newvalue});
+      },
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "Please enter ${question.questionTitle}";
+        }
+        return null;
+      },
     );
   } else if (question.questionOptionType == 'chip') {
     return Column(
@@ -75,6 +84,9 @@ Widget buildQuestionWidget(Question question, List<Screen> screens,
     return DropDownField(
       title: question.questionTitle,
       optionsList: question.questionOption,
+      onchanged: (Object e) {
+        notify.state.add({"id": question.questionId, "item": e});
+      },
     );
   } else if (question.questionOptionType == 'multichip') {
     List<String> selectedOptions = [];
@@ -109,6 +121,10 @@ Widget buildQuestionWidget(Question question, List<Screen> screens,
                             } else {
                               selectedOptions.remove(item);
                             }
+                          });
+                          notify.state.add({
+                            "id": question.questionId,
+                            "item": selectedOptions
                           });
                         },
                         labelColor: selectedOptions.contains(item)
@@ -155,6 +171,8 @@ Widget buildQuestionWidget(Question question, List<Screen> screens,
                             selectedOption = option;
                           }
                         });
+                        notify.state
+                            .add({"id": question.questionId, "item": option});
                       },
                       labelColor: selectedOption == option
                           ? Colors.white
@@ -171,6 +189,10 @@ Widget buildQuestionWidget(Question question, List<Screen> screens,
     return TextFormField(
       keyboardType: TextInputType.multiline,
       maxLines: 5,
+      onChanged: (newvalue) {
+        print("newvalue");
+        notify.state.add({"id": question.questionId, "item": newvalue});
+      },
       decoration: InputDecoration(
         hintText: question.questionOption,
         border: OutlineInputBorder(

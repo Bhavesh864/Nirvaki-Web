@@ -66,6 +66,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(myArrayProvider.notifier);
+
     return Scaffold(
       body: FutureBuilder<List<InventoryQuestions>>(
         future: getQuestions,
