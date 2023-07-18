@@ -10,12 +10,14 @@ class LabelTextInputField extends StatelessWidget {
     required this.labelText,
     this.isDropDown = false,
     this.onChanged,
+    this.validator,
   });
 
   final String labelText;
   final bool isDropDown;
   final TextEditingController inputController;
   final Function(String)? onChanged;
+  final FormFieldValidator<String>? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +43,7 @@ class LabelTextInputField extends StatelessWidget {
               controller: inputController,
               hintText: 'Type here..',
               onChanged: onChanged,
+              validator: validator,
             ),
           ),
         ],

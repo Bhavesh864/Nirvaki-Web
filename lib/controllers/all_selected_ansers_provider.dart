@@ -15,7 +15,16 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
   AllChipSelectedAnwers() : super([]);
 
   void add(Map<String, dynamic> selectedValue) {
-    state = [...state, selectedValue];
+    final currentValue = state;
+    if (currentValue.any((g) => g["id"] == selectedValue["id"])) {
+      state = [
+        ...currentValue.where((g) => g["id"] != selectedValue["id"]),
+        selectedValue
+      ];
+    } else {
+      state = [...currentValue, selectedValue];
+    }
+    // state = [...state, selectedValue];
     print('state, $state');
   }
 
@@ -26,9 +35,21 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
     // print(state);
   }
 
-  Map<String, dynamic> _data = {};
-  void updateTextFields(Map<String, String> textFields) {
-    _data['textFields'] = textFields;
+  void removeValue(int id) {
+    state = state.where((item) => item["id"] != id).toList();
+  }
+
+  void addOrReplaceGender(gender) {
+    final currentGenders = state;
+    if (currentGenders.any((g) => g["id"] == gender["id"])) {
+      state = [...currentGenders.where((g) => g["id"] != gender["id"]), gender];
+    } else {
+      state = [...currentGenders, gender];
+    }
+  }
+
+  void removeGender(gender) {
+    state = [...state.where((g) => g["id"] != gender["id"])];
   }
 
   final randomId = randomNumeric(5);
