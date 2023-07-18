@@ -64,9 +64,9 @@ class BrokerInfo {
       await brokerInfosCollection
           .doc(brokerInfo.brokerid)
           .set(brokerInfo.toMap());
-      // print('BrokerInfo added successfully');
+      print('BrokerInfo added successfully');
     } catch (error) {
-      // print('Failed to add BrokerInfo: $error');
+      print('Failed to add BrokerInfo: $error');
     }
   }
 
@@ -94,18 +94,18 @@ class BrokerInfo {
       await brokerInfosCollection
           .doc(updatedBrokerInfo.brokerid)
           .update(updatedBrokerInfo.toMap());
-      // print('BrokerInfo updated successfully');
+      print('BrokerInfo updated successfully');
     } catch (error) {
-      // print('Failed to update BrokerInfo: $error');
+      print('Failed to update BrokerInfo: $error');
     }
   }
 
   static Future<void> deleteBrokerInfo(String brokerid) async {
     try {
       await brokerInfosCollection.doc(brokerid).delete();
-      // print('BrokerInfo deleted successfully');
+      print('BrokerInfo deleted successfully');
     } catch (error) {
-      // print('Failed to delete BrokerInfo: $error');
+      print('Failed to delete BrokerInfo: $error');
     }
   }
 }
