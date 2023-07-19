@@ -141,10 +141,6 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                               .questionTitle,
                                           fontWeight: FontWeight.bold,
                                         ),
-                                      // buildQuestionWidget(
-                                      //   screens[index].questions[i],
-                                      //   screens,
-                                      // ),
                                       buildQuestionWidget(
                                           screens[index].questions[i],
                                           screens,

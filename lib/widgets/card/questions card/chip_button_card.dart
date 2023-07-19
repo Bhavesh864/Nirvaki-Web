@@ -72,7 +72,7 @@ class ChipButtonCard extends StatelessWidget {
                           onPressed: () {
                             ref
                                 .watch(allChipSelectedAnwersProvider.notifier)
-                                .submitInventoryDetails();
+                                .submitInventory();
                           },
                           height: 40,
                         );
