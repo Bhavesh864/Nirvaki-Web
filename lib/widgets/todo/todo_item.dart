@@ -7,6 +7,7 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/constants/utils/theme.dart';
 import 'package:yes_broker/widgets/custom_chip.dart';
 
 import '../../constants/utils/image_constants.dart';
@@ -53,30 +54,27 @@ class _TodoItemState extends State<TodoItem> {
           : const ClampingScrollPhysics(),
       itemCount: userData.length,
       itemBuilder: ((context, index) => Card(
-            color: AppColor.cardColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.0),
-            ),
             margin: EdgeInsets.only(
               left: width! < 1280 && width! > 1200 ? 0 : 10,
               right: width! < 1280 && width! > 1200 ? 0 : 10,
               bottom: 15,
             ),
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              alignment: Alignment.center,
+              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12.0),
-                color: AppColor.cardColor,
               ),
-              height: 170,
+              height: 155,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Expanded(
                     child: Row(
                       children: [
                         SizedBox(
-                          height: 30,
+                          // height: 30,
                           width: Responsive.isMobile(context) ? 170 : 150,
                           child: ListView(
                             physics: const ClampingScrollPhysics(),
@@ -138,31 +136,6 @@ class _TodoItemState extends State<TodoItem> {
                         const Spacer(),
                         const Row(
                           children: [
-                            // Chip(
-                            //   padding: EdgeInsets.zero,
-                            //   labelPadding:
-                            //       const EdgeInsets.symmetric(horizontal: 4),
-                            //   side: BorderSide.none,
-                            //   backgroundColor: const Color(0x0D200E32),
-                            //   shape: RoundedRectangleBorder(
-                            //     borderRadius: BorderRadius.circular(5),
-                            //   ),
-                            //   label: const Row(
-                            //     children: [
-                            //       Icon(
-                            //         Icons.calendar_month_outlined,
-                            //         color: Colors.black,
-                            //         size: 12,
-                            //       ),
-                            //       FittedBox(
-                            //         child: CustomText(
-                            //           title: '23 May 2023',
-                            //           size: 10,
-                            //         ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
                             CustomChip(
                               avatar: Icon(
                                 Icons.calendar_month_outlined,
@@ -200,7 +173,7 @@ class _TodoItemState extends State<TodoItem> {
                     style: textTheme.titleSmall,
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 15,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -209,11 +182,7 @@ class _TodoItemState extends State<TodoItem> {
                         margin: const EdgeInsets.only(right: 3),
                         child: Text(
                           userData[index].name!,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: textTheme.titleMedium,
                         ),
                       ),
                       const CustomChip(
@@ -259,57 +228,6 @@ class _TodoItemState extends State<TodoItem> {
                           borderRadius: BorderRadius.circular(40),
                         ),
                       ),
-                      // SizedBox(
-                      //   width: 50,
-                      //   child: Stack(
-                      //     alignment: Alignment.center,
-                      //     children: [
-                      //       Align(
-                      //         alignment: Alignment.centerLeft,
-                      //         child: Container(
-                      //           margin: const EdgeInsets.only(right: 5),
-                      //           height: 24,
-                      //           width: 24,
-                      //           decoration: BoxDecoration(
-                      //             image: const DecorationImage(
-                      //                 image: AssetImage(profileImage)),
-                      //             borderRadius: BorderRadius.circular(40),
-                      //           ),
-                      //           // child: Text(width.toString()),
-                      //         ),
-                      //       ),
-                      //       Container(
-                      //         margin: const EdgeInsets.only(right: 5),
-                      //         height: 24,
-                      //         width: 24,
-                      //         decoration: BoxDecoration(
-                      //           image: const DecorationImage(
-                      //               image: AssetImage(profileImage)),
-                      //           borderRadius: BorderRadius.circular(40),
-                      //         ),
-                      //         alignment: Alignment.center,
-                      //       ),
-                      //       Align(
-                      //         alignment: Alignment.centerRight,
-                      //         child: Container(
-                      //           width: 24,
-                      //           padding: const EdgeInsets.only(
-                      //               left: 5, top: 5, right: 6, bottom: 5),
-                      //           decoration: BoxDecoration(
-                      //             color: AppColor.chipGreyColor,
-                      //             borderRadius: BorderRadius.circular(40),
-                      //           ),
-                      //           child: const Text(
-                      //             "+2",
-                      //             overflow: TextOverflow.ellipsis,
-                      //             textAlign: TextAlign.left,
-                      //             style: TextStyle(color: Colors.white),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
                     ],
                   ),
                 ],

@@ -53,6 +53,7 @@ class _WorkItemState extends State<WorkItem> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return ListView.builder(
       shrinkWrap: true,
       physics: Responsive.isMobile(context)
@@ -60,20 +61,13 @@ class _WorkItemState extends State<WorkItem> {
           : const ClampingScrollPhysics(),
       itemCount: workItemData.length,
       itemBuilder: ((context, index) => Card(
-            color: AppColor.cardColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0),
-            ),
             margin: EdgeInsets.only(
               left: width! < 1280 && width! > 1200 ? 0 : 10,
               right: width! < 1280 && width! > 1200 ? 0 : 10,
               bottom: 15,
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 10,
-                horizontal: 10,
-              ),
+              padding: const EdgeInsets.only(bottom: 10, right: 10, left: 10),
               child: SizedBox(
                 height: Responsive.isMobile(context) ? 170 : 140,
                 child: Column(
@@ -174,20 +168,16 @@ class _WorkItemState extends State<WorkItem> {
                     const SizedBox(
                       height: 10,
                     ),
-                    CustomText(
-                      title: workItemData[index].title!,
-                      size: 14,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
+                    Text(
+                      workItemData[index].title!,
+                      style: textTheme.titleMedium,
                     ),
                     const SizedBox(
                       height: 5,
                     ),
-                    CustomText(
-                      title: workItemData[index].subtitle!,
-                      size: 12,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.w500,
+                    Text(
+                      workItemData[index].subtitle!,
+                      style: textTheme.titleSmall,
                     ),
                     const SizedBox(
                       height: 10,
@@ -195,11 +185,9 @@ class _WorkItemState extends State<WorkItem> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        CustomText(
-                          title: workItemData[index].name!,
-                          size: 14,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
+                        Text(
+                          workItemData[index].name!,
+                          style: textTheme.titleMedium,
                         ),
                         const CustomChip(
                           label: Icon(
@@ -251,23 +239,6 @@ class _WorkItemState extends State<WorkItem> {
               ),
             ),
           )),
-    );
-  }
-
-  Widget customChipWidget(Widget label, Color color,
-      {double paddingHorizontal = 3}) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 0),
-      child: Chip(
-          padding:
-              EdgeInsets.symmetric(horizontal: paddingHorizontal, vertical: 0),
-          labelPadding: const EdgeInsets.all(0),
-          side: BorderSide.none,
-          backgroundColor: color,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-          ),
-          label: label),
     );
   }
 }
