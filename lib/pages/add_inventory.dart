@@ -49,6 +49,53 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     }
   }
 
+  // nextQuestion({List<Screen>? screens}) {
+  //   if (currentIndex < screens!.length - 1) {
+  //     // Find the next screen based on the current screen ID
+  //     String currentScreenId = screens[currentIndex].screenId;
+  //     Screen? nextScreen = screens.firstWhere(
+  //       (screen) => screen.screenId != currentScreenId,
+  //       orElse: () => null,
+  //     );
+  //     int nextPageIndex = screens.indexOf(nextScreen);
+  //     setState(() {
+  //       currentIndex = nextPageIndex;
+  //       pageController!.animateToPage(
+  //         currentIndex,
+  //         duration: const Duration(milliseconds: 300),
+  //         curve: Curves.easeInOut,
+  //       );
+  //     });
+  //   } else {
+  //     // Handle reaching the last question or any other action
+  //   }
+  // }
+
+  // goBack(List<Screen>? screens) {
+  //   if (currentIndex > 0) {
+  //     // Find the previous screen based on the current screen ID
+  //     String currentScreenId = screens![currentIndex].id;
+  //     Screen? previousScreen = screens.lastWhere(
+  //       (screen) => screen.id != currentScreenId,
+  //       orElse: () => null,
+  //     );
+
+  //     if (previousScreen != null) {
+  //       int previousPageIndex = screens.indexOf(previousScreen);
+  //       setState(() {
+  //         currentIndex = previousPageIndex;
+  //         pageController!.animateToPage(
+  //           currentIndex,
+  //           duration: const Duration(milliseconds: 300),
+  //           curve: Curves.easeInOut,
+  //         );
+  //       });
+  //     }
+  //   } else {
+  //     Navigator.pop(context); // Go back to the previous screen
+  //   }
+  // }
+
   goBack() {
     if (currentIndex > 0) {
       setState(() {

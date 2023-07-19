@@ -69,6 +69,9 @@ Widget buildQuestionWidget(
               text: option,
               onSelect: () {
                 // print(option);
+                if (option == "Direct") {
+                  pageController.jumpToPage(5);
+                }
                 if (currentIndex < screens.length - 1) {
                   notify.state.add({"id": question.questionId, "item": option});
                   nextQuestion(screens: screens);
