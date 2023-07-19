@@ -35,17 +35,8 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
     state = state.where((item) => item["id"] != id).toList();
   }
 
-  void addOrReplaceGender(gender) {
-    final currentGenders = state;
-    if (currentGenders.any((g) => g["id"] == gender["id"])) {
-      state = [...currentGenders.where((g) => g["id"] != gender["id"]), gender];
-    } else {
-      state = [...currentGenders, gender];
-    }
-  }
-
-  void removeGender(gender) {
-    state = [...state.where((g) => g["id"] != gender["id"])];
+  void removev(value) {
+    state = [...state.where((g) => g["id"] != value["id"])];
   }
 
   void submitInventory() async {
