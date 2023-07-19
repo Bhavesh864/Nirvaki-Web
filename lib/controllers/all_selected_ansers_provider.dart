@@ -23,7 +23,6 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
     state.retainWhere(
       (element) => element['id'] != id,
     );
-    // print(state);
   }
 
   final randomId = randomNumeric(5);

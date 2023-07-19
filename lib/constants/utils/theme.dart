@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 
+import 'constants.dart';
+
 class TAppTheme {
   static ThemeData lightTheme = ThemeData(
     fontFamily: GoogleFonts.dmSans().fontFamily,
@@ -33,12 +35,18 @@ class TAppTheme {
       titleMedium: TextStyle(
         color: Color(0xFF000000),
         fontSize: 14,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w600,
       ),
       titleSmall: TextStyle(
         color: Color(0xFF797979),
         fontSize: 10,
         fontWeight: FontWeight.w400,
+      ),
+    ),
+    cardTheme: CardTheme(
+      color: AppColor.cardColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
       ),
     ),
   );
