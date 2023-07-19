@@ -7,8 +7,14 @@ import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
 import '../utils/colors.dart';
 
-Widget buildQuestionWidget(Question question, List<Screen> screens,
-    int currentIndex, selectedOption, PageController pageController, notify) {
+Widget buildQuestionWidget(
+    Question question,
+    List<Screen> screens,
+    int currentIndex,
+    selectedOption,
+    PageController pageController,
+    notify,
+    Function nextQuestion) {
   if (question.questionOptionType == 'textfield') {
     TextEditingController controller = TextEditingController();
     bool isChecked = true;
@@ -65,13 +71,7 @@ Widget buildQuestionWidget(Question question, List<Screen> screens,
                 // print(option);
                 if (currentIndex < screens.length - 1) {
                   notify.state.add({"id": question.questionId, "item": option});
-                  setState(() {
-                    currentIndex++; // Increment the current index
-                    pageController.nextPage(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    );
-                  });
+                  nextQuestion(screens: screens);
                 } else {
                   // Handle reaching the last question or any other action
                 }
@@ -112,25 +112,24 @@ Widget buildQuestionWidget(Question question, List<Screen> screens,
                       padding:
                           const EdgeInsets.only(right: 10, top: 5, bottom: 5),
                       child: CustomChoiceChip(
-                        label: item,
-                        selected: selectedOptions.contains(item),
-                        onSelected: (selectedItem) {
-                          setState(() {
-                            if (selectedItem) {
-                              selectedOptions.add(item);
-                            } else {
-                              selectedOptions.remove(item);
-                            }
-                          });
-                          notify.state.add({
-                            "id": question.questionId,
-                            "item": selectedOptions
-                          });
-                        },
-                        labelColor: selectedOptions.contains(item)
-                            ? Colors.white
-                            : Colors.black,
-                      ),
+                          label: item,
+                          selected: selectedOptions.contains(item),
+                          onSelected: (selectedItem) {
+                            setState(() {
+                              if (selectedItem) {
+                                selectedOptions.add(item);
+                              } else {
+                                selectedOptions.remove(item);
+                              }
+                            });
+                            notify.state.add({
+                              "id": question.questionId,
+                              "item": selectedOptions
+                            });
+                          },
+                          labelColor: selectedOptions.contains(item)
+                              ? Colors.white
+                              : Colors.black),
                     ),
                 ],
               ),

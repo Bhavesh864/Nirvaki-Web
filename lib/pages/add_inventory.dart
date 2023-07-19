@@ -151,7 +151,8 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                           currentIndex,
                                           selectedOption,
                                           pageController!,
-                                          notify),
+                                          notify,
+                                          nextQuestion),
                                       if (i ==
                                               screens[index].questions.length -
                                                   1 &&
