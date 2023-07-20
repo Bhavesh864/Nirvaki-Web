@@ -74,8 +74,7 @@ class CustomTextInputState extends State<CustomTextInput> {
         decoration: InputDecoration(
           errorStyle: const TextStyle(height: 0),
           label: widget.label,
-          contentPadding: EdgeInsets.symmetric(
-              vertical: widget.contentPadding, horizontal: 10),
+          contentPadding: EdgeInsets.symmetric(vertical: widget.contentPadding, horizontal: 10),
           labelText: widget.labelText,
           hintText: widget.hintText,
           hintStyle: widget.hintstyle,
@@ -177,11 +176,12 @@ class _CustomButtonState extends State<CustomButton> {
       child: Opacity(
         opacity: widget.opacity,
         child: Container(
+          alignment: Alignment.center,
           height: widget.height,
           width: widget.width,
           padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey),
+            // border: Border.all(color: Colors.grey),
             // color: widget.buttonColor,
             color: widget.buttonColor.withOpacity(_isPressed ? 0.8 : 1.0),
             borderRadius: BorderRadius.circular(10),
