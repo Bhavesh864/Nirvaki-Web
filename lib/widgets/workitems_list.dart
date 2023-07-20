@@ -42,20 +42,6 @@ class WorkItemsList extends StatelessWidget {
                       )
                     : Container(),
                 const SizedBox(
-                  // height: height! * 0.8,
-                  // child: ListView.builder(
-                  //   shrinkWrap: true,
-                  //   physics: Responsive.isMobile(context)
-                  //       ? const NeverScrollableScrollPhysics()
-                  //       : const ClampingScrollPhysics(),
-                  //   itemCount: workItemData.length,
-                  //   itemBuilder: (context, index) {
-                  //     return CustomCard(
-                  //       index: index,
-                  //       isTodoItem: false,
-                  //     );
-                  //   },
-                  // ),
                   child: WorkItem(),
                 ),
               ],

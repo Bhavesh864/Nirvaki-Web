@@ -1,10 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:random_string/random_string.dart';
-import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
-import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart'
-    as cards;
-import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
-import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/constants/firebase/Methods/submit_inventory.dart';
 
 final allChipSelectedAnwersProvider =
     StateNotifierProvider<AllChipSelectedAnwers, List<Map<String, dynamic>>>(
@@ -15,67 +11,50 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
   AllChipSelectedAnwers() : super([]);
 
   void add(Map<String, dynamic> selectedValue) {
-    state = [...state, selectedValue];
-    // print('state, $state');
+    final currentValue = state;
+    if (currentValue.any((g) => g["id"] == selectedValue["id"])) {
+      state = [
+        ...currentValue.where((g) => g["id"] != selectedValue["id"]),
+        selectedValue
+      ];
+    } else {
+      state = [...currentValue, selectedValue];
+    }
+    // state = [...state, selectedValue];
+    print('state, $state');
   }
 
-  void remove(int id) {
-    state.retainWhere(
-      (element) => element['id'] != id,
-    );
-    // print(state);
+  // void validate(GlobalKey<FormState> formKey)
+
+  //    if (formKey.currentState!.validate()) {
+  //     // The form is valid, proceed with the desired action.
+  //     // For example, you can save the data or navigate to the next screen.
+  //   }
+  // }
+
+  void remove(List<int> ids) {
+    final currentValue = state;
+    state = currentValue.where((item) => !ids.contains(item['id'])).toList();
+    print('state: $state');
   }
 
-  final randomId = randomNumeric(5);
-  void submitInventoryDetails() async {
-    //   propertycategory example = residental ,commerical,
-    //  inventorycategory example =  rent ,sell
-    final String propertyCategory = getDataById(state, 1);
-    final String inventoryCategory = getDataById(state, 2);
-    final String inventoryType = getDataById(state, 3);
-    final String inventorySource = getDataById(state, 4);
-    final String propertyKind = getDataById(state, 6);
-    final String villaType = getDataById(state, 7);
-    final String transactionType = getDataById(state, 8);
+  // void remove(int id) {
+  //   state.retainWhere(
+  //     (element) => element['id'] != id,
+  //   );
+  //   print('state $state');
+  // }
 
-    final cards.CardDetails card = cards.CardDetails(
-        workitemId: "IN$randomId",
-        status: "New",
-        cardCategory: inventoryCategory,
-        brokerid: authentication.currentUser!.uid,
-        cardType: "IN",
-        cardTitle: "$propertyCategory Apartment",
-        cardDescription: "Want to $inventoryCategory her 1 BHK for 70 L rupees",
-        customerinfo: cards.Customerinfo(),
-        cardStatus: "New",
-        createdby: cards.Createdby(
-            userfirstname: "bhavesh",
-            userid: authentication.currentUser!.uid,
-            userlastname: "khatri"),
-        propertyarearange: cards.Propertyarearange(arearangestart: ""),
-        roomconfig: cards.Roomconfig(bedroom: ''),
-        propertypricerange: cards.Propertypricerange(arearangestart: '50L'));
+  // void removeValue(int id) {
+  //   state = state.where((item) => item["id"] != id).toList();
+  // }
 
-    final InventoryDetails inventory = InventoryDetails(
-        inventoryTitle: "$propertyCategory Apartment",
-        inventoryDescription: "inventoryDescription",
-        inventoryId: "IN$randomId",
-        inventoryStatus: "New",
-        propertykind: propertyKind,
-        villatype: villaType,
-        transactiontype: transactionType,
-        brokerid: authentication.currentUser!.uid,
-        inventorycategory: inventoryCategory,
-        propertycategory: propertyCategory,
-        inventoryType: inventoryType,
-        inventorysource: inventorySource,
-        createdby: Createdby(
-            userfirstname: "bhavesh",
-            userid: authentication.currentUser!.uid,
-            userlastname: "khatri"));
-    // await InventoryDetails.addInventoryDetails(inventory);
-    // print('category $inventoryCategory');
-    // print('type $propertyCategory');
+  // void removev(value) {
+  //   state = [...state.where((g) => g["id"] != value["id"])];
+  // }
+
+  void submitInventory() async {
+    submitInventoryAndcardDetails(state);
   }
 }
 

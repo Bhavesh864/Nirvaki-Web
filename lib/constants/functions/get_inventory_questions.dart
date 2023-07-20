@@ -1,11 +1,22 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 
+import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
+import 'package:yes_broker/widgets/inventory/inventory_photos.dart';
+
+import 'package:yes_broker/google_maps.dart';
+import 'package:yes_broker/widgets/inventory/search_user_textfield.dart';
 import '../../Customs/custom_fields.dart';
 import '../../Customs/custom_text.dart';
 import '../../Customs/dropdown_field.dart';
 import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
+
 import '../utils/colors.dart';
 
 Widget buildQuestionWidget(
@@ -14,6 +25,8 @@ Widget buildQuestionWidget(
   int currentIndex,
   selectedOption,
   PageController pageController,
+  AllChipSelectedAnwers notify,
+  Function nextQuestion,
 ) {
   if (question.questionOptionType == 'textfield') {
     TextEditingController controller = TextEditingController();
@@ -23,28 +36,58 @@ Widget buildQuestionWidget(
         builder: (context, setState) {
           return Column(
             children: [
-              CustomCheckbox(
-                value: isChecked,
-                label: 'Use this as whatsapp number',
-                onChanged: (value) {
-                  setState(() {
-                    isChecked = value;
-                  });
-                },
-              ),
+              if (question.questionTitle == 'Whatsapp Number')
+                CustomCheckbox(
+                  value: isChecked,
+                  label: 'Use this as whatsapp number',
+                  onChanged: (value) {
+                    setState(() {
+                      isChecked = value;
+                    });
+                  },
+                ),
               if (!isChecked)
                 LabelTextInputField(
+                  onChanged: (newvalue) {
+                    notify.add({"id": question.questionId, "item": newvalue});
+                  },
                   inputController: controller,
                   labelText: question.questionTitle,
-                )
+                  validator: (value) {
+                    if (isChecked && value!.isEmpty) {
+                      return "Please enter ${question.questionTitle}";
+                    }
+                    return null;
+                  },
+                ),
             ],
           );
+        },
+      );
+    } else if (question.questionTitle == "Assign to") {
+      List<Map<String, dynamic>> users = []; // Holds the search results
+      return SearchByUser(
+        question: question,
+        onpressed: (data) {
+          notify.add({
+            'id': question.questionId,
+            'item': [data]
+          });
         },
       );
     }
     return LabelTextInputField(
       inputController: controller,
       labelText: question.questionTitle,
+      onChanged: (newvalue) {
+        notify.add({"id": question.questionId, "item": newvalue});
+      },
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "Please enter ${question.questionTitle}";
+        }
+        return null;
+      },
     );
   } else if (question.questionOptionType == 'chip') {
     return Column(
@@ -54,15 +97,9 @@ Widget buildQuestionWidget(
             return ChipButton(
               text: option,
               onSelect: () {
-                // print(option);
                 if (currentIndex < screens.length - 1) {
-                  setState(() {
-                    currentIndex++; // Increment the current index
-                    pageController.nextPage(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    );
-                  });
+                  notify.add({"id": question.questionId, "item": option});
+                  nextQuestion(screens: screens);
                 } else {
                   // Handle reaching the last question or any other action
                 }
@@ -75,6 +112,9 @@ Widget buildQuestionWidget(
     return DropDownField(
       title: question.questionTitle,
       optionsList: question.questionOption,
+      onchanged: (Object e) {
+        notify.add({"id": question.questionId, "item": e});
+      },
     );
   } else if (question.questionOptionType == 'multichip') {
     List<String> selectedOptions = [];
@@ -100,21 +140,24 @@ Widget buildQuestionWidget(
                       padding:
                           const EdgeInsets.only(right: 10, top: 5, bottom: 5),
                       child: CustomChoiceChip(
-                        label: item,
-                        selected: selectedOptions.contains(item),
-                        onSelected: (selectedItem) {
-                          setState(() {
-                            if (selectedItem) {
-                              selectedOptions.add(item);
-                            } else {
-                              selectedOptions.remove(item);
-                            }
-                          });
-                        },
-                        labelColor: selectedOptions.contains(item)
-                            ? Colors.white
-                            : Colors.black,
-                      ),
+                          label: item,
+                          selected: selectedOptions.contains(item),
+                          onSelected: (selectedItem) {
+                            setState(() {
+                              if (selectedItem) {
+                                selectedOptions.add(item);
+                              } else {
+                                selectedOptions.remove(item);
+                              }
+                            });
+                            notify.add({
+                              "id": question.questionId,
+                              "item": selectedOptions
+                            });
+                          },
+                          labelColor: selectedOptions.contains(item)
+                              ? Colors.white
+                              : Colors.black),
                     ),
                 ],
               ),
@@ -143,18 +186,16 @@ Widget buildQuestionWidget(
                     padding: const EdgeInsets.only(right: 10, bottom: 10),
                     child: CustomChoiceChip(
                       label: option,
-                      selected: selectedOption ==
-                          option, // Check if the current item is selected
+                      selected: selectedOption == option,
                       onSelected: (selectedItem) {
                         setState(() {
                           if (selectedOption == option) {
-                            // If the current option is already selected, unselect it
                             selectedOption = '';
                           } else {
-                            // Otherwise, select the current option
                             selectedOption = option;
                           }
                         });
+                        notify.add({"id": question.questionId, "item": option});
                       },
                       labelColor: selectedOption == option
                           ? Colors.white
@@ -171,6 +212,9 @@ Widget buildQuestionWidget(
     return TextFormField(
       keyboardType: TextInputType.multiline,
       maxLines: 5,
+      onChanged: (newvalue) {
+        notify.add({"id": question.questionId, "item": newvalue});
+      },
       decoration: InputDecoration(
         hintText: question.questionOption,
         border: OutlineInputBorder(
@@ -185,8 +229,37 @@ Widget buildQuestionWidget(
         ),
       ),
     );
+  } else if (question.questionOptionType == 'map') {
+    return CustomGoogleMap(
+      onLatLngSelected: (latLng) {
+        notify.add({
+          "id": question.questionId,
+          "item": [latLng.latitude, latLng.longitude]
+        });
+      },
+    );
+  } else if (question.questionOptionType == 'photo') {
+    // getDataById(state,  )
+    File? selectedImage;
+    Uint8List webImage;
+    void setImage(File image) {
+      selectedImage = image;
+    }
+
+    void setWebImage(Uint8List image) async {
+      webImage = image;
+    }
+
+    return Wrap(
+      children: [
+        ImagePickerContainer(
+            onImageSelected: setImage, webImageSelected: setWebImage),
+        const SizedBox(height: 20),
+        if (selectedImage != null)
+          Image.file(selectedImage!, height: 200, width: 200)
+      ],
+    );
   }
 
-  return const SizedBox
-      .shrink(); // Return an empty widget if the question type is not supported
+  return const SizedBox.shrink();
 }
