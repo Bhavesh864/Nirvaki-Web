@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
-import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/widgets/card/card_footer.dart';
 import 'package:yes_broker/widgets/card/card_header.dart';
@@ -14,10 +13,6 @@ class CustomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: AppColor.cardColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
-      ),
       margin: EdgeInsets.only(
         left: width! < 1280 && width! > 1200 ? 0 : 10,
         right: width! < 1280 && width! > 1200 ? 0 : 10,
@@ -25,10 +20,6 @@ class CustomCard extends StatelessWidget {
       ),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12.0),
-          color: AppColor.cardColor,
-        ),
         height: 170,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

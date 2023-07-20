@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:yes_broker/TabScreens/account_screens/profile_screen.dart';
 import 'package:yes_broker/TabScreens/main_screens/chat_screen.dart';
 import 'package:yes_broker/TabScreens/main_screens/inventroy_screen.dart';
 import 'package:yes_broker/TabScreens/main_screens/lead_screen.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
-import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/widgets/app/app_bar.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';
 import 'package:yes_broker/widgets/calendar_view.dart';
@@ -34,8 +35,6 @@ class SmallScreen extends ConsumerWidget {
     const ProfileScreen(),
   ];
 
-  // int menuController.selectedMobilePageIndex.value = 0;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = ref.watch(currentIndexProvider);
@@ -57,10 +56,10 @@ class SmallScreen extends ConsumerWidget {
           bottomBarItems.length,
           (index) => BottomNavigationBarItem(
             icon: Icon(
-              bottomBarItems[index]["icon"],
+              bottomBarItems[index].iconData,
               color: index == currentIndex ? AppColor.primary : Colors.black,
             ),
-            label: bottomBarItems[index]['title'],
+            label: bottomBarItems[index].label,
           ),
         ),
       ),

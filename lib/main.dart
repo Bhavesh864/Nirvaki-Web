@@ -22,44 +22,14 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Brokr',
       theme: TAppTheme.lightTheme,
-      // theme: FlexThemeData.light(
-      //   scheme: FlexScheme.materialBaseline,
-      //   surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
-      //   blendLevel: 7,
-      //   subThemesData: const FlexSubThemesData(
-      //     blendOnLevel: 10,
-      //     blendOnColors: false,
-      //     useTextTheme: true,
-      //     useM2StyleDividerInM3: true,
-      //   ),
-      //   visualDensity: FlexColorScheme.comfortablePlatformDensity,
-      //   useMaterial3: true,
-      //   swapLegacyOnMaterial3: true,
-      //   fontFamily: GoogleFonts.dmSans().fontFamily,
-      // ),
-      // darkTheme: FlexThemeData.dark(
-      //   scheme: FlexScheme.materialBaseline,
-      //   surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
-      //   blendLevel: 13,
-      //   subThemesData: const FlexSubThemesData(
-      //     blendOnLevel: 20,
-      //     useTextTheme: true,
-      //     useM2StyleDividerInM3: true,
-      //   ),
-      //   visualDensity: FlexColorScheme.comfortablePlatformDensity,
-      //   useMaterial3: true,
-      //   swapLegacyOnMaterial3: true,
-      // ),
-      // themeMode: ThemeMode.light,
       home: LayoutView(),
-      routes: AppRoutes.routes,
+      routes: AppRoutes.routesTable,
     );
   }
 }

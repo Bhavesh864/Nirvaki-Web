@@ -69,6 +69,27 @@ class User {
     }
   }
 
+  static Future<List<User>> getAllUsers() async {
+    try {
+      final QuerySnapshot querySnapshot = await usersCollection.get();
+      final List<User> users = [];
+      for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        if (documentSnapshot.exists) {
+          final Map<String, dynamic> data =
+              documentSnapshot.data() as Map<String, dynamic>;
+          final User user = User.fromMap(data);
+          users.add(user);
+        }
+      }
+      return users;
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to get users: $error');
+      }
+      return [];
+    }
+  }
+
   static Future<User?> getUser(String userId) async {
     try {
       final DocumentSnapshot documentSnapshot =
@@ -180,10 +201,10 @@ Future<String> signUpwith(email, password) async {
 // await userCRUD.deleteUser('1');
 // // }
 
-dynamic getDataById(List<dynamic> dataArray, int id) {
+dynamic getDataById(dataArray, int id) {
   for (var data in dataArray) {
-    if (data['id'] == id) {
-      return data["selectedAnswer"];
+    if (data["id"] == id) {
+      return data['item'];
     }
   }
   return null;

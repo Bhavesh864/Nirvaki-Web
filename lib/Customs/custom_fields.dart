@@ -44,7 +44,7 @@ class CustomTextInput extends StatefulWidget {
       this.readonly = false,
       this.label,
       this.enabled = true,
-      this.contentPadding = 13})
+      this.contentPadding = 0})
       : super(key: key);
 
   @override
@@ -62,21 +62,19 @@ class CustomTextInputState extends State<CustomTextInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(
-        minHeight: 50, // Adjust the height value as per your requirement
-      ),
+    return SizedBox(
+      height: 65,
       child: TextFormField(
         enabled: widget.enabled,
         style: const TextStyle(
           color: Colors.black,
+          fontWeight: FontWeight.w400,
         ),
         controller: widget.controller,
         decoration: InputDecoration(
-          // isDense: widget.indense,
+          errorStyle: const TextStyle(height: 0),
           label: widget.label,
-          contentPadding: EdgeInsets.symmetric(
-              vertical: widget.contentPadding, horizontal: 10),
+          contentPadding: EdgeInsets.symmetric(vertical: widget.contentPadding, horizontal: 10),
           labelText: widget.labelText,
           hintText: widget.hintText,
           hintStyle: widget.hintstyle,
@@ -96,11 +94,12 @@ class CustomTextInputState extends State<CustomTextInput> {
           ),
           // isDense: true,
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(6),
             borderSide: const BorderSide(
               color: AppColor.primary,
             ),
           ),
+          errorMaxLines: 1,
         ),
         obscureText: _obscureText!,
         maxLength: widget.maxLength,
@@ -177,11 +176,12 @@ class _CustomButtonState extends State<CustomButton> {
       child: Opacity(
         opacity: widget.opacity,
         child: Container(
+          alignment: Alignment.center,
           height: widget.height,
           width: widget.width,
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey),
+            // border: Border.all(color: Colors.grey),
             // color: widget.buttonColor,
             color: widget.buttonColor.withOpacity(_isPressed ? 0.8 : 1.0),
             borderRadius: BorderRadius.circular(10),
@@ -189,12 +189,14 @@ class _CustomButtonState extends State<CustomButton> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // if (widget.leftIcon != null)
-              //     Icon(
-              //       widget.leftIcon,
-              //       color: widget.lefticonColor,
-              //     ),
-              // const SizedBox(width: 8.0),
+              if (widget.leftIcon != null)
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Icon(
+                    widget.leftIcon,
+                    color: widget.lefticonColor,
+                  ),
+                ),
               CustomText(
                 textAlign: TextAlign.center,
                 title: widget.text,

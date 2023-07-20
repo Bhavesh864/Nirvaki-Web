@@ -13,7 +13,6 @@ import '../Customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
 
 class AddLead extends ConsumerStatefulWidget {
-  static const routeName = '/add-lead';
   const AddLead({super.key});
 
   @override
@@ -68,14 +67,11 @@ class _AddLeadState extends ConsumerState<AddLead> {
         future: getQuestions,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-                child: CircularProgressIndicator
-                    .adaptive()); // Display a loading indicator while waiting
+            return const Center(child: CircularProgressIndicator.adaptive()); // Display a loading indicator while waiting
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
-            List<LeadQuestions> screenData =
-                snapshot.data as List<LeadQuestions>;
+            List<LeadQuestions> screenData = snapshot.data as List<LeadQuestions>;
             List<Screen> screens = screenData[0].screens;
 
             return Stack(
@@ -108,9 +104,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                               minHeight: 0,
                               maxHeight: double.infinity,
                             ),
-                            width: Responsive.isMobile(context)
-                                ? width! * 0.9
-                                : 650,
+                            width: Responsive.isMobile(context) ? width! * 0.9 : 650,
                             padding: const EdgeInsets.all(25),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
@@ -123,9 +117,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                     title: screens[index].title.toString(),
                                     fontWeight: FontWeight.bold,
                                   ),
-                                for (var i = 0;
-                                    i < screens[index].questions.length;
-                                    i++)
+                                for (var i = 0; i < screens[index].questions.length; i++)
                                   Column(
                                     children: [
                                       if (screens[index].title == null)
@@ -133,9 +125,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                           softWrap: true,
                                           textAlign: TextAlign.center,
                                           size: 30,
-                                          title: screens[index]
-                                              .questions[i]
-                                              .questionTitle,
+                                          title: screens[index].questions[i].questionTitle,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       // buildQuestionWidget(
@@ -149,16 +139,9 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                         selectedOption,
                                         pageController!,
                                       ),
-                                      if (i ==
-                                              screens[index].questions.length -
-                                                  1 &&
-                                          screens[index]
-                                                  .questions[i]
-                                                  .questionOptionType !=
-                                              'chip')
+                                      if (i == screens[index].questions.length - 1 && screens[index].questions[i].questionOptionType != 'chip')
                                         Container(
-                                          margin:
-                                              const EdgeInsets.only(top: 10),
+                                          margin: const EdgeInsets.only(top: 10),
                                           alignment: Alignment.centerRight,
                                           child: CustomButton(
                                             text: 'Next',

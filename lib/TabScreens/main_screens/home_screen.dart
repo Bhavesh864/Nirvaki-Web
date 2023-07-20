@@ -7,7 +7,6 @@ import 'package:yes_broker/widgets/todo/todo_list_view.dart';
 import 'package:yes_broker/widgets/workitems_list.dart';
 
 class HomeScreen extends StatefulWidget {
-  static const routeName = '/home';
   const HomeScreen({super.key});
 
   @override

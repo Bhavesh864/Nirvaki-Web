@@ -158,7 +158,6 @@ class CardDetails {
         final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         return CardDetails.fromJson(data);
       }).toList();
-
       return inventoryItems;
     } catch (error) {
       // print('Failed to get Inventory items: $error');
@@ -179,9 +178,9 @@ class CardDetails {
   static Future<void> deleteCardDetails(String id) async {
     try {
       await cardDetailsCollection.doc(id).delete();
-      // print('Inventory item deleted successfully');
+      print("deleted successfully");
     } catch (error) {
-      // print('Failed to delete Inventory item: $error');
+      print('Failed to delete Inventory item: $error');
     }
   }
 }
