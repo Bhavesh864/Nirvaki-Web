@@ -150,14 +150,14 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                               child: CustomButton(
                                                 text: 'Next',
                                                 onPressed: () {
-                                                  nextQuestion(
-                                                    screens: screens,
-                                                  );
-                                                  // if (_formKey.currentState!.validate()) {
-                                                  //   nextQuestion(
-                                                  //     screens: screens,
-                                                  //   );
-                                                  // }
+                                                  // nextQuestion(
+                                                  //   screens: screens,
+                                                  // );
+                                                  if (_formKey.currentState!.validate()) {
+                                                    nextQuestion(
+                                                      screens: screens,
+                                                    );
+                                                  }
                                                 },
                                                 width: 73,
                                                 height: 39,
