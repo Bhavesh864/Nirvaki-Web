@@ -1,58 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
-import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
-import 'package:yes_broker/google_maps.dart';
+import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
+
 import '../../Customs/custom_fields.dart';
 import '../../Customs/custom_text.dart';
 import '../../Customs/dropdown_field.dart';
 import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
-
 import '../utils/colors.dart';
 
-Widget buildQuestionWidget(
-  Question question,
-  List<Screen> screens,
-  int currentIndex,
-  selectedOption,
-  PageController pageController,
-  AllChipSelectedAnwers notify,
-  Function nextQuestion,
-) {
+Widget buildQuestionWidgetForLead(Question question, List<Screen> screens,
+    int currentIndex, selectedOption, PageController pageController) {
   if (question.questionOptionType == 'textfield') {
     TextEditingController controller = TextEditingController();
     bool isChecked = true;
-
     if (question.questionTitle == 'Whatsapp Number') {
       return StatefulBuilder(
         builder: (context, setState) {
           return Column(
             children: [
-              if (question.questionTitle == 'Whatsapp Number')
-                CustomCheckbox(
-                  value: isChecked,
-                  label: 'Use this as whatsapp number',
-                  onChanged: (value) {
-                    setState(() {
-                      isChecked = value;
-                    });
-                  },
-                ),
+              CustomCheckbox(
+                value: isChecked,
+                label: 'Use this as whatsapp number',
+                onChanged: (value) {
+                  setState(() {
+                    isChecked = value;
+                  });
+                },
+              ),
               if (!isChecked)
                 LabelTextInputField(
-                  onChanged: (newvalue) {
-                    notify.add({"id": question.questionId, "item": newvalue});
-                  },
                   inputController: controller,
                   labelText: question.questionTitle,
-                  validator: (value) {
-                    if (isChecked && value!.isEmpty) {
-                      return "Please enter ${question.questionTitle}";
-                    }
-                    return null;
-                  },
-                ),
+                )
             ],
           );
         },
@@ -61,15 +40,6 @@ Widget buildQuestionWidget(
     return LabelTextInputField(
       inputController: controller,
       labelText: question.questionTitle,
-      onChanged: (newvalue) {
-        notify.add({"id": question.questionId, "item": newvalue});
-      },
-      validator: (value) {
-        if (value!.isEmpty) {
-          return "Please enter ${question.questionTitle}";
-        }
-        return null;
-      },
     );
   } else if (question.questionOptionType == 'chip') {
     return Column(
@@ -81,9 +51,13 @@ Widget buildQuestionWidget(
               onSelect: () {
                 // print(option);
                 if (currentIndex < screens.length - 1) {
-                  print('hello');
-                  notify.add({"id": question.questionId, "item": option});
-                  nextQuestion(screens: screens);
+                  setState(() {
+                    currentIndex++; // Increment the current index
+                    pageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  });
                 } else {
                   // Handle reaching the last question or any other action
                 }
@@ -96,9 +70,7 @@ Widget buildQuestionWidget(
     return DropDownField(
       title: question.questionTitle,
       optionsList: question.questionOption,
-      onchanged: (Object e) {
-        notify.add({"id": question.questionId, "item": e});
-      },
+      onchanged: (Object e) {},
     );
   } else if (question.questionOptionType == 'multichip') {
     List<String> selectedOptions = [];
@@ -121,21 +93,24 @@ Widget buildQuestionWidget(
                 children: [
                   for (var item in items)
                     Padding(
-                      padding: const EdgeInsets.only(right: 10, top: 5, bottom: 5),
+                      padding:
+                          const EdgeInsets.only(right: 10, top: 5, bottom: 5),
                       child: CustomChoiceChip(
-                          label: item,
-                          selected: selectedOptions.contains(item),
-                          onSelected: (selectedItem) {
-                            setState(() {
-                              if (selectedItem) {
-                                selectedOptions.add(item);
-                              } else {
-                                selectedOptions.remove(item);
-                              }
-                            });
-                            notify.add({"id": question.questionId, "item": selectedOptions});
-                          },
-                          labelColor: selectedOptions.contains(item) ? Colors.white : Colors.black),
+                        label: item,
+                        selected: selectedOptions.contains(item),
+                        onSelected: (selectedItem) {
+                          setState(() {
+                            if (selectedItem) {
+                              selectedOptions.add(item);
+                            } else {
+                              selectedOptions.remove(item);
+                            }
+                          });
+                        },
+                        labelColor: selectedOptions.contains(item)
+                            ? Colors.white
+                            : Colors.black,
+                      ),
                     ),
                 ],
               ),
@@ -164,7 +139,8 @@ Widget buildQuestionWidget(
                     padding: const EdgeInsets.only(right: 10, bottom: 10),
                     child: CustomChoiceChip(
                       label: option,
-                      selected: selectedOption == option, // Check if the current item is selected
+                      selected: selectedOption ==
+                          option, // Check if the current item is selected
                       onSelected: (selectedItem) {
                         setState(() {
                           if (selectedOption == option) {
@@ -175,9 +151,10 @@ Widget buildQuestionWidget(
                             selectedOption = option;
                           }
                         });
-                        notify.add({"id": question.questionId, "item": option});
                       },
-                      labelColor: selectedOption == option ? Colors.white : Colors.black,
+                      labelColor: selectedOption == option
+                          ? Colors.white
+                          : Colors.black,
                     ),
                   ),
               ],
@@ -190,9 +167,6 @@ Widget buildQuestionWidget(
     return TextFormField(
       keyboardType: TextInputType.multiline,
       maxLines: 5,
-      onChanged: (newvalue) {
-        notify.add({"id": question.questionId, "item": newvalue});
-      },
       decoration: InputDecoration(
         hintText: question.questionOption,
         border: OutlineInputBorder(
@@ -207,16 +181,8 @@ Widget buildQuestionWidget(
         ),
       ),
     );
-  } else if (question.questionOptionType == 'map') {
-    return CustomGoogleMap(
-      onLatLngSelected: (latLng) {
-        notify.add({
-          "id": question.questionId,
-          "item": [latLng.latitude, latLng.longitude]
-        });
-      },
-    );
   }
 
-  return const SizedBox.shrink();
+  return const SizedBox
+      .shrink(); // Return an empty widget if the question type is not supported
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/custom_fields.dart';
-import 'package:yes_broker/constants/firebase/inventory_questions.dart';
+import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
+
 import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/card/questions%20card/chip_button.dart';
 
@@ -71,7 +72,7 @@ class ChipButtonCard extends StatelessWidget {
                           onPressed: () {
                             ref
                                 .watch(allChipSelectedAnwersProvider.notifier)
-                                .submitInventoryDetails();
+                                .submitInventory();
                           },
                           height: 40,
                         );

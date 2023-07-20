@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
 
 final CollectionReference usersCollection =
     FirebaseFirestore.instance.collection('users');
@@ -176,24 +177,15 @@ Future<String> signUpwith(email, password) async {
 
 //   await userCRUD.updateUser(retrievedUser);
 // }
-
 // // Delete the user
 // await userCRUD.deleteUser('1');
 // // }
 
-dynamic getDataById(List<dynamic> dataArray, int id) {
+dynamic getDataById(dataArray, int id) {
   for (var data in dataArray) {
-    if (data['id'] == id) {
-      return data["selectedAnswer"];
+    if (data["id"] == id) {
+      return data['item'];
     }
   }
   return null;
-}
-
-getbyid() {
-  final data = getDataById([
-    {"id": 1, "select": "hello"},
-    {"id": 2, "select": "manish"}
-  ], 1);
-  print(data);
 }
