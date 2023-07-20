@@ -1,54 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 
-import 'package:yes_broker/Customs/custom_text.dart';
-
-// var pixelRatio = window.devicePixelRatio;
-
-// var logicalScreenSize = window.physicalSize / pixelRatio;
-// var width = logicalScreenSize.width;
-// var height = logicalScreenSize.height;
 double? height;
 double? width;
 
 // App constants
 
-List<IconData> sideBarIcons = [
-  Icons.home_outlined,
-  Icons.list_outlined,
-  MaterialSymbols.location_home,
-  MaterialSymbols.location_away,
-  Icons.chat_outlined,
-  Icons.calendar_month_outlined,
-  // MaterialSymbols.location_home_circle,
-];
+const GOOGLE_MAPS_APIKEY = 'AIzaSyD7KtQoq29-5TqELLdPBSQoqCD376-qGjA';
 
-final List bottomBarItems = [
-  {
-    "title": 'Home',
-    "icon": Icons.home_outlined,
-    "active_icon": Icons.home_rounded,
-    "page": const CustomText(title: 'Home'),
-  },
-  {
-    "title": 'Inventory',
-    "icon": MaterialSymbols.location_home,
-    "active_icon": Icons.search,
-    "page": const CustomText(title: 'Lead'),
-  },
-  {
-    "title": 'Lead',
-    "icon": MaterialSymbols.location_away,
-    "active_icon": Icons.favorite_outlined,
-    "page": const CustomText(title: 'Inventory'),
-  },
-  {
-    "title": 'Chat',
-    "icon": Icons.chat_outlined,
-    "active_icon": Icons.forum_rounded,
-    "page": const CustomText(title: 'Chat'),
-  },
-];
+class MenuItem {
+  final String label;
+  final IconData? iconData;
+  final Widget screen;
+
+  MenuItem({
+    required this.label,
+    this.iconData,
+    required this.screen,
+  });
+}
+
+class BottomBarItem {
+  final String label;
+  final IconData? iconData;
+  final Widget screen;
+
+  BottomBarItem({
+    required this.label,
+    this.iconData,
+    required this.screen,
+  });
+}
 
 class TodoItemModal {
   String? image;
@@ -101,8 +82,7 @@ final List<TodoItemModal> userData = [
     image: "user1",
     name: "Riya Sharma",
     task: "Collects documents from kishore",
-    subtitle:
-        'Make sure to collect all the documents from Kishor which we need for our meeting with DLF',
+    subtitle: 'Make sure to collect all the documents from Kishor which we need for our meeting with DLF',
     time: 'Today at 9:12 AM',
     todoType: 'Task',
     todoStatus: 'New',
@@ -160,8 +140,7 @@ List<WorkItemModal> workItemData = [
     isLead: false,
     name: 'Priya singh',
     title: 'Residential villa- Delhi',
-    subtitle:
-        'Looking for 360 sq yrd villa, preferred location Rohini and park facing.',
+    subtitle: 'Looking for 360 sq yrd villa, preferred location Rohini and park facing.',
   ),
   WorkItemModal(
     bhk: '3BHK',
@@ -172,8 +151,7 @@ List<WorkItemModal> workItemData = [
     isLead: true,
     name: 'Priya singh',
     title: 'Residential villa- Delhi',
-    subtitle:
-        'Looking for 360 sq yrd villa, preferred location Rohini and park facing.',
+    subtitle: 'Looking for 360 sq yrd villa, preferred location Rohini and park facing.',
   ),
   WorkItemModal(
     bhk: '4BHK',
@@ -184,8 +162,7 @@ List<WorkItemModal> workItemData = [
     isLead: false,
     name: 'Priya singh',
     title: 'Residential villa- Delhi',
-    subtitle:
-        'Looking for 360 sq yrd villa, preferred location Rohini and park facing.',
+    subtitle: 'Looking for 360 sq yrd villa, preferred location Rohini and park facing.',
   ),
   WorkItemModal(
     bhk: '2BHK',
@@ -196,8 +173,7 @@ List<WorkItemModal> workItemData = [
     isLead: true,
     name: 'Priya singh',
     title: 'Residential villa- Delhi',
-    subtitle:
-        'Looking for 360 sq yrd villa, preferred location Rohini and park facing.',
+    subtitle: 'Looking for 360 sq yrd villa, preferred location Rohini and park facing.',
   ),
   WorkItemModal(
     bhk: '5BHK',
@@ -208,8 +184,7 @@ List<WorkItemModal> workItemData = [
     isLead: false,
     name: 'Priya singh',
     title: 'Residential villa- Delhi',
-    subtitle:
-        'Looking for 360 sq yrd villa, preferred location Rohini and park facing.',
+    subtitle: 'Looking for 360 sq yrd villa, preferred location Rohini and park facing.',
   ),
 ];
 
@@ -240,34 +215,10 @@ String defaultValue = "New";
 String selectedOption = "New";
 
 List<Map<String, dynamic>> timelineData = [
-  {
-    'name': 'Ramesh Singh',
-    'title': 'Property Details Added',
-    'isInventory': false,
-    'isFollowUp': false,
-    'id': 'LD 938'
-  },
-  {
-    'name': 'Ramesh Singh',
-    'title': 'Property Details Added',
-    'isInventory': true,
-    'isFollowUp': true,
-    'id': 'IN 938'
-  },
-  {
-    'name': 'Ramesh Singh',
-    'title': 'Property Details Added',
-    'isInventory': true,
-    'isFollowUp': true,
-    'id': 'IN 938'
-  },
-  {
-    'name': 'Ramesh Singh',
-    'title': 'Property Details Added',
-    'isInventory': false,
-    'isFollowUp': false,
-    'id': 'LD 235'
-  },
+  {'name': 'Ramesh Singh', 'title': 'Property Details Added', 'isInventory': false, 'isFollowUp': false, 'id': 'LD 938'},
+  {'name': 'Ramesh Singh', 'title': 'Property Details Added', 'isInventory': true, 'isFollowUp': true, 'id': 'IN 938'},
+  {'name': 'Ramesh Singh', 'title': 'Property Details Added', 'isInventory': true, 'isFollowUp': true, 'id': 'IN 938'},
+  {'name': 'Ramesh Singh', 'title': 'Property Details Added', 'isInventory': false, 'isFollowUp': false, 'id': 'LD 235'},
 ];
 
 final List<Map<String, dynamic>> inventoryFilterOtpion = [

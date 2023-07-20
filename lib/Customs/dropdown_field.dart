@@ -17,7 +17,21 @@ class DropDownField extends StatefulWidget {
 }
 
 class _DropDownFieldState extends State<DropDownField> {
+  String? errorText;
   var selectedValues;
+
+  void validateDropdown() {
+    if (selectedValues == null) {
+      setState(() {
+        errorText = 'Please select an option';
+      });
+    } else {
+      setState(() {
+        errorText = null;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -67,7 +81,15 @@ class _DropDownFieldState extends State<DropDownField> {
                 }).toList(),
               ),
             ),
-          )
+          ),
+          if (errorText != null)
+            Text(
+              errorText!,
+              style: const TextStyle(
+                color: Colors.red,
+                fontSize: 12,
+              ),
+            ),
         ],
       ),
     );

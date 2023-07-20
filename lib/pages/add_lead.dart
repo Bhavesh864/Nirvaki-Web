@@ -13,7 +13,6 @@ import '../Customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
 
 class AddLead extends ConsumerStatefulWidget {
-  static const routeName = '/add-lead';
   const AddLead({super.key});
 
   @override
