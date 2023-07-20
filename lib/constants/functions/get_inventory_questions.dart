@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
 import 'package:yes_broker/google_maps.dart';
@@ -79,9 +79,7 @@ Widget buildQuestionWidget(
             return ChipButton(
               text: option,
               onSelect: () {
-                // print(option);
                 if (currentIndex < screens.length - 1) {
-                  print('hello');
                   notify.add({"id": question.questionId, "item": option});
                   nextQuestion(screens: screens);
                 } else {
@@ -164,14 +162,12 @@ Widget buildQuestionWidget(
                     padding: const EdgeInsets.only(right: 10, bottom: 10),
                     child: CustomChoiceChip(
                       label: option,
-                      selected: selectedOption == option, // Check if the current item is selected
+                      selected: selectedOption == option,
                       onSelected: (selectedItem) {
                         setState(() {
                           if (selectedOption == option) {
-                            // If the current option is already selected, unselect it
                             selectedOption = '';
                           } else {
-                            // Otherwise, select the current option
                             selectedOption = option;
                           }
                         });
