@@ -41,6 +41,7 @@ void submitInventoryAndcardDetails(state) async {
   final String floorNumber = getDataById(state, 30);
   final String propertyFacing = getDataById(state, 32);
   final String comments = getDataById(state, 35);
+  final List<Map<String, dynamic>> assignto = getDataById(state, 36);
 
   final cards.CardDetails card = cards.CardDetails(
       workitemId: "IN$randomId",
@@ -107,6 +108,14 @@ void submitInventoryAndcardDetails(state) async {
           addressline1: addressLine1,
           addressline2: addressLine2,
           floornumber: floorNumber),
+      assignedto: [
+        Assignedto(
+            firstname: assignto[0]["userfirstname"],
+            lastname: assignto[0]["userlastname"],
+            assignedby: "bhavesh",
+            image: assignto[0]["image"].toString(),
+            userid: assignto[0]["userId"])
+      ],
       createdby: Createdby(
           userfirstname: "bhavesh",
           userid: authentication.currentUser!.uid,
