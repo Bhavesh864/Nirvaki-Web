@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
-import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/routes/routes.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({super.key});
@@ -41,15 +41,15 @@ class _SideMenuState extends State<SideMenu> {
             // margin: const EdgeInsets.only(top: 100),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: sideBarIcons
+              children: sideBarItems
                   .map(
                     (e) => Center(
                       child: NavBarItem(
-                        icon: e,
-                        selected: selected[sideBarIcons.indexOf(e)],
+                        icon: e.iconData!,
+                        selected: selected[sideBarItems.indexOf(e)],
                         onTap: () {
                           setState(() {
-                            select(sideBarIcons.indexOf(e));
+                            select(sideBarItems.indexOf(e));
                           });
                         },
                       ),

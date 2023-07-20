@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
-import 'package:yes_broker/TabScreens/main_screens/home_screen.dart';
+import 'package:yes_broker/routes/routes.dart';
 import '../../constants/utils/image_constants.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -18,6 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   var isloading = false;
   final TextEditingController emailcontroller = TextEditingController();
   final TextEditingController passwordcontroller = TextEditingController();
+
   void loginwithemailpassword() {
     final isvalid = key.currentState?.validate();
     if (isvalid!) {
@@ -31,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     setState(() {
                       isloading = false;
                     }),
-                    Navigator.of(context).pushNamed(HomeScreen.routeName)
+                    Navigator.of(context).pushNamed(AppRoutes.homeScreen)
                   }
                 else
                   {
@@ -40,7 +42,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     }),
                     ScaffoldMessenger.of(context)
                         .showSnackBar(SnackBar(content: Text(value!))),
-                    // print('please enter correct info')
                   }
               });
     }
@@ -49,13 +50,12 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
-    // final h = MediaQuery.of(context).size.height;
 
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            height: 800,
+            height: 750,
             padding: const EdgeInsets.symmetric(vertical: 60),
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -69,13 +69,8 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             child: Center(
               child: Card(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
                 child: Container(
                     width: Responsive.isMobile(context) ? w * 0.9 : 500,
-                    // height: h / 1.2,
                     padding: const EdgeInsets.all(25),
                     child: Form(
                       key: key,
@@ -92,10 +87,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(
                             width: w,
                             child: CustomButton(
-                                leftIcon: Icons.g_mobiledata,
-                                text: 'Continue with Google',
-                                lefticonColor: Colors.white,
-                                onPressed: () {}),
+                              leftIcon: Icons.g_mobiledata,
+                              text: 'Continue with Google',
+                              lefticonColor: Colors.white,
+                              onPressed: () {},
+                            ),
                           ),
                           const SizedBox(height: 10),
                           SizedBox(
@@ -147,36 +143,28 @@ class _LoginScreenState extends State<LoginScreen> {
                           const SizedBox(
                             height: 10,
                           ),
-                          SizedBox(
-                            width: w,
-                            height: 65,
-                            child: CustomTextInput(
-                              controller: emailcontroller,
-                              hintText: 'Email address',
-                              validator: (value) {
-                                if (value!.isEmpty || value.length < 6) {
-                                  return 'Please enter email';
-                                }
-                                return null;
-                              },
-                            ),
+                          CustomTextInput(
+                            controller: emailcontroller,
+                            hintText: 'Email address',
+                            validator: (value) {
+                              if (value!.isEmpty || value.length < 6) {
+                                return 'Please enter email';
+                              }
+                              return null;
+                            },
                           ),
                           const SizedBox(height: 15),
-                          SizedBox(
-                            width: w,
-                            height: 65,
-                            child: CustomTextInput(
-                              controller: passwordcontroller,
-                              hintText: 'Password',
-                              obscureText: true,
-                              rightIcon: Icons.remove_red_eye,
-                              validator: (value) {
-                                if (value!.isEmpty || value.length < 6) {
-                                  return 'Password should be atleast 6 character long';
-                                }
-                                return null;
-                              },
-                            ),
+                          CustomTextInput(
+                            controller: passwordcontroller,
+                            hintText: 'Password',
+                            obscureText: true,
+                            rightIcon: Icons.remove_red_eye,
+                            validator: (value) {
+                              if (value!.isEmpty || value.length < 6) {
+                                return 'Password should be atleast 6 character long';
+                              }
+                              return null;
+                            },
                           ),
                           const SizedBox(height: 15),
                           isloading

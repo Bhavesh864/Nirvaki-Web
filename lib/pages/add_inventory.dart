@@ -14,7 +14,6 @@ final myArrayProvider =
         (ref) => AllChipSelectedAnwers());
 
 class AddInventory extends ConsumerStatefulWidget {
-  static const routeName = '/add-inventory';
   const AddInventory({super.key});
 
   @override
@@ -26,6 +25,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   late Future<List<InventoryQuestions>> getQuestions;
   PageController? pageController;
   int currentIndex = 0;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -37,7 +37,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   nextQuestion({List<Screen>? screens}) {
     if (currentIndex < screens!.length - 1) {
       setState(() {
-        currentIndex++; // Increment the current index
+        currentIndex++;
         pageController!.nextPage(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
@@ -48,43 +48,20 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     }
   }
 
-  goBack(List<Screen>? screens) {
+  goBack(List<int> id) {
     if (currentIndex > 0) {
-      String currentScreenId = screens![currentIndex].screenId;
-      int previousPageIndex = currentIndex - 1;
-      while (previousPageIndex >= 0) {
-        if (screens[previousPageIndex].screenId != currentScreenId) {
-          break;
-        }
-        previousPageIndex--;
-      }
-
       setState(() {
-        currentIndex = previousPageIndex;
-        pageController!.animateToPage(
-          currentIndex,
+        currentIndex--;
+        ref.read(myArrayProvider.notifier).remove(id);
+        pageController!.previousPage(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
       });
     } else {
-      // Navigator.pop(context); // Go back to the previous screen
+      Navigator.pop(context);
     }
   }
-
-  // goBack() {
-  //   if (currentIndex > 0) {
-  //     setState(() {
-  //       currentIndex--; // Decrement the current index
-  //       pageController!.previousPage(
-  //         duration: const Duration(milliseconds: 300),
-  //         curve: Curves.easeInOut,
-  //       );
-  //     });
-  //   } else {
-  //     Navigator.pop(context); // Go back to the previous screen
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -95,9 +72,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
         future: getQuestions,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-                child: CircularProgressIndicator
-                    .adaptive()); // Display a loading indicator while waiting
+            return const Center(child: CircularProgressIndicator.adaptive());
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
@@ -117,117 +92,137 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                       ),
                     ),
                   ),
-                  child: PageView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    controller: pageController,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: screens.length,
-                    itemBuilder: (context, index) {
-                      return Center(
-                        child: Card(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Container(
-                            constraints: const BoxConstraints(
-                              minHeight: 0,
-                              maxHeight: double.infinity,
+                  child: Form(
+                    key: _formKey,
+                    child: PageView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: pageController,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: screens.length,
+                      itemBuilder: (context, index) {
+                        return Center(
+                          child: Card(
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            width: Responsive.isMobile(context)
-                                ? width! * 0.9
-                                : 650,
-                            padding: const EdgeInsets.all(25),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                if (screens[index].title != null)
-                                  CustomText(
-                                    softWrap: true,
-                                    textAlign: TextAlign.center,
-                                    size: 30,
-                                    title: screens[index].title.toString(),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                for (var i = 0;
-                                    i < screens[index].questions.length;
-                                    i++)
-                                  Column(
-                                    children: [
-                                      if (screens[index].title == null)
-                                        CustomText(
-                                          softWrap: true,
-                                          textAlign: TextAlign.center,
-                                          size: 30,
-                                          title: screens[index]
-                                              .questions[i]
-                                              .questionTitle,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      buildQuestionWidget(
-                                          screens[index].questions[i],
-                                          screens,
-                                          currentIndex,
-                                          selectedOption,
-                                          pageController!,
-                                          notify,
-                                          nextQuestion),
-                                      if (i ==
-                                              screens[index].questions.length -
-                                                  1 &&
-                                          screens[index]
-                                                  .questions[i]
-                                                  .questionOptionType !=
-                                              'chip')
-                                        Container(
-                                          margin:
-                                              const EdgeInsets.only(top: 10),
-                                          alignment: Alignment.centerRight,
-                                          child: CustomButton(
-                                            text: 'Next',
-                                            onPressed: () {
-                                              nextQuestion(screens: screens);
-                                            },
-                                            width: 73,
-                                            height: 39,
+                            child: SingleChildScrollView(
+                              child: Container(
+                                constraints: const BoxConstraints(
+                                  minHeight: 0,
+                                  maxHeight: double.infinity,
+                                ),
+                                width: Responsive.isMobile(context)
+                                    ? width! * 0.9
+                                    : 650,
+                                padding: const EdgeInsets.all(25),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    if (screens[index].title != null)
+                                      CustomText(
+                                        softWrap: true,
+                                        textAlign: TextAlign.center,
+                                        size: 30,
+                                        title: screens[index].title.toString(),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    for (var i = 0;
+                                        i < screens[index].questions.length;
+                                        i++)
+                                      Column(
+                                        children: [
+                                          if (screens[index].title == null)
+                                            CustomText(
+                                                softWrap: true,
+                                                textAlign: TextAlign.center,
+                                                size: 30,
+                                                title: screens[index]
+                                                    .questions[i]
+                                                    .questionTitle,
+                                                fontWeight: FontWeight.bold),
+                                          buildQuestionWidget(
+                                            screens[index].questions[i],
+                                            screens,
+                                            currentIndex,
+                                            selectedOption,
+                                            pageController!,
+                                            notify,
+                                            nextQuestion,
                                           ),
-                                        ),
-                                    ],
-                                  ),
-                              ],
+                                          if (i ==
+                                                  screens[index]
+                                                          .questions
+                                                          .length -
+                                                      1 &&
+                                              screens[index]
+                                                      .questions[i]
+                                                      .questionOptionType !=
+                                                  'chip')
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  top: 10),
+                                              alignment: Alignment.centerRight,
+                                              child: CustomButton(
+                                                text: 'Next',
+                                                onPressed: () {
+                                                  // nextQuestion(
+                                                  //   screens: screens,
+                                                  // );
+                                                  if (_formKey.currentState!
+                                                      .validate()) {
+                                                    nextQuestion(
+                                                      screens: screens,
+                                                    );
+                                                  }
+                                                },
+                                                width: 73,
+                                                height: 39,
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                Positioned(
-                  top: 0.0,
-                  left: 0.0,
-                  right: 0.0,
-                  child: AppBar(
-                    elevation: 0,
-                    iconTheme: const IconThemeData(color: Colors.white),
-                    backgroundColor: Colors.transparent,
-                    centerTitle: true,
-                    leading: IconButton(
-                      onPressed: () {
-                        goBack(screens);
-                      },
-                      icon: const Icon(Icons.arrow_back),
-                    ),
-                    title: Consumer(
-                      builder: (context, ref, child) {
-                        return const CustomText(
-                          title: 'Add Inventory ',
-                          fontWeight: FontWeight.w700,
-                          size: 20,
-                          color: Colors.white,
                         );
                       },
                     ),
                   ),
+                ),
+                Consumer(
+                  builder: (context, ref, child) {
+                    return Positioned(
+                      top: 0.0,
+                      left: 0.0,
+                      right: 0.0,
+                      child: AppBar(
+                        elevation: 0,
+                        iconTheme: const IconThemeData(color: Colors.white),
+                        backgroundColor: Colors.transparent,
+                        centerTitle: true,
+                        leading: IconButton(
+                          onPressed: () {
+                            final currentScreenQuestions =
+                                screens[currentIndex].questions;
+                            final ids = currentScreenQuestions
+                                .map((q) => q.questionId)
+                                .toList();
+                            goBack(ids);
+                          },
+                          icon: const Icon(Icons.arrow_back),
+                        ),
+                        title: const CustomText(
+                          title: 'Add Inventory ',
+                          fontWeight: FontWeight.w700,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ],
             );
