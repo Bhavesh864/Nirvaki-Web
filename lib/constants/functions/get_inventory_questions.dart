@@ -1,5 +1,13 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
+
+import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
+import 'package:yes_broker/widgets/inventory/inventory_photos.dart';
 import '../../Customs/custom_fields.dart';
 import '../../Customs/custom_text.dart';
 import '../../Customs/dropdown_field.dart';
@@ -13,7 +21,7 @@ Widget buildQuestionWidget(
     int currentIndex,
     selectedOption,
     PageController pageController,
-    notify,
+    AllChipSelectedAnwers notify,
     Function nextQuestion) {
   if (question.questionOptionType == 'textfield') {
     TextEditingController controller = TextEditingController();
@@ -36,8 +44,7 @@ Widget buildQuestionWidget(
                 LabelTextInputField(
                     onChanged: (newvalue) {
                       print("newvalue");
-                      notify.state
-                          .add({"id": question.questionId, "item": newvalue});
+                      notify.add({"id": question.questionId, "item": newvalue});
                     },
                     inputController: controller,
                     labelText: question.questionTitle)
@@ -46,19 +53,21 @@ Widget buildQuestionWidget(
         },
       );
     }
-    return LabelTextInputField(
-      inputController: controller,
-      labelText: question.questionTitle,
-      onChanged: (newvalue) {
-        print("newvalue");
-        notify.state.add({"id": question.questionId, "item": newvalue});
-      },
-      validator: (value) {
-        if (value!.isEmpty) {
-          return "Please enter ${question.questionTitle}";
-        }
-        return null;
-      },
+    return Form(
+      child: LabelTextInputField(
+        inputController: controller,
+        labelText: question.questionTitle,
+        onChanged: (newvalue) {
+          print("newvalue");
+          notify.add({"id": question.questionId, "item": newvalue});
+        },
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "Please enter ${question.questionTitle}";
+          }
+          return null;
+        },
+      ),
     );
   } else if (question.questionOptionType == 'chip') {
     return Column(
@@ -69,11 +78,8 @@ Widget buildQuestionWidget(
               text: option,
               onSelect: () {
                 // print(option);
-                if (option == "Direct") {
-                  pageController.jumpToPage(5);
-                }
                 if (currentIndex < screens.length - 1) {
-                  notify.state.add({"id": question.questionId, "item": option});
+                  notify.add({"id": question.questionId, "item": option});
                   nextQuestion(screens: screens);
                 } else {
                   // Handle reaching the last question or any other action
@@ -88,7 +94,7 @@ Widget buildQuestionWidget(
       title: question.questionTitle,
       optionsList: question.questionOption,
       onchanged: (Object e) {
-        notify.state.add({"id": question.questionId, "item": e});
+        notify.add({"id": question.questionId, "item": e});
       },
     );
   } else if (question.questionOptionType == 'multichip') {
@@ -125,7 +131,7 @@ Widget buildQuestionWidget(
                                 selectedOptions.remove(item);
                               }
                             });
-                            notify.state.add({
+                            notify.add({
                               "id": question.questionId,
                               "item": selectedOptions
                             });
@@ -173,8 +179,7 @@ Widget buildQuestionWidget(
                             selectedOption = option;
                           }
                         });
-                        notify.state
-                            .add({"id": question.questionId, "item": option});
+                        notify.add({"id": question.questionId, "item": option});
                       },
                       labelColor: selectedOption == option
                           ? Colors.white
@@ -193,7 +198,7 @@ Widget buildQuestionWidget(
       maxLines: 5,
       onChanged: (newvalue) {
         print("newvalue");
-        notify.state.add({"id": question.questionId, "item": newvalue});
+        notify.add({"id": question.questionId, "item": newvalue});
       },
       decoration: InputDecoration(
         hintText: question.questionOption,
@@ -208,6 +213,27 @@ Widget buildQuestionWidget(
           ),
         ),
       ),
+    );
+  } else if (question.questionOptionType == 'photo') {
+    // getDataById(state,  )
+    File? selectedImage;
+    Uint8List webImage;
+    void setImage(File image) {
+      selectedImage = image;
+    }
+
+    void setWebImage(Uint8List image) async {
+      webImage = image;
+    }
+
+    return Wrap(
+      children: [
+        ImagePickerContainer(
+            onImageSelected: setImage, webImageSelected: setWebImage),
+        const SizedBox(height: 20),
+        if (selectedImage != null)
+          Image.file(selectedImage!, height: 200, width: 200)
+      ],
     );
   }
 

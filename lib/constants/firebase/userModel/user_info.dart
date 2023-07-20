@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
 
 final CollectionReference usersCollection =
     FirebaseFirestore.instance.collection('users');
@@ -67,6 +66,27 @@ class User {
       // print('User added successfully');
     } catch (error) {
       // print('Failed to add user: $error');
+    }
+  }
+
+  static Future<List<User>> getAllUsers() async {
+    try {
+      final QuerySnapshot querySnapshot = await usersCollection.get();
+      final List<User> users = [];
+      for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        if (documentSnapshot.exists) {
+          final Map<String, dynamic> data =
+              documentSnapshot.data() as Map<String, dynamic>;
+          final User user = User.fromMap(data);
+          users.add(user);
+        }
+      }
+      return users;
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to get users: $error');
+      }
+      return [];
     }
   }
 
