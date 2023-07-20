@@ -40,7 +40,7 @@ void submitInventoryAndcardDetails(state) async {
   final String addressLine2 = getDataById(state, 29);
   final String floorNumber = getDataById(state, 30);
   final String propertyFacing = getDataById(state, 32);
-  final String comments = getDataById(state, 32);
+  final String comments = getDataById(state, 35);
 
   final cards.CardDetails card = cards.CardDetails(
       workitemId: "IN$randomId",

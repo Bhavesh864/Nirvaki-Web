@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
-
 import 'package:yes_broker/constants/functions/get_inventory_questions.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import '../Customs/custom_fields.dart';
@@ -12,7 +10,8 @@ import '../constants/utils/image_constants.dart';
 import '../controllers/all_selected_ansers_provider.dart';
 
 final myArrayProvider =
-    StateProvider<AllChipSelectedAnwers>((ref) => AllChipSelectedAnwers());
+    StateNotifierProvider<AllChipSelectedAnwers, List<Map<String, dynamic>>>(
+        (ref) => AllChipSelectedAnwers());
 
 class AddInventory extends ConsumerStatefulWidget {
   static const routeName = '/add-inventory';
@@ -49,66 +48,43 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     }
   }
 
-  // nextQuestion({List<Screen>? screens}) {
-  //   if (currentIndex < screens!.length - 1) {
-  //     // Find the next screen based on the current screen ID
-  //     String currentScreenId = screens[currentIndex].screenId;
-  //     Screen? nextScreen = screens.firstWhere(
-  //       (screen) => screen.screenId != currentScreenId,
-  //       orElse: () => null,
-  //     );
-  //     int nextPageIndex = screens.indexOf(nextScreen);
-  //     setState(() {
-  //       currentIndex = nextPageIndex;
-  //       pageController!.animateToPage(
-  //         currentIndex,
-  //         duration: const Duration(milliseconds: 300),
-  //         curve: Curves.easeInOut,
-  //       );
-  //     });
-  //   } else {
-  //     // Handle reaching the last question or any other action
-  //   }
-  // }
-
-  // goBack(List<Screen>? screens) {
-  //   if (currentIndex > 0) {
-  //     // Find the previous screen based on the current screen ID
-  //     String currentScreenId = screens![currentIndex].id;
-  //     Screen? previousScreen = screens.lastWhere(
-  //       (screen) => screen.id != currentScreenId,
-  //       orElse: () => null,
-  //     );
-
-  //     if (previousScreen != null) {
-  //       int previousPageIndex = screens.indexOf(previousScreen);
-  //       setState(() {
-  //         currentIndex = previousPageIndex;
-  //         pageController!.animateToPage(
-  //           currentIndex,
-  //           duration: const Duration(milliseconds: 300),
-  //           curve: Curves.easeInOut,
-  //         );
-  //       });
-  //     }
-  //   } else {
-  //     Navigator.pop(context); // Go back to the previous screen
-  //   }
-  // }
-
-  goBack() {
+  goBack(List<Screen>? screens) {
     if (currentIndex > 0) {
+      String currentScreenId = screens![currentIndex].screenId;
+      int previousPageIndex = currentIndex - 1;
+      while (previousPageIndex >= 0) {
+        if (screens[previousPageIndex].screenId != currentScreenId) {
+          break;
+        }
+        previousPageIndex--;
+      }
+
       setState(() {
-        currentIndex--; // Decrement the current index
-        pageController!.previousPage(
+        currentIndex = previousPageIndex;
+        pageController!.animateToPage(
+          currentIndex,
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
       });
     } else {
-      Navigator.pop(context); // Go back to the previous screen
+      // Navigator.pop(context); // Go back to the previous screen
     }
   }
+
+  // goBack() {
+  //   if (currentIndex > 0) {
+  //     setState(() {
+  //       currentIndex--; // Decrement the current index
+  //       pageController!.previousPage(
+  //         duration: const Duration(milliseconds: 300),
+  //         curve: Curves.easeInOut,
+  //       );
+  //     });
+  //   } else {
+  //     Navigator.pop(context); // Go back to the previous screen
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -237,7 +213,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                     centerTitle: true,
                     leading: IconButton(
                       onPressed: () {
-                        goBack();
+                        goBack(screens);
                       },
                       icon: const Icon(Icons.arrow_back),
                     ),

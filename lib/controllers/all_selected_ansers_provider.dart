@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:random_string/random_string.dart';
 import 'package:yes_broker/constants/firebase/Methods/submit_inventory.dart';
 
 final allChipSelectedAnwersProvider =
@@ -28,15 +27,6 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
     state.retainWhere(
       (element) => element['id'] != id,
     );
-    // print(state);
-  }
-
-  void removeValue(int id) {
-    state = state.where((item) => item["id"] != id).toList();
-  }
-
-  void removev(value) {
-    state = [...state.where((g) => g["id"] != value["id"])];
   }
 
   void submitInventory() async {
