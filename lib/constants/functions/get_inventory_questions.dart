@@ -1,17 +1,16 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 
 import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/inventory/inventory_photos.dart';
 
-import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
-import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
 import 'package:yes_broker/google_maps.dart';
+import 'package:yes_broker/widgets/inventory/search_user_textfield.dart';
 import '../../Customs/custom_fields.dart';
 import '../../Customs/custom_text.dart';
 import '../../Customs/dropdown_field.dart';
@@ -32,7 +31,6 @@ Widget buildQuestionWidget(
   if (question.questionOptionType == 'textfield') {
     TextEditingController controller = TextEditingController();
     bool isChecked = true;
-
     if (question.questionTitle == 'Whatsapp Number') {
       return StatefulBuilder(
         builder: (context, setState) {
@@ -64,6 +62,17 @@ Widget buildQuestionWidget(
                 ),
             ],
           );
+        },
+      );
+    } else if (question.questionTitle == "Assign to") {
+      List<Map<String, dynamic>> users = []; // Holds the search results
+      return SearchByUser(
+        question: question,
+        onpressed: (data) {
+          notify.add({
+            'id': question.questionId,
+            'item': [data]
+          });
         },
       );
     }
