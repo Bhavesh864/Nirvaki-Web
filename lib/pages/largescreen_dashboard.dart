@@ -51,9 +51,7 @@ class LargeScreen extends ConsumerWidget {
                 minWidth: 60,
                 useIndicator: false,
                 onDestinationSelected: (index) {
-                  ref
-                      .read(currentIndexProvider.notifier)
-                      .update((state) => index);
+                  ref.read(currentIndexProvider.notifier).update((state) => index);
                 },
                 destinations: sideBarItems
                     .map(
@@ -74,9 +72,7 @@ class LargeScreen extends ConsumerWidget {
               children: [
                 LargeScreenNavBar((selectedVal) {
                   if (selectedVal == 'Profile') {
-                    ref
-                        .read(currentIndexProvider.notifier)
-                        .update((state) => 6);
+                    ref.read(currentIndexProvider.notifier).update((state) => 6);
                   }
                 }),
                 Expanded(
