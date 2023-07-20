@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/widgets/calendar_view.dart';
@@ -8,7 +7,6 @@ import 'package:yes_broker/widgets/todo/todo_list_view.dart';
 import 'package:yes_broker/widgets/workitems_list.dart';
 
 class HomeScreen extends StatefulWidget {
-  static const routeName = '/home';
   const HomeScreen({super.key});
 
   @override
@@ -18,16 +16,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    getstate();
+    // questions();
   }
 
-  getstate() async {
-    // final List<Questions> item =
-    //     await Questions.getAllQuestionssFromFirestore();
-    // print(item[0].screens[0].isActive);
-    // await Questions.addScreens(screensList);
+  questions() async {
+    // await LeadQuestions.addScreens(screensList);
   }
 
   @override

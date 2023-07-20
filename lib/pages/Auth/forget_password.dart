@@ -5,11 +5,11 @@ import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/TabScreens/main_screens/home_screen.dart';
+import 'package:yes_broker/routes/routes.dart';
 
 import '../../constants/utils/image_constants.dart';
 
 class ForgetPassword extends StatelessWidget {
-  static const routeName = '/forget-password';
   const ForgetPassword({super.key});
   @override
   Widget build(BuildContext context) {
@@ -117,7 +117,7 @@ class ForgetPassword extends StatelessWidget {
                           text: 'Reset',
                           onPressed: () {
                             Navigator.of(context)
-                                .pushNamed(HomeScreen.routeName);
+                                .pushNamed(AppRoutes.homeScreen);
                           },
                           height: 40.0,
                         ),

@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:yes_broker/TabScreens/account_screens/profile_screen.dart';
-import 'package:yes_broker/TabScreens/main_screens/caledar_screen.dart';
-import 'package:yes_broker/TabScreens/main_screens/chat_screen.dart';
-import 'package:yes_broker/TabScreens/main_screens/inventroy_screen.dart';
-import 'package:yes_broker/TabScreens/main_screens/lead_screen.dart';
-import 'package:yes_broker/TabScreens/main_screens/todo_screen.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/widgets/app/side_menu.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
-import 'package:yes_broker/TabScreens/main_screens/home_screen.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';
 
 final currentIndexProvider = StateProvider<int>((ref) {
@@ -32,16 +26,6 @@ class LargeScreen extends ConsumerWidget {
       }
     }
   }
-
-  final List<Widget> _pages = [
-    const HomeScreen(),
-    const TodoTabScreen(),
-    const InventoryScreen(),
-    const LeadScreen(),
-    const ChatScreen(),
-    const CalendarScreen(),
-    const ProfileScreen(),
-  ];
 
   // int _selectedPageIndex = 0;
   @override
@@ -71,11 +55,11 @@ class LargeScreen extends ConsumerWidget {
                       .read(currentIndexProvider.notifier)
                       .update((state) => index);
                 },
-                destinations: sideBarIcons
+                destinations: sideBarItems
                     .map(
                       (e) => NavigationRailDestination(
-                        icon: Icon(e),
-                        selectedIcon: Icon(e, color: AppColor.primary),
+                        icon: Icon(e.iconData),
+                        selectedIcon: Icon(e.iconData, color: AppColor.primary),
                         label: const Text('Yes Broker'),
                       ),
                     )
@@ -96,7 +80,7 @@ class LargeScreen extends ConsumerWidget {
                   }
                 }),
                 Expanded(
-                  child: _pages[currentIndex],
+                  child: sideBarItems[currentIndex].screen,
                 ),
               ],
             ),

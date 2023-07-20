@@ -4,7 +4,6 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 
 class ProfileScreen extends StatefulWidget {
-  static const routeName = '/profileScreen';
   const ProfileScreen({super.key});
 
   @override
@@ -41,11 +40,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 )
                 .toList(),
-            // CustomText(title: 'Team'),
-            // CustomText(title: 'Subscription'),
-            // CustomText(title: 'Settings'),
-            // CustomText(title: 'Help'),
-            // CustomText(title: 'Logout'),
           ),
         ),
         Expanded(

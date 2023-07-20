@@ -1,19 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'custom_text.dart';
 
 class DropDownField extends StatefulWidget {
   final String title;
   final List optionsList;
+  final void Function(Object e) onchanged;
   const DropDownField(
-      {super.key, required this.title, required this.optionsList});
+      {super.key,
+      required this.title,
+      required this.optionsList,
+      required this.onchanged});
 
   @override
   State<DropDownField> createState() => _DropDownFieldState();
 }
 
 class _DropDownFieldState extends State<DropDownField> {
+  String? errorText;
   var selectedValues;
+
+  void validateDropdown() {
+    if (selectedValues == null) {
+      setState(() {
+        errorText = 'Please select an option';
+      });
+    } else {
+      setState(() {
+        errorText = null;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -49,9 +68,10 @@ class _DropDownFieldState extends State<DropDownField> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                 value: selectedValues,
-                onChanged: (newValue) {
+                onChanged: (e) {
+                  widget.onchanged(e!);
                   setState(() {
-                    selectedValues = newValue!;
+                    selectedValues = e;
                   });
                 },
                 items: widget.optionsList.map((value) {
@@ -62,7 +82,15 @@ class _DropDownFieldState extends State<DropDownField> {
                 }).toList(),
               ),
             ),
-          )
+          ),
+          if (errorText != null)
+            Text(
+              errorText!,
+              style: const TextStyle(
+                color: Colors.red,
+                fontSize: 12,
+              ),
+            ),
         ],
       ),
     );

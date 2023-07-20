@@ -9,18 +9,22 @@ class LabelTextInputField extends StatelessWidget {
     required this.inputController,
     required this.labelText,
     this.isDropDown = false,
+    this.onChanged,
+    this.validator,
   });
 
   final String labelText;
   final bool isDropDown;
   final TextEditingController inputController;
+  final Function(String)? onChanged;
+  final FormFieldValidator<String>? validator;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4),
+      // margin: const EdgeInsets.symmetric(vertical: 4),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 8, right: 8, left: 2),
@@ -30,15 +34,15 @@ class LabelTextInputField extends StatelessWidget {
               textAlign: TextAlign.left,
             ),
           ),
-          SizedBox(
-            height: 40,
-            child: CustomTextInput(
-              // indense: true,
-              enabled: isDropDown ? false : true,
-              rightIcon: isDropDown ? Icons.arrow_drop_down_sharp : null,
-              controller: inputController,
-              hintText: 'Type here..',
-            ),
+          CustomTextInput(
+            // indense: true,
+            enabled: isDropDown ? false : true,
+            rightIcon: isDropDown ? Icons.arrow_drop_down_sharp : null,
+            controller: inputController,
+            hintText: 'Type here..',
+            onChanged: onChanged,
+            validator: validator,
+            contentPadding: 4,
           ),
         ],
       ),

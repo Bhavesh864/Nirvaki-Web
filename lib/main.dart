@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:yes_broker/constants/utils/theme.dart';
 import 'package:yes_broker/routes/routes.dart';
 import 'firebase_options.dart';
@@ -24,41 +25,37 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GoogleMapController mapController;
+    // LatLng _selectedLatLng;
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Brokr',
       theme: TAppTheme.lightTheme,
-      // theme: FlexThemeData.light(
-      //   scheme: FlexScheme.materialBaseline,
-      //   surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
-      //   blendLevel: 7,
-      //   subThemesData: const FlexSubThemesData(
-      //     blendOnLevel: 10,
-      //     blendOnColors: false,
-      //     useTextTheme: true,
-      //     useM2StyleDividerInM3: true,
-      //   ),
-      //   visualDensity: FlexColorScheme.comfortablePlatformDensity,
-      //   useMaterial3: true,
-      //   swapLegacyOnMaterial3: true,
-      //   fontFamily: GoogleFonts.dmSans().fontFamily,
-      // ),
-      // darkTheme: FlexThemeData.dark(
-      //   scheme: FlexScheme.materialBaseline,
-      //   surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
-      //   blendLevel: 13,
-      //   subThemesData: const FlexSubThemesData(
-      //     blendOnLevel: 20,
-      //     useTextTheme: true,
-      //     useM2StyleDividerInM3: true,
-      //   ),
-      //   visualDensity: FlexColorScheme.comfortablePlatformDensity,
-      //   useMaterial3: true,
-      //   swapLegacyOnMaterial3: true,
-      // ),
-      // themeMode: ThemeMode.light,
       home: LayoutView(),
-      routes: AppRoutes.routes,
+      // home: GoogleMap(
+      //   onMapCreated: (controlle) {
+      //     mapController = controlle;
+      //   },
+      //   initialCameraPosition: const CameraPosition(
+      //     target: LatLng(37.7749, -122.4194), // Set initial map center
+      //     zoom: 12,
+      //   ),
+      //   onTap: (latLng) {
+      //     // setState(() {
+      //     //   _selectedLatLng = latLng;
+      //     // });
+      //   },
+      //   // markers: _selectedLatLng != null
+      //   //     ? Set<Marker>.from([
+      //   //         Marker(
+      //   //           markerId: MarkerId('selected-location'),
+      //   //           position: _selectedLatLng,
+      //   //         ),
+      //   //       ])
+      //   //     : null,
+      // ),
+      routes: AppRoutes.routesTable,
     );
   }
 }
