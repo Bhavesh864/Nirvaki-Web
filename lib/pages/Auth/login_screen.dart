@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 setState(() {
                   isloading = false;
                 }),
-                Navigator.of(context).pushNamed(AppRoutes.homeScreen)
+                Navigator.of(context).pushReplacementNamed(AppRoutes.homeScreen)
               }
             else
               {

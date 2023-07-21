@@ -12,7 +12,9 @@ import '../Customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
 import '../controllers/all_selected_ansers_provider.dart';
 
-final myArrayProvider = StateNotifierProvider<AllChipSelectedAnwers, List<Map<String, dynamic>>>((ref) => AllChipSelectedAnwers());
+final myArrayProvider = StateNotifierProvider<AllChipSelectedAnwers, List<Map<String, dynamic>>>(
+  (ref) => AllChipSelectedAnwers(),
+);
 
 class AddInventory extends ConsumerStatefulWidget {
   const AddInventory({super.key});
