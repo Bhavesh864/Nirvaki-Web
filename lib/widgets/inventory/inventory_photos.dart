@@ -6,10 +6,7 @@ import 'package:image_picker/image_picker.dart';
 class ImagePickerContainer extends StatefulWidget {
   final Function(File) onImageSelected;
   final Function(Uint8List)? webImageSelected;
-  const ImagePickerContainer(
-      {super.key,
-      required this.onImageSelected,
-      required this.webImageSelected});
+  const ImagePickerContainer({super.key, required this.onImageSelected, required this.webImageSelected});
 
   @override
   ImagePickerContainerState createState() => ImagePickerContainerState();
@@ -21,7 +18,7 @@ class ImagePickerContainerState extends State<ImagePickerContainer> {
   Future<void> _pickImage(ImageSource source) async {
     if (!kIsWeb) {
       final ImagePicker pickedImage = ImagePicker();
-      XFile? image = await pickedImage.pickImage(source: ImageSource.gallery);
+      XFile? image = await pickedImage.pickVideo(source: ImageSource.gallery);
       if (image != null) {
         var selected = File(image.path);
         setState(() {
@@ -90,8 +87,7 @@ class ImagePickerContainerState extends State<ImagePickerContainer> {
             borderRadius: BorderRadius.circular(10),
           ),
           child: _imageFile == null
-              ? Icon(Icons.add_photo_alternate,
-                  size: 50, color: Colors.grey[800])
+              ? Icon(Icons.add_photo_alternate, size: 50, color: Colors.grey[800])
               : kIsWeb
                   ? Image.memory(webImage, fit: BoxFit.fill)
                   : Image.file(_imageFile!, fit: BoxFit.fill)),

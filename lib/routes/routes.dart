@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 // Flutter Packages Imports
 import 'package:flutter_material_symbols/flutter_material_symbols.dart';
+import 'package:yes_broker/pages/Auth/login_screen.dart';
 
 // Local Files Imports
 import '../Customs/responsive.dart';
@@ -109,13 +110,14 @@ List<BottomBarItem> bottomBarItems = [
 class AppRoutes {
   static const String homeScreen = '/home_screen';
   static const String forgetPassword = '/forget_password_screen';
+  static const String loginScreen = '/login_screen';
   static const String profileScreen = '/profile_screen';
   static const String addInventory = '/add_inventory_screen';
   static const String addLead = '/add_lead_screen';
 
   static Map<String, WidgetBuilder> routesTable = {
-    homeScreen: (context) =>
-        Responsive.isMobile(context) ? SmallScreen() : LargeScreen(),
+    homeScreen: (context) => Responsive.isMobile(context) ? SmallScreen() : LargeScreen(),
+    loginScreen: (context) => const LoginScreen(),
     forgetPassword: (context) => const ForgetPassword(),
     profileScreen: (context) => const ProfileScreen(),
     addInventory: (context) => const AddInventory(),
