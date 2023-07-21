@@ -3,11 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
-
 import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
 import 'package:yes_broker/constants/functions/get_lead_questions.dart';
-
-// import 'package:yes_broker/constants/functions/get_inventory_questions.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import '../Customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
@@ -49,14 +46,14 @@ class _AddLeadState extends ConsumerState<AddLead> {
   goBack() {
     if (currentIndex > 0) {
       setState(() {
-        currentIndex--; // Decrement the current index
+        currentIndex--;
         pageController!.previousPage(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
       });
     } else {
-      Navigator.pop(context); // Go back to the previous screen
+      Navigator.pop(context);
     }
   }
 
@@ -128,10 +125,6 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                           title: screens[index].questions[i].questionTitle,
                                           fontWeight: FontWeight.bold,
                                         ),
-                                      // buildQuestionWidget(
-                                      //   screens[index].questions[i],
-                                      //   screens,
-                                      // ),
                                       buildQuestionWidgetForLead(
                                         screens[index].questions[i],
                                         screens,
