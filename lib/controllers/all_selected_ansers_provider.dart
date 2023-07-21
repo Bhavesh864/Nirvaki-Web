@@ -20,17 +20,8 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
     } else {
       state = [...currentValue, selectedValue];
     }
-    // state = [...state, selectedValue];
     print('state, $state');
   }
-
-  // void validate(GlobalKey<FormState> formKey)
-
-  //    if (formKey.currentState!.validate()) {
-  //     // The form is valid, proceed with the desired action.
-  //     // For example, you can save the data or navigate to the next screen.
-  //   }
-  // }
 
   void remove(List<int> ids) {
     final currentValue = state;
@@ -38,23 +29,9 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
     print('state: $state');
   }
 
-  // void remove(int id) {
-  //   state.retainWhere(
-  //     (element) => element['id'] != id,
-  //   );
-  //   print('state $state');
-  // }
-
-  // void removeValue(int id) {
-  //   state = state.where((item) => item["id"] != id).toList();
-  // }
-
-  // void removev(value) {
-  //   state = [...state.where((g) => g["id"] != value["id"])];
-  // }
-
-  void submitInventory() async {
-    submitInventoryAndcardDetails(state);
+  Future<String> submitInventory() async {
+    final String res = await submitInventoryAndcardDetails(state);
+    return res;
   }
 }
 

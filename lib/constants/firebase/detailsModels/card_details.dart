@@ -20,12 +20,13 @@ class CardDetails {
   String? duedate;
   Createdby? createdby;
   Customerinfo? customerinfo;
-
+  Timestamp? createdate;
   CardDetails(
       {this.cardType,
       required this.workitemId,
       required this.status,
       required this.cardCategory,
+      required this.createdate,
       this.cardTitle,
       this.cardDescription,
       this.cardStatus,
@@ -51,6 +52,9 @@ class CardDetails {
     }
     if (json["cardCategory"] is String) {
       cardCategory = json["cardCategory"];
+    }
+    if (json["createdate"] is Timestamp) {
+      createdate = json["createdate"];
     }
     if (json["cardTitle"] is String) {
       cardTitle = json["cardTitle"];
@@ -115,6 +119,7 @@ class CardDetails {
     data["cardStatus"] = cardStatus;
     data["brokerid"] = brokerid;
     data["managerid"] = managerid;
+    data["createdate"] = createdate;
     if (assignedto != null) {
       data["assignedto"] = assignedto?.map((e) => e.toJson()).toList();
     }
