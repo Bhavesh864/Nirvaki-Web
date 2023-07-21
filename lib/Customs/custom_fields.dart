@@ -74,7 +74,8 @@ class CustomTextInputState extends State<CustomTextInput> {
         decoration: InputDecoration(
           errorStyle: const TextStyle(height: 0),
           label: widget.label,
-          contentPadding: EdgeInsets.symmetric(vertical: widget.contentPadding, horizontal: 10),
+          contentPadding: EdgeInsets.symmetric(
+              vertical: widget.contentPadding, horizontal: 10),
           labelText: widget.labelText,
           hintText: widget.hintText,
           hintStyle: widget.hintstyle,

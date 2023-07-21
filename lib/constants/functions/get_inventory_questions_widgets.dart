@@ -1,12 +1,16 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
+import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
+import 'package:yes_broker/widgets/inventory/assign_user.dart';
 import 'package:yes_broker/widgets/inventory/inventory_photos.dart';
 import 'package:yes_broker/google_maps.dart';
 import '../../Customs/custom_fields.dart';
@@ -45,6 +49,7 @@ Widget buildQuestionWidget(
     );
   } else if (question.questionOptionType == 'smallchip') {
     String selectedOption = question.questionOption.isNotEmpty ? question.questionOption[0] : '';
+
     return StatefulBuilder(builder: (context, setState) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,85 +212,10 @@ Widget buildQuestionWidget(
       },
     );
   } else if (question.questionOptionType == "Assign") {
-    List<String> users = ['Bhavesh', 'Manish', 'Jitender', 'Rahul', 'Bhavya', "Bhavna"];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(top: 8, right: 8, left: 2, bottom: 3),
-          child: CustomText(
-            title: 'Assign to',
-            fontWeight: FontWeight.w600,
-            textAlign: TextAlign.left,
-          ),
-        ),
-        SizedBox(
-          height: 45,
-          child: Autocomplete(
-            optionsBuilder: (TextEditingValue textEditingValue) {
-              if (textEditingValue.text.isEmpty) {
-                return const Iterable<String>.empty();
-              }
-
-              final String searchText = textEditingValue.text.toLowerCase();
-
-              return users.where((userName) {
-                final String optionLowerCase = userName.toLowerCase();
-                return optionLowerCase.contains(searchText);
-              });
-            },
-            fieldViewBuilder: (context, textEditingController, focusNode, onFieldSubmitted) {
-              return TextField(
-                controller: textEditingController,
-                focusNode: focusNode,
-                decoration: InputDecoration(
-                  hintText: '@',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                ),
-                // onChanged: (e) {
-                //   onFieldSubmitted();
-                // },
-              );
-            },
-            optionsViewBuilder: (context, onSelected, options) {
-              const itemHeight = 56.0; // Height of each option ListTile
-              final itemCount = options.length;
-              final dropdownHeight = itemHeight * itemCount;
-
-              return SingleChildScrollView(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: SizedBox(
-                    width: 400,
-                    height: dropdownHeight,
-                    child: Material(
-                      elevation: 4,
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        itemCount: itemCount,
-                        separatorBuilder: (context, index) => const Divider(),
-                        itemBuilder: (context, index) {
-                          final option = options.elementAt(index);
-                          return GestureDetector(
-                            onTap: () {
-                              onSelected(option);
-                            },
-                            child: ListTile(
-                              title: Text(option),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
+    return AssignUser(
+      addUser: (user) {
+        notify.add({"id": question.questionId, "item": user});
+      },
     );
   } else if (question.questionOptionType == 'dropdown') {
     return DropDownField(

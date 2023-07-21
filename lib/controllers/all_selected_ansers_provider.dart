@@ -16,7 +16,6 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
     } else {
       state = [...currentValue, selectedValue];
     }
-    // state = [...state, selectedValue];
     print('state, $state');
   }
 
@@ -26,8 +25,9 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
     print('state: $state');
   }
 
-  void submitInventory() async {
-    submitInventoryAndcardDetails(state);
+  Future<String> submitInventory() async {
+    final String res = await submitInventoryAndcardDetails(state);
+    return res;
   }
 }
 
