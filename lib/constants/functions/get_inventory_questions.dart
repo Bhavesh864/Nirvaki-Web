@@ -64,17 +64,6 @@ Widget buildQuestionWidget(
           );
         },
       );
-    } else if (question.questionTitle == "Assign to") {
-      List<Map<String, dynamic>> users = []; // Holds the search results
-      return SearchByUser(
-        question: question,
-        onpressed: (data) {
-          notify.add({
-            'id': question.questionId,
-            'item': [data]
-          });
-        },
-      );
     }
     return LabelTextInputField(
       inputController: controller,
