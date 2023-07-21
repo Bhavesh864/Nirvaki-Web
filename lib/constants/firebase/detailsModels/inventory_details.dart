@@ -12,7 +12,7 @@ class InventoryDetails {
   List<Assignedto>? assignedto;
   String? managerid;
   Createdby? createdby;
-  String? createdate;
+  Timestamp? createdate;
   String? updatedby;
   String? updatedate;
   List<Attachments>? attachments;
@@ -128,7 +128,7 @@ class InventoryDetails {
           ? null
           : Createdby.fromJson(json["createdby"]);
     }
-    if (json["createdate"] is String) {
+    if (json["createdate"] is Timestamp) {
       createdate = json["createdate"];
     }
     if (json["updatedby"] is String) {
@@ -797,7 +797,7 @@ class Attachments {
     if (json["createdby"] is String) {
       createdby = json["createdby"];
     }
-    if (json["createddate"] is String) {
+    if (json["createddate"] is Timestamp) {
       createddate = json["createddate"];
     }
   }
