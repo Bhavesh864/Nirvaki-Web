@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
+
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/constants/functions/get_inventory_questions_widgets.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
@@ -24,10 +25,11 @@ class AddInventory extends ConsumerStatefulWidget {
 }
 
 class _AddInventoryState extends ConsumerState<AddInventory> {
+  String? response;
   bool allQuestionFinishes = false;
   late Future<List<InventoryQuestions>> getQuestions;
   PageController? pageController;
-  int currentScreenIndex = 20;
+  int currentScreenIndex = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -35,6 +37,14 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     super.initState();
     getQuestions = InventoryQuestions.getAllQuestionssFromFirestore();
     pageController = PageController(initialPage: currentScreenIndex);
+  }
+
+  addDataOnfirestore(AllChipSelectedAnwers notify) {
+    notify.submitInventory().then((value) => {
+          setState(() {
+            response = value;
+          })
+        });
   }
 
   nextQuestion({List<Screen>? screensDataList}) {
@@ -71,7 +81,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(myArrayProvider.notifier);
-
+    // print(response);
     return Scaffold(
       body: FutureBuilder<List<InventoryQuestions>>(
         future: getQuestions,
@@ -86,97 +96,103 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
             return Stack(
               children: [
                 Container(
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(authBgImage),
-                      fit: BoxFit.cover,
-                      colorFilter: ColorFilter.mode(
-                        Colors.black38,
-                        BlendMode.darken,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(authBgImage),
+                        fit: BoxFit.cover,
+                        colorFilter: ColorFilter.mode(
+                          Colors.black38,
+                          BlendMode.darken,
+                        ),
                       ),
                     ),
-                  ),
-                  child: !allQuestionFinishes
-                      ? Form(
-                          key: _formKey,
-                          child: PageView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            controller: pageController,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: screensDataList.length,
-                            itemBuilder: (context, index) {
-                              return Center(
-                                child: Card(
-                                  color: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: SingleChildScrollView(
-                                    child: Container(
-                                      constraints: const BoxConstraints(
-                                        minHeight: 0,
-                                        maxHeight: double.infinity,
-                                      ),
-                                      width: Responsive.isMobile(context) ? width! * 0.9 : 650,
-                                      padding: const EdgeInsets.all(25),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          if (screensDataList[index].title != null)
-                                            CustomText(
-                                              softWrap: true,
-                                              textAlign: TextAlign.center,
-                                              size: 30,
-                                              title: screensDataList[index].title.toString(),
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          for (var i = 0; i < screensDataList[index].questions.length; i++)
-                                            Column(
-                                              children: [
-                                                if (screensDataList[index].title == null)
-                                                  CustomText(
-                                                      softWrap: true,
-                                                      textAlign: TextAlign.center,
-                                                      size: 30,
-                                                      title: screensDataList[index].questions[i].questionTitle,
-                                                      fontWeight: FontWeight.bold),
-                                                buildQuestionWidget(
-                                                  screensDataList[index].questions[i],
-                                                  screensDataList,
-                                                  currentScreenIndex,
-                                                  notify,
-                                                  nextQuestion,
-                                                ),
-                                                if (i == screensDataList[index].questions.length - 1 && screensDataList[index].questions[i].questionOptionType != 'chip')
-                                                  Container(
-                                                    margin: const EdgeInsets.only(top: 10),
-                                                    alignment: Alignment.centerRight,
-                                                    child: CustomButton(
-                                                      text: 'Next',
-                                                      onPressed: () {
-                                                        if (_formKey.currentState!.validate()) {
-                                                          nextQuestion(
-                                                            screensDataList: screensDataList,
-                                                          );
-                                                        }
-                                                      },
-                                                      width: 73,
-                                                      height: 39,
-                                                    ),
+                    child: !allQuestionFinishes
+                        ? Form(
+                            key: _formKey,
+                            child: PageView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              controller: pageController,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: screensDataList.length,
+                              itemBuilder: (context, index) {
+                                return Center(
+                                  child: Card(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: SingleChildScrollView(
+                                      child: Container(
+                                        constraints: const BoxConstraints(
+                                          minHeight: 0,
+                                          maxHeight: double.infinity,
+                                        ),
+                                        width: Responsive.isMobile(context) ? width! * 0.9 : 650,
+                                        padding: const EdgeInsets.all(25),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            if (screensDataList[index].title != null)
+                                              CustomText(
+                                                softWrap: true,
+                                                textAlign: TextAlign.center,
+                                                size: 30,
+                                                title: screensDataList[index].title.toString(),
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            for (var i = 0; i < screensDataList[index].questions.length; i++)
+                                              Column(
+                                                children: [
+                                                  if (screensDataList[index].title == null)
+                                                    CustomText(
+                                                        softWrap: true,
+                                                        textAlign: TextAlign.center,
+                                                        size: 30,
+                                                        title: screensDataList[index].questions[i].questionTitle,
+                                                        fontWeight: FontWeight.bold),
+                                                  buildQuestionWidget(
+                                                    screensDataList[index].questions[i],
+                                                    screensDataList,
+                                                    currentScreenIndex,
+                                                    notify,
+                                                    nextQuestion,
                                                   ),
-                                              ],
-                                            ),
-                                        ],
+                                                  if (i == screensDataList[index].questions.length - 1 && screensDataList[index].questions[i].questionOptionType != 'chip')
+                                                    Container(
+                                                      margin: const EdgeInsets.only(top: 10),
+                                                      alignment: Alignment.centerRight,
+                                                      child: CustomButton(
+                                                        text: 'Next',
+                                                        onPressed: () {
+                                                          if (_formKey.currentState!.validate()) {
+                                                            nextQuestion(
+                                                              screensDataList: screensDataList,
+                                                            );
+                                                          }
+                                                          if (screensDataList[index].title == "Assign to") {
+                                                            addDataOnfirestore(notify);
+                                                          }
+                                                        },
+                                                        width: 73,
+                                                        height: 39,
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
-                          ),
-                        )
-                      : const InventorySuccessWidget(),
-                ),
+                                );
+                              },
+                            ),
+                          )
+                        : response == "success"
+                            ? const InventorySuccessWidget()
+                            : const Center(
+                                child: CircularProgressIndicator.adaptive(),
+                              )),
                 Consumer(
                   builder: (context, ref, child) {
                     return Positioned(
