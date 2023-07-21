@@ -2,24 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/constants/utils/constants.dart';
+import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
-import '../../constants/firebase/userModel/user_info.dart';
 
-final currentIndexProvider = StateProvider<int>((ref) {
-  return 0;
+class UserNotifier extends StateNotifier<User> {
+  UserNotifier()
+      : super(
+          User(
+            brokerId: 'brokerId',
+            status: 'status',
+            userfirstname: 'userfirstname',
+            userlastname: 'userlastname',
+            userId: 'userId',
+            mobile: 3434,
+            email: 'email',
+            role: 'role',
+            image: 'image',
+          ),
+        );
+}
+
+final userProvider = StateProvider<UserNotifier>((ref) {
+  return UserNotifier();
 });
 
 class LargeScreenNavBar extends ConsumerWidget {
   final void Function(String) onOptionSelect;
   const LargeScreenNavBar(this.onOptionSelect, {super.key});
 
-  // final SideMenuController menuController = Get.put(SideMenuController());
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final currentIndex = ref.watch(currentIndexProvider);
-
     return Container(
       height: 70,
       margin: const EdgeInsets.only(bottom: 5, right: 5),
@@ -41,6 +54,8 @@ class LargeScreenNavBar extends ConsumerWidget {
           //   return const Center(child: CircularProgressIndicator());
           // }
           if (snapshot.hasData) {
+            ref.read(userProvider).state = snapshot.data!;
+
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -61,9 +76,7 @@ class LargeScreenNavBar extends ConsumerWidget {
                     width: 30,
                     margin: const EdgeInsets.only(right: 10),
                     decoration: BoxDecoration(
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(snapshot.data!.image.toString())),
+                      image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(snapshot.data!.image.toString())),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),

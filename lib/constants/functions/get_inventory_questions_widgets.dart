@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
@@ -43,7 +45,6 @@ Widget buildQuestionWidget(
     );
   } else if (question.questionOptionType == 'smallchip') {
     String selectedOption = question.questionOption.isNotEmpty ? question.questionOption[0] : '';
-
     return StatefulBuilder(builder: (context, setState) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -304,24 +305,82 @@ Widget buildQuestionWidget(
       },
     );
   } else if (question.questionOptionType == 'photo') {
-    // getDataById(state,  )
-    File? selectedImage;
-    Uint8List webImage;
-    void setImage(File image) {
-      selectedImage = image;
-    }
+    // File? selectedImage;
+    // void setImage(File image) {
+    //   selectedImage = image;
+    // }
 
-    void setWebImage(Uint8List image) async {
-      webImage = image;
-    }
+    // Uint8List? webImage;
+    // void setWebImage(Uint8List image) {
+    //   webImage = image;
+    // }
 
-    return Wrap(
-      children: [
-        ImagePickerContainer(onImageSelected: setImage, webImageSelected: setWebImage),
-        const SizedBox(height: 20),
-        if (selectedImage != null) Image.file(selectedImage!, height: 200, width: 200)
-      ],
-    );
+    // return Wrap(
+    //   children: [
+    //     ImagePickerContainer(onImageSelected: setImage, webImageSelected: setWebImage),
+    //     const SizedBox(height: 20),
+    //     if (selectedImage != null) Image.file(selectedImage!, height: 200, width: 200)
+    //   ],
+    // );
+    // // getDataById(state,  )
+    // File? selectedImage;
+    // Uint8List webImage;
+    // void setImage(File image) {
+    //   selectedImage = image;
+    // }
+
+    // void setWebImage(Uint8List image) async {
+    //   webImage = image;
+    // }
+
+    // return Wrap(
+    //   children: [
+    //     ImagePickerContainer(onImageSelected: setImage, webImageSelected: setWebImage),
+    // const SizedBox(height: 20),
+    //     if (selectedImage != null) Image.file(selectedImage!, height: 200, width: 200)
+    //   ],
+    // );
+  } else if (question.questionOptionType == 'video') {
+    //  File? selectedVideo;
+    // void pickVideo() async {
+    //   final pickedFile = await ImagePicker().getVideo(source: ImageSource.gallery);
+    //   if (pickedFile != null) {
+    //     setState(() {
+    //       selectedVideo = File(pickedFile.path);
+    //     });
+    //   }
+    // }
+
+    // return Wrap(
+    //   children: [
+    //     ElevatedButton(
+    //       onPressed: pickVideo,
+    //       child: Text('Pick a video'),
+    //     ),
+    //     if (selectedVideo != null)
+    //       SizedBox(
+    //         height: 200,
+    //         width: 200,
+    //         child: VideoPlayer(FileVideoPlayerController(selectedVideo!)),
+    //       ),
+    //   ],
+    // );
+    // }
+    // File? selectedImage;
+    // Uint8List webImage;
+    // void setImage(File image) {
+    //   selectedImage = image;
+    // }
+
+    // void setWebImage(Uint8List image) async {
+    //   webImage = image;
+    // }
+
+    // return Wrap(
+    //   children: [
+    //     ImagePickerContainer(onImageSelected: setImage, webImageSelected: setWebImage),
+    //   ],
+    // );
   }
 
   return const SizedBox.shrink();

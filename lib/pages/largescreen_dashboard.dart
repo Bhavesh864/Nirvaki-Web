@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
@@ -73,6 +74,11 @@ class LargeScreen extends ConsumerWidget {
                 LargeScreenNavBar((selectedVal) {
                   if (selectedVal == 'Profile') {
                     ref.read(currentIndexProvider.notifier).update((state) => 6);
+                  } else if (selectedVal == "Logout") {
+                    print('object');
+                    authentication.signOut().then(
+                          (value) => Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen),
+                        );
                   }
                 }),
                 Expanded(

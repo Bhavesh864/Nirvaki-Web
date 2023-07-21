@@ -12,6 +12,8 @@ import 'package:yes_broker/widgets/app/speed_dial_button.dart';
 import 'package:yes_broker/widgets/calendar_view.dart';
 import 'package:yes_broker/widgets/todo/todo_list_view.dart';
 
+import '../constants/firebase/userModel/broker_info.dart';
+
 final currentIndexProvider = StateProvider<int>((ref) {
   return 0;
 });
@@ -42,14 +44,18 @@ class SmallScreen extends ConsumerWidget {
       appBar: mobileAppBar(context, (selectedVal) {
         if (selectedVal == 'Profile') {
           ref.read(currentIndexProvider.notifier).update((state) => 3);
+        } else if (selectedVal == "Logout") {
+          print('object');
+          authentication.signOut().then(
+                (value) => Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen),
+              );
         }
       }),
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: const Color.fromARGB(255, 158, 153, 153),
         selectedItemColor: AppColor.primary,
         showUnselectedLabels: false,
-        onTap: (value) =>
-            ref.read(currentIndexProvider.notifier).update((state) => value),
+        onTap: (value) => ref.read(currentIndexProvider.notifier).update((state) => value),
         currentIndex: currentIndex,
         backgroundColor: Colors.white,
         items: List.generate(
