@@ -6,11 +6,7 @@ class DropDownField extends StatefulWidget {
   final String title;
   final List optionsList;
   final void Function(Object e) onchanged;
-  const DropDownField(
-      {super.key,
-      required this.title,
-      required this.optionsList,
-      required this.onchanged});
+  const DropDownField({super.key, required this.title, required this.optionsList, required this.onchanged});
 
   @override
   State<DropDownField> createState() => _DropDownFieldState();
@@ -64,8 +60,7 @@ class _DropDownFieldState extends State<DropDownField> {
                 icon: const Icon(Icons.expand_more),
                 isExpanded: true,
                 borderRadius: BorderRadius.circular(6),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                 value: selectedValues,
                 onChanged: (e) {
                   widget.onchanged(e!);
