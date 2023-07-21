@@ -31,6 +31,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     if (!serviceEnabled) {
       serviceEnabled = await location.requestService();
       if (!serviceEnabled) {
+        _showSnackbar('Location services are disabled.');
         return;
       }
     }
@@ -39,6 +40,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     if (permissionGranted == PermissionStatus.denied) {
       permissionGranted = await location.requestPermission();
       if (permissionGranted != PermissionStatus.granted) {
+        _showSnackbar('Location permission is required to use your curren location.');
         return;
       }
     }
@@ -49,6 +51,15 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       showMaps = true;
     });
     mapController.animateCamera(CameraUpdate.newLatLng(_selectedLatLng));
+  }
+
+  void _showSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 3),
+      ),
+    );
   }
 
   @override
