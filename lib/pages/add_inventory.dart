@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lottie/lottie.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
-import 'package:yes_broker/constants/functions/get_inventory_questions.dart';
+import 'package:yes_broker/constants/functions/get_inventory_questions_widgets.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/widgets/inventory/inventory_success_widget.dart';
 import '../Customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
 import '../controllers/all_selected_ansers_provider.dart';
-import '../routes/routes.dart';
 
 final myArrayProvider = StateNotifierProvider<AllChipSelectedAnwers, List<Map<String, dynamic>>>((ref) => AllChipSelectedAnwers());
 
@@ -26,27 +25,26 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   bool allQuestionFinishes = false;
   late Future<List<InventoryQuestions>> getQuestions;
   PageController? pageController;
-  int currentIndex = 16;
+  int currentScreenIndex = 20;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     getQuestions = InventoryQuestions.getAllQuestionssFromFirestore();
-    pageController = PageController(initialPage: currentIndex);
+    pageController = PageController(initialPage: currentScreenIndex);
   }
 
-  nextQuestion({List<Screen>? screens}) {
-    if (currentIndex < screens!.length - 1) {
+  nextQuestion({List<Screen>? screensDataList}) {
+    if (currentScreenIndex < screensDataList!.length - 1) {
       setState(() {
-        currentIndex++;
+        currentScreenIndex++;
         pageController!.nextPage(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
       });
     } else {
-      // Handle reaching the last question or any other action
       setState(() {
         allQuestionFinishes = true;
       });
@@ -54,9 +52,9 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   }
 
   goBack(List<int> id) {
-    if (currentIndex > 0) {
+    if (currentScreenIndex > 0) {
       setState(() {
-        currentIndex--;
+        currentScreenIndex--;
         ref.read(myArrayProvider.notifier).remove(id);
         pageController!.previousPage(
           duration: const Duration(milliseconds: 300),
@@ -82,7 +80,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
             return Text('Error: ${snapshot.error}');
           } else {
             List<InventoryQuestions> screenData = snapshot.data as List<InventoryQuestions>;
-            List<Screen> screens = screenData[0].screens;
+            List<Screen> screensDataList = screenData[0].screens;
             return Stack(
               children: [
                 Container(
@@ -103,7 +101,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                             physics: const NeverScrollableScrollPhysics(),
                             controller: pageController,
                             scrollDirection: Axis.horizontal,
-                            itemCount: screens.length,
+                            itemCount: screensDataList.length,
                             itemBuilder: (context, index) {
                               return Center(
                                 child: Card(
@@ -122,46 +120,41 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          if (screens[index].title != null)
+                                          if (screensDataList[index].title != null)
                                             CustomText(
                                               softWrap: true,
                                               textAlign: TextAlign.center,
                                               size: 30,
-                                              title: screens[index].title.toString(),
+                                              title: screensDataList[index].title.toString(),
                                               fontWeight: FontWeight.bold,
                                             ),
-                                          for (var i = 0; i < screens[index].questions.length; i++)
+                                          for (var i = 0; i < screensDataList[index].questions.length; i++)
                                             Column(
                                               children: [
-                                                if (screens[index].title == null)
+                                                if (screensDataList[index].title == null)
                                                   CustomText(
                                                       softWrap: true,
                                                       textAlign: TextAlign.center,
                                                       size: 30,
-                                                      title: screens[index].questions[i].questionTitle,
+                                                      title: screensDataList[index].questions[i].questionTitle,
                                                       fontWeight: FontWeight.bold),
                                                 buildQuestionWidget(
-                                                  screens[index].questions[i],
-                                                  screens,
-                                                  currentIndex,
-                                                  selectedOption,
-                                                  pageController!,
+                                                  screensDataList[index].questions[i],
+                                                  screensDataList,
+                                                  currentScreenIndex,
                                                   notify,
                                                   nextQuestion,
                                                 ),
-                                                if (i == screens[index].questions.length - 1 && screens[index].questions[i].questionOptionType != 'chip')
+                                                if (i == screensDataList[index].questions.length - 1 && screensDataList[index].questions[i].questionOptionType != 'chip')
                                                   Container(
                                                     margin: const EdgeInsets.only(top: 10),
                                                     alignment: Alignment.centerRight,
                                                     child: CustomButton(
                                                       text: 'Next',
                                                       onPressed: () {
-                                                        // nextQuestion(
-                                                        //   screens: screens,
-                                                        // );
                                                         if (_formKey.currentState!.validate()) {
                                                           nextQuestion(
-                                                            screens: screens,
+                                                            screensDataList: screensDataList,
                                                           );
                                                         }
                                                       },
@@ -180,35 +173,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                             },
                           ),
                         )
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: Lottie.network(
-                                'https://lottie.host/a861e48f-e9ec-4daf-a520-b13522422df5/pcZJc9Jkdm.json',
-                                alignment: Alignment.center,
-                                height: 396,
-                                width: 444,
-                              ),
-                            ),
-                            const CustomText(
-                              title: ' Inventory have been \n Successfully created',
-                              size: 48,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: CustomButton(
-                                  height: 40,
-                                  width: 165,
-                                  text: 'Go to Dashboard',
-                                  onPressed: () {
-                                    Navigator.of(context).pushNamed(AppRoutes.homeScreen);
-                                  }),
-                            )
-                          ],
-                        ),
+                      : const InventorySuccessWidget(),
                 ),
                 Consumer(
                   builder: (context, ref, child) {
@@ -223,7 +188,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                         centerTitle: true,
                         leading: IconButton(
                           onPressed: () {
-                            final currentScreenQuestions = screens[currentIndex].questions;
+                            final currentScreenQuestions = screensDataList[currentScreenIndex].questions;
                             final ids = currentScreenQuestions.map((q) => q.questionId).toList();
                             goBack(ids);
                           },
