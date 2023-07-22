@@ -112,7 +112,6 @@ PopupMenuItem popupMenuItem(String title) {
 }
 
 Widget largeScreenView(name) {
-  // final SideMenuController menuController = Get.put(SideMenuController());
   return Container(
     padding: const EdgeInsets.only(left: 10),
     child: Column(
