@@ -1,17 +1,7 @@
-import 'dart:async';
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
-import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/inventory/assign_user.dart';
-import 'package:yes_broker/widgets/inventory/inventory_photos.dart';
 import 'package:yes_broker/google_maps.dart';
 import '../../Customs/custom_fields.dart';
 import '../../Customs/custom_text.dart';

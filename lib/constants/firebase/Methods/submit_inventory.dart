@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:random_string/random_string.dart';
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
-import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart'
-    as cards;
+import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' as cards;
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
@@ -53,24 +52,15 @@ Future<String> submitInventoryAndcardDetails(state) async {
       brokerid: authentication.currentUser!.uid,
       cardType: "IN",
       cardTitle: "$propertyCategory Apartment",
-      cardDescription: "Want to $inventoryCategory her 1 BHK for 70 L rupees",
-      customerinfo: cards.Customerinfo(
-          email: email,
-          firstname: firstName,
-          lastname: lastName,
-          mobile: mobileNo,
-          title: companyNamecustomer,
-          whatsapp: whatsAppNo),
+      cardDescription: "Want to $inventoryCategory her $bedrooms BHK for 70 L rupees",
+      customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo),
       cardStatus: "New",
-      createdby: cards.Createdby(
-          userfirstname: "bhavesh",
-          userid: authentication.currentUser!.uid,
-          userlastname: "khatri"),
+      assignedto: [cards.Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)],
+      createdby: cards.Createdby(userfirstname: "bhavesh", userid: authentication.currentUser!.uid, userlastname: "khatri"),
       createdate: Timestamp.now(),
-      propertyarearange: cards.Propertyarearange(arearangestart: ""),
-      roomconfig:
-          cards.Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom),
-      propertypricerange: cards.Propertypricerange(arearangestart: '50L'));
+      propertyarearange: cards.Propertyarearange(arearangestart: superArea, unit: areaUnit),
+      roomconfig: cards.Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom),
+      propertypricerange: cards.Propertypricerange(arearangestart: '50', unit: "L"));
 
   final InventoryDetails inventory = InventoryDetails(
       inventoryTitle: "$propertyCategory Apartment",
@@ -87,49 +77,21 @@ Future<String> submitInventoryAndcardDetails(state) async {
       inventorysource: inventorySource,
       possessiondate: possession,
       amenities: amenities,
+      propertyprice: Propertyprice(price: "50", unit: "L"),
       reservedparking: Reservedparking(covered: coveredparking),
-      propertyarea: Propertyarea(
-          unit: areaUnit, superarea: superArea, carpetarea: carpetArea),
-      plotdetails:
-          Plotdetails(boundarywall: boundaryWall, opensides: openSides),
-      customerinfo: Customerinfo(
-          email: email,
-          firstname: firstName,
-          lastname: lastName,
-          companyname: companyNamecustomer,
-          mobile: mobileNo,
-          whatsapp: whatsAppNo),
-      roomconfig: Roomconfig(
-          bedroom: bedrooms,
-          additionalroom: additionalRoom,
-          balconies: balconies,
-          bathroom: bathrooms),
+      propertyarea: Propertyarea(unit: areaUnit, superarea: superArea, carpetarea: carpetArea),
+      plotdetails: Plotdetails(boundarywall: boundaryWall, opensides: openSides),
+      customerinfo: Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo),
+      roomconfig: Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom, balconies: balconies, bathroom: bathrooms),
       propertyfacing: propertyFacing,
       comments: comments,
-      propertyaddress: Propertyaddress(
-          state: propertyState,
-          city: propertyCity,
-          addressline1: addressLine1,
-          addressline2: addressLine2,
-          floornumber: floorNumber),
+      propertyaddress: Propertyaddress(state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, floornumber: floorNumber),
       propertylocation: latlng,
       createdate: Timestamp.now(),
-      assignedto: [
-        Assignedto(
-            firstname: assignto.userfirstname,
-            lastname: assignto.userlastname,
-            assignedby: "bhavesh",
-            image: assignto.image,
-            userid: assignto.userId)
-      ],
-      createdby: Createdby(
-          userfirstname: "bhavesh",
-          userid: authentication.currentUser!.uid,
-          userlastname: "khatri"));
+      assignedto: [Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)],
+      createdby: Createdby(userfirstname: "bhavesh", userid: authentication.currentUser!.uid, userlastname: "khatri"));
 
-  await cards.CardDetails.addCardDetails(card)
-      .then((value) => {res = "success"});
-  await InventoryDetails.addInventoryDetails(inventory)
-      .then((value) => {res = "success"});
+  await cards.CardDetails.addCardDetails(card).then((value) => {res = "success"});
+  await InventoryDetails.addInventoryDetails(inventory).then((value) => {res = "success"});
   return res;
 }
