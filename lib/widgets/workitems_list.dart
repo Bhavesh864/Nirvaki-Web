@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
+
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/widgets/work_items.dart';
+import 'package:yes_broker/widgets/card/custom_card.dart';
 
 class WorkItemsList extends StatelessWidget {
   final bool headerShow;
@@ -14,6 +16,9 @@ class WorkItemsList extends StatelessWidget {
       behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
       child: SingleChildScrollView(
         child: Container(
+          constraints: const BoxConstraints(
+            minHeight: 700,
+          ),
           decoration: BoxDecoration(
             color: AppColor.secondary,
             borderRadius: BorderRadius.circular(15),
@@ -26,8 +31,7 @@ class WorkItemsList extends StatelessWidget {
               children: [
                 headerShow
                     ? Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 0),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                         height: 50,
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -41,8 +45,26 @@ class WorkItemsList extends StatelessWidget {
                         ),
                       )
                     : Container(),
-                const SizedBox(
-                  child: WorkItem(),
+                FutureBuilder(
+                  future: CardDetails.getCardDetails(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator.adaptive());
+                    }
+                    if (snapshot.hasData) {
+                      return ListView(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: List.generate(
+                          snapshot.data!.length,
+                          (index) => CustomCard(index: index, cardDetails: snapshot.data!),
+                        ),
+                      );
+                    }
+                    return const Center(
+                      child: Text("NO data found"),
+                    );
+                  },
                 ),
               ],
             ),
