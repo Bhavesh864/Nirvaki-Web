@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-final CollectionReference usersCollection =
-    FirebaseFirestore.instance.collection('inventoryDetails');
+final CollectionReference usersCollection = FirebaseFirestore.instance.collection('inventoryDetails');
 
 class InventoryDetails {
   String? inventoryTitle;
@@ -36,7 +35,7 @@ class InventoryDetails {
   Propertyprice? propertyprice;
   Propertyrent? propertyrent;
   Propertyaddress? propertyaddress;
-  List<String>? propertylocation;
+  List<double>? propertylocation;
   String? propertyfacing;
   Propertyphotos? propertyphotos;
   List<String>? commercialphotos;
@@ -114,19 +113,13 @@ class InventoryDetails {
       brokerid = json["brokerid"];
     }
     if (json["assignedto"] is List) {
-      assignedto = json["assignedto"] == null
-          ? null
-          : (json["assignedto"] as List)
-              .map((e) => Assignedto.fromJson(e))
-              .toList();
+      assignedto = json["assignedto"] == null ? null : (json["assignedto"] as List).map((e) => Assignedto.fromJson(e)).toList();
     }
     if (json["managerid"] is String) {
       managerid = json["managerid"];
     }
     if (json["createdby"] is Map) {
-      createdby = json["createdby"] == null
-          ? null
-          : Createdby.fromJson(json["createdby"]);
+      createdby = json["createdby"] == null ? null : Createdby.fromJson(json["createdby"]);
     }
     if (json["createdate"] is Timestamp) {
       createdate = json["createdate"];
@@ -138,16 +131,10 @@ class InventoryDetails {
       updatedate = json["updatedate"];
     }
     if (json["attachments"] is List) {
-      attachments = json["attachments"] == null
-          ? null
-          : (json["attachments"] as List)
-              .map((e) => Attachments.fromJson(e))
-              .toList();
+      attachments = json["attachments"] == null ? null : (json["attachments"] as List).map((e) => Attachments.fromJson(e)).toList();
     }
     if (json["customerinfo"] is Map) {
-      customerinfo = json["customerinfo"] == null
-          ? null
-          : Customerinfo.fromJson(json["customerinfo"]);
+      customerinfo = json["customerinfo"] == null ? null : Customerinfo.fromJson(json["customerinfo"]);
     }
     if (json["comments"] is String) {
       comments = json["comments"];
@@ -177,69 +164,46 @@ class InventoryDetails {
       villatype = json["villatype"];
     }
     if (json["roomconfig"] is Map) {
-      roomconfig = json["roomconfig"] == null
-          ? null
-          : Roomconfig.fromJson(json["roomconfig"]);
+      roomconfig = json["roomconfig"] == null ? null : Roomconfig.fromJson(json["roomconfig"]);
     }
     if (json["plotdetails"] is Map) {
-      plotdetails = json["plotdetails"] == null
-          ? null
-          : Plotdetails.fromJson(json["plotdetails"]);
+      plotdetails = json["plotdetails"] == null ? null : Plotdetails.fromJson(json["plotdetails"]);
     }
     if (json["possessiondate"] is String) {
       possessiondate = json["possessiondate"];
     }
     if (json["amenities"] is List) {
-      amenities = json["amenities"] == null
-          ? null
-          : List<String>.from(json["amenities"]);
+      amenities = json["amenities"] == null ? null : List<String>.from(json["amenities"]);
     }
     if (json["reservedparking"] is Map) {
-      reservedparking = json["reservedparking"] == null
-          ? null
-          : Reservedparking.fromJson(json["reservedparking"]);
+      reservedparking = json["reservedparking"] == null ? null : Reservedparking.fromJson(json["reservedparking"]);
     }
     if (json["propertyarea"] is Map) {
-      propertyarea = json["propertyarea"] == null
-          ? null
-          : Propertyarea.fromJson(json["propertyarea"]);
+      propertyarea = json["propertyarea"] == null ? null : Propertyarea.fromJson(json["propertyarea"]);
     }
     if (json["plotarea"] is Map) {
-      plotarea =
-          json["plotarea"] == null ? null : Plotarea.fromJson(json["plotarea"]);
+      plotarea = json["plotarea"] == null ? null : Plotarea.fromJson(json["plotarea"]);
     }
     if (json["propertyprice"] is Map) {
-      propertyprice = json["propertyprice"] == null
-          ? null
-          : Propertyprice.fromJson(json["propertyprice"]);
+      propertyprice = json["propertyprice"] == null ? null : Propertyprice.fromJson(json["propertyprice"]);
     }
     if (json["propertyrent"] is Map) {
-      propertyrent = json["propertyrent"] == null
-          ? null
-          : Propertyrent.fromJson(json["propertyrent"]);
+      propertyrent = json["propertyrent"] == null ? null : Propertyrent.fromJson(json["propertyrent"]);
     }
     if (json["propertyaddress"] is Map) {
-      propertyaddress = json["propertyaddress"] == null
-          ? null
-          : Propertyaddress.fromJson(json["propertyaddress"]);
+      propertyaddress = json["propertyaddress"] == null ? null : Propertyaddress.fromJson(json["propertyaddress"]);
     }
     if (json["propertylocation"] is List) {
-      propertylocation = json["propertylocation"] == null
-          ? null
-          : List<String>.from(json["propertylocation"]);
+      propertylocation = json["propertylocation"] == null ? null : List<double>.from(json["propertylocation"]);
     }
     if (json["propertyfacing"] is String) {
       propertyfacing = json["propertyfacing"];
     }
     if (json["propertyphotos"] is Map) {
-      propertyphotos = json["propertyphotos"] == null
-          ? null
-          : Propertyphotos.fromJson(json["propertyphotos"]);
+      propertyphotos = json["propertyphotos"] == null ? null : Propertyphotos.fromJson(json["propertyphotos"]);
     }
     if (json["commercialphotos"] is List) {
-      commercialphotos = json["commercialphotos"] == null
-          ? null
-          : List<String>.from(json["commercialphotos"]);
+      commercialphotos = json["commercialphotos"] == null ? null : List<String>.from(json["commercialphotos"]);
     }
     if (json["propertyvideo"] is String) {
       propertyvideo = json["propertyvideo"];
@@ -354,22 +318,36 @@ class InventoryDetails {
 
 //  -----------------------------Methods------------------------------------------------------------------->
 
-  static Future<InventoryDetails?> getInventoryDetails(String id) async {
+  // static Future<InventoryDetails?> getInventoryDetails(String id) async {
+  //   try {
+  //     final DocumentSnapshot documentSnapshot = await usersCollection.doc(id).get();
+  //     final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+  //     return InventoryDetails.fromJson(data);
+  //   } catch (error) {
+  //     // print('Failed to get Inventory items: $error');
+  //     return null;
+  //   }
+  // }
+
+  static Future<InventoryDetails?> getInventoryDetails(itemid) async {
     try {
-      final DocumentSnapshot documentSnapshot =
-          await usersCollection.doc(id).get();
-      final Map<String, dynamic> data =
-          documentSnapshot.data() as Map<String, dynamic>;
-      return InventoryDetails.fromJson(data);
+      final QuerySnapshot querySnapshot = await usersCollection.where("InventoryId", isEqualTo: itemid).get();
+      for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        if (documentSnapshot.exists) {
+          final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+          return InventoryDetails.fromJson(data);
+        }
+      }
+      return null;
     } catch (error) {
-      // print('Failed to get Inventory items: $error');
+      print('Failed to get users: $error');
       return null;
     }
   }
 
   static Future<void> addInventoryDetails(InventoryDetails inventory) async {
     try {
-      await usersCollection.doc(inventory.inventoryId).set(inventory.toJson());
+      await usersCollection.doc().set(inventory.toJson());
       // print('Inventory item added successfully');
     } catch (error) {
       // print('Failed to add Inventory item: $error');
@@ -396,52 +374,32 @@ class Propertyphotos {
   List<String>? officeroom;
   List<String>? frontelevation;
 
-  Propertyphotos(
-      {this.bedroom,
-      this.bathroom,
-      this.kitchen,
-      this.pujaroom,
-      this.servantroom,
-      this.studyroom,
-      this.officeroom,
-      this.frontelevation});
+  Propertyphotos({this.bedroom, this.bathroom, this.kitchen, this.pujaroom, this.servantroom, this.studyroom, this.officeroom, this.frontelevation});
 
   Propertyphotos.fromJson(Map<String, dynamic> json) {
     if (json["bedroom"] is List) {
-      bedroom =
-          json["bedroom"] == null ? null : List<String>.from(json["bedroom"]);
+      bedroom = json["bedroom"] == null ? null : List<String>.from(json["bedroom"]);
     }
     if (json["bathroom"] is List) {
-      bathroom =
-          json["bathroom"] == null ? null : List<String>.from(json["bathroom"]);
+      bathroom = json["bathroom"] == null ? null : List<String>.from(json["bathroom"]);
     }
     if (json["kitchen"] is List) {
-      kitchen =
-          json["kitchen"] == null ? null : List<String>.from(json["kitchen"]);
+      kitchen = json["kitchen"] == null ? null : List<String>.from(json["kitchen"]);
     }
     if (json["pujaroom"] is List) {
-      pujaroom =
-          json["pujaroom"] == null ? null : List<String>.from(json["pujaroom"]);
+      pujaroom = json["pujaroom"] == null ? null : List<String>.from(json["pujaroom"]);
     }
     if (json["servantroom"] is List) {
-      servantroom = json["servantroom"] == null
-          ? null
-          : List<String>.from(json["servantroom"]);
+      servantroom = json["servantroom"] == null ? null : List<String>.from(json["servantroom"]);
     }
     if (json["studyroom"] is List) {
-      studyroom = json["studyroom"] == null
-          ? null
-          : List<String>.from(json["studyroom"]);
+      studyroom = json["studyroom"] == null ? null : List<String>.from(json["studyroom"]);
     }
     if (json["officeroom"] is List) {
-      officeroom = json["officeroom"] == null
-          ? null
-          : List<String>.from(json["officeroom"]);
+      officeroom = json["officeroom"] == null ? null : List<String>.from(json["officeroom"]);
     }
     if (json["frontelevation"] is List) {
-      frontelevation = json["frontelevation"] == null
-          ? null
-          : List<String>.from(json["frontelevation"]);
+      frontelevation = json["frontelevation"] == null ? null : List<String>.from(json["frontelevation"]);
     }
   }
 
@@ -482,12 +440,7 @@ class Propertyaddress {
   String? city;
   String? state;
 
-  Propertyaddress(
-      {this.addressline1,
-      this.addressline2,
-      this.floornumber,
-      this.city,
-      this.state});
+  Propertyaddress({this.addressline1, this.addressline2, this.floornumber, this.city, this.state});
 
   Propertyaddress.fromJson(Map<String, dynamic> json) {
     if (json["Addressline1"] is String) {
@@ -525,12 +478,7 @@ class Propertyrent {
   String? securityamount;
   String? lockinperiod;
 
-  Propertyrent(
-      {this.rentunit,
-      this.rentamount,
-      this.securityunit,
-      this.securityamount,
-      this.lockinperiod});
+  Propertyrent({this.rentunit, this.rentamount, this.securityunit, this.securityamount, this.lockinperiod});
 
   Propertyrent.fromJson(Map<String, dynamic> json) {
     if (json["rentunit"] is String) {
@@ -609,8 +557,8 @@ class Plotarea {
 
 class Propertyarea {
   String? unit;
-  String? superarea;
-  String? carpetarea;
+  dynamic superarea;
+  dynamic carpetarea;
 
   Propertyarea({this.unit, this.superarea, this.carpetarea});
 
@@ -618,12 +566,8 @@ class Propertyarea {
     if (json["unit"] is String) {
       unit = json["unit"];
     }
-    if (json["superarea"] is String) {
-      superarea = json["superarea"];
-    }
-    if (json["carpetarea"] is String) {
-      carpetarea = json["carpetarea"];
-    }
+    superarea = json["superarea"];
+    carpetarea = json["carpetarea"];
   }
 
   Map<String, dynamic> toJson() {
@@ -687,17 +631,14 @@ class Roomconfig {
   String? bathroom;
   String? balconies;
 
-  Roomconfig(
-      {this.bedroom, this.additionalroom, this.bathroom, this.balconies});
+  Roomconfig({this.bedroom, this.additionalroom, this.bathroom, this.balconies});
 
   Roomconfig.fromJson(Map<String, dynamic> json) {
     if (json["bedroom"] is String) {
       bedroom = json["bedroom"];
     }
     if (json["additionalroom"] is List) {
-      additionalroom = json["additionalroom"] == null
-          ? null
-          : List<String>.from(json["additionalroom"]);
+      additionalroom = json["additionalroom"] == null ? null : List<String>.from(json["additionalroom"]);
     }
     if (json["bathroom"] is String) {
       bathroom = json["bathroom"];
@@ -728,14 +669,7 @@ class Customerinfo {
   String? email;
   String? companyname;
 
-  Customerinfo(
-      {this.firstname,
-      this.lastname,
-      this.title,
-      this.mobile,
-      this.whatsapp,
-      this.email,
-      this.companyname});
+  Customerinfo({this.firstname, this.lastname, this.title, this.mobile, this.whatsapp, this.email, this.companyname});
 
   Customerinfo.fromJson(Map<String, dynamic> json) {
     if (json["firstname"] is String) {
@@ -781,8 +715,7 @@ class Attachments {
   String? createdby;
   String? createddate;
 
-  Attachments(
-      {this.title, this.type, this.path, this.createdby, this.createddate});
+  Attachments({this.title, this.type, this.path, this.createdby, this.createddate});
 
   Attachments.fromJson(Map<String, dynamic> json) {
     if (json["title"] is String) {
@@ -819,8 +752,7 @@ class Createdby {
   String? userlastname;
   String? userimage;
 
-  Createdby(
-      {this.userid, this.userfirstname, this.userlastname, this.userimage});
+  Createdby({this.userid, this.userfirstname, this.userlastname, this.userimage});
 
   Createdby.fromJson(Map<String, dynamic> json) {
     if (json["userid"] is String) {
@@ -855,13 +787,7 @@ class Assignedto {
   String? assignedon;
   String? assignedby;
 
-  Assignedto(
-      {this.userid,
-      this.firstname,
-      this.lastname,
-      this.image,
-      this.assignedon,
-      this.assignedby});
+  Assignedto({this.userid, this.firstname, this.lastname, this.image, this.assignedon, this.assignedby});
 
   Assignedto.fromJson(Map<String, dynamic> json) {
     if (json["userid"] is String) {
