@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 
 import '../../constants/utils/constants.dart';
 import '../../constants/utils/image_constants.dart';
@@ -8,6 +9,7 @@ import '../custom_chip.dart';
 
 class CardFooter extends StatelessWidget {
   final int index;
+  final List<CardDetails> cardDetails;
   final bool? call;
   final bool? whatsapp;
   final bool? edit;
@@ -28,17 +30,19 @@ class CardFooter extends StatelessWidget {
     this.showAvatarNumber = false,
     this.showAvatar1 = true,
     this.showAvatar2 = false,
+    required this.cardDetails,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final cardData = cardDetails[index];
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
           margin: const EdgeInsets.only(right: 3),
           child: Text(
-            userData[index].name!,
+            "${cardData.customerinfo!.firstname!} ${cardData.customerinfo!.lastname!}",
             style: const TextStyle(
               fontSize: 14,
               color: Colors.black,
@@ -78,17 +82,21 @@ class CardFooter extends StatelessWidget {
           ),
           paddingHorizontal: 3,
         ),
+        // CustomChip(
+        //   label: Text(cardData.workitemId!),
+        //   paddingHorizontal: 3,
+        // ),
         const Spacer(),
-        Container(
-          margin: const EdgeInsets.only(right: 5),
-          height: 20,
-          width: 20,
-          decoration: BoxDecoration(
-            image: const DecorationImage(image: AssetImage(profileImage)),
-            borderRadius: BorderRadius.circular(40),
-          ),
-          // child: Text(width.toString()),
-        ),
+        // Container(
+        //   margin: const EdgeInsets.only(right: 5),
+        //   height: 20,
+        //   width: 20,
+        //   decoration: BoxDecoration(
+        //     image: DecorationImage(image: NetworkImage(cardData.assignedto![0].image!), fit: BoxFit.fill),
+        //     borderRadius: BorderRadius.circular(40),
+        //   ),
+        //   // child: Text(width.toString()),
+        // ),
       ],
     );
   }
