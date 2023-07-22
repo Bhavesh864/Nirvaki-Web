@@ -74,8 +74,7 @@ class CustomTextInputState extends State<CustomTextInput> {
         decoration: InputDecoration(
           errorStyle: const TextStyle(height: 0),
           label: widget.label,
-          contentPadding: EdgeInsets.symmetric(
-              vertical: widget.contentPadding, horizontal: 10),
+          contentPadding: EdgeInsets.symmetric(vertical: widget.contentPadding, horizontal: 10),
           labelText: widget.labelText,
           hintText: widget.hintText,
           hintStyle: widget.hintstyle,
@@ -120,6 +119,7 @@ class CustomTextInputState extends State<CustomTextInput> {
 
 class CustomButton extends StatefulWidget {
   final String text;
+  final bool? isBorder;
   final double? width;
   final VoidCallback onPressed;
   final Color buttonColor;
@@ -147,6 +147,7 @@ class CustomButton extends StatefulWidget {
     this.height = 50.0,
     this.textStyle,
     this.width,
+    this.isBorder = true,
   }) : super(key: key);
 
   @override
@@ -182,7 +183,7 @@ class _CustomButtonState extends State<CustomButton> {
           width: widget.width,
           padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
           decoration: BoxDecoration(
-            // border: Border.all(color: Colors.grey),
+            border: widget.isBorder! ? Border.all(color: Colors.grey) : null,
             // color: widget.buttonColor,
             color: widget.buttonColor.withOpacity(_isPressed ? 0.8 : 1.0),
             borderRadius: BorderRadius.circular(10),

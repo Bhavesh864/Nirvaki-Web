@@ -5,7 +5,6 @@ import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/routes/routes.dart';
-import 'package:yes_broker/widgets/app/side_menu.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';
 
@@ -14,21 +13,8 @@ final currentIndexProvider = StateProvider<int>((ref) {
 });
 
 class LargeScreen extends ConsumerWidget {
-  LargeScreen({super.key});
+  const LargeScreen({Key? key}) : super(key: key);
 
-  // final SideMenuController menuController = Get.put(SideMenuController());
-
-  void select(int n) {
-    for (int i = 0; i < 5; i++) {
-      if (i == n) {
-        selected[i] = true;
-      } else {
-        selected[i] = false;
-      }
-    }
-  }
-
-  // int _selectedPageIndex = 0;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = ref.watch(currentIndexProvider);
@@ -38,10 +24,6 @@ class LargeScreen extends ConsumerWidget {
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // const Expanded(
-          //   flex: 1,
-          //   child: SideMenu(),
-          // ),
           SingleChildScrollView(
             child: Container(
               color: Colors.white,
@@ -55,6 +37,7 @@ class LargeScreen extends ConsumerWidget {
                   ref.read(currentIndexProvider.notifier).update((state) => index);
                 },
                 destinations: sideBarItems
+                    .sublist(0, 6)
                     .map(
                       (e) => NavigationRailDestination(
                         icon: Icon(e.iconData),
@@ -75,7 +58,6 @@ class LargeScreen extends ConsumerWidget {
                   if (selectedVal == 'Profile') {
                     ref.read(currentIndexProvider.notifier).update((state) => 6);
                   } else if (selectedVal == "Logout") {
-                    print('object');
                     authentication.signOut().then(
                           (value) => Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen),
                         );
