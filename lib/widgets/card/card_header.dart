@@ -43,6 +43,7 @@ class CardHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cardData = cardDetails[index];
     return Row(
       children: [
         Expanded(
@@ -58,34 +59,36 @@ class CardHeader extends StatelessWidget {
                   children: [
                     CustomChip(
                       label: Icon(
-                        cardDetails[index].cardType == "IN" ? MaterialSymbols.location_home_outlined : MaterialSymbols.location_away,
-                        color: cardDetails[index].cardType == "IN" ? AppColor.inventoryIconColor : AppColor.leadIconColor,
+                        cardData.cardType == "IN" ? MaterialSymbols.location_home_outlined : MaterialSymbols.location_away,
+                        color: cardData.cardType == "IN" ? AppColor.inventoryIconColor : AppColor.leadIconColor,
                         size: 18,
                         // weight: 10.12,
                       ),
-                      color: cardDetails[index].cardType == "IN" ? AppColor.inventoryChipColor : AppColor.leadChipColor,
+                      color: cardData.cardType == "IN" ? AppColor.inventoryChipColor : AppColor.leadChipColor,
                     ),
+                    cardData.roomconfig!.bedroom != null
+                        ? CustomChip(
+                            label: CustomText(
+                              title: "${cardData.roomconfig!.bedroom}BHK+${cardData.roomconfig!.additionalroom?[0] ?? ""}",
+                              size: 10,
+                            ),
+                          )
+                        : const SizedBox(),
                     CustomChip(
                       label: CustomText(
-                        title: "${cardDetails[index].roomconfig!.bedroom}BHK+${cardDetails[index].roomconfig!.additionalroom?[0] ?? ""}",
+                        title: "${cardData.propertyarearange!.arearangestart} ${cardData.propertyarearange!.unit}",
                         size: 10,
                       ),
                     ),
                     CustomChip(
                       label: CustomText(
-                        title: "${cardDetails[index].propertyarearange!.arearangestart} ${cardDetails[index].propertyarearange!.unit}",
+                        title: "${cardData.propertypricerange!.arearangestart}${cardData.propertypricerange!.unit}",
                         size: 10,
                       ),
                     ),
                     CustomChip(
                       label: CustomText(
-                        title: "${cardDetails[index].propertypricerange!.arearangestart}${cardDetails[index].propertypricerange!.unit}",
-                        size: 10,
-                      ),
-                    ),
-                    CustomChip(
-                      label: CustomText(
-                        title: cardDetails[index].cardCategory!,
+                        title: cardData.cardCategory!,
                         size: 10,
                       ),
                     ),

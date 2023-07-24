@@ -12,13 +12,7 @@ import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
 import '../utils/colors.dart';
 
-Widget buildQuestionWidget(
-  Question question,
-  List<Screen> screensDataList,
-  int currentScreenIndex,
-  AllChipSelectedAnwers notify,
-  Function nextQuestion,
-) {
+Widget buildQuestionWidget(Question question, List<Screen> screensDataList, int currentScreenIndex, AllChipSelectedAnwers notify, Function nextQuestion) {
   if (question.questionOptionType == 'chip') {
     return Column(
       children: [
@@ -29,9 +23,9 @@ Widget buildQuestionWidget(
               onSelect: () {
                 if (currentScreenIndex < screensDataList.length - 1) {
                   notify.add({"id": question.questionId, "item": option});
-                  nextQuestion(screensDataList: screensDataList);
+                  nextQuestion(screensDataList: screensDataList, option: option);
                 } else {
-                  // Handle reaching the last question or any other action
+                  // Handle reaching the last question
                 }
               },
             );
@@ -146,7 +140,7 @@ Widget buildQuestionWidget(
               if (!isChecked)
                 LabelTextInputField(
                   onChanged: (newvalue) {
-                    notify.add({"id": question.questionId, "item": newvalue});
+                    notify.add({"id": question.questionId, "item": newvalue.trim()});
                   },
                   inputController: controller,
                   labelText: question.questionTitle,
@@ -166,7 +160,7 @@ Widget buildQuestionWidget(
       inputController: controller,
       labelText: question.questionTitle,
       onChanged: (newvalue) {
-        notify.add({"id": question.questionId, "item": newvalue});
+        notify.add({"id": question.questionId, "item": newvalue.trim()});
       },
       validator: (value) {
         if (value!.isEmpty) {
@@ -180,7 +174,7 @@ Widget buildQuestionWidget(
       keyboardType: TextInputType.multiline,
       maxLines: 5,
       onChanged: (newvalue) {
-        notify.add({"id": question.questionId, "item": newvalue});
+        notify.add({"id": question.questionId, "item": newvalue.trim()});
       },
       decoration: InputDecoration(
         hintText: question.questionOption,
@@ -227,82 +221,6 @@ Widget buildQuestionWidget(
     );
   } else if (question.questionOptionType == 'photo') {
     return const PhotosViewForm();
-    // File? selectedImage;
-    // void setImage(File image) {
-    //   selectedImage = image;
-    // }
-
-    // Uint8List? webImage;
-    // void setWebImage(Uint8List image) {
-    //   webImage = image;
-    // }
-
-    // return Wrap(
-    //   children: [
-    //     ImagePickerContainer(onImageSelected: setImage, webImageSelected: setWebImage),
-    //     const SizedBox(height: 20),
-    //     if (selectedImage != null) Image.file(selectedImage!, height: 200, width: 200)
-    //   ],
-    // );
-    // getDataById(state,  )
-    // File? selectedImage;
-    // Uint8List webImage;
-    // void setImage(File image) {
-    //   selectedImage = image;
-    // }
-
-    // void setWebImage(Uint8List image) async {
-    //   webImage = image;
-    // }
-
-    // return Wrap(
-    //   children: [
-    //     ImagePickerContainer(onImageSelected: setImage, webImageSelected: setWebImage),
-    // const SizedBox(height: 20),
-    //     if (selectedImage != null) Image.file(selectedImage!, height: 200, width: 200)
-    //   ],
-    // );
-  } else if (question.questionOptionType == 'video') {
-    //  File? selectedVideo;
-    // void pickVideo() async {
-    //   final pickedFile = await ImagePicker().getVideo(source: ImageSource.gallery);
-    //   if (pickedFile != null) {
-    //     setState(() {
-    //       selectedVideo = File(pickedFile.path);
-    //     });
-    //   }
-    // }
-
-    // return Wrap(
-    //   children: [
-    //     ElevatedButton(
-    //       onPressed: pickVideo,
-    //       child: Text('Pick a video'),
-    //     ),
-    //     if (selectedVideo != null)
-    //       SizedBox(
-    //         height: 200,
-    //         width: 200,
-    //         child: VideoPlayer(FileVideoPlayerController(selectedVideo!)),
-    //       ),
-    //   ],
-    // );
-    // }
-    // File? selectedImage;
-    // Uint8List webImage;
-    // void setImage(File image) {
-    //   selectedImage = image;
-    // }
-
-    // void setWebImage(Uint8List image) async {
-    //   webImage = image;
-    // }
-
-    // return Wrap(
-    //   children: [
-    //     ImagePickerContainer(onImageSelected: setImage, webImageSelected: setWebImage),
-    //   ],
-    // );
   }
 
   return const SizedBox.shrink();

@@ -42,8 +42,27 @@ Future<String> submitInventoryAndcardDetails(state) async {
   final floorNumber = getDataById(state, 30);
   final latlng = getDataById(state, 31);
   final propertyFacing = getDataById(state, 32);
+  final photos = getDataById(state, 33);
+  final video = getDataById(state, 34);
   final comments = getDataById(state, 35);
   final User assignto = getDataById(state, 36);
+  final availability = getDataById(state, 37);
+  final commericialtype = getDataById(state, 38);
+  final typeofoffice = getDataById(state, 39);
+  final typeofretail = getDataById(state, 40);
+  final typeofhospitality = getDataById(state, 41);
+  final typeofhealthcare = getDataById(state, 42);
+  final approvedbeds = getDataById(state, 43);
+  final typeofschool = getDataById(state, 44);
+  final hospitalrooms = getDataById(state, 45);
+  final price = getDataById(state, 46);
+  final priceunit = getDataById(state, 47);
+  final rentamount = getDataById(state, 48);
+  final rentunit = getDataById(state, 49);
+  final securityamount = getDataById(state, 50);
+  final securityunit = getDataById(state, 51);
+  final lockinperiod = getDataById(state, 52);
+  final commercialphotos = getDataById(state, 53);
 
   final cards.CardDetails card = cards.CardDetails(
       workitemId: "IN$randomId",
@@ -51,7 +70,7 @@ Future<String> submitInventoryAndcardDetails(state) async {
       cardCategory: inventoryCategory,
       brokerid: authentication.currentUser!.uid,
       cardType: "IN",
-      cardTitle: "$propertyCategory Apartment",
+      cardTitle: "$propertyCategory $propertyKind-$propertyCity",
       cardDescription: "Want to $inventoryCategory her $bedrooms BHK for 70 L rupees",
       customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo),
       cardStatus: "New",
@@ -60,15 +79,23 @@ Future<String> submitInventoryAndcardDetails(state) async {
       createdate: Timestamp.now(),
       propertyarearange: cards.Propertyarearange(arearangestart: superArea, unit: areaUnit),
       roomconfig: cards.Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom),
-      propertypricerange: cards.Propertypricerange(arearangestart: '50', unit: "L"));
+      propertypricerange: cards.Propertypricerange(arearangestart: price, unit: priceunit));
 
   final InventoryDetails inventory = InventoryDetails(
-      inventoryTitle: "$propertyCategory Apartment",
+      inventoryTitle: "$propertyCategory $propertyKind-$propertyCity",
       inventoryDescription: "inventoryDescription",
       inventoryId: "IN$randomId",
       inventoryStatus: "New",
+      typeofoffice: typeofoffice,
+      approvedbeds: approvedbeds,
+      typeofhospitality: typeofhospitality,
+      hospitalrooms: hospitalrooms,
       propertykind: propertyKind,
+      commericialtype: commericialtype,
+      typeofretail: typeofretail,
+      typeofhealthcare: typeofhealthcare,
       villatype: villaType,
+      typeofschool: typeofschool,
       transactiontype: transactionType,
       brokerid: authentication.currentUser!.uid,
       inventorycategory: inventoryCategory,
@@ -77,7 +104,10 @@ Future<String> submitInventoryAndcardDetails(state) async {
       inventorysource: inventorySource,
       possessiondate: possession,
       amenities: amenities,
-      propertyprice: Propertyprice(price: "50", unit: "L"),
+      commercialphotos: commercialphotos,
+      propertyrent: Propertyrent(rentamount: rentamount, rentunit: rentunit, securityamount: securityamount, securityunit: securityunit, lockinperiod: lockinperiod),
+      availability: availability,
+      propertyprice: Propertyprice(price: price, unit: priceunit),
       reservedparking: Reservedparking(covered: coveredparking),
       propertyarea: Propertyarea(unit: areaUnit, superarea: superArea, carpetarea: carpetArea),
       plotdetails: Plotdetails(boundarywall: boundaryWall, opensides: openSides),
@@ -85,8 +115,11 @@ Future<String> submitInventoryAndcardDetails(state) async {
       roomconfig: Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom, balconies: balconies, bathroom: bathrooms),
       propertyfacing: propertyFacing,
       comments: comments,
+      plotarea: Plotarea(area: carpetArea, unit: areaUnit),
       propertyaddress: Propertyaddress(state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, floornumber: floorNumber),
       propertylocation: latlng,
+      attachments: [],
+      propertyvideo: video,
       createdate: Timestamp.now(),
       assignedto: [Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)],
       createdby: Createdby(userfirstname: "bhavesh", userid: authentication.currentUser!.uid, userlastname: "khatri"));

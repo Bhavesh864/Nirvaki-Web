@@ -26,14 +26,12 @@ class AssignUser extends StatelessWidget {
         SizedBox(
           height: 45,
           child: StreamBuilder(
-              stream:
-                  FirebaseFirestore.instance.collection("users").snapshots(),
+              stream: FirebaseFirestore.instance.collection("users").snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data == null) {
                   return const CircularProgressIndicator.adaptive();
                 }
-                final QuerySnapshot<Map<String, dynamic>> usersListSnapshot =
-                    snapshot.data!;
+                final QuerySnapshot<Map<String, dynamic>> usersListSnapshot = snapshot.data!;
                 final List<User> usersList = usersListSnapshot.docs
                     .map((doc) => User(
                           brokerId: doc['brokerId'],
@@ -52,18 +50,13 @@ class AssignUser extends StatelessWidget {
                     if (textEditingValue.text.isEmpty) {
                       return const Iterable<String>.empty();
                     }
-                    final String searchText =
-                        textEditingValue.text.toLowerCase();
+                    final String searchText = textEditingValue.text.toLowerCase();
                     return usersList.where((user) {
-                      final String fullName =
-                          '${user.userfirstname} ${user.userlastname}'
-                              .toLowerCase();
+                      final String fullName = '${user.userfirstname} ${user.userlastname}'.toLowerCase();
                       return fullName.contains(searchText);
-                    }).map(
-                        (user) => '${user.userfirstname} ${user.userlastname}');
+                    }).map((user) => '${user.userfirstname} ${user.userlastname}');
                   },
-                  fieldViewBuilder: (context, textEditingController, focusNode,
-                      onFieldSubmitted) {
+                  fieldViewBuilder: (context, textEditingController, focusNode, onFieldSubmitted) {
                     return TextField(
                       controller: textEditingController,
                       focusNode: focusNode,
@@ -90,17 +83,13 @@ class AssignUser extends StatelessWidget {
                             child: ListView.separated(
                               shrinkWrap: true,
                               itemCount: itemCount,
-                              separatorBuilder: (context, index) =>
-                                  const Divider(),
+                              separatorBuilder: (context, index) => const Divider(),
                               itemBuilder: (context, index) {
                                 final option = options.elementAt(index);
                                 return GestureDetector(
                                   onTap: () {
                                     onSelected(option);
-                                    User selectedUser = usersList.firstWhere(
-                                        (user) =>
-                                            '${user.userfirstname} ${user.userlastname}' ==
-                                            option);
+                                    User selectedUser = usersList.firstWhere((user) => '${user.userfirstname} ${user.userlastname}' == option);
                                     addUser(selectedUser);
                                   },
                                   child: ListTile(
