@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
+import 'package:yes_broker/questions_form_photos_view.dart';
 import 'package:yes_broker/widgets/inventory/assign_user.dart';
 import 'package:yes_broker/google_maps.dart';
 import '../../Customs/custom_fields.dart';
@@ -9,7 +10,6 @@ import '../../Customs/custom_text.dart';
 import '../../Customs/dropdown_field.dart';
 import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
-
 import '../utils/colors.dart';
 
 Widget buildQuestionWidget(
@@ -39,7 +39,7 @@ Widget buildQuestionWidget(
       ],
     );
   } else if (question.questionOptionType == 'smallchip') {
-    String selectedOption = question.questionOption.isNotEmpty ? question.questionOption[0] : '';
+    String selectedOption = '';
 
     return StatefulBuilder(builder: (context, setState) {
       return Column(
@@ -81,7 +81,7 @@ Widget buildQuestionWidget(
       );
     });
   } else if (question.questionOptionType == 'multichip') {
-    List<String> selectedOptions = question.questionOption.isNotEmpty ? [question.questionOption[0]] : [];
+    List<String> selectedOptions = [];
     List items = question.questionOption;
     return StatefulBuilder(
       builder: (context, setState) {
@@ -226,6 +226,7 @@ Widget buildQuestionWidget(
       },
     );
   } else if (question.questionOptionType == 'photo') {
+    return const PhotosViewForm();
     // File? selectedImage;
     // void setImage(File image) {
     //   selectedImage = image;
@@ -243,7 +244,7 @@ Widget buildQuestionWidget(
     //     if (selectedImage != null) Image.file(selectedImage!, height: 200, width: 200)
     //   ],
     // );
-    // // getDataById(state,  )
+    // getDataById(state,  )
     // File? selectedImage;
     // Uint8List webImage;
     // void setImage(File image) {

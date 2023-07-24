@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
+import 'package:geocoding/geocoding.dart';
 
 class CustomGoogleMap extends StatefulWidget {
   final void Function(LatLng) onLatLngSelected;
@@ -19,53 +19,32 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   List<Marker> markers = [];
   bool showMaps = true;
   LatLng _selectedLatLng = const LatLng(20.5937, 78.9629);
+  LatLng? location;
 
-  Future<void> getCurrentLocation() async {
-    Location location = Location();
-
-    bool serviceEnabled;
-    PermissionStatus permissionGranted;
-    LocationData locationData;
-
-    serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) {
-        _showSnackbar('Location services are disabled.');
-        return;
+  Future<LatLng?> getCoordinates(String address) async {
+    try {
+      List<Location> locations = await locationFromAddress(address);
+      if (locations.isNotEmpty) {
+        return LatLng(locations[0].latitude, locations[0].longitude);
       }
+    } catch (e) {
+      print("Error getting location: $e");
     }
-
-    permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
-        _showSnackbar('Location permission is required to use your curren location.');
-        return;
-      }
-    }
-
-    locationData = await location.getLocation();
-    setState(() {
-      _selectedLatLng = LatLng(locationData.latitude!, locationData.longitude!);
-      showMaps = true;
-    });
-    mapController.animateCamera(CameraUpdate.newLatLng(_selectedLatLng));
+    return null;
   }
 
-  void _showSnackbar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: const Duration(seconds: 3),
-      ),
-    );
+  void _loadMap() async {
+    location = await getCoordinates('Rajasthan Bikaner, pawanpuri');
+    if (location != null) {
+      mapController.animateCamera(CameraUpdate.newLatLng(location!));
+    }
+    setState(() {});
   }
 
   @override
   void initState() {
-    getCurrentLocation();
     super.initState();
+    _loadMap();
   }
 
   @override
@@ -81,7 +60,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
                     mapController = controller;
                   },
                   initialCameraPosition: CameraPosition(
-                    target: _selectedLatLng,
+                    target: location ?? _selectedLatLng,
                     zoom: 10,
                   ),
                   onTap: (latLng) {
@@ -93,7 +72,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
                   markers: <Marker>{
                     Marker(
                       markerId: const MarkerId('myLocation'),
-                      position: _selectedLatLng,
+                      position: location ?? _selectedLatLng,
                     ),
                   },
                   mapType: MapType.terrain,

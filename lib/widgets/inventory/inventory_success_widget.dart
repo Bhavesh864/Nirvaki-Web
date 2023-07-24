@@ -32,6 +32,7 @@ class InventorySuccessWidget extends StatelessWidget {
           child: CustomButton(
             height: 40,
             width: 165,
+            isBorder: false,
             text: 'Go to Dashboard',
             onPressed: () {
               Navigator.of(context).pushNamed(AppRoutes.homeScreen);
