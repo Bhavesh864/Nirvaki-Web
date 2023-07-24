@@ -1,8 +1,13 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/inventory/assign_user.dart';
 import 'package:yes_broker/google_maps.dart';
+import 'package:yes_broker/widgets/inventory/inventory_photos.dart';
 import '../../Customs/custom_fields.dart';
 import '../../Customs/custom_text.dart';
 import '../../Customs/dropdown_field.dart';
@@ -11,13 +16,7 @@ import '../../widgets/card/questions card/chip_button.dart';
 
 import '../utils/colors.dart';
 
-Widget buildQuestionWidget(
-  Question question,
-  List<Screen> screensDataList,
-  int currentScreenIndex,
-  AllChipSelectedAnwers notify,
-  Function nextQuestion,
-) {
+Widget buildQuestionWidget(Question question, List<Screen> screensDataList, int currentScreenIndex, AllChipSelectedAnwers notify, Function nextQuestion) {
   if (question.questionOptionType == 'chip') {
     return Column(
       children: [
@@ -28,9 +27,9 @@ Widget buildQuestionWidget(
               onSelect: () {
                 if (currentScreenIndex < screensDataList.length - 1) {
                   notify.add({"id": question.questionId, "item": option});
-                  nextQuestion(screensDataList: screensDataList);
+                  nextQuestion(screensDataList: screensDataList, option: option);
                 } else {
-                  // Handle reaching the last question or any other action
+                  // Handle reaching the last question
                 }
               },
             );
@@ -145,7 +144,7 @@ Widget buildQuestionWidget(
               if (!isChecked)
                 LabelTextInputField(
                   onChanged: (newvalue) {
-                    notify.add({"id": question.questionId, "item": newvalue});
+                    notify.add({"id": question.questionId, "item": newvalue.trim()});
                   },
                   inputController: controller,
                   labelText: question.questionTitle,
@@ -165,7 +164,7 @@ Widget buildQuestionWidget(
       inputController: controller,
       labelText: question.questionTitle,
       onChanged: (newvalue) {
-        notify.add({"id": question.questionId, "item": newvalue});
+        notify.add({"id": question.questionId, "item": newvalue.trim()});
       },
       validator: (value) {
         if (value!.isEmpty) {
@@ -179,7 +178,7 @@ Widget buildQuestionWidget(
       keyboardType: TextInputType.multiline,
       maxLines: 5,
       onChanged: (newvalue) {
-        notify.add({"id": question.questionId, "item": newvalue});
+        notify.add({"id": question.questionId, "item": newvalue.trim()});
       },
       decoration: InputDecoration(
         hintText: question.questionOption,
@@ -225,24 +224,24 @@ Widget buildQuestionWidget(
       },
     );
   } else if (question.questionOptionType == 'photo') {
-    // File? selectedImage;
-    // void setImage(File image) {
-    //   selectedImage = image;
-    // }
+    File? selectedImage;
+    void setImage(File image) {
+      selectedImage = image;
+    }
 
-    // Uint8List? webImage;
-    // void setWebImage(Uint8List image) {
-    //   webImage = image;
-    // }
+    Uint8List? webImage;
+    void setWebImage(Uint8List image) {
+      webImage = image;
+    }
 
-    // return Wrap(
-    //   children: [
-    //     ImagePickerContainer(onImageSelected: setImage, webImageSelected: setWebImage),
-    //     const SizedBox(height: 20),
-    //     if (selectedImage != null) Image.file(selectedImage!, height: 200, width: 200)
-    //   ],
-    // );
-    // // getDataById(state,  )
+    return Wrap(
+      children: [
+        ImagePickerContainer(onImageSelected: setImage, webImageSelected: setWebImage),
+        const SizedBox(height: 20),
+        if (selectedImage != null) Image.file(selectedImage!, height: 200, width: 200)
+      ],
+    );
+    // getDataById(state,  )
     // File? selectedImage;
     // Uint8List webImage;
     // void setImage(File image) {

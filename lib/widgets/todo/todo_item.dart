@@ -7,7 +7,7 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/constants/utils/theme.dart';
+
 import 'package:yes_broker/widgets/custom_chip.dart';
 
 import '../../constants/utils/image_constants.dart';
@@ -49,9 +49,7 @@ class _TodoItemState extends State<TodoItem> {
 
     return ListView.builder(
       shrinkWrap: true,
-      physics: Responsive.isMobile(context)
-          ? const NeverScrollableScrollPhysics()
-          : const ClampingScrollPhysics(),
+      physics: Responsive.isMobile(context) ? const NeverScrollableScrollPhysics() : const ClampingScrollPhysics(),
       itemCount: userData.length,
       itemBuilder: ((context, index) => Card(
             margin: EdgeInsets.only(
@@ -82,17 +80,11 @@ class _TodoItemState extends State<TodoItem> {
                             children: [
                               CustomChip(
                                 label: Icon(
-                                  userData[index].isLead
-                                      ? MaterialSymbols.location_home_outlined
-                                      : MaterialSymbols.location_away,
-                                  color: userData[index].isLead
-                                      ? AppColor.inventoryIconColor
-                                      : AppColor.leadIconColor,
+                                  userData[index].isLead ? MaterialSymbols.location_home_outlined : MaterialSymbols.location_away,
+                                  color: userData[index].isLead ? AppColor.inventoryIconColor : AppColor.leadIconColor,
                                   size: 18,
                                 ),
-                                color: userData[index].isLead
-                                    ? AppColor.inventoryChipColor
-                                    : AppColor.leadChipColor,
+                                color: userData[index].isLead ? AppColor.inventoryChipColor : AppColor.leadChipColor,
                               ),
                               CustomChip(
                                 label: CustomText(
@@ -108,9 +100,7 @@ class _TodoItemState extends State<TodoItem> {
                                 padding: EdgeInsets.zero,
                                 color: Colors.white.withOpacity(1),
                                 offset: const Offset(10, 40),
-                                itemBuilder: (context) => dropDownListData
-                                    .map((e) => popupMenuItem(e.toString()))
-                                    .toList(),
+                                itemBuilder: (context) => dropDownListData.map((e) => popupMenuItem(e.toString())).toList(),
                                 child: CustomChip(
                                   label: Row(
                                     children: [
@@ -126,8 +116,7 @@ class _TodoItemState extends State<TodoItem> {
                                       ),
                                     ],
                                   ),
-                                  color: taskStatusColor(selectedOption)
-                                      .withOpacity(0.1),
+                                  color: taskStatusColor(selectedOption).withOpacity(0.1),
                                 ),
                               ),
                             ],
@@ -223,8 +212,7 @@ class _TodoItemState extends State<TodoItem> {
                         height: 24,
                         width: 24,
                         decoration: BoxDecoration(
-                          image: const DecorationImage(
-                              image: AssetImage(profileImage)),
+                          image: const DecorationImage(image: AssetImage(profileImage)),
                           borderRadius: BorderRadius.circular(40),
                         ),
                       ),
