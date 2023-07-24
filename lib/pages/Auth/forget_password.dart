@@ -4,7 +4,7 @@ import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/TabScreens/main_screens/home_screen.dart';
+
 import 'package:yes_broker/routes/routes.dart';
 
 import '../../constants/utils/image_constants.dart';
@@ -52,11 +52,7 @@ class ForgetPassword extends StatelessWidget {
                       const SizedBox(height: 25),
                       SizedBox(
                         width: w,
-                        child: CustomButton(
-                            leftIcon: Icons.g_mobiledata,
-                            text: 'Continue with Google',
-                            lefticonColor: Colors.white,
-                            onPressed: () {}),
+                        child: CustomButton(leftIcon: Icons.g_mobiledata, text: 'Continue with Google', lefticonColor: Colors.white, onPressed: () {}),
                       ),
                       const SizedBox(height: 10),
                       SizedBox(
@@ -73,12 +69,7 @@ class ForgetPassword extends StatelessWidget {
                       SizedBox(
                         width: w,
                         child: CustomButton(
-                            leftIcon: Icons.apple,
-                            text: 'Continue with apple',
-                            buttonColor: Colors.white,
-                            textColor: Colors.black,
-                            lefticonColor: Colors.black,
-                            onPressed: () {}),
+                            leftIcon: Icons.apple, text: 'Continue with apple', buttonColor: Colors.white, textColor: Colors.black, lefticonColor: Colors.black, onPressed: () {}),
                       ),
                       const SizedBox(height: 30),
                       Row(
@@ -106,9 +97,7 @@ class ForgetPassword extends StatelessWidget {
                       ),
                       SizedBox(
                         width: w,
-                        child: CustomTextInput(
-                            controller: emailcontroller,
-                            hintText: 'Email address/ Phone number'),
+                        child: CustomTextInput(controller: emailcontroller, hintText: 'Email address/ Phone number'),
                       ),
                       const SizedBox(height: 15),
                       SizedBox(
@@ -116,8 +105,7 @@ class ForgetPassword extends StatelessWidget {
                         child: CustomButton(
                           text: 'Reset',
                           onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed(AppRoutes.homeScreen);
+                            Navigator.of(context).pushNamed(AppRoutes.homeScreen);
                           },
                           height: 40.0,
                         ),
