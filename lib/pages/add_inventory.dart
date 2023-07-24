@@ -5,6 +5,7 @@ import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
+
 import 'package:yes_broker/constants/functions/get_inventory_questions_widgets.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/widgets/inventory/inventory_success_widget.dart';
@@ -47,7 +48,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
         });
   }
 
-  nextQuestion({List<Screen>? screensDataList}) {
+  nextQuestion({List<Screen>? screensDataList, option}) {
     if (currentScreenIndex < screensDataList!.length - 1) {
       setState(() {
         currentScreenIndex++;
@@ -78,10 +79,19 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     }
   }
 
+  InventoryQuestions? getcurrentInventory(AsyncSnapshot<List<InventoryQuestions>> snapshot, option) {
+    for (var data in snapshot.data!) {
+      if (data.type == option) {
+        return data;
+      }
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(myArrayProvider.notifier);
-    // print(response);
+
     return Scaffold(
       body: FutureBuilder<List<InventoryQuestions>>(
         future: getQuestions,
@@ -91,8 +101,9 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
-            List<InventoryQuestions> screenData = snapshot.data as List<InventoryQuestions>;
-            List<Screen> screensDataList = screenData[0].screens;
+            final String res = notify.state.isNotEmpty ? notify.state[0]["item"] : "Residential";
+            InventoryQuestions? screenData = getcurrentInventory(snapshot, res);
+            List<Screen> screensDataList = screenData!.screens;
             return Stack(
               children: [
                 Container(
@@ -197,40 +208,44 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                             : const Center(
                                 child: CircularProgressIndicator.adaptive(),
                               )),
-                Consumer(
-                  builder: (context, ref, child) {
-                    return Positioned(
-                      top: 0.0,
-                      left: 0.0,
-                      right: 0.0,
-                      child: AppBar(
-                        elevation: 0,
-                        iconTheme: const IconThemeData(color: Colors.white),
-                        backgroundColor: Colors.transparent,
-                        centerTitle: true,
-                        leading: IconButton(
-                          onPressed: () {
-                            final currentScreenQuestions = screensDataList[currentScreenIndex].questions;
-                            final ids = currentScreenQuestions.map((q) => q.questionId).toList();
-                            goBack(ids);
-                          },
-                          icon: const Icon(Icons.arrow_back),
-                        ),
-                        title: const CustomText(
-                          title: 'Add Inventory ',
-                          fontWeight: FontWeight.w700,
-                          size: 20,
-                          color: Colors.white,
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                inventoryAppBar(screensDataList),
               ],
             );
           }
         },
       ),
+    );
+  }
+
+  Consumer inventoryAppBar(List<Screen> screensDataList) {
+    return Consumer(
+      builder: (context, ref, child) {
+        return Positioned(
+          top: 0.0,
+          left: 0.0,
+          right: 0.0,
+          child: AppBar(
+            elevation: 0,
+            iconTheme: const IconThemeData(color: Colors.white),
+            backgroundColor: Colors.transparent,
+            centerTitle: true,
+            leading: IconButton(
+              onPressed: () {
+                final currentScreenQuestions = screensDataList[currentScreenIndex].questions;
+                final ids = currentScreenQuestions.map((q) => q.questionId).toList();
+                goBack(ids);
+              },
+              icon: const Icon(Icons.arrow_back),
+            ),
+            title: const CustomText(
+              title: 'Add Inventory ',
+              fontWeight: FontWeight.w700,
+              size: 20,
+              color: Colors.white,
+            ),
+          ),
+        );
+      },
     );
   }
 }
