@@ -1,10 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
-
-import '../../constants/utils/constants.dart';
-import '../../constants/utils/image_constants.dart';
 import '../custom_chip.dart';
 
 class CardFooter extends StatelessWidget {
@@ -82,21 +79,21 @@ class CardFooter extends StatelessWidget {
           ),
           paddingHorizontal: 3,
         ),
-        // CustomChip(
-        //   label: Text(cardData.workitemId!),
-        //   paddingHorizontal: 3,
-        // ),
+        CustomChip(
+          label: Text(cardData.workitemId!),
+          paddingHorizontal: 3,
+        ),
         const Spacer(),
-        // Container(
-        //   margin: const EdgeInsets.only(right: 5),
-        //   height: 20,
-        //   width: 20,
-        //   decoration: BoxDecoration(
-        //     image: DecorationImage(image: NetworkImage(cardData.assignedto![0].image!), fit: BoxFit.fill),
-        //     borderRadius: BorderRadius.circular(40),
-        //   ),
-        //   // child: Text(width.toString()),
-        // ),
+        Container(
+          margin: const EdgeInsets.only(right: 5),
+          height: 20,
+          width: 20,
+          decoration: BoxDecoration(
+            image: DecorationImage(image: NetworkImage(cardData.assignedto![0].image!), fit: BoxFit.fill),
+            borderRadius: BorderRadius.circular(40),
+          ),
+          // child: Text(width.toString()),
+        ),
       ],
     );
   }
