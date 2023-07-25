@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+
 import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
 
+import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
+import 'package:yes_broker/questions_form_photos_view.dart';
+import 'package:yes_broker/widgets/inventory/assign_user.dart';
+import 'package:yes_broker/google_maps.dart';
 import '../../Customs/custom_fields.dart';
 import '../../Customs/custom_text.dart';
 import '../../Customs/dropdown_field.dart';
@@ -8,40 +14,8 @@ import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
 import '../utils/colors.dart';
 
-Widget buildQuestionWidgetForLead(Question question, List<Screen> screens,
-    int currentIndex, selectedOption, PageController pageController) {
-  if (question.questionOptionType == 'textfield') {
-    TextEditingController controller = TextEditingController();
-    bool isChecked = true;
-    if (question.questionTitle == 'Whatsapp Number') {
-      return StatefulBuilder(
-        builder: (context, setState) {
-          return Column(
-            children: [
-              CustomCheckbox(
-                value: isChecked,
-                label: 'Use this as whatsapp number',
-                onChanged: (value) {
-                  setState(() {
-                    isChecked = value;
-                  });
-                },
-              ),
-              if (!isChecked)
-                LabelTextInputField(
-                  inputController: controller,
-                  labelText: question.questionTitle,
-                )
-            ],
-          );
-        },
-      );
-    }
-    return LabelTextInputField(
-      inputController: controller,
-      labelText: question.questionTitle,
-    );
-  } else if (question.questionOptionType == 'chip') {
+Widget buildLeadQuestions(Question question, List<Screen> screensDataList, int currentScreenIndex, AllChipSelectedAnwers notify, Function nextQuestion) {
+  if (question.questionOptionType == 'chip') {
     return Column(
       children: [
         for (var option in question.questionOption)
@@ -49,29 +23,59 @@ Widget buildQuestionWidgetForLead(Question question, List<Screen> screens,
             return ChipButton(
               text: option,
               onSelect: () {
-                // print(option);
-                if (currentIndex < screens.length - 1) {
-                  setState(() {
-                    currentIndex++; // Increment the current index
-                    pageController.nextPage(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    );
-                  });
+                if (currentScreenIndex < screensDataList.length - 1) {
+                  notify.add({"id": question.questionId, "item": option});
+                  nextQuestion(screensDataList: screensDataList, option: option);
                 } else {
-                  // Handle reaching the last question or any other action
+                  // Handle reaching the last question
                 }
               },
             );
           }),
       ],
     );
-  } else if (question.questionOptionType == 'dropdown') {
-    return DropDownField(
-      title: question.questionTitle,
-      optionsList: question.questionOption,
-      onchanged: (Object e) {},
-    );
+  } else if (question.questionOptionType == 'smallchip') {
+    String selectedOption = '';
+
+    return StatefulBuilder(builder: (context, setState) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CustomText(
+            fontWeight: FontWeight.w500,
+            size: 16,
+            title: question.questionTitle,
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: Wrap(
+              alignment: WrapAlignment.start,
+              children: [
+                for (var option in question.questionOption)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10, bottom: 10),
+                    child: CustomChoiceChip(
+                      label: option,
+                      selected: selectedOption == option,
+                      onSelected: (selectedItem) {
+                        setState(() {
+                          if (selectedOption == option) {
+                            selectedOption = '';
+                          } else {
+                            selectedOption = option;
+                          }
+                        });
+                        notify.add({"id": question.questionId, "item": option});
+                      },
+                      labelColor: selectedOption == option ? Colors.white : Colors.black,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      );
+    });
   } else if (question.questionOptionType == 'multichip') {
     List<String> selectedOptions = [];
     List items = question.questionOption;
@@ -93,24 +97,21 @@ Widget buildQuestionWidgetForLead(Question question, List<Screen> screens,
                 children: [
                   for (var item in items)
                     Padding(
-                      padding:
-                          const EdgeInsets.only(right: 10, top: 5, bottom: 5),
+                      padding: const EdgeInsets.only(right: 10, top: 5, bottom: 5),
                       child: CustomChoiceChip(
-                        label: item,
-                        selected: selectedOptions.contains(item),
-                        onSelected: (selectedItem) {
-                          setState(() {
-                            if (selectedItem) {
-                              selectedOptions.add(item);
-                            } else {
-                              selectedOptions.remove(item);
-                            }
-                          });
-                        },
-                        labelColor: selectedOptions.contains(item)
-                            ? Colors.white
-                            : Colors.black,
-                      ),
+                          label: item,
+                          selected: selectedOptions.contains(item),
+                          onSelected: (selectedItem) {
+                            setState(() {
+                              if (selectedItem) {
+                                selectedOptions.add(item);
+                              } else {
+                                selectedOptions.remove(item);
+                              }
+                            });
+                            notify.add({"id": question.questionId, "item": selectedOptions});
+                          },
+                          labelColor: selectedOptions.contains(item) ? Colors.white : Colors.black),
                     ),
                 ],
               ),
@@ -119,54 +120,64 @@ Widget buildQuestionWidgetForLead(Question question, List<Screen> screens,
         );
       },
     );
-  } else if (question.questionOptionType == 'smallchip') {
-    return StatefulBuilder(builder: (context, setState) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomText(
-            fontWeight: FontWeight.w500,
-            size: 16,
-            title: question.questionTitle,
-          ),
-          SizedBox(
-            width: double.infinity,
-            child: Wrap(
-              alignment: WrapAlignment.start,
-              children: [
-                for (var option in question.questionOption)
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10, bottom: 10),
-                    child: CustomChoiceChip(
-                      label: option,
-                      selected: selectedOption ==
-                          option, // Check if the current item is selected
-                      onSelected: (selectedItem) {
-                        setState(() {
-                          if (selectedOption == option) {
-                            // If the current option is already selected, unselect it
-                            selectedOption = '';
-                          } else {
-                            // Otherwise, select the current option
-                            selectedOption = option;
-                          }
-                        });
-                      },
-                      labelColor: selectedOption == option
-                          ? Colors.white
-                          : Colors.black,
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ],
+  } else if (question.questionOptionType == 'textfield') {
+    TextEditingController controller = TextEditingController();
+    bool isChecked = true;
+
+    if (question.questionTitle == 'Whatsapp Number') {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return Column(
+            children: [
+              if (question.questionTitle == 'Whatsapp Number')
+                CustomCheckbox(
+                  value: isChecked,
+                  label: 'Use this as whatsapp number',
+                  onChanged: (value) {
+                    setState(() {
+                      isChecked = value;
+                    });
+                  },
+                ),
+              if (!isChecked)
+                LabelTextInputField(
+                  onChanged: (newvalue) {
+                    notify.add({"id": question.questionId, "item": newvalue.trim()});
+                  },
+                  inputController: controller,
+                  labelText: question.questionTitle,
+                  validator: (value) {
+                    if (isChecked && value!.isEmpty) {
+                      return "Please enter ${question.questionTitle}";
+                    }
+                    return null;
+                  },
+                ),
+            ],
+          );
+        },
       );
-    });
+    }
+    return LabelTextInputField(
+      inputController: controller,
+      labelText: question.questionTitle,
+      onChanged: (newvalue) {
+        notify.add({"id": question.questionId, "item": newvalue.trim()});
+      },
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "Please enter ${question.questionTitle}";
+        }
+        return null;
+      },
+    );
   } else if (question.questionOptionType == 'textarea') {
     return TextFormField(
       keyboardType: TextInputType.multiline,
       maxLines: 5,
+      onChanged: (newvalue) {
+        notify.add({"id": question.questionId, "item": newvalue.trim()});
+      },
       decoration: InputDecoration(
         hintText: question.questionOption,
         border: OutlineInputBorder(
@@ -180,9 +191,47 @@ Widget buildQuestionWidgetForLead(Question question, List<Screen> screens,
           ),
         ),
       ),
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "Please enter ${question.questionTitle}";
+        }
+        return null;
+      },
     );
+  } else if (question.questionOptionType == "Assign") {
+    return AssignUser(
+      addUser: (user) {
+        notify.add({"id": question.questionId, "item": user});
+      },
+    );
+  } else if (question.questionOptionType == 'dropdown') {
+    return DropDownField(
+      title: question.questionTitle,
+      optionsList: question.questionOption,
+      onchanged: (Object e) {
+        notify.add({"id": question.questionId, "item": e});
+      },
+    );
+  } else if (question.questionOptionType == 'map') {
+    final state = getDataById(notify.state, 26);
+    final city = getDataById(notify.state, 27);
+    final address1 = getDataById(notify.state, 28);
+    final address2 = getDataById(notify.state, 29);
+    return CustomGoogleMap(
+      onLatLngSelected: (latLng) {
+        notify.add({
+          "id": question.questionId,
+          "item": [latLng.latitude, latLng.longitude]
+        });
+      },
+      cityName: city,
+      stateName: state,
+      address1: address1,
+      address2: address2,
+    );
+  } else if (question.questionOptionType == 'photo') {
+    return const PhotosViewForm();
   }
 
-  return const SizedBox
-      .shrink(); // Return an empty widget if the question type is not supported
+  return const SizedBox.shrink();
 }

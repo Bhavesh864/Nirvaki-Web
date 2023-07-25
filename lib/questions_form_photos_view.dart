@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -20,25 +19,131 @@ class _PhotosViewFormState extends ConsumerState<PhotosViewForm> {
   int numberOfColumns = 5;
   List<File?> images = [];
   List<String> itemTitles = [];
+  bool isInitialized = false;
 
   @override
   void initState() {
-    final answersArr = ref.read(myArrayProvider.notifier).state;
+    super.initState();
+    initializeLists();
+  }
 
+  void initializeLists() {
+    final answersArr = ref.read(myArrayProvider.notifier).state;
     int numberOfItems = answersArr.length;
     itemTitles = ['Front Elevation'];
     itemTitles.addAll(List.generate(numberOfItems, (index) => 'Bed Room(${index + 1})'));
+
+    print('itemTiles length --- ${itemTitles.length}');
+
     webImages = List.generate(itemTitles.length, (index) => null);
     images = List.generate(itemTitles.length, (index) => null);
+    print('webimages length --- ${webImages.length}');
+    isInitialized = true;
+  }
 
-    super.initState();
+  String getItemTitle(int itemId, int roomNumber, int containerIndex, List<String> roomList) {
+    if (itemId == 14) {
+      return 'Bed Room $roomNumber($containerIndex)';
+    } else if (itemId == 16) {
+      return 'BathRoom $roomNumber($containerIndex)';
+    } else if (itemId == 15) {
+      return '${roomList[roomNumber - 1]} ($containerIndex)';
+    }
+    return 'BhAVESH';
+  }
+
+  Widget getImageContainer(int index) {
+    return Column(
+      children: [
+        Card(
+          child: SizedBox(
+            width: 106,
+            height: 100,
+            child: images[index] == null
+                ? const Icon(Icons.photo_rounded, size: 70, color: Colors.grey)
+                : kIsWeb
+                    ? Image.memory(
+                        webImages[index]!,
+                        fit: BoxFit.fill,
+                      )
+                    : Image.file(
+                        images[index]!,
+                        fit: BoxFit.fill,
+                      ),
+          ),
+        ),
+        const SizedBox(height: 4),
+        CustomText(
+          title: itemTitles[index],
+          size: 14,
+        ),
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final answersArr = ref.watch(myArrayProvider.notifier).state;
 
-    final selectedAnswerArr = answersArr.where((item) => item['id'] == 41 || item['id'] == 42 || item['id'] == 43).toList();
+    final selectedAnswerArr = answersArr.where((item) => item['id'] == 14 || item['id'] == 15 || item['id'] == 16).toList();
+
+    final Set<String> roomsWithTwoImages = {};
+
+    final Map<String, int> containersCountByRoom = {};
+
+    List<Widget> imageContainers = [];
+    imageContainers.add(getImageContainer(0));
+
+    for (var item in selectedAnswerArr) {
+      int itemId = item['id'];
+      dynamic roomItems = item['item'];
+
+      if (roomItems is String) {
+        for (int i = 1; i <= int.parse(roomItems); i++) {
+          itemTitles.add(getItemTitle(itemId, i, containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1, []));
+          webImages.add(null);
+          images.add(null);
+          imageContainers.add(getImageContainer(itemTitles.length - 1));
+
+          // Update the count of containers added for the room
+          containersCountByRoom[itemTitles[itemTitles.length - 1]] = (containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1) + 1;
+
+          if (!roomsWithTwoImages.contains(itemTitles[itemTitles.length - 1])) {
+            itemTitles.add(getItemTitle(itemId, i, containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1, []));
+            webImages.add(null);
+            images.add(null);
+            imageContainers.add(getImageContainer(itemTitles.length - 1));
+
+            // Mark the room as having two images
+            roomsWithTwoImages.add(itemTitles[itemTitles.length - 1]);
+          }
+        }
+
+        // Check if the room already has two images, if not, add another container
+      } else if (roomItems is List<String>) {
+        for (int i = 0; i < roomItems.length; i++) {
+          itemTitles.add(getItemTitle(itemId, i + 1, containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1, roomItems));
+          webImages.add(null);
+          images.add(null);
+          imageContainers.add(getImageContainer(itemTitles.length - 1));
+
+          // Update the count of containers added for the room
+          containersCountByRoom[itemTitles[itemTitles.length - 1]] = (containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1) + 1;
+
+          // Check if the room already has two images, if not, add another container
+          if (!roomsWithTwoImages.contains(itemTitles[itemTitles.length - 1])) {
+            itemTitles.add(getItemTitle(itemId, i + 1, containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1, roomItems));
+            webImages.add(null);
+            images.add(null);
+            imageContainers.add(getImageContainer(itemTitles.length - 1));
+
+            // Mark the room as having two images
+            roomsWithTwoImages.add(itemTitles[itemTitles.length - 1]);
+          }
+        }
+      }
+    }
+    print(webImages[1]);
 
     Future<void> selectImage(int index) async {
       XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -52,7 +157,10 @@ class _PhotosViewFormState extends ConsumerState<PhotosViewForm> {
             images[index] = File('a');
           });
 
-          String base64String = base64Encode(f);
+          // print(webImages[0]);
+          print(index);
+
+          // String base64String = base64Encode(f);
         }
       } else {
         if (pickedImage != null) {
@@ -75,38 +183,13 @@ class _PhotosViewFormState extends ConsumerState<PhotosViewForm> {
           mainAxisSpacing: 10,
           mainAxisExtent: 140,
         ),
-        itemCount: selectedAnswerArr.length,
+        itemCount: imageContainers.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
               selectImage(index);
             },
-            child: Column(
-              children: [
-                Card(
-                  child: SizedBox(
-                    width: 106,
-                    height: 100,
-                    child: images[index] == null
-                        ? const Icon(Icons.photo_rounded, size: 70, color: Colors.grey)
-                        : kIsWeb
-                            ? Image.memory(
-                                webImages[index]!,
-                                fit: BoxFit.fill,
-                              )
-                            : Image.file(
-                                images[index]!,
-                                fit: BoxFit.fill,
-                              ),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                CustomText(
-                  title: itemTitles[index],
-                  size: 14,
-                ),
-              ],
-            ),
+            child: isInitialized ? imageContainers[index] : const CircularProgressIndicator(),
           );
         },
       ),

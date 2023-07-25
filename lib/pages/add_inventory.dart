@@ -30,7 +30,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   bool allQuestionFinishes = false;
   late Future<List<InventoryQuestions>> getQuestions;
   PageController? pageController;
-  int currentScreenIndex = 17;
+  int currentScreenIndex = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -91,7 +91,6 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(myArrayProvider.notifier);
-
     return Scaffold(
       body: FutureBuilder<List<InventoryQuestions>>(
         future: getQuestions,
@@ -175,14 +174,14 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                       child: CustomButton(
                                                         text: 'Next',
                                                         onPressed: () {
-                                                          // nextQuestion(
-                                                          //   screensDataList: screensDataList,
-                                                          // );
-                                                          if (_formKey.currentState!.validate()) {
-                                                            nextQuestion(
-                                                              screensDataList: screensDataList,
-                                                            );
-                                                          }
+                                                          nextQuestion(
+                                                            screensDataList: screensDataList,
+                                                          );
+                                                          // if (_formKey.currentState!.validate()) {
+                                                          //   nextQuestion(
+                                                          //     screensDataList: screensDataList,
+                                                          //   );
+                                                          // }
                                                           if (screensDataList[index].title == "Assign to") {
                                                             addDataOnfirestore(notify);
                                                           }

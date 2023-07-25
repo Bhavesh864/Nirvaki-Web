@@ -116,7 +116,7 @@ class AppRoutes {
   static const String addLead = '/add_lead_screen';
 
   static Map<String, WidgetBuilder> routesTable = {
-    homeScreen: (context) => Responsive.isMobile(context) ? SmallScreen() : LargeScreen(),
+    homeScreen: (context) => Responsive.isMobile(context) ? const SmallScreen() : const LargeScreen(),
     loginScreen: (context) => const LoginScreen(),
     forgetPassword: (context) => const ForgetPassword(),
     profileScreen: (context) => const ProfileScreen(),
