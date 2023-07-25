@@ -1,23 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-final CollectionReference questionsCollection =
-    FirebaseFirestore.instance.collection('LeadQuestions');
+final CollectionReference questionsCollection = FirebaseFirestore.instance.collection('LeadQuestions');
 
 class LeadQuestions {
   List<Screen> screens;
-
-  LeadQuestions({required this.screens});
+  String type;
+  LeadQuestions({required this.screens, required this.type});
 
   factory LeadQuestions.fromJson(Map<String, dynamic> json) {
-    List<Screen> screens = List<Screen>.from(
-        json['screens'].map((screen) => Screen.fromJson(screen)).toList());
-    return LeadQuestions(screens: screens);
+    List<Screen> screens = List<Screen>.from(json['screens'].map((screen) => Screen.fromJson(screen)).toList());
+    return LeadQuestions(screens: screens, type: json["type"]);
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'screens': screens.map((screen) => screen.toJson()).toList(),
-    };
+    return {'screens': screens.map((screen) => screen.toJson()).toList(), "type": type};
   }
 
   // Get all Questions data from Firestore
@@ -42,8 +38,7 @@ class LeadQuestions {
   static Future<void> addScreens(List<LeadQuestions> screens) async {
     try {
       for (LeadQuestions screen in screens) {
-        final DocumentReference documentReference =
-            await questionsCollection.add(screen.toJson());
+        final DocumentReference documentReference = await questionsCollection.add(screen.toJson());
         print('Screen added with ID: ${documentReference.id}');
       }
     } catch (e) {
@@ -70,9 +65,7 @@ class Screen {
   });
 
   factory Screen.fromJson(Map<String, dynamic> json) {
-    List<Question> questions = List<Question>.from(json['questions']
-        .map((question) => Question.fromJson(question))
-        .toList());
+    List<Question> questions = List<Question>.from(json['questions'].map((question) => Question.fromJson(question)).toList());
     return Screen(
         screenId: json['screenId'],
         questions: questions,
