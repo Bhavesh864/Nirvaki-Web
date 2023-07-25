@@ -1,83 +1,84 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geocoding/geocoding.dart';
+import 'package:yes_broker/widgets/lat_lng_get.dart';
 
 class CustomGoogleMap extends StatefulWidget {
+  final String stateName;
+  final String cityName;
+  final String address1;
+  final String address2;
   final void Function(LatLng) onLatLngSelected;
 
   const CustomGoogleMap({
     required this.onLatLngSelected,
-    super.key,
-  });
+    Key? key,
+    required this.stateName,
+    required this.cityName,
+    required this.address1,
+    required this.address2,
+  }) : super(key: key);
 
   @override
   State<CustomGoogleMap> createState() => _CustomGoogleMapState();
 }
 
 class _CustomGoogleMapState extends State<CustomGoogleMap> {
-  late GoogleMapController mapController;
-  List<Marker> markers = [];
+  GoogleMapController? mapController;
   bool showMaps = true;
-  LatLng _selectedLatLng = const LatLng(20.5937, 78.9629);
+
   LatLng? location;
-
-  Future<LatLng?> getCoordinates(String address) async {
-    try {
-      List<Location> locations = await locationFromAddress(address);
-      if (locations.isNotEmpty) {
-        return LatLng(locations[0].latitude, locations[0].longitude);
-      }
-    } catch (e) {
-      print("Error getting location: $e");
-    }
-    return null;
-  }
-
-  void _loadMap() async {
-    location = await getCoordinates('Rajasthan Bikaner, pawanpuri');
-    if (location != null) {
-      mapController.animateCamera(CameraUpdate.newLatLng(location!));
-    }
-    setState(() {});
-  }
 
   @override
   void initState() {
     super.initState();
+    // Load the map when the widget is first initialized
     _loadMap();
+  }
+
+  Future<void> _loadMap() async {
+    final placeName = '${widget.stateName} ${widget.cityName} ${widget.address1} ${widget.address2}';
+    location = await getLatLng(placeName);
+    if (location != null && mapController != null) {
+      mapController!.animateCamera(CameraUpdate.newLatLng(location!));
+    }
+    widget.onLatLngSelected(location!);
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(20),
-        child: showMaps
-            ? SizedBox(
-                height: 307,
-                width: 795,
-                child: GoogleMap(
-                  onMapCreated: (controller) {
-                    mapController = controller;
-                  },
-                  initialCameraPosition: CameraPosition(
-                    target: location ?? _selectedLatLng,
-                    zoom: 10,
+      padding: const EdgeInsets.all(20),
+      child: SizedBox(
+        height: 307,
+        width: 795,
+        child: GoogleMap(
+          onMapCreated: (controller) {
+            mapController = controller;
+            // Call _loadMap() here to ensure the map is fully created before loading it
+            _loadMap();
+          },
+          initialCameraPosition: CameraPosition(
+            target: location ?? const LatLng(20.5937, 78.9629),
+            zoom: 10,
+          ),
+          onTap: (latLng) {
+            setState(() {
+              location = latLng;
+            });
+            widget.onLatLngSelected(location!);
+          },
+          markers: location != null
+              ? <Marker>{
+                  Marker(
+                    markerId: const MarkerId('myLocation'),
+                    position: location!,
                   ),
-                  onTap: (latLng) {
-                    setState(() {
-                      _selectedLatLng = latLng;
-                    });
-                    widget.onLatLngSelected(_selectedLatLng);
-                  },
-                  markers: <Marker>{
-                    Marker(
-                      markerId: const MarkerId('myLocation'),
-                      position: location ?? _selectedLatLng,
-                    ),
-                  },
-                  mapType: MapType.terrain,
-                ),
-              )
-            : const CircularProgressIndicator());
+                }
+              : {},
+          mapType: MapType.terrain,
+        ),
+      ),
+    );
   }
 }

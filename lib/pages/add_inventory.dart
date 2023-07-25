@@ -91,7 +91,6 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(myArrayProvider.notifier);
-
     return Scaffold(
       body: FutureBuilder<List<InventoryQuestions>>(
         future: getQuestions,
@@ -168,8 +167,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                     notify,
                                                     nextQuestion,
                                                   ),
-                                                  if (i == screensDataList[index].questions.length - 1 &&
-                                                      screensDataList[index].questions[i].questionOptionType != 'chip')
+                                                  if (i == screensDataList[index].questions.length - 1 && screensDataList[index].questions[i].questionOptionType != 'chip')
                                                     Container(
                                                       margin: const EdgeInsets.only(top: 10),
                                                       alignment: Alignment.centerRight,
