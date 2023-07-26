@@ -5,8 +5,9 @@ import '../../Customs/custom_fields.dart';
 import '../../Customs/custom_text.dart';
 import '../../routes/routes.dart';
 
-class InventorySuccessWidget extends StatelessWidget {
-  const InventorySuccessWidget({Key? key}) : super(key: key);
+class WorkItemSuccessWidget extends StatelessWidget {
+  final String isInventory;
+  const WorkItemSuccessWidget({Key? key, this.isInventory = 'IN'}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +22,8 @@ class InventorySuccessWidget extends StatelessWidget {
             width: 444,
           ),
         ),
-        const CustomText(
-          title: ' Inventory have been \n Successfully created',
+        CustomText(
+          title: ' ${isInventory == 'IN' ? 'Inventory' : isInventory == 'Todo' ? 'Todo' : 'Lead'} have been \n Successfully created',
           size: 48,
           fontWeight: FontWeight.w700,
           color: Colors.white,
