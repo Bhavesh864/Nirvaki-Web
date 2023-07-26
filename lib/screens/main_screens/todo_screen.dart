@@ -4,18 +4,17 @@ import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
-import 'package:yes_broker/widgets/inventory/inventory_filter_view.dart';
+import 'package:yes_broker/widgets/todo/todo_filter_view.dart';
 import 'package:yes_broker/widgets/todo/todo_list_view.dart';
-import 'package:yes_broker/widgets/workitems_list.dart';
 
-class LeadScreen extends StatefulWidget {
-  const LeadScreen({super.key});
+class TodoTabScreen extends StatefulWidget {
+  const TodoTabScreen({super.key});
 
   @override
-  State<LeadScreen> createState() => _LeadScreenState();
+  State<TodoTabScreen> createState() => _TodoTabScreenState();
 }
 
-class _LeadScreenState extends State<LeadScreen> {
+class _TodoTabScreenState extends State<TodoTabScreen> {
   bool isFilterOpen = false;
 
   @override
@@ -75,7 +74,7 @@ class _LeadScreenState extends State<LeadScreen> {
                           const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 8.0),
                             child: CustomText(
-                              title: 'Lead',
+                              title: 'Inventory',
                               fontWeight: FontWeight.w600,
                               size: 18,
                             ),
@@ -113,7 +112,7 @@ class _LeadScreenState extends State<LeadScreen> {
                       if (!Responsive.isMobile(context) && !isFilterOpen)
                         const Expanded(
                           child: TodoListView(headerShow: false),
-                        )
+                        ),
                     ],
                   ),
                 ),
@@ -131,7 +130,7 @@ class _LeadScreenState extends State<LeadScreen> {
                         color: Colors.grey.withOpacity(0.5),
                       ),
                       Expanded(
-                        child: InventoryFilterView(
+                        child: TodoFilterView(
                           closeFilterView: () {
                             setState(() {
                               isFilterOpen = false;
