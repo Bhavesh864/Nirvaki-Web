@@ -42,7 +42,7 @@ Future<String> submitInventoryAndcardDetails(state) async {
   final floorNumber = getDataById(state, 30);
   final latlng = getDataById(state, 31);
   final propertyFacing = getDataById(state, 32);
-  final photos = getDataById(state, 33);
+  // final photos = getDataById(state, 33);
   final video = getDataById(state, 34);
   final comments = getDataById(state, 35);
   final User assignto = getDataById(state, 36);
@@ -74,7 +74,9 @@ Future<String> submitInventoryAndcardDetails(state) async {
       cardDescription: "Want to $inventoryCategory her $bedrooms BHK for 70 L rupees",
       customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo),
       cardStatus: "New",
-      assignedto: [cards.Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)],
+      assignedto: [
+        cards.Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)
+      ],
       createdby: cards.Createdby(userfirstname: "bhavesh", userid: authentication.currentUser!.uid, userlastname: "khatri"),
       createdate: Timestamp.now(),
       propertyarearange: cards.Propertyarearange(arearangestart: superArea, unit: areaUnit),
