@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
 import 'package:yes_broker/questions_form_photos_view.dart';
@@ -13,7 +12,7 @@ import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
 import '../utils/colors.dart';
 
-Widget buildInventoryQuestions(Question question, List<Screen> screensDataList, int currentScreenIndex, AllChipSelectedAnwers notify, Function nextQuestion) {
+Widget buildWorkItemQuestion(dynamic question, List<dynamic> screensDataList, int currentScreenIndex, AllChipSelectedAnwers notify, Function nextQuestion) {
   if (question.questionOptionType == 'chip') {
     return Column(
       children: [

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 
+import 'package:flutter_material_symbols/flutter_material_symbols.dart';
+import 'package:yes_broker/pages/add_workitems.dart';
 import 'package:yes_broker/routes/routes.dart';
 import '../../constants/utils/colors.dart';
 
@@ -19,6 +20,13 @@ class CustomSpeedDialButton extends StatelessWidget {
       children: [
         SpeedDialChild(
           onTap: () {
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: (context) => const AddWorkItem(
+            //       isInventory: true,
+            //     ),
+            //   ),
+            // );
             Navigator.of(context).pushNamed(AppRoutes.addInventory);
           },
           labelShadow: [
@@ -38,6 +46,13 @@ class CustomSpeedDialButton extends StatelessWidget {
         ),
         SpeedDialChild(
           onTap: () {
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: (context) => const AddWorkItem(
+            //       isInventory: false,
+            //     ),
+            //   ),
+            // );
             Navigator.of(context).pushNamed(AppRoutes.addLead);
           },
           labelShadow: [
