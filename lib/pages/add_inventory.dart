@@ -210,7 +210,9 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                           ),
                         )
                       : response == "success"
-                          ? const InventorySuccessWidget()
+                          ? const WorkItemSuccessWidget(
+                              isInventory: true,
+                            )
                           : const Center(
                               child: CircularProgressIndicator.adaptive(),
                             ),
