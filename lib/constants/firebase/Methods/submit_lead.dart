@@ -58,14 +58,7 @@ Future<String> submitLeadAndCardDetails(state) async {
   final approvedbeds = getDataById(state, 43);
   final typeofschool = getDataById(state, 44);
   final hospitalrooms = getDataById(state, 45);
-  final price = getDataById(state, 46);
-  final priceunit = getDataById(state, 47);
-  final rentamount = getDataById(state, 48);
-  final rentunit = getDataById(state, 49);
-  final securityamount = getDataById(state, 50);
-  final securityunit = getDataById(state, 51);
-  final lockinperiod = getDataById(state, 52);
-  final commercialphotos = getDataById(state, 53);
+  final widthofRoad = getDataById(state, 46);
 
   final cards.CardDetails card = cards.CardDetails(
       workitemId: "LD$randomId",
@@ -95,8 +88,10 @@ Future<String> submitLeadAndCardDetails(state) async {
       hospitalrooms: hospitalrooms,
       propertykind: propertyKind,
       commericialtype: commericialtype,
+      availability: availability,
       typeofretail: typeofretail,
       typeofhealthcare: typeofhealthcare,
+      preferredroadwidth: widthofRoad,
       propertylocation: latlng,
       villatype: villaType,
       preferredlocation: latlng,

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-final CollectionReference todoDetailsCollection =
-    FirebaseFirestore.instance.collection('todoDetails');
+final CollectionReference todoDetailsCollection = FirebaseFirestore.instance.collection('todoDetails');
 
 class TodoDetails {
   String? todoType;
@@ -67,30 +66,16 @@ class TodoDetails {
       todoStatus = json["todoStatus"];
     }
     if (json["customerinfo"] is Map) {
-      customerinfo = json["customerinfo"] == null
-          ? null
-          : Customerinfo.fromJson(json["customerinfo"]);
+      customerinfo = json["customerinfo"] == null ? null : Customerinfo.fromJson(json["customerinfo"]);
     }
     if (json["assignedto"] is List) {
-      assignedto = json["assignedto"] == null
-          ? null
-          : (json["assignedto"] as List)
-              .map((e) => Assignedto.fromJson(e))
-              .toList();
+      assignedto = json["assignedto"] == null ? null : (json["assignedto"] as List).map((e) => Assignedto.fromJson(e)).toList();
     }
     if (json["linkedWorkItem"] is List) {
-      linkedWorkItem = json["linkedWorkItem"] == null
-          ? null
-          : (json["linkedWorkItem"] as List)
-              .map((e) => LinkedWorkItem.fromJson(e))
-              .toList();
+      linkedWorkItem = json["linkedWorkItem"] == null ? null : (json["linkedWorkItem"] as List).map((e) => LinkedWorkItem.fromJson(e)).toList();
     }
     if (json["attachments"] is List) {
-      attachments = json["attachments"] == null
-          ? null
-          : (json["attachments"] as List)
-              .map((e) => Attachments.fromJson(e))
-              .toList();
+      attachments = json["attachments"] == null ? null : (json["attachments"] as List).map((e) => Attachments.fromJson(e)).toList();
     }
   }
 
@@ -125,10 +110,8 @@ class TodoDetails {
 
   static Future<TodoDetails?> getTodoDetails(String id) async {
     try {
-      final DocumentSnapshot documentSnapshot =
-          await todoDetailsCollection.doc(id).get();
-      final Map<String, dynamic> data =
-          documentSnapshot.data() as Map<String, dynamic>;
+      final DocumentSnapshot documentSnapshot = await todoDetailsCollection.doc(id).get();
+      final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
       return TodoDetails.fromJson(data);
     } catch (error) {
       // print('Failed to get Inventory items: $error');
@@ -162,8 +145,7 @@ class Attachments {
   String? createdby;
   String? createdate;
 
-  Attachments(
-      {this.title, this.type, this.path, this.createdby, this.createdate});
+  Attachments({this.title, this.type, this.path, this.createdby, this.createdate});
 
   Attachments.fromJson(Map<String, dynamic> json) {
     if (json["title"] is String) {
@@ -200,11 +182,7 @@ class LinkedWorkItem {
   String? workItemTitle;
   String? workItemDescription;
 
-  LinkedWorkItem(
-      {this.workItemId,
-      this.workItemType,
-      this.workItemTitle,
-      this.workItemDescription});
+  LinkedWorkItem({this.workItemId, this.workItemType, this.workItemTitle, this.workItemDescription});
 
   LinkedWorkItem.fromJson(Map<String, dynamic> json) {
     if (json["workItemId"] is String) {
@@ -239,13 +217,7 @@ class Assignedto {
   String? assignedon;
   String? assignedby;
 
-  Assignedto(
-      {this.userid,
-      this.firstname,
-      this.lastname,
-      this.image,
-      this.assignedon,
-      this.assignedby});
+  Assignedto({this.userid, this.firstname, this.lastname, this.image, this.assignedon, this.assignedby});
 
   Assignedto.fromJson(Map<String, dynamic> json) {
     if (json["userid"] is String) {
@@ -288,13 +260,7 @@ class Customerinfo {
   String? whatsapp;
   String? email;
 
-  Customerinfo(
-      {this.firstname,
-      this.lastname,
-      this.title,
-      this.mobile,
-      this.whatsapp,
-      this.email});
+  Customerinfo({this.firstname, this.lastname, this.title, this.mobile, this.whatsapp, this.email});
 
   Customerinfo.fromJson(Map<String, dynamic> json) {
     if (json["firstname"] is String) {
