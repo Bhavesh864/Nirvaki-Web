@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/constants/utils/colors.dart';
-import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/TabScreens/main_screens/home_screen.dart';
-import 'package:yes_broker/routes/routes.dart';
+import 'package:yes_broker/widgets/auth/common_auth_widgets.dart';
 
 import '../../constants/utils/image_constants.dart';
 
@@ -42,21 +39,11 @@ class ResetPasswordScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(25),
                   child: Column(
                     children: [
-                      SizedBox(
-                        child: Image.asset(
-                          appLogo,
-                          width: 60,
-                          height: 60,
-                        ),
-                      ),
+                      const CustomAppLogo(),
                       const SizedBox(height: 25),
                       SizedBox(
                         width: w,
-                        child: CustomButton(
-                            leftIcon: Icons.g_mobiledata,
-                            text: 'Continue with Google',
-                            lefticonColor: Colors.white,
-                            onPressed: () {}),
+                        child: CustomButton(leftIcon: Icons.g_mobiledata, text: 'Continue with Google', lefticonColor: Colors.white, onPressed: () {}),
                       ),
                       const SizedBox(height: 10),
                       SizedBox(
@@ -81,61 +68,23 @@ class ResetPasswordScreen extends StatelessWidget {
                             onPressed: () {}),
                       ),
                       const SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Container(
-                            width: 150,
-                            height: 1,
-                            color: Colors.grey,
-                          ),
-                          const CustomText(
-                            title: 'or',
-                            size: 13,
-                            color: Colors.grey,
-                          ),
-                          Container(
-                            width: 150,
-                            height: 1,
-                            color: Colors.grey,
-                          ),
-                        ],
-                      ),
+                      const CustomOrDivider(),
                       const SizedBox(height: 30),
                       SizedBox(
                         width: w,
-                        child: CustomTextInput(
-                            controller: emailcontroller,
-                            hintText: 'Email address/ Phone number'),
+                        child: CustomTextInput(controller: emailcontroller, hintText: 'Email address/ Phone number'),
                       ),
                       const SizedBox(height: 15),
                       SizedBox(
                         width: w,
                         child: CustomButton(
                           text: 'Reset',
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed(AppRoutes.homeScreen);
-                          },
+                          onPressed: () {},
                           height: 40.0,
                         ),
                       ),
                       const SizedBox(height: 20),
-                      SizedBox(
-                        width: w,
-                        child: const Row(
-                          children: [
-                            CustomText(
-                              title: 'Don’t Have an account?',
-                              color: Colors.grey,
-                            ),
-                            CustomText(
-                              title: 'Signup Now.',
-                              color: AppColor.primary,
-                            ),
-                          ],
-                        ),
-                      )
+                      const CustomSignUpNow(),
                     ],
                   )),
             ),

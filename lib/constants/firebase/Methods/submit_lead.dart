@@ -1,19 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:random_string/random_string.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
+
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' as cards;
-import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
+
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
 final randomId = randomNumeric(5);
-Future<String> submitInventoryAndcardDetails(state) async {
+Future<String> submitLeadAndCardDetails(state) async {
   var res = "pending";
-  //  inventorycategory example =  rent ,sell
+  //  leadcategory example =  rent ,buy
   //   propertycategory example = residental ,commerical,
   final propertyCategory = getDataById(state, 1);
-  final inventoryCategory = getDataById(state, 2);
-  final inventoryType = getDataById(state, 3);
-  final inventorySource = getDataById(state, 4);
+  final leadCategory = getDataById(state, 2);
+  final leadType = getDataById(state, 3);
+  final leadSource = getDataById(state, 4);
   final firstName = getDataById(state, 5);
   final lastName = getDataById(state, 6);
   final mobileNo = getDataById(state, 7);
@@ -33,19 +35,20 @@ Future<String> submitInventoryAndcardDetails(state) async {
   final amenities = getDataById(state, 21);
   final coveredparking = getDataById(state, 22);
   final areaUnit = getDataById(state, 23);
-  final superArea = getDataById(state, 24);
-  final carpetArea = getDataById(state, 25);
+  final expectedArea = getDataById(state, 24);
   final propertyState = getDataById(state, 26);
   final propertyCity = getDataById(state, 27);
   final addressLine1 = getDataById(state, 28);
   final addressLine2 = getDataById(state, 29);
   final floorNumber = getDataById(state, 30);
   final latlng = getDataById(state, 31);
-  final propertyFacing = getDataById(state, 32);
-  // final photos = getDataById(state, 33);
-  final video = getDataById(state, 34);
+  final budgetPrice = getDataById(state, 32);
+  final budgetFigures = getDataById(state, 33);
+  final preferredpropertyfacing = getDataById(state, 34);
   final comments = getDataById(state, 35);
   final User assignto = getDataById(state, 36);
+
+  // commerical
   final availability = getDataById(state, 37);
   final commericialtype = getDataById(state, 38);
   final typeofoffice = getDataById(state, 39);
@@ -55,78 +58,66 @@ Future<String> submitInventoryAndcardDetails(state) async {
   final approvedbeds = getDataById(state, 43);
   final typeofschool = getDataById(state, 44);
   final hospitalrooms = getDataById(state, 45);
-  final price = getDataById(state, 46);
-  final priceunit = getDataById(state, 47);
-  final rentamount = getDataById(state, 48);
-  final rentunit = getDataById(state, 49);
-  final securityamount = getDataById(state, 50);
-  final securityunit = getDataById(state, 51);
-  final lockinperiod = getDataById(state, 52);
-  final commercialphotos = getDataById(state, 53);
+  final widthofRoad = getDataById(state, 46);
 
   final cards.CardDetails card = cards.CardDetails(
-      workitemId: "IN$randomId",
+      workitemId: "LD$randomId",
       status: "New",
-      cardCategory: inventoryCategory,
+      cardCategory: leadCategory,
       brokerid: authentication.currentUser!.uid,
-      cardType: "IN",
+      cardType: "LD",
       cardTitle: "$propertyCategory $propertyKind-$propertyCity",
-      cardDescription: "Want to $inventoryCategory her $bedrooms BHK for 70 L rupees",
+      cardDescription: "Want to $leadCategory her $bedrooms BHK for $budgetPrice $budgetFigures rupees",
       customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo),
       cardStatus: "New",
-      assignedto: [
-        cards.Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)
-      ],
+      assignedto: [cards.Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)],
       createdby: cards.Createdby(userfirstname: "bhavesh", userid: authentication.currentUser!.uid, userlastname: "khatri"),
       createdate: Timestamp.now(),
-      propertyarearange: cards.Propertyarearange(arearangestart: superArea, unit: areaUnit),
+      propertyarearange: cards.Propertyarearange(arearangestart: expectedArea, unit: areaUnit),
       roomconfig: cards.Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom),
-      propertypricerange: cards.Propertypricerange(arearangestart: price, unit: priceunit));
+      propertypricerange: cards.Propertypricerange(arearangestart: budgetPrice, unit: budgetFigures));
 
-  final InventoryDetails inventory = InventoryDetails(
-      inventoryTitle: "$propertyCategory $propertyKind-$propertyCity",
-      inventoryDescription: "inventoryDescription",
-      inventoryId: "IN$randomId",
-      inventoryStatus: "New",
+  final LeadDetails lead = LeadDetails(
+      leadTitle: "$propertyCategory $propertyKind-$propertyCity",
+      leadDescription: "lead",
+      leadId: "LD$randomId",
+      leadStatus: "New",
       typeofoffice: typeofoffice,
       approvedbeds: approvedbeds,
       typeofhospitality: typeofhospitality,
       hospitalrooms: hospitalrooms,
       propertykind: propertyKind,
       commericialtype: commericialtype,
+      availability: availability,
       typeofretail: typeofretail,
       typeofhealthcare: typeofhealthcare,
+      preferredroadwidth: widthofRoad,
+      propertylocation: latlng,
       villatype: villaType,
+      preferredlocation: latlng,
       typeofschool: typeofschool,
       transactiontype: transactionType,
       brokerid: authentication.currentUser!.uid,
-      inventorycategory: inventoryCategory,
+      leadcategory: leadCategory,
       propertycategory: propertyCategory,
-      inventoryType: inventoryType,
-      inventorysource: inventorySource,
+      leadType: leadType,
+      preferredpropertyfacing: preferredpropertyfacing,
+      leadsource: leadSource,
       possessiondate: possession,
-      amenities: amenities,
-      commercialphotos: commercialphotos,
-      propertyrent: Propertyrent(rentamount: rentamount, rentunit: rentunit, securityamount: securityamount, securityunit: securityunit, lockinperiod: lockinperiod),
-      availability: availability,
-      propertyprice: Propertyprice(price: price, unit: priceunit),
-      reservedparking: Reservedparking(covered: coveredparking),
-      propertyarea: Propertyarea(unit: areaUnit, superarea: superArea, carpetarea: carpetArea),
       plotdetails: Plotdetails(boundarywall: boundaryWall, opensides: openSides),
+      amenities: amenities,
+      preferredlocality: Preferredlocality(state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, prefferedfloornumber: floorNumber),
+      propertyarearange: Propertyarearange(unit: areaUnit, arearangestart: expectedArea),
+      propertypricerange: Propertypricerange(unit: budgetFigures, arearangestart: budgetPrice),
+      reservedparking: Reservedparking(covered: coveredparking),
       customerinfo: Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo),
       roomconfig: Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom, balconies: balconies, bathroom: bathrooms),
-      propertyfacing: propertyFacing,
       comments: comments,
-      plotarea: Plotarea(area: carpetArea, unit: areaUnit),
-      propertyaddress: Propertyaddress(state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, floornumber: floorNumber),
-      propertylocation: latlng,
-      attachments: [],
-      propertyvideo: video,
       createdate: Timestamp.now(),
       assignedto: [Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)],
       createdby: Createdby(userfirstname: "bhavesh", userid: authentication.currentUser!.uid, userlastname: "khatri"));
 
   await cards.CardDetails.addCardDetails(card).then((value) => {res = "success"});
-  await InventoryDetails.addInventoryDetails(inventory).then((value) => {res = "success"});
+  await LeadDetails.addLeadDetails(lead).then((value) => {res = "success"});
   return res;
 }
