@@ -6,7 +6,8 @@ import 'package:yes_broker/widgets/custom_chip.dart';
 import 'package:yes_broker/widgets/inventory/inventory_checkbox_options.dart';
 
 class InventoryFilterView extends StatelessWidget {
-  const InventoryFilterView({super.key});
+  final Function closeFilterView;
+  const InventoryFilterView({super.key, required this.closeFilterView});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,11 @@ class InventoryFilterView extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                       size: 18,
                     ),
-                    IconButton(onPressed: () {}, icon: const Icon(Icons.close)),
+                    IconButton(
+                        onPressed: () {
+                          closeFilterView();
+                        },
+                        icon: const Icon(Icons.close)),
                   ],
                 ),
                 // Spacer(),

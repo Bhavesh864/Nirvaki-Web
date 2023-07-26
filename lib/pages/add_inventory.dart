@@ -44,6 +44,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     notify.submitInventory().then((value) => {
           setState(() {
             response = value;
+            if (value == 'success') allQuestionFinishes = true;
           })
         });
   }
@@ -58,9 +59,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
         );
       });
     } else {
-      setState(() {
-        allQuestionFinishes = true;
-      });
+      setState(() {});
     }
   }
 
@@ -106,39 +105,37 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
             return Stack(
               children: [
                 Container(
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(authBgImage),
-                        fit: BoxFit.cover,
-                        colorFilter: ColorFilter.mode(
-                          Colors.black38,
-                          BlendMode.darken,
-                        ),
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(authBgImage),
+                      fit: BoxFit.cover,
+                      colorFilter: ColorFilter.mode(
+                        Colors.black38,
+                        BlendMode.darken,
                       ),
                     ),
-                    child: !allQuestionFinishes
-                        ? Form(
-                            key: _formKey,
-                            child: PageView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              controller: pageController,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: screensDataList.length,
-                              itemBuilder: (context, index) {
-                                return Center(
-                                  child: Card(
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: !allQuestionFinishes
+                      ? Form(
+                          key: _formKey,
+                          child: PageView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            controller: pageController,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: screensDataList.length,
+                            itemBuilder: (context, index) {
+                              return Center(
+                                child: Card(
+                                  child: Container(
+                                    constraints: BoxConstraints(
+                                      minHeight: 0,
+                                      maxHeight: Responsive.isMobile(context) ? height! * 0.8 : height! * 0.88,
                                     ),
-                                    child: SingleChildScrollView(
-                                      child: Container(
-                                        constraints: const BoxConstraints(
-                                          minHeight: 0,
-                                          maxHeight: double.infinity,
-                                        ),
-                                        width: Responsive.isMobile(context) ? width! * 0.9 : 650,
-                                        padding: const EdgeInsets.all(25),
+                                    width: Responsive.isMobile(context) ? width! * 0.9 : 650,
+                                    padding: const EdgeInsets.all(25),
+                                    child: ScrollConfiguration(
+                                      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                                      child: SingleChildScrollView(
                                         child: Column(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
@@ -150,62 +147,74 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                 title: screensDataList[index].title.toString(),
                                                 fontWeight: FontWeight.bold,
                                               ),
-                                            for (var i = 0; i < screensDataList[index].questions.length; i++)
-                                              Column(
-                                                children: [
-                                                  if (screensDataList[index].title == null)
-                                                    CustomText(
+                                            ListView.builder(
+                                              shrinkWrap: true,
+                                              physics: const NeverScrollableScrollPhysics(),
+                                              itemCount: screensDataList[index].questions.length,
+                                              itemBuilder: (context, i) {
+                                                final question = screensDataList[index].questions[i];
+                                                return Column(
+                                                  children: [
+                                                    if (screensDataList[index].title == null)
+                                                      CustomText(
                                                         softWrap: true,
                                                         textAlign: TextAlign.center,
                                                         size: 30,
-                                                        title: screensDataList[index].questions[i].questionTitle,
-                                                        fontWeight: FontWeight.bold),
-                                                  buildQuestionWidget(
-                                                    screensDataList[index].questions[i],
-                                                    screensDataList,
-                                                    currentScreenIndex,
-                                                    notify,
-                                                    nextQuestion,
-                                                  ),
-                                                  if (i == screensDataList[index].questions.length - 1 && screensDataList[index].questions[i].questionOptionType != 'chip')
-                                                    Container(
-                                                      margin: const EdgeInsets.only(top: 10),
-                                                      alignment: Alignment.centerRight,
-                                                      child: CustomButton(
-                                                        text: 'Next',
-                                                        onPressed: () {
-                                                          nextQuestion(
-                                                            screensDataList: screensDataList,
-                                                          );
-                                                          // if (_formKey.currentState!.validate()) {
-                                                          //   nextQuestion(
-                                                          //     screensDataList: screensDataList,
-                                                          //   );
-                                                          // }
-                                                          if (screensDataList[index].title == "Assign to") {
-                                                            addDataOnfirestore(notify);
-                                                          }
-                                                        },
-                                                        width: 73,
-                                                        height: 39,
+                                                        title: question.questionTitle,
+                                                        fontWeight: FontWeight.bold,
                                                       ),
+                                                    buildQuestionWidget(
+                                                      question,
+                                                      screensDataList,
+                                                      currentScreenIndex,
+                                                      notify,
+                                                      nextQuestion,
                                                     ),
-                                                ],
-                                              ),
+                                                    if (i == screensDataList[index].questions.length - 1 && question.questionOptionType != 'chip')
+                                                      Container(
+                                                        margin: const EdgeInsets.only(top: 10),
+                                                        alignment: Alignment.centerRight,
+                                                        child: CustomButton(
+                                                          text: 'Next',
+                                                          onPressed: () {
+                                                            FocusScope.of(context).unfocus();
+
+                                                            nextQuestion(
+                                                              screensDataList: screensDataList,
+                                                            );
+                                                            // if (_formKey.currentState!.validate()) {
+                                                            //   nextQuestion(
+                                                            //     screensDataList: screensDataList,
+                                                            //   );
+                                                            // }
+                                                            if (screensDataList[index].title == "Assign to") {
+                                                              addDataOnfirestore(notify);
+                                                            }
+                                                          },
+                                                          width: 73,
+                                                          height: 39,
+                                                        ),
+                                                      ),
+                                                  ],
+                                                );
+                                              },
+                                            )
                                           ],
                                         ),
                                       ),
                                     ),
                                   ),
-                                );
-                              },
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      : response == "success"
+                          ? const InventorySuccessWidget()
+                          : const Center(
+                              child: CircularProgressIndicator.adaptive(),
                             ),
-                          )
-                        : response == "success"
-                            ? const InventorySuccessWidget()
-                            : const Center(
-                                child: CircularProgressIndicator.adaptive(),
-                              )),
+                ),
                 inventoryAppBar(screensDataList),
               ],
             );
