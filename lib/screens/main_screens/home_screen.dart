@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/constants/firebase/questionModels/todo_question.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
@@ -20,10 +21,115 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // questions();
+    // add();
   }
 
-  // await LeadQuestions.addScreens(screensList);
+  add() async {
+    List<TodoQuestion> screensList = [
+      TodoQuestion(screens: [
+        Screen(
+          questions: [
+            Question(
+              questionId: 1,
+              questionOptionType: "chip",
+              questionTitle: "What kind of to do is it?",
+              questionOption: ["Task", "Follow Up", "Reminder"],
+            ),
+          ],
+          isActive: true,
+          previousScreenId: "",
+          screenId: "S1",
+          nextScreenId: "S2",
+        ),
+        Screen(
+          questions: [
+            Question(
+              questionId: 2,
+              questionOptionType: "textfield",
+              questionTitle: "Task Name",
+              questionOption: "",
+            ),
+            Question(
+              questionId: 3,
+              questionOptionType: "textarea",
+              questionTitle: "Task Description",
+              questionOption: "",
+            ),
+          ],
+          isActive: true,
+          previousScreenId: "S1",
+          screenId: "S2",
+          title: "Task Name and Description",
+          nextScreenId: "S3",
+        ),
+        Screen(
+          questions: [
+            Question(
+              questionId: 4,
+              questionOptionType: "date",
+              questionTitle: "Due date",
+              questionOption: "",
+            ),
+          ],
+          isActive: true,
+          previousScreenId: "S2",
+          screenId: "S3",
+          title: "Due Date for task",
+          nextScreenId: "S4",
+        ),
+        Screen(
+          questions: [
+            Question(
+              questionId: 5,
+              questionOptionType: "chip",
+              questionTitle: "Do you want to link  work item?",
+              questionOption: ["Yes", "No"],
+            ),
+          ],
+          isActive: true,
+          previousScreenId: "S3",
+          screenId: "S4",
+          nextScreenId: "S5",
+        ),
+        Screen(
+          questions: [
+            Question(
+              questionId: 6,
+              questionOptionType: "dropdown",
+              questionTitle: "Link Work Item",
+              questionOption: "",
+            ),
+          ],
+          title: "Link Work Item",
+          isActive: true,
+          previousScreenId: "S4",
+          screenId: "S5",
+          nextScreenId: "S6",
+        ),
+        Screen(
+          questions: [
+            Question(questionId: 7, questionOptionType: "dropdown", questionTitle: "Link Inventory", questionOption: ""),
+          ],
+          isActive: true,
+          previousScreenId: "S5",
+          screenId: "S6",
+          title: "Link Inventory",
+          nextScreenId: "S7",
+        ),
+        Screen(
+          questions: [
+            Question(questionId: 12, questionOptionType: "Assign", questionTitle: "Assign to", questionOption: ""),
+          ],
+          isActive: true,
+          previousScreenId: "S6",
+          title: "Assign to",
+          screenId: "S7",
+          nextScreenId: "S8",
+        ),
+      ], type: '')
+    ];
+    await TodoQuestion.addScreens(screensList);
+  }
 
   // await InventoryQuestions.addScreens(screensList);
 
