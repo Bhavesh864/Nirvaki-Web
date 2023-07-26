@@ -6,7 +6,7 @@ import 'package:yes_broker/Customs/responsive.dart';
 
 import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
 
-import 'package:yes_broker/constants/functions/get_lead_questions.dart';
+import 'package:yes_broker/constants/functions/get_todo_questions.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/widgets/inventory/inventory_success_widget.dart';
 import '../Customs/custom_fields.dart';
@@ -17,15 +17,15 @@ final myArrayProvider = StateNotifierProvider<AllChipSelectedAnwers, List<Map<St
   (ref) => AllChipSelectedAnwers(),
 );
 
-class AddLead extends ConsumerStatefulWidget {
-  const AddLead({super.key});
+class AddTodo extends ConsumerStatefulWidget {
+  const AddTodo({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _AddLeadState createState() => _AddLeadState();
+  _AddTodoState createState() => _AddTodoState();
 }
 
-class _AddLeadState extends ConsumerState<AddLead> {
+class _AddTodoState extends ConsumerState<AddTodo> {
   String? response;
   bool allQuestionFinishes = false;
   late Future<List<LeadQuestions>> getQuestions;
@@ -160,7 +160,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                         size: 30,
                                                         title: screensDataList[index].questions[i].questionTitle,
                                                         fontWeight: FontWeight.bold),
-                                                  buildLeadQuestions(
+                                                  buildTodoQuestions(
                                                     screensDataList[index].questions[i],
                                                     screensDataList,
                                                     currentScreenIndex,

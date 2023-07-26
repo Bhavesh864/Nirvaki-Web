@@ -61,6 +61,7 @@ class LargeScreenNavBar extends ConsumerWidget {
               children: [
                 largeScreenView(snapshot.data?.userfirstname),
                 PopupMenuButton(
+                  onCanceled: () {},
                   onSelected: (value) {
                     onOptionSelect(value);
                   },
@@ -119,7 +120,7 @@ Widget largeScreenView(name) {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CustomText(
-          title: 'Good morning, $name',
+          title: 'Welcome, $name',
           fontWeight: FontWeight.bold,
         ),
         Center(
