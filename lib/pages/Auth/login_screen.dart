@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/constants/utils/colors.dart';
-import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 import 'package:yes_broker/routes/routes.dart';
+import 'package:yes_broker/widgets/auth/common_auth_widgets.dart';
 import '../../constants/utils/image_constants.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -32,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 setState(() {
                   isloading = false;
                 }),
-                Navigator.of(context).pushNamed(AppRoutes.homeScreen)
+                Navigator.of(context).pushReplacementNamed(AppRoutes.homeScreen)
               }
             else
               {
@@ -60,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 image: AssetImage(authBgImage),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
-                  Colors.black38,
+                  Colors.black12,
                   BlendMode.darken,
                 ),
               ),
@@ -74,18 +73,22 @@ class _LoginScreenState extends State<LoginScreen> {
                     key: key,
                     child: Column(
                       children: [
-                        SizedBox(
-                          child: Image.asset(
-                            appLogo,
-                            width: 60,
-                            height: 60,
+                        const CustomAppLogo(),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 10),
+                          child: Text(
+                            "Log In",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
                           ),
                         ),
-                        const SizedBox(height: 25),
+                        const SizedBox(height: 10),
                         SizedBox(
                           width: w,
                           child: CustomButton(
-                            leftIcon: Icons.g_mobiledata,
+                            leftIcon: Icons.g_mobiledata_rounded,
                             text: 'Continue with Google',
                             lefticonColor: Colors.white,
                             onPressed: () {},
@@ -114,26 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               onPressed: () {}),
                         ),
                         const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              width: Responsive.isMobile(context) ? w * 0.2 : 150,
-                              height: 1,
-                              color: Colors.grey,
-                            ),
-                            const CustomText(
-                              title: 'or',
-                              size: 13,
-                              color: Colors.grey,
-                            ),
-                            Container(
-                              width: Responsive.isMobile(context) ? w * 0.2 : 150,
-                              height: 1,
-                              color: Colors.grey,
-                            ),
-                          ],
-                        ),
+                        const CustomOrDivider(),
                         const SizedBox(
                           height: 10,
                         ),
@@ -147,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             return null;
                           },
                         ),
-                        const SizedBox(height: 15),
+                        // const SizedBox(height: 15),
                         CustomTextInput(
                           controller: passwordcontroller,
                           hintText: 'Password',
@@ -160,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             return null;
                           },
                         ),
-                        const SizedBox(height: 15),
+                        const SizedBox(height: 10),
                         isloading
                             ? const Center(child: CircularProgressIndicator.adaptive())
                             : SizedBox(
@@ -172,37 +156,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                         const SizedBox(height: 10),
-                        Center(
-                          child: InkWell(
-                            onTap: () {
-                              // Navigator.of(context)
-                              //     .pushNamed(ForgetPassword.routeName);
-                            },
-                            child: const CustomText(
-                              title: 'Forget password?',
-                              size: 14,
-                            ),
-                          ),
-                        ),
+                        const CustomForgetPassword(),
                         const SizedBox(height: 10),
-                        const Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CustomText(
-                                title: 'Don’t Have an account?',
-                                color: Colors.grey,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              CustomText(
-                                title: 'Signup Now.',
-                                color: AppColor.primary,
-                              ),
-                            ],
-                          ),
-                        ),
+                        const CustomSignUpNow(),
                       ],
                     ),
                   ),

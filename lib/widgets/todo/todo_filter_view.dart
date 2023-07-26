@@ -6,7 +6,9 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/widgets/custom_chip.dart';
 
 class TodoFilterView extends StatelessWidget {
-  const TodoFilterView({super.key});
+  final Function closeFilterView;
+
+  const TodoFilterView({super.key, required this.closeFilterView});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,11 @@ class TodoFilterView extends StatelessWidget {
                 fontWeight: FontWeight.w700,
                 size: 18,
               ),
-              IconButton(onPressed: () {}, icon: const Icon(Icons.close)),
+              IconButton(
+                  onPressed: () {
+                    closeFilterView();
+                  },
+                  icon: const Icon(Icons.close)),
             ],
           ),
           // Spacer(),

@@ -1,28 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-final CollectionReference questionsCollection =
-    FirebaseFirestore.instance.collection('InventoryQuestions');
+final CollectionReference questionsCollection = FirebaseFirestore.instance.collection('InventoryQuestions');
 
 class InventoryQuestions {
   List<Screen> screens;
-
-  InventoryQuestions({required this.screens});
+  String type;
+  InventoryQuestions({required this.screens, required this.type});
 
   factory InventoryQuestions.fromJson(Map<String, dynamic> json) {
-    List<Screen> screens = List<Screen>.from(
-        json['screens'].map((screen) => Screen.fromJson(screen)).toList());
-    return InventoryQuestions(screens: screens);
+    List<Screen> screens = List<Screen>.from(json['screens'].map((screen) => Screen.fromJson(screen)).toList());
+    return InventoryQuestions(screens: screens, type: json["type"]);
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'screens': screens.map((screen) => screen.toJson()).toList(),
-    };
+    return {'screens': screens.map((screen) => screen.toJson()).toList(), "type": type};
   }
 
   // Get all Questions data from Firestore
-  static Future<List<InventoryQuestions>>
-      getAllQuestionssFromFirestore() async {
+  static Future<List<InventoryQuestions>> getAllQuestionssFromFirestore() async {
     final List<InventoryQuestions> questionss = [];
     try {
       QuerySnapshot querySnapshot = await questionsCollection.get();
@@ -43,8 +38,7 @@ class InventoryQuestions {
   static Future<void> addScreens(List<InventoryQuestions> screens) async {
     try {
       for (InventoryQuestions screen in screens) {
-        final DocumentReference documentReference =
-            await questionsCollection.add(screen.toJson());
+        final DocumentReference documentReference = await questionsCollection.add(screen.toJson());
         print('Screen added with ID: ${documentReference.id}');
       }
     } catch (e) {
@@ -71,9 +65,7 @@ class Screen {
   });
 
   factory Screen.fromJson(Map<String, dynamic> json) {
-    List<Question> questions = List<Question>.from(json['questions']
-        .map((question) => Question.fromJson(question))
-        .toList());
+    List<Question> questions = List<Question>.from(json['questions'].map((question) => Question.fromJson(question)).toList());
     return Screen(
         screenId: json['screenId'],
         questions: questions,

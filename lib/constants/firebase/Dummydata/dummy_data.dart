@@ -407,7 +407,7 @@
     //         questions: [
     //           Question(
     //             questionId: 34,
-    //             questionOptionType: "video",
+    //             questionOptionType: "textfield",
     //             questionTitle: "Video",
     //             questionOption: "",
     //           ),
@@ -435,7 +435,7 @@
     //         questions: [
     //           Question(
     //             questionId: 36,
-    //             questionOptionType: "textfield",
+    //             questionOptionType: "Assign",
     //             questionTitle: "Assign to",
     //             questionOption: "",
     //           ),

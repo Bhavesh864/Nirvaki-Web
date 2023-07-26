@@ -4,9 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 
-import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
+import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart' as IN;
+import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart' as LD;
 
-import 'package:yes_broker/constants/functions/get_inventory_questions_widgets.dart';
+import 'package:yes_broker/constants/functions/get_workItem_question.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/widgets/inventory/inventory_success_widget.dart';
 import '../Customs/custom_fields.dart';
@@ -17,18 +18,21 @@ final myArrayProvider = StateNotifierProvider<AllChipSelectedAnwers, List<Map<St
   (ref) => AllChipSelectedAnwers(),
 );
 
-class AddInventory extends ConsumerStatefulWidget {
-  const AddInventory({super.key});
+class AddWorkItem extends ConsumerStatefulWidget {
+  final bool isInventory;
+
+  const AddWorkItem({this.isInventory = true, super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _AddInventoryState createState() => _AddInventoryState();
+  _AddWorkItemState createState() => _AddWorkItemState();
 }
 
-class _AddInventoryState extends ConsumerState<AddInventory> {
+class _AddWorkItemState extends ConsumerState<AddWorkItem> {
   String? response;
   bool allQuestionFinishes = false;
-  late Future<List<InventoryQuestions>> getQuestions;
+  late Future<List<IN.InventoryQuestions>> getInventoryQuestions;
+  late Future<List<LD.LeadQuestions>> getLeadQuestions;
   PageController? pageController;
   int currentScreenIndex = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -36,7 +40,11 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   @override
   void initState() {
     super.initState();
-    getQuestions = InventoryQuestions.getAllQuestionssFromFirestore();
+    if (widget.isInventory) {
+      getInventoryQuestions = IN.InventoryQuestions.getAllQuestionssFromFirestore();
+    } else {
+      getLeadQuestions = LD.LeadQuestions.getAllQuestionssFromFirestore();
+    }
     pageController = PageController(initialPage: currentScreenIndex);
   }
 
@@ -49,7 +57,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
         });
   }
 
-  nextQuestion({List<Screen>? screensDataList, option}) {
+  nextQuestion({List<dynamic>? screensDataList, option}) {
     if (currentScreenIndex < screensDataList!.length - 1) {
       setState(() {
         currentScreenIndex++;
@@ -78,7 +86,16 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     }
   }
 
-  InventoryQuestions? getcurrentInventory(AsyncSnapshot<List<InventoryQuestions>> snapshot, option) {
+  IN.InventoryQuestions? getcurrentInventory(AsyncSnapshot<List<dynamic>> snapshot, option) {
+    for (var data in snapshot.data!) {
+      if (data.type == option) {
+        return data;
+      }
+    }
+    return null;
+  }
+
+  LD.LeadQuestions? getCurrentLead(AsyncSnapshot<List<dynamic>> snapshot, option) {
     for (var data in snapshot.data!) {
       if (data.type == option) {
         return data;
@@ -91,8 +108,8 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   Widget build(BuildContext context) {
     final notify = ref.read(myArrayProvider.notifier);
     return Scaffold(
-      body: FutureBuilder<List<InventoryQuestions>>(
-        future: getQuestions,
+      body: FutureBuilder<List<dynamic>>(
+        future: widget.isInventory ? getInventoryQuestions : getLeadQuestions,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator.adaptive());
@@ -100,8 +117,8 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
             return Text('Error: ${snapshot.error}');
           } else {
             final String res = notify.state.isNotEmpty ? notify.state[0]["item"] : "Residential";
-            InventoryQuestions? screenData = getcurrentInventory(snapshot, res);
-            List<Screen> screensDataList = screenData!.screens;
+            dynamic screenData = widget.isInventory ? getcurrentInventory(snapshot, res) : getCurrentLead(snapshot, res);
+            List<dynamic> screensDataList = screenData!.screens;
             return Stack(
               children: [
                 Container(
@@ -163,7 +180,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                         title: question.questionTitle,
                                                         fontWeight: FontWeight.bold,
                                                       ),
-                                                    buildInventoryQuestions(
+                                                    buildWorkItemQuestion(
                                                       question,
                                                       screensDataList,
                                                       currentScreenIndex,
@@ -210,8 +227,8 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                           ),
                         )
                       : response == "success"
-                          ? const WorkItemSuccessWidget(
-                              isInventory: "IN",
+                          ? WorkItemSuccessWidget(
+                              isInventory: widget.isInventory ? 'IN' : 'LD',
                             )
                           : const Center(
                               child: CircularProgressIndicator.adaptive(),
@@ -226,7 +243,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     );
   }
 
-  Consumer inventoryAppBar(List<Screen> screensDataList) {
+  Consumer inventoryAppBar(List<dynamic> screensDataList) {
     return Consumer(
       builder: (context, ref, child) {
         return Positioned(
@@ -246,8 +263,8 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
               },
               icon: const Icon(Icons.arrow_back),
             ),
-            title: const CustomText(
-              title: 'Add Inventory ',
+            title: CustomText(
+              title: widget.isInventory ? 'Add Inventory ' : 'Add Lead',
               fontWeight: FontWeight.w700,
               size: 20,
               color: Colors.white,

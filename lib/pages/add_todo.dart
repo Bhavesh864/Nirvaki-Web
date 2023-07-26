@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 
-import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
+import 'package:yes_broker/constants/firebase/questionModels/todo_question.dart';
 
-import 'package:yes_broker/constants/functions/get_lead_questions.dart';
+import 'package:yes_broker/constants/functions/get_todo_questions.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/widgets/inventory/inventory_success_widget.dart';
 import '../Customs/custom_fields.dart';
@@ -17,18 +17,18 @@ final myArrayProvider = StateNotifierProvider<AllChipSelectedAnwers, List<Map<St
   (ref) => AllChipSelectedAnwers(),
 );
 
-class AddLead extends ConsumerStatefulWidget {
-  const AddLead({super.key});
+class AddTodo extends ConsumerStatefulWidget {
+  const AddTodo({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _AddLeadState createState() => _AddLeadState();
+  _AddTodoState createState() => _AddTodoState();
 }
 
-class _AddLeadState extends ConsumerState<AddLead> {
+class _AddTodoState extends ConsumerState<AddTodo> {
   String? response;
   bool allQuestionFinishes = false;
-  late Future<List<LeadQuestions>> getQuestions;
+  late Future<List<TodoQuestion>> getQuestions;
   PageController? pageController;
   int currentScreenIndex = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -36,16 +36,19 @@ class _AddLeadState extends ConsumerState<AddLead> {
   @override
   void initState() {
     super.initState();
-    getQuestions = LeadQuestions.getAllQuestionssFromFirestore();
+    getQuestions = TodoQuestion.getAllQuestionssFromFirestore();
     pageController = PageController(initialPage: currentScreenIndex);
   }
 
   addDataOnfirestore(AllChipSelectedAnwers notify) {
-    notify.submitLead().then((value) => {
-          setState(() {
-            response = value;
-          })
-        });
+    // notify.submitLead().then((value) => {
+    //       setState(() {
+    //         response = value;
+    //       })
+    //     });
+    setState(() {
+      response = 'success';
+    });
   }
 
   nextQuestion({List<Screen>? screensDataList, option}) {
@@ -79,7 +82,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
     }
   }
 
-  LeadQuestions? getCurrentLead(AsyncSnapshot<List<LeadQuestions>> snapshot, option) {
+  TodoQuestion? getCurrentLead(AsyncSnapshot<List<TodoQuestion>> snapshot, option) {
     for (var data in snapshot.data!) {
       if (data.type == option) {
         return data;
@@ -92,7 +95,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
   Widget build(BuildContext context) {
     final notify = ref.read(myArrayProvider.notifier);
     return Scaffold(
-      body: FutureBuilder<List<LeadQuestions>>(
+      body: FutureBuilder<List<TodoQuestion>>(
         future: getQuestions,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -100,9 +103,9 @@ class _AddLeadState extends ConsumerState<AddLead> {
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
-            final String res = notify.state.isNotEmpty ? notify.state[0]["item"] : "Residential";
-            LeadQuestions? screenData = getCurrentLead(snapshot, res);
-            List<Screen> screensDataList = screenData!.screens;
+            // final String res = notify.state.isNotEmpty ? notify.state[0]["item"] : "Residential";
+            List<TodoQuestion>? screenData = snapshot.data;
+            List<Screen> screensDataList = screenData![0].screens;
             return Stack(
               children: [
                 Container(
@@ -160,7 +163,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                         size: 30,
                                                         title: screensDataList[index].questions[i].questionTitle,
                                                         fontWeight: FontWeight.bold),
-                                                  buildLeadQuestions(
+                                                  buildTodoQuestions(
                                                     screensDataList[index].questions[i],
                                                     screensDataList,
                                                     currentScreenIndex,
@@ -204,7 +207,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                           )
                         : response == "success"
                             ? const WorkItemSuccessWidget(
-                                isInventory: 'LD',
+                                isInventory: 'Todo',
                               )
                             : const Center(
                                 child: CircularProgressIndicator.adaptive(),
@@ -239,7 +242,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
               icon: const Icon(Icons.arrow_back),
             ),
             title: const CustomText(
-              title: 'Add Lead',
+              title: 'Add Todo',
               fontWeight: FontWeight.w700,
               size: 20,
               color: Colors.white,
