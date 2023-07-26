@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
 class AssignUser extends StatelessWidget {
@@ -74,13 +76,14 @@ class AssignUser extends StatelessWidget {
                     final dropdownHeight = itemHeight * itemCount;
                     return SingleChildScrollView(
                       child: Align(
-                        alignment: Alignment.centerLeft,
+                        alignment: Alignment.topLeft,
                         child: SizedBox(
-                          width: 400,
+                          width: Responsive.isMobile(context) ? 310 : 500,
                           height: dropdownHeight,
                           child: Material(
                             elevation: 4,
                             child: ListView.separated(
+                              padding: const EdgeInsets.all(3.0),
                               shrinkWrap: true,
                               itemCount: itemCount,
                               separatorBuilder: (context, index) => const Divider(),

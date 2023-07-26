@@ -1,10 +1,11 @@
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/pages/add_inventory.dart';
 
 class PhotosViewForm extends ConsumerStatefulWidget {
@@ -21,35 +22,76 @@ class _PhotosViewFormState extends ConsumerState<PhotosViewForm> {
   List<String> itemTitles = [];
   bool isInitialized = false;
 
+  final Set<String> roomsWithTwoImages = {};
+
+  final Map<String, int> containersCountByRoom = {};
+
+  List<Widget> imageContainers = [];
+
+  // Use a map to store the corresponding indexes of webImages and images lists.
+  Map<String, int> imageIndexes = {};
+
   @override
   void initState() {
-    super.initState();
-    initializeLists();
-  }
-
-  void initializeLists() {
     final answersArr = ref.read(myArrayProvider.notifier).state;
-    int numberOfItems = answersArr.length;
-    itemTitles = ['Front Elevation'];
-    itemTitles.addAll(List.generate(numberOfItems, (index) => 'Bed Room(${index + 1})'));
+    itemTitles = [
+      'Front Elevation',
+    ];
 
-    print('itemTiles length --- ${itemTitles.length}');
+    final selectedAnswerArr = answersArr.where((item) => item['id'] == 14 || item['id'] == 15 || item['id'] == 16).toList();
+
+    for (var item in selectedAnswerArr) {
+      int itemId = item['id'];
+      dynamic roomItems = item['item'];
+
+      if (roomItems is String) {
+        for (int i = 1; i <= int.parse(roomItems); i++) {
+          itemTitles.add(getItemTitle(itemId, i, containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1, []));
+
+          // Update the count of containers added for the room
+          containersCountByRoom[itemTitles[itemTitles.length - 1]] = (containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1) + 1;
+
+          if (!roomsWithTwoImages.contains(itemTitles[itemTitles.length - 1])) {
+            itemTitles.add(getItemTitle(itemId, i, containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1, []));
+
+            // Mark the room as having two images
+            roomsWithTwoImages.add(itemTitles[itemTitles.length - 1]);
+          }
+        }
+      } else if (roomItems is List<String>) {
+        for (int i = 0; i < roomItems.length; i++) {
+          itemTitles.add(getItemTitle(itemId, i + 1, containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1, roomItems));
+
+          // Update the count of containers added for the room
+          containersCountByRoom[itemTitles[itemTitles.length - 1]] = (containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1) + 1;
+
+          if (!roomsWithTwoImages.contains(itemTitles[itemTitles.length - 1])) {
+            itemTitles.add(getItemTitle(itemId, i + 1, containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1, roomItems));
+
+            // Mark the room as having two images
+            roomsWithTwoImages.add(itemTitles[itemTitles.length - 1]);
+          }
+        }
+      }
+    }
 
     webImages = List.generate(itemTitles.length, (index) => null);
     images = List.generate(itemTitles.length, (index) => null);
-    print('webimages length --- ${webImages.length}');
     isInitialized = true;
+    imageContainers = List.generate(itemTitles.length, (index) => getImageContainer(index));
+
+    super.initState();
   }
 
   String getItemTitle(int itemId, int roomNumber, int containerIndex, List<String> roomList) {
     if (itemId == 14) {
-      return 'Bed Room $roomNumber($containerIndex)';
+      return 'Bed Room$roomNumber ($containerIndex)';
     } else if (itemId == 16) {
-      return 'BathRoom $roomNumber($containerIndex)';
+      return 'BathRoom$roomNumber ($containerIndex)';
     } else if (itemId == 15) {
       return '${roomList[roomNumber - 1]} ($containerIndex)';
     }
-    return 'BhAVESH';
+    return '';
   }
 
   Widget getImageContainer(int index) {
@@ -59,7 +101,7 @@ class _PhotosViewFormState extends ConsumerState<PhotosViewForm> {
           child: SizedBox(
             width: 106,
             height: 100,
-            child: images[index] == null
+            child: webImages[index] == null
                 ? const Icon(Icons.photo_rounded, size: 70, color: Colors.grey)
                 : kIsWeb
                     ? Image.memory(
@@ -81,117 +123,95 @@ class _PhotosViewFormState extends ConsumerState<PhotosViewForm> {
     );
   }
 
+  Future<void> selectImage(int index) async {
+    XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (kIsWeb) {
+      if (pickedImage != null) {
+        var f = await pickedImage.readAsBytes();
+
+        setState(() {
+          webImages[index] = f;
+          images[index] = File('a');
+        });
+
+        // String base64String = base64Encode(f);
+      }
+    } else {
+      if (pickedImage != null) {
+        var selected = File(pickedImage.path);
+        setState(() {
+          images[index] = selected;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final answersArr = ref.watch(myArrayProvider.notifier).state;
-
-    final selectedAnswerArr = answersArr.where((item) => item['id'] == 14 || item['id'] == 15 || item['id'] == 16).toList();
-
-    final Set<String> roomsWithTwoImages = {};
-
-    final Map<String, int> containersCountByRoom = {};
-
-    List<Widget> imageContainers = [];
-    imageContainers.add(getImageContainer(0));
-
-    for (var item in selectedAnswerArr) {
-      int itemId = item['id'];
-      dynamic roomItems = item['item'];
-
-      if (roomItems is String) {
-        for (int i = 1; i <= int.parse(roomItems); i++) {
-          itemTitles.add(getItemTitle(itemId, i, containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1, []));
-          webImages.add(null);
-          images.add(null);
-          imageContainers.add(getImageContainer(itemTitles.length - 1));
-
-          // Update the count of containers added for the room
-          containersCountByRoom[itemTitles[itemTitles.length - 1]] = (containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1) + 1;
-
-          if (!roomsWithTwoImages.contains(itemTitles[itemTitles.length - 1])) {
-            itemTitles.add(getItemTitle(itemId, i, containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1, []));
-            webImages.add(null);
-            images.add(null);
-            imageContainers.add(getImageContainer(itemTitles.length - 1));
-
-            // Mark the room as having two images
-            roomsWithTwoImages.add(itemTitles[itemTitles.length - 1]);
-          }
-        }
-
-        // Check if the room already has two images, if not, add another container
-      } else if (roomItems is List<String>) {
-        for (int i = 0; i < roomItems.length; i++) {
-          itemTitles.add(getItemTitle(itemId, i + 1, containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1, roomItems));
-          webImages.add(null);
-          images.add(null);
-          imageContainers.add(getImageContainer(itemTitles.length - 1));
-
-          // Update the count of containers added for the room
-          containersCountByRoom[itemTitles[itemTitles.length - 1]] = (containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1) + 1;
-
-          // Check if the room already has two images, if not, add another container
-          if (!roomsWithTwoImages.contains(itemTitles[itemTitles.length - 1])) {
-            itemTitles.add(getItemTitle(itemId, i + 1, containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1, roomItems));
-            webImages.add(null);
-            images.add(null);
-            imageContainers.add(getImageContainer(itemTitles.length - 1));
-
-            // Mark the room as having two images
-            roomsWithTwoImages.add(itemTitles[itemTitles.length - 1]);
-          }
-        }
-      }
-    }
-    print(webImages[1]);
-
-    Future<void> selectImage(int index) async {
-      XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
-
-      if (kIsWeb) {
-        if (pickedImage != null) {
-          var f = await pickedImage.readAsBytes();
-
-          setState(() {
-            webImages[index] = f;
-            images[index] = File('a');
-          });
-
-          // print(webImages[0]);
-          print(index);
-
-          // String base64String = base64Encode(f);
-        }
-      } else {
-        if (pickedImage != null) {
-          var selected = File(pickedImage.path);
-          setState(() {
-            images[index] = selected;
-          });
-        }
-      }
-    }
-
-    return Container(
-      padding: const EdgeInsets.all(10),
-      child: GridView.builder(
-        shrinkWrap: true,
-        padding: EdgeInsets.zero,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: numberOfColumns,
-          crossAxisSpacing: 15,
-          mainAxisSpacing: 10,
-          mainAxisExtent: 140,
+    return SingleChildScrollView(
+      physics: Responsive.isMobile(context) ? const ScrollPhysics() : const NeverScrollableScrollPhysics(),
+      child: Container(
+        constraints: BoxConstraints(
+          minHeight: 0,
+          maxHeight: Responsive.isMobile(context) ? 450 : 600,
         ),
-        itemCount: imageContainers.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              selectImage(index);
+        padding: const EdgeInsets.all(10),
+        child: LayoutBuilder(builder: (context, constraints) {
+          int crossAxisCount = (constraints.maxWidth / 120).floor();
+          return GridView.builder(
+            // scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              mainAxisExtent: 145,
+            ),
+            itemCount: itemTitles.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectImage(index);
+                  });
+                },
+                child: isInitialized
+                    ? Column(
+                        children: [
+                          Card(
+                            clipBehavior: Clip.antiAlias,
+                            elevation: 2,
+                            shadowColor: Colors.grey[300],
+                            child: SizedBox(
+                              width: constraints.maxWidth / crossAxisCount - 20,
+                              height: constraints.maxWidth / crossAxisCount - 45,
+                              child: webImages[index] == null
+                                  ? const Icon(Icons.photo_rounded, size: 70, color: Colors.grey)
+                                  : kIsWeb
+                                      ? Image.memory(
+                                          webImages[index]!,
+                                          fit: BoxFit.fill,
+                                        )
+                                      : Image.file(
+                                          images[index]!,
+                                          fit: BoxFit.fill,
+                                        ),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          CustomText(
+                            title: itemTitles[index],
+                            size: 14,
+                          ),
+                        ],
+                      )
+                    : const CircularProgressIndicator(),
+              );
             },
-            child: isInitialized ? imageContainers[index] : const CircularProgressIndicator(),
           );
-        },
+        }),
       ),
     );
   }

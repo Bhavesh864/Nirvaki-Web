@@ -5,10 +5,18 @@ import 'package:yes_broker/Customs/responsive.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/widgets/inventory/inventory_filter_view.dart';
+import 'package:yes_broker/widgets/todo/todo_list_view.dart';
 import 'package:yes_broker/widgets/workitems_list.dart';
 
-class LeadScreen extends StatelessWidget {
+class LeadScreen extends StatefulWidget {
   const LeadScreen({super.key});
+
+  @override
+  State<LeadScreen> createState() => _LeadScreenState();
+}
+
+class _LeadScreenState extends State<LeadScreen> {
+  bool isFilterOpen = false;
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +43,7 @@ class LeadScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            margin: const EdgeInsets.only(
-                                top: 10, bottom: 5, left: 20, right: 20),
+                            margin: const EdgeInsets.only(top: 10, bottom: 5, left: 20, right: 20),
                             width: MediaQuery.of(context).size.width * 0.3,
                             child: CustomTextInput(
                               controller: TextEditingController(),
@@ -51,7 +58,11 @@ class LeadScreen extends StatelessWidget {
                                 icon: const Icon(Icons.filter_alt_outlined),
                               ),
                               IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  setState(() {
+                                    isFilterOpen = true;
+                                  });
+                                },
                                 icon: const Icon(Icons.view_stream_outlined),
                               ),
                             ],
@@ -88,41 +99,45 @@ class LeadScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       const Expanded(
-                        child: WorkItemsList(
+                        child: TodoListView(
                           headerShow: false,
                         ),
                       ),
                       !Responsive.isMobile(context)
                           ? const Expanded(
-                              child: WorkItemsList(
+                              child: TodoListView(
                                 headerShow: false,
                               ),
                             )
                           : Container(),
-                      // width! > 1100
-                      //     ? const Expanded(
-                      //         child: WorkItemsList(headerShow: false),
-                      //       )
-                      //     : Container(),
+                      if (!Responsive.isMobile(context) && !isFilterOpen)
+                        const Expanded(
+                          child: TodoListView(headerShow: false),
+                        )
                     ],
                   ),
                 ),
               ],
             ),
           ),
-          Responsive.isDesktop(context)
+          Responsive.isDesktop(context) && isFilterOpen
               ? Expanded(
                   flex: 2,
                   child: Row(
                     children: [
                       Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 15, horizontal: 10),
+                        margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
                         width: 1,
                         color: Colors.grey.withOpacity(0.5),
                       ),
-                      const Expanded(
-                        child: InventoryFilterView(),
+                      Expanded(
+                        child: InventoryFilterView(
+                          closeFilterView: () {
+                            setState(() {
+                              isFilterOpen = false;
+                            });
+                          },
+                        ),
                       ),
                     ],
                   ),

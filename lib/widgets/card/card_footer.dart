@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import '../custom_chip.dart';
 
@@ -80,8 +81,11 @@ class CardFooter extends StatelessWidget {
           paddingHorizontal: 3,
         ),
         CustomChip(
-          label: Text(cardData.workitemId!),
-          paddingHorizontal: 3,
+          label: CustomText(
+            title: cardData.workitemId!,
+            size: 10,
+          ),
+          paddingHorizontal: 2,
         ),
         const Spacer(),
         Container(

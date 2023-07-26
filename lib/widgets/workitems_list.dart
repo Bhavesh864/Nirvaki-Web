@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
-
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/widgets/card/custom_card.dart';
@@ -12,12 +12,14 @@ class WorkItemsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
     return ScrollConfiguration(
       behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
       child: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
         child: Container(
-          constraints: const BoxConstraints(
-            minHeight: 700,
+          constraints: BoxConstraints(
+            minHeight: height,
           ),
           decoration: BoxDecoration(
             color: AppColor.secondary,
@@ -49,15 +51,23 @@ class WorkItemsList extends StatelessWidget {
                   future: CardDetails.getCardDetails(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator.adaptive());
+                      return SizedBox(
+                        height: height * 0.7,
+                        child: const Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        ),
+                      );
                     }
                     if (snapshot.hasData) {
-                      return ListView(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: List.generate(
-                          snapshot.data!.length,
-                          (index) => CustomCard(index: index, cardDetails: snapshot.data!),
+                      return SizedBox(
+                        height: Responsive.isMobile(context) ? height * 0.75 : height * 0.8,
+                        child: ListView(
+                          shrinkWrap: true,
+                          // physics: const NeverScrollableScrollPhysics(),
+                          children: List.generate(
+                            snapshot.data!.length,
+                            (index) => CustomCard(index: index, cardDetails: snapshot.data!),
+                          ),
                         ),
                       );
                     }
