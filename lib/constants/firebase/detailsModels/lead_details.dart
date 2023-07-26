@@ -11,9 +11,13 @@ class LeadDetails {
   List<Assignedto>? assignedto;
   String? managerid;
   Createdby? createdby;
-  String? createdate;
+  Timestamp? createdate;
+  Propertyarea? propertyarea;
+
   String? updatedby;
   String? updatedate;
+  List<double>? propertylocation;
+
   Customerinfo? customerinfo;
   String? comments;
   String? leadcategory;
@@ -31,11 +35,12 @@ class LeadDetails {
   Propertyarearange? propertyarearange;
   Propertypricerange? propertypricerange;
   Preferredlocality? preferredlocality;
-  List<String>? preferredlocation;
+  List<double>? preferredlocation;
   String? preferredpropertyfacing;
   String? commericialtype;
   String? typeofoffice;
   String? typeofretail;
+  Plotdetails? plotdetails;
   String? typeofhospitality;
   String? typeofhealthcare;
   String? approvedbeds;
@@ -46,6 +51,7 @@ class LeadDetails {
   LeadDetails(
       {this.leadStatus,
       this.brokerid,
+      this.plotdetails,
       this.leadTitle,
       this.leadDescription,
       this.leadId,
@@ -53,6 +59,7 @@ class LeadDetails {
       this.managerid,
       this.createdby,
       this.createdate,
+      this.propertylocation,
       this.updatedby,
       this.updatedate,
       this.customerinfo,
@@ -80,6 +87,7 @@ class LeadDetails {
       this.typeofhospitality,
       this.typeofhealthcare,
       this.approvedbeds,
+      this.propertyarea,
       this.typeofschool,
       this.hospitalrooms,
       this.preferredroadwidth});
@@ -97,6 +105,9 @@ class LeadDetails {
     if (json["leadTitle"] is String) {
       leadTitle = json["leadTitle"];
     }
+    if (json["propertyarea"] is Map) {
+      propertyarea = json["propertyarea"] == null ? null : Propertyarea.fromJson(json["propertyarea"]);
+    }
     if (json["leadDescription"] is String) {
       leadId = json["leadDescription"];
     }
@@ -109,7 +120,7 @@ class LeadDetails {
     if (json["createdby"] is Map) {
       createdby = json["createdby"] == null ? null : Createdby.fromJson(json["createdby"]);
     }
-    if (json["createdate"] is String) {
+    if (json["createdate"] is Timestamp) {
       createdate = json["createdate"];
     }
     if (json["updatedby"] is String) {
@@ -117,6 +128,9 @@ class LeadDetails {
     }
     if (json["updatedate"] is String) {
       updatedate = json["updatedate"];
+    }
+    if (json["propertylocation"] is List) {
+      propertylocation = json["propertylocation"] == null ? null : List<double>.from(json["propertylocation"]);
     }
     if (json["customerinfo"] is Map) {
       customerinfo = json["customerinfo"] == null ? null : Customerinfo.fromJson(json["customerinfo"]);
@@ -129,6 +143,9 @@ class LeadDetails {
     }
     if (json["leadType"] is String) {
       leadType = json["leadType"];
+    }
+    if (json["plotdetails"] is Map) {
+      plotdetails = json["plotdetails"] == null ? null : Plotdetails.fromJson(json["plotdetails"]);
     }
     if (json["leadsource"] is String) {
       leadsource = json["leadsource"];
@@ -169,8 +186,8 @@ class LeadDetails {
     if (json["preferredlocality"] is Map) {
       preferredlocality = json["preferredlocality"] == null ? null : Preferredlocality.fromJson(json["preferredlocality"]);
     }
-    if (json["preferredlocation"] is List) {
-      preferredlocation = json["preferredlocation"] == null ? null : List<String>.from(json["preferredlocation"]);
+    if (json["preferredlocation"] is double) {
+      preferredlocation = json["preferredlocation"] == null ? null : List<double>.from(json["preferredlocation"]);
     }
     if (json["preferredpropertyfacing"] is String) {
       preferredpropertyfacing = json["preferredpropertyfacing"];
@@ -211,6 +228,9 @@ class LeadDetails {
     data["leadId"] = leadId;
     data["leadDescription"] = leadDescription;
     data["leadTitle"] = leadTitle;
+    if (propertyarea != null) {
+      data["propertyarea"] = propertyarea?.toJson();
+    }
     if (assignedto != null) {
       data["assignedto"] = assignedto?.map((e) => e.toJson()).toList();
     }
@@ -239,6 +259,9 @@ class LeadDetails {
     data["possessiondate"] = possessiondate;
     if (amenities != null) {
       data["amenities"] = amenities;
+    }
+    if (plotdetails != null) {
+      data["plotdetails"] = plotdetails?.toJson();
     }
     if (reservedparking != null) {
       data["reservedparking"] = reservedparking?.toJson();
@@ -304,6 +327,52 @@ class LeadDetails {
     } catch (error) {
       // print('Failed to add Inventory item: $error');
     }
+  }
+}
+
+class Plotdetails {
+  String? boundarywall;
+  String? opensides;
+
+  Plotdetails({this.boundarywall, this.opensides});
+
+  Plotdetails.fromJson(Map<String, dynamic> json) {
+    if (json["boundarywall"] is String) {
+      boundarywall = json["boundarywall"];
+    }
+    if (json["opensides"] is String) {
+      opensides = json["opensides"];
+    }
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["boundarywall"] = boundarywall;
+    data["opensides"] = opensides;
+    return data;
+  }
+}
+
+class Propertyarea {
+  String? unit;
+  dynamic superarea;
+  dynamic carpetarea;
+
+  Propertyarea({this.unit, this.superarea, this.carpetarea});
+
+  Propertyarea.fromJson(Map<String, dynamic> json) {
+    if (json["unit"] is String) {
+      unit = json["unit"];
+    }
+    superarea = json["superarea"];
+    carpetarea = json["carpetarea"];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["unit"] = unit;
+    data["superarea"] = superarea;
+    data["carpetarea"] = carpetarea;
+    return data;
   }
 }
 

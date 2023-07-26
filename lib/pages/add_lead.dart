@@ -41,11 +41,11 @@ class _AddLeadState extends ConsumerState<AddLead> {
   }
 
   addDataOnfirestore(AllChipSelectedAnwers notify) {
-    // notify.submitLead().then((value) => {
-    //       setState(() {
-    //         response = value;
-    //       })
-    //     });
+    notify.submitLead().then((value) => {
+          setState(() {
+            response = value;
+          })
+        });
   }
 
   nextQuestion({List<Screen>? screensDataList, option}) {

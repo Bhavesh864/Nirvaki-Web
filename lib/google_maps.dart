@@ -25,7 +25,6 @@ class CustomGoogleMap extends StatefulWidget {
 class _CustomGoogleMapState extends State<CustomGoogleMap> {
   GoogleMapController? mapController;
   bool showMaps = true;
-
   LatLng? location;
 
   @override
@@ -60,7 +59,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           },
           initialCameraPosition: CameraPosition(
             target: location ?? const LatLng(20.5937, 78.9629),
-            zoom: 10,
+            zoom: 15,
           ),
           onTap: (latLng) {
             setState(() {
