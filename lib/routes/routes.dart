@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 // Flutter Packages Imports
 import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 import 'package:yes_broker/pages/Auth/login_screen.dart';
+import 'package:yes_broker/pages/add_todo.dart';
 import 'package:yes_broker/pages/add_workitems.dart';
 
 // Local Files Imports
@@ -116,6 +117,7 @@ class AppRoutes {
   static const String addInventory = '/add_inventory_screen';
   static const String addLead = '/add_lead_screen';
   static const String addWorkItem = '/add_workItem_screen';
+  static const String addTodo = '/add_todoItem_screen';
 
   static Map<String, WidgetBuilder> routesTable = {
     homeScreen: (context) => Responsive.isMobile(context) ? const SmallScreen() : const LargeScreen(),
@@ -125,5 +127,6 @@ class AppRoutes {
     addInventory: (context) => const AddInventory(),
     addLead: (context) => const AddLead(),
     addWorkItem: (context) => const AddWorkItem(),
+    addTodo: (context) => const AddTodo(),
   };
 }
