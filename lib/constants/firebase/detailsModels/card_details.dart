@@ -141,7 +141,7 @@ class CardDetails {
   // Get Inventory items added by the broker or employees under the broker
   static Future<List<CardDetails>> getCardDetails() async {
     try {
-      final QuerySnapshot querySnapshot = await cardDetailsCollection.get();
+      final QuerySnapshot querySnapshot = await cardDetailsCollection.orderBy("createdate").get();
       final List<CardDetails> inventoryItems = querySnapshot.docs.map((doc) {
         final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         return CardDetails.fromJson(data);

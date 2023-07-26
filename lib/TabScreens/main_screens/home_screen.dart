@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
+import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
@@ -26,8 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   questions() async {
-    List<InventoryQuestions> screensList = [
-      InventoryQuestions(
+    List<LeadQuestions> screensList = [
+      LeadQuestions(
         type: "Commercial",
         screens: [
           Screen(
@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Question(
                 questionId: 1,
                 questionOptionType: "chip",
-                questionTitle: "Which Property Category does this inventory Fall under ?",
+                questionTitle: "Which Property Category does this Lead Fall under ?",
                 questionOption: ["Residential", "Commercial"],
               ),
             ],
@@ -49,8 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Question(
                 questionId: 2,
                 questionOptionType: "chip",
-                questionTitle: "What Category does this inventory belong to?",
-                questionOption: ["Rent", "Sell"],
+                questionTitle: "What Category does this Lead belong to?",
+                questionOption: ["Rent", "Buy"],
               ),
             ],
             isActive: true,
@@ -386,62 +386,23 @@ class _HomeScreenState extends State<HomeScreen> {
           Screen(
             questions: [
               Question(
-                questionId: 46,
+                questionId: 32,
                 questionOptionType: "textfield",
-                questionTitle: "Listing Price",
+                questionTitle: "Budget range",
                 questionOption: "",
               ),
               Question(
-                questionId: 47,
+                questionId: 33,
                 questionOptionType: "smallchip",
                 questionTitle: "",
                 questionOption: ["Crore", "Lakh", "Thousands"],
               ),
             ],
             isActive: true,
-            title: "Property Listing Price",
+            title: "What is the customers budget range?",
             previousScreenId: "S19",
             screenId: "S20",
             nextScreenId: "S21",
-          ),
-          Screen(
-            questions: [
-              Question(
-                questionId: 48,
-                questionOptionType: "textfield",
-                questionTitle: "Rent",
-                questionOption: "",
-              ),
-              Question(
-                questionId: 49,
-                questionOptionType: "smallchip",
-                questionTitle: "",
-                questionOption: ["Crore", "Lakh", "Thousands"],
-              ),
-              Question(
-                questionId: 50,
-                questionOptionType: "textfield",
-                questionTitle: "Security Deposit",
-                questionOption: "",
-              ),
-              Question(
-                questionId: 51,
-                questionOptionType: "smallchip",
-                questionTitle: "",
-                questionOption: ["Lakh", "Thousands"],
-              ),
-              Question(
-                questionId: 52,
-                questionOptionType: "dropdown",
-                questionTitle: "Notice Period",
-                questionOption: ["0-12 Months", "1-5 Years"],
-              ),
-            ],
-            isActive: true,
-            title: "What is expected Rent for the property",
-            previousScreenId: "S20",
-            screenId: "S21",
-            nextScreenId: "S22",
           ),
           Screen(
             questions: [
@@ -478,9 +439,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
             title: "Property Address",
             isActive: true,
-            previousScreenId: "S21",
-            screenId: "S22",
-            nextScreenId: "S23",
+            previousScreenId: "S20",
+            screenId: "S21",
+            nextScreenId: "S22",
           ),
           Screen(
             questions: [
@@ -492,23 +453,23 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
             isActive: true,
-            previousScreenId: "S22",
-            screenId: "S23",
-            nextScreenId: "S24",
+            previousScreenId: "S21",
+            screenId: "S22",
+            nextScreenId: "S23",
           ),
           Screen(
             questions: [
               Question(
                 questionId: 32,
                 questionOptionType: "chip",
-                questionTitle: "Which Direction Does the property Face?",
+                questionTitle: "Preferred Property Direction",
                 questionOption: ["East", "West", "North", "South", "North East", "North West", "South East", "South West"],
               ),
             ],
             isActive: true,
-            previousScreenId: "S23",
-            screenId: "S24",
-            nextScreenId: "S25",
+            previousScreenId: "S22",
+            screenId: "S23",
+            nextScreenId: "S24",
           ),
           Screen(
             questions: [
@@ -530,34 +491,6 @@ class _HomeScreenState extends State<HomeScreen> {
             previousScreenId: "S24",
             screenId: "S25",
             nextScreenId: "S26",
-          ),
-          Screen(
-            questions: [
-              Question(
-                questionId: 33,
-                questionOptionType: "photo",
-                questionTitle: "Photos",
-                questionOption: "",
-              ),
-            ],
-            isActive: true,
-            previousScreenId: "S25",
-            screenId: "S26",
-            nextScreenId: "S27",
-          ),
-          Screen(
-            questions: [
-              Question(
-                questionId: 34,
-                questionOptionType: "textfield",
-                questionTitle: "Video",
-                questionOption: "",
-              ),
-            ],
-            isActive: true,
-            previousScreenId: "S26",
-            screenId: "S27",
-            nextScreenId: "S28",
           ),
           Screen(
             questions: [
@@ -591,9 +524,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     ];
-    await InventoryQuestions.addScreens(screensList);
-    // await LeadQuestions.addScreens(screensList);
+    await LeadQuestions.addScreens(screensList);
   }
+  // await InventoryQuestions.addScreens(screensList);
 
   @override
   Widget build(BuildContext context) {
