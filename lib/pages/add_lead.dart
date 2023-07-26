@@ -204,7 +204,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                           )
                         : response == "success"
                             ? const WorkItemSuccessWidget(
-                                isInventory: false,
+                                isInventory: 'LD',
                               )
                             : const Center(
                                 child: CircularProgressIndicator.adaptive(),
