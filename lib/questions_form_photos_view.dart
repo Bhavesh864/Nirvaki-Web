@@ -1,11 +1,11 @@
-import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/pages/add_inventory.dart';
 
 class PhotosViewForm extends ConsumerStatefulWidget {
@@ -34,8 +34,9 @@ class _PhotosViewFormState extends ConsumerState<PhotosViewForm> {
   @override
   void initState() {
     final answersArr = ref.read(myArrayProvider.notifier).state;
-    int numberOfItems = answersArr.length;
-    itemTitles = ['Front Elevation'];
+    itemTitles = [
+      'Front Elevation',
+    ];
 
     final selectedAnswerArr = answersArr.where((item) => item['id'] == 14 || item['id'] == 15 || item['id'] == 16).toList();
 
@@ -84,13 +85,13 @@ class _PhotosViewFormState extends ConsumerState<PhotosViewForm> {
 
   String getItemTitle(int itemId, int roomNumber, int containerIndex, List<String> roomList) {
     if (itemId == 14) {
-      return 'Bed Room $roomNumber($containerIndex)';
+      return 'Bed Room$roomNumber ($containerIndex)';
     } else if (itemId == 16) {
-      return 'BathRoom $roomNumber($containerIndex)';
+      return 'BathRoom$roomNumber ($containerIndex)';
     } else if (itemId == 15) {
       return '${roomList[roomNumber - 1]} ($containerIndex)';
     }
-    return 'BhAVESH';
+    return '';
   }
 
   Widget getImageContainer(int index) {
@@ -134,7 +135,7 @@ class _PhotosViewFormState extends ConsumerState<PhotosViewForm> {
           images[index] = File('a');
         });
 
-        String base64String = base64Encode(f);
+        // String base64String = base64Encode(f);
       }
     } else {
       if (pickedImage != null) {
@@ -148,55 +149,69 @@ class _PhotosViewFormState extends ConsumerState<PhotosViewForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      child: GridView.builder(
-        shrinkWrap: true,
-        padding: EdgeInsets.zero,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: numberOfColumns,
-          crossAxisSpacing: 15,
-          mainAxisSpacing: 10,
-          mainAxisExtent: 140,
+    return SingleChildScrollView(
+      physics: Responsive.isMobile(context) ? const ScrollPhysics() : const NeverScrollableScrollPhysics(),
+      child: Container(
+        constraints: BoxConstraints(
+          minHeight: 0,
+          maxHeight: Responsive.isMobile(context) ? 450 : 600,
         ),
-        itemCount: itemTitles.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                selectImage(index);
-              });
+        padding: const EdgeInsets.all(10),
+        child: LayoutBuilder(builder: (context, constraints) {
+          int crossAxisCount = (constraints.maxWidth / 120).floor();
+          return GridView.builder(
+            // scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              mainAxisExtent: 145,
+            ),
+            itemCount: itemTitles.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectImage(index);
+                  });
+                },
+                child: isInitialized
+                    ? Column(
+                        children: [
+                          Card(
+                            clipBehavior: Clip.antiAlias,
+                            elevation: 2,
+                            shadowColor: Colors.grey[300],
+                            child: SizedBox(
+                              width: constraints.maxWidth / crossAxisCount - 20,
+                              height: constraints.maxWidth / crossAxisCount - 45,
+                              child: webImages[index] == null
+                                  ? const Icon(Icons.photo_rounded, size: 70, color: Colors.grey)
+                                  : kIsWeb
+                                      ? Image.memory(
+                                          webImages[index]!,
+                                          fit: BoxFit.fill,
+                                        )
+                                      : Image.file(
+                                          images[index]!,
+                                          fit: BoxFit.fill,
+                                        ),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          CustomText(
+                            title: itemTitles[index],
+                            size: 14,
+                          ),
+                        ],
+                      )
+                    : const CircularProgressIndicator(),
+              );
             },
-            child: isInitialized
-                ? Column(
-                    children: [
-                      Card(
-                        child: SizedBox(
-                          width: 106,
-                          height: 100,
-                          child: webImages[index] == null
-                              ? const Icon(Icons.photo_rounded, size: 70, color: Colors.grey)
-                              : kIsWeb
-                                  ? Image.memory(
-                                      webImages[index]!,
-                                      fit: BoxFit.fill,
-                                    )
-                                  : Image.file(
-                                      images[index]!,
-                                      fit: BoxFit.fill,
-                                    ),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      CustomText(
-                        title: itemTitles[index],
-                        size: 14,
-                      ),
-                    ],
-                  )
-                : const CircularProgressIndicator(),
           );
-        },
+        }),
       ),
     );
   }
