@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
-
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
 import 'package:yes_broker/questions_form_photos_view.dart';
@@ -12,6 +10,7 @@ import '../../Customs/custom_text.dart';
 import '../../Customs/dropdown_field.dart';
 import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
+import '../firebase/questionModels/todo_question.dart';
 import '../utils/colors.dart';
 
 Widget buildTodoQuestions(Question question, List<Screen> screensDataList, int currentScreenIndex, AllChipSelectedAnwers notify, Function nextQuestion) {
@@ -172,31 +171,45 @@ Widget buildTodoQuestions(Question question, List<Screen> screensDataList, int c
       },
     );
   } else if (question.questionOptionType == 'textarea') {
-    return TextFormField(
-      keyboardType: TextInputType.multiline,
-      maxLines: 5,
-      onChanged: (newvalue) {
-        notify.add({"id": question.questionId, "item": newvalue.trim()});
-      },
-      decoration: InputDecoration(
-        hintText: question.questionOption,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6),
-        ),
-        // isDense: true,
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(
-            color: AppColor.primary,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 4, right: 8, left: 2),
+          child: CustomText(
+            title: question.questionTitle,
+            fontWeight: FontWeight.w500,
+            textAlign: TextAlign.left,
           ),
         ),
-      ),
-      validator: (value) {
-        if (value!.isEmpty) {
-          return "Please enter ${question.questionTitle}";
-        }
-        return null;
-      },
+        TextFormField(
+          keyboardType: TextInputType.multiline,
+          maxLines: 5,
+          onChanged: (newvalue) {
+            notify.add({"id": question.questionId, "item": newvalue.trim()});
+          },
+          decoration: InputDecoration(
+            hintText: 'Type here..',
+            hintStyle: const TextStyle(color: Colors.grey),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(6),
+            ),
+            // isDense: true,
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(6),
+              borderSide: const BorderSide(
+                color: AppColor.primary,
+              ),
+            ),
+          ),
+          validator: (value) {
+            if (value!.isEmpty) {
+              return "Please enter ${question.questionTitle}";
+            }
+            return null;
+          },
+        ),
+      ],
     );
   } else if (question.questionOptionType == "Assign") {
     return AssignUser(

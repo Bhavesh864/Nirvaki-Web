@@ -70,6 +70,9 @@ class CustomSpeedDialButton extends StatelessWidget {
           backgroundColor: AppColor.primary,
         ),
         SpeedDialChild(
+          onTap: () {
+            Navigator.of(context).pushNamed(AppRoutes.addTodo);
+          },
           labelShadow: [
             const BoxShadow(
               color: Colors.grey,

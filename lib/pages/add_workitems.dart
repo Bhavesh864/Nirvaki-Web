@@ -228,7 +228,7 @@ class _AddWorkItemState extends ConsumerState<AddWorkItem> {
                         )
                       : response == "success"
                           ? WorkItemSuccessWidget(
-                              isInventory: widget.isInventory,
+                              isInventory: widget.isInventory ? 'IN' : 'LD',
                             )
                           : const Center(
                               child: CircularProgressIndicator.adaptive(),

@@ -6,8 +6,8 @@ import '../../Customs/custom_text.dart';
 import '../../routes/routes.dart';
 
 class WorkItemSuccessWidget extends StatelessWidget {
-  final bool isInventory;
-  const WorkItemSuccessWidget({Key? key, this.isInventory = true}) : super(key: key);
+  final String isInventory;
+  const WorkItemSuccessWidget({Key? key, this.isInventory = 'IN'}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class WorkItemSuccessWidget extends StatelessWidget {
           ),
         ),
         CustomText(
-          title: ' ${isInventory ? 'Inventory' : 'Lead'} have been \n Successfully created',
+          title: ' ${isInventory == 'IN' ? 'Inventory' : isInventory == 'Todo' ? 'Todo' : 'Lead'} have been \n Successfully created',
           size: 48,
           fontWeight: FontWeight.w700,
           color: Colors.white,
