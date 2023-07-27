@@ -1,15 +1,19 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
 import 'package:yes_broker/pages/add_inventory.dart';
 
 class PhotosViewForm extends ConsumerStatefulWidget {
-  const PhotosViewForm({super.key});
+  final AllChipSelectedAnwers? notify;
+  final int id;
+  const PhotosViewForm(this.notify, this.id, {super.key});
 
   @override
   _PhotosViewFormState createState() => _PhotosViewFormState();
@@ -28,8 +32,9 @@ class _PhotosViewFormState extends ConsumerState<PhotosViewForm> {
 
   List<Widget> imageContainers = [];
 
-  // Use a map to store the corresponding indexes of webImages and images lists.
-  Map<String, int> imageIndexes = {};
+  String imageUrl = '';
+
+  List<String> selectedImagesUrlList = [];
 
   @override
   void initState() {
@@ -132,18 +137,49 @@ class _PhotosViewFormState extends ConsumerState<PhotosViewForm> {
 
         setState(() {
           webImages[index] = f;
-          images[index] = File('a');
+          images[index] = null;
         });
+
+        print('for Web  ' + pickedImage.path);
+
+        uploadImageToFirebase(index, f);
 
         // String base64String = base64Encode(f);
       }
     } else {
       if (pickedImage != null) {
-        var selected = File(pickedImage.path);
+        File selected = File(pickedImage.path);
+
         setState(() {
           images[index] = selected;
+          webImages[index] = null;
         });
+        print('for mobile  ' + pickedImage.path);
+
+        uploadImageToFirebase(index, selected);
       }
+    }
+  }
+
+  void uploadImageToFirebase(int index, dataToPut) async {
+    final uniqueKey = DateTime.now().microsecondsSinceEpoch.toString();
+
+    Reference referenceRoot = FirebaseStorage.instance.ref();
+    Reference referenceDirImages = referenceRoot.child('images');
+
+    Reference referenceImagesToUpload = referenceDirImages.child(uniqueKey);
+
+    try {
+      if (kIsWeb) {
+        await referenceImagesToUpload.putData(dataToPut);
+      } else {
+        await referenceImagesToUpload.putFile(dataToPut);
+      }
+      imageUrl = await referenceImagesToUpload.getDownloadURL();
+      selectedImagesUrlList.add(imageUrl);
+      widget.notify!.add({'id': widget.id, 'item': selectedImagesUrlList});
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -187,13 +223,15 @@ class _PhotosViewFormState extends ConsumerState<PhotosViewForm> {
                             child: SizedBox(
                               width: constraints.maxWidth / crossAxisCount - 20,
                               height: constraints.maxWidth / crossAxisCount - 45,
-                              child: webImages[index] == null
-                                  ? const Icon(Icons.photo_rounded, size: 70, color: Colors.grey)
-                                  : kIsWeb
-                                      ? Image.memory(
+                              child: kIsWeb
+                                  ? webImages[index] == null
+                                      ? const Icon(Icons.photo_rounded, size: 70, color: Colors.grey)
+                                      : Image.memory(
                                           webImages[index]!,
                                           fit: BoxFit.fill,
                                         )
+                                  : images[index] == null
+                                      ? const Icon(Icons.photo_rounded, size: 70, color: Colors.grey)
                                       : Image.file(
                                           images[index]!,
                                           fit: BoxFit.fill,

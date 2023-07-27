@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
@@ -13,7 +14,8 @@ import '../../widgets/card/questions card/chip_button.dart';
 import '../firebase/questionModels/todo_question.dart';
 import '../utils/colors.dart';
 
-Widget buildTodoQuestions(Question question, List<Screen> screensDataList, int currentScreenIndex, AllChipSelectedAnwers notify, Function nextQuestion) {
+Widget buildTodoQuestions(
+    Question question, List<Screen> screensDataList, int currentScreenIndex, AllChipSelectedAnwers notify, Function nextQuestion, BuildContext context) {
   if (question.questionOptionType == 'chip') {
     return Column(
       children: [
@@ -156,7 +158,43 @@ Widget buildTodoQuestions(Question question, List<Screen> screensDataList, int c
           );
         },
       );
+    } else if (question.questionTitle == 'Due date') {
+      return GestureDetector(
+        onTap: () {
+          showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(1900),
+            lastDate: DateTime.now(),
+          ).then(
+            (pickedDate) {
+              if (pickedDate == null) {
+                return;
+              }
+              DateFormat formatter = DateFormat('dd-MM-yyyy');
+              controller.text = formatter.format(pickedDate);
+              notify.add({"id": question.questionId, "item": controller.text});
+            },
+          );
+        },
+        child: LabelTextInputField(
+          isDatePicker: true,
+          onChanged: (newvalue) {
+            notify.add({"id": question.questionId, "item": newvalue.trim()});
+          },
+          hintText: 'DD/MM/YYYY',
+          inputController: controller,
+          labelText: question.questionTitle,
+          validator: (value) {
+            if (isChecked && value!.isEmpty) {
+              return "Please enter ${question.questionTitle}";
+            }
+            return null;
+          },
+        ),
+      );
     }
+
     return LabelTextInputField(
       inputController: controller,
       labelText: question.questionTitle,
@@ -243,7 +281,9 @@ Widget buildTodoQuestions(Question question, List<Screen> screensDataList, int c
       address2: address2,
     );
   } else if (question.questionOptionType == 'photo') {
-    return const PhotosViewForm();
+    return PhotosViewForm(notify, question.questionId);
+  } else if (question.questionOptionType == 'date') {
+    // return cons/
   }
 
   return const SizedBox.shrink();

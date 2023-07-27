@@ -230,7 +230,7 @@ Widget buildLeadQuestions(Question question, List<Screen> screensDataList, int c
       address2: address2,
     );
   } else if (question.questionOptionType == 'photo') {
-    return const PhotosViewForm();
+    return PhotosViewForm(notify, question.questionId);
   }
 
   return const SizedBox.shrink();
