@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 
 import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
@@ -36,6 +37,43 @@ Widget buildTodoQuestions(
   } else if (question.questionOptionType == 'textfield') {
     TextEditingController controller = TextEditingController();
 
+    if (question.questionTitle == 'Due date') {
+      return GestureDetector(
+        onTap: () {
+          showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(1900),
+            lastDate: DateTime.now(),
+          ).then(
+            (pickedDate) {
+              if (pickedDate == null) {
+                return;
+              }
+              DateFormat formatter = DateFormat('dd-MM-yyyy');
+              controller.text = formatter.format(pickedDate);
+              notify.add({"id": question.questionId, "item": controller.text});
+            },
+          );
+        },
+        child: LabelTextInputField(
+          isDatePicker: true,
+          onChanged: (newvalue) {
+            notify.add({"id": question.questionId, "item": newvalue.trim()});
+          },
+          hintText: 'DD/MM/YYYY',
+          inputController: controller,
+          labelText: question.questionTitle,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return "Please enter ${question.questionTitle}";
+            }
+            return null;
+          },
+        ),
+      );
+    }
+
     return LabelTextInputField(
       inputController: controller,
       labelText: question.questionTitle,
@@ -69,11 +107,10 @@ Widget buildTodoQuestions(
           },
           decoration: InputDecoration(
             hintText: 'Type here..',
-            hintStyle: const TextStyle(color: Colors.grey),
+            hintStyle: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w400),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(6),
             ),
-            // isDense: true,
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(6),
               borderSide: const BorderSide(

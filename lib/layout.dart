@@ -23,9 +23,9 @@ class LayoutView extends ConsumerWidget {
           return Scaffold(
             body: ScreenTypeLayout.builder(
               breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
-              mobile: (p0) => snapshot.hasData ? SmallScreen() : const LoginScreen(),
-              tablet: (p0) => snapshot.hasData ? LargeScreen() : const LoginScreen(),
-              desktop: (p0) => snapshot.hasData ? LargeScreen() : const LoginScreen(),
+              mobile: (p0) => snapshot.hasData ? const SmallScreen() : const LoginScreen(),
+              tablet: (p0) => snapshot.hasData ? const LargeScreen() : const LoginScreen(),
+              desktop: (p0) => snapshot.hasData ? const LargeScreen() : const LoginScreen(),
             ),
           );
         });
