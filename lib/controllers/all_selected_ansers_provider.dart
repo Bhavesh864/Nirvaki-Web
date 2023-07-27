@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/constants/firebase/Methods/submit_inventory.dart';
 import 'package:yes_broker/constants/firebase/Methods/submit_lead.dart';
+import 'package:yes_broker/constants/firebase/Methods/submit_todo.dart';
 
 final allChipSelectedAnwersProvider = StateNotifierProvider<AllChipSelectedAnwers, List<Map<String, dynamic>>>(
   (ref) => AllChipSelectedAnwers(),
@@ -33,6 +34,11 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
 
   Future<String> submitLead() async {
     final String res = await submitLeadAndCardDetails(state);
+    return res;
+  }
+
+  Future<String> submitTodo() async {
+    final String res = await submitTodoAndCardDetails(state);
     return res;
   }
 }
