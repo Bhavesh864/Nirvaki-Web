@@ -56,9 +56,7 @@ class _WorkItemState extends State<WorkItem> {
     final textTheme = Theme.of(context).textTheme;
     return ListView.builder(
       shrinkWrap: true,
-      physics: Responsive.isMobile(context)
-          ? const NeverScrollableScrollPhysics()
-          : const ClampingScrollPhysics(),
+      physics: Responsive.isMobile(context) ? const NeverScrollableScrollPhysics() : const ClampingScrollPhysics(),
       itemCount: workItemData.length,
       itemBuilder: ((context, index) => Card(
             margin: EdgeInsets.only(
@@ -86,18 +84,12 @@ class _WorkItemState extends State<WorkItem> {
                               children: [
                                 CustomChip(
                                   label: Icon(
-                                    userData[index].isLead
-                                        ? MaterialSymbols.location_home_outlined
-                                        : MaterialSymbols.location_away,
-                                    color: userData[index].isLead
-                                        ? AppColor.inventoryIconColor
-                                        : AppColor.leadIconColor,
+                                    userData[index].isLead ? MaterialSymbols.location_home_outlined : MaterialSymbols.location_away,
+                                    color: userData[index].isLead ? AppColor.inventoryIconColor : AppColor.leadIconColor,
                                     size: 18,
                                     // weight: 10.12,
                                   ),
-                                  color: userData[index].isLead
-                                      ? AppColor.inventoryChipColor
-                                      : AppColor.leadChipColor,
+                                  color: userData[index].isLead ? AppColor.inventoryChipColor : AppColor.leadChipColor,
                                 ),
                                 CustomChip(
                                   label: CustomText(
@@ -130,28 +122,23 @@ class _WorkItemState extends State<WorkItem> {
                                   padding: EdgeInsets.zero,
                                   color: Colors.white.withOpacity(1),
                                   offset: const Offset(10, 40),
-                                  itemBuilder: (context) => dropDownListData
-                                      .map((e) => popupMenuItem(e.toString()))
-                                      .toList(),
+                                  itemBuilder: (context) => dropDownListData.map((e) => popupMenuItem(e.toString())).toList(),
                                   child: CustomChip(
                                     label: Row(
                                       children: [
                                         CustomText(
                                           title: selectedOption,
-                                          color:
-                                              taskStatusColor(selectedOption),
+                                          color: taskStatusColor(selectedOption),
                                           size: 10,
                                         ),
                                         Icon(
                                           Icons.expand_more,
                                           size: 18,
-                                          color:
-                                              taskStatusColor(selectedOption),
+                                          color: taskStatusColor(selectedOption),
                                         ),
                                       ],
                                     ),
-                                    color: taskStatusColor(selectedOption)
-                                        .withOpacity(0.1),
+                                    color: taskStatusColor(selectedOption).withOpacity(0.1),
                                   ),
                                 ),
                               ],
@@ -198,7 +185,7 @@ class _WorkItemState extends State<WorkItem> {
                           paddingHorizontal: 4,
                         ),
                         const CustomChip(
-                          label: FaIcon(
+                          label: Icon(
                             FontAwesomeIcons.whatsapp,
                             color: Colors.black,
                             size: 14,
@@ -226,8 +213,7 @@ class _WorkItemState extends State<WorkItem> {
                           height: 20,
                           width: 20,
                           decoration: BoxDecoration(
-                            image: const DecorationImage(
-                                image: AssetImage(profileImage)),
+                            image: const DecorationImage(image: AssetImage(profileImage)),
                             borderRadius: BorderRadius.circular(40),
                           ),
                           // child: Text(width.toString()),

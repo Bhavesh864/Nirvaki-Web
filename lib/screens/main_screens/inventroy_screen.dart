@@ -6,6 +6,7 @@ import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/widgets/inventory/inventory_filter_view.dart';
 import 'package:yes_broker/widgets/todo/todo_list_view.dart';
+import 'package:yes_broker/widgets/workitems_list.dart';
 
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});
@@ -97,7 +98,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   child: Row(
                     children: [
                       const Expanded(
-                        child: TodoListView(
+                        child: WorkItemsList(
                           headerShow: false,
                         ),
                       ),
