@@ -68,15 +68,14 @@ Future<String> submitInventoryAndcardDetails(state) async {
       workitemId: "IN$randomId",
       status: "New",
       cardCategory: inventoryCategory,
+      linkedItemType: "IN",
       brokerid: authentication.currentUser!.uid,
       cardType: "IN",
       cardTitle: "$propertyCategory $propertyKind-$propertyCity",
       cardDescription: "Want to $inventoryCategory her $bedrooms BHK for 70 L rupees",
       customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo),
       cardStatus: "New",
-      assignedto: [
-        cards.Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)
-      ],
+      assignedto: [cards.Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)],
       createdby: cards.Createdby(userfirstname: "bhavesh", userid: authentication.currentUser!.uid, userlastname: "khatri"),
       createdate: Timestamp.now(),
       propertyarearange: cards.Propertyarearange(arearangestart: superArea, unit: areaUnit),

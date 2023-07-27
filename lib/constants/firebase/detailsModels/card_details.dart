@@ -18,17 +18,19 @@ class CardDetails {
   Propertypricerange? propertypricerange;
   String? duedate;
   Createdby? createdby;
+  String? linkedItemType;
   Customerinfo? customerinfo;
   Timestamp? createdate;
   CardDetails(
       {this.cardType,
       required this.workitemId,
       required this.status,
-      required this.cardCategory,
+      this.cardCategory,
       required this.createdate,
       this.cardTitle,
       this.cardDescription,
       this.cardStatus,
+      this.linkedItemType,
       required this.brokerid,
       this.managerid,
       this.assignedto,
@@ -42,6 +44,9 @@ class CardDetails {
   CardDetails.fromJson(Map<String, dynamic> json) {
     if (json["cardType"] is String) {
       cardType = json["cardType"];
+    }
+    if (json["linkedItemType"] is String) {
+      linkedItemType = json["linkedItemType"];
     }
     if (json["workitemId"] is String) {
       workitemId = json["workitemId"];
@@ -105,6 +110,8 @@ class CardDetails {
     data["brokerid"] = brokerid;
     data["managerid"] = managerid;
     data["createdate"] = createdate;
+    data["linkedItemType"] = linkedItemType;
+
     if (assignedto != null) {
       data["assignedto"] = assignedto?.map((e) => e.toJson()).toList();
     }

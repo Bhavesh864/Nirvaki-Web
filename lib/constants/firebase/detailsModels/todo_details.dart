@@ -10,7 +10,7 @@ class TodoDetails {
   String? todoName;
   String? todoDescription;
   String? dueDate;
-  String? createDate;
+  Timestamp? createDate;
   String? createdBy;
   String? todoStatus;
   Customerinfo? customerinfo;
@@ -56,7 +56,7 @@ class TodoDetails {
     if (json["dueDate"] is String) {
       dueDate = json["dueDate"];
     }
-    if (json["createDate"] is String) {
+    if (json["createDate"] is Timestamp) {
       createDate = json["createDate"];
     }
     if (json["createdBy"] is String) {
@@ -121,7 +121,7 @@ class TodoDetails {
 
   static Future<void> addTodoDetails(TodoDetails inventory) async {
     try {
-      await todoDetailsCollection.doc(inventory.todoId).set(inventory.toJson());
+      await todoDetailsCollection.doc().set(inventory.toJson());
       // print('Inventory item added successfully');
     } catch (error) {
       // print('Failed to add Inventory item: $error');
@@ -143,7 +143,7 @@ class Attachments {
   String? type;
   String? path;
   String? createdby;
-  String? createdate;
+  Timestamp? createdate;
 
   Attachments({this.title, this.type, this.path, this.createdby, this.createdate});
 
@@ -160,7 +160,7 @@ class Attachments {
     if (json["createdby"] is String) {
       createdby = json["createdby"];
     }
-    if (json["createdate"] is String) {
+    if (json["createdate"] is Timestamp) {
       createdate = json["createdate"];
     }
   }

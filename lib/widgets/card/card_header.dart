@@ -15,30 +15,11 @@ import '../custom_chip.dart';
 class CardHeader extends StatelessWidget {
   final int index;
   List<CardDetails> cardDetails;
-  final bool? showWorkItem;
-  final bool? showTask;
-  final bool? showTag1;
-  final bool? showTag2;
-  final bool? showTag3;
-  final bool? showTag4;
-  final bool? showTag5;
-  final bool? showTag6;
-  final bool? showStatus;
-  final bool? showDate;
+
   CardHeader({
     Key? key,
     required this.index,
     required this.cardDetails,
-    this.showWorkItem = true,
-    this.showTask = true,
-    this.showTag1 = false,
-    this.showTag2 = false,
-    this.showTag3 = false,
-    this.showTag4 = false,
-    this.showTag5 = false,
-    this.showTag6 = false,
-    this.showStatus = true,
-    this.showDate = true,
   }) : super(key: key);
 
   @override
@@ -58,40 +39,53 @@ class CardHeader extends StatelessWidget {
                   shrinkWrap: true,
                   children: [
                     CustomChip(
-                      label: Icon(
-                        cardData.cardType == "IN" ? MaterialSymbols.location_home_outlined : MaterialSymbols.location_away,
-                        color: cardData.cardType == "IN" ? AppColor.inventoryIconColor : AppColor.leadIconColor,
-                        size: 18,
-                        // weight: 10.12,
-                      ),
-                      color: cardData.cardType == "IN" ? AppColor.inventoryChipColor : AppColor.leadChipColor,
-                    ),
-                    cardData.roomconfig!.bedroom != null
+                        label: Icon(
+                          checkIconByCategory(cardData),
+                          color: checkIconColorByCategory(cardData),
+                          size: 18,
+                          // weight: 10.12,
+                        ),
+                        color: checkChipColorByCategory(cardData)),
+                    checkNotNUllItem(cardData.roomconfig?.bedroom)
                         ? CustomChip(
                             label: CustomText(
-                              title: "${cardData.roomconfig!.bedroom}BHK+${cardData.roomconfig!.additionalroom?[0] ?? ""}",
+                              title: "${cardData.roomconfig?.bedroom}BHK+${cardData.roomconfig?.additionalroom?[0] ?? ""}",
                               size: 10,
                             ),
                           )
                         : const SizedBox(),
-                    CustomChip(
-                      label: CustomText(
-                        title: "${cardData.propertyarearange!.arearangestart} ${cardData.propertyarearange!.unit}",
-                        size: 10,
-                      ),
-                    ),
-                    CustomChip(
-                      label: CustomText(
-                        title: "${cardData.propertypricerange!.arearangestart}${cardData.propertypricerange!.unit}",
-                        size: 10,
-                      ),
-                    ),
-                    CustomChip(
-                      label: CustomText(
-                        title: cardData.cardCategory!,
-                        size: 10,
-                      ),
-                    ),
+                    isTypeisTodo(cardData)
+                        ? CustomChip(
+                            label: CustomText(
+                              title: "${cardData.cardType}",
+                              size: 10,
+                            ),
+                          )
+                        : const SizedBox(),
+                    checkNotNUllItem(cardData.propertyarearange?.arearangestart)
+                        ? CustomChip(
+                            label: CustomText(
+                              title: "${cardData.propertyarearange?.arearangestart} ${cardData.propertyarearange?.unit}",
+                              size: 10,
+                            ),
+                          )
+                        : const SizedBox(),
+                    checkNotNUllItem(cardData.propertypricerange?.arearangestart)
+                        ? CustomChip(
+                            label: CustomText(
+                              title: "${cardData.propertypricerange?.arearangestart}${cardData.propertypricerange?.unit}",
+                              size: 10,
+                            ),
+                          )
+                        : const SizedBox(),
+                    checkNotNUllItem(cardData.cardCategory)
+                        ? CustomChip(
+                            label: CustomText(
+                              title: cardData.cardCategory!,
+                              size: 10,
+                            ),
+                          )
+                        : const SizedBox(),
                     PopupMenuButton(
                       tooltip: '',
                       initialValue: selectedOption,
@@ -131,5 +125,59 @@ class CardHeader extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+bool isTypeisTodo(CardDetails cardData) {
+  if (cardData.cardType != "LD" && cardData.cardType != "IN") {
+    return true;
+  }
+  return false;
+}
+
+dynamic checkIconByCategory(CardDetails carddata) {
+  if (carddata.workitemId!.contains("IN")) {
+    return MaterialSymbols.location_home_outlined;
+  } else if (carddata.workitemId!.contains("LD")) {
+    return MaterialSymbols.location_away;
+  } else if (carddata.linkedItemType!.contains("LD")) {
+    return MaterialSymbols.location_away;
+  } else if (carddata.linkedItemType!.contains("IN")) {
+    return MaterialSymbols.location_home_outlined;
+  }
+  return MaterialSymbols.location_home_outlined;
+}
+
+Color checkIconColorByCategory(CardDetails carddata) {
+  if (carddata.workitemId!.contains("IN")) {
+    return AppColor.inventoryIconColor;
+  } else if (carddata.workitemId!.contains("LD")) {
+    return AppColor.leadIconColor;
+  } else if (carddata.linkedItemType!.contains("LD")) {
+    return AppColor.leadIconColor;
+  } else if (carddata.linkedItemType!.contains("IN")) {
+    return AppColor.inventoryIconColor;
+  }
+  return AppColor.leadIconColor;
+}
+
+Color checkChipColorByCategory(CardDetails carddata) {
+  if (carddata.workitemId!.contains("IN")) {
+    return AppColor.inventoryChipColor;
+  } else if (carddata.workitemId!.contains("LD")) {
+    return AppColor.leadChipColor;
+  } else if (carddata.linkedItemType!.contains("LD")) {
+    return AppColor.leadChipColor;
+  } else if (carddata.linkedItemType!.contains("IN")) {
+    return AppColor.inventoryChipColor;
+  }
+  return AppColor.inventoryIconColor;
+}
+
+bool checkNotNUllItem(dynamic data) {
+  if (data != null) {
+    return true;
+  } else {
+    return false;
   }
 }
