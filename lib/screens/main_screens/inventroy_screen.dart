@@ -98,7 +98,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   child: Row(
                     children: [
                       const Expanded(
-                        child: WorkItemsList(
+                        child: TodoListView(
                           headerShow: false,
                         ),
                       ),
