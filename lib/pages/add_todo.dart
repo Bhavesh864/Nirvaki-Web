@@ -41,11 +41,11 @@ class _AddTodoState extends ConsumerState<AddTodo> {
   }
 
   addDataOnfirestore(AllChipSelectedAnwers notify) {
-    // notify.submitLead().then((value) => {
-    //       setState(() {
-    //         response = value;
-    //       })
-    //     });
+    notify.submitTodo().then((value) => {
+          setState(() {
+            response = value;
+          })
+        });
     setState(() {
       response = 'success';
     });
@@ -170,8 +170,7 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                                                     notify,
                                                     nextQuestion,
                                                   ),
-                                                  if (i == screensDataList[index].questions.length - 1 &&
-                                                      screensDataList[index].questions[i].questionOptionType != 'chip')
+                                                  if (i == screensDataList[index].questions.length - 1 && screensDataList[index].questions[i].questionOptionType != 'chip')
                                                     Container(
                                                       margin: const EdgeInsets.only(top: 10),
                                                       alignment: Alignment.centerRight,
