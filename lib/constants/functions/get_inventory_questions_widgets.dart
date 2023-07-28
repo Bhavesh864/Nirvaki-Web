@@ -230,7 +230,7 @@ Widget buildInventoryQuestions(Question question, List<Screen> screensDataList, 
       address2: address2,
     );
   } else if (question.questionOptionType == 'photo') {
-    return const PhotosViewForm();
+    return PhotosViewForm(notify, question.questionId);
   }
 
   return const SizedBox.shrink();

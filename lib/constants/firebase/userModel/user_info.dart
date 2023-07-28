@@ -2,12 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
 
-final CollectionReference usersCollection =
-    FirebaseFirestore.instance.collection('users');
+final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 
+@HiveType(typeId: 0)
 class User {
   String brokerId;
   String userId;
@@ -75,8 +76,7 @@ class User {
       final List<User> users = [];
       for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
         if (documentSnapshot.exists) {
-          final Map<String, dynamic> data =
-              documentSnapshot.data() as Map<String, dynamic>;
+          final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
           final User user = User.fromMap(data);
           users.add(user);
         }
@@ -92,14 +92,22 @@ class User {
 
   static Future<User?> getUser(String userId) async {
     try {
-      final DocumentSnapshot documentSnapshot =
-          await usersCollection.doc(userId).get();
-      if (documentSnapshot.exists) {
-        final Map<String, dynamic> data =
-            documentSnapshot.data() as Map<String, dynamic>;
-        return User.fromMap(data);
+      // Check if the user exists in the 'users' box in Hive
+      final usersBox = Hive.box('users');
+      final userFromHive = usersBox.get(userId);
+      print("userFromHive=====>$userFromHive");
+      if (userFromHive != null) {
+        return userFromHive;
       } else {
-        return null;
+        final DocumentSnapshot documentSnapshot = await usersCollection.doc(userId).get();
+        if (documentSnapshot.exists) {
+          final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+          final User user = User.fromMap(data);
+          usersBox.put(userId, user);
+          return user;
+        } else {
+          return null;
+        }
       }
     } catch (error) {
       if (kDebugMode) {
@@ -111,9 +119,7 @@ class User {
 
   static Future<void> updateUser(User updatedUser) async {
     try {
-      await usersCollection
-          .doc(updatedUser.brokerId)
-          .update(updatedUser.toMap());
+      await usersCollection.doc(updatedUser.brokerId).update(updatedUser.toMap());
       // print('User updated successfully');
     } catch (error) {
       // print('Failed to update user: $error');
