@@ -18,7 +18,7 @@ Future<String> submitTodoAndCardDetails(state) async {
   final User assignto = getDataById(state, 12);
 
   final cards.CardDetails card = cards.CardDetails(
-    workitemId: "Todo$randomId",
+    workitemId: "TD$randomId",
     status: "New",
     brokerid: authentication.currentUser!.uid,
     cardType: todotype,
