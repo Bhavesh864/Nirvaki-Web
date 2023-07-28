@@ -64,6 +64,7 @@ Future<String> submitLeadAndCardDetails(state) async {
       workitemId: "LD$randomId",
       status: "New",
       cardCategory: leadCategory,
+      linkedItemType: "LD",
       brokerid: authentication.currentUser!.uid,
       cardType: "LD",
       cardTitle: "$propertyCategory $propertyKind-$propertyCity",
