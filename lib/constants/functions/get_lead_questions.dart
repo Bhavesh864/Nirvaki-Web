@@ -4,9 +4,9 @@ import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart'
 
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
-import 'package:yes_broker/questions_form_photos_view.dart';
-import 'package:yes_broker/widgets/inventory/assign_user.dart';
-import 'package:yes_broker/google_maps.dart';
+import 'package:yes_broker/widgets/questionaries/questions_form_photos_view.dart';
+import 'package:yes_broker/widgets/questionaries/assign_user.dart';
+import 'package:yes_broker/widgets/questionaries/google_maps.dart';
 import '../../Customs/custom_fields.dart';
 import '../../Customs/custom_text.dart';
 import '../../Customs/dropdown_field.dart';

@@ -10,7 +10,7 @@ import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/widgets/calendar_view.dart';
 import 'package:yes_broker/widgets/timeline_view.dart';
 import 'package:yes_broker/widgets/todo/todo_list_view.dart';
-import 'package:yes_broker/widgets/workitems_list.dart';
+import 'package:yes_broker/widgets/workitems/workitems_list.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

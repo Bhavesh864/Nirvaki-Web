@@ -197,6 +197,7 @@ class _CustomButtonState extends State<CustomButton> {
                   child: Icon(
                     widget.leftIcon,
                     color: widget.lefticonColor,
+                    size: 24,
                   ),
                 ),
               CustomText(

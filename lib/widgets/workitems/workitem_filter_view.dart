@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
-import 'package:yes_broker/widgets/custom_chip.dart';
-import 'package:yes_broker/widgets/inventory/inventory_checkbox_options.dart';
+import 'package:yes_broker/Customs/custom_chip.dart';
+import 'package:yes_broker/widgets/workitems/inventory_checkbox_options.dart';
 
-class InventoryFilterView extends StatelessWidget {
+class WorkItemFilterView extends StatelessWidget {
   final Function closeFilterView;
-  const InventoryFilterView({super.key, required this.closeFilterView});
+  const WorkItemFilterView({super.key, required this.closeFilterView});
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +31,14 @@ class InventoryFilterView extends StatelessWidget {
                       size: 18,
                     ),
                     IconButton(
-                        onPressed: () {
-                          closeFilterView();
-                        },
-                        icon: const Icon(Icons.close)),
+                      onPressed: () {
+                        closeFilterView();
+                      },
+                      icon: const Icon(
+                        Icons.close,
+                        size: 24,
+                      ),
+                    ),
                   ],
                 ),
                 // Spacer(),
@@ -146,7 +151,7 @@ class InventoryFilterView extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      const InventoryCheckBoxOptions(),
+                      const WorkItemCheckboxOptions(),
                     ],
                   ),
                 ),
@@ -163,12 +168,3 @@ class InventoryFilterView extends StatelessWidget {
     );
   }
 }
-
- // floatingActionButton: Container(
-      //   margin: const EdgeInsets.only(left: 15,right: 15,),
-      //   child: CustomButton(
-      //     text: 'Apply Filters',
-      //     onPressed: () {},
-      //   ),
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

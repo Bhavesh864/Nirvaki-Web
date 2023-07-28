@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
-import '../custom_chip.dart';
+import '../../Customs/custom_chip.dart';
 
 class CardFooter extends StatelessWidget {
   final int index;
@@ -51,32 +51,24 @@ class CardFooter extends StatelessWidget {
         const CustomChip(
           label: Icon(
             Icons.call_outlined,
-            color: Colors.black,
-            size: 14,
           ),
           paddingHorizontal: 3,
         ),
         const CustomChip(
           label: FaIcon(
             FontAwesomeIcons.whatsapp,
-            color: Colors.black,
-            size: 14,
           ),
           paddingHorizontal: 3,
         ),
         const CustomChip(
           label: Icon(
             Icons.edit_outlined,
-            color: Colors.black,
-            size: 14,
           ),
           paddingHorizontal: 3,
         ),
         const CustomChip(
           label: Icon(
             Icons.share_outlined,
-            color: Colors.black,
-            size: 14,
           ),
           paddingHorizontal: 3,
         ),

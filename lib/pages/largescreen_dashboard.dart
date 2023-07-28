@@ -84,6 +84,7 @@ class LargeScreen extends ConsumerWidget {
             child: Icon(
               Icons.chat_outlined,
               color: Colors.white,
+              size: 24,
             ),
           ),
         ],

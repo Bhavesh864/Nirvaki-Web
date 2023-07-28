@@ -29,12 +29,9 @@ class SmallScreen extends ConsumerWidget {
         }
       }),
       bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor: const Color.fromARGB(255, 158, 153, 153),
         selectedItemColor: AppColor.primary,
-        showUnselectedLabels: false,
         onTap: (value) => ref.read(currentIndexProvider.notifier).update((state) => value),
         currentIndex: currentIndex,
-        backgroundColor: Colors.white,
         items: List.generate(
           bottomBarItems.length,
           (index) => BottomNavigationBarItem(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../constants/utils/image_constants.dart';
+import '../constants/utils/image_constants.dart';
 
 class CustomAppLogo extends StatelessWidget {
   const CustomAppLogo({Key? key}) : super(key: key);

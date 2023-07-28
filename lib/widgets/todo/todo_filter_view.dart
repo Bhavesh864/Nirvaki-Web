@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
-import 'package:yes_broker/widgets/custom_chip.dart';
+import 'package:yes_broker/Customs/custom_chip.dart';
 
 class TodoFilterView extends StatelessWidget {
   final Function closeFilterView;
@@ -26,10 +26,14 @@ class TodoFilterView extends StatelessWidget {
                 size: 18,
               ),
               IconButton(
-                  onPressed: () {
-                    closeFilterView();
-                  },
-                  icon: const Icon(Icons.close)),
+                onPressed: () {
+                  closeFilterView();
+                },
+                icon: const Icon(
+                  Icons.close,
+                  size: 24,
+                ),
+              ),
             ],
           ),
           // Spacer(),

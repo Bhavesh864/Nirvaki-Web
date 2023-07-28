@@ -25,8 +25,7 @@ class CustomTimeLineView extends StatelessWidget {
             ),
             Expanded(
               child: ScrollConfiguration(
-                behavior:
-                    ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                 child: ListView.builder(
                   itemCount: timelineData.length + 1,
                   itemBuilder: (context, index) {
@@ -55,7 +54,6 @@ class CustomTimeLineView extends StatelessWidget {
                                 backgroundColor: AppColor.primary,
                                 child: Icon(
                                   Icons.add,
-                                  size: 14,
                                   color: Colors.white,
                                 ),
                               ),
