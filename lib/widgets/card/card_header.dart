@@ -9,7 +9,7 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
 
 import '../app/nav_bar.dart';
-import '../custom_chip.dart';
+import '../../Customs/custom_chip.dart';
 
 // ignore: must_be_immutable
 class CardHeader extends StatelessWidget {
@@ -56,9 +56,11 @@ class CardHeader extends StatelessWidget {
                         : const SizedBox(),
                     isTypeisTodo(cardData)
                         ? CustomChip(
+                            color: AppColor.primary.withOpacity(0.1),
                             label: CustomText(
                               title: "${cardData.cardType}",
                               size: 10,
+                              color: AppColor.primary,
                             ),
                           )
                         : const SizedBox(),

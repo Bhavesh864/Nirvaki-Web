@@ -15,12 +15,9 @@ class TodoListView extends StatelessWidget {
       behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
       child: SingleChildScrollView(
         child: Container(
-          decoration: BoxDecoration(
-              color: AppColor.secondary,
-              borderRadius: BorderRadius.circular(15)),
+          decoration: BoxDecoration(color: AppColor.secondary, borderRadius: BorderRadius.circular(15)),
           padding: const EdgeInsets.all(5),
-          margin: EdgeInsets.symmetric(
-              horizontal: Responsive.isMobile(context) ? 0 : 10),
+          margin: EdgeInsets.symmetric(horizontal: Responsive.isMobile(context) ? 0 : 10),
           child: SafeArea(
             right: false,
             child: Column(

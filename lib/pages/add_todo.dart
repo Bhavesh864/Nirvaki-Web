@@ -8,7 +8,7 @@ import 'package:yes_broker/constants/firebase/questionModels/todo_question.dart'
 
 import 'package:yes_broker/constants/functions/get_todo_questions.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
-import 'package:yes_broker/widgets/inventory/inventory_success_widget.dart';
+import 'package:yes_broker/widgets/questionaries/workitem_success.dart';
 import '../Customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
 import '../controllers/all_selected_ansers_provider.dart';
@@ -232,24 +232,18 @@ class _AddTodoState extends ConsumerState<AddTodo> {
           left: 0.0,
           right: 0.0,
           child: AppBar(
-            elevation: 0,
-            iconTheme: const IconThemeData(color: Colors.white),
-            backgroundColor: Colors.transparent,
-            centerTitle: true,
             leading: IconButton(
               onPressed: () {
                 final currentScreenQuestions = screensDataList[currentScreenIndex].questions;
                 final ids = currentScreenQuestions.map((q) => q.questionId).toList();
                 goBack(ids);
               },
-              icon: const Icon(Icons.arrow_back),
+              icon: const Icon(
+                Icons.arrow_back,
+                size: 24,
+              ),
             ),
-            title: const CustomText(
-              title: 'Add Todo',
-              fontWeight: FontWeight.w700,
-              size: 20,
-              color: Colors.white,
-            ),
+            title: const Text('Add Todo'),
           ),
         );
       },

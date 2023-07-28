@@ -21,6 +21,16 @@ class TAppTheme {
         900: Color(0xE64460EF),
       },
     ),
+    appBarTheme: const AppBarTheme(
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      centerTitle: true,
+      titleTextStyle: TextStyle(
+        fontWeight: FontWeight.w700,
+        fontSize: 20,
+        color: Colors.white,
+      ),
+    ),
     chipTheme: ChipThemeData(
       side: BorderSide.none,
       backgroundColor: AppColor.chipGreyColor,
@@ -28,11 +38,13 @@ class TAppTheme {
         borderRadius: BorderRadius.circular(4),
       ),
     ),
+    iconTheme: const IconThemeData(
+      color: Colors.black,
+      size: 14,
+    ),
     textTheme: const TextTheme(
-      // titleLarge: TextStyle(),
       titleMedium: TextStyle(
         color: Color(0xFF000000),
-        // color: Colors.amber,
         fontSize: 14,
         fontWeight: FontWeight.w600,
       ),

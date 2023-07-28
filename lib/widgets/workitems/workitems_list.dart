@@ -49,7 +49,10 @@ class _WorkItemsListState extends State<WorkItemsList> {
                               title: widget.title,
                               fontWeight: FontWeight.w600,
                             ),
-                            const Icon(Icons.more_horiz),
+                            const Icon(
+                              Icons.more_horiz,
+                              size: 24,
+                            ),
                           ],
                         ),
                       )
