@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 // Flutter Packages Imports
 import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 import 'package:yes_broker/pages/Auth/login_screen.dart';
+import 'package:yes_broker/pages/Auth/personal_details.dart';
+import 'package:yes_broker/pages/Auth/signup_screen.dart';
 import 'package:yes_broker/pages/add_todo.dart';
 import 'package:yes_broker/pages/add_workitems.dart';
 
 // Local Files Imports
 import '../Customs/responsive.dart';
+import '../pages/Auth/company_details.dart';
 import '../screens/main_screens/caledar_screen.dart';
 import '../screens/main_screens/chat_screen.dart';
 import '../screens/main_screens/home_screen.dart';
@@ -21,8 +24,6 @@ import '../pages/add_lead.dart';
 import '../pages/largescreen_dashboard.dart';
 import '../pages/smallscreen_dashboard.dart';
 import '../screens/account_screens/profile_screen.dart';
-import '../widgets/calendar_view.dart';
-import '../widgets/todo/todo_list_view.dart';
 
 // labels
 const homeScreenPageLabel = 'Home';
@@ -82,15 +83,7 @@ List<BottomBarItem> bottomBarItems = [
   BottomBarItem(
     label: homeScreenPageLabel,
     iconData: homeIcon,
-    screen: const SingleChildScrollView(
-      physics: ClampingScrollPhysics(),
-      child: Column(
-        children: [
-          CustomCalendarView(),
-          TodoListView(),
-        ],
-      ),
-    ),
+    screen: const TodoTabScreen(),
   ),
   BottomBarItem(
     label: inventoryPageLabel,
@@ -113,6 +106,9 @@ class AppRoutes {
   static const String homeScreen = '/home_screen';
   static const String forgetPassword = '/forget_password_screen';
   static const String loginScreen = '/login_screen';
+  static const String singupscreen = '/signup_screen';
+  static const String personalDetails = '/personal_details_screen';
+  static const String companyDetails = '/company_details_screen';
   static const String profileScreen = '/profile_screen';
   static const String addInventory = '/add_inventory_screen';
   static const String addLead = '/add_lead_screen';
@@ -122,8 +118,11 @@ class AppRoutes {
   static Map<String, WidgetBuilder> routesTable = {
     homeScreen: (context) => Responsive.isMobile(context) ? const SmallScreen() : const LargeScreen(),
     loginScreen: (context) => const LoginScreen(),
+    singupscreen: (context) => const SignUpScreen(),
     forgetPassword: (context) => const ForgetPassword(),
     profileScreen: (context) => const ProfileScreen(),
+    personalDetails: (context) => const PersonalDetailsAuthScreen(),
+    companyDetails: (context) => const CompanyDetailsAuthScreen(),
     addInventory: (context) => const AddInventory(),
     addLead: (context) => const AddLead(),
     addWorkItem: (context) => const AddWorkItem(),

@@ -16,11 +16,13 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final key = GlobalKey<FormState>();
   var isloading = false;
+
   final TextEditingController emailcontroller = TextEditingController();
   final TextEditingController passwordcontroller = TextEditingController();
 
   void loginwithemailpassword() {
     final isvalid = key.currentState?.validate();
+
     if (isvalid!) {
       setState(() {
         isloading = true;
@@ -52,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            height: 750,
+            // height: 780,
             padding: const EdgeInsets.symmetric(vertical: 60),
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -121,17 +123,19 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(
                           height: 10,
                         ),
-                        CustomTextInput(
-                          controller: emailcontroller,
-                          hintText: 'Email address',
-                          validator: (value) {
-                            if (value!.isEmpty || value.length < 6) {
-                              return 'Please enter email';
-                            }
-                            return null;
-                          },
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 5),
+                          child: CustomTextInput(
+                            controller: emailcontroller,
+                            hintText: 'Email address',
+                            validator: (value) {
+                              if (value!.isEmpty || value.length < 6) {
+                                return 'Please enter valid email';
+                              }
+                              return null;
+                            },
+                          ),
                         ),
-                        // const SizedBox(height: 15),
                         CustomTextInput(
                           controller: passwordcontroller,
                           hintText: 'Password',
@@ -158,7 +162,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(height: 10),
                         const CustomForgetPassword(),
                         const SizedBox(height: 10),
-                        const CustomSignUpNow(),
+                        CustomSignUpNow(onPressSignUp: () {
+                          print('object');
+                          Navigator.pushNamed(context, AppRoutes.singupscreen);
+                        }),
                       ],
                     ),
                   ),
