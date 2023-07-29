@@ -39,20 +39,6 @@ class TodoListView extends StatelessWidget {
                       )
                     : Container(),
                 const SizedBox(
-                  // height: Responsive.isMobile(context) ? height * 0.70 : 600,
-                  // child: ListView.builder(
-                  //   shrinkWrap: true,
-                  //   physics: Responsive.isMobile(context)
-                  //       ? const NeverScrollableScrollPhysics()
-                  //       : const ClampingScrollPhysics(),
-                  //   itemCount: userData.length,
-                  //   itemBuilder: (context, index) {
-                  //     return CustomCard(
-                  //       index: index,
-                  //       isTodoItem: true,
-                  //     );
-                  //   },
-                  // ),
                   child: TodoItem(),
                 ),
               ],

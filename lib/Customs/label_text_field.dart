@@ -9,6 +9,7 @@ class LabelTextInputField extends StatelessWidget {
   final String hintText;
   final bool isDropDown;
   final bool isDatePicker;
+  final bool isMandatory;
   final TextEditingController inputController;
   final Function(String)? onChanged;
   final FormFieldValidator<String>? validator;
@@ -22,6 +23,7 @@ class LabelTextInputField extends StatelessWidget {
     required this.inputController,
     this.onChanged,
     this.validator,
+    this.isMandatory = true,
   }) : super(key: key);
 
   @override
@@ -29,12 +31,37 @@ class LabelTextInputField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Padding(
+        //   padding: const EdgeInsets.only(top: 4, right: 8, left: 2),
+        //   child: CustomText(
+        //     title: labelText,
+        //     fontWeight: FontWeight.w500,
+        //     textAlign: TextAlign.left,
+        //   ),
+        // ),
         Padding(
-          padding: const EdgeInsets.only(top: 4, right: 8, left: 2),
-          child: CustomText(
-            title: labelText,
-            fontWeight: FontWeight.w500,
-            textAlign: TextAlign.left,
+          padding: const EdgeInsets.only(top: 4, bottom: 4, right: 8, left: 2),
+          child: RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: labelText,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                if (isMandatory)
+                  const TextSpan(
+                    text: ' *',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.red,
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
         CustomTextInput(

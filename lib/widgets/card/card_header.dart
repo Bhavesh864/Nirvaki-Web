@@ -26,105 +26,99 @@ class CardHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final cardData = cardDetails[index];
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+        SizedBox(
+          height: 30,
+          width: 260,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
             children: [
-              SizedBox(
-                height: 30,
-                width: 260,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  children: [
-                    CustomChip(
-                        label: Icon(
-                          checkIconByCategory(cardData),
-                          color: checkIconColorByCategory(cardData),
-                          size: 18,
-                          // weight: 10.12,
-                        ),
-                        color: checkChipColorByCategory(cardData)),
-                    checkNotNUllItem(cardData.roomconfig?.bedroom)
-                        ? CustomChip(
-                            label: CustomText(
-                              title: "${cardData.roomconfig?.bedroom}BHK+${cardData.roomconfig?.additionalroom?[0] ?? ""}",
-                              size: 10,
-                            ),
-                          )
-                        : const SizedBox(),
-                    isTypeisTodo(cardData)
-                        ? CustomChip(
-                            color: AppColor.primary.withOpacity(0.1),
-                            label: CustomText(
-                              title: "${cardData.cardType}",
-                              size: 10,
-                              color: AppColor.primary,
-                            ),
-                          )
-                        : const SizedBox(),
-                    checkNotNUllItem(cardData.propertyarearange?.arearangestart)
-                        ? CustomChip(
-                            label: CustomText(
-                              title: "${cardData.propertyarearange?.arearangestart} ${cardData.propertyarearange?.unit}",
-                              size: 10,
-                            ),
-                          )
-                        : const SizedBox(),
-                    checkNotNUllItem(cardData.propertypricerange?.arearangestart)
-                        ? CustomChip(
-                            label: CustomText(
-                              title: "${cardData.propertypricerange?.arearangestart}${cardData.propertypricerange?.unit}",
-                              size: 10,
-                            ),
-                          )
-                        : const SizedBox(),
-                    checkNotNUllItem(cardData.cardCategory)
-                        ? CustomChip(
-                            label: CustomText(
-                              title: cardData.cardCategory!,
-                              size: 10,
-                            ),
-                          )
-                        : const SizedBox(),
-                    PopupMenuButton(
-                      tooltip: '',
-                      initialValue: selectedOption,
-                      splashRadius: 0,
-                      padding: EdgeInsets.zero,
-                      color: Colors.white.withOpacity(1),
-                      offset: const Offset(10, 40),
-                      itemBuilder: (context) => dropDownListData.map((e) => popupMenuItem(e.toString())).toList(),
-                      child: CustomChip(
-                        label: Row(
-                          children: [
-                            CustomText(
-                              title: selectedOption,
-                              color: taskStatusColor(selectedOption),
-                              size: 10,
-                            ),
-                            Icon(
-                              Icons.expand_more,
-                              size: 18,
-                              color: taskStatusColor(selectedOption),
-                            ),
-                          ],
-                        ),
-                        color: taskStatusColor(selectedOption).withOpacity(0.1),
+              CustomChip(
+                  label: Icon(
+                    checkIconByCategory(cardData),
+                    color: checkIconColorByCategory(cardData),
+                    size: 18,
+                    // weight: 10.12,
+                  ),
+                  color: checkChipColorByCategory(cardData)),
+              checkNotNUllItem(cardData.roomconfig?.bedroom)
+                  ? CustomChip(
+                      label: CustomText(
+                        title: "${cardData.roomconfig?.bedroom}BHK+${cardData.roomconfig?.additionalroom?[0] ?? ""}",
+                        size: 10,
                       ),
-                    ),
-                  ],
+                    )
+                  : const SizedBox(),
+              isTypeisTodo(cardData)
+                  ? CustomChip(
+                      color: AppColor.primary.withOpacity(0.1),
+                      label: CustomText(
+                        title: "${cardData.cardType}",
+                        size: 10,
+                        color: AppColor.primary,
+                      ),
+                    )
+                  : const SizedBox(),
+              checkNotNUllItem(cardData.propertyarearange?.arearangestart)
+                  ? CustomChip(
+                      label: CustomText(
+                        title: "${cardData.propertyarearange?.arearangestart} ${cardData.propertyarearange?.unit}",
+                        size: 10,
+                      ),
+                    )
+                  : const SizedBox(),
+              checkNotNUllItem(cardData.propertypricerange?.arearangestart)
+                  ? CustomChip(
+                      label: CustomText(
+                        title: "${cardData.propertypricerange?.arearangestart}${cardData.propertypricerange?.unit}",
+                        size: 10,
+                      ),
+                    )
+                  : const SizedBox(),
+              checkNotNUllItem(cardData.cardCategory)
+                  ? CustomChip(
+                      label: CustomText(
+                        title: cardData.cardCategory!,
+                        size: 10,
+                      ),
+                    )
+                  : const SizedBox(),
+              PopupMenuButton(
+                tooltip: '',
+                initialValue: selectedOption,
+                splashRadius: 0,
+                padding: EdgeInsets.zero,
+                color: Colors.white.withOpacity(1),
+                offset: const Offset(10, 40),
+                itemBuilder: (context) => dropDownListData.map((e) => popupMenuItem(e.toString())).toList(),
+                child: CustomChip(
+                  label: Row(
+                    children: [
+                      CustomText(
+                        title: selectedOption,
+                        color: taskStatusColor(selectedOption),
+                        size: 10,
+                      ),
+                      Icon(
+                        Icons.expand_more,
+                        size: 18,
+                        color: taskStatusColor(selectedOption),
+                      ),
+                    ],
+                  ),
+                  color: taskStatusColor(selectedOption).withOpacity(0.1),
                 ),
               ),
-              const Spacer(),
-              const Icon(
-                Icons.chevron_right,
-                size: 20,
-              )
             ],
           ),
         ),
+        const Spacer(),
+        const Icon(
+          Icons.chevron_right,
+          size: 20,
+        )
       ],
     );
   }

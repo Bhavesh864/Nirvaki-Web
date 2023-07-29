@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yes_broker/Customs/custom_fields.dart';
+
 import 'package:yes_broker/Customs/custom_text.dart';
 
 class TopSerachBar extends StatefulWidget {
@@ -31,12 +31,14 @@ class _TopSerachBarState extends State<TopSerachBar> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                margin: const EdgeInsets.only(top: 10, bottom: 5, left: 20, right: 20),
+                margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                 width: MediaQuery.of(context).size.width * 0.3,
-                child: CustomTextInput(
+                child: TextField(
                   controller: searchController,
-                  hintText: 'Search',
-                  leftIcon: Icons.search,
+                  decoration: const InputDecoration(
+                    hintText: 'Search',
+                    prefixIcon: Icon(Icons.search),
+                  ),
                 ),
               ),
               Row(
@@ -59,30 +61,32 @@ class _TopSerachBarState extends State<TopSerachBar> {
               )
             ],
           )
-        : Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: CustomText(
-                  title: widget.title,
-                  fontWeight: FontWeight.w600,
-                  size: 18,
-                ),
-              ),
-              Row(
+        : widget.title != 'Todo'
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                    onPressed: widget.onFilterClose,
-                    icon: const Icon(Icons.filter_list),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: CustomText(
+                      title: widget.title,
+                      fontWeight: FontWeight.w600,
+                      size: 18,
+                    ),
                   ),
-                  IconButton(
-                    onPressed: widget.onFilterOpen,
-                    icon: const Icon(Icons.more_horiz),
-                  ),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: widget.onFilterClose,
+                        icon: const Icon(Icons.filter_list),
+                      ),
+                      IconButton(
+                        onPressed: widget.onFilterOpen,
+                        icon: const Icon(Icons.more_horiz),
+                      ),
+                    ],
+                  )
                 ],
               )
-            ],
-          );
+            : Container();
   }
 }
