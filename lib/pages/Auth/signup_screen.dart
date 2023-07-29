@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/pages/Auth/personal_details.dart';
 import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/widgets/auth/common_auth_widgets.dart';
 import '../../Customs/custom_text.dart';
