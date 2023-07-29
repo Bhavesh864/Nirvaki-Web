@@ -7,10 +7,11 @@ import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/widgets/card/custom_card.dart';
 
 class WorkItemsList extends StatefulWidget {
+  final bool isScrollable;
   final bool headerShow;
   final String title;
   final List<CardDetails> getCardDetails;
-  const WorkItemsList({super.key, this.headerShow = true, required this.title, required this.getCardDetails});
+  const WorkItemsList({super.key, this.headerShow = true, required this.title, required this.getCardDetails, this.isScrollable = true});
 
   @override
   State<WorkItemsList> createState() => _WorkItemsListState();
@@ -32,7 +33,7 @@ class _WorkItemsListState extends State<WorkItemsList> {
             color: AppColor.secondary,
             borderRadius: BorderRadius.circular(15),
           ),
-          padding: const EdgeInsets.all(5),
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
           margin: const EdgeInsets.symmetric(horizontal: 5),
           child: SafeArea(
             right: false,
@@ -58,10 +59,11 @@ class _WorkItemsListState extends State<WorkItemsList> {
                       )
                     : Container(),
                 SizedBox(
-                  height: Responsive.isMobile(context) ? height * 0.75 : height * 0.8,
+                  height: Responsive.isMobile(context) ? height : height * 0.79,
+                  // height: MediaQuery.of(context).size.height,
                   child: ListView(
                     shrinkWrap: true,
-                    // physics: const NeverScrollableScrollPhysics(),
+                    physics: widget.isScrollable ? const ScrollPhysics() : const NeverScrollableScrollPhysics(),
                     children: List.generate(
                       widget.getCardDetails.length,
                       (index) => CustomCard(index: index, cardDetails: widget.getCardDetails),
