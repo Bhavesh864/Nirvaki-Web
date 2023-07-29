@@ -7,7 +7,7 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/widgets/custom_chip.dart';
+import 'package:yes_broker/Customs/custom_chip.dart';
 import '../../constants/utils/image_constants.dart';
 
 class TodoItem extends StatefulWidget {
@@ -124,11 +124,7 @@ class _TodoItemState extends State<TodoItem> {
                         const Row(
                           children: [
                             CustomChip(
-                              avatar: Icon(
-                                Icons.calendar_month_outlined,
-                                color: Colors.black,
-                                size: 14,
-                              ),
+                              avatar: Icon(Icons.calendar_month_outlined),
                               label: FittedBox(
                                 child: CustomText(
                                   title: '23 May 2023',
@@ -173,35 +169,19 @@ class _TodoItemState extends State<TodoItem> {
                         ),
                       ),
                       const CustomChip(
-                        label: Icon(
-                          Icons.call_outlined,
-                          color: Colors.black,
-                          size: 14,
-                        ),
+                        label: Icon(Icons.call_outlined),
                         paddingHorizontal: 4,
                       ),
                       const CustomChip(
-                        label: Icon(
-                          FontAwesomeIcons.whatsapp,
-                          color: Colors.black,
-                          size: 14,
-                        ),
+                        label: Icon(FontAwesomeIcons.whatsapp),
                         paddingHorizontal: 4,
                       ),
                       const CustomChip(
-                        label: Icon(
-                          Icons.edit_outlined,
-                          color: Colors.black,
-                          size: 14,
-                        ),
+                        label: Icon(Icons.edit_outlined),
                         paddingHorizontal: 4,
                       ),
                       const CustomChip(
-                        label: Icon(
-                          Icons.share_outlined,
-                          color: Colors.black,
-                          size: 14,
-                        ),
+                        label: Icon(Icons.share_outlined),
                         paddingHorizontal: 4,
                       ),
                       const Spacer(),

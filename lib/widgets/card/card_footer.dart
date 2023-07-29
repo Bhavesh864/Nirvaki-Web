@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
-import '../custom_chip.dart';
+import '../../Customs/custom_chip.dart';
 
 class CardFooter extends StatelessWidget {
   final int index;
@@ -37,55 +37,58 @@ class CardFooter extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Container(
-          margin: const EdgeInsets.only(right: 3),
-          child: Text(
-            "${cardData.customerinfo!.firstname!} ${cardData.customerinfo!.lastname!}",
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.black,
-              fontWeight: FontWeight.w600,
-            ),
+        SizedBox(
+          height: 30,
+          width: 260,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: [
+              Center(
+                child: Container(
+                  margin: const EdgeInsets.only(right: 3),
+                  child: Text(
+                    "${cardData.customerinfo!.firstname!} ${cardData.customerinfo!.lastname!}",
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+              const CustomChip(
+                label: Icon(
+                  Icons.call_outlined,
+                ),
+                paddingHorizontal: 3,
+              ),
+              const CustomChip(
+                label: FaIcon(
+                  FontAwesomeIcons.whatsapp,
+                ),
+                paddingHorizontal: 3,
+              ),
+              const CustomChip(
+                label: Icon(
+                  Icons.edit_outlined,
+                ),
+                paddingHorizontal: 3,
+              ),
+              const CustomChip(
+                label: Icon(
+                  Icons.share_outlined,
+                ),
+                paddingHorizontal: 3,
+              ),
+              CustomChip(
+                label: CustomText(
+                  title: cardData.workitemId!,
+                  size: 10,
+                ),
+                paddingHorizontal: 2,
+              ),
+            ],
           ),
-        ),
-        const CustomChip(
-          label: Icon(
-            Icons.call_outlined,
-            color: Colors.black,
-            size: 14,
-          ),
-          paddingHorizontal: 3,
-        ),
-        const CustomChip(
-          label: FaIcon(
-            FontAwesomeIcons.whatsapp,
-            color: Colors.black,
-            size: 14,
-          ),
-          paddingHorizontal: 3,
-        ),
-        const CustomChip(
-          label: Icon(
-            Icons.edit_outlined,
-            color: Colors.black,
-            size: 14,
-          ),
-          paddingHorizontal: 3,
-        ),
-        const CustomChip(
-          label: Icon(
-            Icons.share_outlined,
-            color: Colors.black,
-            size: 14,
-          ),
-          paddingHorizontal: 3,
-        ),
-        CustomChip(
-          label: CustomText(
-            title: cardData.workitemId!,
-            size: 10,
-          ),
-          paddingHorizontal: 2,
         ),
         const Spacer(),
         Container(

@@ -4,7 +4,7 @@ import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 
 import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
 
-import 'package:yes_broker/widgets/inventory/assign_user.dart';
+import 'package:yes_broker/widgets/questionaries/assign_user.dart';
 
 import '../../Customs/custom_text.dart';
 import '../../Customs/dropdown_field.dart';
@@ -44,7 +44,7 @@ Widget buildTodoQuestions(
             context: context,
             initialDate: DateTime.now(),
             firstDate: DateTime(1900),
-            lastDate: DateTime.now(),
+            lastDate: DateTime(DateTime.now().year + 1),
           ).then(
             (pickedDate) {
               if (pickedDate == null) {

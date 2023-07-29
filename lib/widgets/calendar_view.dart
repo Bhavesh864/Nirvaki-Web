@@ -29,8 +29,14 @@ class CustomCalendarView extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Icon(Icons.add),
-                    Icon(Icons.more_horiz),
+                    Icon(
+                      Icons.add,
+                      size: 24,
+                    ),
+                    Icon(
+                      Icons.more_horiz,
+                      size: 24,
+                    ),
                   ],
                 ),
               ],
@@ -41,8 +47,7 @@ class CustomCalendarView extends StatelessWidget {
               child: SfCalendar(
                 headerHeight: 0,
                 view: CalendarView.timelineWeek,
-                timeSlotViewSettings:
-                    const TimeSlotViewSettings(startHour: 9, endHour: 18),
+                timeSlotViewSettings: const TimeSlotViewSettings(startHour: 9, endHour: 18),
                 showTodayButton: true,
                 showNavigationArrow: true,
                 backgroundColor: Colors.white,

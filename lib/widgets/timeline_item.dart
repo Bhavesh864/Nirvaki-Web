@@ -4,7 +4,7 @@ import 'package:yes_broker/constants/utils/colors.dart';
 
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/widgets/custom_chip.dart';
+import 'package:yes_broker/Customs/custom_chip.dart';
 
 import '../constants/utils/image_constants.dart';
 
@@ -36,17 +36,10 @@ class TimeLineItem extends StatelessWidget {
                   title: timeLine['id'],
                   size: 12,
                 ),
-                color: timeLine['isInventory']
-                    ? AppColor.leadChipColor
-                    : AppColor.inventoryChipColor,
+                color: timeLine['isInventory'] ? AppColor.leadChipColor : AppColor.inventoryChipColor,
                 avatar: Icon(
-                  timeLine['isInventory']
-                      ? MaterialSymbols.location_home_outlined
-                      : MaterialSymbols.location_away,
-                  color: timeLine['isInventory']
-                      ? AppColor.leadIconColor
-                      : AppColor.inventoryIconColor,
-                  size: 14,
+                  timeLine['isInventory'] ? MaterialSymbols.location_home_outlined : MaterialSymbols.location_away,
+                  color: timeLine['isInventory'] ? AppColor.leadIconColor : AppColor.inventoryIconColor,
                 ),
               ),
               CustomText(
