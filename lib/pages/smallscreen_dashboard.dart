@@ -5,7 +5,6 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/widgets/app/app_bar.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';
-
 import '../constants/firebase/userModel/broker_info.dart';
 
 final currentIndexProvider = StateProvider<int>((ref) {
@@ -18,6 +17,7 @@ class SmallScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = ref.watch(currentIndexProvider);
+
     return Scaffold(
       appBar: mobileAppBar(context, (selectedVal) {
         if (selectedVal == 'Profile') {
@@ -29,12 +29,9 @@ class SmallScreen extends ConsumerWidget {
         }
       }),
       bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor: const Color.fromARGB(255, 158, 153, 153),
         selectedItemColor: AppColor.primary,
-        showUnselectedLabels: false,
         onTap: (value) => ref.read(currentIndexProvider.notifier).update((state) => value),
         currentIndex: currentIndex,
-        backgroundColor: Colors.white,
         items: List.generate(
           bottomBarItems.length,
           (index) => BottomNavigationBarItem(

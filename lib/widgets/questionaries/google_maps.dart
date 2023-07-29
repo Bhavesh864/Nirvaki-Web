@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:yes_broker/widgets/lat_lng_get.dart';
+import 'package:yes_broker/constants/functions/lat_lng_get.dart';
 
 class CustomGoogleMap extends StatefulWidget {
   final String stateName;

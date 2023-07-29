@@ -3,15 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 
-class InventoryCheckBoxOptions extends StatefulWidget {
-  const InventoryCheckBoxOptions({super.key});
+class WorkItemCheckboxOptions extends StatefulWidget {
+  const WorkItemCheckboxOptions({super.key});
 
   @override
-  State<InventoryCheckBoxOptions> createState() =>
-      _InventoryCheckBoxOptionsState();
+  State<WorkItemCheckboxOptions> createState() => _WorkItemCheckboxOptionsState();
 }
 
-class _InventoryCheckBoxOptionsState extends State<InventoryCheckBoxOptions> {
+class _WorkItemCheckboxOptionsState extends State<WorkItemCheckboxOptions> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -35,8 +34,7 @@ class _InventoryCheckBoxOptionsState extends State<InventoryCheckBoxOptions> {
                   height: 20,
                   child: CheckboxListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: CustomText(
-                        title: inventoryFilterOtpion[index]['title']),
+                    title: CustomText(title: inventoryFilterOtpion[index]['title']),
                     value: inventoryFilterOtpion[index]['selected'],
                     onChanged: (value) {
                       setState(() {

@@ -72,7 +72,11 @@ class CustomTextInputState extends State<CustomTextInput> {
         ),
         controller: widget.controller,
         decoration: InputDecoration(
-          errorStyle: const TextStyle(height: 0),
+          errorStyle: const TextStyle(height: 0, textBaseline: TextBaseline.ideographic),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(color: Colors.red, width: 1),
+          ),
           label: widget.label,
           contentPadding: EdgeInsets.symmetric(vertical: widget.contentPadding, horizontal: 10),
           labelText: widget.labelText,
@@ -82,6 +86,7 @@ class CustomTextInputState extends State<CustomTextInput> {
           suffixIcon: widget.rightIcon != null
               ? IconButton(
                   icon: Icon(widget.rightIcon),
+                  iconSize: 18,
                   onPressed: () {
                     setState(() {
                       _obscureText = !_obscureText!;
@@ -90,11 +95,11 @@ class CustomTextInputState extends State<CustomTextInput> {
                 )
               : null,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: BorderRadius.circular(10),
           ),
           // isDense: true,
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: BorderRadius.circular(10),
             borderSide: const BorderSide(
               color: AppColor.primary,
             ),
@@ -197,6 +202,7 @@ class _CustomButtonState extends State<CustomButton> {
                   child: Icon(
                     widget.leftIcon,
                     color: widget.lefticonColor,
+                    size: 24,
                   ),
                 ),
               CustomText(
@@ -281,6 +287,7 @@ class CustomCheckboxState extends State<CustomCheckbox> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Checkbox(
           checkColor: Colors.white,

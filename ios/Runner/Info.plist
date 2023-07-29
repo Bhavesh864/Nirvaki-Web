@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<key>NSAppTransportSecurity</key>
 <dict>
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>Allow access to the location for distance calculation</string>
+<key>NSLocationAlwaysUsageDescription</key>
+<string>Allow access to the location for distance calculation</string>
+<key>NSCameraUsageDescription</key>
+<string>Allow access to camera for profile picture</string>
+<key>NSPhotoLibraryUsageDescription</key>
+ <string>Allow access to photo library for profile picture</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Pick Picture</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Take Picture</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Take Picture</string>
 	<key>CFBundleDisplayName</key>
 	<string>Yes Broker</string>
 	<key>CFBundleExecutable</key>

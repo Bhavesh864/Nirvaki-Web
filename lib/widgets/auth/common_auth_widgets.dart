@@ -102,24 +102,30 @@ class CustomForgetPassword extends StatelessWidget {
 }
 
 class CustomSignUpNow extends StatelessWidget {
-  const CustomSignUpNow({Key? key}) : super(key: key);
+  final Function onPressSignUp;
+  const CustomSignUpNow({Key? key, required this.onPressSignUp}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CustomText(
+          const CustomText(
             title: 'Don’t Have an account?',
             color: Colors.grey,
           ),
-          SizedBox(
+          const SizedBox(
             width: 10,
           ),
-          CustomText(
-            title: 'Signup Now.',
-            color: AppColor.primary,
+          GestureDetector(
+            onTap: () {
+              onPressSignUp();
+            },
+            child: const CustomText(
+              title: 'Signup Now.',
+              color: AppColor.primary,
+            ),
           ),
         ],
       ),

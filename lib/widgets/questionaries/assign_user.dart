@@ -49,9 +49,9 @@ class AssignUser extends StatelessWidget {
                     .toList();
                 return Autocomplete(
                   optionsBuilder: (TextEditingValue textEditingValue) {
-                    if (textEditingValue.text.isEmpty) {
-                      return const Iterable<String>.empty();
-                    }
+                    // if (textEditingValue.text.isEmpty) {
+                    //   return const Iterable<String>.empty();
+                    // }
                     final String searchText = textEditingValue.text.toLowerCase();
                     return usersList.where((user) {
                       final String fullName = '${user.userfirstname} ${user.userlastname}'.toLowerCase();
@@ -62,6 +62,7 @@ class AssignUser extends StatelessWidget {
                     return TextField(
                       controller: textEditingController,
                       focusNode: focusNode,
+                      onTap: () {},
                       decoration: InputDecoration(
                         hintText: '@',
                         border: OutlineInputBorder(
