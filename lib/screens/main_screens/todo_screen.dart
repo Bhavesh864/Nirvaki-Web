@@ -96,7 +96,7 @@ class _TodoTabScreenState extends State<TodoTabScreen> {
                                           children: [
                                             const CustomCalendarView(),
                                             Container(
-                                              constraints: BoxConstraints(),
+                                              constraints: const BoxConstraints(),
                                               child: WorkItemsList(
                                                 isScrollable: false,
                                                 title: 'To do',

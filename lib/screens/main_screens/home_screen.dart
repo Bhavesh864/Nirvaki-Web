@@ -116,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                             ),
                           )
-                        : SizedBox.shrink(),
+                        : const SizedBox.shrink(),
                   ],
                 ),
               );

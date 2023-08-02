@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 
+import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/routes/routes.dart';
@@ -14,6 +14,69 @@ final currentIndexProvider = StateProvider<int>((ref) {
 
 class LargeScreen extends ConsumerWidget {
   const LargeScreen({Key? key}) : super(key: key);
+
+  void _showChatDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      // position: RelativeRect.fromLTRB(offset.dx, offset.dy, offset.dx + button.size.width, offset.dy + button.size.height),
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Chat Dialog Box'), // Replace with your dialog title
+          content: const Text('This is the content of the chat dialog box.'), // Replace with your dialog content
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog box
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // void _showChatDialog(BuildContext context) {
+  //   final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+  //   final chatButton = overlay.localToGlobal(Offset.zero);
+
+  //   showMenu(
+  //     context: context,
+  //     position: RelativeRect.fromLTRB(
+  //       chatButton.dx,
+  //       chatButton.dy,
+  //       chatButton.dx + 1000, // Adjust this value to position the dialog horizontally
+  //       chatButton.dy + 300, // Adjust this value to position the dialog vertically
+  //     ),
+  //     items: [
+  //       PopupMenuItem(
+  //         child: Container(
+  //           width: 200,
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               ListTile(
+  //                 leading: Icon(Icons.chat_outlined),
+  //                 title: Text('Chat Dialog Box'), // Replace with your dialog title
+  //                 subtitle: Text('This is the content of the chat dialog box.'), // Replace with your dialog content
+  //               ),
+  //               Align(
+  //                 alignment: Alignment.centerRight,
+  //                 child: IconButton(
+  //                   onPressed: () {
+  //                     Navigator.of(context).pop(); // Close the dialog box
+  //                   },
+  //                   icon: Icon(Icons.close),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //         enabled: false,
+  //       ),
+  //     ],
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -71,20 +134,25 @@ class LargeScreen extends ConsumerWidget {
           ),
         ],
       ),
-      floatingActionButton: const Column(
+      floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          CustomSpeedDialButton(),
-          SizedBox(
+          const CustomSpeedDialButton(),
+          const SizedBox(
             height: 10,
           ),
           CircleAvatar(
             radius: 28,
             backgroundColor: AppColor.primary,
-            child: Icon(
-              Icons.chat_outlined,
-              color: Colors.white,
-              size: 24,
+            child: IconButton(
+              icon: const Icon(
+                Icons.chat_outlined,
+                color: Colors.white,
+                size: 24,
+              ),
+              onPressed: () {
+                popupMenuItem('title');
+              },
             ),
           ),
         ],

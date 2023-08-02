@@ -129,7 +129,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
             ),
           );
         }
-        return SizedBox.shrink();
+        return const SizedBox.shrink();
       },
     );
   }

@@ -6,6 +6,7 @@ import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/routes/routes.dart';
 import '../../constants/utils/constants.dart';
 import '../../constants/utils/image_constants.dart';
+import '../../widgets/auth/details_header.dart';
 
 class CompanyDetailsAuthScreen extends StatefulWidget {
   const CompanyDetailsAuthScreen({super.key});
@@ -54,8 +55,8 @@ class _CompanyDetailsAuthScreenState extends State<CompanyDetailsAuthScreen> {
                       behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                       child: SingleChildScrollView(
                         child: Column(
-                          // crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            const DetailsHeaderWidget(isPersonalDetails: false),
                             const Padding(
                               padding: EdgeInsets.only(top: 10),
                               child: Text(
