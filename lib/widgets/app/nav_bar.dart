@@ -59,7 +59,7 @@ class LargeScreenNavBar extends ConsumerWidget {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                largeScreenView(snapshot.data?.userfirstname),
+                largeScreenView("${snapshot.data?.userfirstname} ${snapshot.data?.userlastname}"),
                 PopupMenuButton(
                   onCanceled: () {},
                   onSelected: (value) {

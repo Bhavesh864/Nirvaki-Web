@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hive/hive.dart';
 import 'package:random_string/random_string.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
@@ -16,7 +17,8 @@ Future<String> submitTodoAndCardDetails(state) async {
   final dueDate = getDataById(state, 4);
   final cards.CardDetails cardDetail = getDataById(state, 6);
   final User assignto = getDataById(state, 12);
-
+  Box box = Hive.box("users");
+  final currentUser = box.get(authentication.currentUser!.uid);
   final cards.CardDetails card = cards.CardDetails(
     workitemId: "TD$randomId",
     status: "New",
@@ -43,11 +45,8 @@ Future<String> submitTodoAndCardDetails(state) async {
         userid: assignto.userId,
       )
     ],
-    createdby: cards.Createdby(
-      userfirstname: "bhavesh",
-      userid: authentication.currentUser!.uid,
-      userlastname: "khatri",
-    ),
+    createdby:
+        cards.Createdby(userfirstname: currentUser["userfirstname"], userid: currentUser["userId"], userlastname: currentUser["userlastname"], userimage: currentUser["image"]),
     createdate: Timestamp.now(),
   );
   final TodoDetails todo = TodoDetails(
