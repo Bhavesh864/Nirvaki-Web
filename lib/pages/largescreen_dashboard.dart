@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
+import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
+
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+
 import 'package:yes_broker/routes/routes.dart';
+
 import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';
 
@@ -13,6 +18,36 @@ final currentIndexProvider = StateProvider<int>((ref) {
 });
 
 class LargeScreen extends ConsumerWidget {
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: const Text("Cancel"),
+      onPressed: () {},
+    );
+    Widget continueButton = TextButton(
+      child: const Text("Continue"),
+      onPressed: () {},
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: const Text("AlertDialog"),
+      content: const Text("Would you like to continue learning how to use Flutter alerts?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   const LargeScreen({Key? key}) : super(key: key);
 
   @override
@@ -58,9 +93,8 @@ class LargeScreen extends ConsumerWidget {
                   if (selectedVal == 'Profile') {
                     ref.read(currentIndexProvider.notifier).update((state) => 6);
                   } else if (selectedVal == "Logout") {
-                    authentication.signOut().then(
-                          (value) => Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen),
-                        );
+                    authentication.signOut().then((value) => {Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen)});
+                    UserHiveMethods.deleteData(authentication.currentUser?.uid);
                   }
                 }),
                 Expanded(
@@ -71,20 +105,23 @@ class LargeScreen extends ConsumerWidget {
           ),
         ],
       ),
-      floatingActionButton: const Column(
+      floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           CustomSpeedDialButton(),
           SizedBox(
             height: 10,
           ),
-          CircleAvatar(
-            radius: 28,
-            backgroundColor: AppColor.primary,
-            child: Icon(
-              Icons.chat_outlined,
-              color: Colors.white,
-              size: 24,
+          InkWell(
+            onTap: () => showAlertDialog(context),
+            child: CircleAvatar(
+              radius: 28,
+              backgroundColor: AppColor.blue,
+              child: Icon(
+                Icons.chat_outlined,
+                color: Colors.white,
+                size: 24,
+              ),
             ),
           ),
         ],

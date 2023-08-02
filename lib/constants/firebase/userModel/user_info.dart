@@ -3,21 +3,31 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
+import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
 
 final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 
 @HiveType(typeId: 0)
-class User {
+class User extends HiveObject {
+  @HiveField(0)
   String brokerId;
+  @HiveField(1)
   String userId;
+  @HiveField(2)
   String userfirstname;
+  @HiveField(3)
   String userlastname;
+  @HiveField(4)
   int mobile;
+  @HiveField(5)
   String email;
+  @HiveField(6)
   String role;
+  @HiveField(7)
   String status;
+  @HiveField(8)
   String image;
 
   User(
@@ -92,26 +102,27 @@ class User {
 
   static Future<User?> getUser(String userId) async {
     try {
-      // Check if the user exists in the 'users' box in Hive
-      final usersBox = Hive.box('users');
-      final userFromHive = usersBox.get(userId);
-      print("userFromHive=====>$userFromHive");
-      if (userFromHive != null) {
-        return userFromHive;
+      final hiveUserData = UserHiveMethods.getdata(userId);
+      print("userhiveform=====>${hiveUserData}");
+      if (hiveUserData != null) {
+        final Map<String, dynamic> userDataMap = Map.from(hiveUserData);
+        final User user = User.fromMap(userDataMap);
+        return user;
       } else {
         final DocumentSnapshot documentSnapshot = await usersCollection.doc(userId).get();
         if (documentSnapshot.exists) {
           final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
           final User user = User.fromMap(data);
-          usersBox.put(userId, user);
+          UserHiveMethods.addData(key: userId, data: user.toMap());
           return user;
         } else {
           return null;
         }
       }
     } catch (error) {
+      print(error);
       if (kDebugMode) {
-        // print('Failed to get user: $error');
+        print('Failed to get user: $error');
       }
       return null;
     }

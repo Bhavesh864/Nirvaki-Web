@@ -9,7 +9,7 @@ class CustomTextInput extends StatefulWidget {
   final double contentPadding;
   final Widget? label;
   final bool enabled;
-  final String hintText;
+  final String? hintText;
   final IconData? leftIcon;
   final bool? obscureText;
   final bool? readonly;
@@ -28,7 +28,7 @@ class CustomTextInput extends StatefulWidget {
       {Key? key,
       required this.controller,
       this.labelText,
-      required this.hintText,
+      this.hintText,
       this.indense,
       this.leftIcon,
       this.hintstyle = const TextStyle(color: Colors.grey),

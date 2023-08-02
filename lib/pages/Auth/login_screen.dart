@@ -127,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           margin: const EdgeInsets.only(bottom: 5),
                           child: CustomTextInput(
                             controller: emailcontroller,
-                            hintText: 'Email address',
+                            labelText: 'Email address',
                             validator: (value) {
                               if (value!.isEmpty || value.length < 6) {
                                 return 'Please enter valid email';
@@ -138,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         CustomTextInput(
                           controller: passwordcontroller,
-                          hintText: 'Password',
+                          labelText: 'Password',
                           obscureText: true,
                           rightIcon: Icons.remove_red_eye,
                           validator: (value) {

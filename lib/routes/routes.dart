@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 import 'package:yes_broker/pages/Auth/login_screen.dart';
 import 'package:yes_broker/pages/Auth/personal_details.dart';
+import 'package:yes_broker/pages/Auth/set_new_password.dart';
 import 'package:yes_broker/pages/Auth/signup_screen.dart';
 import 'package:yes_broker/pages/add_todo.dart';
 import 'package:yes_broker/pages/add_workitems.dart';
@@ -114,6 +115,7 @@ class AppRoutes {
   static const String addLead = '/add_lead_screen';
   static const String addWorkItem = '/add_workItem_screen';
   static const String addTodo = '/add_todoItem_screen';
+  static const String setNewPassword = '/setNewPassword';
 
   static Map<String, WidgetBuilder> routesTable = {
     homeScreen: (context) => Responsive.isMobile(context) ? const SmallScreen() : const LargeScreen(),
@@ -127,5 +129,6 @@ class AppRoutes {
     addLead: (context) => const AddLead(),
     addWorkItem: (context) => const AddWorkItem(),
     addTodo: (context) => const AddTodo(),
+    setNewPassword: (context) => const ChangePasswordPage()
   };
 }
