@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
+import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/label_text_field.dart';
 import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/routes/routes.dart';
+import 'package:yes_broker/widgets/auth/details_header.dart';
 import '../../constants/utils/constants.dart';
 import '../../constants/utils/image_constants.dart';
 
@@ -54,8 +57,9 @@ class _PersonalDetailsAuthScreenState extends State<PersonalDetailsAuthScreen> {
                       behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                       child: SingleChildScrollView(
                         child: Column(
-                          // crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
+                            const DetailsHeaderWidget(isPersonalDetails: true),
                             const Padding(
                               padding: EdgeInsets.only(top: 10),
                               child: Text(
