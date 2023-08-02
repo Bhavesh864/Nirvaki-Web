@@ -62,8 +62,10 @@ class CustomTextInputState extends State<CustomTextInput> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      // height: widget.validator == null ? 40 : 65,
       height: 65,
+      // margin: const EdgeInsets.only(bottom: 15),
       child: TextFormField(
         enabled: widget.enabled,
         style: const TextStyle(
@@ -72,13 +74,13 @@ class CustomTextInputState extends State<CustomTextInput> {
         ),
         controller: widget.controller,
         decoration: InputDecoration(
-          errorStyle: const TextStyle(height: 0, textBaseline: TextBaseline.ideographic),
+          errorStyle: const TextStyle(height: 0),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: const BorderSide(color: Colors.red, width: 1),
           ),
           label: widget.label,
-          contentPadding: EdgeInsets.symmetric(vertical: widget.contentPadding, horizontal: 10),
+          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
           labelText: widget.labelText,
           hintText: widget.hintText,
           hintStyle: widget.hintstyle,
