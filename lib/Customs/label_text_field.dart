@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 import 'custom_fields.dart';
-import 'custom_text.dart';
 
 class LabelTextInputField extends StatelessWidget {
   final String labelText;
@@ -31,56 +30,49 @@ class LabelTextInputField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Padding(
-        //   padding: const EdgeInsets.only(top: 4, right: 8, left: 2),
-        //   child: CustomText(
-        //     title: labelText,
-        //     fontWeight: FontWeight.w500,
-        //     textAlign: TextAlign.left,
-        //   ),
-        // ),
-        Padding(
-          padding: const EdgeInsets.only(top: 4, bottom: 4, right: 8, left: 2),
-          child: RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: labelText,
-                  style: const TextStyle(
-                    fontSize: 16,
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: labelText,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              if (isMandatory)
+                const TextSpan(
+                  text: ' *',
+                  style: TextStyle(
+                    fontSize: 12,
                     fontWeight: FontWeight.w500,
+                    color: Colors.red,
                   ),
                 ),
-                if (isMandatory)
-                  const TextSpan(
-                    text: ' *',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.red,
-                    ),
-                  ),
-              ],
-            ),
+            ],
           ),
         ),
-        CustomTextInput(
-          // indense: true,
-          enabled: isDropDown
-              ? false
-              : isDatePicker
-                  ? false
-                  : true,
-          rightIcon: isDropDown
-              ? Icons.arrow_drop_down_sharp
-              : isDatePicker
-                  ? Icons.calendar_month
-                  : null,
-          controller: inputController,
-          hintText: hintText,
-          onChanged: onChanged,
-          validator: validator,
-          contentPadding: 4,
+        Container(
+          // margin: const EdgeInsets.only(top: 4, bottom: 15, right: 8),
+          child: CustomTextInput(
+            // indense: true,
+            enabled: isDropDown
+                ? false
+                : isDatePicker
+                    ? false
+                    : true,
+            rightIcon: isDropDown
+                ? Icons.arrow_drop_down_sharp
+                : isDatePicker
+                    ? Icons.calendar_month
+                    : null,
+            controller: inputController,
+            hintText: hintText,
+            onChanged: onChanged,
+            validator: validator,
+            contentPadding: 0,
+          ),
         ),
       ],
     );
