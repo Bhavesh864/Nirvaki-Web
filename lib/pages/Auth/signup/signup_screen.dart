@@ -1,30 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
+
+import 'package:yes_broker/pages/Auth/signup/sign_up_state.dart';
+
+import 'package:yes_broker/pages/Auth/validation/basic_validation.dart';
 import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/widgets/auth/common_auth_widgets.dart';
-import '../../Customs/custom_text.dart';
-import '../../constants/utils/colors.dart';
-import '../../constants/utils/image_constants.dart';
+import '../../../Customs/custom_text.dart';
+import '../../../constants/utils/colors.dart';
+import '../../../constants/utils/image_constants.dart';
 
-class SignUpScreen extends StatefulWidget {
+final selectedItemForsignup = StateNotifierProvider<SelectedSignupItems, List<Map<String, dynamic>>>((ref) {
+  return SelectedSignupItems();
+});
+
+class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
+
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  // ignore: library_private_types_in_public_api
+  SignUpScreenState createState() => SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class SignUpScreenState extends ConsumerState<SignUpScreen> {
   final key = GlobalKey<FormState>();
   var isloading = false;
 
+  String? validateReenteredPassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your password';
+    }
+    if (value.length < 6) {
+      return 'Password must be at least 6 characters long';
+    } else if (value != passwordcontroller.text) {
+      return "Password do not match";
+    }
+    return null;
+  }
+
+  void navigateTopage(SelectedSignupItems notify) {
+    final isvalid = key.currentState?.validate();
+    if (isvalid!) {
+      Navigator.pushNamed(context, AppRoutes.personalDetails, arguments: notify);
+    }
+  }
+
   final TextEditingController emailcontroller = TextEditingController();
   final TextEditingController passwordcontroller = TextEditingController();
+  final TextEditingController reenteredpasswordcontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final notify = ref.read(selectedItemForsignup.notifier);
     final w = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -68,24 +99,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Container(
                           margin: const EdgeInsets.only(bottom: 5),
                           child: CustomTextInput(
-                            controller: emailcontroller,
-                            hintText: 'Email address',
-                          ),
+                              controller: emailcontroller,
+                              labelText: 'Email address',
+                              validator: validateEmail,
+                              onChanged: (value) {
+                                notify.add({"id": 1, "item": value.trim()});
+                              }),
                         ),
                         CustomTextInput(
                           controller: passwordcontroller,
-                          hintText: 'Password',
+                          labelText: 'Password',
+                          validator: validatePassword,
                           obscureText: true,
-                          rightIcon: Icons.remove_red_eye,
+                          // rightIcon: Icons.remove_red_eye,
                         ),
                         const Text('Use a minimum of 10 characters with at-least one-special symbol and one upper case letter. '),
                         const SizedBox(height: 15),
                         CustomTextInput(
-                          controller: passwordcontroller,
-                          hintText: 'Re-enter Password',
-                          obscureText: true,
-                          rightIcon: Icons.remove_red_eye,
-                        ),
+                            controller: reenteredpasswordcontroller,
+                            labelText: 'Re-enter Password',
+                            obscureText: true,
+                            onChanged: (value) {
+                              notify.add({"id": 2, "item": value.trim()});
+                            },
+                            rightIcon: Icons.remove_red_eye,
+                            validator: validateReenteredPassword),
                         const SizedBox(height: 10),
                         isloading
                             ? const Center(child: CircularProgressIndicator.adaptive())
@@ -93,9 +131,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 width: w,
                                 child: CustomButton(
                                   text: 'Sign up',
-                                  onPressed: () {
-                                    Navigator.pushReplacementNamed(context, AppRoutes.personalDetails);
-                                  },
+                                  onPressed: () => navigateTopage(notify),
                                   height: 40.0,
                                 ),
                               ),

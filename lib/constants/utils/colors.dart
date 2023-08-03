@@ -17,10 +17,11 @@ class AppColor {
   static const appBgColor = Color(0xFFFAFAFA);
   static const shadowColor = Colors.black87;
   static const textBoxColor = Colors.white;
+  static const selectedItemColor = Color(0x0D4460EF);
 
   static const bottomBarColor = Colors.white;
   static const inActiveColor = Colors.grey;
-
+  static const verticalLineColor = Color(0xFFECECEC);
   static const yellow = Color(0xFFffcb66);
   static const grey = Color(0xFF200E32);
   static const green = Color(0xFF1ED91A);

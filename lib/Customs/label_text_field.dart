@@ -71,6 +71,7 @@ class LabelTextInputField extends StatelessWidget {
             hintText: hintText,
             onChanged: onChanged,
             validator: validator,
+            indense: true,
             contentPadding: 0,
           ),
         ),

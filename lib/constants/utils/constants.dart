@@ -19,6 +19,14 @@ class MenuItem {
   });
 }
 
+class ProfileMenuItems {
+  final int id;
+  final String title;
+  final Widget screen;
+
+  ProfileMenuItems({required this.title, required this.screen, required this.id});
+}
+
 class BottomBarItem {
   final String label;
   final IconData? iconData;
@@ -264,14 +272,14 @@ final List<Map<String, dynamic>> inventoryFilterOtpion = [
   },
 ];
 
-List<String> menuItems = [
-  'Profile',
-  'Team',
-  'Settings',
-  'Subscription',
-  'Help',
-  'Logout',
-];
+// List<String> MenuItems = [
+//   'Profile',
+//   'Team',
+//   'Settings',
+//   'Subscription',
+//   'Help',
+//   'Logout',
+// ];
 
 
 // final _questions = [
