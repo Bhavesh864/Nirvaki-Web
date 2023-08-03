@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/label_text_field.dart';
 import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/pages/Auth/signup/sign_up_state.dart';
+import 'package:yes_broker/pages/Auth/validation/basic_validation.dart';
 import 'package:yes_broker/routes/routes.dart';
-import '../../constants/utils/constants.dart';
-import '../../constants/utils/image_constants.dart';
-import '../../widgets/auth/details_header.dart';
+import '../../../Customs/dropdown_field.dart';
+import '../../../constants/utils/constants.dart';
+import '../../../constants/utils/image_constants.dart';
+import '../../../widgets/auth/details_header.dart';
 
 class CompanyDetailsAuthScreen extends StatefulWidget {
   const CompanyDetailsAuthScreen({super.key});
@@ -18,12 +21,25 @@ class _CompanyDetailsAuthScreenState extends State<CompanyDetailsAuthScreen> {
   bool isChecked = true;
   final key = GlobalKey<FormState>();
   var isloading = false;
+  void navigateTopage() {
+    final isvalid = key.currentState?.validate();
+    if (isvalid!) {
+      // Navigator.pushNamed(context, AppRoutes.companyDetails, arguments: notify);
+    }
+  }
 
-  final TextEditingController emailcontroller = TextEditingController();
-  final TextEditingController passwordcontroller = TextEditingController();
+  final List<String> dropdownitem = ["Broker", "Builder"];
+  final TextEditingController companynamecontroller = TextEditingController();
+  final TextEditingController mobilenumbercontroller = TextEditingController();
+  final TextEditingController whatsupnumbercontroller = TextEditingController();
+  final TextEditingController address1controller = TextEditingController();
+  final TextEditingController address2controller = TextEditingController();
+  final TextEditingController statecontroller = TextEditingController();
+  final TextEditingController citycontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final SelectedSignupItems notify = ModalRoute.of(context)?.settings.arguments as SelectedSignupItems;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -70,13 +86,21 @@ class _CompanyDetailsAuthScreenState extends State<CompanyDetailsAuthScreen> {
                             const SizedBox(
                               height: 10,
                             ),
-                            LabelTextInputField(
+                            CustomTextInput(
                               labelText: 'Company Name',
-                              inputController: TextEditingController(),
+                              controller: companynamecontroller,
+                              validator: (value) => validateForNormalFeild(value: value, props: "Company Name"),
+                              onChanged: (value) {
+                                notify.add({"id": 7, "item": value.trim()});
+                              },
                             ),
-                            LabelTextInputField(
+                            CustomTextInput(
                               labelText: 'Mobile',
-                              inputController: TextEditingController(),
+                              controller: mobilenumbercontroller,
+                              validator: (value) => validateForMobileNumberFeild(value: value, props: "Mobile Number"),
+                              onChanged: (value) {
+                                notify.add({"id": 8, "item": value.trim()});
+                              },
                             ),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 8.0),
@@ -90,26 +114,47 @@ class _CompanyDetailsAuthScreenState extends State<CompanyDetailsAuthScreen> {
                                 },
                               ),
                             ),
-                            LabelTextInputField(
-                              labelText: 'Whatsapp Number',
-                              inputController: TextEditingController(),
-                            ),
-                            LabelTextInputField(
+                            if (!isChecked)
+                              CustomTextInput(
+                                labelText: 'Whatsapp Number',
+                                controller: whatsupnumbercontroller,
+                                validator: !isChecked ? (value) => validateForMobileNumberFeild(value: value, props: "Whatsapp Number") : null,
+                                onChanged: (value) {
+                                  notify.add({"id": 9, "item": value.trim()});
+                                },
+                              ),
+                            CustomTextInput(
                               labelText: 'Address',
-                              inputController: TextEditingController(),
+                              controller: address1controller,
+                              validator: (value) => validateForNormalFeild(value: value, props: "Address"),
+                              onChanged: (value) {
+                                notify.add({"id": 10, "item": value.trim()});
+                              },
                             ),
-                            LabelTextInputField(
-                              labelText: 'Register As',
-                              inputController: TextEditingController(),
-                            ),
+                            DropDownField(
+                                title: "State",
+                                optionsList: const ["Rajasthan"],
+                                onchanged: (value) {
+                                  notify.add({"id": 11, "item": value});
+                                }),
+                            DropDownField(
+                                title: "City",
+                                optionsList: const ["Jaipur", "Bikaner"],
+                                onchanged: (value) {
+                                  notify.add({"id": 12, "item": value});
+                                }),
+                            DropDownField(
+                                title: "Register As",
+                                optionsList: dropdownitem,
+                                onchanged: (value) {
+                                  notify.add({"id": 13, "item": value});
+                                }),
                             Container(
                               margin: const EdgeInsets.only(top: 10, bottom: 10),
                               alignment: Alignment.centerRight,
                               child: CustomButton(
                                 text: 'Save',
-                                onPressed: () {
-                                  Navigator.pushReplacementNamed(context, AppRoutes.loginScreen);
-                                },
+                                onPressed: navigateTopage,
                                 width: 73,
                                 height: 39,
                               ),

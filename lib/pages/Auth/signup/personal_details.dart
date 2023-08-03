@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
-import 'package:yes_broker/Customs/custom_text.dart';
+
 import 'package:yes_broker/Customs/label_text_field.dart';
 import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/pages/Auth/signup/sign_up_state.dart';
+import 'package:yes_broker/pages/Auth/validation/basic_validation.dart';
+
 import 'package:yes_broker/routes/routes.dart';
+
 import 'package:yes_broker/widgets/auth/details_header.dart';
-import '../../constants/utils/constants.dart';
-import '../../constants/utils/image_constants.dart';
+import '../../../constants/utils/constants.dart';
+import '../../../constants/utils/image_constants.dart';
 
 class PersonalDetailsAuthScreen extends StatefulWidget {
   const PersonalDetailsAuthScreen({super.key});
@@ -17,21 +20,29 @@ class PersonalDetailsAuthScreen extends StatefulWidget {
 }
 
 class _PersonalDetailsAuthScreenState extends State<PersonalDetailsAuthScreen> {
+  final TextEditingController firstnamecontroller = TextEditingController();
+  final TextEditingController lastnamecontroller = TextEditingController();
+  final TextEditingController mobilenumbercontroller = TextEditingController();
+  final TextEditingController whatsupnumbercontroller = TextEditingController();
+
   bool isChecked = true;
   final key = GlobalKey<FormState>();
   var isloading = false;
-
-  final TextEditingController emailcontroller = TextEditingController();
-  final TextEditingController passwordcontroller = TextEditingController();
+  void navigateTopage(SelectedSignupItems notify) {
+    final isvalid = key.currentState?.validate();
+    if (isvalid!) {
+      Navigator.pushNamed(context, AppRoutes.companyDetails, arguments: notify);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final SelectedSignupItems notify = ModalRoute.of(context)?.settings.arguments as SelectedSignupItems;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
             height: MediaQuery.of(context).size.height,
-            // padding: const EdgeInsets.symmetric(vertical: 0),
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(authBgImage),
@@ -73,17 +84,29 @@ class _PersonalDetailsAuthScreenState extends State<PersonalDetailsAuthScreen> {
                             const SizedBox(
                               height: 10,
                             ),
-                            LabelTextInputField(
+                            CustomTextInput(
                               labelText: 'First Name',
-                              inputController: TextEditingController(),
+                              controller: firstnamecontroller,
+                              validator: (value) => validateForNormalFeild(props: "First Name", value: value),
+                              onChanged: (value) {
+                                notify.add({"id": 3, "item": value.trim()});
+                              },
                             ),
-                            LabelTextInputField(
+                            CustomTextInput(
                               labelText: 'Last Name',
-                              inputController: TextEditingController(),
+                              controller: lastnamecontroller,
+                              validator: (value) => validateForNormalFeild(props: "Last Name", value: value),
+                              onChanged: (value) {
+                                notify.add({"id": 4, "item": value.trim()});
+                              },
                             ),
-                            LabelTextInputField(
+                            CustomTextInput(
                               labelText: 'Mobile',
-                              inputController: TextEditingController(),
+                              controller: mobilenumbercontroller,
+                              validator: (value) => validateForMobileNumberFeild(value: value, props: "Mobile Number"),
+                              onChanged: (value) {
+                                notify.add({"id": 5, "item": value.trim()});
+                              },
                             ),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 8.0),
@@ -97,26 +120,21 @@ class _PersonalDetailsAuthScreenState extends State<PersonalDetailsAuthScreen> {
                                 },
                               ),
                             ),
-                            LabelTextInputField(
-                              labelText: 'Whatsapp Number',
-                              inputController: TextEditingController(),
-                            ),
-                            LabelTextInputField(
-                              labelText: 'Address',
-                              inputController: TextEditingController(),
-                            ),
-                            LabelTextInputField(
-                              labelText: 'Register As',
-                              inputController: TextEditingController(),
-                            ),
+                            if (!isChecked)
+                              CustomTextInput(
+                                labelText: 'Whatsapp Number',
+                                controller: whatsupnumbercontroller,
+                                validator: !isChecked ? (value) => validateForMobileNumberFeild(value: value, props: "Whatsapp Number") : null,
+                                onChanged: (value) {
+                                  notify.add({"id": 6, "item": value.trim()});
+                                },
+                              ),
                             Container(
                               margin: const EdgeInsets.only(top: 10, bottom: 10),
                               alignment: Alignment.centerRight,
                               child: CustomButton(
                                 text: 'Next',
-                                onPressed: () {
-                                  Navigator.pushReplacementNamed(context, AppRoutes.companyDetails);
-                                },
+                                onPressed: () => navigateTopage(notify),
                                 width: 73,
                                 height: 39,
                               ),

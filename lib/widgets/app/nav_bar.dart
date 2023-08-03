@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/screens/account_screens/common_screen.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
@@ -67,9 +67,9 @@ class LargeScreenNavBar extends ConsumerWidget {
                   },
                   color: Colors.white.withOpacity(1),
                   offset: const Offset(200, 40),
-                  itemBuilder: (contex) => menuItems.map(
+                  itemBuilder: (contex) => profileMenuItems.map(
                     (e) {
-                      return popupMenuItem(e);
+                      return popupMenuItem(e.title);
                     },
                   ).toList(),
                   child: Container(

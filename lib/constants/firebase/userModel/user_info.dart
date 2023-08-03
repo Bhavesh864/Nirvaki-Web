@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
+import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 
 final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
 
@@ -147,7 +148,7 @@ class User extends HiveObject {
   }
 }
 
-Future<String?> signinwith(email, password) async {
+Future<String?> signinMethod({required email, required password}) async {
   String res = 'Something went wrong';
   try {
     await auth.signInWithEmailAndPassword(email: email, password: password);
@@ -157,35 +158,17 @@ Future<String?> signinwith(email, password) async {
     if (e.code == 'user-not-found') {
       return 'No user found for that email.';
     } else if (e.code == 'wrong-password') {
-      return 'Wrong password provided.';
+      return 'Wrong password provided for that user.';
+    } else if (e.code == "email-already-in-use") {
+      return "The account already exists for that email";
+    } else if (e.code == "weak-password") {
+      return "The password provided is too weak.";
     }
     return e.toString();
   } catch (E) {
     return E.toString();
   }
   // return null;
-}
-
-Future<String> signUpwith(email, password) async {
-  String res = 'Something went wrong';
-  try {
-    await auth.createUserWithEmailAndPassword(email: email, password: password);
-    // final User item = User(
-    //     brokerId: auth.currentUser!.uid,
-    //     status: 'accepted',
-    //     name: 'testing',
-    //     userId: auth.currentUser!.uid,
-    //     mobile: 123456789,
-    //     email: email,
-    //     role: 'broker',
-    //     image: '');
-    // await User.addUser(item);
-    res = "success";
-    return res;
-  } catch (er) {
-    // print(er);
-    return er.toString();
-  }
 }
 
 // void main() async {

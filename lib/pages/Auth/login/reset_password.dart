@@ -4,7 +4,7 @@ import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/widgets/auth/common_auth_widgets.dart';
 
-import '../../constants/utils/image_constants.dart';
+import '../../../constants/utils/image_constants.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
   const ResetPasswordScreen({super.key});
@@ -60,12 +60,7 @@ class ResetPasswordScreen extends StatelessWidget {
                       SizedBox(
                         width: w,
                         child: CustomButton(
-                            leftIcon: Icons.apple,
-                            text: 'Continue with apple',
-                            buttonColor: Colors.white,
-                            textColor: Colors.black,
-                            lefticonColor: Colors.black,
-                            onPressed: () {}),
+                            leftIcon: Icons.apple, text: 'Continue with apple', buttonColor: Colors.white, textColor: Colors.black, lefticonColor: Colors.black, onPressed: () {}),
                       ),
                       const SizedBox(height: 30),
                       const CustomOrDivider(),
