@@ -18,6 +18,8 @@ class AppColor {
   static const shadowColor = Colors.black87;
   static const textBoxColor = Colors.white;
   static const selectedItemColor = Color(0x0D4460EF);
+  static const cardtitleColor = Color(0xFF6A7587);
+  static const baseline = Color(0xFFCED4DA);
 
   static const bottomBarColor = Colors.white;
   static const inActiveColor = Colors.grey;

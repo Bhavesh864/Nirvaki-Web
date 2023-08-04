@@ -10,12 +10,13 @@ class UserNotifier extends StateNotifier<User> {
   UserNotifier()
       : super(
           User(
+            whatsAppNumber: "whatsAppNumber",
             brokerId: 'brokerId',
             status: 'status',
             userfirstname: 'userfirstname',
             userlastname: 'userlastname',
             userId: 'userId',
-            mobile: 3434,
+            mobile: "3434",
             email: 'email',
             role: 'role',
             image: 'image',

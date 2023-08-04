@@ -7,6 +7,7 @@ class CustomTextInput extends StatefulWidget {
   final TextEditingController controller;
   final String? labelText;
   final double contentPadding;
+  final VoidCallback? ontap;
   final Widget? label;
   final bool enabled;
   final String? hintText;
@@ -31,6 +32,7 @@ class CustomTextInput extends StatefulWidget {
       this.hintText,
       this.indense,
       this.leftIcon,
+      this.ontap,
       this.hintstyle = const TextStyle(color: Colors.grey),
       this.rightIcon,
       this.obscureText = false,
@@ -68,6 +70,7 @@ class CustomTextInputState extends State<CustomTextInput> {
       // margin: const EdgeInsets.only(bottom: 15),
       child: TextFormField(
         enabled: widget.enabled,
+        onTap: widget.ontap,
         style: const TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.w400,
@@ -139,6 +142,7 @@ class CustomButton extends StatefulWidget {
   final double? fontsize;
   final double height;
   final TextStyle? textStyle;
+  final Color? borderColor;
   const CustomButton({
     Key? key,
     required this.text,
@@ -155,6 +159,7 @@ class CustomButton extends StatefulWidget {
     this.textStyle,
     this.width,
     this.isBorder = true,
+    this.borderColor = Colors.grey,
   }) : super(key: key);
 
   @override
@@ -190,7 +195,7 @@ class _CustomButtonState extends State<CustomButton> {
           width: widget.width,
           padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
           decoration: BoxDecoration(
-            border: widget.isBorder! ? Border.all(color: Colors.grey) : null,
+            border: widget.isBorder! ? Border.all(color: widget.borderColor!) : null,
             // color: widget.buttonColor,
             color: widget.buttonColor.withOpacity(_isPressed ? 0.8 : 1.0),
             borderRadius: BorderRadius.circular(10),
