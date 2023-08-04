@@ -2,8 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/foundation.dart';
-
-import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:image_picker/image_picker.dart';
 
 final CollectionReference brokerInfosCollection = FirebaseFirestore.instance.collection('brokerInfo');
 
@@ -12,10 +11,10 @@ final auth.FirebaseAuth authentication = auth.FirebaseAuth.instance;
 class BrokerInfo {
   String? brokerid;
   String? companyname;
-  int? brokercompanynumber;
-  int? brokercompanywhatsapp;
+  String? brokercompanynumber;
+  String? brokercompanywhatsapp;
   String? brokercompanyemail;
-  String? brokerlogo;
+  XFile? brokerlogo;
   String role;
   Map<String, dynamic> brokercompanyaddress;
   BrokerInfo({

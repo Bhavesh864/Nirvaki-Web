@@ -8,7 +8,7 @@ import 'package:yes_broker/pages/Auth/set_new_password.dart';
 import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
 import 'package:yes_broker/pages/add_todo.dart';
 import 'package:yes_broker/pages/add_workitems.dart';
-import 'package:yes_broker/screens/account_screens/team_screen.dart';
+import 'package:yes_broker/screens/account_screens/Teams/team_screen.dart';
 
 // Local Files Imports
 import '../Customs/responsive.dart';

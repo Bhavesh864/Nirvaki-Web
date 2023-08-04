@@ -1,31 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
-import 'package:yes_broker/Customs/label_text_field.dart';
+
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/pages/Auth/signup/sign_up_state.dart';
+import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
+import 'package:yes_broker/pages/Auth/signup/upload_logo.dart';
+
 import 'package:yes_broker/pages/Auth/validation/basic_validation.dart';
-import 'package:yes_broker/routes/routes.dart';
+
 import '../../../Customs/dropdown_field.dart';
 import '../../../constants/utils/constants.dart';
 import '../../../constants/utils/image_constants.dart';
+import '../../../routes/routes.dart';
 import '../../../widgets/auth/details_header.dart';
 
-class CompanyDetailsAuthScreen extends StatefulWidget {
+class CompanyDetailsAuthScreen extends ConsumerStatefulWidget {
   const CompanyDetailsAuthScreen({super.key});
   @override
-  State<CompanyDetailsAuthScreen> createState() => _CompanyDetailsAuthScreenState();
+  CompanyDetailsAuthScreenState createState() => CompanyDetailsAuthScreenState();
 }
 
-class _CompanyDetailsAuthScreenState extends State<CompanyDetailsAuthScreen> {
+class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScreen> {
   bool isChecked = true;
   final key = GlobalKey<FormState>();
   var isloading = false;
-  void navigateTopage() {
+
+  void submitSignupForm(SelectedSignupItems notify) {
     final isvalid = key.currentState?.validate();
     if (isvalid!) {
-      // Navigator.pushNamed(context, AppRoutes.companyDetails, arguments: notify);
+      setState(() {
+        isloading = true;
+      });
+      notify.signup().then((value) => {
+            if (value == 'success')
+              {
+                setState(() {
+                  isloading = false;
+                }),
+                Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen)
+              }
+            else
+              {
+                setState(() {
+                  isloading = false;
+                }),
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value!))),
+              }
+          });
     }
+  }
+
+  Future<XFile?> selectImagee() async {
+    XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+    setState(() {
+      uploadLogocontroller.text = pickedImage!.name;
+    });
+    return pickedImage;
   }
 
   final List<String> dropdownitem = ["Broker", "Builder"];
@@ -36,10 +69,11 @@ class _CompanyDetailsAuthScreenState extends State<CompanyDetailsAuthScreen> {
   final TextEditingController address2controller = TextEditingController();
   final TextEditingController statecontroller = TextEditingController();
   final TextEditingController citycontroller = TextEditingController();
+  final TextEditingController uploadLogocontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final SelectedSignupItems notify = ModalRoute.of(context)?.settings.arguments as SelectedSignupItems;
+    final notify = ref.read(selectedItemForsignup.notifier);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -131,6 +165,24 @@ class _CompanyDetailsAuthScreenState extends State<CompanyDetailsAuthScreen> {
                                 notify.add({"id": 10, "item": value.trim()});
                               },
                             ),
+                            TextFormField(
+                              controller: uploadLogocontroller,
+                              readOnly: true,
+                              onTap: () async {
+                                selectImagee().then((value) => {
+                                      getImageUrl(value!).then((img) => {
+                                            notify.add({"id": 14, "item": img})
+                                          })
+                                    });
+                              },
+                              validator: (value) => validateForNormalFeild(value: value, props: "Logo"),
+                              decoration: const InputDecoration(
+                                labelText: 'Upload Logo',
+                                hintText: 'Select an image',
+                                border: OutlineInputBorder(),
+                                suffixIcon: Icon(Icons.publish),
+                              ),
+                            ),
                             DropDownField(
                                 title: "State",
                                 optionsList: const ["Rajasthan"],
@@ -152,12 +204,14 @@ class _CompanyDetailsAuthScreenState extends State<CompanyDetailsAuthScreen> {
                             Container(
                               margin: const EdgeInsets.only(top: 10, bottom: 10),
                               alignment: Alignment.centerRight,
-                              child: CustomButton(
-                                text: 'Save',
-                                onPressed: navigateTopage,
-                                width: 73,
-                                height: 39,
-                              ),
+                              child: isloading
+                                  ? const Center(child: CircularProgressIndicator.adaptive())
+                                  : CustomButton(
+                                      text: 'Save',
+                                      onPressed: () => submitSignupForm(notify),
+                                      width: 73,
+                                      height: 39,
+                                    ),
                             ),
                           ],
                         ),

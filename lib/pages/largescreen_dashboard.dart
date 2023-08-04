@@ -10,7 +10,6 @@ import 'package:yes_broker/constants/utils/constants.dart';
 
 import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/screens/account_screens/common_screen.dart';
-import 'package:yes_broker/screens/account_screens/screens_state.dart';
 
 import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';

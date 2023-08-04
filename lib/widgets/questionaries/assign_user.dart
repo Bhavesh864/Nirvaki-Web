@@ -36,6 +36,7 @@ class AssignUser extends StatelessWidget {
                 final QuerySnapshot<Map<String, dynamic>> usersListSnapshot = snapshot.data!;
                 final List<User> usersList = usersListSnapshot.docs
                     .map((doc) => User(
+                          whatsAppNumber: doc["whatsAppNumber"],
                           brokerId: doc['brokerId'],
                           status: doc['status'],
                           userfirstname: doc['userfirstname'],

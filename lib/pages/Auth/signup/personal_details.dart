@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
 
-import 'package:yes_broker/Customs/label_text_field.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/pages/Auth/signup/sign_up_state.dart';
+import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
 import 'package:yes_broker/pages/Auth/validation/basic_validation.dart';
 
 import 'package:yes_broker/routes/routes.dart';
@@ -13,13 +14,13 @@ import 'package:yes_broker/widgets/auth/details_header.dart';
 import '../../../constants/utils/constants.dart';
 import '../../../constants/utils/image_constants.dart';
 
-class PersonalDetailsAuthScreen extends StatefulWidget {
+class PersonalDetailsAuthScreen extends ConsumerStatefulWidget {
   const PersonalDetailsAuthScreen({super.key});
   @override
-  State<PersonalDetailsAuthScreen> createState() => _PersonalDetailsAuthScreenState();
+  PersonalDetailsAuthScreenState createState() => PersonalDetailsAuthScreenState();
 }
 
-class _PersonalDetailsAuthScreenState extends State<PersonalDetailsAuthScreen> {
+class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthScreen> {
   final TextEditingController firstnamecontroller = TextEditingController();
   final TextEditingController lastnamecontroller = TextEditingController();
   final TextEditingController mobilenumbercontroller = TextEditingController();
@@ -31,13 +32,13 @@ class _PersonalDetailsAuthScreenState extends State<PersonalDetailsAuthScreen> {
   void navigateTopage(SelectedSignupItems notify) {
     final isvalid = key.currentState?.validate();
     if (isvalid!) {
-      Navigator.pushNamed(context, AppRoutes.companyDetails, arguments: notify);
+      Navigator.pushNamed(context, AppRoutes.companyDetails);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final SelectedSignupItems notify = ModalRoute.of(context)?.settings.arguments as SelectedSignupItems;
+    final notify = ref.read(selectedItemForsignup.notifier);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(

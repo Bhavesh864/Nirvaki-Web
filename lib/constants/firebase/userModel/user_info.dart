@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
-import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 
 final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
 
@@ -21,7 +20,7 @@ class User extends HiveObject {
   @HiveField(3)
   String userlastname;
   @HiveField(4)
-  int mobile;
+  String mobile;
   @HiveField(5)
   String email;
   @HiveField(6)
@@ -30,6 +29,8 @@ class User extends HiveObject {
   String status;
   @HiveField(8)
   String image;
+  @HiveField(9)
+  String whatsAppNumber;
 
   User(
       {required this.brokerId,
@@ -40,6 +41,7 @@ class User extends HiveObject {
       required this.mobile,
       required this.email,
       required this.role,
+      required this.whatsAppNumber,
       required this.image});
 
   // Convert User object to a map
@@ -49,6 +51,7 @@ class User extends HiveObject {
       'userfirstname': userfirstname,
       'userlastname': userlastname,
       'mobile': mobile,
+      "whatsAppNumber": whatsAppNumber,
       'email': email,
       'role': role,
       'userId': userId,
@@ -65,6 +68,7 @@ class User extends HiveObject {
         userlastname: map['userlastname'],
         mobile: map['mobile'],
         email: map["email"],
+        whatsAppNumber: map["whatsAppNumber"],
         role: map['role'],
         userId: map['userId'],
         status: map['status'],

@@ -44,11 +44,11 @@ Future<List<String>> uploadImagesAndGetDownloadUrls(List<dynamic> images, String
   return downloadUrls;
 }
 
-Future<List<String>> uploadImagesAndGetDownloadUrlss({required List<File> images, required String uniqueId, required String category}) async {
+Future<List<String>> uploadImagesAndGetDownloadUrlss({required List<File> images, required String uniqueId, required String category, required folderName}) async {
   List<String> downloadUrls = [];
   for (var image in images) {
     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-    String path = 'inventory/$uniqueId/$category/$fileName';
+    String path = '$folderName/$uniqueId/$category/$fileName';
     Reference storageReference = storage.ref().child(path);
     UploadTask uploadTask = storageReference.putFile(image);
     TaskSnapshot snapshot = await uploadTask.whenComplete(() => null);
