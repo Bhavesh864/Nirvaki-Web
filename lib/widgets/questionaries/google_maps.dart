@@ -46,11 +46,11 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: SizedBox(
-        height: 307,
-        width: 795,
+    return SizedBox(
+      height: 307,
+      width: 795,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
         child: GoogleMap(
           onMapCreated: (controller) {
             mapController = controller;

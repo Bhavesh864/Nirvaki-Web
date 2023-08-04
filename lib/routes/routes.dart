@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 import 'package:yes_broker/pages/Auth/login/login_screen.dart';
 import 'package:yes_broker/pages/Auth/signup/personal_details.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
+
 import 'package:yes_broker/pages/Auth/set_new_password.dart';
 import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
 import 'package:yes_broker/pages/add_todo.dart';
 import 'package:yes_broker/pages/add_workitems.dart';
 import 'package:yes_broker/screens/account_screens/Teams/team_screen.dart';
+import 'package:yes_broker/screens/main_screens/Inventory_details_screen.dart';
 
 // Local Files Imports
 import '../Customs/responsive.dart';
@@ -36,6 +39,7 @@ const calendarPageLabel = 'Calendar';
 const chatPageLabel = 'Chat';
 const profilePageLabel = 'Profile';
 const teamPageLabel = "Team";
+const inventoryDetailsLabel = 'InventoryDetails';
 
 // icons
 const IconData homeIcon = Icons.home_outlined;
@@ -79,6 +83,10 @@ List<MenuItem> sideBarItems = [
   MenuItem(
     label: profilePageLabel,
     screen: const CommonScreen(),
+  ),
+  MenuItem(
+    label: profilePageLabel,
+    screen: const InventoryDetailsScreen(),
   ),
 ];
 
