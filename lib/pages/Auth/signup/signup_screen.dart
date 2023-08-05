@@ -44,7 +44,7 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
   void navigateTopage(SelectedSignupItems notify) {
     final isvalid = key.currentState?.validate();
     if (isvalid!) {
-      Navigator.pushNamed(context, AppRoutes.personalDetails);
+      Navigator.pushNamed(context, AppRoutes.personalDetailsScreen);
     }
   }
 

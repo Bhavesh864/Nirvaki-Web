@@ -131,6 +131,7 @@ class CustomButton extends StatefulWidget {
   final String text;
   final bool? isBorder;
   final double? width;
+  final bool titleLeft;
   final VoidCallback onPressed;
   final Color buttonColor;
   final Color textColor;
@@ -143,6 +144,7 @@ class CustomButton extends StatefulWidget {
   final double height;
   final TextStyle? textStyle;
   final Color? borderColor;
+
   const CustomButton({
     Key? key,
     required this.text,
@@ -160,6 +162,7 @@ class CustomButton extends StatefulWidget {
     this.width,
     this.isBorder = true,
     this.borderColor = Colors.grey,
+    this.titleLeft = false,
   }) : super(key: key);
 
   @override
@@ -167,24 +170,24 @@ class CustomButton extends StatefulWidget {
 }
 
 class _CustomButtonState extends State<CustomButton> {
-  bool _isPressed = false;
+  bool isPressed = false;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapDown: (_) {
         setState(() {
-          _isPressed = true;
+          isPressed = true;
         });
       },
       onTapUp: (_) {
         setState(() {
-          _isPressed = false;
+          isPressed = false;
         });
         widget.onPressed();
       },
       onTapCancel: () {
         setState(() {
-          _isPressed = false;
+          isPressed = false;
         });
       },
       child: Opacity(
@@ -196,12 +199,12 @@ class _CustomButtonState extends State<CustomButton> {
           padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
           decoration: BoxDecoration(
             border: widget.isBorder! ? Border.all(color: widget.borderColor!) : null,
-            // color: widget.buttonColor,
-            color: widget.buttonColor.withOpacity(_isPressed ? 0.8 : 1.0),
+            color: widget.buttonColor,
+            // color: widget.buttonColor.withOpacity(isPressed ? 0.8 : 1.0),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: widget.titleLeft ? MainAxisAlignment.start : MainAxisAlignment.center,
             children: [
               if (widget.leftIcon != null)
                 Padding(
@@ -218,10 +221,15 @@ class _CustomButtonState extends State<CustomButton> {
                 color: widget.textColor,
                 size: widget.fontsize!,
               ),
+              if (widget.titleLeft)
+                const SizedBox(
+                  width: 10,
+                ),
               if (widget.rightIcon != null)
                 Icon(
                   widget.rightIcon,
                   color: widget.righticonColor,
+                  size: 18,
                 ),
             ],
           ),

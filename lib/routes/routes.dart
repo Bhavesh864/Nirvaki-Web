@@ -118,26 +118,29 @@ class AppRoutes {
   static const String forgetPassword = '/forget_password_screen';
   static const String loginScreen = '/login_screen';
   static const String singupscreen = '/signup_screen';
-  static const String personalDetails = '/personal_details_screen';
-  static const String companyDetails = '/company_details_screen';
+  static const String personalDetailsScreen = '/personal_details_screen';
+  static const String companyDetailsScreen = '/company_details_screen';
+  static const String inventoryDetailsScreen = '/inventory_details_screen';
 
   static const String addInventory = '/add_inventory_screen';
   static const String addLead = '/add_lead_screen';
   static const String addWorkItem = '/add_workItem_screen';
   static const String addTodo = '/add_todoItem_screen';
   static const String setNewPassword = '/setNewPassword';
+  static const String inventroyDetails = '/setNewPassword';
 
   static Map<String, WidgetBuilder> routesTable = {
     homeScreen: (context) => Responsive.isMobile(context) ? const SmallScreen() : const LargeScreen(),
     loginScreen: (context) => const LoginScreen(),
     singupscreen: (context) => const SignUpScreen(),
     forgetPassword: (context) => const ForgetPassword(),
-    personalDetails: (context) => const PersonalDetailsAuthScreen(),
-    companyDetails: (context) => const CompanyDetailsAuthScreen(),
+    personalDetailsScreen: (context) => const PersonalDetailsAuthScreen(),
+    companyDetailsScreen: (context) => const CompanyDetailsAuthScreen(),
     addInventory: (context) => const AddInventory(),
     addLead: (context) => const AddLead(),
     addWorkItem: (context) => const AddWorkItem(),
     addTodo: (context) => const AddTodo(),
     setNewPassword: (context) => const ChangePasswordPage(),
+    inventoryDetailsScreen: (context) => const InventoryDetailsScreen(),
   };
 }

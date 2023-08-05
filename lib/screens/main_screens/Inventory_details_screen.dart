@@ -1,111 +1,148 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/Customs/custom_chip.dart';
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/dropdown_field.dart';
-import 'package:yes_broker/Customs/label_text_field.dart';
+import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
+import 'package:yes_broker/providers/selected_workitem.dart';
 import 'package:yes_broker/widgets/questionaries/google_maps.dart';
 
 import '../../Customs/custom_text.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
-import '../../widgets/app/app_bar.dart';
+import '../../widgets/workItemDetail/Inventory_details_header.dart';
+import '../../widgets/workItemDetail/contact_information.dart';
+import '../../widgets/workItemDetail/tab_bar_widget.dart';
 
-class InventoryDetailsScreen extends StatefulWidget {
+class InventoryDetailsScreen extends ConsumerStatefulWidget {
   const InventoryDetailsScreen({super.key});
 
   @override
-  State<InventoryDetailsScreen> createState() => _InventoryDetailsScreenState();
+  _InventoryDetailsScreenState createState() => _InventoryDetailsScreenState();
 }
 
-class _InventoryDetailsScreenState extends State<InventoryDetailsScreen> with TickerProviderStateMixin {
+class _InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> with TickerProviderStateMixin {
   late TabController tabviewController;
+  late Future<InventoryDetails?> inventoryDetails;
 
-  showAlertDialog(BuildContext context) {
-    // set up the buttons
-    Widget cancelButton = TextButton(
-      child: const Text("Cancel"),
-      onPressed: () {},
-    );
-    Widget continueButton = TextButton(
-      child: const Text("Continue"),
-      onPressed: () {},
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const Text("AlertDialog"),
-      content: const Text("Would you like to continue learning how to use Flutter alerts?"),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
+  void showUploadDocumentModal(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
-  void _showChatDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      // position: RelativeRect.fromLTRB(offset.dx, offset.dy, offset.dx + button.size.width, offset.dy + button.size.height),
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            'Upload New Document',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ), // Replace with your dialog title
-          content: SizedBox(
-            height: 200,
-            width: 500,
-            child: Column(
-              children: [
-                // LabelTextInputField(
-                //   isDropDown: true,
-                //   hintText: '-select-',
-                //   labelText: 'Document Type',
-                //   inputController: TextEditingController(),
-                // ),
-                DropDownField(title: 'Document Type', optionsList: const ['Adhaar', 'Pan ', 'Icici'], onchanged: (e) {}),
-                CustomButton(
-                  text: 'Upload Document',
-                  buttonColor: AppColor.pink,
-                  onPressed: () {},
-                ),
-              ],
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Container(
+              padding: const EdgeInsets.all(15),
+              height: 300,
+              width: 500,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Upload New Document',
+                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        iconSize: 20,
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Close the dialog when the close icon is pressed
+                        },
+                      ),
+                    ],
+                  ),
+                  DropDownField(title: 'Document Type', optionsList: const ['Adhaar', 'Pan ', 'Insurance'], onchanged: (e) {}),
+                  CustomButton(
+                    text: 'Upload Document',
+                    rightIcon: Icons.publish_outlined,
+                    buttonColor: AppColor.secondary,
+                    // isBorder: false,
+                    textColor: Colors.black,
+                    righticonColor: Colors.black,
+                    titleLeft: true,
+                    onPressed: () async {
+                      XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+                      pickedImage!.path;
+                    },
+                  ),
+                  CustomButton(text: 'Done', onPressed: () {}),
+                ],
+              ),
             ),
           ),
-          actions: [
-            CustomButton(text: 'Done', onPressed: () {}),
-          ],
         );
       },
     );
   }
 
-  List<String> items = [
-    'Residential',
-    'Apartment',
-    'Floor Wise',
-    '3BHK + Study',
-    'Balcony',
-    'In house Gym',
-    '2 Car Parking',
-    'Pool',
-    'Power Backup',
-    'Power Backup',
-    'Power Backup',
-    'Power Backup',
-    'Power Backup',
-    'Power Backup',
-    'Power Backup',
-  ];
+  void _showImageSlider(List<String> imageUrls, int initialIndex) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          insetPadding: const EdgeInsets.all(0),
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            children: [
+              Expanded(
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    height: 550,
+                    initialPage: initialIndex,
+                    enlargeCenterPage: true,
+                    viewportFraction: 0.55,
+                    enableInfiniteScroll: false,
+                  ),
+                  items: imageUrls.map(
+                    (url) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return ClipRRect(
+                            borderRadius: BorderRadius.circular(40),
+                            child: Image.network(
+                              url,
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ).toList(),
+                ),
+              ),
+              Positioned(
+                top: -5,
+                right: 10,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -115,538 +152,438 @@ class _InventoryDetailsScreenState extends State<InventoryDetailsScreen> with Ti
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: AppColor.secondary,
-            spreadRadius: 12,
-            blurRadius: 4,
-            offset: Offset(5, 5),
-          ),
-        ],
-        color: Colors.white,
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 3,
-            child: ScrollConfiguration(
-              behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-              child: SingleChildScrollView(
-                child: Container(
-                  padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            children: [
-                              SizedBox(
-                                width: 430,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: [
-                                    const Text(
-                                      "Regal Heaven",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    CustomChip(
-                                      color: AppColor.primary.withOpacity(0.1),
-                                      label: const CustomText(
-                                        title: "Sell",
-                                        size: 10,
-                                        color: AppColor.primary,
-                                      ),
-                                    ),
-                                    CustomChip(
-                                      color: AppColor.primary.withOpacity(0.1),
-                                      label: const CustomText(
-                                        title: "Direct",
-                                        size: 10,
-                                        color: AppColor.primary,
-                                      ),
-                                    ),
-                                    CustomChip(
-                                      color: AppColor.primary.withOpacity(0.1),
-                                      label: const CustomText(
-                                        title: "Residential",
-                                        size: 10,
-                                        color: AppColor.primary,
-                                      ),
-                                    ),
-                                    PopupMenuButton(
-                                      tooltip: '',
-                                      initialValue: 'New',
-                                      splashRadius: 0,
-                                      padding: EdgeInsets.zero,
-                                      color: Colors.white.withOpacity(1),
-                                      offset: const Offset(10, 40),
-                                      itemBuilder: (context) => dropDownListData.map((e) => popupMenuItem(e.toString(), (e) {})).toList(),
-                                      child: CustomChip(
-                                        label: Row(
-                                          children: [
-                                            CustomText(
-                                              title: selectedOption,
-                                              color: taskStatusColor(selectedOption),
-                                              size: 10,
-                                            ),
-                                            Icon(
-                                              Icons.expand_more,
-                                              size: 18,
-                                              color: taskStatusColor(selectedOption),
-                                            ),
-                                          ],
-                                        ),
-                                        color: taskStatusColor(selectedOption).withOpacity(0.1),
-                                      ),
-                                    ),
-                                    const CustomChip(
-                                      label: Icon(
-                                        Icons.share_outlined,
-                                      ),
-                                      paddingHorizontal: 3,
-                                    ),
-                                    const CustomChip(
-                                      label: Icon(
-                                        Icons.more_vert,
-                                      ),
-                                      paddingHorizontal: 3,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+    final workItemId = Responsive.isMobile(context) ? ModalRoute.of(context)!.settings.arguments : ref.watch(selectedWorkItemId.notifier).state;
+    inventoryDetails = InventoryDetails.getInventoryDetails(workItemId);
+
+    return Scaffold(
+      appBar: Responsive.isMobile(context)
+          ? AppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                iconSize: 25,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              title: const CustomText(
+                title: 'Inventory Details',
+                color: Colors.black,
+              ),
+              foregroundColor: Colors.black,
+              toolbarHeight: 50,
+            )
+          : null,
+      body: FutureBuilder(
+          future: inventoryDetails,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator.adaptive());
+            }
+            if (snapshot.hasData) {
+              final data = snapshot.data;
+              return Container(
+                decoration: !Responsive.isMobile(context)
+                    ? const BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColor.secondary,
+                            spreadRadius: 12,
+                            blurRadius: 4,
+                            offset: Offset(5, 5),
                           ),
-                          const CustomText(
-                            title: '₹90,000/month',
-                            color: AppColor.primary,
-                          )
                         ],
-                      ),
-                      const ListTile(
-                        leading: Icon(
-                          Icons.location_on_outlined,
-                          size: 20,
-                          color: Colors.black,
-                        ),
-                        minLeadingWidth: 2,
-                        horizontalTitleGap: 8,
-                        titleAlignment: ListTileTitleAlignment.center,
-                        title: CustomText(
-                          title: 'South-ex, Delhi',
-                          size: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFFA8A8A8),
-                        ),
-                      ),
-                      Container(
-                        height: 62,
-                        // width: 396,
-                        margin: const EdgeInsets.only(top: 22),
-                        decoration: BoxDecoration(
-                          color: AppColor.secondary,
-                          borderRadius: BorderRadius.circular(
-                            10,
-                          ),
-                        ),
-                        child: TabBar(
-                          controller: tabviewController,
-                          labelColor: Colors.white,
-                          labelStyle: const TextStyle(
-                            fontSize: 14,
-                            fontFamily: 'DM Sans',
-                            fontWeight: FontWeight.w600,
-                          ),
-                          unselectedLabelColor: Colors.black,
-                          unselectedLabelStyle: const TextStyle(
-                            fontSize: 14,
-                            fontFamily: 'DM Sans',
-                            fontWeight: FontWeight.w600,
-                          ),
-                          indicatorPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                          splashBorderRadius: BorderRadius.circular(8),
-                          indicator: BoxDecoration(
-                            color: AppColor.primary,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          tabs: const [
-                            Tab(
-                              child: Text(
-                                "Details",
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            Tab(
-                              child: Text(
-                                "Activity",
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            Tab(
-                              child: Text(
-                                "To-Do",
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            Tab(
-                              child: Text(
-                                "Matches",
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      const CustomText(
-                        title: "Images",
-                        color: Color(0xFF181818),
-                        fontWeight: FontWeight.w700,
-                      ),
-                      SizedBox(
-                        height: 170,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 10,
-                          itemBuilder: (context, index) {
-                            return Column(
+                        color: Colors.white,
+                      )
+                    : null,
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                        child: SingleChildScrollView(
+                          child: Container(
+                            padding: const EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  margin: const EdgeInsets.all(10),
-                                  height: 120,
-                                  width: 120,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black),
-                                    borderRadius: BorderRadius.circular(10),
+                                InventoryDetailsHeader(
+                                  title: data!.inventoryTitle!,
+                                  category: data.inventorycategory!,
+                                  type: data.inventoryType!,
+                                  propertyCategory: data.propertycategory!,
+                                  status: data.inventoryStatus!,
+                                  price: data.propertyprice!.price!,
+                                  unit: data.propertyprice!.unit!,
+                                ),
+                                if (Responsive.isMobile(context))
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: HeaderChips(
+                                      category: data.inventorycategory!,
+                                      type: data.inventoryType!,
+                                      propertyCategory: data.propertycategory!,
+                                      status: data.inventoryStatus!,
+                                    ),
+                                  ),
+                                ListTile(
+                                  leading: const Icon(
+                                    Icons.location_on_outlined,
+                                    size: 20,
+                                    color: Colors.black,
+                                  ),
+                                  minLeadingWidth: 2,
+                                  horizontalTitleGap: 8,
+                                  titleAlignment: ListTileTitleAlignment.center,
+                                  title: CustomText(
+                                    title: '${data.propertyaddress!.state},${data.propertyaddress!.city},${data.propertyaddress!.addressline1}',
+                                    size: 12,
+                                    fontWeight: FontWeight.w400,
+                                    color: const Color(0xFFA8A8A8),
                                   ),
                                 ),
-                                const CustomText(title: 'Front Elevation')
+                                if (Responsive.isMobile(context))
+                                  CustomButton(
+                                    text: 'View Owner Detail',
+                                    onPressed: () {},
+                                    height: 40,
+                                    width: 180,
+                                  ),
+                                if (Responsive.isMobile(context))
+                                  const Padding(
+                                    padding: EdgeInsets.only(top: 12.0),
+                                    child: CustomText(
+                                      title: '₹90,000/month',
+                                      color: AppColor.primary,
+                                    ),
+                                  ),
+                                TabBarWidget(tabviewController: tabviewController),
+                                const SizedBox(
+                                  height: 30,
+                                ),
+                                const CustomText(
+                                  title: "Images",
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                SizedBox(
+                                  height: 200,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: 10,
+                                    itemBuilder: (context, index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          _showImageSlider(inventoryDetailsImageUrls, index);
+                                        },
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              margin: const EdgeInsets.all(10),
+                                              height: 150,
+                                              width: 150,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(color: Colors.grey),
+                                                borderRadius: BorderRadius.circular(10),
+                                              ),
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(10),
+                                                child: Image.network(
+                                                  inventoryDetailsImageUrls[index],
+                                                  fit: BoxFit.cover,
+                                                  errorBuilder: (context, error, stackTrace) {
+                                                    return const Icon(
+                                                      Icons.error_outline,
+                                                      size: 50,
+                                                      color: Colors.red,
+                                                    );
+                                                  },
+                                                  loadingBuilder: (context, child, loadingProgress) {
+                                                    return loadingProgress == null ? child : const CircularProgressIndicator();
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                            const CustomText(title: 'Front Elevation')
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 30,
+                                ),
+                                const CustomText(
+                                  title: "Overview",
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                if (data.amenities != null)
+                                  Wrap(
+                                    children: List<Widget>.generate(
+                                      data.amenities!.length,
+                                      (index) => Padding(
+                                        padding: const EdgeInsets.only(right: 8.0, top: 10),
+                                        child: CustomChip(
+                                          label: Text(data.amenities![index]),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                const SizedBox(
+                                  height: 30,
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.only(bottom: 8.0),
+                                  child: CustomText(
+                                    title: "Property Description",
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                Text(
+                                  data.comments!,
+                                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey),
+                                ),
+                                const SizedBox(
+                                  height: 30,
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.only(bottom: 8.0),
+                                  child: CustomText(
+                                    title: "Attachments",
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    showUploadDocumentModal(context);
+                                  },
+                                  child: Container(
+                                    height: 100,
+                                    width: 100,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: const Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.add,
+                                          size: 40,
+                                        ),
+                                        CustomText(
+                                          title: 'Add more',
+                                          size: 8,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                if (Responsive.isMobile(context)) const MapViewWidget()
                               ],
-                            );
-                          },
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      const CustomText(
-                        title: "Overview",
-                        color: Color(0xFF181818),
-                        fontWeight: FontWeight.w700,
-                      ),
-                      Wrap(
-                        children: List<Widget>.generate(
-                          items.length,
-                          (index) => Padding(
-                            padding: const EdgeInsets.only(right: 8.0, top: 10),
-                            child: CustomChip(
-                              label: Text(items[index]),
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 30,
+                    ),
+                    if (Responsive.isDesktop(context))
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                        width: 1,
+                        color: Colors.grey.withOpacity(0.5),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 8.0),
-                        child: CustomText(
-                          title: "Property Description",
-                          color: Color(0xFF181818),
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const Text(
-                        "A beautiful 2 BHK which offers you luxury at every corner of this Farm. The garden is huge and beautifully maintained. The swimming pool is like the cherry on the cake. This 2 bedroom can easily accommodate up to 6 guests. To ensure you have a comfortable stay, housekeeping and the services of a caretaker are provided here.",
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey),
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 8.0),
-                        child: CustomText(
-                          title: "Attachments",
-                          color: Color(0xFF181818),
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          _showChatDialog(context);
-                        },
+                    if (Responsive.isDesktop(context))
+                      Expanded(
+                        flex: 1,
                         child: Container(
-                          height: 100,
-                          width: 100,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.add,
-                                size: 40,
-                              ),
-                              CustomText(
-                                title: 'Add more',
-                                size: 8,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-            width: 1,
-            color: Colors.grey.withOpacity(0.5),
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CustomText(
-                        title: 'Miss. Riya Sharma',
-                        fontWeight: FontWeight.w600,
-                        size: 20,
-                      ),
-                      CustomChip(
-                        label: Icon(
-                          Icons.more_vert,
-                        ),
-                        paddingHorizontal: 3,
-                      ),
-                    ],
-                  ),
-                  const ListTile(
-                    contentPadding: EdgeInsets.all(0),
-                    dense: true,
-                    visualDensity: VisualDensity(vertical: -2),
-                    leading: CustomChip(
-                      label: Icon(
-                        Icons.call_outlined,
-                        color: Colors.black,
-                      ),
-                      paddingHorizontal: 3,
-                    ),
-                    title: CustomText(
-                      title: '+919876543210',
-                      size: 14,
-                      color: Color(0xFFA8A8A8),
-                    ),
-                    minLeadingWidth: 0,
-                  ),
-                  const ListTile(
-                    contentPadding: EdgeInsets.all(0),
-                    dense: true,
-                    visualDensity: VisualDensity(vertical: -2),
-                    leading: CustomChip(
-                      label: Icon(
-                        FontAwesomeIcons.whatsapp,
-                        color: Colors.black,
-                      ),
-                      paddingHorizontal: 3,
-                    ),
-                    title: CustomText(
-                      title: 'Not Active',
-                      size: 12,
-                      color: Color(0xFFA8A8A8),
-                    ),
-                    minLeadingWidth: 0,
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(
-                      top: 17,
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.add),
-                        Padding(
-                            padding: EdgeInsets.only(left: 4, top: 1, bottom: 1),
-                            child: Text("Added by ",
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontFamily: 'DM Sans',
-                                  fontWeight: FontWeight.w400,
-                                ))),
-                        Padding(
-                            padding: EdgeInsets.only(left: 6, top: 2),
-                            child: Text("Shamsheer Singh",
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  color: AppColor.primary,
-                                  fontSize: 14,
-                                  fontFamily: 'DM Sans',
-                                  fontWeight: FontWeight.w400,
-                                )))
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20, bottom: 8),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Icon(Icons.person_add_alt_outlined),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 4, top: 2),
-                          child: Text(
-                            "Assigned to",
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontFamily: 'DM Sans',
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 22),
+                          padding: const EdgeInsets.all(10),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Container(
-                                padding: const EdgeInsets.only(left: 4, right: 4),
-                                child: const Row(
-                                  mainAxisSize: MainAxisSize.min,
+                              ContactInformation(customerinfo: data.customerinfo!),
+                              const Padding(
+                                padding: EdgeInsets.only(top: 17),
+                                child: Row(
                                   children: [
+                                    Icon(Icons.add),
                                     Padding(
-                                        padding: EdgeInsets.only(left: 6, top: 4),
+                                        padding: EdgeInsets.only(left: 4, top: 1, bottom: 1),
+                                        child: Text("Added by ",
+                                            overflow: TextOverflow.ellipsis,
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                            ))),
+                                    Padding(
+                                        padding: EdgeInsets.only(left: 6, top: 2),
                                         child: Text("Shamsheer Singh",
                                             overflow: TextOverflow.ellipsis,
                                             textAlign: TextAlign.left,
                                             style: TextStyle(
                                               color: AppColor.primary,
                                               fontSize: 14,
-                                              fontFamily: 'DM Sans',
                                               fontWeight: FontWeight.w400,
-                                            ))),
+                                            )))
                                   ],
                                 ),
                               ),
-                              const Padding(
-                                  padding: EdgeInsets.only(top: 16),
-                                  child: Row(children: [
-                                    Padding(
-                                        padding: EdgeInsets.only(left: 4, top: 2),
-                                        child: Text("Rajpal Yadav",
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.left,
-                                            style: TextStyle(
-                                              color: AppColor.primary,
-                                              fontSize: 14,
-                                              fontFamily: 'DM Sans',
-                                              fontWeight: FontWeight.w400,
-                                            )))
-                                  ])),
-                              const Padding(
-                                  padding: EdgeInsets.only(top: 15),
-                                  child: Row(children: [
-                                    Padding(
-                                        padding: EdgeInsets.only(left: 6, top: 2),
-                                        child: Text("Gaurav Singh ",
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.left,
-                                            style: TextStyle(
-                                              color: AppColor.primary,
-                                              fontSize: 14,
-                                              fontFamily: 'DM Sans',
-                                              fontWeight: FontWeight.w400,
-                                            )))
-                                  ])),
-                              const Padding(
-                                padding: EdgeInsets.only(top: 14),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 20, bottom: 8),
                                 child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Icon(Icons.add),
+                                    const Icon(Icons.person_add_alt_outlined),
+                                    const Padding(
+                                      padding: EdgeInsets.only(left: 4, top: 2),
+                                      child: Text(
+                                        "Assigned to",
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ),
                                     Padding(
-                                      padding: EdgeInsets.only(left: 6),
-                                      child: Text("Add More",
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            color: AppColor.primary,
-                                            fontSize: 14,
-                                            fontFamily: 'DM Sans',
-                                            fontWeight: FontWeight.w400,
-                                          )),
+                                      padding: const EdgeInsets.only(left: 22),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.only(left: 4, right: 4),
+                                            child: const Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(left: 6, top: 4),
+                                                  child: Text(
+                                                    "Shamsheer Singh",
+                                                    overflow: TextOverflow.ellipsis,
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                      color: AppColor.primary,
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          const Padding(
+                                              padding: EdgeInsets.only(top: 16),
+                                              child: Row(children: [
+                                                Padding(
+                                                    padding: EdgeInsets.only(left: 4, top: 2),
+                                                    child: Text("Rajpal Yadav",
+                                                        overflow: TextOverflow.ellipsis,
+                                                        textAlign: TextAlign.left,
+                                                        style: TextStyle(
+                                                          color: AppColor.primary,
+                                                          fontSize: 14,
+                                                          fontWeight: FontWeight.w400,
+                                                        )))
+                                              ])),
+                                          const Padding(
+                                              padding: EdgeInsets.only(top: 15),
+                                              child: Row(children: [
+                                                Padding(
+                                                    padding: EdgeInsets.only(left: 6, top: 2),
+                                                    child: Text("Gaurav Singh ",
+                                                        overflow: TextOverflow.ellipsis,
+                                                        textAlign: TextAlign.left,
+                                                        style: TextStyle(
+                                                          color: AppColor.primary,
+                                                          fontSize: 14,
+                                                          fontWeight: FontWeight.w400,
+                                                        )))
+                                              ])),
+                                          const Padding(
+                                            padding: EdgeInsets.only(top: 14),
+                                            child: Row(
+                                              children: [
+                                                Icon(Icons.add),
+                                                Padding(
+                                                  padding: EdgeInsets.only(left: 6),
+                                                  child: Text("Add More",
+                                                      overflow: TextOverflow.ellipsis,
+                                                      textAlign: TextAlign.left,
+                                                      style: TextStyle(
+                                                        color: AppColor.primary,
+                                                        fontSize: 14,
+                                                        fontWeight: FontWeight.w400,
+                                                      )),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
+                              if (Responsive.isDesktop(context)) const MapViewWidget(),
                             ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 10, top: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        CustomText(
-                          title: 'Location',
-                          fontWeight: FontWeight.w600,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        CustomChip(
-                          label: Icon(
-                            Icons.share_outlined,
-                          ),
-                          paddingHorizontal: 3,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    // width: 314,
-                    height: 197,
-                    child: CustomGoogleMap(
-                      onLatLngSelected: (d) {},
-                      stateName: 'Rajasthan',
-                      cityName: 'Jaipur',
-                      address1: 'wtp',
-                      address2: 'wtp',
-                    ),
-                  ),
-                ],
+                      ),
+                  ],
+                ),
+              );
+            }
+            return const SizedBox();
+          }),
+    );
+  }
+}
+
+class MapViewWidget extends StatelessWidget {
+  const MapViewWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 10, top: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const CustomText(
+                title: 'Location',
+                fontWeight: FontWeight.w600,
               ),
-            ),
+              const SizedBox(
+                width: 10,
+              ),
+              if (!Responsive.isMobile(context))
+                const CustomChip(
+                  label: Icon(
+                    Icons.share_outlined,
+                  ),
+                  paddingHorizontal: 3,
+                ),
+            ],
           ),
-        ],
-      ),
+        ),
+        SizedBox(
+          height: 200,
+          child: CustomGoogleMap(
+            onLatLngSelected: (d) {},
+            stateName: 'Rajasthan',
+            cityName: 'Jaipur',
+            address1: 'wtp',
+            address2: 'wtp',
+          ),
+        ),
+      ],
     );
   }
 }

@@ -53,27 +53,24 @@ class LabelTextInputField extends StatelessWidget {
             ],
           ),
         ),
-        Container(
-          // margin: const EdgeInsets.only(top: 4, bottom: 15, right: 8),
-          child: CustomTextInput(
-            // indense: true,
-            enabled: isDropDown
-                ? false
-                : isDatePicker
-                    ? false
-                    : true,
-            rightIcon: isDropDown
-                ? Icons.arrow_drop_down_sharp
-                : isDatePicker
-                    ? Icons.calendar_month
-                    : null,
-            controller: inputController,
-            hintText: hintText,
-            onChanged: onChanged,
-            validator: validator,
-            indense: true,
-            contentPadding: 0,
-          ),
+        CustomTextInput(
+          // indense: true,
+          enabled: isDropDown
+              ? false
+              : isDatePicker
+                  ? false
+                  : true,
+          rightIcon: isDropDown
+              ? Icons.arrow_drop_down_sharp
+              : isDatePicker
+                  ? Icons.calendar_month
+                  : null,
+          controller: inputController,
+          hintText: hintText,
+          onChanged: onChanged,
+          validator: validator,
+          indense: true,
+          contentPadding: 0,
         ),
       ],
     );

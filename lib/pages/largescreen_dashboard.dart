@@ -12,7 +12,7 @@ import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';
 
 final largeScreenTabsProvider = StateProvider<int>((ref) {
-  return 0;
+  return 7;
 });
 
 class LargeScreen extends ConsumerWidget {

@@ -7,9 +7,7 @@ import 'package:yes_broker/widgets/todo/todo_list_view.dart';
 import 'package:yes_broker/widgets/top_search_bar.dart';
 import 'package:yes_broker/widgets/workitems/workitem_filter_view.dart';
 import 'package:yes_broker/widgets/workitems/workitems_list.dart';
-
 import '../../constants/firebase/detailsModels/card_details.dart';
-import '../../pages/largescreen_dashboard.dart';
 
 class InventoryScreen extends ConsumerStatefulWidget {
   const InventoryScreen({super.key});
@@ -82,15 +80,10 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
                         child: Row(
                           children: [
                             Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  ref.read(largeScreenTabsProvider.notifier).update((state) => 7);
-                                },
-                                child: WorkItemsList(
-                                  title: 'Inventory',
-                                  getCardDetails: inventoryList,
-                                  headerShow: false,
-                                ),
+                              child: WorkItemsList(
+                                title: 'Inventory',
+                                getCardDetails: inventoryList,
+                                headerShow: false,
                               ),
                             ),
                             !Responsive.isMobile(context)
