@@ -61,7 +61,7 @@ class LargeScreen extends ConsumerWidget {
                   if (selectedVal != 'Logout') {
                     ref.read(largeScreenTabsProvider.notifier).update((state) => 6);
                     final ProfileMenuItems profile = profileMenuItems.firstWhere((element) => element.title == selectedVal);
-                    ref.read(selectedItemProvider.notifier).setSelectedItem(profile);
+                    ref.read(selectedProfileItemProvider.notifier).setSelectedItem(profile);
                   } else if (selectedVal == "Logout") {
                     authentication.signOut().then((value) => {Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen)});
                     UserHiveMethods.deleteData(authentication.currentUser?.uid);

@@ -76,7 +76,7 @@ Future<String> submitInventoryAndcardDetails(state) async {
       cardType: "IN",
       cardTitle: "$propertyCategory $propertyKind-$propertyCity",
       cardDescription: "Want to $inventoryCategory her $bedrooms BHK for 70 L rupees",
-      customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo),
+      customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
       cardStatus: "New",
       assignedto: [cards.Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)],
       createdby:
@@ -116,7 +116,7 @@ Future<String> submitInventoryAndcardDetails(state) async {
       reservedparking: Reservedparking(covered: coveredparking),
       propertyarea: Propertyarea(unit: areaUnit, superarea: superArea, carpetarea: carpetArea),
       plotdetails: Plotdetails(boundarywall: boundaryWall, opensides: openSides),
-      customerinfo: Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo),
+      customerinfo: Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo ?? mobileNo),
       roomconfig: Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom, balconies: balconies, bathroom: bathrooms),
       propertyfacing: propertyFacing,
       comments: comments,

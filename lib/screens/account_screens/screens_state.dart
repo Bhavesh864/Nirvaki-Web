@@ -4,7 +4,7 @@ import 'package:yes_broker/constants/utils/constants.dart';
 class SelectedItemNotifier extends StateNotifier<ProfileMenuItems?> {
   SelectedItemNotifier() : super(null);
 
-  void setSelectedItem(ProfileMenuItems item) {
+  void setSelectedItem(ProfileMenuItems? item) {
     state = item;
   }
 }
