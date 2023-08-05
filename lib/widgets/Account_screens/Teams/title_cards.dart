@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
-import 'package:yes_broker/constants/utils/constants.dart';
 
 class TitleCards extends StatelessWidget {
   final String cardTitle;
@@ -10,11 +9,12 @@ class TitleCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final w = MediaQuery.of(context).size.width;
     return Card(
       elevation: 5,
       margin: const EdgeInsets.all(10),
       child: Container(
-        width: width! * 0.14,
+        width: 180,
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

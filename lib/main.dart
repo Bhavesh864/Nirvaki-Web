@@ -1,3 +1,5 @@
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,12 +20,36 @@ void main() async {
   Hive.registerAdapter(TimestampAdapter());
   await Hive.openBox("users");
   await Hive.openBox<CardDetails>("carddetails");
+
   runApp(
     const ProviderScope(
       child: MyApp(),
     ),
   );
 }
+
+// Future<dynamic> dynamicLinksget() async {
+//   if (!kIsWeb) {
+//     final PendingDynamicLinkData? initialLink = await FirebaseDynamicLinks.instance.getInitialLink();
+
+//     if (initialLink != null) {
+//       final Uri deepLink = initialLink.link;
+//       print(deepLink);
+//       // Example of using the dynamic link to push the user to a different screen
+//       // Navigator.pushNamed(context, deepLink.path);
+//     }
+//     FirebaseDynamicLinks.instance.onLink.listen(
+//       (pendingDynamicLinkData) {
+//         // Set up the `onLink` event listener next as it may be received here
+
+//         final Uri deepLink = pendingDynamicLinkData.link;
+//         // Example of using the dynamic link to push the user to a different screen
+//         // Navigator.pushNamed(context, deepLink.path);
+//       },
+//     );
+//     return initialLink;
+//   }
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
