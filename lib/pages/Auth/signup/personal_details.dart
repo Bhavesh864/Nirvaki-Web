@@ -32,7 +32,7 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
   void navigateTopage(SelectedSignupItems notify) {
     final isvalid = key.currentState?.validate();
     if (isvalid!) {
-      Navigator.pushNamed(context, AppRoutes.companyDetails);
+      Navigator.pushNamed(context, AppRoutes.companyDetailsScreen);
     }
   }
 

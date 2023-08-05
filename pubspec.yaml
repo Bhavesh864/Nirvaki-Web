@@ -55,7 +55,7 @@ dependencies:
   build_runner: ^2.4.6
   path_provider: ^2.0.15
   universal_platform: ^1.0.0+1
-
+  carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0

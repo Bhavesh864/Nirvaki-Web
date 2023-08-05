@@ -42,15 +42,3 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
     return res;
   }
 }
-
-final allDropDownSelectedAnswers = StateNotifierProvider<AllDropdownSelectedAnwers, List<String>>(
-  (ref) => AllDropdownSelectedAnwers(),
-);
-
-class AllDropdownSelectedAnwers extends StateNotifier<List<String>> {
-  AllDropdownSelectedAnwers() : super([]);
-
-  void add(String selectedValue) {
-    state = [...state, selectedValue];
-  }
-}
