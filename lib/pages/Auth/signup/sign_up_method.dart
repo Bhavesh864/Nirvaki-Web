@@ -31,17 +31,16 @@ Future<String> signUpMethod({required state}) async {
       brokercompanyaddress: {"address": companyAddress, "city": companyCity, "state": companyState},
     );
     final User items = User(
-      brokerId: authentication.currentUser!.uid,
-      status: 'accepted',
-      userfirstname: userFirstName,
-      whatsAppNumber: userWhatsAppNumber ?? userMobileNumber,
-      userlastname: userLastName,
-      userId: authentication.currentUser!.uid,
-      mobile: userMobileNumber,
-      email: email,
-      role: registerAs,
-      image: '',
-    );
+        brokerId: authentication.currentUser!.uid,
+        status: 'accepted',
+        userfirstname: userFirstName,
+        whatsAppNumber: userWhatsAppNumber ?? userMobileNumber,
+        userlastname: userLastName,
+        userId: authentication.currentUser!.uid,
+        mobile: userMobileNumber,
+        email: email,
+        role: registerAs,
+        image: "");
     await User.addUser(items);
     await BrokerInfo.addBrokerInfo(item);
     res = "success";

@@ -5,6 +5,7 @@ import 'package:yes_broker/screens/account_screens/common_screen.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
+import '../../constants/utils/constants.dart';
 
 class UserNotifier extends StateNotifier<User> {
   UserNotifier()
@@ -78,7 +79,7 @@ class LargeScreenNavBar extends ConsumerWidget {
                     width: 30,
                     margin: const EdgeInsets.only(right: 10),
                     decoration: BoxDecoration(
-                      image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(snapshot.data!.image.toString())),
+                      image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(snapshot.data!.image.isEmpty ? noImg : snapshot.data!.image)),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
