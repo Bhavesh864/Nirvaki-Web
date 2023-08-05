@@ -28,7 +28,7 @@ class AssignUser extends StatelessWidget {
         SizedBox(
           height: 45,
           child: StreamBuilder(
-              stream: FirebaseFirestore.instance.collection("users").snapshots(),
+              stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: currentUser["brokerId"]).snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data == null) {
                   return const CircularProgressIndicator.adaptive();

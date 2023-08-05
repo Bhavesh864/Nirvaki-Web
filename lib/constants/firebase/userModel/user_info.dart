@@ -4,9 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
+import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 
 final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
-
+Box box = Hive.box("users");
+final currentUser = box.get(auth.currentUser!.uid);
 final FirebaseAuth auth = FirebaseAuth.instance;
 
 @HiveType(typeId: 0)
@@ -87,7 +89,7 @@ class User extends HiveObject {
 
   static Future<List<User>> getAllUsers() async {
     try {
-      final QuerySnapshot querySnapshot = await usersCollection.get();
+      final QuerySnapshot querySnapshot = await usersCollection.where("brokerId", isEqualTo: currentUser["brokerId"]).get();
       final List<User> users = [];
       for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
         if (documentSnapshot.exists) {

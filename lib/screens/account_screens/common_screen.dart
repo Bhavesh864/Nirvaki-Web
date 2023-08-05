@@ -4,12 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 
 import 'package:yes_broker/constants/utils/constants.dart';
-import 'package:yes_broker/screens/account_screens/Teams/AddMembers/add_member_screen.dart';
+
 import 'package:yes_broker/screens/account_screens/Teams/team_screen.dart';
 
 import 'package:yes_broker/screens/account_screens/screens_state.dart';
 
-final selectedItemProvider = StateNotifierProvider<SelectedItemNotifier, ProfileMenuItems?>((ref) {
+final selectedProfileItemProvider = StateNotifierProvider<SelectedItemNotifier, ProfileMenuItems?>((ref) {
   return SelectedItemNotifier();
 });
 
@@ -27,16 +27,17 @@ class CommonScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedItem = ref.watch(selectedItemProvider);
+    final selectedItem = ref.watch(selectedProfileItemProvider);
 
     void onItemSelected(ProfileMenuItems item) {
-      ref.read(selectedItemProvider.notifier).setSelectedItem(item);
+      ref.read(selectedProfileItemProvider.notifier).setSelectedItem(item);
     }
 
     void logoutaction() {
       // authentication.signOut().then((value) => {Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen)});
       // UserHiveMethods.deleteData(authentication.currentUser?.uid);
     }
+    // final largescreen = MediaQuery.of(context).size.width >= 600;
 
     return Container(
       decoration: const BoxDecoration(
@@ -52,7 +53,7 @@ class CommonScreen extends ConsumerWidget {
       ),
       child: Row(
         children: [
-          if (MediaQuery.of(context).size.width >= 600)
+          if (MediaQuery.of(context).size.width >= 900)
             Expanded(
               flex: 1,
               child: ListView(
