@@ -1,25 +1,46 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 final CollectionReference cardDetailsCollection = FirebaseFirestore.instance.collection('cardDetails');
 
+@HiveType(typeId: 1)
 class CardDetails {
+  @HiveField(0)
   String? cardType;
+  @HiveField(1)
   String? workitemId;
+  @HiveField(2)
   String? status;
+  @HiveField(3)
   String? cardCategory;
+  @HiveField(4)
   String? cardTitle;
+  @HiveField(5)
   String? cardDescription;
+  @HiveField(6)
   String? cardStatus;
+  @HiveField(7)
   String? brokerid;
+  @HiveField(8)
   String? managerid;
+  @HiveField(9)
   List<Assignedto>? assignedto;
+  @HiveField(10)
   Roomconfig? roomconfig;
+  @HiveField(11)
   Propertyarearange? propertyarearange;
+  @HiveField(12)
   Propertypricerange? propertypricerange;
+  @HiveField(13)
   String? duedate;
+  @HiveField(14)
   Createdby? createdby;
+  @HiveField(15)
   String? linkedItemType;
+  @HiveField(16)
   Customerinfo? customerinfo;
+  @HiveField(17)
   Timestamp? createdate;
   CardDetails(
       {this.cardType,
@@ -145,7 +166,6 @@ class CardDetails {
     }
   }
 
-  // Get Inventory items added by the broker or employees under the broker
   static Future<List<CardDetails>> getCardDetails() async {
     try {
       final QuerySnapshot querySnapshot = await cardDetailsCollection.orderBy("createdate", descending: true).get();
@@ -155,7 +175,7 @@ class CardDetails {
       }).toList();
       return inventoryItems;
     } catch (error) {
-      // print('Failed to get Inventory items: $error');
+      print('Failed to get Inventory items: $error');
       return [];
     }
   }

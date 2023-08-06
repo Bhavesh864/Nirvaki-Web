@@ -1,34 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
-import 'package:yes_broker/Customs/label_text_field.dart';
-import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/routes/routes.dart';
-import '../../constants/utils/constants.dart';
-import '../../constants/utils/image_constants.dart';
 
-class PersonalDetailsAuthScreen extends StatefulWidget {
+import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/riverpodstate/sign_up_state.dart';
+import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
+import 'package:yes_broker/constants/validation/basic_validation.dart';
+
+import 'package:yes_broker/routes/routes.dart';
+
+import 'package:yes_broker/widgets/auth/details_header.dart';
+import '../../../constants/utils/constants.dart';
+import '../../../constants/utils/image_constants.dart';
+
+class PersonalDetailsAuthScreen extends ConsumerStatefulWidget {
   const PersonalDetailsAuthScreen({super.key});
   @override
-  State<PersonalDetailsAuthScreen> createState() => _PersonalDetailsAuthScreenState();
+  PersonalDetailsAuthScreenState createState() => PersonalDetailsAuthScreenState();
 }
 
-class _PersonalDetailsAuthScreenState extends State<PersonalDetailsAuthScreen> {
+class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthScreen> {
+  final TextEditingController firstnamecontroller = TextEditingController();
+  final TextEditingController lastnamecontroller = TextEditingController();
+  final TextEditingController mobilenumbercontroller = TextEditingController();
+  final TextEditingController whatsupnumbercontroller = TextEditingController();
+
   bool isChecked = true;
   final key = GlobalKey<FormState>();
   var isloading = false;
-
-  final TextEditingController emailcontroller = TextEditingController();
-  final TextEditingController passwordcontroller = TextEditingController();
+  void navigateTopage(SelectedSignupItems notify) {
+    final isvalid = key.currentState?.validate();
+    if (isvalid!) {
+      Navigator.pushNamed(context, AppRoutes.companyDetailsScreen);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final notify = ref.read(selectedItemForsignup.notifier);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
             height: MediaQuery.of(context).size.height,
-            // padding: const EdgeInsets.symmetric(vertical: 0),
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(authBgImage),
@@ -54,8 +69,9 @@ class _PersonalDetailsAuthScreenState extends State<PersonalDetailsAuthScreen> {
                       behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                       child: SingleChildScrollView(
                         child: Column(
-                          // crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
+                            const DetailsHeaderWidget(isPersonalDetails: true),
                             const Padding(
                               padding: EdgeInsets.only(top: 10),
                               child: Text(
@@ -69,17 +85,29 @@ class _PersonalDetailsAuthScreenState extends State<PersonalDetailsAuthScreen> {
                             const SizedBox(
                               height: 10,
                             ),
-                            LabelTextInputField(
+                            CustomTextInput(
                               labelText: 'First Name',
-                              inputController: TextEditingController(),
+                              controller: firstnamecontroller,
+                              validator: (value) => validateForNormalFeild(props: "First Name", value: value),
+                              onChanged: (value) {
+                                notify.add({"id": 3, "item": value.trim()});
+                              },
                             ),
-                            LabelTextInputField(
+                            CustomTextInput(
                               labelText: 'Last Name',
-                              inputController: TextEditingController(),
+                              controller: lastnamecontroller,
+                              validator: (value) => validateForNormalFeild(props: "Last Name", value: value),
+                              onChanged: (value) {
+                                notify.add({"id": 4, "item": value.trim()});
+                              },
                             ),
-                            LabelTextInputField(
+                            CustomTextInput(
                               labelText: 'Mobile',
-                              inputController: TextEditingController(),
+                              controller: mobilenumbercontroller,
+                              validator: (value) => validateForMobileNumberFeild(value: value, props: "Mobile Number"),
+                              onChanged: (value) {
+                                notify.add({"id": 5, "item": value.trim()});
+                              },
                             ),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 8.0),
@@ -93,26 +121,21 @@ class _PersonalDetailsAuthScreenState extends State<PersonalDetailsAuthScreen> {
                                 },
                               ),
                             ),
-                            LabelTextInputField(
-                              labelText: 'Whatsapp Number',
-                              inputController: TextEditingController(),
-                            ),
-                            LabelTextInputField(
-                              labelText: 'Address',
-                              inputController: TextEditingController(),
-                            ),
-                            LabelTextInputField(
-                              labelText: 'Register As',
-                              inputController: TextEditingController(),
-                            ),
+                            if (!isChecked)
+                              CustomTextInput(
+                                labelText: 'Whatsapp Number',
+                                controller: whatsupnumbercontroller,
+                                validator: !isChecked ? (value) => validateForMobileNumberFeild(value: value, props: "Whatsapp Number") : null,
+                                onChanged: (value) {
+                                  notify.add({"id": 6, "item": value.trim()});
+                                },
+                              ),
                             Container(
                               margin: const EdgeInsets.only(top: 10, bottom: 10),
                               alignment: Alignment.centerRight,
                               child: CustomButton(
                                 text: 'Next',
-                                onPressed: () {
-                                  Navigator.pushReplacementNamed(context, AppRoutes.companyDetails);
-                                },
+                                onPressed: () => navigateTopage(notify),
                                 width: 73,
                                 height: 39,
                               ),

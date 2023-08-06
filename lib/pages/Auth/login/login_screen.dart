@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
+
+import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/widgets/auth/common_auth_widgets.dart';
-import '../../constants/utils/image_constants.dart';
+import '../../../constants/utils/image_constants.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,12 +24,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void loginwithemailpassword() {
     final isvalid = key.currentState?.validate();
-
     if (isvalid!) {
       setState(() {
         isloading = true;
       });
-      signinwithbroker(emailcontroller.text, passwordcontroller.text).then((value) => {
+      signinMethod(email: emailcontroller.text, password: passwordcontroller.text).then((value) => {
             if (value == 'success')
               {
                 setState(() {
@@ -125,29 +126,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         Container(
                           margin: const EdgeInsets.only(bottom: 5),
-                          child: CustomTextInput(
-                            controller: emailcontroller,
-                            hintText: 'Email address',
-                            validator: (value) {
-                              if (value!.isEmpty || value.length < 6) {
-                                return 'Please enter valid email';
-                              }
-                              return null;
-                            },
-                          ),
+                          child: CustomTextInput(controller: emailcontroller, labelText: 'Email address', validator: validateEmail),
                         ),
-                        CustomTextInput(
-                          controller: passwordcontroller,
-                          hintText: 'Password',
-                          obscureText: true,
-                          rightIcon: Icons.remove_red_eye,
-                          validator: (value) {
-                            if (value!.isEmpty || value.length < 6) {
-                              return 'Password should be atleast 6 character long';
-                            }
-                            return null;
-                          },
-                        ),
+                        CustomTextInput(controller: passwordcontroller, labelText: 'Password', obscureText: true, rightIcon: Icons.remove_red_eye, validator: validatePassword),
                         const SizedBox(height: 10),
                         isloading
                             ? const Center(child: CircularProgressIndicator.adaptive())

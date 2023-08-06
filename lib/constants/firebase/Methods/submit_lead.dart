@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hive/hive.dart';
 import 'package:random_string/random_string.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 
@@ -59,7 +60,8 @@ Future<String> submitLeadAndCardDetails(state) async {
   final typeofschool = getDataById(state, 44);
   final hospitalrooms = getDataById(state, 45);
   final widthofRoad = getDataById(state, 46);
-
+  Box box = Hive.box("users");
+  final currentUser = box.get(authentication.currentUser!.uid);
   final cards.CardDetails card = cards.CardDetails(
       workitemId: "LD$randomId",
       status: "New",
@@ -69,10 +71,11 @@ Future<String> submitLeadAndCardDetails(state) async {
       cardType: "LD",
       cardTitle: "$propertyCategory $propertyKind-$propertyCity",
       cardDescription: "Want to $leadCategory her $bedrooms BHK for $budgetPrice $budgetFigures rupees",
-      customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo),
+      customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
       cardStatus: "New",
       assignedto: [cards.Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)],
-      createdby: cards.Createdby(userfirstname: "bhavesh", userid: authentication.currentUser!.uid, userlastname: "khatri"),
+      createdby:
+          cards.Createdby(userfirstname: currentUser["userfirstname"], userid: currentUser["userId"], userlastname: currentUser["userlastname"], userimage: currentUser["image"]),
       createdate: Timestamp.now(),
       propertyarearange: cards.Propertyarearange(arearangestart: expectedArea, unit: areaUnit),
       roomconfig: cards.Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom),
@@ -111,12 +114,13 @@ Future<String> submitLeadAndCardDetails(state) async {
       propertyarearange: Propertyarearange(unit: areaUnit, arearangestart: expectedArea),
       propertypricerange: Propertypricerange(unit: budgetFigures, arearangestart: budgetPrice),
       reservedparking: Reservedparking(covered: coveredparking),
-      customerinfo: Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo),
+      customerinfo: Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo ?? mobileNo),
       roomconfig: Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom, balconies: balconies, bathroom: bathrooms),
       comments: comments,
       createdate: Timestamp.now(),
       assignedto: [Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)],
-      createdby: Createdby(userfirstname: "bhavesh", userid: authentication.currentUser!.uid, userlastname: "khatri"));
+      createdby:
+          Createdby(userfirstname: currentUser["userfirstname"], userid: currentUser["userId"], userlastname: currentUser["userlastname"], userimage: currentUser["image"]));
 
   await cards.CardDetails.addCardDetails(card).then((value) => {res = "success"});
   await LeadDetails.addLeadDetails(lead).then((value) => {res = "success"});

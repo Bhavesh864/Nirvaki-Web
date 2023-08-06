@@ -11,7 +11,7 @@ import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/widgets/questionaries/workitem_success.dart';
 import '../Customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
-import '../controllers/all_selected_ansers_provider.dart';
+import '../riverpodstate/all_selected_ansers_provider.dart';
 
 final myArrayProvider = StateNotifierProvider<AllChipSelectedAnwers, List<Map<String, dynamic>>>(
   (ref) => AllChipSelectedAnwers(),

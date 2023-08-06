@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
 
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
-import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
+import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/questionaries/questions_form_photos_view.dart';
 import 'package:yes_broker/widgets/questionaries/assign_user.dart';
 import 'package:yes_broker/widgets/questionaries/google_maps.dart';

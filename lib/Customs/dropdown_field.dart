@@ -31,7 +31,7 @@ class _DropDownFieldState extends State<DropDownField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -45,7 +45,7 @@ class _DropDownFieldState extends State<DropDownField> {
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(0),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 isDense: true,
               ),
@@ -59,8 +59,8 @@ class _DropDownFieldState extends State<DropDownField> {
                 ),
                 icon: const Icon(Icons.expand_more),
                 isExpanded: true,
-                borderRadius: BorderRadius.circular(6),
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                borderRadius: BorderRadius.circular(10),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3.5),
                 value: selectedValues,
                 onChanged: (e) {
                   widget.onchanged(e!);

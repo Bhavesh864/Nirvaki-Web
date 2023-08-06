@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
-import '../../constants/utils/image_constants.dart';
-import '../../widgets/auth/common_auth_widgets.dart';
+import '../../../constants/utils/image_constants.dart';
+import '../../../widgets/auth/common_auth_widgets.dart';
 
 class ForgetPassword extends StatelessWidget {
   const ForgetPassword({super.key});
@@ -77,12 +77,7 @@ class ForgetPassword extends StatelessWidget {
                       SizedBox(
                         width: screenHeight,
                         child: CustomButton(
-                            leftIcon: Icons.apple,
-                            text: 'Continue with apple',
-                            buttonColor: Colors.white,
-                            textColor: Colors.black,
-                            lefticonColor: Colors.black,
-                            onPressed: () {}),
+                            leftIcon: Icons.apple, text: 'Continue with apple', buttonColor: Colors.white, textColor: Colors.black, lefticonColor: Colors.black, onPressed: () {}),
                       ),
                       const SizedBox(height: 30),
                       const CustomOrDivider(),
