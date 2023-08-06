@@ -7,7 +7,7 @@ import 'package:yes_broker/constants/utils/constants.dart';
 
 import 'package:yes_broker/screens/account_screens/Teams/team_screen.dart';
 
-import 'package:yes_broker/screens/account_screens/screens_state.dart';
+import 'package:yes_broker/riverpodstate/screens_state.dart';
 
 final selectedProfileItemProvider = StateNotifierProvider<SelectedItemNotifier, ProfileMenuItems?>((ref) {
   return SelectedItemNotifier();

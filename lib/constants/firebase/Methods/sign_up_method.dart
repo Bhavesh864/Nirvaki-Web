@@ -1,5 +1,5 @@
-import '../../../constants/firebase/userModel/broker_info.dart';
-import '../../../constants/firebase/userModel/user_info.dart';
+import '../userModel/broker_info.dart';
+import '../userModel/user_info.dart';
 
 Future<String> signUpMethod({required state}) async {
   String res = 'Something went wrong';
