@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/screens/account_screens/common_screen.dart';
 import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/utils/image_constants.dart';
 
-AppBar mobileAppBar(
-    BuildContext context, void Function(String) onOptionSelect) {
+AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect) {
   // final width = MediaQuery.of(context).size.width;
 
   return AppBar(
@@ -18,8 +18,7 @@ AppBar mobileAppBar(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         ScreenTypeLayout.builder(
-          breakpoints:
-              const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
+          breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
           mobile: (p0) => const CustomText(
             title: 'YesBroker',
             fontWeight: FontWeight.bold,
@@ -37,9 +36,9 @@ AppBar mobileAppBar(
         },
         color: Colors.white.withOpacity(1),
         offset: const Offset(200, 40),
-        itemBuilder: (context) => menuItems.map(
+        itemBuilder: (context) => profileMenuItems.map(
           (e) {
-            return popupMenuItem(e, onOptionSelect);
+            return popupMenuItem(e.title, onOptionSelect);
           },
         ).toList(),
         child: Container(
@@ -57,8 +56,7 @@ AppBar mobileAppBar(
   );
 }
 
-PopupMenuItem popupMenuItem(
-    String title, void Function(String) onOptionSelect) {
+PopupMenuItem popupMenuItem(String title, void Function(String) onOptionSelect) {
   return PopupMenuItem(
     onTap: () {
       onOptionSelect(title);

@@ -4,6 +4,7 @@ double? height;
 double? width;
 
 // App constants
+const noImg = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
 
 const GOOGLE_MAPS_APIKEY = 'AIzaSyD7KtQoq29-5TqELLdPBSQoqCD376-qGjA';
 
@@ -17,6 +18,14 @@ class MenuItem {
     this.iconData,
     required this.screen,
   });
+}
+
+class ProfileMenuItems {
+  final int id;
+  final String title;
+  final Widget screen;
+
+  ProfileMenuItems({required this.title, required this.screen, required this.id});
 }
 
 class BottomBarItem {
@@ -264,14 +273,47 @@ final List<Map<String, dynamic>> inventoryFilterOtpion = [
   },
 ];
 
-List<String> menuItems = [
-  'Profile',
-  'Team',
-  'Settings',
-  'Subscription',
-  'Help',
-  'Logout',
+List<String> inventoryDetailsOverviewItems = [
+  'Residential',
+  'Apartment',
+  'Floor Wise',
+  '3BHK + Study',
+  'Balcony',
+  'In house Gym',
+  '2 Car Parking',
+  'Pool',
+  'Power Backup',
+  'Power Backup',
+  'Power Backup',
+  'Power Backup',
+  'Power Backup',
+  'Power Backup',
+  'Power Backup',
 ];
+
+List<String> inventoryDetailsImageUrls = [
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdocsAtr24XQL5sydteSFs6VYwww-1bZQBOg&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHzKnIon6D6PeqCBGxlroFP-bQzAGTi8fUkg&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlt_j5QPoJpIFeO5ElGNRgoFQGYwM3Y7eotw&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZyIq1luTkp60-ZSjz98D6KW6g32vxDL8rsA&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQ1XKiCWaQNE_mEh7YXH7C8peeCk3QbeiXJA&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgZ3Sg7lP-k0OgUdnUtE0eNT7PmqmqklX8RA&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqxyJhTiyoXAk0KhLiBE6QBD2yyPyHHq1rfg&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlt_j5QPoJpIFeO5ElGNRgoFQGYwM3Y7eotw&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHzKnIon6D6PeqCBGxlroFP-bQzAGTi8fUkg&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgZ3Sg7lP-k0OgUdnUtE0eNT7PmqmqklX8RA&usqp=CAU',
+
+  // Add more image URLs as needed
+];
+
+// List<String> MenuItems = [
+//   'Profile',
+//   'Team',
+//   'Settings',
+//   'Subscription',
+//   'Help',
+//   'Logout',
+// ];
 
 
 // final _questions = [

@@ -6,6 +6,8 @@ import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/widgets/app/app_bar.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';
 import '../constants/firebase/userModel/broker_info.dart';
+import '../constants/utils/constants.dart';
+import '../screens/account_screens/common_screen.dart';
 
 final currentIndexProvider = StateProvider<int>((ref) {
   return 0;
@@ -17,11 +19,14 @@ class SmallScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = ref.watch(currentIndexProvider);
+    final selectedItem = ref.watch(selectedProfileItemProvider);
 
     return Scaffold(
       appBar: mobileAppBar(context, (selectedVal) {
-        if (selectedVal == 'Profile') {
-          ref.read(currentIndexProvider.notifier).update((state) => 3);
+        if (selectedVal != 'logout') {
+          // ref.read(currentIndexProvider.notifier).update((state) => 4);
+          final ProfileMenuItems profile = profileMenuItems.firstWhere((element) => element.title == selectedVal);
+          ref.read(selectedProfileItemProvider.notifier).setSelectedItem(profile);
         } else if (selectedVal == "Logout") {
           authentication.signOut().then(
                 (value) => Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen),
@@ -30,7 +35,10 @@ class SmallScreen extends ConsumerWidget {
       }),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: AppColor.primary,
-        onTap: (value) => ref.read(currentIndexProvider.notifier).update((state) => value),
+        onTap: (value) => {
+          ref.read(currentIndexProvider.notifier).update((state) => value),
+          ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null),
+        },
         currentIndex: currentIndex,
         items: List.generate(
           bottomBarItems.length,
@@ -43,7 +51,16 @@ class SmallScreen extends ConsumerWidget {
           ),
         ),
       ),
-      body: bottomBarItems[currentIndex].screen,
+      body: Stack(
+        children: [
+          if (selectedItem == null) ...[
+            bottomBarItems[currentIndex].screen,
+          ],
+          if (selectedItem != null) ...[
+            selectedItem.screen,
+          ],
+        ],
+      ),
       floatingActionButton: const CustomSpeedDialButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

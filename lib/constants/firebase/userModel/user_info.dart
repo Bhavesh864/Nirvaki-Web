@@ -3,22 +3,36 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
+import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
+import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 
 final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
-
+Box box = Hive.box("users");
+final currentUser = box.get(auth.currentUser!.uid);
 final FirebaseAuth auth = FirebaseAuth.instance;
 
 @HiveType(typeId: 0)
-class User {
+class User extends HiveObject {
+  @HiveField(0)
   String brokerId;
+  @HiveField(1)
   String userId;
+  @HiveField(2)
   String userfirstname;
+  @HiveField(3)
   String userlastname;
-  int mobile;
+  @HiveField(4)
+  String mobile;
+  @HiveField(5)
   String email;
+  @HiveField(6)
   String role;
+  @HiveField(7)
   String status;
+  @HiveField(8)
   String image;
+  @HiveField(9)
+  String whatsAppNumber;
 
   User(
       {required this.brokerId,
@@ -29,6 +43,7 @@ class User {
       required this.mobile,
       required this.email,
       required this.role,
+      required this.whatsAppNumber,
       required this.image});
 
   // Convert User object to a map
@@ -38,6 +53,7 @@ class User {
       'userfirstname': userfirstname,
       'userlastname': userlastname,
       'mobile': mobile,
+      "whatsAppNumber": whatsAppNumber,
       'email': email,
       'role': role,
       'userId': userId,
@@ -54,6 +70,7 @@ class User {
         userlastname: map['userlastname'],
         mobile: map['mobile'],
         email: map["email"],
+        whatsAppNumber: map["whatsAppNumber"],
         role: map['role'],
         userId: map['userId'],
         status: map['status'],
@@ -72,7 +89,7 @@ class User {
 
   static Future<List<User>> getAllUsers() async {
     try {
-      final QuerySnapshot querySnapshot = await usersCollection.get();
+      final QuerySnapshot querySnapshot = await usersCollection.where("brokerId", isEqualTo: currentUser["brokerId"]).get();
       final List<User> users = [];
       for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
         if (documentSnapshot.exists) {
@@ -92,26 +109,27 @@ class User {
 
   static Future<User?> getUser(String userId) async {
     try {
-      // Check if the user exists in the 'users' box in Hive
-      final usersBox = Hive.box('users');
-      final userFromHive = usersBox.get(userId);
-      print("userFromHive=====>$userFromHive");
-      if (userFromHive != null) {
-        return userFromHive;
+      final hiveUserData = UserHiveMethods.getdata(userId);
+      print("userhiveform=====>${hiveUserData}");
+      if (hiveUserData != null) {
+        final Map<String, dynamic> userDataMap = Map.from(hiveUserData);
+        final User user = User.fromMap(userDataMap);
+        return user;
       } else {
         final DocumentSnapshot documentSnapshot = await usersCollection.doc(userId).get();
         if (documentSnapshot.exists) {
           final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
           final User user = User.fromMap(data);
-          usersBox.put(userId, user);
+          UserHiveMethods.addData(key: userId, data: user.toMap());
           return user;
         } else {
           return null;
         }
       }
     } catch (error) {
+      print(error);
       if (kDebugMode) {
-        // print('Failed to get user: $error');
+        print('Failed to get user: $error');
       }
       return null;
     }
@@ -136,7 +154,7 @@ class User {
   }
 }
 
-Future<String?> signinwith(email, password) async {
+Future<String?> signinMethod({required email, required password}) async {
   String res = 'Something went wrong';
   try {
     await auth.signInWithEmailAndPassword(email: email, password: password);
@@ -146,35 +164,17 @@ Future<String?> signinwith(email, password) async {
     if (e.code == 'user-not-found') {
       return 'No user found for that email.';
     } else if (e.code == 'wrong-password') {
-      return 'Wrong password provided.';
+      return 'Wrong password provided for that user.';
+    } else if (e.code == "email-already-in-use") {
+      return "The account already exists for that email";
+    } else if (e.code == "weak-password") {
+      return "The password provided is too weak.";
     }
     return e.toString();
   } catch (E) {
     return E.toString();
   }
   // return null;
-}
-
-Future<String> signUpwith(email, password) async {
-  String res = 'Something went wrong';
-  try {
-    await auth.createUserWithEmailAndPassword(email: email, password: password);
-    // final User item = User(
-    //     brokerId: auth.currentUser!.uid,
-    //     status: 'accepted',
-    //     name: 'testing',
-    //     userId: auth.currentUser!.uid,
-    //     mobile: 123456789,
-    //     email: email,
-    //     role: 'broker',
-    //     image: '');
-    // await User.addUser(item);
-    res = "success";
-    return res;
-  } catch (er) {
-    // print(er);
-    return er.toString();
-  }
 }
 
 // void main() async {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 
-import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
+import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 
 import 'package:yes_broker/widgets/questionaries/assign_user.dart';
 
@@ -13,8 +13,7 @@ import '../../widgets/card/questions card/chip_button.dart';
 import '../firebase/questionModels/todo_question.dart';
 import '../utils/colors.dart';
 
-Widget buildTodoQuestions(
-    Question question, List<Screen> screensDataList, int currentScreenIndex, AllChipSelectedAnwers notify, Function nextQuestion, BuildContext context) {
+Widget buildTodoQuestions(Question question, List<Screen> screensDataList, int currentScreenIndex, AllChipSelectedAnwers notify, Function nextQuestion, BuildContext context) {
   if (question.questionOptionType == 'chip') {
     return Column(
       children: [
@@ -43,7 +42,7 @@ Widget buildTodoQuestions(
           showDatePicker(
             context: context,
             initialDate: DateTime.now(),
-            firstDate: DateTime(1900),
+            firstDate: DateTime.now(),
             lastDate: DateTime(DateTime.now().year + 1),
           ).then(
             (pickedDate) {

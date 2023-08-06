@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/screens/account_screens/common_screen.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
+import '../../constants/utils/constants.dart';
 
 class UserNotifier extends StateNotifier<User> {
   UserNotifier()
       : super(
           User(
+            whatsAppNumber: "whatsAppNumber",
             brokerId: 'brokerId',
             status: 'status',
             userfirstname: 'userfirstname',
             userlastname: 'userlastname',
             userId: 'userId',
-            mobile: 3434,
+            mobile: "3434",
             email: 'email',
             role: 'role',
             image: 'image',
@@ -59,7 +61,7 @@ class LargeScreenNavBar extends ConsumerWidget {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                largeScreenView(snapshot.data?.userfirstname),
+                largeScreenView("${snapshot.data?.userfirstname} ${snapshot.data?.userlastname}"),
                 PopupMenuButton(
                   onCanceled: () {},
                   onSelected: (value) {
@@ -67,9 +69,9 @@ class LargeScreenNavBar extends ConsumerWidget {
                   },
                   color: Colors.white.withOpacity(1),
                   offset: const Offset(200, 40),
-                  itemBuilder: (contex) => menuItems.map(
+                  itemBuilder: (contex) => profileMenuItems.map(
                     (e) {
-                      return popupMenuItem(e);
+                      return popupMenuItem(e.title);
                     },
                   ).toList(),
                   child: Container(
@@ -77,7 +79,7 @@ class LargeScreenNavBar extends ConsumerWidget {
                     width: 30,
                     margin: const EdgeInsets.only(right: 10),
                     decoration: BoxDecoration(
-                      image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(snapshot.data!.image.toString())),
+                      image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(snapshot.data!.image.isEmpty ? noImg : snapshot.data!.image)),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),

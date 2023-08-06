@@ -28,7 +28,7 @@ class AssignUser extends StatelessWidget {
         SizedBox(
           height: 45,
           child: StreamBuilder(
-              stream: FirebaseFirestore.instance.collection("users").snapshots(),
+              stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: currentUser["brokerId"]).snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data == null) {
                   return const CircularProgressIndicator.adaptive();
@@ -36,6 +36,7 @@ class AssignUser extends StatelessWidget {
                 final QuerySnapshot<Map<String, dynamic>> usersListSnapshot = snapshot.data!;
                 final List<User> usersList = usersListSnapshot.docs
                     .map((doc) => User(
+                          whatsAppNumber: doc["whatsAppNumber"],
                           brokerId: doc['brokerId'],
                           status: doc['status'],
                           userfirstname: doc['userfirstname'],
