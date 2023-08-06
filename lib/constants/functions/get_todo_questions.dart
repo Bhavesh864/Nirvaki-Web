@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 
-import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
+import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 
 import 'package:yes_broker/widgets/questionaries/assign_user.dart';
 

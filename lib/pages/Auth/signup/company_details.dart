@@ -5,11 +5,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/Customs/custom_fields.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/pages/Auth/signup/sign_up_state.dart';
+import 'package:yes_broker/riverpodstate/sign_up_state.dart';
 import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
 import 'package:yes_broker/pages/Auth/signup/upload_logo.dart';
 
-import 'package:yes_broker/pages/Auth/validation/basic_validation.dart';
+import 'package:yes_broker/constants/validation/basic_validation.dart';
 
 import '../../../Customs/dropdown_field.dart';
 import '../../../constants/utils/constants.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yes_broker/pages/Auth/signup/sign_up_method.dart';
+import 'package:yes_broker/constants/firebase/Methods/sign_up_method.dart';
 
 class SelectedSignupItems extends StateNotifier<List<Map<String, dynamic>>> {
   SelectedSignupItems() : super([]);

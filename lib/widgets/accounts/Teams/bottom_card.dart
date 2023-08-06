@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:yes_broker/widgets/Account_screens/Teams/bottom_card_header.dart';
-import 'package:yes_broker/widgets/Account_screens/Teams/bottom_card_main.dart';
+import 'package:yes_broker/widgets/accounts/Teams/bottom_card_header.dart';
+import 'package:yes_broker/widgets/accounts/Teams/bottom_card_main.dart';
 
 import '../../../constants/utils/constants.dart';
 
