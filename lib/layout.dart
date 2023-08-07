@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:yes_broker/constants/app_constant.dart';
+import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/pages/Auth/login/login_screen.dart';
@@ -10,7 +12,6 @@ import 'package:yes_broker/pages/smallscreen_dashboard.dart';
 class LayoutView extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   LayoutView({super.key});
-
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
@@ -19,6 +20,8 @@ class LayoutView extends StatelessWidget {
     return StreamBuilder(
         stream: authentication.authStateChanges(),
         builder: (context, snapshot) {
+          final token = UserHiveMethods.getdata("token");
+          AppConst.setAccessToken(token);
           return Scaffold(
             body: ScreenTypeLayout.builder(
               breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),

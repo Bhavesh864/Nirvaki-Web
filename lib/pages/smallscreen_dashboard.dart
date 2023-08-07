@@ -5,6 +5,7 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/widgets/app/app_bar.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';
+import '../constants/firebase/Hive/hive_methods.dart';
 import '../constants/firebase/userModel/broker_info.dart';
 import '../constants/utils/constants.dart';
 import '../screens/account_screens/common_screen.dart';
@@ -31,6 +32,8 @@ class SmallScreen extends ConsumerWidget {
           authentication.signOut().then(
                 (value) => Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen),
               );
+          UserHiveMethods.deleteData(authentication.currentUser?.uid);
+          UserHiveMethods.deleteData("token");
         }
       }),
       bottomNavigationBar: BottomNavigationBar(

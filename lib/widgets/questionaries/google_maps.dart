@@ -7,6 +7,7 @@ class CustomGoogleMap extends StatefulWidget {
   final String cityName;
   final String address1;
   final String address2;
+  final bool isReadOnly;
   final void Function(LatLng) onLatLngSelected;
 
   const CustomGoogleMap({
@@ -16,6 +17,7 @@ class CustomGoogleMap extends StatefulWidget {
     required this.cityName,
     required this.address1,
     required this.address2,
+    this.isReadOnly = false,
   }) : super(key: key);
 
   @override
@@ -61,12 +63,14 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
             target: location ?? const LatLng(20.5937, 78.9629),
             zoom: 15,
           ),
-          onTap: (latLng) {
-            setState(() {
-              location = latLng;
-            });
-            widget.onLatLngSelected(location!);
-          },
+          onTap: widget.isReadOnly
+              ? null
+              : (latLng) {
+                  setState(() {
+                    location = latLng;
+                  });
+                  widget.onLatLngSelected(location!);
+                },
           markers: location != null
               ? <Marker>{
                   Marker(

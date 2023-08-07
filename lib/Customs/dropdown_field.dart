@@ -14,7 +14,7 @@ class DropDownField extends StatefulWidget {
 
 class _DropDownFieldState extends State<DropDownField> {
   String? errorText;
-  var selectedValues;
+  String? selectedValues;
 
   void validateDropdown() {
     if (selectedValues == null) {

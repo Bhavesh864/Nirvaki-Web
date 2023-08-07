@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:yes_broker/constants/utils/constants.dart';
+
 import 'package:yes_broker/screens/account_screens/common_screen.dart';
 import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
@@ -56,7 +56,7 @@ AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect) 
   );
 }
 
-PopupMenuItem popupMenuItem(String title, void Function(String) onOptionSelect) {
+PopupMenuItem popupMenuItem(String title, void Function(String) onOptionSelect, {IconData icon = Icons.abc, bool showicon = false}) {
   return PopupMenuItem(
     onTap: () {
       onOptionSelect(title);
@@ -71,7 +71,16 @@ PopupMenuItem popupMenuItem(String title, void Function(String) onOptionSelect) 
           color: AppColor.secondary,
           borderRadius: BorderRadius.circular(5),
         ),
-        child: Text(title),
+        child: Row(
+          children: [
+            if (showicon)
+              Padding(
+                padding: const EdgeInsets.only(right: 5.0),
+                child: Icon(icon),
+              ),
+            Text(title),
+          ],
+        ),
       ),
     ),
   );

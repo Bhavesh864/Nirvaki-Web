@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 
 import 'package:yes_broker/screens/account_screens/common_screen.dart';
 import '../../constants/firebase/userModel/user_info.dart';
@@ -35,6 +36,7 @@ class LargeScreenNavBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final token = AppConst.getAccessToken();
     return Container(
       height: 70,
       margin: const EdgeInsets.only(bottom: 5, right: 5),
@@ -50,7 +52,7 @@ class LargeScreenNavBar extends ConsumerWidget {
         color: Colors.white,
       ),
       child: FutureBuilder(
-        future: User.getUser(auth.currentUser!.uid),
+        future: User.getUser(token!),
         builder: (context, snapshot) {
           // if (snapshot.connectionState == ConnectionState.waiting) {
           //   return const Center(child: CircularProgressIndicator());
@@ -114,6 +116,13 @@ PopupMenuItem popupMenuItem(String title) {
   );
 }
 
+String capitalizeFirstLetter(String input) {
+  if (input.isEmpty) {
+    return input;
+  }
+  return input[0].toUpperCase() + input.substring(1);
+}
+
 Widget largeScreenView(name) {
   return Container(
     padding: const EdgeInsets.only(left: 10),
@@ -122,7 +131,7 @@ Widget largeScreenView(name) {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CustomText(
-          title: 'Welcome, $name',
+          title: 'Welcome, ${capitalizeFirstLetter(name)}',
           fontWeight: FontWeight.bold,
         ),
         Center(
