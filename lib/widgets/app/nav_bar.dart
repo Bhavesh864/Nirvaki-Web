@@ -116,6 +116,13 @@ PopupMenuItem popupMenuItem(String title) {
   );
 }
 
+String capitalizeFirstLetter(String input) {
+  if (input.isEmpty) {
+    return input;
+  }
+  return input[0].toUpperCase() + input.substring(1);
+}
+
 Widget largeScreenView(name) {
   return Container(
     padding: const EdgeInsets.only(left: 10),
@@ -124,7 +131,7 @@ Widget largeScreenView(name) {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CustomText(
-          title: 'Welcome, $name',
+          title: 'Welcome, ${capitalizeFirstLetter(name)}',
           fontWeight: FontWeight.bold,
         ),
         Center(

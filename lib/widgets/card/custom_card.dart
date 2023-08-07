@@ -20,7 +20,6 @@ class CustomCard extends StatefulWidget {
 class _CustomCardState extends State<CustomCard> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getdata();
   }

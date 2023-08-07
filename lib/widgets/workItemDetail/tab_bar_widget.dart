@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import '../../constants/utils/colors.dart';
 
 class TabBarWidget extends StatelessWidget {
+  final TabController tabviewController;
+  final Function(int) onTabChanged;
+
   const TabBarWidget({
     super.key,
     required this.tabviewController,
+    required this.onTabChanged,
   });
-
-  final TabController tabviewController;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +24,9 @@ class TabBarWidget extends StatelessWidget {
         ),
       ),
       child: TabBar(
+        onTap: (value) {
+          onTabChanged(value);
+        },
         controller: tabviewController,
         labelColor: Colors.white,
         labelStyle: const TextStyle(
