@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/Customs/snackbar.dart';
 
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
@@ -41,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 setState(() {
                   isloading = false;
                 }),
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value!))),
+                customSnackBar(context: context, text: value!)
               }
           });
     }
