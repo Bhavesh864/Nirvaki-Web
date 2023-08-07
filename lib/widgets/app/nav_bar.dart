@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import 'package:yes_broker/screens/account_screens/common_screen.dart';
 import '../../constants/firebase/userModel/user_info.dart';
@@ -114,6 +115,13 @@ PopupMenuItem popupMenuItem(String title) {
   );
 }
 
+String capitalizeFirstLetter(String input) {
+  if (input.isEmpty) {
+    return input;
+  }
+  return input[0].toUpperCase() + input.substring(1);
+}
+
 Widget largeScreenView(name) {
   return Container(
     padding: const EdgeInsets.only(left: 10),
@@ -122,7 +130,7 @@ Widget largeScreenView(name) {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CustomText(
-          title: 'Welcome, $name',
+          title: 'Welcome, ${capitalizeFirstLetter(name)}',
           fontWeight: FontWeight.bold,
         ),
         Center(

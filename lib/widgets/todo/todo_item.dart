@@ -98,7 +98,7 @@ class _TodoItemState extends State<TodoItem> {
                                 padding: EdgeInsets.zero,
                                 color: Colors.white.withOpacity(1),
                                 offset: const Offset(10, 40),
-                                itemBuilder: (context) => dropDownListData.map((e) => popupMenuItem(e.toString())).toList(),
+                                itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
                                 child: CustomChip(
                                   label: Row(
                                     children: [

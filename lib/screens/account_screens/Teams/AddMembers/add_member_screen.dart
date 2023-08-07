@@ -23,7 +23,7 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
   final _lastNameController = TextEditingController();
   final _mobileController = TextEditingController();
   final _emailController = TextEditingController();
-  var role;
+  dynamic role;
   void backToTeamScreen() {
     if (Responsive.isMobile(context)) {
       Navigator.of(context).pop();
