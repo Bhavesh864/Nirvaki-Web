@@ -65,6 +65,7 @@ class LargeScreen extends ConsumerWidget {
                   } else if (selectedVal == "Logout") {
                     authentication.signOut().then((value) => {Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen)});
                     UserHiveMethods.deleteData(authentication.currentUser?.uid);
+                    UserHiveMethods.deleteData("token");
                   }
                 }),
                 Expanded(

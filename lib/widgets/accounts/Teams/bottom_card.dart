@@ -15,7 +15,7 @@ class BottomCard extends StatelessWidget {
       elevation: 5,
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       child: Container(
-        width: w * 0.7,
+        // width: w,
         padding: const EdgeInsets.all(16),
         child: Padding(
           padding: const EdgeInsets.all(8),
