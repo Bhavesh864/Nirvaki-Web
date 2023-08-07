@@ -17,22 +17,27 @@ class ContactInformation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CustomText(
-              title: '${customerinfo.firstname} ${customerinfo.lastname}',
-              fontWeight: FontWeight.w600,
-              size: 20,
-            ),
-            const CustomChip(
-              label: Icon(
-                Icons.more_vert,
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CustomText(
+                title: '${customerinfo.firstname} ${customerinfo.lastname}',
+                fontWeight: FontWeight.w600,
+                size: 20,
               ),
-              paddingHorizontal: 3,
-            ),
-          ],
+              const CustomChip(
+                label: Icon(
+                  Icons.more_vert,
+                ),
+                paddingHorizontal: 3,
+              ),
+            ],
+          ),
         ),
         ListTile(
           contentPadding: const EdgeInsets.all(0),

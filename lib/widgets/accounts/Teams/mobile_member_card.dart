@@ -45,8 +45,8 @@ class MobileMemberCard extends StatelessWidget {
                           icon: const Icon(Icons.edit),
                         ),
                       ),
-                      SizedBox(width: 3),
-                      Text("200"),
+                      const SizedBox(width: 3),
+                      const Text("200"),
                     ],
                   ),
                 ],
@@ -61,6 +61,5 @@ class MobileMemberCard extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }

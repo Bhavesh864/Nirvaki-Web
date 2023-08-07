@@ -129,7 +129,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           margin: const EdgeInsets.only(bottom: 5),
                           child: CustomTextInput(controller: emailcontroller, labelText: 'Email address', validator: validateEmail),
                         ),
-                        CustomTextInput(controller: passwordcontroller, labelText: 'Password', obscureText: true, rightIcon: Icons.remove_red_eye, validator: validatePassword),
+                        CustomTextInput(
+                            controller: passwordcontroller, labelText: 'Password', obscureText: true, rightIcon: Icons.remove_red_eye, validator: validatePassword),
                         const SizedBox(height: 10),
                         isloading
                             ? const Center(child: CircularProgressIndicator.adaptive())
@@ -145,7 +146,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         const CustomForgetPassword(),
                         const SizedBox(height: 10),
                         CustomSignUpNow(onPressSignUp: () {
-                          print('object');
                           Navigator.pushNamed(context, AppRoutes.singupscreen);
                         }),
                       ],

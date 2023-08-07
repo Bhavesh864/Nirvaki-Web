@@ -9,7 +9,6 @@ class TitleCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final w = MediaQuery.of(context).size.width;
     return Card(
       elevation: 5,
       margin: const EdgeInsets.all(10),
