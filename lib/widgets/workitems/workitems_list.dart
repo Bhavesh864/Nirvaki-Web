@@ -19,10 +19,10 @@ class WorkItemsList extends ConsumerStatefulWidget {
   const WorkItemsList({super.key, this.headerShow = true, required this.title, required this.getCardDetails, this.isScrollable = true});
 
   @override
-  _WorkItemsListState createState() => _WorkItemsListState();
+  WorkItemsListState createState() => WorkItemsListState();
 }
 
-class _WorkItemsListState extends ConsumerState<WorkItemsList> {
+class WorkItemsListState extends ConsumerState<WorkItemsList> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;

@@ -13,10 +13,10 @@ class InventoryScreen extends ConsumerStatefulWidget {
   const InventoryScreen({super.key});
 
   @override
-  _InventoryScreenState createState() => _InventoryScreenState();
+  InventoryScreenState createState() => InventoryScreenState();
 }
 
-class _InventoryScreenState extends ConsumerState<InventoryScreen> {
+class InventoryScreenState extends ConsumerState<InventoryScreen> {
   bool isFilterOpen = false;
 
   Future<List<CardDetails>>? future;

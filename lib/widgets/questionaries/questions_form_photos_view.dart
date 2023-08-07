@@ -16,10 +16,10 @@ class PhotosViewForm extends ConsumerStatefulWidget {
   const PhotosViewForm(this.notify, this.id, {super.key});
 
   @override
-  _PhotosViewFormState createState() => _PhotosViewFormState();
+  PhotosViewFormState createState() => PhotosViewFormState();
 }
 
-class _PhotosViewFormState extends ConsumerState<PhotosViewForm> {
+class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
   List<Uint8List?> webImages = [];
   int numberOfColumns = 5;
   List<File?> images = [];
@@ -140,7 +140,7 @@ class _PhotosViewFormState extends ConsumerState<PhotosViewForm> {
           images[index] = null;
         });
 
-        print('for Web  ' + pickedImage.path);
+        print('for Web   ${pickedImage.path}');
 
         uploadImageToFirebase(index, f);
 
@@ -154,7 +154,7 @@ class _PhotosViewFormState extends ConsumerState<PhotosViewForm> {
           images[index] = selected;
           webImages[index] = null;
         });
-        print('for mobile  ' + pickedImage.path);
+        print('for mobile  ${pickedImage.path}');
 
         uploadImageToFirebase(index, selected);
       }

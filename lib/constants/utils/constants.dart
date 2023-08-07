@@ -6,7 +6,7 @@ double? width;
 // App constants
 const noImg = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
 
-const GOOGLE_MAPS_APIKEY = 'AIzaSyD7KtQoq29-5TqELLdPBSQoqCD376-qGjA';
+// const GOOGLE_MAPS_APIKEY = 'AIzaSyD7KtQoq29-5TqELLdPBSQoqCD376-qGjA';
 
 class MenuItem {
   final String label;
@@ -210,7 +210,7 @@ Color taskStatusColor(String title) {
   }
 }
 
-List dropDownListData = [
+List dropDownStatusDataList = [
   'New',
   'Location Finalised',
   'Negotiation',
@@ -218,6 +218,11 @@ List dropDownListData = [
   'Agreement',
   'Converted',
   'Closed',
+];
+
+List<Map<String, dynamic>> dropDownDetailsList = [
+  {'title': 'Edit', 'icon': Icons.edit},
+  {'title': 'Preview Public View', 'icon': Icons.remove_red_eye_rounded}
 ];
 
 String defaultValue = "New";

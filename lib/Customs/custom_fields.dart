@@ -64,10 +64,8 @@ class CustomTextInputState extends State<CustomTextInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // height: widget.validator == null ? 40 : 65,
+    return SizedBox(
       height: 65,
-      // margin: const EdgeInsets.only(bottom: 15),
       child: TextFormField(
         enabled: widget.enabled,
         onTap: widget.ontap,
