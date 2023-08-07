@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
-import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 
 final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
 Box box = Hive.box("users");
@@ -110,7 +110,7 @@ class User extends HiveObject {
   static Future<User?> getUser(String userId) async {
     try {
       final hiveUserData = UserHiveMethods.getdata(userId);
-      print("userhiveform=====>${hiveUserData}");
+      print("userhiveform=====>$hiveUserData");
       if (hiveUserData != null) {
         final Map<String, dynamic> userDataMap = Map.from(hiveUserData);
         final User user = User.fromMap(userDataMap);
@@ -158,6 +158,11 @@ Future<String?> signinMethod({required email, required password}) async {
   String res = 'Something went wrong';
   try {
     await auth.signInWithEmailAndPassword(email: email, password: password);
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    UserHiveMethods.addData(key: "token", data: uid);
+    final token = UserHiveMethods.getdata("token");
+    AppConst.setAccessToken(token);
+    print(token);
     res = "success";
     return res;
   } on FirebaseAuthException catch (e) {

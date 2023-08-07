@@ -10,6 +10,7 @@ class TopSerachBar extends StatefulWidget {
   final VoidCallback onFilterOpen;
 
   const TopSerachBar({
+    super.key,
     required this.isMobile,
     required this.isFilterOpen,
     required this.onFilterClose,

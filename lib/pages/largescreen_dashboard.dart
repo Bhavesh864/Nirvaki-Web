@@ -12,7 +12,7 @@ import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';
 
 final largeScreenTabsProvider = StateProvider<int>((ref) {
-  return 7;
+  return 0;
 });
 
 class LargeScreen extends ConsumerWidget {
@@ -65,6 +65,7 @@ class LargeScreen extends ConsumerWidget {
                   } else if (selectedVal == "Logout") {
                     authentication.signOut().then((value) => {Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen)});
                     UserHiveMethods.deleteData(authentication.currentUser?.uid);
+                    UserHiveMethods.deleteData("token");
                   }
                 }),
                 Expanded(

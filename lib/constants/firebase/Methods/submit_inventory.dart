@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 import 'package:random_string/random_string.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' as cards;
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
@@ -65,14 +66,14 @@ Future<String> submitInventoryAndcardDetails(state) async {
   final lockinperiod = getDataById(state, 52);
   final commercialphotos = getDataById(state, 53);
   Box box = Hive.box("users");
-  final currentUser = box.get(authentication.currentUser!.uid);
+  final currentUser = box.get(AppConst.getAccessToken());
 
   final cards.CardDetails card = cards.CardDetails(
       workitemId: "IN$randomId",
       status: "New",
       cardCategory: inventoryCategory,
       linkedItemType: "IN",
-      brokerid: authentication.currentUser!.uid,
+      brokerid: currentUser["brokerid"],
       cardType: "IN",
       cardTitle: "$propertyCategory $propertyKind-$propertyCity",
       cardDescription: "Want to $inventoryCategory her $bedrooms BHK for 70 L rupees",
@@ -102,7 +103,7 @@ Future<String> submitInventoryAndcardDetails(state) async {
       villatype: villaType,
       typeofschool: typeofschool,
       transactiontype: transactionType,
-      brokerid: authentication.currentUser!.uid,
+      brokerid: currentUser["brokerid"],
       inventorycategory: inventoryCategory,
       propertycategory: propertyCategory,
       inventoryType: inventoryType,

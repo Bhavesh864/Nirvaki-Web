@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 import 'package:random_string/random_string.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
@@ -61,13 +62,13 @@ Future<String> submitLeadAndCardDetails(state) async {
   final hospitalrooms = getDataById(state, 45);
   final widthofRoad = getDataById(state, 46);
   Box box = Hive.box("users");
-  final currentUser = box.get(authentication.currentUser!.uid);
+  final currentUser = box.get(AppConst.getAccessToken());
   final cards.CardDetails card = cards.CardDetails(
       workitemId: "LD$randomId",
       status: "New",
       cardCategory: leadCategory,
       linkedItemType: "LD",
-      brokerid: authentication.currentUser!.uid,
+      brokerid: currentUser["brokerId"],
       cardType: "LD",
       cardTitle: "$propertyCategory $propertyKind-$propertyCity",
       cardDescription: "Want to $leadCategory her $bedrooms BHK for $budgetPrice $budgetFigures rupees",
@@ -101,7 +102,7 @@ Future<String> submitLeadAndCardDetails(state) async {
       preferredlocation: latlng,
       typeofschool: typeofschool,
       transactiontype: transactionType,
-      brokerid: authentication.currentUser!.uid,
+      brokerid: currentUser["brokerId"],
       leadcategory: leadCategory,
       propertycategory: propertyCategory,
       leadType: leadType,

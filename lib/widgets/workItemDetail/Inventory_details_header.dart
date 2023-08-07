@@ -13,8 +13,8 @@ class InventoryDetailsHeader extends StatelessWidget {
   final String propertyCategory;
   final String status;
   final String type;
-  final String price;
-  final String unit;
+  final String? price;
+  final String? unit;
   const InventoryDetailsHeader(
       {super.key,
       required this.title,
@@ -55,18 +55,31 @@ class InventoryDetailsHeader extends StatelessWidget {
                 ),
                 paddingHorizontal: 3,
               ),
-              const CustomChip(
-                label: Icon(
-                  Icons.more_vert,
+              PopupMenuButton(
+                tooltip: '',
+                initialValue: status,
+                splashRadius: 0,
+                padding: EdgeInsets.zero,
+                color: Colors.white.withOpacity(1),
+                offset: const Offset(10, 40),
+                itemBuilder: (context) => dropDownDetailsList
+                    .map(
+                      (e) => popupMenuItem(e['title'].toString(), (e) {}, showicon: true, icon: e['icon']),
+                    )
+                    .toList(),
+                child: const CustomChip(
+                  label: Icon(
+                    Icons.more_vert,
+                  ),
+                  paddingHorizontal: 3,
                 ),
-                paddingHorizontal: 3,
               ),
             ],
           ),
         ),
         if (!Responsive.isMobile(context))
           CustomText(
-            title: '$price$unit',
+            title: price != null ? '$price$unit' : '50k/month',
             color: AppColor.primary,
           )
       ],
@@ -125,7 +138,7 @@ class HeaderChips extends StatelessWidget {
             padding: EdgeInsets.zero,
             color: Colors.white.withOpacity(1),
             offset: const Offset(10, 40),
-            itemBuilder: (context) => dropDownListData.map((e) => popupMenuItem(e.toString(), (e) {})).toList(),
+            itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString(), (e) {})).toList(),
             child: CustomChip(
               label: Row(
                 children: [

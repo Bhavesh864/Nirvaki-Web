@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 
 final CollectionReference cardDetailsCollection = FirebaseFirestore.instance.collection('cardDetails');
+Box box = Hive.box("users");
+final currentUser = box.get(AppConst.getAccessToken());
 
 @HiveType(typeId: 1)
 class CardDetails {
@@ -42,6 +44,8 @@ class CardDetails {
   Customerinfo? customerinfo;
   @HiveField(17)
   Timestamp? createdate;
+  @HiveField(18)
+  String? linkedItemId;
   CardDetails(
       {this.cardType,
       required this.workitemId,
@@ -59,12 +63,16 @@ class CardDetails {
       this.propertyarearange,
       this.propertypricerange,
       this.duedate,
+      this.linkedItemId,
       this.createdby,
       this.customerinfo});
 
   CardDetails.fromJson(Map<String, dynamic> json) {
     if (json["cardType"] is String) {
       cardType = json["cardType"];
+    }
+    if (json["linkedItemId"] is String) {
+      linkedItemId = json["linkedItemId"];
     }
     if (json["linkedItemType"] is String) {
       linkedItemType = json["linkedItemType"];
@@ -132,6 +140,7 @@ class CardDetails {
     data["managerid"] = managerid;
     data["createdate"] = createdate;
     data["linkedItemType"] = linkedItemType;
+    data["linkedItemId"] = linkedItemId;
 
     if (assignedto != null) {
       data["assignedto"] = assignedto?.map((e) => e.toJson()).toList();
@@ -169,6 +178,20 @@ class CardDetails {
   static Future<List<CardDetails>> getCardDetails() async {
     try {
       final QuerySnapshot querySnapshot = await cardDetailsCollection.orderBy("createdate", descending: true).get();
+      final List<CardDetails> inventoryItems = querySnapshot.docs.map((doc) {
+        final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        return CardDetails.fromJson(data);
+      }).toList();
+      return inventoryItems;
+    } catch (error) {
+      print('Failed to get Inventory items: $error');
+      return [];
+    }
+  }
+
+  static Future<List<CardDetails>> getcardByInventoryId(id) async {
+    try {
+      final QuerySnapshot querySnapshot = await cardDetailsCollection.orderBy("createdate", descending: true).where("linkedItemId", isEqualTo: id).get();
       final List<CardDetails> inventoryItems = querySnapshot.docs.map((doc) {
         final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         return CardDetails.fromJson(data);
