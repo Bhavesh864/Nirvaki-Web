@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 import 'package:random_string/random_string.dart';
+
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
-
-import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' as cards;
-
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
 final randomId = randomNumeric(5);
@@ -72,11 +70,14 @@ Future<String> submitLeadAndCardDetails(state) async {
       cardType: "LD",
       cardTitle: "$propertyCategory $propertyKind-$propertyCity",
       cardDescription: "Want to $leadCategory her $bedrooms BHK for $budgetPrice $budgetFigures rupees",
-      customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
+      customerinfo:
+          cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
       cardStatus: "New",
-      assignedto: [cards.Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)],
-      createdby:
-          cards.Createdby(userfirstname: currentUser["userfirstname"], userid: currentUser["userId"], userlastname: currentUser["userlastname"], userimage: currentUser["image"]),
+      assignedto: [
+        cards.Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)
+      ],
+      createdby: cards.Createdby(
+          userfirstname: currentUser["userfirstname"], userid: currentUser["userId"], userlastname: currentUser["userlastname"], userimage: currentUser["image"]),
       createdate: Timestamp.now(),
       propertyarearange: cards.Propertyarearange(arearangestart: expectedArea, unit: areaUnit),
       roomconfig: cards.Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom),
@@ -111,17 +112,19 @@ Future<String> submitLeadAndCardDetails(state) async {
       possessiondate: possession,
       plotdetails: Plotdetails(boundarywall: boundaryWall, opensides: openSides),
       amenities: amenities,
-      preferredlocality: Preferredlocality(state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, prefferedfloornumber: floorNumber),
+      preferredlocality:
+          Preferredlocality(state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, prefferedfloornumber: floorNumber),
       propertyarearange: Propertyarearange(unit: areaUnit, arearangestart: expectedArea),
       propertypricerange: Propertypricerange(unit: budgetFigures, arearangestart: budgetPrice),
       reservedparking: Reservedparking(covered: coveredparking),
-      customerinfo: Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo ?? mobileNo),
+      customerinfo:
+          Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo ?? mobileNo),
       roomconfig: Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom, balconies: balconies, bathroom: bathrooms),
       comments: comments,
       createdate: Timestamp.now(),
       assignedto: [Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)],
-      createdby:
-          Createdby(userfirstname: currentUser["userfirstname"], userid: currentUser["userId"], userlastname: currentUser["userlastname"], userimage: currentUser["image"]));
+      createdby: Createdby(
+          userfirstname: currentUser["userfirstname"], userid: currentUser["userId"], userlastname: currentUser["userlastname"], userimage: currentUser["image"]));
 
   await cards.CardDetails.addCardDetails(card).then((value) => {res = "success"});
   await LeadDetails.addLeadDetails(lead).then((value) => {res = "success"});

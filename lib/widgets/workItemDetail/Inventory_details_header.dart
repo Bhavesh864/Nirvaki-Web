@@ -3,6 +3,7 @@ import 'package:yes_broker/Customs/responsive.dart';
 
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
+import '../../constants/app_constant.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
 import '../app/app_bar.dart';
@@ -15,15 +16,19 @@ class InventoryDetailsHeader extends StatelessWidget {
   final String type;
   final String? price;
   final String? unit;
-  const InventoryDetailsHeader(
-      {super.key,
-      required this.title,
-      required this.category,
-      required this.propertyCategory,
-      required this.status,
-      required this.type,
-      required this.price,
-      required this.unit});
+  final Function setState;
+
+  const InventoryDetailsHeader({
+    super.key,
+    required this.title,
+    required this.category,
+    required this.propertyCategory,
+    required this.status,
+    required this.type,
+    required this.price,
+    required this.unit,
+    required this.setState,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +36,6 @@ class InventoryDetailsHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         SizedBox(
-          // width: 430,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -64,7 +68,12 @@ class InventoryDetailsHeader extends StatelessWidget {
                 offset: const Offset(10, 40),
                 itemBuilder: (context) => dropDownDetailsList
                     .map(
-                      (e) => popupMenuItem(e['title'].toString(), (e) {}, showicon: true, icon: e['icon']),
+                      (e) => popupMenuItem(e['title'].toString(), (e) {
+                        if (e.contains('Public')) {
+                          AppConst.setPublicView(!AppConst.getPublicView());
+                          setState();
+                        }
+                      }, showicon: true, icon: e['icon']),
                     )
                     .toList(),
                 child: const CustomChip(
@@ -129,35 +138,36 @@ class HeaderChips extends StatelessWidget {
             color: AppColor.primary,
           ),
         ),
-        SizedBox(
-          width: 60,
-          child: PopupMenuButton(
-            tooltip: '',
-            initialValue: status,
-            splashRadius: 0,
-            padding: EdgeInsets.zero,
-            color: Colors.white.withOpacity(1),
-            offset: const Offset(10, 40),
-            itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString(), (e) {})).toList(),
-            child: CustomChip(
-              label: Row(
-                children: [
-                  CustomText(
-                    title: selectedOption,
-                    color: taskStatusColor(selectedOption),
-                    size: 10,
-                  ),
-                  Icon(
-                    Icons.expand_more,
-                    size: 18,
-                    color: taskStatusColor(selectedOption),
-                  ),
-                ],
+        if (!AppConst.getPublicView())
+          SizedBox(
+            width: 60,
+            child: PopupMenuButton(
+              tooltip: '',
+              initialValue: status,
+              splashRadius: 0,
+              padding: EdgeInsets.zero,
+              color: Colors.white.withOpacity(1),
+              offset: const Offset(10, 40),
+              itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString(), (e) {})).toList(),
+              child: CustomChip(
+                label: Row(
+                  children: [
+                    CustomText(
+                      title: selectedOption,
+                      color: taskStatusColor(selectedOption),
+                      size: 10,
+                    ),
+                    Icon(
+                      Icons.expand_more,
+                      size: 18,
+                      color: taskStatusColor(selectedOption),
+                    ),
+                  ],
+                ),
+                color: taskStatusColor(selectedOption).withOpacity(0.1),
               ),
-              color: taskStatusColor(selectedOption).withOpacity(0.1),
             ),
           ),
-        ),
       ],
     );
   }

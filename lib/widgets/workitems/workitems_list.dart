@@ -5,7 +5,7 @@ import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/providers/selected_workitem.dart';
+import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/card/custom_card.dart';
 
 import '../../pages/largescreen_dashboard.dart';

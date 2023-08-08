@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/app_constant.dart';
@@ -51,47 +53,47 @@ class LargeScreenNavBar extends ConsumerWidget {
         ],
         color: Colors.white,
       ),
-      child: FutureBuilder(
-        future: User.getUser(token!),
-        builder: (context, snapshot) {
-          // if (snapshot.connectionState == ConnectionState.waiting) {
-          //   return const Center(child: CircularProgressIndicator());
-          // }
-          if (snapshot.hasData) {
-            ref.read(userProvider).state = snapshot.data!;
+      // child: FutureBuilder(
+      //   future: User.getUser(token!),
+      //   builder: (context, snapshot) {
+      //     // if (snapshot.connectionState == ConnectionState.waiting) {
+      //     //   return const Center(child: CircularProgressIndicator());
+      //     // }
+      //     if (snapshot.hasData) {
+      //       ref.read(userProvider).state = snapshot.data!;
 
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                largeScreenView("${snapshot.data?.userfirstname} ${snapshot.data?.userlastname}"),
-                PopupMenuButton(
-                  onCanceled: () {},
-                  onSelected: (value) {
-                    onOptionSelect(value);
-                  },
-                  color: Colors.white.withOpacity(1),
-                  offset: const Offset(200, 40),
-                  itemBuilder: (contex) => profileMenuItems.map(
-                    (e) {
-                      return popupMenuItem(e.title);
-                    },
-                  ).toList(),
-                  child: Container(
-                    height: 30,
-                    width: 30,
-                    margin: const EdgeInsets.only(right: 10),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(snapshot.data!.image.isEmpty ? noImg : snapshot.data!.image)),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }
-          return const SizedBox();
-        },
-      ),
+      //       return Row(
+      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //         children: [
+      //           largeScreenView("${snapshot.data?.userfirstname} ${snapshot.data?.userlastname}"),
+      //           PopupMenuButton(
+      //             onCanceled: () {},
+      //             onSelected: (value) {
+      //               onOptionSelect(value);
+      //             },
+      //             color: Colors.white.withOpacity(1),
+      //             offset: const Offset(200, 40),
+      //             itemBuilder: (contex) => profileMenuItems.map(
+      //               (e) {
+      //                 return popupMenuItem(e.title);
+      //               },
+      //             ).toList(),
+      //             child: Container(
+      //               height: 30,
+      //               width: 30,
+      //               margin: const EdgeInsets.only(right: 10),
+      //               decoration: BoxDecoration(
+      //                 image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(snapshot.data!.image.isEmpty ? noImg : snapshot.data!.image)),
+      //                 borderRadius: BorderRadius.circular(10),
+      //               ),
+      //             ),
+      //           ),
+      //         ],
+      //       );
+      //     }
+      //     return const SizedBox();
+      //   },
+      // ),
     );
   }
 }

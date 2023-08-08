@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -167,7 +169,8 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                     notify,
                                                     nextQuestion,
                                                   ),
-                                                  if (i == screensDataList[index].questions.length - 1 && screensDataList[index].questions[i].questionOptionType != 'chip')
+                                                  if (i == screensDataList[index].questions.length - 1 &&
+                                                      screensDataList[index].questions[i].questionOptionType != 'chip')
                                                     Container(
                                                       margin: const EdgeInsets.only(top: 10),
                                                       alignment: Alignment.centerRight,
