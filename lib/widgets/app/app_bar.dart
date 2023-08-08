@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-
+import 'package:yes_broker/constants/app_constant.dart';
+import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/screens/account_screens/common_screen.dart';
 import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
-import '../../constants/utils/image_constants.dart';
 
 AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect) {
   // final width = MediaQuery.of(context).size.width;
-
   return AppBar(
     foregroundColor: Colors.black,
     scrolledUnderElevation: 0.0,
@@ -41,16 +41,23 @@ AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect) 
             return popupMenuItem(e.title, onOptionSelect);
           },
         ).toList(),
-        child: Container(
-          height: 30,
-          width: 30,
-          margin: const EdgeInsets.only(right: 10),
-          decoration: BoxDecoration(
-            image: const DecorationImage(image: AssetImage(profileImage)),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          // child: Text(width.toString()),
-        ),
+        child: FutureBuilder(
+            future: User.getUser(AppConst.getAccessToken().toString()),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Container(
+                  height: 30,
+                  width: 30,
+                  margin: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(snapshot.data!.image.isEmpty ? noImg : snapshot.data!.image.toString())),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  // child: Text(width.toString()),
+                );
+              }
+              return const SizedBox();
+            }),
       ),
     ],
   );
