@@ -8,6 +8,7 @@ import 'package:yes_broker/pages/Auth/set_new_password.dart';
 import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
 import 'package:yes_broker/pages/add_todo.dart';
 import 'package:yes_broker/screens/main_screens/inventory_details_screen.dart';
+import 'package:yes_broker/screens/main_screens/lead_details_screen.dart';
 
 // Local Files Imports
 import '../Customs/responsive.dart';
@@ -84,6 +85,10 @@ List<MenuItem> sideBarItems = [
     label: profilePageLabel,
     screen: const InventoryDetailsScreen(),
   ),
+  MenuItem(
+    label: profilePageLabel,
+    screen: const LeadDetailsScreen(),
+  ),
 ];
 
 List<BottomBarItem> bottomBarItems = [
@@ -117,13 +122,12 @@ class AppRoutes {
   static const String personalDetailsScreen = '/personal_details_screen';
   static const String companyDetailsScreen = '/company_details_screen';
   static const String inventoryDetailsScreen = '/inventory_details_screen';
-
+  static const String leadDetailsScreen = '/lead_details_screen';
   static const String addInventory = '/add_inventory_screen';
   static const String addLead = '/add_lead_screen';
   static const String addWorkItem = '/add_workItem_screen';
   static const String addTodo = '/add_todoItem_screen';
   static const String setNewPassword = '/setNewPassword';
-  static const String inventroyDetails = '/setNewPassword';
 
   static Map<String, WidgetBuilder> routesTable = {
     homeScreen: (context) => Responsive.isMobile(context) ? const SmallScreen() : const LargeScreen(),
@@ -138,5 +142,6 @@ class AppRoutes {
     addTodo: (context) => const AddTodo(),
     setNewPassword: (context) => const ChangePasswordPage(),
     inventoryDetailsScreen: (context) => const InventoryDetailsScreen(),
+    leadDetailsScreen: (context) => const LeadDetailsScreen(),
   };
 }

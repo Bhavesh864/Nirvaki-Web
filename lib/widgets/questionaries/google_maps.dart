@@ -79,7 +79,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
                   ),
                 }
               : {},
-          mapType: MapType.terrain,
+          mapType: MapType.normal,
         ),
       ),
     );
