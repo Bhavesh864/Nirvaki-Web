@@ -29,6 +29,15 @@ class AppConst {
     _accessToken = token;
   }
 
+  static bool _isPublicView = false;
+  static bool getPublicView() {
+    return _isPublicView;
+  }
+
+  static setPublicView(bool val) {
+    _isPublicView = val;
+  }
+
   static showConsoleLog(message) {
     if (kDebugMode) {
       print(message);

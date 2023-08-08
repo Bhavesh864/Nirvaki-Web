@@ -6,6 +6,7 @@ import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.da
 
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
+import '../../constants/app_constant.dart';
 
 class ContactInformation extends StatelessWidget {
   final Customerinfo customerinfo;
@@ -30,12 +31,13 @@ class ContactInformation extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 size: 20,
               ),
-              const CustomChip(
-                label: Icon(
-                  Icons.more_vert,
+              if (!AppConst.getPublicView())
+                const CustomChip(
+                  label: Icon(
+                    Icons.more_vert,
+                  ),
+                  paddingHorizontal: 3,
                 ),
-                paddingHorizontal: 3,
-              ),
             ],
           ),
         ),

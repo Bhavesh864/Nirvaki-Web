@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../constants/app_constant.dart';
 import '../../constants/utils/colors.dart';
 
 class AssignmentWidget extends StatelessWidget {
@@ -20,50 +21,51 @@ class AssignmentWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 17),
-          child: Row(
-            children: [
-              const Icon(Icons.add),
-              const Padding(
-                  padding: EdgeInsets.only(left: 4, top: 1, bottom: 1),
-                  child: Text("Added by ",
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ))),
-              Padding(
-                padding: const EdgeInsets.only(left: 6, top: 2),
-                child: Row(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(right: 5),
-                      height: 20,
-                      width: 20,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(image: NetworkImage(imageUrlCreatedBy), fit: BoxFit.fill),
-                        borderRadius: BorderRadius.circular(40),
+        if (!AppConst.getPublicView())
+          Padding(
+            padding: const EdgeInsets.only(top: 17),
+            child: Row(
+              children: [
+                const Icon(Icons.add),
+                const Padding(
+                    padding: EdgeInsets.only(left: 4, top: 1, bottom: 1),
+                    child: Text("Added by ",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ))),
+                Padding(
+                  padding: const EdgeInsets.only(left: 6, top: 2),
+                  child: Row(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(right: 5),
+                        height: 20,
+                        width: 20,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(image: NetworkImage(imageUrlCreatedBy), fit: BoxFit.fill),
+                          borderRadius: BorderRadius.circular(40),
+                        ),
                       ),
-                    ),
-                    Text(
-                      createdBy,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(
-                        color: AppColor.primary,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
+                      Text(
+                        createdBy,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                          color: AppColor.primary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              )
-            ],
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
         Padding(
           padding: const EdgeInsets.only(top: 18, bottom: 8),
           child: Row(
@@ -131,8 +133,9 @@ class AssignmentWidget extends StatelessWidget {
                                   )))
                         ])),
                     const Padding(
-                        padding: EdgeInsets.only(top: 15),
-                        child: Row(children: [
+                      padding: EdgeInsets.only(top: 15),
+                      child: Row(
+                        children: [
                           Padding(
                               padding: EdgeInsets.only(left: 6, top: 2),
                               child: Text("Gaurav Singh ",
@@ -143,7 +146,9 @@ class AssignmentWidget extends StatelessWidget {
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
                                   )))
-                        ])),
+                        ],
+                      ),
+                    ),
                     const Padding(
                       padding: EdgeInsets.only(top: 14),
                       child: Row(

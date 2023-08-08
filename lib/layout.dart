@@ -21,7 +21,9 @@ class LayoutView extends StatelessWidget {
         stream: authentication.authStateChanges(),
         builder: (context, snapshot) {
           final token = UserHiveMethods.getdata("token");
-          AppConst.setAccessToken(token);
+          // AppConst.setAccessToken(token);
+          // print('token $token');
+
           return Scaffold(
             body: ScreenTypeLayout.builder(
               breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),

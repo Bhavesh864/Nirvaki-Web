@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:hive_flutter/adapters.dart';
+
 import 'package:yes_broker/constants/app_constant.dart';
-import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
-import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart' as user;
 
 Future<String> sendInvitationEmail({
