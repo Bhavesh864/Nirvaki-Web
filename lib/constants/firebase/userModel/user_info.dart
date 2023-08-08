@@ -8,7 +8,7 @@ import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
 
 final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
 Box box = Hive.box("users");
-final currentUser = box.get(auth.currentUser!.uid);
+final currentUser = box.get(AppConst.getAccessToken());
 final FirebaseAuth auth = FirebaseAuth.instance;
 
 @HiveType(typeId: 0)
@@ -33,7 +33,10 @@ class User extends HiveObject {
   String image;
   @HiveField(9)
   String whatsAppNumber;
-
+  @HiveField(10)
+  String? managerid;
+  @HiveField(11)
+  String? managerName;
   User(
       {required this.brokerId,
       required this.status,
@@ -41,6 +44,8 @@ class User extends HiveObject {
       required this.userlastname,
       required this.userId,
       required this.mobile,
+      this.managerName,
+      this.managerid,
       required this.email,
       required this.role,
       required this.whatsAppNumber,
@@ -56,6 +61,8 @@ class User extends HiveObject {
       "whatsAppNumber": whatsAppNumber,
       'email': email,
       'role': role,
+      "managerid": managerid,
+      "managerName": managerName,
       'userId': userId,
       "status": status,
       'image': image
@@ -74,6 +81,8 @@ class User extends HiveObject {
         role: map['role'],
         userId: map['userId'],
         status: map['status'],
+        managerName: map["managerName"],
+        managerid: map["managerid"],
         image: map['image']);
   }
 //  -----------------------------Methods------------------------------------------------------------------->

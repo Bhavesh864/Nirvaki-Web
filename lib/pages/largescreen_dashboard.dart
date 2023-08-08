@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 
 import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
@@ -17,6 +18,13 @@ final largeScreenTabsProvider = StateProvider<int>((ref) {
 
 class LargeScreen extends ConsumerWidget {
   const LargeScreen({Key? key}) : super(key: key);
+  void userLogout(WidgetRef ref, BuildContext context) {
+    authentication.signOut().then((value) => {Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen)});
+    UserHiveMethods.deleteData(AppConst.getAccessToken());
+    UserHiveMethods.deleteData("token");
+    ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null);
+    ref.read(largeScreenTabsProvider.notifier).update((state) => 0);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -63,9 +71,7 @@ class LargeScreen extends ConsumerWidget {
                     final ProfileMenuItems profile = profileMenuItems.firstWhere((element) => element.title == selectedVal);
                     ref.read(selectedProfileItemProvider.notifier).setSelectedItem(profile);
                   } else if (selectedVal == "Logout") {
-                    authentication.signOut().then((value) => {Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen)});
-                    UserHiveMethods.deleteData(authentication.currentUser?.uid);
-                    UserHiveMethods.deleteData("token");
+                    userLogout(ref, context);
                   }
                 }),
                 Expanded(
