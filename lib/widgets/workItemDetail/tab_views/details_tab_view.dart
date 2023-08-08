@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 
 import '../../../Customs/custom_chip.dart';
 import '../../../Customs/custom_text.dart';
 import '../../../Customs/responsive.dart';
 import '../../../constants/app_constant.dart';
-import '../../../constants/firebase/detailsModels/inventory_details.dart';
+// import '../../../constants/firebase/detailsModels/inventory_details.dart';
 import '../../../constants/functions/workitems_detail_methods.dart';
 import '../../../constants/utils/constants.dart';
 import '../mapview_widget.dart';
 
 // ignore: must_be_immutable
 class DetailsTabView extends StatelessWidget {
-  final InventoryDetails data;
-  final List<XFile> pickedDocuments;
+  final dynamic data;
+  final List<PlatformFile> pickedDocuments;
   final List<String> selectedDocsName;
-  late XFile? selectedImageName;
+  late PlatformFile? selectedImageName;
+  final bool isLeadView;
 
   DetailsTabView({
     Key? key,
@@ -23,6 +25,7 @@ class DetailsTabView extends StatelessWidget {
     required this.pickedDocuments,
     required this.selectedDocsName,
     this.selectedImageName,
+    this.isLeadView = false,
   }) : super(key: key);
 
   @override
@@ -31,66 +34,68 @@ class DetailsTabView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const CustomText(
-          title: "Images",
-          fontWeight: FontWeight.w700,
-        ),
-        SizedBox(
-          height: 200,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 10,
-            itemBuilder: (context, index) {
-              if (!AppConst.getPublicView() || index > 0) {
-                return GestureDetector(
-                  onTap: () {
-                    showImageSliderCarousel(inventoryDetailsImageUrls, index, context);
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.all(10),
-                        height: 150,
-                        width: 150,
-                        decoration: BoxDecoration(
-                          // border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
-                            inventoryDetailsImageUrls[index],
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return const Icon(
-                                Icons.error_outline,
-                                size: 50,
-                                color: Colors.red,
-                              );
-                            },
-                            loadingBuilder: (context, child, loadingProgress) {
-                              return loadingProgress == null ? child : const CircularProgressIndicator();
-                            },
+        if (!isLeadView) ...[
+          const CustomText(
+            title: "Images",
+            fontWeight: FontWeight.w700,
+          ),
+          SizedBox(
+            height: 200,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                if (!AppConst.getPublicView() || index > 0) {
+                  return GestureDetector(
+                    onTap: () {
+                      showImageSliderCarousel(inventoryDetailsImageUrls, index, context);
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.all(10),
+                          height: 150,
+                          width: 150,
+                          decoration: BoxDecoration(
+                            // border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              inventoryDetailsImageUrls[index],
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Icon(
+                                  Icons.error_outline,
+                                  size: 50,
+                                  color: Colors.red,
+                                );
+                              },
+                              loadingBuilder: (context, child, loadingProgress) {
+                                return loadingProgress == null ? child : const CircularProgressIndicator();
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                      const CustomText(title: 'Front Elevation')
-                    ],
-                  ),
-                );
-              }
-              return SizedBox();
-            },
+                        const CustomText(title: 'Front Elevation')
+                      ],
+                    ),
+                  );
+                }
+                return const SizedBox();
+              },
+            ),
           ),
-        ),
+        ],
         const SizedBox(
           height: 30,
         ),
-        const CustomText(
-          title: "Overview",
-          fontWeight: FontWeight.w700,
-        ),
-        if (data.amenities != null)
+        if (data.amenities != null) ...[
+          CustomText(
+            title: !isLeadView ? "Overview" : 'Requirements',
+            fontWeight: FontWeight.w700,
+          ),
           Wrap(
             children: List<Widget>.generate(
               data.amenities!.length,
@@ -102,9 +107,10 @@ class DetailsTabView extends StatelessWidget {
               ),
             ),
           ),
-        const SizedBox(
-          height: 30,
-        ),
+          const SizedBox(
+            height: 30,
+          ),
+        ],
         const Padding(
           padding: EdgeInsets.only(bottom: 8.0),
           child: CustomText(
@@ -174,7 +180,7 @@ class DetailsTabView extends StatelessWidget {
                                   onPressed: () {
                                     setState(() {
                                       pickedDocuments.remove(document);
-                                      selectedDocsName.removeAt(currentIndex);
+                                      // selectedDocsName.removeAt(currentIndex);
                                     });
                                   },
                                 ),
@@ -184,12 +190,18 @@ class DetailsTabView extends StatelessWidget {
                         }).toList(),
                       ),
                       GestureDetector(
-                        onTap: () {
-                          showUploadDocumentModal(context, selectedDocsName, selectedImageName, pickedDocuments, () {
-                            setState(() {});
-                            selectedImageName = null;
-                            Navigator.of(context).pop();
-                          });
+                        onTap: () async {
+                          showUploadDocumentModal(
+                            context,
+                            selectedDocsName,
+                            selectedImageName,
+                            pickedDocuments,
+                            () {
+                              setState(() {});
+                              selectedImageName = null;
+                              Navigator.of(context).pop();
+                            },
+                          );
                         },
                         child: Container(
                           height: 100,
@@ -221,13 +233,23 @@ class DetailsTabView extends StatelessWidget {
               ),
             ],
           ),
-        if (!Responsive.isDesktop(context))
-          MapViewWidget(
-            state: data.propertyaddress!.state!,
-            city: data.propertyaddress!.city!,
-            addressline1: data.propertyaddress!.addressline1!,
-            addressline2: data.propertyaddress?.addressline2,
-          ),
+        if (!Responsive.isDesktop(context)) ...[
+          if (isLeadView) ...[
+            MapViewWidget(
+              state: data.preferredlocality!.state!,
+              city: data.preferredlocality!.city!,
+              addressline1: data.preferredlocality!.addressline1!,
+              addressline2: data.preferredlocality?.addressline2,
+            ),
+          ] else ...[
+            MapViewWidget(
+              state: data.propertyaddress!.state!,
+              city: data.propertyaddress!.city!,
+              addressline1: data.propertyaddress!.addressline1!,
+              addressline2: data.propertyaddress?.addressline2,
+            ),
+          ]
+        ],
       ],
     );
   }
