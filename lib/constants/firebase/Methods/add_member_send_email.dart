@@ -9,7 +9,8 @@ Future<String> sendInvitationEmail({
   required firstname,
   required lastname,
   required mobile,
-  required manager,
+  required managerName,
+  required managerid,
   required role,
 }) async {
   var res = "something went wrong";

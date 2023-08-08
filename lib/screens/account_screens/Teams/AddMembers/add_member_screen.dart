@@ -7,6 +7,7 @@ import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/Methods/add_member_send_email.dart';
+import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
 
@@ -26,8 +27,10 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
   final _lastNameController = TextEditingController();
   final _mobileController = TextEditingController();
   final _emailController = TextEditingController();
+  User? manager;
   bool loading = false;
   var role;
+
   void submitMemberRole() {
     final isvalid = key.currentState?.validate();
     if (isvalid!) {
@@ -39,7 +42,8 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
               firstname: _firstNameController.text,
               lastname: _lastNameController.text,
               mobile: _mobileController.text,
-              manager: "",
+              managerName: '${manager?.userfirstname} ${manager?.userlastname}',
+              managerid: manager?.userId,
               role: role.toString())
           .then((value) => {
                 if (value == "success")
@@ -110,7 +114,23 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                             inputController: _emailController,
                             validator: (value) => validateEmail(value),
                           ),
-                          DropDownField(title: "Manager", optionsList: const ["Employe", "Manager"], onchanged: (e) {}),
+                          FutureBuilder(
+                              future: User.getAllUsers(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  final List<String> userNames = snapshot.data!.map((user) => "${user.userfirstname} ${user.userlastname}").toList();
+                                  return DropDownField(
+                                      title: "Manager",
+                                      optionsList: userNames,
+                                      onchanged: (e) {
+                                        setState(() {
+                                          User selectedUser = snapshot.data!.firstWhere((user) => '${user.userfirstname} ${user.userlastname}' == e);
+                                          manager = selectedUser;
+                                        });
+                                      });
+                                }
+                                return DropDownField(title: "Manager", optionsList: const [], onchanged: (e) {});
+                              }),
                           DropDownField(
                               title: "Role",
                               optionsList: const ["Employe", "Manager"],

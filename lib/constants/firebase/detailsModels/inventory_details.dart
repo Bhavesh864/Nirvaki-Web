@@ -354,9 +354,9 @@ class InventoryDetails {
     }
   }
 
-  static Future<void> updateInventoryDetails(InventoryDetails item) async {
+  static Future<void> updateInventoryDetails({required String id, required String item}) async {
     try {
-      await usersCollection.doc(item.inventoryId).update(item.toJson());
+      await usersCollection.doc().update({"status": item});
       // print('Inventory item updated successfully');
     } catch (error) {
       // print('Failed to update Inventory item: $error');
