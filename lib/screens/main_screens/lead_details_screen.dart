@@ -8,29 +8,29 @@ import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
-import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
 import '../../riverpodstate/selected_workitem.dart';
-import '../../widgets/workItemDetail/Inventory_details_header.dart';
 import '../../widgets/workItemDetail/assignment_widget.dart';
 import '../../widgets/workItemDetail/contact_information.dart';
+import '../../widgets/workItemDetail/inventory_details_header.dart';
 import '../../widgets/workItemDetail/mapview_widget.dart';
 import '../../widgets/workItemDetail/tab_bar_widget.dart';
 import '../../widgets/workItemDetail/tab_views/activity_tab_view.dart';
 import '../../widgets/workItemDetail/tab_views/details_tab_view.dart';
 
-class InventoryDetailsScreen extends ConsumerStatefulWidget {
-  const InventoryDetailsScreen({super.key});
+class LeadDetailsScreen extends ConsumerStatefulWidget {
+  const LeadDetailsScreen({super.key});
 
   @override
-  InventoryDetailsScreenState createState() => InventoryDetailsScreenState();
+  LeadDetailsScreenState createState() => LeadDetailsScreenState();
 }
 
-class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> with TickerProviderStateMixin {
+class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with TickerProviderStateMixin {
   late TabController tabviewController;
-  late Future<InventoryDetails?> inventoryDetails;
+  late Future<LeadDetails?> leadDetails;
   PlatformFile? selectedImageName;
   List<PlatformFile> pickedDocuments = [];
   List<String> selectedDocsName = [];
@@ -81,13 +81,13 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
     super.initState();
     tabviewController = TabController(length: 4, vsync: this);
     // final workItemId = ref.read(selectedWorkItemId.notifier).state;
-    // inventoryDetails = InventoryDetails.getInventoryDetails(workItemId);
+    // leadDetails = LeadDetails.getLeadDetails(workItemId);
   }
 
   @override
   Widget build(BuildContext context) {
     final workItemId = Responsive.isMobile(context) ? ModalRoute.of(context)!.settings.arguments : ref.watch(selectedWorkItemId.notifier).state;
-    inventoryDetails = InventoryDetails.getInventoryDetails(workItemId);
+    leadDetails = LeadDetails.getLeadDetails(workItemId);
 
     return Scaffold(
       appBar: Responsive.isMobile(context)
@@ -100,7 +100,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                 },
               ),
               title: const CustomText(
-                title: 'Inventory Details',
+                title: 'Lead Details',
                 color: Colors.black,
               ),
               foregroundColor: Colors.black,
@@ -108,7 +108,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
             )
           : null,
       body: FutureBuilder(
-          future: inventoryDetails,
+          future: leadDetails,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator.adaptive());
@@ -127,7 +127,6 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                           ),
                         ],
                         color: Colors.white,
-                        // color: Color(0xFFF9F9FD),
                       )
                     : null,
                 child: Row(
@@ -148,22 +147,22 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                   setState: () {
                                     setState(() {});
                                   },
-                                  title: data!.inventoryTitle!,
-                                  category: data.inventorycategory!,
-                                  type: data.inventoryType!,
+                                  title: data!.leadTitle!,
+                                  category: data.leadcategory!,
+                                  type: data.leadType!,
                                   propertyCategory: data.propertycategory!,
-                                  status: data.inventoryStatus!,
-                                  price: data.propertyprice?.price,
-                                  unit: data.propertyprice?.unit,
+                                  status: data.leadStatus!,
+                                  price: data.propertypricerange?.arearangestart,
+                                  unit: data.propertypricerange?.unit,
                                 ),
                                 if (Responsive.isMobile(context))
                                   Padding(
                                     padding: const EdgeInsets.only(top: 10),
                                     child: HeaderChips(
-                                      category: data.inventorycategory!,
-                                      type: data.inventoryType!,
+                                      category: data.leadcategory!,
+                                      type: data.leadType!,
                                       propertyCategory: data.propertycategory!,
-                                      status: data.inventoryStatus!,
+                                      status: data.leadStatus!,
                                     ),
                                   ),
                                 ListTile(
@@ -177,7 +176,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                   horizontalTitleGap: 8,
                                   titleAlignment: ListTileTitleAlignment.center,
                                   title: CustomText(
-                                    title: '${data.propertyaddress!.state},${data.propertyaddress!.city},${data.propertyaddress!.addressline1}',
+                                    title: '${data.preferredlocality!.state},${data.preferredlocality!.city},${data.preferredlocality!.addressline1}',
                                     size: 12,
                                     fontWeight: FontWeight.w400,
                                     color: const Color(0xFFA8A8A8),
@@ -213,7 +212,9 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                     child: Padding(
                                       padding: const EdgeInsets.only(top: 12.0),
                                       child: CustomText(
-                                        title: data.propertyprice?.price != null ? '${data.propertyprice!.price}${data.propertyprice!.unit}' : '50k/month',
+                                        title: data.propertypricerange?.arearangestart != null
+                                            ? '${data.propertypricerange!.arearangestart}${data.propertypricerange!.unit}'
+                                            : '50k/month',
                                         color: AppColor.primary,
                                       ),
                                     ),
@@ -232,6 +233,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                 ),
                                 if (currentSelectedTab == 0)
                                   DetailsTabView(
+                                    isLeadView: true,
                                     data: data,
                                     pickedDocuments: pickedDocuments,
                                     selectedDocsName: selectedDocsName,
@@ -245,13 +247,12 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                         ),
                       ),
                     ),
-                    if (Responsive.isDesktop(context))
+                    if (Responsive.isDesktop(context)) ...[
                       Container(
                         margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                         width: 1,
                         color: Colors.grey.withOpacity(0.5),
                       ),
-                    if (Responsive.isDesktop(context))
                       Expanded(
                         flex: 1,
                         child: Container(
@@ -270,20 +271,23 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                 ),
                               if (Responsive.isDesktop(context))
                                 MapViewWidget(
-                                  state: data.propertyaddress!.state!,
-                                  city: data.propertyaddress!.city!,
-                                  addressline1: data.propertyaddress!.addressline1!,
-                                  addressline2: data.propertyaddress?.addressline2,
+                                  state: data.preferredlocality!.state!,
+                                  city: data.preferredlocality!.city!,
+                                  addressline1: data.preferredlocality!.addressline1!,
+                                  addressline2: data.preferredlocality?.addressline2,
                                 ),
                             ],
                           ),
                         ),
                       ),
+                    ],
                   ],
                 ),
               );
             }
-            return const SizedBox();
+            return Container(
+              color: Colors.amber,
+            );
           }),
     );
   }

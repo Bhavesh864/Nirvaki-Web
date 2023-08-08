@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -63,7 +64,7 @@ void showImageSliderCarousel(List<String> imageUrls, int initialIndex, BuildCont
   );
 }
 
-void showUploadDocumentModal(BuildContext context, List<String> selectedDocName, XFile? selectedImage, List<XFile> pickedDocuments, Function onPressed) {
+void showUploadDocumentModal(BuildContext context, List<String> selectedDocName, PlatformFile? selectedImage, List<PlatformFile> pickedDocuments, Function onPressed) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -106,7 +107,7 @@ void showUploadDocumentModal(BuildContext context, List<String> selectedDocName,
                     },
                   ),
                   CustomButton(
-                    text: selectedImage == null ? 'Upload Document' : selectedImage!.name,
+                    text: selectedImage == null ? 'Upload Document' : selectedImage!.name.toString(),
                     rightIcon: Icons.publish_outlined,
                     buttonColor: AppColor.secondary,
                     // isBorder: false,
@@ -114,14 +115,24 @@ void showUploadDocumentModal(BuildContext context, List<String> selectedDocName,
                     righticonColor: Colors.black,
                     titleLeft: true,
                     onPressed: () async {
-                      XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
-                      if (pickedImage != null) {
-                        innerSetState(
-                          () {
-                            selectedImage = pickedImage;
-                          },
-                        );
-                        pickedDocuments.add(pickedImage); // Add picked document to the list
+                      // XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+                      // if (pickedImage != null) {
+                      //   innerSetState(
+                      //     () {
+                      //       selectedImage = pickedImage;
+                      //     },
+                      //   );
+                      //   pickedDocuments.add(pickedImage); // Add picked document to the list
+                      // }
+
+                      FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+                      if (result != null) {
+                        innerSetState(() {
+                          pickedDocuments.addAll(result.files);
+                          selectedImage = result.files[0];
+                        });
+                        print(selectedImage!.name);
                       }
                     },
                   ),

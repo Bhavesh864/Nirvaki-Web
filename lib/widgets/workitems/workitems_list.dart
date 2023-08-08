@@ -74,11 +74,20 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                       (index) => GestureDetector(
                         onTap: () {
                           final id = widget.getCardDetails[index].workitemId;
-                          if (Responsive.isMobile(context)) {
-                            Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
-                          } else {
-                            ref.read(selectedWorkItemId.notifier).addItemId(id!);
-                            ref.read(largeScreenTabsProvider.notifier).update((state) => 7);
+                          if (id!.contains('IN')) {
+                            if (Responsive.isMobile(context)) {
+                              Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
+                            } else {
+                              ref.read(selectedWorkItemId.notifier).addItemId(id);
+                              ref.read(largeScreenTabsProvider.notifier).update((state) => 7);
+                            }
+                          } else if (id.contains('LD')) {
+                            if (Responsive.isMobile(context)) {
+                              Navigator.of(context).pushNamed(AppRoutes.leadDetailsScreen, arguments: id);
+                            } else {
+                              ref.read(selectedWorkItemId.notifier).addItemId(id);
+                              ref.read(largeScreenTabsProvider.notifier).update((state) => 8);
+                            }
                           }
                         },
                         child: CustomCard(index: index, cardDetails: widget.getCardDetails),
