@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart' as user;
+
+import '../../app_constant.dart';
 
 Future<String> sendInvitationEmail({
   required email,
@@ -12,7 +13,6 @@ Future<String> sendInvitationEmail({
   required role,
 }) async {
   var res = "something went wrong";
-  // Box box = Hive.box("users");
   try {
     final authResult = await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: email,

@@ -57,6 +57,7 @@ dependencies:
   universal_platform: ^1.0.0+1
   carousel_slider: ^4.2.1
   firebase_dynamic_links: ^5.3.4
+  shared_preferences: ^2.2.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0

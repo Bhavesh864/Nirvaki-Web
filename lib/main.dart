@@ -1,5 +1,3 @@
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,7 +18,6 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await Hive.initFlutter();
   Hive.registerAdapter(TimestampAdapter());
-  await dynamicLinksget();
   await Hive.openBox("users");
   await Hive.openBox<CardDetails>("carddetails");
 
@@ -29,29 +26,6 @@ void main() async {
       child: MyApp(),
     ),
   );
-}
-
-Future<dynamic> dynamicLinksget() async {
-  if (!kIsWeb) {
-    final PendingDynamicLinkData? initialLink = await FirebaseDynamicLinks.instance.getInitialLink();
-
-    if (initialLink != null) {
-      final Uri deepLink = initialLink.link;
-      print("deepLink$deepLink");
-      // Example of using the dynamic link to push the user to a different screen
-      // Navigator.pushNamed(context, deepLink.path);
-    }
-    FirebaseDynamicLinks.instance.onLink.listen(
-      (pendingDynamicLinkData) {
-        // Set up the `onLink` event listener next as it may be received here
-
-        // final Uri deepLink = pendingDynamicLinkData.link;
-        // Example of using the dynamic link to push the user to a different screen
-        // Navigator.pushNamed(context, deepLink.path);
-      },
-    );
-    return initialLink;
-  }
 }
 
 class MyApp extends StatelessWidget {
@@ -63,7 +37,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Brokr',
       theme: TAppTheme.lightTheme,
-      home: LayoutView(),
+      home: const LayoutView(),
       routes: AppRoutes.routesTable,
     );
   }

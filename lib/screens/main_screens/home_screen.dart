@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 
@@ -25,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     getCardDetails = CardDetails.getCardDetails();
     // adddata();
     // getdata();
+    print(AppConst.getAccessToken());
   }
 
   @override
