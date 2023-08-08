@@ -54,12 +54,8 @@ class LargeScreenNavBar extends ConsumerWidget {
       child: FutureBuilder(
         future: User.getUser(token!),
         builder: (context, snapshot) {
-          // if (snapshot.connectionState == ConnectionState.waiting) {
-          //   return const Center(child: CircularProgressIndicator());
-          // }
           if (snapshot.hasData) {
             ref.read(userProvider).state = snapshot.data!;
-
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

@@ -24,7 +24,7 @@ class SmallScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: mobileAppBar(context, (selectedVal) {
-        if (selectedVal != 'logout') {
+        if (selectedVal != 'Logout') {
           // ref.read(currentIndexProvider.notifier).update((state) => 4);
           final ProfileMenuItems profile = profileMenuItems.firstWhere((element) => element.title == selectedVal);
           ref.read(selectedProfileItemProvider.notifier).setSelectedItem(profile);

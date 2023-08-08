@@ -160,9 +160,7 @@ Future<String?> signinMethod({required email, required password}) async {
     await auth.signInWithEmailAndPassword(email: email, password: password);
     final uid = FirebaseAuth.instance.currentUser!.uid;
     UserHiveMethods.addData(key: "token", data: uid);
-    final token = UserHiveMethods.getdata("token");
-    AppConst.setAccessToken(token);
-    print(token);
+    AppConst.setAccessToken(uid);
     res = "success";
     return res;
   } on FirebaseAuthException catch (e) {
