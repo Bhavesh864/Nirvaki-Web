@@ -9,9 +9,24 @@ import 'package:yes_broker/pages/Auth/login/login_screen.dart';
 import 'package:yes_broker/pages/largescreen_dashboard.dart';
 import 'package:yes_broker/pages/smallscreen_dashboard.dart';
 
-class LayoutView extends StatelessWidget {
+class LayoutView extends StatefulWidget {
+  const LayoutView({super.key});
+
+  @override
+  State<LayoutView> createState() => _LayoutViewState();
+}
+
+class _LayoutViewState extends State<LayoutView> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
-  LayoutView({super.key});
+  @override
+  void initState() {
+    super.initState();
+    final token = UserHiveMethods.getdata("token");
+    if (token != null) {
+      AppConst.setAccessToken(token);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
@@ -20,10 +35,6 @@ class LayoutView extends StatelessWidget {
     return StreamBuilder(
         stream: authentication.authStateChanges(),
         builder: (context, snapshot) {
-          final token = UserHiveMethods.getdata("token");
-          // AppConst.setAccessToken(token);
-          // print('token $token');
-
           return Scaffold(
             body: ScreenTypeLayout.builder(
               breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
