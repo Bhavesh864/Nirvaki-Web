@@ -293,13 +293,18 @@ class LeadDetails {
 
 //  -----------------------------Methods------------------------------------------------------------------->
 
-  static Future<LeadDetails?> getLeadDetails(String id) async {
+  static Future<LeadDetails?> getLeadDetails(itemid) async {
     try {
-      final DocumentSnapshot documentSnapshot = await usersCollection.doc(id).get();
-      final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-      return LeadDetails.fromJson(data);
+      final QuerySnapshot querySnapshot = await usersCollection.where("leadId", isEqualTo: itemid).get();
+      for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        if (documentSnapshot.exists) {
+          final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+          return LeadDetails.fromJson(data);
+        }
+      }
+      return null;
     } catch (error) {
-      // print('Failed to get Inventory items: $error');
+      print('Failed to get users: $error');
       return null;
     }
   }
