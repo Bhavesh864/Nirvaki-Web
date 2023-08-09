@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 
 import '../../../Customs/custom_chip.dart';
 import '../../../Customs/custom_text.dart';
 import '../../../Customs/responsive.dart';
 import '../../../constants/app_constant.dart';
-// import '../../../constants/firebase/detailsModels/inventory_details.dart';
 import '../../../constants/functions/workitems_detail_methods.dart';
 import '../../../constants/utils/constants.dart';
 import '../mapview_widget.dart';
@@ -16,7 +14,7 @@ class DetailsTabView extends StatelessWidget {
   final dynamic data;
   final List<PlatformFile> pickedDocuments;
   final List<String> selectedDocsName;
-  late PlatformFile? selectedImageName;
+  late PlatformFile? selectedFileName;
   final bool isLeadView;
 
   DetailsTabView({
@@ -24,7 +22,7 @@ class DetailsTabView extends StatelessWidget {
     required this.data,
     required this.pickedDocuments,
     required this.selectedDocsName,
-    this.selectedImageName,
+    this.selectedFileName,
     this.isLeadView = false,
   }) : super(key: key);
 
@@ -42,6 +40,7 @@ class DetailsTabView extends StatelessWidget {
           SizedBox(
             height: 200,
             child: ListView.builder(
+              physics: const ScrollPhysics(),
               scrollDirection: Axis.horizontal,
               itemCount: 10,
               itemBuilder: (context, index) {
@@ -138,96 +137,100 @@ class DetailsTabView extends StatelessWidget {
               ),
               StatefulBuilder(
                 builder: (context, setState) {
-                  return Row(
-                    children: [
-                      Row(
-                        children: pickedDocuments.map((document) {
-                          final currentIndex = pickedDocuments.indexOf(document);
-                          return Stack(
-                            children: [
-                              Container(
-                                height: 99,
-                                margin: const EdgeInsets.only(right: 15),
-                                width: 108,
+                  return SizedBox(
+                    height: 100,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: pickedDocuments.length + 1,
+                        itemBuilder: (context, index) {
+                          if (index < pickedDocuments.length) {
+                            final document = pickedDocuments[index];
+                            return Stack(
+                              children: [
+                                Container(
+                                  height: 99,
+                                  margin: const EdgeInsets.only(right: 15),
+                                  width: 108,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey.withOpacity(0.5)),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.image_outlined,
+                                        size: 40,
+                                      ),
+                                      CustomText(
+                                        title: selectedDocsName[index],
+                                        size: 13,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Positioned(
+                                  top: -13,
+                                  right: 0,
+                                  child: IconButton(
+                                    icon: const Icon(
+                                      Icons.cancel,
+                                      size: 16,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        pickedDocuments.remove(document);
+                                        selectedDocsName.removeAt(index);
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
+                            );
+                          } else {
+                            return GestureDetector(
+                              onTap: () async {
+                                showUploadDocumentModal(
+                                  context,
+                                  selectedDocsName,
+                                  selectedFileName,
+                                  pickedDocuments,
+                                  () {
+                                    setState(() {});
+                                    selectedFileName = null;
+                                    Navigator.of(context).pop();
+                                  },
+                                );
+                              },
+                              child: Container(
+                                height: 100,
+                                width: 100,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   border: Border.all(color: Colors.grey.withOpacity(0.5)),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                child: Column(
+                                child: const Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Icon(
-                                      Icons.image_outlined,
+                                    Icon(
+                                      Icons.add,
                                       size: 40,
                                     ),
                                     CustomText(
-                                      title: selectedDocsName[currentIndex],
-                                      size: 13,
+                                      title: 'Add more',
+                                      size: 8,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ],
                                 ),
                               ),
-                              Positioned(
-                                top: -13,
-                                right: 0,
-                                child: IconButton(
-                                  icon: const Icon(
-                                    Icons.cancel,
-                                    size: 16,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      pickedDocuments.remove(document);
-                                      // selectedDocsName.removeAt(currentIndex);
-                                    });
-                                  },
-                                ),
-                              ),
-                            ],
-                          );
-                        }).toList(),
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          showUploadDocumentModal(
-                            context,
-                            selectedDocsName,
-                            selectedImageName,
-                            pickedDocuments,
-                            () {
-                              setState(() {});
-                              selectedImageName = null;
-                              Navigator.of(context).pop();
-                            },
-                          );
-                        },
-                        child: Container(
-                          height: 100,
-                          width: 100,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey.withOpacity(0.5)),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.add,
-                                size: 40,
-                              ),
-                              CustomText(
-                                title: 'Add more',
-                                size: 8,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                            );
+                          }
+                        }),
                   );
                 },
               ),

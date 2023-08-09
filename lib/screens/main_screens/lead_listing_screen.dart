@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/widgets/todo/todo_list_view.dart';
-import 'package:yes_broker/widgets/top_search_bar.dart';
 import 'package:yes_broker/widgets/workitems/workitem_filter_view.dart';
 import 'package:yes_broker/widgets/workitems/workitems_list.dart';
-import '../../constants/firebase/detailsModels/card_details.dart';
 
-class InventoryScreen extends ConsumerStatefulWidget {
-  const InventoryScreen({super.key});
+import '../../constants/firebase/detailsModels/card_details.dart';
+import '../../routes/routes.dart';
+import '../../widgets/top_search_bar.dart';
+
+class LeadScreen extends StatefulWidget {
+  const LeadScreen({super.key});
 
   @override
-  InventoryScreenState createState() => InventoryScreenState();
+  State<LeadScreen> createState() => _LeadScreenState();
 }
 
-class InventoryScreenState extends ConsumerState<InventoryScreen> {
+class _LeadScreenState extends State<LeadScreen> {
   bool isFilterOpen = false;
 
   Future<List<CardDetails>>? future;
@@ -30,6 +31,7 @@ class InventoryScreenState extends ConsumerState<InventoryScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
     return FutureBuilder(
       future: future,
       builder: (context, snapshot) {
@@ -42,7 +44,7 @@ class InventoryScreenState extends ConsumerState<InventoryScreen> {
           );
         }
         if (snapshot.hasData) {
-          List<CardDetails> inventoryList = snapshot.data!.where((item) => item.cardType == "IN").toList();
+          List<CardDetails> leadList = snapshot.data!.where((item) => item.cardType == "LD").toList();
 
           return Container(
             decoration: const BoxDecoration(
@@ -63,7 +65,7 @@ class InventoryScreenState extends ConsumerState<InventoryScreen> {
                   child: Column(
                     children: [
                       TopSerachBar(
-                          title: 'Inventory',
+                          title: 'Lead',
                           isMobile: Responsive.isMobile(context),
                           isFilterOpen: isFilterOpen,
                           onFilterClose: () {
@@ -72,18 +74,23 @@ class InventoryScreenState extends ConsumerState<InventoryScreen> {
                             });
                           },
                           onFilterOpen: () {
-                            setState(() {
-                              isFilterOpen = true;
-                            });
+                            if (Responsive.isMobile(context)) {
+                              Navigator.of(context).push(AppRoutes.createAnimatedRoute(const WorkItemFilterView()));
+                            } else {
+                              setState(() {
+                                isFilterOpen = true;
+                              });
+                            }
                           }),
                       Expanded(
+                        // height: height! * 0.74,
                         child: Row(
                           children: [
                             Expanded(
                               child: WorkItemsList(
-                                title: 'Inventory',
-                                getCardDetails: inventoryList,
+                                title: 'Lead',
                                 headerShow: false,
+                                getCardDetails: leadList,
                               ),
                             ),
                             !Responsive.isMobile(context)
@@ -97,7 +104,7 @@ class InventoryScreenState extends ConsumerState<InventoryScreen> {
                               if (!Responsive.isMobile(context) && !isFilterOpen)
                                 const Expanded(
                                   child: TodoListView(headerShow: false),
-                                ),
+                                )
                           ],
                         ),
                       ),
@@ -115,11 +122,13 @@ class InventoryScreenState extends ConsumerState<InventoryScreen> {
                               color: Colors.grey.withOpacity(0.5),
                             ),
                             Expanded(
-                              child: WorkItemFilterView(closeFilterView: () {
-                                setState(() {
-                                  isFilterOpen = false;
-                                });
-                              }),
+                              child: WorkItemFilterView(
+                                closeFilterView: () {
+                                  setState(() {
+                                    isFilterOpen = false;
+                                  });
+                                },
+                              ),
                             ),
                           ],
                         ),

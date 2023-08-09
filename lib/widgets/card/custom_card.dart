@@ -32,11 +32,11 @@ class _CustomCardState extends State<CustomCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.only(
-        left: width! < 1280 && width! > 1200 ? 0 : 10,
-        right: width! < 1280 && width! > 1200 ? 0 : 10,
-        bottom: 15,
-      ),
+      // margin: EdgeInsets.only(
+      //   left: width! < 1280 && width! > 1200 ? 0 : 10,
+      //   right: width! < 1280 && width! > 1200 ? 0 : 10,
+      //   bottom: 15,
+      // ),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         alignment: Alignment.topCenter,

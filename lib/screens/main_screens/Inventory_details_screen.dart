@@ -3,13 +3,13 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import '../../Customs/custom_text.dart';
+import '../../Customs/small_custom_profile_image.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
 import '../../riverpodstate/selected_workitem.dart';
@@ -184,38 +184,52 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                   ),
                                 ),
                                 if (Responsive.isMobile(context))
-                                  CustomButton(
-                                    text: 'View Owner Detail',
-                                    onPressed: () {
-                                      showOwnerDetailsAndAssignToBottomSheet(
-                                        context,
-                                        'Owner Details',
-                                        ContactInformation(customerinfo: data.customerinfo!),
-                                      );
-                                    },
-                                    height: 40,
-                                    width: 180,
+                                  Row(
+                                    children: [
+                                      CustomButton(
+                                        text: 'View Owner Detail',
+                                        onPressed: () {
+                                          showOwnerDetailsAndAssignToBottomSheet(
+                                            context,
+                                            'Owner Details',
+                                            ContactInformation(customerinfo: data.customerinfo!),
+                                          );
+                                        },
+                                        height: 40,
+                                        width: 180,
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          showOwnerDetailsAndAssignToBottomSheet(
+                                            context,
+                                            'Assignment',
+                                            AssignmentWidget(
+                                              imageUrlAssignTo:
+                                                  data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
+                                              imageUrlCreatedBy:
+                                                  data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                              createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
+                                              assignTo: data.assignedto![0].firstname! + data.assignedto![0].firstname!,
+                                            ),
+                                          );
+                                        },
+                                        child: SmallCustomCircularImage(
+                                          width: 30,
+                                          height: 30,
+                                          imageUrl: data.assignedto![0].image!,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 if (Responsive.isMobile(context))
-                                  GestureDetector(
-                                    onTap: () {
-                                      showOwnerDetailsAndAssignToBottomSheet(
-                                        context,
-                                        'Assignment',
-                                        AssignmentWidget(
-                                          imageUrlAssignTo: data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
-                                          imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                          createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
-                                          assignTo: data.assignedto![0].firstname! + data.assignedto![0].firstname!,
-                                        ),
-                                      );
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(top: 12.0),
-                                      child: CustomText(
-                                        title: data.propertyprice?.price != null ? '${data.propertyprice!.price}${data.propertyprice!.unit}' : '50k/month',
-                                        color: AppColor.primary,
-                                      ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 12.0),
+                                    child: CustomText(
+                                      title: data.propertyprice?.price != null ? '${data.propertyprice!.price}${data.propertyprice!.unit}' : '50k/month',
+                                      color: AppColor.primary,
                                     ),
                                   ),
                                 if (!AppConst.getPublicView())
@@ -235,7 +249,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                     data: data,
                                     pickedDocuments: pickedDocuments,
                                     selectedDocsName: selectedDocsName,
-                                    selectedImageName: selectedImageName,
+                                    selectedFileName: selectedImageName,
                                   ),
                                 if (currentSelectedTab == 1) const ActivityTabView(),
                                 // if (currentSelectedTab == 2)  TodoTabView(data),
