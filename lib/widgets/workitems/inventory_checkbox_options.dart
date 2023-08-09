@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 
 class WorkItemCheckboxOptions extends StatefulWidget {
@@ -27,6 +28,7 @@ class _WorkItemCheckboxOptionsState extends State<WorkItemCheckboxOptions> {
           ),
           Expanded(
             child: ListView.builder(
+              physics: Responsive.isMobile(context) ? const NeverScrollableScrollPhysics() : ScrollPhysics(),
               itemCount: inventoryFilterOtpion.length,
               itemBuilder: (context, index) {
                 return Container(

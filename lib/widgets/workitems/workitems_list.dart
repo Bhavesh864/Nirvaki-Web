@@ -65,7 +65,6 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                     : Container(),
                 SizedBox(
                   height: Responsive.isMobile(context) ? height : height * 0.79,
-                  // height: MediaQuery.of(context).size.height,
                   child: ListView(
                     shrinkWrap: true,
                     physics: widget.isScrollable ? const ScrollPhysics() : const NeverScrollableScrollPhysics(),

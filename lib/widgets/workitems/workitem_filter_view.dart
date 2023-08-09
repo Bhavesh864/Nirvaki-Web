@@ -2,51 +2,69 @@ import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_chip.dart';
 import 'package:yes_broker/widgets/workitems/inventory_checkbox_options.dart';
 
 class WorkItemFilterView extends StatelessWidget {
   final Function closeFilterView;
-  const WorkItemFilterView({super.key, required this.closeFilterView});
+  const WorkItemFilterView({super.key, this.closeFilterView = _defaultCloseFunction});
+
+  static void _defaultCloseFunction() {}
 
   @override
   Widget build(BuildContext context) {
-    return ScrollConfiguration(
-      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-      child: SingleChildScrollView(
-        child: Expanded(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: Responsive.isMobile(context)
+          ? AppBar(
+              toolbarHeight: 50,
+              elevation: 0,
+              title: const CustomText(
+                title: 'Filter your search',
+                fontWeight: FontWeight.w700,
+                size: 18,
+              ),
+              iconTheme: const IconThemeData(color: Colors.black, size: 24),
+            )
+          : null,
+      body: ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+        child: SingleChildScrollView(
           child: Container(
             height: 800,
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: Column(
-              // mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const CustomText(
-                      title: 'Filter',
-                      fontWeight: FontWeight.w700,
-                      size: 18,
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        closeFilterView();
-                      },
-                      icon: const Icon(
-                        Icons.close,
-                        size: 24,
+                if (!Responsive.isMobile(context))
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const CustomText(
+                        title: 'Filter',
+                        fontWeight: FontWeight.w700,
+                        size: 18,
                       ),
-                    ),
-                  ],
-                ),
+                      IconButton(
+                        onPressed: () {
+                          closeFilterView();
+                        },
+                        icon: const Icon(
+                          Icons.close,
+                          size: 24,
+                        ),
+                      ),
+                    ],
+                  ),
                 // Spacer(),
-                const SizedBox(
-                  height: 30,
-                ),
+                if (!Responsive.isMobile(context))
+                  const SizedBox(
+                    height: 20,
+                  ),
                 SizedBox(
-                  height: 650,
+                  height: !Responsive.isMobile(context) ? 650 : 700,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,75 +77,72 @@ class WorkItemFilterView extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SizedBox(
-                        height: 40,
-                        child: Row(
-                          children: [
-                            CustomChip(
-                              label: CustomText(
-                                title: 'Studio',
-                                size: 10,
-                              ),
-                              color: AppColor.chipGreyColor,
+                      const Row(
+                        children: [
+                          CustomChip(
+                            label: CustomText(
+                              title: 'Studio',
+                              size: 10,
                             ),
-                            CustomChip(
-                              label: CustomText(
-                                title: '1RK',
-                                size: 10,
-                              ),
-                              color: AppColor.chipGreyColor,
+                            color: AppColor.chipGreyColor,
+                          ),
+                          CustomChip(
+                            label: CustomText(
+                              title: '1RK',
+                              size: 10,
                             ),
-                            CustomChip(
-                              label: CustomText(
-                                title: '1BHK',
-                                size: 10,
-                              ),
-                              color: AppColor.chipGreyColor,
+                            color: AppColor.chipGreyColor,
+                          ),
+                          CustomChip(
+                            label: CustomText(
+                              title: '1BHK',
+                              size: 10,
                             ),
-                            CustomChip(
-                              label: CustomText(
-                                title: '2BHK',
-                                size: 10,
-                              ),
-                              color: AppColor.chipGreyColor,
+                            color: AppColor.chipGreyColor,
+                          ),
+                          CustomChip(
+                            label: CustomText(
+                              title: '2BHK',
+                              size: 10,
                             ),
-                          ],
-                        ),
+                            color: AppColor.chipGreyColor,
+                          ),
+                        ],
                       ),
                       const SizedBox(
-                        height: 30,
-                        child: Row(
-                          children: [
-                            CustomChip(
-                              label: CustomText(
-                                title: '3BHK',
-                                size: 10,
-                              ),
-                              color: AppColor.chipGreyColor,
+                        height: 10,
+                      ),
+                      const Row(
+                        children: [
+                          CustomChip(
+                            label: CustomText(
+                              title: '3BHK',
+                              size: 10,
                             ),
-                            CustomChip(
-                              label: CustomText(
-                                title: '4BHK',
-                                size: 10,
-                              ),
-                              color: AppColor.chipGreyColor,
+                            color: AppColor.chipGreyColor,
+                          ),
+                          CustomChip(
+                            label: CustomText(
+                              title: '4BHK',
+                              size: 10,
                             ),
-                            CustomChip(
-                              label: CustomText(
-                                title: '5BHK',
-                                size: 10,
-                              ),
-                              color: AppColor.chipGreyColor,
+                            color: AppColor.chipGreyColor,
+                          ),
+                          CustomChip(
+                            label: CustomText(
+                              title: '5BHK',
+                              size: 10,
                             ),
-                            CustomChip(
-                              label: CustomText(
-                                title: '5BHK +',
-                                size: 10,
-                              ),
-                              color: AppColor.chipGreyColor,
+                            color: AppColor.chipGreyColor,
+                          ),
+                          CustomChip(
+                            label: CustomText(
+                              title: '5BHK +',
+                              size: 10,
                             ),
-                          ],
-                        ),
+                            color: AppColor.chipGreyColor,
+                          ),
+                        ],
                       ),
                       const SizedBox(
                         height: 20,
@@ -155,7 +170,7 @@ class WorkItemFilterView extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Spacer(),
+                // const Spacer(),
                 CustomButton(
                   text: 'Apply Filters',
                   onPressed: () {},

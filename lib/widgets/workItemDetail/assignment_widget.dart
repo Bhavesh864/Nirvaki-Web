@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yes_broker/Customs/small_custom_profile_image.dart';
 
 import '../../constants/app_constant.dart';
 import '../../constants/utils/colors.dart';
@@ -41,15 +42,7 @@ class AssignmentWidget extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 6, top: 2),
                   child: Row(
                     children: [
-                      Container(
-                        margin: const EdgeInsets.only(right: 5),
-                        height: 20,
-                        width: 20,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(image: NetworkImage(imageUrlCreatedBy), fit: BoxFit.fill),
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                      ),
+                      SmallCustomCircularImage(imageUrl: imageUrlCreatedBy),
                       Text(
                         createdBy,
                         overflow: TextOverflow.ellipsis,
@@ -94,15 +87,7 @@ class AssignmentWidget extends StatelessWidget {
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Container(
-                          margin: const EdgeInsets.only(right: 5),
-                          height: 20,
-                          width: 20,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(image: NetworkImage(imageUrlAssignTo), fit: BoxFit.fill),
-                            borderRadius: BorderRadius.circular(40),
-                          ),
-                        ),
+                        SmallCustomCircularImage(imageUrl: imageUrlAssignTo),
                         Padding(
                           padding: const EdgeInsets.only(left: 4, top: 4),
                           child: Text(

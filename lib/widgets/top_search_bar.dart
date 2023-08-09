@@ -7,7 +7,7 @@ class TopSerachBar extends StatefulWidget {
   final bool isMobile;
   final bool isFilterOpen;
   final VoidCallback onFilterClose;
-  final VoidCallback onFilterOpen;
+  final Function onFilterOpen;
 
   const TopSerachBar({
     super.key,
@@ -45,7 +45,9 @@ class _TopSerachBarState extends State<TopSerachBar> {
               Row(
                 children: [
                   IconButton(
-                    onPressed: widget.onFilterOpen,
+                    onPressed: () {
+                      widget.onFilterOpen();
+                    },
                     icon: const Icon(
                       Icons.filter_alt_outlined,
                       size: 24,
@@ -77,11 +79,15 @@ class _TopSerachBarState extends State<TopSerachBar> {
                   Row(
                     children: [
                       IconButton(
-                        onPressed: widget.onFilterClose,
+                        onPressed: () {
+                          widget.onFilterOpen();
+                        },
                         icon: const Icon(Icons.filter_list),
                       ),
                       IconButton(
-                        onPressed: widget.onFilterOpen,
+                        onPressed: () {
+                          widget.onFilterOpen();
+                        },
                         icon: const Icon(Icons.more_horiz),
                       ),
                     ],
