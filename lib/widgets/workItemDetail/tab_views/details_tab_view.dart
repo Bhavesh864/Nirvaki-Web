@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:yes_broker/widgets/app/nav_bar.dart';
 
 import '../../../Customs/custom_chip.dart';
 import '../../../Customs/custom_text.dart';
 import '../../../Customs/responsive.dart';
-import '../../../constants/app_constant.dart';
-// import '../../../constants/firebase/detailsModels/inventory_details.dart';
 import '../../../constants/functions/workitems_detail_methods.dart';
 import '../../../constants/utils/constants.dart';
 import '../mapview_widget.dart';
@@ -14,22 +12,50 @@ import '../mapview_widget.dart';
 // ignore: must_be_immutable
 class DetailsTabView extends StatelessWidget {
   final dynamic data;
-  final List<PlatformFile> pickedDocuments;
-  final List<String> selectedDocsName;
-  late PlatformFile? selectedImageName;
+  final List<PlatformFile> pickedFilesList;
+  final List<String> selectedDocNameList;
+  late PlatformFile? selectedFileName;
   final bool isLeadView;
 
   DetailsTabView({
     Key? key,
     required this.data,
-    required this.pickedDocuments,
-    required this.selectedDocsName,
-    this.selectedImageName,
+    required this.pickedFilesList,
+    required this.selectedDocNameList,
+    this.selectedFileName,
     this.isLeadView = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    List<String> allImages = [];
+    List<String> allTitles = [];
+
+    if (!isLeadView) {
+      if (data.propertyphotos != null) {
+        final Map<String, List<String>> propertyPhotos = {
+          'frontelevation': [...data!.propertyphotos.frontelevation],
+          'bedroom': [...data!.propertyphotos.bedroom],
+          'bathroom': [...data!.propertyphotos.bathroom],
+          'pujaroom': [...data!.propertyphotos.pujaroom],
+          'servantroom': [...data!.propertyphotos.servantroom],
+          'studyroom': [...data!.propertyphotos.studyroom],
+          'officeroom': [...data!.propertyphotos.officeroom],
+        };
+
+        propertyPhotos.forEach((key, value) {
+          if (value.isNotEmpty) {
+            allImages.addAll(value);
+
+            // ignore: unused_local_variable
+            for (var i in value) {
+              allTitles.add(capitalizeFirstLetter(key));
+            }
+          }
+        });
+      }
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,48 +68,55 @@ class DetailsTabView extends StatelessWidget {
           SizedBox(
             height: 200,
             child: ListView.builder(
+              physics: const ScrollPhysics(),
               scrollDirection: Axis.horizontal,
-              itemCount: 10,
+              itemCount: data.propertyphotos == null ? inventoryDetailsImageUrls.length : allImages.length,
               itemBuilder: (context, index) {
-                if (!AppConst.getPublicView() || index > 0) {
-                  return GestureDetector(
-                    onTap: () {
-                      showImageSliderCarousel(inventoryDetailsImageUrls, index, context);
-                    },
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.all(10),
-                          height: 150,
-                          width: 150,
-                          decoration: BoxDecoration(
-                            // border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              inventoryDetailsImageUrls[index],
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return const Icon(
-                                  Icons.error_outline,
-                                  size: 50,
-                                  color: Colors.red,
-                                );
-                              },
-                              loadingBuilder: (context, child, loadingProgress) {
-                                return loadingProgress == null ? child : const CircularProgressIndicator();
-                              },
-                            ),
+                return GestureDetector(
+                  onTap: () {
+                    showImageSliderCarousel(
+                      data.propertyphotos == null ? inventoryDetailsImageUrls : allImages,
+                      index,
+                      context,
+                    );
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.all(10),
+                        height: 130,
+                        width: 150,
+                        decoration: BoxDecoration(
+                          // border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network(
+                            data.propertyphotos == null ? inventoryDetailsImageUrls[index] : allImages[index],
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Icon(
+                                Icons.error_outline,
+                                size: 50,
+                                color: Colors.red,
+                              );
+                            },
+                            loadingBuilder: (context, child, loadingProgress) {
+                              return loadingProgress == null ? child : const Center(child: CircularProgressIndicator.adaptive());
+                            },
                           ),
                         ),
-                        const CustomText(title: 'Front Elevation')
-                      ],
-                    ),
-                  );
-                }
-                return const SizedBox();
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CustomText(
+                          title: data.propertyphotos == null ? 'Front Elevation' : allTitles[index],
+                        ),
+                      )
+                    ],
+                  ),
+                );
               },
             ),
           ),
@@ -125,24 +158,28 @@ class DetailsTabView extends StatelessWidget {
         const SizedBox(
           height: 30,
         ),
-        if (!AppConst.getPublicView())
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(bottom: 8.0),
-                child: CustomText(
-                  title: "Attachments",
-                  fontWeight: FontWeight.w700,
-                ),
+        // if (!AppConst.getPublicView())
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(bottom: 8.0),
+              child: CustomText(
+                title: "Attachments",
+                fontWeight: FontWeight.w700,
               ),
-              StatefulBuilder(
-                builder: (context, setState) {
-                  return Row(
-                    children: [
-                      Row(
-                        children: pickedDocuments.map((document) {
-                          final currentIndex = pickedDocuments.indexOf(document);
+            ),
+            StatefulBuilder(
+              builder: (context, setState) {
+                return SizedBox(
+                  height: 100,
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: pickedFilesList.length + 1,
+                      itemBuilder: (context, index) {
+                        if (index < pickedFilesList.length) {
+                          final document = pickedFilesList[index];
                           return Stack(
                             children: [
                               Container(
@@ -162,7 +199,7 @@ class DetailsTabView extends StatelessWidget {
                                       size: 40,
                                     ),
                                     CustomText(
-                                      title: selectedDocsName[currentIndex],
+                                      title: selectedDocNameList[index],
                                       size: 13,
                                       fontWeight: FontWeight.w400,
                                     ),
@@ -179,60 +216,58 @@ class DetailsTabView extends StatelessWidget {
                                   ),
                                   onPressed: () {
                                     setState(() {
-                                      pickedDocuments.remove(document);
-                                      // selectedDocsName.removeAt(currentIndex);
+                                      pickedFilesList.remove(document);
+                                      selectedDocNameList.removeAt(index);
                                     });
                                   },
                                 ),
                               ),
                             ],
                           );
-                        }).toList(),
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          showUploadDocumentModal(
-                            context,
-                            selectedDocsName,
-                            selectedImageName,
-                            pickedDocuments,
-                            () {
-                              setState(() {});
-                              selectedImageName = null;
-                              Navigator.of(context).pop();
+                        } else {
+                          return GestureDetector(
+                            onTap: () async {
+                              showUploadDocumentModal(
+                                context,
+                                selectedDocNameList,
+                                selectedFileName,
+                                pickedFilesList,
+                                () {
+                                  setState(() {});
+                                },
+                              );
                             },
+                            child: Container(
+                              height: 100,
+                              width: 100,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey.withOpacity(0.5)),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.add,
+                                    size: 40,
+                                  ),
+                                  CustomText(
+                                    title: 'Add more',
+                                    size: 8,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ],
+                              ),
+                            ),
                           );
-                        },
-                        child: Container(
-                          height: 100,
-                          width: 100,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey.withOpacity(0.5)),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.add,
-                                size: 40,
-                              ),
-                              CustomText(
-                                title: 'Add more',
-                                size: 8,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ],
-          ),
+                        }
+                      }),
+                );
+              },
+            ),
+          ],
+        ),
         if (!Responsive.isDesktop(context)) ...[
           if (isLeadView) ...[
             MapViewWidget(

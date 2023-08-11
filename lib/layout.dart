@@ -18,6 +18,7 @@ class LayoutView extends StatefulWidget {
 
 class _LayoutViewState extends State<LayoutView> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();

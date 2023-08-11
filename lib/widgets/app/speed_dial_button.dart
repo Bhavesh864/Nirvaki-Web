@@ -1,13 +1,20 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 import 'package:flutter_material_symbols/flutter_material_symbols.dart';
+import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/routes/routes.dart';
 import '../../constants/utils/colors.dart';
 
-class CustomSpeedDialButton extends StatelessWidget {
+class CustomSpeedDialButton extends StatefulWidget {
   const CustomSpeedDialButton({super.key});
 
+  @override
+  State<CustomSpeedDialButton> createState() => _CustomSpeedDialButtonState();
+}
+
+class _CustomSpeedDialButtonState extends State<CustomSpeedDialButton> {
   @override
   Widget build(BuildContext context) {
     return SpeedDial(
@@ -15,6 +22,7 @@ class CustomSpeedDialButton extends StatelessWidget {
       foregroundColor: Colors.white,
       backgroundColor: AppColor.primary,
       overlayColor: Colors.black,
+      renderOverlay: false,
       overlayOpacity: 0.4,
       children: [
         SpeedDialChild(
@@ -26,7 +34,11 @@ class CustomSpeedDialButton extends StatelessWidget {
             //     ),
             //   ),
             // );
-            Navigator.of(context).pushNamed(AppRoutes.addInventory);
+            if (Responsive.isMobile(context)) {
+              Navigator.of(context).pushNamed(AppRoutes.addInventory);
+            } else {
+              context.beamToNamed(AppRoutes.addInventory);
+            }
           },
           labelShadow: [
             const BoxShadow(
@@ -52,7 +64,11 @@ class CustomSpeedDialButton extends StatelessWidget {
             //     ),
             //   ),
             // );
-            Navigator.of(context).pushNamed(AppRoutes.addLead);
+            if (Responsive.isMobile(context)) {
+              Navigator.of(context).pushNamed(AppRoutes.addLead);
+            } else {
+              context.beamToNamed(AppRoutes.addLead);
+            }
           },
           labelShadow: [
             const BoxShadow(
@@ -71,7 +87,11 @@ class CustomSpeedDialButton extends StatelessWidget {
         ),
         SpeedDialChild(
           onTap: () {
-            Navigator.of(context).pushNamed(AppRoutes.addTodo);
+            if (Responsive.isMobile(context)) {
+              Navigator.of(context).pushNamed(AppRoutes.addTodo);
+            } else {
+              context.beamToNamed(AppRoutes.addTodo);
+            }
           },
           labelShadow: [
             const BoxShadow(

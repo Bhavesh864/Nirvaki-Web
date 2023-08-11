@@ -101,7 +101,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
-            final String res = notify.state.isNotEmpty ? notify.state[0]["item"] : "Residential";
+            final res = notify.state.isNotEmpty ? notify.state[0]["item"] : "Residential";
             InventoryQuestions? screenData = getcurrentInventory(snapshot, res);
             List<Screen> screensDataList = screenData!.screens;
             return Stack(
@@ -177,7 +177,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                         margin: const EdgeInsets.only(top: 10),
                                                         alignment: Alignment.centerRight,
                                                         child: CustomButton(
-                                                          text: 'Next',
+                                                          text: screensDataList[index].title == "Assign to" ? 'Submit' : 'Next',
                                                           onPressed: () {
                                                             FocusScope.of(context).unfocus();
 
@@ -193,7 +193,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                               addDataOnfirestore(notify);
                                                             }
                                                           },
-                                                          width: 73,
+                                                          width: screensDataList[index].title == "Assign to" ? 90 : 70,
                                                           height: 39,
                                                         ),
                                                       ),
@@ -216,7 +216,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                               isInventory: "IN",
                             )
                           : const Center(
-                              child: CircularProgressIndicator.adaptive(),
+                              child: CircularProgressIndicator(),
                             ),
                 ),
                 inventoryAppBar(screensDataList),
