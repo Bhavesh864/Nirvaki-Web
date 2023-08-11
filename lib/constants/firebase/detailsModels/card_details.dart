@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 
@@ -203,12 +204,20 @@ class CardDetails {
     }
   }
 
-  static Future<void> updateCardDetails(CardDetails item) async {
+  static Future<void> updateCardStatus({required String id, required String newStatus}) async {
     try {
-      await cardDetailsCollection.doc(item.workitemId).update(item.toJson());
-      // print('Inventory item updated successfully');
+      // Query for documents that match the specified criteria
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();
+
+      // Update the status field in each matching document
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'Status': newStatus});
+      }
+      // Print a message indicating success
+      print('Card status updated successfully for documents matching criteria.');
     } catch (error) {
-      // print('Failed to update Inventory item: $error');
+      // Handle errors
+      print('Failed to update card status: $error');
     }
   }
 
