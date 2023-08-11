@@ -10,7 +10,6 @@ import 'package:yes_broker/widgets/card/card_header.dart';
 class CustomCard extends StatefulWidget {
   final int index;
   final List<CardDetails> cardDetails;
-
   const CustomCard({super.key, required this.index, required this.cardDetails});
 
   @override
@@ -26,7 +25,7 @@ class _CustomCardState extends State<CustomCard> {
 
   getdata() async {
     final InventoryDetails? item = await InventoryDetails.getInventoryDetails(widget.cardDetails[0].workitemId);
-    print("==========>${item?.customerinfo?.firstname}");
+    print("====================>${item?.customerinfo?.firstname}");
   }
 
   @override
