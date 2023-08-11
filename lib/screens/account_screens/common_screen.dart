@@ -46,47 +46,49 @@ class CommonScreen extends ConsumerWidget {
       ref.read(selectedProfileItemProvider.notifier).setSelectedItem(item);
     }
 
-    return Container(
-      decoration: const BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: AppColor.secondary,
-            spreadRadius: 12,
-            blurRadius: 4,
-            offset: Offset(5, 5),
-          ),
-        ],
-        color: Colors.white,
-      ),
-      child: Row(
-        children: [
-          if (MediaQuery.of(context).size.width >= 900)
-            Expanded(
-              flex: 1,
-              child: ListView(
-                children: [
-                  for (var item in profileMenuItems)
-                    ListTile(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      hoverColor: AppColor.selectedItemColor,
-                      selectedTileColor: selectedItem?.id == item.id ? AppColor.selectedItemColor : Colors.white,
-                      title: Text(item.title),
-                      onTap: () => item.id == 6 ? logoutaction(ref, context) : onItemSelected(item),
-                      selected: selectedItem?.id == item.id,
-                    ),
-                ],
-              ),
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: AppColor.secondary,
+              spreadRadius: 12,
+              blurRadius: 4,
+              offset: Offset(5, 5),
             ),
-          const VerticalDivider(
-            color: AppColor.verticalLineColor,
-            thickness: 1,
-          ),
-          // Right side content
-          Expanded(
-            flex: 5,
-            child: selectedItem != null ? selectedItem.screen : Container(),
-          ),
-        ],
+          ],
+          color: Colors.white,
+        ),
+        child: Row(
+          children: [
+            if (MediaQuery.of(context).size.width >= 900)
+              Expanded(
+                flex: 1,
+                child: ListView(
+                  children: [
+                    for (var item in profileMenuItems)
+                      ListTile(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        hoverColor: AppColor.selectedItemColor,
+                        selectedTileColor: selectedItem?.id == item.id ? AppColor.selectedItemColor : Colors.white,
+                        title: Text(item.title),
+                        onTap: () => item.id == 6 ? logoutaction(ref, context) : onItemSelected(item),
+                        selected: selectedItem?.id == item.id,
+                      ),
+                  ],
+                ),
+              ),
+            const VerticalDivider(
+              color: AppColor.verticalLineColor,
+              thickness: 1,
+            ),
+            // Right side content
+            Expanded(
+              flex: 5,
+              child: selectedItem != null ? selectedItem.screen : Container(),
+            ),
+          ],
+        ),
       ),
     );
   }

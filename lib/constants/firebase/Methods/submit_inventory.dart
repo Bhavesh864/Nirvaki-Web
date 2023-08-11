@@ -44,7 +44,7 @@ Future<String> submitInventoryAndcardDetails(state) async {
   final floorNumber = getDataById(state, 30);
   final latlng = getDataById(state, 31);
   final propertyFacing = getDataById(state, 32);
-  // final photos = getDataById(state, 33);
+  final photos = getDataById(state, 33);
   final video = getDataById(state, 34);
   final comments = getDataById(state, 35);
   final User assignto = getDataById(state, 36);
@@ -130,6 +130,7 @@ Future<String> submitInventoryAndcardDetails(state) async {
       propertylocation: latlng,
       attachments: [],
       propertyvideo: video,
+      propertyphotos: photos,
       createdate: Timestamp.now(),
       assignedto: [Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)],
       createdby: Createdby(

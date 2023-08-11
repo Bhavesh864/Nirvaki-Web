@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import 'package:yes_broker/pages/add_inventory.dart';
 
@@ -173,13 +174,40 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
 
     try {
       if (kIsWeb) {
-        await referenceImagesToUpload.putData(dataToPut);
+        final metaData = SettableMetadata(contentType: 'image/jpeg');
+        await referenceImagesToUpload.putData(dataToPut, metaData);
       } else {
         await referenceImagesToUpload.putFile(dataToPut);
       }
       imageUrl = await referenceImagesToUpload.getDownloadURL();
       selectedImagesUrlList.add(imageUrl);
-      widget.notify!.add({'id': widget.id, 'item': selectedImagesUrlList});
+
+      if (itemTitles.length == selectedImagesUrlList.length) {
+        List<int> bedRoomIndices = itemTitles.asMap().entries.where((entry) => entry.value.contains('Bed Room')).map((entry) => entry.key).toList();
+        List<int> bathRoomIndices = itemTitles.asMap().entries.where((entry) => entry.value.contains('BathRoom')).map((entry) => entry.key).toList();
+        List<int> pujaRoomIndices = itemTitles.asMap().entries.where((entry) => entry.value.contains('Puja')).map((entry) => entry.key).toList();
+        List<int> servantRoomIndices = itemTitles.asMap().entries.where((entry) => entry.value.contains('Servant')).map((entry) => entry.key).toList();
+        List<int> studyRoomIndices = itemTitles.asMap().entries.where((entry) => entry.value.contains('Study')).map((entry) => entry.key).toList();
+        List<int> officeRoomIndices = itemTitles.asMap().entries.where((entry) => entry.value.contains('Office')).map((entry) => entry.key).toList();
+
+        Propertyphotos propertyphotos = Propertyphotos(
+          frontelevation: [selectedImagesUrlList[0]],
+          bedroom: bedRoomIndices.map((index) => selectedImagesUrlList[index]).toList(),
+          bathroom: bathRoomIndices.map((index) => selectedImagesUrlList[index]).toList(),
+          pujaroom: pujaRoomIndices.map((index) => selectedImagesUrlList[index]).toList(),
+          servantroom: servantRoomIndices.map((index) => selectedImagesUrlList[index]).toList(),
+          studyroom: studyRoomIndices.map((index) => selectedImagesUrlList[index]).toList(),
+          officeroom: officeRoomIndices.map((index) => selectedImagesUrlList[index]).toList(),
+          //   kitchen: ,
+        );
+
+        widget.notify!.add({
+          'id': widget.id,
+          'item': propertyphotos,
+        });
+
+        print('propertyPhotos =-----------${propertyphotos.toJson()}');
+      }
     } catch (e) {
       print(e);
     }
@@ -187,6 +215,8 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
 
   @override
   Widget build(BuildContext context) {
+    print(itemTitles);
+
     return SingleChildScrollView(
       physics: Responsive.isMobile(context) ? const ScrollPhysics() : const NeverScrollableScrollPhysics(),
       child: Container(

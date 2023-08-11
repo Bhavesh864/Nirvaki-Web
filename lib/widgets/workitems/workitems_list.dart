@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -38,8 +39,8 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
             color: AppColor.secondary,
             borderRadius: BorderRadius.circular(15),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-          margin: const EdgeInsets.symmetric(horizontal: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+          margin: const EdgeInsets.only(left: 8, right: 3),
           child: SafeArea(
             right: false,
             child: Column(
@@ -79,6 +80,7 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                             } else {
                               ref.read(selectedWorkItemId.notifier).addItemId(id);
                               ref.read(largeScreenTabsProvider.notifier).update((state) => 7);
+                              context.beamToNamed('/inventory-details/$id');
                             }
                           } else if (id.contains('LD')) {
                             if (Responsive.isMobile(context)) {
@@ -86,6 +88,7 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                             } else {
                               ref.read(selectedWorkItemId.notifier).addItemId(id);
                               ref.read(largeScreenTabsProvider.notifier).update((state) => 8);
+                              context.beamToNamed('/lead-details/$id');
                             }
                           }
                         },

@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:yes_broker/Customs/responsive.dart';
 
 import '../../Customs/custom_fields.dart';
 import '../../Customs/dropdown_field.dart';
@@ -19,10 +24,10 @@ void showImageSliderCarousel(List<String> imageUrls, int initialIndex, BuildCont
             Expanded(
               child: CarouselSlider(
                 options: CarouselOptions(
-                  height: 550,
+                  height: Responsive.isMobile(context) ? null : 550,
                   initialPage: initialIndex,
                   enlargeCenterPage: true,
-                  viewportFraction: 0.55,
+                  viewportFraction: Responsive.isMobile(context) ? 0.7 : 0.55,
                   enableInfiniteScroll: false,
                 ),
                 items: imageUrls.map(
@@ -63,6 +68,30 @@ void showImageSliderCarousel(List<String> imageUrls, int initialIndex, BuildCont
   );
 }
 
+void uploadFileToFirebase(PlatformFile fileToUpload) async {
+  print(fileToUpload);
+
+  final uniqueKey = DateTime.now().microsecondsSinceEpoch.toString();
+
+  Reference referenceRoot = FirebaseStorage.instance.ref();
+  Reference referenceDirImages = referenceRoot.child('attachments');
+
+  Reference referenceImagesToUpload = referenceDirImages.child(uniqueKey);
+
+  try {
+    if (kIsWeb) {
+      await referenceImagesToUpload.putData(fileToUpload.bytes!);
+    } else {
+      await referenceImagesToUpload.putFile(File(fileToUpload.path!));
+    }
+    final downloadUrl = await referenceImagesToUpload.getDownloadURL();
+
+    print('downloadurl.-------$downloadUrl');
+  } catch (e) {
+    print(e);
+  }
+}
+
 void showUploadDocumentModal(
   BuildContext context,
   List<String> selectedDocName,
@@ -71,6 +100,7 @@ void showUploadDocumentModal(
   Function onPressed,
 ) {
   String docName = '';
+
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -133,8 +163,13 @@ void showUploadDocumentModal(
                     CustomButton(
                       text: 'Done',
                       onPressed: () {
-                        selectedDocName.add(docName);
-                        onPressed();
+                        if (docName != '' && selectedFile != null) {
+                          selectedDocName.add(docName);
+                          uploadFileToFirebase(selectedFile!);
+                          onPressed();
+                          selectedFile = null;
+                          Navigator.of(context).pop();
+                        }
                       },
                     ),
                   ],
@@ -143,6 +178,46 @@ void showUploadDocumentModal(
             ),
           );
         },
+      );
+    },
+  );
+}
+
+void showOwnerDetailsAndAssignToBottomSheet(BuildContext context, String title, Widget innerContent) {
+  showModalBottomSheet(
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+    ),
+    builder: (BuildContext context) {
+      return Container(
+        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 10),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                  icon: const Icon(
+                    Icons.close,
+                    size: 20,
+                    color: AppColor.primary,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            innerContent,
+          ],
+        ),
       );
     },
   );

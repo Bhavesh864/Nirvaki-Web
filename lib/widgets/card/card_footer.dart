@@ -69,12 +69,12 @@ class CardFooter extends StatelessWidget {
                 ),
                 paddingHorizontal: 3,
               ),
-              const CustomChip(
-                label: Icon(
-                  Icons.edit_outlined,
-                ),
-                paddingHorizontal: 3,
-              ),
+              // const CustomChip(
+              //   label: Icon(
+              //     Icons.edit_outlined,
+              //   ),
+              //   paddingHorizontal: 3,
+              // ),
               const CustomChip(
                 label: Icon(
                   Icons.share_outlined,

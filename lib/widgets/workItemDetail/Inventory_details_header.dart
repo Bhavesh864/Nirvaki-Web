@@ -32,65 +32,70 @@ class InventoryDetailsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0), // Adjust as needed
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-              if (!Responsive.isMobile(context))
-                HeaderChips(
-                  category: category,
-                  type: type,
-                  propertyCategory: propertyCategory,
-                  status: status,
-                ),
-              const CustomChip(
+            ),
+            if (!Responsive.isMobile(context))
+              HeaderChips(
+                category: category,
+                type: type,
+                propertyCategory: propertyCategory,
+                status: status,
+              ),
+            const CustomChip(
+              label: Icon(
+                Icons.share_outlined,
+              ),
+              paddingHorizontal: 3,
+            ),
+            PopupMenuButton(
+              tooltip: '',
+              initialValue: status,
+              splashRadius: 0,
+              padding: EdgeInsets.zero,
+              color: Colors.white.withOpacity(1),
+              offset: const Offset(10, 40),
+              itemBuilder: (context) => dropDownDetailsList
+                  .map(
+                    (e) => popupMenuItem(e['title'].toString(), (e) {
+                      if (e.contains('Public')) {
+                        AppConst.setPublicView(!AppConst.getPublicView());
+                        setState();
+                      }
+                    }, showicon: true, icon: e['icon']),
+                  )
+                  .toList(),
+              child: const CustomChip(
                 label: Icon(
-                  Icons.share_outlined,
+                  Icons.more_vert,
                 ),
                 paddingHorizontal: 3,
               ),
-              PopupMenuButton(
-                tooltip: '',
-                initialValue: status,
-                splashRadius: 0,
-                padding: EdgeInsets.zero,
-                color: Colors.white.withOpacity(1),
-                offset: const Offset(10, 40),
-                itemBuilder: (context) => dropDownDetailsList
-                    .map(
-                      (e) => popupMenuItem(e['title'].toString(), (e) {
-                        if (e.contains('Public')) {
-                          AppConst.setPublicView(!AppConst.getPublicView());
-                          setState();
-                        }
-                      }, showicon: true, icon: e['icon']),
-                    )
-                    .toList(),
-                child: const CustomChip(
-                  label: Icon(
-                    Icons.more_vert,
-                  ),
-                  paddingHorizontal: 3,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
         if (!Responsive.isMobile(context))
           CustomText(
             title: price != null ? '$price$unit' : '50k/month',
             color: AppColor.primary,
-          )
+          ),
       ],
     );
   }
