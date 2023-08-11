@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
@@ -35,7 +36,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 setState(() {
                   isloading = false;
                 }),
-                Navigator.of(context).pushReplacementNamed(AppRoutes.homeScreen)
+                if (Responsive.isMobile(context))
+                  {
+                    Navigator.of(context).pushReplacementNamed(AppRoutes.homeScreen),
+                  }
+                else
+                  {
+                    context.beamToNamed('/'),
+                  }
               }
             else
               {

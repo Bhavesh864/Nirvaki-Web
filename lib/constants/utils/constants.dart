@@ -12,8 +12,10 @@ class MenuItem {
   final String label;
   final IconData? iconData;
   final Widget screen;
+  final String nav;
 
   MenuItem({
+    this.nav = '',
     required this.label,
     this.iconData,
     required this.screen,

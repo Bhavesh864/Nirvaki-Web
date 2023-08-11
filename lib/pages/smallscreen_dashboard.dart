@@ -41,8 +41,42 @@ class SmallScreen extends ConsumerWidget {
           userLogout(ref, context);
         }
       }),
+      // bottomNavigationBar: BottomAppBar(
+      //   shape: const CircularNotchedRectangle(),
+      //   notchMargin: 10,
+      //   child: Container(
+      //     height: 60,
+      //     child: Row(
+      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //       children: [
+      //         Row(
+      //           crossAxisAlignment: CrossAxisAlignment.start,
+      //           children: List.generate(
+      //             bottomBarItems.length,
+      //             (index) => MaterialButton(
+      //               onPressed: () {},
+      //               minWidth: 40,
+      //               child: const Column(
+      //                 mainAxisAlignment: MainAxisAlignment.center,
+      //                 children: [
+      //                   Icon(
+      //                     Icons.dashboard,
+      //                     color: Colors.amber,
+      //                   )
+      //                 ],
+      //               ),
+      //             ),
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         selectedItemColor: AppColor.primary,
+        unselectedItemColor: Colors.grey,
+        showUnselectedLabels: true,
         onTap: (value) => {
           ref.read(currentIndexProvider.notifier).update((state) => value),
           ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null),
@@ -70,7 +104,7 @@ class SmallScreen extends ConsumerWidget {
         ],
       ),
       floatingActionButton: const CustomSpeedDialButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
