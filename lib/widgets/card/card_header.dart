@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 
@@ -12,7 +13,7 @@ import '../app/nav_bar.dart';
 import '../../Customs/custom_chip.dart';
 
 // ignore: must_be_immutable
-class CardHeader extends StatelessWidget {
+class CardHeader extends StatefulWidget {
   final int index;
   List<CardDetails> cardDetails;
 
@@ -23,8 +24,13 @@ class CardHeader extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<CardHeader> createState() => _CardHeaderState();
+}
+
+class _CardHeaderState extends State<CardHeader> {
+  @override
   Widget build(BuildContext context) {
-    final cardData = cardDetails[index];
+    final cardData = widget.cardDetails[widget.index];
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -86,29 +92,32 @@ class CardHeader extends StatelessWidget {
                     )
                   : const SizedBox(),
               PopupMenuButton(
-                tooltip: '',
-                initialValue: selectedOption,
+                initialValue: cardData.status,
                 splashRadius: 0,
                 padding: EdgeInsets.zero,
                 color: Colors.white.withOpacity(1),
                 offset: const Offset(10, 40),
                 itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
+                onSelected: (value) {
+                  CardDetails.updateCardStatus(id: cardData.workitemId!, newStatus: value);
+                  setState(() {});
+                },
                 child: CustomChip(
                   label: Row(
                     children: [
                       CustomText(
-                        title: selectedOption,
-                        color: taskStatusColor(selectedOption),
+                        title: cardData.status!,
+                        color: taskStatusColor(cardData.status!),
                         size: 10,
                       ),
                       Icon(
                         Icons.expand_more,
                         size: 18,
-                        color: taskStatusColor(selectedOption),
+                        color: taskStatusColor(cardData.status!),
                       ),
                     ],
                   ),
-                  color: taskStatusColor(selectedOption).withOpacity(0.1),
+                  color: taskStatusColor(cardData.status!).withOpacity(0.1),
                 ),
               ),
             ],
