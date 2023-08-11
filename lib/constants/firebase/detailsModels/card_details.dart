@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 
@@ -208,7 +207,6 @@ class CardDetails {
     try {
       // Query for documents that match the specified criteria
       QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();
-
       // Update the status field in each matching document
       for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
         await docSnapshot.reference.update({'Status': newStatus});
