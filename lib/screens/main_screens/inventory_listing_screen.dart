@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -11,14 +12,14 @@ import '../../pages/largescreen_dashboard.dart';
 import '../../riverpodstate/selected_workitem.dart';
 import '../../widgets/card/custom_card.dart';
 
-class InventoryScreen extends ConsumerStatefulWidget {
-  const InventoryScreen({super.key});
+class InventoryListingScreen extends ConsumerStatefulWidget {
+  const InventoryListingScreen({super.key});
 
   @override
-  InventoryScreenState createState() => InventoryScreenState();
+  InventoryListingScreenState createState() => InventoryListingScreenState();
 }
 
-class InventoryScreenState extends ConsumerState<InventoryScreen> {
+class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> {
   bool isFilterOpen = false;
 
   Future<List<CardDetails>>? future;
@@ -35,17 +36,15 @@ class InventoryScreenState extends ConsumerState<InventoryScreen> {
       future: future,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const SizedBox(
-            // height: height! * 0.7,
-            child: Center(
-              child: CircularProgressIndicator.adaptive(),
-            ),
+          return const Center(
+            child: CircularProgressIndicator.adaptive(),
           );
         }
         if (snapshot.hasData) {
           List<CardDetails> inventoryList = snapshot.data!.where((item) => item.cardType == "IN").toList();
 
           return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 flex: 5,
@@ -71,19 +70,20 @@ class InventoryScreenState extends ConsumerState<InventoryScreen> {
                             }
                           }),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
                             flex: 5,
                             child: Container(
                               // constraints: BoxConstraints(
-                              //   minHeight: height!,
+                              //   minHeight: height! * 0.7,
                               // ),
                               decoration: BoxDecoration(
                                 color: AppColor.secondary,
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                              margin: Responsive.isMobile(context) ? null : const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                               child: GridView.builder(
                                 shrinkWrap: true,
                                 physics: const ScrollPhysics(),
@@ -104,16 +104,20 @@ class InventoryScreenState extends ConsumerState<InventoryScreen> {
                                     if (id!.contains('IN')) {
                                       if (Responsive.isMobile(context)) {
                                         Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
+                                        ref.read(selectedWorkItemId.notifier).addItemId(id);
                                       } else {
                                         ref.read(selectedWorkItemId.notifier).addItemId(id);
                                         ref.read(largeScreenTabsProvider.notifier).update((state) => 7);
+                                        context.beamToNamed('/inventory/inventory-details/$id');
                                       }
                                     } else if (id.contains('LD')) {
                                       if (Responsive.isMobile(context)) {
                                         Navigator.of(context).pushNamed(AppRoutes.leadDetailsScreen, arguments: id);
+                                        ref.read(selectedWorkItemId.notifier).addItemId(id);
                                       } else {
                                         ref.read(selectedWorkItemId.notifier).addItemId(id);
                                         ref.read(largeScreenTabsProvider.notifier).update((state) => 8);
+                                        context.beamToNamed('/lead/lead-details');
                                       }
                                     }
                                   },

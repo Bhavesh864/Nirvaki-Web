@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 
-import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/widgets/card/card_footer.dart';
 import 'package:yes_broker/widgets/card/card_header.dart';
 

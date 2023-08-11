@@ -19,7 +19,7 @@ import '../screens/main_screens/chat_screen.dart';
 import '../screens/main_screens/home_screen.dart';
 import '../screens/main_screens/inventory_listing_screen.dart';
 import '../screens/main_screens/lead_listing_screen.dart';
-import '../screens/main_screens/todo_screen.dart';
+import '../screens/main_screens/todo_listing_screen.dart';
 import '../constants/utils/constants.dart';
 import '../pages/Auth/login/forget_password.dart';
 import '../pages/add_inventory.dart';
@@ -49,44 +49,53 @@ const IconData calendarIcon = Icons.calendar_month_outlined;
 
 List<MenuItem> sideBarItems = [
   MenuItem(
+    nav: '/',
+    // nav = '/home_screen',
     label: homeScreenPageLabel,
     iconData: homeIcon,
     screen: const HomeScreen(),
   ),
   MenuItem(
+    nav: '/todo',
     label: todoPageLabel,
     iconData: todoIcon,
-    screen: const TodoTabScreen(),
+    screen: const TodoListingScreen(),
   ),
   MenuItem(
+    nav: '/inventory',
     label: inventoryPageLabel,
     iconData: inventoryIcon,
-    screen: const InventoryScreen(),
+    screen: const InventoryListingScreen(),
   ),
   MenuItem(
+    nav: '/lead',
     label: leadPageLabel,
     iconData: leadIcon,
-    screen: const LeadScreen(),
+    screen: const LeadListingScreen(),
   ),
   MenuItem(
-    label: calendarPageLabel,
-    iconData: chatIcon,
-    screen: const ChatScreen(),
-  ),
-  MenuItem(
+    nav: '/chat',
     label: chatPageLabel,
     iconData: calendarIcon,
     screen: const CalendarScreen(),
+  ),
+  MenuItem(
+    nav: '/calendar',
+    label: calendarPageLabel,
+    iconData: chatIcon,
+    screen: const ChatScreen(),
   ),
   MenuItem(
     label: profilePageLabel,
     screen: const CommonScreen(),
   ),
   MenuItem(
-    label: profilePageLabel,
+    nav: '/inventorydetails',
+    label: inventoryDetailsLabel,
     screen: const InventoryDetailsScreen(),
   ),
   MenuItem(
+    nav: '/lead-details',
     label: profilePageLabel,
     screen: const LeadDetailsScreen(),
   ),
@@ -96,17 +105,17 @@ List<BottomBarItem> bottomBarItems = [
   BottomBarItem(
     label: homeScreenPageLabel,
     iconData: homeIcon,
-    screen: const TodoTabScreen(),
+    screen: const TodoListingScreen(),
   ),
   BottomBarItem(
     label: inventoryPageLabel,
     iconData: inventoryIcon,
-    screen: const InventoryScreen(),
+    screen: const InventoryListingScreen(),
   ),
   BottomBarItem(
     label: leadPageLabel,
     iconData: leadIcon,
-    screen: const LeadScreen(),
+    screen: const LeadListingScreen(),
   ),
   BottomBarItem(
     label: chatPageLabel,
@@ -117,6 +126,7 @@ List<BottomBarItem> bottomBarItems = [
 
 class AppRoutes {
   static const String homeScreen = '/home_screen';
+
   static const String forgetPassword = '/forget_password_screen';
   static const String loginScreen = '/login_screen';
   static const String singupscreen = '/signup_screen';
