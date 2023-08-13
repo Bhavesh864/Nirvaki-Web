@@ -1,10 +1,9 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 
 import '../../constants/utils/constants.dart';
@@ -100,6 +99,7 @@ class _CardHeaderState extends State<CardHeader> {
                 itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
                 onSelected: (value) {
                   CardDetails.updateCardStatus(id: cardData.workitemId!, newStatus: value);
+                  InventoryDetails.updateAttachment(id: cardData.workitemId!, newStatus: value);
                   setState(() {});
                 },
                 child: CustomChip(

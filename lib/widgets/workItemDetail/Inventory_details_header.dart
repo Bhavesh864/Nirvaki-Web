@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/responsive.dart';
-
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/app_constant.dart';
+import '../../constants/firebase/detailsModels/card_details.dart';
+import '../../constants/firebase/detailsModels/inventory_details.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
-import '../app/app_bar.dart';
+import '../app/app_bar.dart' as app;
+import '../app/nav_bar.dart';
 
 class InventoryDetailsHeader extends StatelessWidget {
   final String title;
   final String category;
+  final String id;
   final String propertyCategory;
   final String status;
   final String type;
@@ -21,6 +24,7 @@ class InventoryDetailsHeader extends StatelessWidget {
   const InventoryDetailsHeader({
     super.key,
     required this.title,
+    required this.id,
     required this.category,
     required this.propertyCategory,
     required this.status,
@@ -58,6 +62,7 @@ class InventoryDetailsHeader extends StatelessWidget {
                 type: type,
                 propertyCategory: propertyCategory,
                 status: status,
+                id: id,
               ),
             const CustomChip(
               label: Icon(
@@ -74,7 +79,7 @@ class InventoryDetailsHeader extends StatelessWidget {
               offset: const Offset(10, 40),
               itemBuilder: (context) => dropDownDetailsList
                   .map(
-                    (e) => popupMenuItem(e['title'].toString(), (e) {
+                    (e) => app.popupMenuItem(e['title'].toString(), (e) {
                       if (e.contains('Public')) {
                         AppConst.setPublicView(!AppConst.getPublicView());
                         setState();
@@ -101,11 +106,12 @@ class InventoryDetailsHeader extends StatelessWidget {
   }
 }
 
-class HeaderChips extends StatelessWidget {
+class HeaderChips extends StatefulWidget {
   final String category;
   final String type;
   final String propertyCategory;
   final String status;
+  final String id;
 
   const HeaderChips({
     super.key,
@@ -113,8 +119,14 @@ class HeaderChips extends StatelessWidget {
     required this.type,
     required this.propertyCategory,
     required this.status,
+    required this.id,
   });
 
+  @override
+  State<HeaderChips> createState() => _HeaderChipsState();
+}
+
+class _HeaderChipsState extends State<HeaderChips> {
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -122,7 +134,7 @@ class HeaderChips extends StatelessWidget {
         CustomChip(
           color: AppColor.primary.withOpacity(0.1),
           label: CustomText(
-            title: category,
+            title: widget.category,
             size: 10,
             color: AppColor.primary,
           ),
@@ -130,7 +142,7 @@ class HeaderChips extends StatelessWidget {
         CustomChip(
           color: AppColor.primary.withOpacity(0.1),
           label: CustomText(
-            title: type,
+            title: widget.type,
             size: 10,
             color: AppColor.primary,
           ),
@@ -138,38 +150,43 @@ class HeaderChips extends StatelessWidget {
         CustomChip(
           color: AppColor.primary.withOpacity(0.1),
           label: CustomText(
-            title: propertyCategory,
+            title: widget.propertyCategory,
             size: 10,
             color: AppColor.primary,
           ),
         ),
         if (!AppConst.getPublicView())
           SizedBox(
-            width: 60,
+            width: 100,
             child: PopupMenuButton(
-              tooltip: '',
-              initialValue: status,
+              initialValue: widget.status,
               splashRadius: 0,
               padding: EdgeInsets.zero,
               color: Colors.white.withOpacity(1),
               offset: const Offset(10, 40),
-              itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString(), (e) {})).toList(),
+              itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
+              onSelected: (value) {
+                print('object');
+                CardDetails.updateCardStatus(id: widget.id, newStatus: value);
+                InventoryDetails.updateAttachment(id: widget.id, newStatus: value);
+                setState(() {});
+              },
               child: CustomChip(
                 label: Row(
                   children: [
                     CustomText(
-                      title: selectedOption,
-                      color: taskStatusColor(selectedOption),
+                      title: widget.status,
+                      color: taskStatusColor(widget.status),
                       size: 10,
                     ),
                     Icon(
                       Icons.expand_more,
                       size: 18,
-                      color: taskStatusColor(selectedOption),
+                      color: taskStatusColor(widget.status),
                     ),
                   ],
                 ),
-                color: taskStatusColor(selectedOption).withOpacity(0.1),
+                color: taskStatusColor(widget.status).withOpacity(0.1),
               ),
             ),
           ),

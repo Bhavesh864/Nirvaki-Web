@@ -49,18 +49,12 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
 
   @override
   Widget build(BuildContext context) {
-    final stateData = ref.watch(selectedWorkItemId.notifier).state;
-
     // final workItemId = Responsive.isMobile(context)
     //     ? ModalRoute.of(context)!.settings.arguments
     //     : stateData == ''
     //         ? widget.leadId
     //         : stateData;
     // leadDetails = LeadDetails.getLeadDetails(workItemId);
-
-    if (stateData == '') {
-      AppConst.setPublicView(true);
-    }
 
     return Scaffold(
       appBar: Responsive.isMobile(context)
@@ -106,7 +100,8 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                               setState: () {
                                 setState(() {});
                               },
-                              title: data!.leadTitle!,
+                              id: data!.leadId!,
+                              title: data.leadTitle!,
                               category: data.leadcategory!,
                               type: data.leadType!,
                               propertyCategory: data.propertycategory!,
@@ -118,6 +113,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                               Padding(
                                 padding: const EdgeInsets.only(top: 10),
                                 child: HeaderChips(
+                                  id: data.leadId!,
                                   category: data.leadcategory!,
                                   type: data.leadType!,
                                   propertyCategory: data.propertycategory!,
@@ -184,9 +180,8 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                               Padding(
                                 padding: const EdgeInsets.only(top: 12.0),
                                 child: CustomText(
-                                  title: data.propertypricerange?.arearangestart != null
-                                      ? '${data.propertypricerange!.arearangestart}${data.propertypricerange!.unit}'
-                                      : '50k/month',
+                                  title:
+                                      data.propertypricerange?.arearangestart != null ? '${data.propertypricerange!.arearangestart}${data.propertypricerange!.unit}' : '50k/month',
                                   color: AppColor.primary,
                                 ),
                               ),

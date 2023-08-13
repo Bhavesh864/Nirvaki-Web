@@ -1,8 +1,8 @@
-// ignore_for_file: invalid_use_of_protected_member
+import 'dart:async';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
@@ -58,11 +58,6 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
     //         ? widget.inventoryId
     //         : stateData;
     // inventoryDetails = InventoryDetails.getInventoryDetails(workItemId);
-
-    if (stateData == '') {
-      AppConst.setPublicView(true);
-    }
-
     return Scaffold(
       appBar: Responsive.isMobile(context)
           ? AppBar(
@@ -89,7 +84,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
             }
             if (snapshot.hasData) {
               final data = snapshot.data;
-
+              print(data);
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -108,7 +103,8 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                 setState: () {
                                   setState(() {});
                                 },
-                                title: data!.inventoryTitle!,
+                                id: data!.inventoryId!,
+                                title: data.inventoryTitle!,
                                 category: data.inventorycategory!,
                                 type: data.inventoryType!,
                                 propertyCategory: data.propertycategory!,
@@ -120,11 +116,11 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                 Padding(
                                   padding: const EdgeInsets.only(top: 10),
                                   child: HeaderChips(
-                                    category: data.inventorycategory!,
-                                    type: data.inventoryType!,
-                                    propertyCategory: data.propertycategory!,
-                                    status: data.inventoryStatus!,
-                                  ),
+                                      category: data.inventorycategory!,
+                                      type: data.inventoryType!,
+                                      propertyCategory: data.propertycategory!,
+                                      status: data.inventoryStatus!,
+                                      id: data.inventoryId!),
                                 ),
                               ListTile(
                                 contentPadding: const EdgeInsets.all(0),
@@ -167,10 +163,8 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                           context,
                                           'Assignment',
                                           AssignmentWidget(
-                                            imageUrlAssignTo:
-                                                data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
-                                            imageUrlCreatedBy:
-                                                data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                            imageUrlAssignTo: data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
+                                            imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                             createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                             assignTo: data.assignedto![0].firstname! + data.assignedto![0].firstname!,
                                           ),
