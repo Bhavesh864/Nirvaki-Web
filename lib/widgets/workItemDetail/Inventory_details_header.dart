@@ -6,6 +6,7 @@ import '../../Customs/custom_text.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
+import '../app/nav_bar.dart';
 import '../app/app_bar.dart';
 
 class InventoryDetailsHeader extends StatelessWidget {
@@ -65,30 +66,30 @@ class InventoryDetailsHeader extends StatelessWidget {
               ),
               paddingHorizontal: 3,
             ),
-            PopupMenuButton(
-              tooltip: '',
-              initialValue: status,
-              splashRadius: 0,
-              padding: EdgeInsets.zero,
-              color: Colors.white.withOpacity(1),
-              offset: const Offset(10, 40),
-              itemBuilder: (context) => dropDownDetailsList
-                  .map(
-                    (e) => popupMenuItem(e['title'].toString(), (e) {
-                      if (e.contains('Public')) {
-                        AppConst.setPublicView(!AppConst.getPublicView());
-                        setState();
-                      }
-                    }, showicon: true, icon: e['icon']),
-                  )
-                  .toList(),
-              child: const CustomChip(
-                label: Icon(
-                  Icons.more_vert,
+            if (!AppConst.getPublicView() || AppConst.getIsAuthenticated())
+              PopupMenuButton(
+                tooltip: '',
+                splashRadius: 0,
+                padding: EdgeInsets.zero,
+                color: Colors.white.withOpacity(1),
+                offset: const Offset(10, 40),
+                itemBuilder: (context) => dropDownDetailsList
+                    .map(
+                      (e) => appBarPopupMenuItem(e['title'].toString(), (e) {
+                        if (e.contains('Public')) {
+                          AppConst.setPublicView(!AppConst.getPublicView());
+                          setState();
+                        }
+                      }, showicon: true, icon: e['icon']),
+                    )
+                    .toList(),
+                child: const CustomChip(
+                  label: Icon(
+                    Icons.more_vert,
+                  ),
+                  paddingHorizontal: 3,
                 ),
-                paddingHorizontal: 3,
               ),
-            ),
           ],
         ),
         if (!Responsive.isMobile(context))
@@ -101,7 +102,7 @@ class InventoryDetailsHeader extends StatelessWidget {
   }
 }
 
-class HeaderChips extends StatelessWidget {
+class HeaderChips extends StatefulWidget {
   final String category;
   final String type;
   final String propertyCategory;
@@ -116,13 +117,21 @@ class HeaderChips extends StatelessWidget {
   });
 
   @override
+  State<HeaderChips> createState() => _HeaderChipsState();
+}
+
+class _HeaderChipsState extends State<HeaderChips> {
+  String? currentStatus;
+
+  @override
   Widget build(BuildContext context) {
+    print(currentStatus);
     return Wrap(
       children: [
         CustomChip(
           color: AppColor.primary.withOpacity(0.1),
           label: CustomText(
-            title: category,
+            title: widget.category,
             size: 10,
             color: AppColor.primary,
           ),
@@ -130,7 +139,7 @@ class HeaderChips extends StatelessWidget {
         CustomChip(
           color: AppColor.primary.withOpacity(0.1),
           label: CustomText(
-            title: type,
+            title: widget.type,
             size: 10,
             color: AppColor.primary,
           ),
@@ -138,38 +147,44 @@ class HeaderChips extends StatelessWidget {
         CustomChip(
           color: AppColor.primary.withOpacity(0.1),
           label: CustomText(
-            title: propertyCategory,
+            title: widget.propertyCategory,
             size: 10,
             color: AppColor.primary,
           ),
         ),
         if (!AppConst.getPublicView())
           SizedBox(
-            width: 60,
+            // width: 60,
             child: PopupMenuButton(
               tooltip: '',
-              initialValue: status,
+              initialValue: currentStatus ?? widget.status,
               splashRadius: 0,
               padding: EdgeInsets.zero,
               color: Colors.white.withOpacity(1),
               offset: const Offset(10, 40),
-              itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString(), (e) {})).toList(),
+              itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
+              onSelected: (value) {
+                // CardDetails.updateCardStatus(id: cardData.workitemId!, newStatus: value);
+                // status![widget.index].status = value;
+                currentStatus = value;
+                setState(() {});
+              },
               child: CustomChip(
                 label: Row(
                   children: [
                     CustomText(
-                      title: selectedOption,
-                      color: taskStatusColor(selectedOption),
+                      title: currentStatus ?? widget.status,
+                      color: taskStatusColor(currentStatus ?? widget.status),
                       size: 10,
                     ),
                     Icon(
                       Icons.expand_more,
                       size: 18,
-                      color: taskStatusColor(selectedOption),
+                      color: taskStatusColor(currentStatus ?? widget.status),
                     ),
                   ],
                 ),
-                color: taskStatusColor(selectedOption).withOpacity(0.1),
+                color: taskStatusColor(currentStatus ?? widget.status).withOpacity(0.1),
               ),
             ),
           ),

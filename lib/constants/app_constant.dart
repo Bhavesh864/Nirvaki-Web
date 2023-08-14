@@ -38,6 +38,15 @@ class AppConst {
     _isPublicView = val;
   }
 
+  static bool _isAuthenticated = false;
+  static bool getIsAuthenticated() {
+    return _isAuthenticated;
+  }
+
+  static setIsAuthenticated(bool val) {
+    _isAuthenticated = val;
+  }
+
   static showConsoleLog(message) {
     if (kDebugMode) {
       print(message);

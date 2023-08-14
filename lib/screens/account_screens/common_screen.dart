@@ -31,7 +31,10 @@ List<ProfileMenuItems> profileMenuItems = [
 class CommonScreen extends ConsumerWidget {
   const CommonScreen({super.key});
   void logoutaction(WidgetRef ref, BuildContext context) {
-    authentication.signOut().then((value) => {Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen)});
+    authentication.signOut().then((value) {
+      Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen);
+      // context.beamToReplacementNamed('/');
+    });
     UserHiveMethods.deleteData(AppConst.getAccessToken());
     ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null);
     UserHiveMethods.deleteData("token");

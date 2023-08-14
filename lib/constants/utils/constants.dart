@@ -207,6 +207,14 @@ Color taskStatusColor(String title) {
       return Colors.orangeAccent;
     case 'Location Finalised':
       return Colors.orangeAccent;
+    case 'Agreement':
+      return const Color(0xFFF72586);
+    case 'Token':
+      return const Color(0xFF7109B6);
+    case 'Negotiation':
+      return const Color(0xFF936D0B);
+    case 'Closed':
+      return Colors.grey.shade900;
     default:
       return Colors.blue;
   }

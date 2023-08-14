@@ -50,19 +50,6 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
 
   @override
   Widget build(BuildContext context) {
-    final stateData = ref.watch(selectedWorkItemId.notifier).state;
-
-    // final workItemId = Responsive.isMobile(context)
-    //     ? ModalRoute.of(context)!.settings.arguments
-    //     : stateData == ''
-    //         ? widget.inventoryId
-    //         : stateData;
-    // inventoryDetails = InventoryDetails.getInventoryDetails(workItemId);
-
-    if (stateData == '') {
-      AppConst.setPublicView(true);
-    }
-
     return Scaffold(
       appBar: Responsive.isMobile(context)
           ? AppBar(

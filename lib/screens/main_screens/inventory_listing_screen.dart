@@ -42,7 +42,6 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
         }
         if (snapshot.hasData) {
           List<CardDetails> inventoryList = snapshot.data!.where((item) => item.cardType == "IN").toList();
-
           return Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -98,31 +97,33 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                                     mainAxisExtent: 160 // Spacing between columns
                                     ),
                                 itemCount: inventoryList.length,
-                                itemBuilder: (context, index) => GestureDetector(
-                                  onTap: () {
-                                    final id = inventoryList[index].workitemId;
-                                    if (id!.contains('IN')) {
-                                      if (Responsive.isMobile(context)) {
-                                        Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
-                                        ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                      } else {
-                                        ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                        ref.read(largeScreenTabsProvider.notifier).update((state) => 7);
-                                        context.beamToNamed('/inventory/inventory-details/$id');
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      final id = inventoryList[index].workitemId;
+                                      if (id!.contains('IN')) {
+                                        if (Responsive.isMobile(context)) {
+                                          Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
+                                          ref.read(selectedWorkItemId.notifier).addItemId(id);
+                                        } else {
+                                          ref.read(selectedWorkItemId.notifier).addItemId(id);
+                                          ref.read(largeScreenTabsProvider.notifier).update((state) => 7);
+                                          context.beamToNamed('/inventory/inventory-details/$id');
+                                        }
+                                      } else if (id.contains('LD')) {
+                                        if (Responsive.isMobile(context)) {
+                                          Navigator.of(context).pushNamed(AppRoutes.leadDetailsScreen, arguments: id);
+                                          ref.read(selectedWorkItemId.notifier).addItemId(id);
+                                        } else {
+                                          ref.read(selectedWorkItemId.notifier).addItemId(id);
+                                          ref.read(largeScreenTabsProvider.notifier).update((state) => 8);
+                                          context.beamToNamed('/lead/lead-details');
+                                        }
                                       }
-                                    } else if (id.contains('LD')) {
-                                      if (Responsive.isMobile(context)) {
-                                        Navigator.of(context).pushNamed(AppRoutes.leadDetailsScreen, arguments: id);
-                                        ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                      } else {
-                                        ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                        ref.read(largeScreenTabsProvider.notifier).update((state) => 8);
-                                        context.beamToNamed('/lead/lead-details');
-                                      }
-                                    }
-                                  },
-                                  child: CustomCard(index: index, cardDetails: inventoryList),
-                                ),
+                                    },
+                                    child: CustomCard(index: index, cardDetails: inventoryList),
+                                  );
+                                },
                               ),
                             ),
                           ),
@@ -160,91 +161,3 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
     );
   }
 }
-
-
- // decoration: const BoxDecoration(
-            //   boxShadow: [
-            //     BoxShadow(
-            //       color: AppColor.secondary,
-            //       spreadRadius: 12,
-            //       blurRadius: 4,
-            //       offset: Offset(5, 5),
-            //     ),
-            //   ],
-            //   color: Colors.white,
-            // ),
-            //   child: Row(
-            //     children: [
-            //       Expanded(
-            //         flex: 5,
-            //         child: Column(
-            //           children: [
-            //             TopSerachBar(
-            //                 title: 'Inventory',
-            //                 isMobile: Responsive.isMobile(context),
-            //                 isFilterOpen: isFilterOpen,
-            //                 onFilterClose: () {
-            //                   setState(() {
-            //                     isFilterOpen = false;
-            //                   });
-            //                 },
-            //                 onFilterOpen: () {
-            //                   if (Responsive.isMobile(context)) {
-            //                     Navigator.of(context).push(AppRoutes.createAnimatedRoute(const WorkItemFilterView()));
-            //                   } else {
-            //                     setState(() {
-            //                       isFilterOpen = true;
-            //                     });
-            //                   }
-            //                 }),
-            //             Expanded(
-            //               child: Row(
-            //                 children: [
-            //                   Expanded(
-            //                     child: WorkItemsList(
-            //                       title: 'Inventory',
-            //                       getCardDetails: inventoryList,
-            //                       headerShow: false,
-            //                     ),
-            //                   ),
-            //                   !Responsive.isMobile(context)
-            //                       ? const Expanded(
-            //                           child: TodoListView(
-            //                             headerShow: false,
-            //                           ),
-            //                         )
-            //                       : Container(),
-            //                   if (size.width > 1200)
-            //                     if (!Responsive.isMobile(context) && !isFilterOpen)
-            //                       const Expanded(
-            //                         child: TodoListView(headerShow: false),
-            //                       ),
-            //                 ],
-            //               ),
-            //             ),
-            //           ],
-            //         ),
-            //       ),
-            //       Responsive.isDesktop(context) && isFilterOpen
-            //           ? Expanded(
-            //               flex: 2,
-            //               child: Row(
-            //                 children: [
-            //                   Container(
-            //                     margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-            //                     width: 1,
-            //                     color: Colors.grey.withOpacity(0.5),
-            //                   ),
-            //                   Expanded(
-            //                     child: WorkItemFilterView(closeFilterView: () {
-            //                       setState(() {
-            //                         isFilterOpen = false;
-            //                       });
-            //                     }),
-            //                   ),
-            //                 ],
-            //               ),
-            //             )
-            //           : Container(),
-            //     ],
-            //   ), 

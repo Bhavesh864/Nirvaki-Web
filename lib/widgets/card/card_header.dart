@@ -1,19 +1,17 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_symbols/flutter_material_symbols.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
-
 import '../../constants/utils/constants.dart';
-
 import '../app/nav_bar.dart';
 import '../../Customs/custom_chip.dart';
 
 // ignore: must_be_immutable
-class CardHeader extends StatefulWidget {
+class CardHeader extends ConsumerStatefulWidget {
   final int index;
   List<CardDetails> cardDetails;
 
@@ -24,13 +22,19 @@ class CardHeader extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<CardHeader> createState() => _CardHeaderState();
+  CardHeaderState createState() => CardHeaderState();
 }
 
-class _CardHeaderState extends State<CardHeader> {
+class CardHeaderState extends ConsumerState<CardHeader> {
+  // String? status;
+  List<CardDetails>? status = [];
+
   @override
   Widget build(BuildContext context) {
     final cardData = widget.cardDetails[widget.index];
+
+    status = widget.cardDetails;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -92,7 +96,7 @@ class _CardHeaderState extends State<CardHeader> {
                     )
                   : const SizedBox(),
               PopupMenuButton(
-                initialValue: cardData.status,
+                initialValue: status ?? cardData.status,
                 splashRadius: 0,
                 padding: EdgeInsets.zero,
                 color: Colors.white.withOpacity(1),
@@ -100,24 +104,25 @@ class _CardHeaderState extends State<CardHeader> {
                 itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
                 onSelected: (value) {
                   CardDetails.updateCardStatus(id: cardData.workitemId!, newStatus: value);
+                  status![widget.index].status = value;
                   setState(() {});
                 },
                 child: CustomChip(
                   label: Row(
                     children: [
                       CustomText(
-                        title: cardData.status!,
-                        color: taskStatusColor(cardData.status!),
+                        title: status![widget.index].status ?? cardData.status!,
+                        color: taskStatusColor(status![widget.index].status ?? cardData.status!),
                         size: 10,
                       ),
                       Icon(
                         Icons.expand_more,
                         size: 18,
-                        color: taskStatusColor(cardData.status!),
+                        color: taskStatusColor(status![widget.index].status ?? cardData.status!),
                       ),
                     ],
                   ),
-                  color: taskStatusColor(cardData.status!).withOpacity(0.1),
+                  color: taskStatusColor(status![widget.index].status ?? cardData.status!).withOpacity(0.1),
                 ),
               ),
             ],

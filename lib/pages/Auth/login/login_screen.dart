@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
@@ -39,10 +40,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 if (Responsive.isMobile(context))
                   {
                     Navigator.of(context).pushReplacementNamed(AppRoutes.homeScreen),
+                    AppConst.setPublicView(false),
                   }
                 else
                   {
                     context.beamToNamed('/'),
+                    AppConst.setPublicView(false),
                   }
               }
             else

@@ -38,7 +38,7 @@ AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect) 
         offset: const Offset(200, 40),
         itemBuilder: (context) => profileMenuItems.map(
           (e) {
-            return popupMenuItem(e.title, onOptionSelect);
+            return appBarPopupMenuItem(e.title, onOptionSelect);
           },
         ).toList(),
         child: FutureBuilder(
@@ -63,7 +63,7 @@ AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect) 
   );
 }
 
-PopupMenuItem popupMenuItem(String title, void Function(String) onOptionSelect, {IconData icon = Icons.abc, bool showicon = false}) {
+PopupMenuItem appBarPopupMenuItem(String title, void Function(String) onOptionSelect, {IconData icon = Icons.abc, bool showicon = false}) {
   return PopupMenuItem(
     onTap: () {
       onOptionSelect(title);
