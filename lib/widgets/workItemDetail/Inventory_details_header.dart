@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/responsive.dart';
-
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/app_constant.dart';
+import '../../constants/firebase/detailsModels/card_details.dart';
+import '../../constants/firebase/detailsModels/inventory_details.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
 import '../app/nav_bar.dart';
@@ -12,6 +13,7 @@ import '../app/app_bar.dart';
 class InventoryDetailsHeader extends StatelessWidget {
   final String title;
   final String category;
+  final String id;
   final String propertyCategory;
   final String status;
   final String type;
@@ -22,6 +24,7 @@ class InventoryDetailsHeader extends StatelessWidget {
   const InventoryDetailsHeader({
     super.key,
     required this.title,
+    required this.id,
     required this.category,
     required this.propertyCategory,
     required this.status,
@@ -59,6 +62,7 @@ class InventoryDetailsHeader extends StatelessWidget {
                 type: type,
                 propertyCategory: propertyCategory,
                 status: status,
+                id: id,
               ),
             const CustomChip(
               label: Icon(
@@ -107,6 +111,7 @@ class HeaderChips extends StatefulWidget {
   final String type;
   final String propertyCategory;
   final String status;
+  final String id;
 
   const HeaderChips({
     super.key,
@@ -114,6 +119,7 @@ class HeaderChips extends StatefulWidget {
     required this.type,
     required this.propertyCategory,
     required this.status,
+    required this.id,
   });
 
   @override
@@ -126,6 +132,7 @@ class _HeaderChipsState extends State<HeaderChips> {
   @override
   Widget build(BuildContext context) {
     print(currentStatus);
+    print(widget.status);
     return Wrap(
       children: [
         CustomChip(
@@ -154,18 +161,17 @@ class _HeaderChipsState extends State<HeaderChips> {
         ),
         if (!AppConst.getPublicView())
           SizedBox(
-            // width: 60,
+            // width: 100,
             child: PopupMenuButton(
-              tooltip: '',
-              initialValue: currentStatus ?? widget.status,
+              initialValue: widget.status,
               splashRadius: 0,
               padding: EdgeInsets.zero,
               color: Colors.white.withOpacity(1),
               offset: const Offset(10, 40),
               itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
               onSelected: (value) {
-                // CardDetails.updateCardStatus(id: cardData.workitemId!, newStatus: value);
-                // status![widget.index].status = value;
+                CardDetails.updateCardStatus(id: widget.id, newStatus: value);
+                InventoryDetails.updateAttachment(id: widget.id, newStatus: value);
                 currentStatus = value;
                 setState(() {});
               },

@@ -362,6 +362,30 @@ class InventoryDetails {
       // print('Failed to update Inventory item: $error');
     }
   }
+
+  static Future<void> updateAttachment({required String id, required String newStatus}) async {
+    try {
+      QuerySnapshot querySnapshot = await usersCollection.where("InventoryId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'InventoryStatus': newStatus});
+      }
+      print('Card status updated successfully for documents matching criteria.');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
+
+  static Future<void> deleteAttachment(String id) async {
+    try {
+      QuerySnapshot querySnapshot = await usersCollection.where("InventoryId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.delete();
+      }
+      print('Card status updated successfully for documents matching criteria.');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
 }
 
 class Propertyphotos {
@@ -709,17 +733,21 @@ class Customerinfo {
 }
 
 class Attachments {
+  String? id;
   String? title;
   String? type;
   String? path;
   String? createdby;
   String? createddate;
 
-  Attachments({this.title, this.type, this.path, this.createdby, this.createddate});
+  Attachments({this.title, this.type, this.path, this.createdby, this.createddate, this.id});
 
   Attachments.fromJson(Map<String, dynamic> json) {
     if (json["title"] is String) {
       title = json["title"];
+    }
+    if (json["id"] is String) {
+      id = json["id"];
     }
     if (json["type"] is String) {
       type = json["type"];
@@ -742,6 +770,7 @@ class Attachments {
     data["path"] = path;
     data["createdby"] = createdby;
     data["createddate"] = createddate;
+    data["id"] = id;
     return data;
   }
 }

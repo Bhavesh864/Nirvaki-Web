@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
 
 double? height;
 double? width;
@@ -204,16 +205,16 @@ Color taskStatusColor(String title) {
     case 'New':
       return Colors.green;
     case 'In progress':
-      return Colors.orangeAccent;
+      return AppColor.locationfinalizedstatuscolor;
     case 'Location Finalised':
-      return Colors.orangeAccent;
-    case 'Agreement':
-      return const Color(0xFFF72586);
-    case 'Token':
-      return const Color(0xFF7109B6);
-    case 'Negotiation':
-      return const Color(0xFF936D0B);
-    case 'Closed':
+      return AppColor.locationfinalizedstatuscolor;
+    case "Token":
+      return AppColor.tokenstatuscolor;
+    case "Agreement":
+      return AppColor.agreementstatuscolor;
+    case "Negotiation":
+      return AppColor.negotiationstatuscolor;
+    case "Closed":
       return Colors.grey.shade900;
     default:
       return Colors.blue;

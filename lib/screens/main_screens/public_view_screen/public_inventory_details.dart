@@ -102,7 +102,8 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                     setState: () {
                                       setState(() {});
                                     },
-                                    title: data!.inventoryTitle!,
+                                    id: data!.inventoryId!,
+                                    title: data.inventoryTitle!,
                                     category: data.inventorycategory!,
                                     type: data.inventoryType!,
                                     propertyCategory: data.propertycategory!,
@@ -114,6 +115,7 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                     Padding(
                                       padding: const EdgeInsets.only(top: 10),
                                       child: HeaderChips(
+                                        id: data.inventoryId!,
                                         category: data.inventorycategory!,
                                         type: data.inventoryType!,
                                         propertyCategory: data.propertycategory!,

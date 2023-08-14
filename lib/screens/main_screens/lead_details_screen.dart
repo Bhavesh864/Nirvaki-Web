@@ -93,7 +93,8 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                 setState: () {
                                   setState(() {});
                                 },
-                                title: data!.leadTitle!,
+                                id: data!.leadId!,
+                                title: data.leadTitle!,
                                 category: data.leadcategory!,
                                 type: data.leadType!,
                                 propertyCategory: data.propertycategory!,
@@ -105,6 +106,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                 Padding(
                                   padding: const EdgeInsets.only(top: 10),
                                   child: HeaderChips(
+                                    id: data.leadId!,
                                     category: data.leadcategory!,
                                     type: data.leadType!,
                                     propertyCategory: data.propertycategory!,
