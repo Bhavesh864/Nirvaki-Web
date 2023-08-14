@@ -20,6 +20,10 @@ class AppColor {
   static const selectedItemColor = Color(0x0D4460EF);
   static const cardtitleColor = Color(0xFF6A7587);
   static const baseline = Color(0xFFCED4DA);
+  static const agreementstatuscolor = Color(0xFFF72586);
+  static const tokenstatuscolor = Color(0xFF7109B6);
+  static const locationfinalizedstatuscolor = Color(0xFFEEBA01);
+  static const negotiationstatuscolor = Color(0xFF936D0B);
 
   static const bottomBarColor = Colors.white;
   static const inActiveColor = Colors.grey;

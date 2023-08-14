@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
 import '../app/nav_bar.dart';
@@ -105,6 +106,7 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                 onSelected: (value) {
                   CardDetails.updateCardStatus(id: cardData.workitemId!, newStatus: value);
                   status![widget.index].status = value;
+                  InventoryDetails.updateAttachment(id: cardData.workitemId!, newStatus: value);
                   setState(() {});
                 },
                 child: CustomChip(
