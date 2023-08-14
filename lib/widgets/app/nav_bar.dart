@@ -1,5 +1,6 @@
 // ignore_for_file: invalid_use_of_protected_member
 
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/app_constant.dart';
@@ -61,7 +62,7 @@ class LargeScreenNavBar extends ConsumerWidget {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                largeScreenView("${snapshot.data?.userfirstname} ${snapshot.data?.userlastname}"),
+                largeScreenView("${snapshot.data?.userfirstname} ${snapshot.data?.userlastname}", context),
                 PopupMenuButton(
                   onCanceled: () {},
                   onSelected: (value) {
@@ -94,7 +95,9 @@ class LargeScreenNavBar extends ConsumerWidget {
   }
 }
 
-PopupMenuItem popupMenuItem(String title) {
+PopupMenuItem popupMenuItem(
+  String title,
+) {
   return PopupMenuItem(
     onTap: null,
     value: title,
@@ -121,7 +124,7 @@ String capitalizeFirstLetter(String input) {
   return input[0].toUpperCase() + input.substring(1);
 }
 
-Widget largeScreenView(name) {
+Widget largeScreenView(String name, BuildContext context) {
   return Container(
     padding: const EdgeInsets.only(left: 10),
     child: Column(
@@ -129,12 +132,11 @@ Widget largeScreenView(name) {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CustomText(
-          title: 'Welcome, ${capitalizeFirstLetter(name)}',
+          title: capitalizeFirstLetter(name) != 'Public View' ? 'Welcome, ${capitalizeFirstLetter(name)}' : capitalizeFirstLetter(name),
           fontWeight: FontWeight.bold,
         ),
         Center(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const InkWell(
                 child: Icon(
@@ -142,13 +144,18 @@ Widget largeScreenView(name) {
                   size: 18,
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 5),
-                child: const CustomText(
-                  title: 'Home',
-                  fontWeight: FontWeight.w600,
-                  color: AppColor.primary,
-                  size: 13,
+              GestureDetector(
+                onTap: () {
+                  context.beamToNamed('/');
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 5),
+                  child: CustomText(
+                    title: AppConst.getPublicView() ? 'Login' : 'Home',
+                    fontWeight: FontWeight.w600,
+                    color: AppColor.primary,
+                    size: 13,
+                  ),
                 ),
               ),
             ],

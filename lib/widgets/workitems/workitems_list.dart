@@ -27,6 +27,7 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+
     return ScrollConfiguration(
       behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
       child: SingleChildScrollView(
@@ -64,39 +65,76 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                         ),
                       )
                     : Container(),
+                // SizedBox(
+                //   height: Responsive.isMobile(context) ? height : height * 0.79,
+                //   child: ListView.builder(
+                //     itemCount: widget.getCardDetails.length,
+                //     shrinkWrap: true,
+                //     physics: widget.isScrollable ? const ScrollPhysics() : const NeverScrollableScrollPhysics(),
+                //     itemBuilder: (context, index) {
+                //       return GestureDetector(
+                //         onTap: () {
+                //           final id = widget.getCardDetails[index].workitemId;
+                //           if (id!.contains('IN')) {
+                //             if (Responsive.isMobile(context)) {
+                //               Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
+                //             } else {
+                //               ref.read(selectedWorkItemId.notifier).addItemId(id);
+                //               ref.read(largeScreenTabsProvider.notifier).update((state) => 7);
+                //               context.beamToNamed('/inventory-details/$id');
+                //             }
+                //           } else if (id.contains('LD')) {
+                //             if (Responsive.isMobile(context)) {
+                //               Navigator.of(context).pushNamed(AppRoutes.leadDetailsScreen, arguments: id);
+                //             } else {
+                //               ref.read(selectedWorkItemId.notifier).addItemId(id);
+                //               ref.read(largeScreenTabsProvider.notifier).update((state) => 8);
+                //               context.beamToNamed('/lead-details/$id');
+                //             }
+                //           }
+                //         },
+                //         child: CustomCard(index: index, cardDetails: widget.getCardDetails),
+                //       );
+                //     },
+                //   ),
+                // ),
+
                 SizedBox(
                   height: Responsive.isMobile(context) ? height : height * 0.79,
                   child: ListView(
                     shrinkWrap: true,
+                    addRepaintBoundaries: false,
                     physics: widget.isScrollable ? const ScrollPhysics() : const NeverScrollableScrollPhysics(),
                     children: List.generate(
                       widget.getCardDetails.length,
-                      (index) => GestureDetector(
-                        onTap: () {
-                          final id = widget.getCardDetails[index].workitemId;
-                          if (id!.contains('IN')) {
-                            if (Responsive.isMobile(context)) {
-                              Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
-                            } else {
-                              ref.read(selectedWorkItemId.notifier).addItemId(id);
-                              ref.read(largeScreenTabsProvider.notifier).update((state) => 7);
-                              context.beamToNamed('/inventory-details/$id');
+                      (index) {
+                        return GestureDetector(
+                          onTap: () {
+                            final id = widget.getCardDetails[index].workitemId;
+                            if (id!.contains('IN')) {
+                              if (Responsive.isMobile(context)) {
+                                Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
+                              } else {
+                                ref.read(selectedWorkItemId.notifier).addItemId(id);
+                                ref.read(largeScreenTabsProvider.notifier).update((state) => 7);
+                                context.beamToNamed('/inventory/inventory-details/$id');
+                              }
+                            } else if (id.contains('LD')) {
+                              if (Responsive.isMobile(context)) {
+                                Navigator.of(context).pushNamed(AppRoutes.leadDetailsScreen, arguments: id);
+                              } else {
+                                ref.read(selectedWorkItemId.notifier).addItemId(id);
+                                ref.read(largeScreenTabsProvider.notifier).update((state) => 8);
+                                context.beamToNamed('/lead/lead-details/$id');
+                              }
                             }
-                          } else if (id.contains('LD')) {
-                            if (Responsive.isMobile(context)) {
-                              Navigator.of(context).pushNamed(AppRoutes.leadDetailsScreen, arguments: id);
-                            } else {
-                              ref.read(selectedWorkItemId.notifier).addItemId(id);
-                              ref.read(largeScreenTabsProvider.notifier).update((state) => 8);
-                              context.beamToNamed('/lead-details/$id');
-                            }
-                          }
-                        },
-                        child: CustomCard(index: index, cardDetails: widget.getCardDetails),
-                      ),
+                          },
+                          child: CustomCard(index: index, cardDetails: widget.getCardDetails),
+                        );
+                      },
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
