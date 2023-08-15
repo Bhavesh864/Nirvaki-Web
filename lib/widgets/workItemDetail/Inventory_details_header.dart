@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/app_constant.dart';
@@ -131,8 +132,8 @@ class _HeaderChipsState extends State<HeaderChips> {
 
   @override
   Widget build(BuildContext context) {
-    print(currentStatus);
-    print(widget.status);
+    // print(currentStatus);
+    // print(widget.status);
     return Wrap(
       children: [
         CustomChip(
@@ -170,8 +171,13 @@ class _HeaderChipsState extends State<HeaderChips> {
               offset: const Offset(10, 40),
               itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
               onSelected: (value) {
+                print(widget.id);
                 CardDetails.updateCardStatus(id: widget.id, newStatus: value);
-                InventoryDetails.updateAttachment(id: widget.id, newStatus: value);
+                if (widget.id.contains("IN")) {
+                  InventoryDetails.updatecardStatus(id: widget.id, newStatus: value);
+                } else if (widget.id.contains("LD")) {
+                  LeadDetails.updatecardStatus(id: widget.id, newStatus: value);
+                }
                 currentStatus = value;
                 setState(() {});
               },

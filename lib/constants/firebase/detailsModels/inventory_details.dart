@@ -363,29 +363,41 @@ class InventoryDetails {
     }
   }
 
-  static Future<void> updateAttachment({required String id, required String newStatus}) async {
+  static Future<void> updatecardStatus({required String id, required String newStatus}) async {
     try {
       QuerySnapshot querySnapshot = await usersCollection.where("InventoryId", isEqualTo: id).get();
       for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
         await docSnapshot.reference.update({'InventoryStatus': newStatus});
       }
-      print('Card status updated successfully for documents matching criteria.');
+      print('inventory status update');
     } catch (error) {
       print('Failed to update card status: $error');
     }
   }
 
-  static Future<void> deleteAttachment(String id) async {
+  static Future<void> updateAttachment({required String id, required Attachments attachments}) async {
     try {
       QuerySnapshot querySnapshot = await usersCollection.where("InventoryId", isEqualTo: id).get();
       for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
-        await docSnapshot.reference.delete();
+        await docSnapshot.reference.update({'attachments': attachments});
       }
-      print('Card status updated successfully for documents matching criteria.');
+      print('inventory status update');
     } catch (error) {
       print('Failed to update card status: $error');
     }
   }
+
+  // static Future<void> deleteAttachment(String id) async {
+  //   try {
+  //     QuerySnapshot querySnapshot = await usersCollection.where("InventoryId", isEqualTo: id).get();
+  //     for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+  //       await docSnapshot.reference.delete();
+  //     }
+  //     print('Card status updated successfully for documents matching criteria.');
+  //   } catch (error) {
+  //     print('Failed to update card status: $error');
+  //   }
+  // }
 }
 
 class Propertyphotos {
