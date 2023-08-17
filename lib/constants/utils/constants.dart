@@ -253,7 +253,7 @@ final List<Map<String, dynamic>> inventoryFilterOtpion = [
   },
   {
     "title": 'Gym',
-    'selected': true,
+    'selected': false,
   },
   {
     "title": 'Gated Community',
@@ -261,11 +261,11 @@ final List<Map<String, dynamic>> inventoryFilterOtpion = [
   },
   {
     "title": 'Parking',
-    'selected': true,
+    'selected': false,
   },
   {
     "title": 'Washing Machine',
-    'selected': true,
+    'selected': false,
   },
   {
     "title": 'Dryer',

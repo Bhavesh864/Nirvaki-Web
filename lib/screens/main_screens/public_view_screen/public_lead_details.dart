@@ -14,7 +14,7 @@ import '../../../constants/utils/colors.dart';
 import '../../../constants/utils/constants.dart';
 import '../../../riverpodstate/selected_workitem.dart';
 import '../../../widgets/app/nav_bar.dart';
-import '../../../widgets/workItemDetail/Inventory_details_header.dart';
+import '../../../widgets/workItemDetail/inventory_details_header.dart';
 import '../../../widgets/workItemDetail/assignment_widget.dart';
 import '../../../widgets/workItemDetail/contact_information.dart';
 import '../../../widgets/workItemDetail/mapview_widget.dart';

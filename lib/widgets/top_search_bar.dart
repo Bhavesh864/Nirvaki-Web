@@ -4,7 +4,11 @@ import 'package:yes_broker/Customs/custom_text.dart';
 
 class TopSerachBar extends StatefulWidget {
   final String title;
+  final Function(String) onChanged;
+  final Function onToggleShowTable;
+  final bool showTableView;
   final bool isMobile;
+  final TextEditingController searchController;
   final bool isFilterOpen;
   final VoidCallback onFilterClose;
   final Function onFilterOpen;
@@ -16,6 +20,10 @@ class TopSerachBar extends StatefulWidget {
     required this.onFilterClose,
     required this.onFilterOpen,
     required this.title,
+    required this.searchController,
+    required this.onChanged,
+    required this.onToggleShowTable,
+    required this.showTableView,
   });
 
   @override
@@ -23,8 +31,6 @@ class TopSerachBar extends StatefulWidget {
 }
 
 class _TopSerachBarState extends State<TopSerachBar> {
-  TextEditingController searchController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return !widget.isMobile
@@ -35,32 +41,38 @@ class _TopSerachBarState extends State<TopSerachBar> {
                 margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                 width: MediaQuery.of(context).size.width * 0.3,
                 child: TextField(
-                  controller: searchController,
+                  controller: widget.searchController,
+                  onChanged: widget.onChanged,
                   decoration: const InputDecoration(
                     hintText: 'Search',
                     prefixIcon: Icon(Icons.search),
                   ),
                 ),
               ),
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      widget.onFilterOpen();
-                    },
-                    icon: const Icon(
-                      Icons.filter_alt_outlined,
-                      size: 24,
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        widget.onFilterOpen();
+                      },
+                      icon: const Icon(
+                        Icons.filter_alt_outlined,
+                        size: 24,
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.view_stream_outlined,
-                      size: 24,
+                    IconButton(
+                      onPressed: () {
+                        widget.onToggleShowTable();
+                      },
+                      icon: Icon(
+                        !widget.showTableView ? Icons.view_agenda_outlined : Icons.view_module_outlined,
+                        size: 24,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               )
             ],
           )

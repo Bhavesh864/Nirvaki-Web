@@ -17,8 +17,6 @@ import 'firebase_options.dart';
 import 'package:yes_broker/constants/utils/theme.dart';
 import 'package:yes_broker/layout.dart';
 
-//View agenda outline; ------------------- Icon for timelinetab
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);

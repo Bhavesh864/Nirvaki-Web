@@ -23,8 +23,6 @@ class HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     getCardDetails = CardDetails.getCardDetails();
-    // adddata();
-    // getdata();
     print(AppConst.getAccessToken());
   }
 

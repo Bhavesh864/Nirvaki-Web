@@ -8,6 +8,7 @@ class SelectedWorkItemId extends StateNotifier<String> {
   SelectedWorkItemId() : super('');
 
   void addItemId(String id) {
+    print('state $id');
     state = id;
   }
 }

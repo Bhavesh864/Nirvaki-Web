@@ -9,6 +9,7 @@ import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
 import 'package:yes_broker/pages/add_todo.dart';
 import 'package:yes_broker/screens/main_screens/inventory_details_screen.dart';
 import 'package:yes_broker/screens/main_screens/lead_details_screen.dart';
+import 'package:yes_broker/screens/main_screens/todo_details_screen.dart';
 import 'package:yes_broker/widgets/workitems/workitem_filter_view.dart';
 
 // Local Files Imports
@@ -137,6 +138,7 @@ class AppRoutes {
   static const String workItemFilterScreen = '/workitem_filter_screen';
   static const String inventoryDetailsScreen = '/inventory_details_screen';
   static const String leadDetailsScreen = '/lead_details_screen';
+  static const String todoDetailsScreen = '/todo_details_screen';
 
   static const String addInventory = '/add_inventory_screen';
   static const String addLead = '/add_lead_screen';
@@ -154,9 +156,12 @@ class AppRoutes {
     addInventory: (context) => const AddInventory(),
     addLead: (context) => const AddLead(),
     addTodo: (context) => const AddTodo(),
-    workItemFilterScreen: (context) => const WorkItemFilterView(),
+    workItemFilterScreen: (context) => const WorkItemFilterView(
+          originalCardList: [],
+        ),
     inventoryDetailsScreen: (context) => const InventoryDetailsScreen(),
     leadDetailsScreen: (context) => const LeadDetailsScreen(),
+    todoDetailsScreen: (context) => const TodoDetailsScreen(),
   };
 
   static Route createAnimatedRoute(Widget destinationScreen) {

@@ -65,40 +65,6 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                         ),
                       )
                     : Container(),
-                // SizedBox(
-                //   height: Responsive.isMobile(context) ? height : height * 0.79,
-                //   child: ListView.builder(
-                //     itemCount: widget.getCardDetails.length,
-                //     shrinkWrap: true,
-                //     physics: widget.isScrollable ? const ScrollPhysics() : const NeverScrollableScrollPhysics(),
-                //     itemBuilder: (context, index) {
-                //       return GestureDetector(
-                //         onTap: () {
-                //           final id = widget.getCardDetails[index].workitemId;
-                //           if (id!.contains('IN')) {
-                //             if (Responsive.isMobile(context)) {
-                //               Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
-                //             } else {
-                //               ref.read(selectedWorkItemId.notifier).addItemId(id);
-                //               ref.read(largeScreenTabsProvider.notifier).update((state) => 7);
-                //               context.beamToNamed('/inventory-details/$id');
-                //             }
-                //           } else if (id.contains('LD')) {
-                //             if (Responsive.isMobile(context)) {
-                //               Navigator.of(context).pushNamed(AppRoutes.leadDetailsScreen, arguments: id);
-                //             } else {
-                //               ref.read(selectedWorkItemId.notifier).addItemId(id);
-                //               ref.read(largeScreenTabsProvider.notifier).update((state) => 8);
-                //               context.beamToNamed('/lead-details/$id');
-                //             }
-                //           }
-                //         },
-                //         child: CustomCard(index: index, cardDetails: widget.getCardDetails),
-                //       );
-                //     },
-                //   ),
-                // ),
-
                 SizedBox(
                   height: Responsive.isMobile(context) ? height : height * 0.79,
                   child: ListView(
@@ -114,6 +80,7 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                             if (id!.contains('IN')) {
                               if (Responsive.isMobile(context)) {
                                 Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
+                                ref.read(selectedWorkItemId.notifier).addItemId(id);
                               } else {
                                 ref.read(selectedWorkItemId.notifier).addItemId(id);
                                 ref.read(largeScreenTabsProvider.notifier).update((state) => 7);
@@ -122,10 +89,20 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                             } else if (id.contains('LD')) {
                               if (Responsive.isMobile(context)) {
                                 Navigator.of(context).pushNamed(AppRoutes.leadDetailsScreen, arguments: id);
+                                ref.read(selectedWorkItemId.notifier).addItemId(id);
                               } else {
                                 ref.read(selectedWorkItemId.notifier).addItemId(id);
                                 ref.read(largeScreenTabsProvider.notifier).update((state) => 8);
                                 context.beamToNamed('/lead/lead-details/$id');
+                              }
+                            } else if (id.contains('TD')) {
+                              if (Responsive.isMobile(context)) {
+                                Navigator.of(context).pushNamed(AppRoutes.todoDetailsScreen, arguments: id);
+                                ref.read(selectedWorkItemId.notifier).addItemId(id);
+                              } else {
+                                ref.read(selectedWorkItemId.notifier).addItemId(id);
+                                ref.read(largeScreenTabsProvider.notifier).update((state) => 8);
+                                context.beamToNamed('/todo/todo-details/$id');
                               }
                             }
                           },

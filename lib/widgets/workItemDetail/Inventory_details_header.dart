@@ -131,8 +131,6 @@ class _HeaderChipsState extends State<HeaderChips> {
 
   @override
   Widget build(BuildContext context) {
-    print(currentStatus);
-    print(widget.status);
     return Wrap(
       children: [
         CustomChip(
@@ -160,22 +158,21 @@ class _HeaderChipsState extends State<HeaderChips> {
           ),
         ),
         if (!AppConst.getPublicView())
-          SizedBox(
-            // width: 100,
-            child: PopupMenuButton(
-              initialValue: widget.status,
-              splashRadius: 0,
-              padding: EdgeInsets.zero,
-              color: Colors.white.withOpacity(1),
-              offset: const Offset(10, 40),
-              itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
-              onSelected: (value) {
-                CardDetails.updateCardStatus(id: widget.id, newStatus: value);
-                InventoryDetails.updateAttachment(id: widget.id, newStatus: value);
-                currentStatus = value;
-                setState(() {});
-              },
-              child: CustomChip(
+          PopupMenuButton(
+            initialValue: widget.status,
+            splashRadius: 0,
+            padding: EdgeInsets.zero,
+            color: Colors.white.withOpacity(1),
+            offset: const Offset(10, 40),
+            itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
+            onSelected: (value) {
+              CardDetails.updateCardStatus(id: widget.id, newStatus: value);
+              InventoryDetails.updateAttachment(id: widget.id, newStatus: value);
+              currentStatus = value;
+              setState(() {});
+            },
+            child: IntrinsicWidth(
+              child: Chip(
                 label: Row(
                   children: [
                     CustomText(
@@ -190,7 +187,7 @@ class _HeaderChipsState extends State<HeaderChips> {
                     ),
                   ],
                 ),
-                color: taskStatusColor(currentStatus ?? widget.status).withOpacity(0.1),
+                backgroundColor: taskStatusColor(currentStatus ?? widget.status).withOpacity(0.1),
               ),
             ),
           ),

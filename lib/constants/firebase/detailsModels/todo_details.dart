@@ -110,9 +110,14 @@ class TodoDetails {
 
   static Future<TodoDetails?> getTodoDetails(String id) async {
     try {
-      final DocumentSnapshot documentSnapshot = await todoDetailsCollection.doc(id).get();
-      final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-      return TodoDetails.fromJson(data);
+      final QuerySnapshot querySnapshot = await todoDetailsCollection.where("todoId", isEqualTo: id).get();
+      for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        if (documentSnapshot.exists) {
+          final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+          return TodoDetails.fromJson(data);
+        }
+      }
+      return null;
     } catch (error) {
       // print('Failed to get Inventory items: $error');
       return null;
