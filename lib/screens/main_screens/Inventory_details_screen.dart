@@ -43,9 +43,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
   void initState() {
     super.initState();
     tabviewController = TabController(length: 4, vsync: this);
-
     final workItemId = ref.read(selectedWorkItemId.notifier).state;
-
     inventoryDetails = InventoryDetails.getInventoryDetails(workItemId == '' ? widget.inventoryId : workItemId);
   }
 
@@ -192,6 +190,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                               ),
                               if (currentSelectedTab == 0)
                                 DetailsTabView(
+                                  id: data.inventoryId!,
                                   data: data,
                                   pickedFilesList: pickedDocuments,
                                   selectedDocNameList: selectedDocsName,
