@@ -375,7 +375,6 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
             onSelected: (value) {
               CardDetails.updateCardStatus(id: inventoryItem.workitemId!, newStatus: value);
               status[index].status = value;
-              InventoryDetails.updateAttachment(id: inventoryItem.workitemId!, newStatus: value);
               setState(() {});
             },
             child: IntrinsicWidth(

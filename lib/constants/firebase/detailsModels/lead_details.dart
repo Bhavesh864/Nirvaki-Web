@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 
 final CollectionReference usersCollection = FirebaseFirestore.instance.collection('leadDetails');
 
@@ -109,7 +110,7 @@ class LeadDetails {
       propertyarea = json["propertyarea"] == null ? null : Propertyarea.fromJson(json["propertyarea"]);
     }
     if (json["leadDescription"] is String) {
-      leadId = json["leadDescription"];
+      leadDescription = json["leadDescription"];
     }
     if (json["assignedto"] is List) {
       assignedto = json["assignedto"] == null ? null : (json["assignedto"] as List).map((e) => Assignedto.fromJson(e)).toList();
@@ -331,6 +332,36 @@ class LeadDetails {
       // print('Inventory item added successfully');
     } catch (error) {
       // print('Failed to add Inventory item: $error');
+    }
+  }
+
+  static Future<void> addAttachmentToItems({required String itemid, required Attachments newAttachment}) async {
+    try {
+      QuerySnapshot querySnapshot = await usersCollection.where("leadId", isEqualTo: itemid).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+
+        List<dynamic> existingAttachments = data['attachments'] ?? [];
+        existingAttachments.add(newAttachment.toJson());
+
+        await docSnapshot.reference.update({'attachments': existingAttachments});
+
+        print('Attachment added successfully to item ${docSnapshot.id}');
+      }
+    } catch (error) {
+      print('Failed to add attachment to items: $error');
+    }
+  }
+
+  static Future<void> updatecardStatus({required String id, required String newStatus}) async {
+    try {
+      QuerySnapshot querySnapshot = await usersCollection.where("leadId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'leadStatus': newStatus});
+      }
+      print('lead status update');
+    } catch (error) {
+      print('Failed to update card status: $error');
     }
   }
 }
