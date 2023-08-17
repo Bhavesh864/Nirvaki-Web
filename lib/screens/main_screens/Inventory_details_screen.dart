@@ -1,3 +1,4 @@
+// ignore_for_file: invalid_use_of_protected_member
 import 'dart:async';
 
 import 'package:file_picker/file_picker.dart';
@@ -14,7 +15,7 @@ import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
 import '../../riverpodstate/selected_workitem.dart';
-import '../../widgets/workItemDetail/Inventory_details_header.dart';
+import '../../widgets/workItemDetail/inventory_details_header.dart';
 import '../../widgets/workItemDetail/assignment_widget.dart';
 import '../../widgets/workItemDetail/contact_information.dart';
 import '../../widgets/workItemDetail/mapview_widget.dart';
@@ -43,9 +44,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
   void initState() {
     super.initState();
     tabviewController = TabController(length: 4, vsync: this);
-
     final workItemId = ref.read(selectedWorkItemId.notifier).state;
-
     inventoryDetails = InventoryDetails.getInventoryDetails(workItemId == '' ? widget.inventoryId : workItemId);
   }
 

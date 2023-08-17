@@ -97,7 +97,6 @@ class _LayoutViewState extends State<LayoutView> {
       final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
 
       if (location.isNotEmpty && location.contains('inventory-details')) {
-        print(extractItemIdFromPath(location, 'inventory'));
         AppConst.setPublicView(true);
         return PublicViewInventoryDetails(
           inventoryId: extractItemIdFromPath(location, 'inventory')!,

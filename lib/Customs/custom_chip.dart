@@ -9,6 +9,7 @@ class CustomChip extends StatelessWidget {
   final Color? color;
   final Widget? avatar;
   final double? paddingHorizontal;
+  final Function()? onPressed;
 
   const CustomChip({
     Key? key,
@@ -16,22 +17,22 @@ class CustomChip extends StatelessWidget {
     this.color = AppColor.chipGreyColor,
     this.avatar,
     this.paddingHorizontal,
+    this.onPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(left: Responsive.isMobile(context) ? 0 : 1, right: Responsive.isMobile(context) ? 8 : 1),
-      // margin: EdgeInsets.symmetric(horizontal: 2),
-      child: Chip(
-        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        avatar: avatar,
-        // padding: EdgeInsets.symmetric(
-        //     horizontal: paddingHorizontal ?? 0, vertical: 0),
-        labelPadding: EdgeInsets.symmetric(horizontal: paddingHorizontal ?? 1, vertical: 0),
-        // padding: EdgeInsets.symmetric(vertical: 3, horizontal: 3),
-        backgroundColor: color,
-        label: label,
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        margin: EdgeInsets.only(left: Responsive.isMobile(context) ? 0 : 1, right: Responsive.isMobile(context) ? 8 : 1),
+        child: Chip(
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          avatar: avatar,
+          labelPadding: EdgeInsets.symmetric(horizontal: paddingHorizontal ?? 1, vertical: 0),
+          backgroundColor: color,
+          label: label,
+        ),
       ),
     );
   }

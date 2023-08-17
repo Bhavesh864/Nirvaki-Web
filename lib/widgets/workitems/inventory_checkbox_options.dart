@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 
-class WorkItemCheckboxOptions extends StatefulWidget {
+import '../../riverpodstate/filter_list_items_provider.dart';
+
+class WorkItemCheckboxOptions extends ConsumerStatefulWidget {
   const WorkItemCheckboxOptions({super.key});
 
   @override
-  State<WorkItemCheckboxOptions> createState() => _WorkItemCheckboxOptionsState();
+  _WorkItemCheckboxOptionsState createState() => _WorkItemCheckboxOptionsState();
 }
 
-class _WorkItemCheckboxOptionsState extends State<WorkItemCheckboxOptions> {
+class _WorkItemCheckboxOptionsState extends ConsumerState<WorkItemCheckboxOptions> {
   @override
   Widget build(BuildContext context) {
+    final selectedInventoryFiltersProvider = ref.read(selectedFilterInventory.notifier);
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,7 +32,7 @@ class _WorkItemCheckboxOptionsState extends State<WorkItemCheckboxOptions> {
           ),
           Expanded(
             child: ListView.builder(
-              physics: Responsive.isMobile(context) ? const NeverScrollableScrollPhysics() : ScrollPhysics(),
+              physics: Responsive.isMobile(context) ? const NeverScrollableScrollPhysics() : const ScrollPhysics(),
               itemCount: inventoryFilterOtpion.length,
               itemBuilder: (context, index) {
                 return Container(
@@ -39,6 +43,11 @@ class _WorkItemCheckboxOptionsState extends State<WorkItemCheckboxOptions> {
                     title: CustomText(title: inventoryFilterOtpion[index]['title']),
                     value: inventoryFilterOtpion[index]['selected'],
                     onChanged: (value) {
+                      if (value!) {
+                        selectedInventoryFiltersProvider.addInventoryFilter(inventoryFilterOtpion[index]['title']);
+                      } else {
+                        selectedInventoryFiltersProvider.removeInventoryFilter(inventoryFilterOtpion[index]['title']);
+                      }
                       setState(() {
                         inventoryFilterOtpion[index]['selected'] = value;
                       });

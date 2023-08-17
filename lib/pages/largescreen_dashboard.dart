@@ -16,6 +16,7 @@ import 'package:yes_broker/screens/main_screens/home_screen.dart';
 import 'package:yes_broker/screens/main_screens/inventory_listing_screen.dart';
 import 'package:yes_broker/screens/main_screens/lead_details_screen.dart';
 import 'package:yes_broker/screens/main_screens/lead_listing_screen.dart';
+import 'package:yes_broker/screens/main_screens/todo_details_screen.dart';
 import 'package:yes_broker/screens/main_screens/todo_listing_screen.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';
@@ -45,7 +46,7 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
   Widget build(BuildContext context) {
     // final currentIndex = ref.watch(largeScreenTabsProvider);
     int currentIndex = 0;
-    final _beamerKey = GlobalKey<BeamerState>();
+    final beamerKey = GlobalKey<BeamerState>();
 
     final path = (context.currentBeamLocation.state as BeamState).uri.path;
 
@@ -80,7 +81,7 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                 onDestinationSelected: (index) {
                   // ref.read(largeScreenTabsProvider.notifier).update((state) => index);
                   setState(() {
-                    _beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[index].nav);
+                    beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[index].nav);
                   });
                 },
                 destinations: sideBarItems
@@ -130,7 +131,7 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                     ),
                     child: Beamer(
                       createBackButtonDispatcher: true,
-                      key: _beamerKey,
+                      key: beamerKey,
                       routerDelegate: BeamerDelegate(
                         setBrowserTabTitle: false,
                         transitionDelegate: const NoAnimationTransitionDelegate(),
@@ -155,6 +156,15 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                                   ),
                                 );
                                 // child: LeadDetailsScreen());
+                              } else if (state.pathPatternSegments.contains('todo-details')) {
+                                return BeamPage(
+                                  key: const ValueKey('/todo-details from home'),
+                                  type: BeamPageType.scaleTransition,
+                                  child: TodoDetailsScreen(
+                                    todoId: state.pathPatternSegments[1],
+                                  ),
+                                );
+                                // child: LeadDetailsScreen());
                               }
                               return const BeamPage(
                                 key: ValueKey('/'),
@@ -162,11 +172,22 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                                 child: HomeScreen(),
                               );
                             },
-                            '/todo': (p0, p1, p2) => const BeamPage(
-                                  key: ValueKey('/todo'),
+                            '/todo': (p0, state, p2) {
+                              if (state.pathPatternSegments.contains('todo-details')) {
+                                return BeamPage(
+                                  key: const ValueKey('/todo-details'),
                                   type: BeamPageType.scaleTransition,
-                                  child: TodoListingScreen(),
-                                ),
+                                  child: TodoDetailsScreen(
+                                    todoId: state.pathPatternSegments[2],
+                                  ),
+                                );
+                              }
+                              return const BeamPage(
+                                key: ValueKey('/todo'),
+                                type: BeamPageType.scaleTransition,
+                                child: TodoListingScreen(),
+                              );
+                            },
                             '/inventory': (p0, state, p2) {
                               if (state.pathPatternSegments.contains('inventory-details')) {
                                 return BeamPage(

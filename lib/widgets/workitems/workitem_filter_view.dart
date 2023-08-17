@@ -1,20 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_chip.dart';
+import 'package:yes_broker/riverpodstate/filter_list_items_provider.dart';
 import 'package:yes_broker/widgets/workitems/inventory_checkbox_options.dart';
 
-class WorkItemFilterView extends StatelessWidget {
+class FilterOptions {
+  List<String> roomConfigurations = [];
+  RangeValues rentRange = RangeValues(10000, 50000);
+}
+
+class WorkItemFilterView extends ConsumerStatefulWidget {
   final Function closeFilterView;
-  const WorkItemFilterView({super.key, this.closeFilterView = _defaultCloseFunction});
+  final List<CardDetails> originalCardList;
+
+  const WorkItemFilterView({
+    super.key,
+    this.closeFilterView = _defaultCloseFunction,
+    required this.originalCardList,
+  });
 
   static void _defaultCloseFunction() {}
 
   @override
+  WorkItemFilterViewState createState() => WorkItemFilterViewState();
+}
+
+class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
+  late FilterOptions filterOptions = FilterOptions();
+  List<String> datalist = ['Studio', '1RK', '1BHK', '2BHK', '3BHK', '4BHK', '5BHK', '5BHK +'];
+
+  @override
   Widget build(BuildContext context) {
+    final selectedInventoryFiltersProvider = ref.read(selectedFilterInventory.notifier);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: Responsive.isMobile(context)
@@ -38,7 +62,7 @@ class WorkItemFilterView extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                if (!Responsive.isMobile(context))
+                if (!Responsive.isMobile(context)) ...[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -49,7 +73,7 @@ class WorkItemFilterView extends StatelessWidget {
                       ),
                       IconButton(
                         onPressed: () {
-                          closeFilterView();
+                          widget.closeFilterView();
                         },
                         icon: const Icon(
                           Icons.close,
@@ -58,11 +82,10 @@ class WorkItemFilterView extends StatelessWidget {
                       ),
                     ],
                   ),
-                // Spacer(),
-                if (!Responsive.isMobile(context))
                   const SizedBox(
                     height: 20,
                   ),
+                ],
                 SizedBox(
                   height: !Responsive.isMobile(context) ? 650 : 700,
                   child: Column(
@@ -77,72 +100,32 @@ class WorkItemFilterView extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const Row(
-                        children: [
-                          CustomChip(
-                            label: CustomText(
-                              title: 'Studio',
-                              size: 10,
-                            ),
-                            color: AppColor.chipGreyColor,
-                          ),
-                          CustomChip(
-                            label: CustomText(
-                              title: '1RK',
-                              size: 10,
-                            ),
-                            color: AppColor.chipGreyColor,
-                          ),
-                          CustomChip(
-                            label: CustomText(
-                              title: '1BHK',
-                              size: 10,
-                            ),
-                            color: AppColor.chipGreyColor,
-                          ),
-                          CustomChip(
-                            label: CustomText(
-                              title: '2BHK',
-                              size: 10,
-                            ),
-                            color: AppColor.chipGreyColor,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Row(
-                        children: [
-                          CustomChip(
-                            label: CustomText(
-                              title: '3BHK',
-                              size: 10,
-                            ),
-                            color: AppColor.chipGreyColor,
-                          ),
-                          CustomChip(
-                            label: CustomText(
-                              title: '4BHK',
-                              size: 10,
-                            ),
-                            color: AppColor.chipGreyColor,
-                          ),
-                          CustomChip(
-                            label: CustomText(
-                              title: '5BHK',
-                              size: 10,
-                            ),
-                            color: AppColor.chipGreyColor,
-                          ),
-                          CustomChip(
-                            label: CustomText(
-                              title: '5BHK +',
-                              size: 10,
-                            ),
-                            color: AppColor.chipGreyColor,
-                          ),
-                        ],
+                      Wrap(
+                        children: datalist
+                            .map(
+                              (e) => Padding(
+                                padding: const EdgeInsets.only(right: 8, top: 8),
+                                child: CustomChip(
+                                  onPressed: () {
+                                    if (filterOptions.roomConfigurations.contains(e)) {
+                                      filterOptions.roomConfigurations.remove(e);
+                                      selectedInventoryFiltersProvider.removeInventoryFilter(e);
+                                    } else {
+                                      filterOptions.roomConfigurations.add(e);
+                                      selectedInventoryFiltersProvider.addInventoryFilter(e);
+                                    }
+                                    setState(() {});
+                                  },
+                                  label: CustomText(
+                                    title: e,
+                                    size: 10,
+                                    color: filterOptions.roomConfigurations.contains(e) ? Colors.white : Colors.black,
+                                  ),
+                                  color: filterOptions.roomConfigurations.contains(e) ? AppColor.primary : AppColor.chipGreyColor,
+                                ),
+                              ),
+                            )
+                            .toList(),
                       ),
                       const SizedBox(
                         height: 20,
@@ -173,7 +156,25 @@ class WorkItemFilterView extends StatelessWidget {
                 // const Spacer(),
                 CustomButton(
                   text: 'Apply Filters',
-                  onPressed: () {},
+                  onPressed: () {
+                    // Get the selected filter items from the Riverpod state
+                    // final selectedFilters = selectedInventoryFiltersProvider.state;
+
+                    // Apply the filtering logic to your card listing data
+                    // final filteredList = widget.originalCardList.where((card) {
+                    //   if (selectedFilters.isEmpty) {
+                    //     return true; // Show all cards if no filters selected
+                    //   }
+                    //   return selectedFilters.any(
+                    //     (filter) => card.roomconfig!.additionalroom!.contains(filter),
+                    //   );
+                    // }).toList();
+
+                    // Update the listing using the filtered results (you need to define originalCardList)
+                    // ref.read(filteredCardListProvider.notifier).updateFilteredList(filteredList);
+
+                    widget.closeFilterView();
+                  },
                 ),
               ],
             ),

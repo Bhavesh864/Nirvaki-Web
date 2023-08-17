@@ -97,8 +97,6 @@ class DetailsTabView extends StatelessWidget {
                             data.propertyphotos == null ? inventoryDetailsImageUrls[index] : '${allImages[index]}.png',
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
-                              print(error);
-                              print('${allImages[index]}.png');
                               return const Icon(
                                 Icons.error_outline,
                                 size: 50,
