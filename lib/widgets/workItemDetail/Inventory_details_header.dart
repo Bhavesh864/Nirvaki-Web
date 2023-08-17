@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/app_constant.dart';
@@ -158,36 +159,43 @@ class _HeaderChipsState extends State<HeaderChips> {
           ),
         ),
         if (!AppConst.getPublicView())
-          PopupMenuButton(
-            initialValue: widget.status,
-            splashRadius: 0,
-            padding: EdgeInsets.zero,
-            color: Colors.white.withOpacity(1),
-            offset: const Offset(10, 40),
-            itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
-            onSelected: (value) {
-              CardDetails.updateCardStatus(id: widget.id, newStatus: value);
-              InventoryDetails.updateAttachment(id: widget.id, newStatus: value);
-              currentStatus = value;
-              setState(() {});
-            },
-            child: IntrinsicWidth(
-              child: Chip(
-                label: Row(
-                  children: [
-                    CustomText(
-                      title: currentStatus ?? widget.status,
-                      color: taskStatusColor(currentStatus ?? widget.status),
-                      size: 10,
-                    ),
-                    Icon(
-                      Icons.expand_more,
-                      size: 18,
-                      color: taskStatusColor(currentStatus ?? widget.status),
-                    ),
-                  ],
+          SizedBox(
+            // width: 100,
+            child: PopupMenuButton(
+              initialValue: widget.status,
+              splashRadius: 0,
+              padding: EdgeInsets.zero,
+              color: Colors.white.withOpacity(1),
+              offset: const Offset(10, 40),
+              itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
+              onSelected: (value) {
+                CardDetails.updateCardStatus(id: widget.id, newStatus: value);
+                if (widget.id.contains("IN")) {
+                  InventoryDetails.updatecardStatus(id: widget.id, newStatus: value);
+                } else if (widget.id.contains("LD")) {
+                  LeadDetails.updatecardStatus(id: widget.id, newStatus: value);
+                }
+                currentStatus = value;
+                setState(() {});
+              },
+              child: IntrinsicWidth(
+                child: Chip(
+                  label: Row(
+                    children: [
+                      CustomText(
+                        title: currentStatus ?? widget.status,
+                        color: taskStatusColor(currentStatus ?? widget.status),
+                        size: 10,
+                      ),
+                      Icon(
+                        Icons.expand_more,
+                        size: 18,
+                        color: taskStatusColor(currentStatus ?? widget.status),
+                      ),
+                    ],
+                  ),
+                  backgroundColor: taskStatusColor(currentStatus ?? widget.status).withOpacity(0.1),
                 ),
-                backgroundColor: taskStatusColor(currentStatus ?? widget.status).withOpacity(0.1),
               ),
             ),
           ),

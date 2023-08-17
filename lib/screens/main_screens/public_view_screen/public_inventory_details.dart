@@ -163,10 +163,8 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                               context,
                                               'Assignment',
                                               AssignmentWidget(
-                                                imageUrlAssignTo:
-                                                    data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
-                                                imageUrlCreatedBy:
-                                                    data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                imageUrlAssignTo: data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
+                                                imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                 createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                                 assignTo: data.assignedto![0].firstname! + data.assignedto![0].firstname!,
                                               ),
@@ -193,6 +191,7 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                   ),
                                   if (currentSelectedTab == 0)
                                     DetailsTabView(
+                                      id: data.inventoryId!,
                                       data: data,
                                       pickedFilesList: pickedDocuments,
                                       selectedDocNameList: selectedDocsName,

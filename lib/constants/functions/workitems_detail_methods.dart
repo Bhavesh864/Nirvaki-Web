@@ -1,11 +1,16 @@
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/constants/app_constant.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
+import 'package:yes_broker/constants/firebase/random_uid.dart';
 
 import '../../Customs/custom_fields.dart';
 import '../../Customs/dropdown_field.dart';
@@ -68,7 +73,7 @@ void showImageSliderCarousel(List<String> imageUrls, int initialIndex, BuildCont
   );
 }
 
-void uploadFileToFirebase(PlatformFile fileToUpload) async {
+void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname) async {
   print(fileToUpload);
 
   final uniqueKey = DateTime.now().microsecondsSinceEpoch.toString();
@@ -85,8 +90,21 @@ void uploadFileToFirebase(PlatformFile fileToUpload) async {
       await referenceImagesToUpload.putFile(File(fileToUpload.path!));
     }
     final downloadUrl = await referenceImagesToUpload.getDownloadURL();
-
     print('downloadurl.-------$downloadUrl');
+    Attachments attachments = Attachments(
+      id: generateUid(),
+      createdby: AppConst.getAccessToken(),
+      createddate: Timestamp.now(),
+      path: downloadUrl,
+      title: docname,
+      type: docname,
+    );
+    if (id.contains("IN")) {
+      await InventoryDetails.addAttachmentToItems(itemid: id, newAttachment: attachments);
+    } else if (id.contains("LD")) {
+      await LeadDetails.addAttachmentToItems(itemid: id, newAttachment: attachments);
+    }
+    // InventoryDetails.deleteAttachment(itemId: id, attachmentIdToDelete: "1");
   } catch (e) {
     print(e);
   }
@@ -98,6 +116,7 @@ void showUploadDocumentModal(
   PlatformFile? selectedFile,
   List<PlatformFile> pickedDocuments,
   Function onPressed,
+  String id,
 ) {
   String docName = '';
 
@@ -165,7 +184,7 @@ void showUploadDocumentModal(
                       onPressed: () {
                         if (docName != '' && selectedFile != null) {
                           selectedDocName.add(docName);
-                          uploadFileToFirebase(selectedFile!);
+                          uploadFileToFirebase(selectedFile!, id, docName);
                           onPressed();
                           selectedFile = null;
                           Navigator.of(context).pop();

@@ -363,27 +363,59 @@ class InventoryDetails {
     }
   }
 
-  static Future<void> updateAttachment({required String id, required String newStatus}) async {
+  static Future<void> updatecardStatus({required String id, required String newStatus}) async {
     try {
       QuerySnapshot querySnapshot = await usersCollection.where("InventoryId", isEqualTo: id).get();
       for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
         await docSnapshot.reference.update({'InventoryStatus': newStatus});
       }
-      print('Card status updated successfully for documents matching criteria.');
+      print('inventory status update');
     } catch (error) {
       print('Failed to update card status: $error');
     }
   }
 
-  static Future<void> deleteAttachment(String id) async {
+  static Future<void> addAttachmentToItems({required String itemid, required Attachments newAttachment}) async {
     try {
-      QuerySnapshot querySnapshot = await usersCollection.where("InventoryId", isEqualTo: id).get();
+      QuerySnapshot querySnapshot = await usersCollection.where("InventoryId", isEqualTo: itemid).get();
       for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
-        await docSnapshot.reference.delete();
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+
+        List<dynamic> existingAttachments = data['attachments'] ?? [];
+        existingAttachments.add(newAttachment.toJson());
+
+        await docSnapshot.reference.update({'attachments': existingAttachments});
+
+        print('Attachment added successfully to item ${docSnapshot.id}');
       }
-      print('Card status updated successfully for documents matching criteria.');
     } catch (error) {
-      print('Failed to update card status: $error');
+      print('Failed to add attachment to items: $error');
+    }
+  }
+
+  static Future<void> deleteAttachment({required String itemId, required String attachmentIdToDelete}) async {
+    try {
+      QuerySnapshot querySnapshot = await usersCollection.where("InventoryId", isEqualTo: itemId).get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        QueryDocumentSnapshot docSnapshot = querySnapshot.docs.first;
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+        List<dynamic> existingAttachments = data['attachments'] ?? [];
+        List<dynamic> updatedAttachments = [];
+        for (var attachment in existingAttachments) {
+          if (attachment['id'] != attachmentIdToDelete) {
+            updatedAttachments.add(attachment);
+          }
+        }
+
+        await docSnapshot.reference.update({'attachments': updatedAttachments});
+
+        print('Attachment deleted successfully from item $itemId');
+      } else {
+        print('Item not found with InventoryId: $itemId');
+      }
+    } catch (error) {
+      print('Failed to delete attachment: $error');
     }
   }
 }
@@ -738,7 +770,7 @@ class Attachments {
   String? type;
   String? path;
   String? createdby;
-  String? createddate;
+  Timestamp? createddate;
 
   Attachments({this.title, this.type, this.path, this.createdby, this.createddate, this.id});
 

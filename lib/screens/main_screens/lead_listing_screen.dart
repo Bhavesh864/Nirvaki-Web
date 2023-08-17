@@ -385,7 +385,6 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
             onSelected: (value) {
               CardDetails.updateCardStatus(id: leadItem.workitemId!, newStatus: value);
               status[index].status = value;
-              InventoryDetails.updateAttachment(id: leadItem.workitemId!, newStatus: value);
               setState(() {});
             },
             child: IntrinsicWidth(
