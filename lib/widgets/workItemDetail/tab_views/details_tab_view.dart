@@ -17,7 +17,7 @@ class DetailsTabView extends StatelessWidget {
   final List<String> selectedDocNameList;
   late PlatformFile? selectedFileName;
   final bool isLeadView;
-
+  final String id;
   DetailsTabView({
     Key? key,
     required this.data,
@@ -25,6 +25,7 @@ class DetailsTabView extends StatelessWidget {
     required this.selectedDocNameList,
     this.selectedFileName,
     this.isLeadView = false,
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -238,6 +239,7 @@ class DetailsTabView extends StatelessWidget {
                                   () {
                                     setState(() {});
                                   },
+                                  id,
                                 );
                               },
                               child: Container(

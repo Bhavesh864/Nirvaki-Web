@@ -193,6 +193,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                               ),
                               if (currentSelectedTab == 0)
                                 DetailsTabView(
+                                  id: data.leadId!,
                                   isLeadView: true,
                                   data: data,
                                   pickedFilesList: pickedDocuments,
