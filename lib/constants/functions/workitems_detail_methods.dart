@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
-import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart' as IN;
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/constants/firebase/random_uid.dart';
 
@@ -91,7 +91,7 @@ void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname) 
     }
     final downloadUrl = await referenceImagesToUpload.getDownloadURL();
     print('downloadurl.-------$downloadUrl');
-    Attachments attachments = Attachments(
+    IN.Attachments attachments = IN.Attachments(
       id: generateUid(),
       createdby: AppConst.getAccessToken(),
       createddate: Timestamp.now(),
@@ -100,8 +100,24 @@ void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname) 
       type: docname,
     );
     if (id.contains("IN")) {
-      await InventoryDetails.addAttachmentToItems(itemid: id, newAttachment: attachments);
+      IN.Attachments attachments = IN.Attachments(
+        id: generateUid(),
+        createdby: AppConst.getAccessToken(),
+        createddate: Timestamp.now(),
+        path: downloadUrl,
+        title: docname,
+        type: docname,
+      );
+      await IN.InventoryDetails.addAttachmentToItems(itemid: id, newAttachment: attachments);
     } else if (id.contains("LD")) {
+      Attachments attachments = Attachments(
+        id: generateUid(),
+        createdby: AppConst.getAccessToken(),
+        createddate: Timestamp.now(),
+        path: downloadUrl,
+        title: docname,
+        type: docname,
+      );
       await LeadDetails.addAttachmentToItems(itemid: id, newAttachment: attachments);
     }
     // InventoryDetails.deleteAttachment(itemId: id, attachmentIdToDelete: "1");
