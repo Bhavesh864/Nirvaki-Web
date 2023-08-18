@@ -10,6 +10,7 @@ import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
+import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
@@ -120,8 +121,8 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                     offset: const Offset(10, 40),
                                     itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
                                     onSelected: (value) {
-                                      // CardDetails.updateCardStatus(id: widget.id, newStatus: value);
-                                      // InventoryDetails.updateAttachment(id: widget.id, newStatus: value);
+                                      CardDetails.updateCardStatus(id: data.todoId!, newStatus: value);
+                                      TodoDetails.updatecardStatus(id: data.todoId!, newStatus: value);
                                       currentStatus = value;
                                       setState(() {});
                                     },

@@ -141,6 +141,36 @@ class TodoDetails {
       // print('Failed to update Inventory item: $error');
     }
   }
+
+  static Future<void> addAttachmentToItems({required String itemid, required Attachments newAttachment}) async {
+    try {
+      QuerySnapshot querySnapshot = await todoDetailsCollection.where("todoId", isEqualTo: itemid).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+
+        List<dynamic> existingAttachments = data['attachments'] ?? [];
+        existingAttachments.add(newAttachment.toJson());
+
+        await docSnapshot.reference.update({'attachments': existingAttachments});
+
+        print('Attachment added successfully to item ${docSnapshot.id}');
+      }
+    } catch (error) {
+      print('Failed to add attachment to items: $error');
+    }
+  }
+
+  static Future<void> updatecardStatus({required String id, required String newStatus}) async {
+    try {
+      QuerySnapshot querySnapshot = await todoDetailsCollection.where("todoId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'todoStatus': newStatus});
+      }
+      print('lead status update');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
 }
 
 class Attachments {
