@@ -3,6 +3,8 @@ import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
 
 import '../../../Customs/custom_chip.dart';
@@ -258,9 +260,15 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                       setState(() {
                                         // widget.pickedFilesList.remove(document);
                                         // widget.selectedDocNameList.removeAt(index);
-                                        InventoryDetails.deleteAttachment(itemId: widget.id, attachmentIdToDelete: attachment.id!).then(
-                                          (value) => widget.updateData(),
-                                        );
+                                        if (widget.id.contains("IN")) {
+                                          InventoryDetails.deleteAttachment(itemId: widget.id, attachmentIdToDelete: attachment.id!).then(
+                                            (value) => widget.updateData(),
+                                          );
+                                        } else if (widget.id.contains("LD")) {
+                                          LeadDetails.deleteAttachment(itemId: widget.id, attachmentIdToDelete: attachment.id!).then(
+                                            (value) => widget.updateData(),
+                                          );
+                                        }
                                       });
                                     },
                                   ),

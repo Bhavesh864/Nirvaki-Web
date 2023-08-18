@@ -160,6 +160,29 @@ class TodoDetails {
     }
   }
 
+  static Future<void> deleteAttachment({required String itemId, required String attachmentIdToDelete}) async {
+    try {
+      QuerySnapshot querySnapshot = await todoDetailsCollection.where("todoId", isEqualTo: itemId).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        QueryDocumentSnapshot docSnapshot = querySnapshot.docs.first;
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+        List<dynamic> existingAttachments = data['attachments'] ?? [];
+        List<dynamic> updatedAttachments = [];
+        for (var attachment in existingAttachments) {
+          if (attachment['id'] != attachmentIdToDelete) {
+            updatedAttachments.add(attachment);
+          }
+        }
+        await docSnapshot.reference.update({'attachments': updatedAttachments});
+        print('Attachment deleted successfully from item $itemId');
+      } else {
+        print('Item not found with InventoryId: $itemId');
+      }
+    } catch (error) {
+      print('Failed to delete attachment: $error');
+    }
+  }
+
   static Future<void> updatecardStatus({required String id, required String newStatus}) async {
     try {
       QuerySnapshot querySnapshot = await todoDetailsCollection.where("todoId", isEqualTo: id).get();
@@ -174,17 +197,21 @@ class TodoDetails {
 }
 
 class Attachments {
+  String? id;
   String? title;
   String? type;
   String? path;
   String? createdby;
-  Timestamp? createdate;
+  Timestamp? createddate;
 
-  Attachments({this.title, this.type, this.path, this.createdby, this.createdate});
+  Attachments({this.title, this.type, this.path, this.createdby, this.createddate, this.id});
 
   Attachments.fromJson(Map<String, dynamic> json) {
     if (json["title"] is String) {
       title = json["title"];
+    }
+    if (json["id"] is String) {
+      id = json["id"];
     }
     if (json["type"] is String) {
       type = json["type"];
@@ -195,8 +222,8 @@ class Attachments {
     if (json["createdby"] is String) {
       createdby = json["createdby"];
     }
-    if (json["createdate"] is Timestamp) {
-      createdate = json["createdate"];
+    if (json["createddate"] is Timestamp) {
+      createddate = json["createddate"];
     }
   }
 
@@ -206,7 +233,8 @@ class Attachments {
     data["type"] = type;
     data["path"] = path;
     data["createdby"] = createdby;
-    data["createdate"] = createdate;
+    data["createddate"] = createddate;
+    data["id"] = id;
     return data;
   }
 }
