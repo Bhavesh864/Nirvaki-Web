@@ -101,6 +101,7 @@ void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname, 
     } else if (id.contains("LD")) {
       await LeadDetails.addAttachmentToItems(itemid: id, newAttachment: attachments).then((value) => updateState());
     }
+
     // InventoryDetails.deleteAttachment(itemId: id, attachmentIdToDelete: "1");
   } catch (e) {
     print(e);

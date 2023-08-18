@@ -7,6 +7,7 @@ import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
 import '../app/nav_bar.dart';
@@ -111,6 +112,8 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                     InventoryDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
                   } else if (cardData.workitemId!.contains("LD")) {
                     LeadDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
+                  } else if (cardData.workitemId!.contains("TD")) {
+                    TodoDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
                   }
                   setState(() {});
                 },

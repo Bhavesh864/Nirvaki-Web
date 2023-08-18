@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 
 // Flutter Packages Imports
@@ -7,6 +9,7 @@ import 'package:yes_broker/pages/Auth/signup/personal_details.dart';
 import 'package:yes_broker/pages/Auth/set_new_password.dart';
 import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
 import 'package:yes_broker/pages/add_todo.dart';
+import 'package:yes_broker/pages/edit_todo.dart';
 import 'package:yes_broker/screens/main_screens/inventory_details_screen.dart';
 import 'package:yes_broker/screens/main_screens/lead_details_screen.dart';
 import 'package:yes_broker/screens/main_screens/todo_details_screen.dart';
@@ -127,7 +130,7 @@ List<BottomBarItem> bottomBarItems = [
 
 class AppRoutes {
   static const String homeScreen = '/home_screen';
-
+  static const String editTodo = '/edit_todo';
   static const String forgetPassword = '/forget_password_screen';
   static const String loginScreen = '/login_screen';
   static const String singupscreen = '/signup_screen';
@@ -156,6 +159,7 @@ class AppRoutes {
     addInventory: (context) => const AddInventory(),
     addLead: (context) => const AddLead(),
     addTodo: (context) => const AddTodo(),
+    editTodo: (context) => const EditTodo(),
     workItemFilterScreen: (context) => const WorkItemFilterView(
           originalCardList: [],
         ),
