@@ -14,12 +14,11 @@ class LeadDetails {
   Createdby? createdby;
   Timestamp? createdate;
   Propertyarea? propertyarea;
-
   String? updatedby;
   String? updatedate;
   List<double>? propertylocation;
-
   Customerinfo? customerinfo;
+  List<Attachments>? attachments;
   String? comments;
   String? leadcategory;
   String? leadType;
@@ -71,6 +70,7 @@ class LeadDetails {
       this.propertycategory,
       this.propertykind,
       this.transactiontype,
+      this.attachments,
       this.availability,
       this.villatype,
       this.roomconfig,
@@ -123,6 +123,9 @@ class LeadDetails {
     }
     if (json["createdate"] is Timestamp) {
       createdate = json["createdate"];
+    }
+    if (json["attachments"] is List) {
+      attachments = json["attachments"] == null ? null : (json["attachments"] as List).map((e) => Attachments.fromJson(e)).toList();
     }
     if (json["updatedby"] is String) {
       updatedby = json["updatedby"];
@@ -244,6 +247,9 @@ class LeadDetails {
     data["updatedate"] = updatedate;
     if (customerinfo != null) {
       data["customerinfo"] = customerinfo?.toJson();
+    }
+    if (attachments != null) {
+      data["attachments"] = attachments?.map((e) => e.toJson()).toList();
     }
     data["comments"] = comments;
     data["leadcategory"] = leadcategory;
@@ -640,6 +646,49 @@ class Createdby {
     data["userfirstname"] = userfirstname;
     data["userlastname"] = userlastname;
     data["userimage"] = userimage;
+    return data;
+  }
+}
+
+class Attachments {
+  String? id;
+  String? title;
+  String? type;
+  String? path;
+  String? createdby;
+  Timestamp? createddate;
+
+  Attachments({this.title, this.type, this.path, this.createdby, this.createddate, this.id});
+
+  Attachments.fromJson(Map<String, dynamic> json) {
+    if (json["title"] is String) {
+      title = json["title"];
+    }
+    if (json["id"] is String) {
+      id = json["id"];
+    }
+    if (json["type"] is String) {
+      type = json["type"];
+    }
+    if (json["path"] is String) {
+      path = json["path"];
+    }
+    if (json["createdby"] is String) {
+      createdby = json["createdby"];
+    }
+    if (json["createddate"] is Timestamp) {
+      createddate = json["createddate"];
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["title"] = title;
+    data["type"] = type;
+    data["path"] = path;
+    data["createdby"] = createdby;
+    data["createddate"] = createddate;
+    data["id"] = id;
     return data;
   }
 }

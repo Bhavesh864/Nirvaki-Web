@@ -1,9 +1,11 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/routes/routes.dart';
 import '../../Customs/custom_chip.dart';
 
 class CardFooter extends StatelessWidget {
@@ -69,12 +71,20 @@ class CardFooter extends StatelessWidget {
                 ),
                 paddingHorizontal: 3,
               ),
-              // const CustomChip(
-              //   label: Icon(
-              //     Icons.edit_outlined,
-              //   ),
-              //   paddingHorizontal: 3,
-              // ),
+              GestureDetector(
+                onTap: () {
+                  if (cardData.workitemId!.contains("TD")) {
+                    // Navigator.of(context).pushNamed(AppRoutes.editTodo);
+                    context.beamToNamed(AppRoutes.editTodo, data: cardData);
+                  }
+                },
+                child: const CustomChip(
+                  label: Icon(
+                    Icons.edit_outlined,
+                  ),
+                  paddingHorizontal: 3,
+                ),
+              ),
               const CustomChip(
                 label: Icon(
                   Icons.share_outlined,
