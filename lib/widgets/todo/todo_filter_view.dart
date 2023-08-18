@@ -15,7 +15,7 @@ class TodoFilterView extends StatefulWidget {
   final Function closeFilterView;
   final Function(List<String>) onApplyFilters;
 
-  TodoFilterView({super.key, required this.closeFilterView, required this.onApplyFilters});
+  const TodoFilterView({super.key, required this.closeFilterView, required this.onApplyFilters});
 
   @override
   State<TodoFilterView> createState() => _TodoFilterViewState();

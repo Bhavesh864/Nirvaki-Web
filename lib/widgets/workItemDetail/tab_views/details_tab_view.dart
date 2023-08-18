@@ -1,5 +1,8 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
 
 import '../../../Customs/custom_chip.dart';
@@ -10,39 +13,62 @@ import '../../../constants/functions/workitems_detail_methods.dart';
 import '../../../constants/utils/constants.dart';
 import '../mapview_widget.dart';
 
+// class CustomAttachment {
+//   Platform selectedFileName;
+//   List<PlatformFile> pickedFilesLists = [];
+//   List<String> selectedDocNameList = [];
+
+//   CustomAttachment({
+//     required this.selectedFileName,
+//     required this.pickedFilesLists,
+//     required this.selectedDocNameList,
+//   });
+// }
+
 // ignore: must_be_immutable
-class DetailsTabView extends StatelessWidget {
+class DetailsTabView extends StatefulWidget {
   final dynamic data;
-  final List<PlatformFile> pickedFilesList;
-  final List<String> selectedDocNameList;
-  late PlatformFile? selectedFileName;
+  final Function updateData;
   final bool isLeadView;
   final String id;
-  DetailsTabView({
+
+  const DetailsTabView({
     Key? key,
     required this.data,
-    required this.pickedFilesList,
-    required this.selectedDocNameList,
-    this.selectedFileName,
     this.isLeadView = false,
     required this.id,
+    this.updateData = updateFunc,
   }) : super(key: key);
+
+  static void updateFunc() {}
+
+  @override
+  State<DetailsTabView> createState() => _DetailsTabViewState();
+}
+
+class _DetailsTabViewState extends State<DetailsTabView> {
+  PlatformFile? selectedFile;
+  List<PlatformFile> pickedFilesList = [];
+  List<String> selectedDocsNameList = [];
 
   @override
   Widget build(BuildContext context) {
     List<String> allImages = [];
     List<String> allTitles = [];
 
-    if (!isLeadView) {
-      if (data.propertyphotos != null) {
+    print(widget.data.toJson());
+
+    if (!widget.isLeadView) {
+      final inventoryData = widget.data as InventoryDetails;
+      if (inventoryData.propertyphotos != null) {
         final Map<String, List<String>> propertyPhotos = {
-          'frontelevation': [...data!.propertyphotos.frontelevation],
-          'bedroom': [...data!.propertyphotos.bedroom],
-          'bathroom': [...data!.propertyphotos.bathroom],
-          'pujaroom': [...data!.propertyphotos.pujaroom],
-          'servantroom': [...data!.propertyphotos.servantroom],
-          'studyroom': [...data!.propertyphotos.studyroom],
-          'officeroom': [...data!.propertyphotos.officeroom],
+          'frontelevation': [...inventoryData.propertyphotos!.frontelevation!],
+          'bedroom': [...inventoryData.propertyphotos!.bedroom!],
+          'bathroom': [...inventoryData.propertyphotos!.bathroom!],
+          'pujaroom': [...inventoryData.propertyphotos!.pujaroom!],
+          'servantroom': [...inventoryData.propertyphotos!.servantroom!],
+          'studyroom': [...inventoryData.propertyphotos!.studyroom!],
+          'officeroom': [...inventoryData.propertyphotos!.officeroom!],
         };
 
         propertyPhotos.forEach((key, value) {
@@ -62,7 +88,7 @@ class DetailsTabView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (!isLeadView) ...[
+        if (!widget.isLeadView) ...[
           const CustomText(
             title: "Images",
             fontWeight: FontWeight.w700,
@@ -72,12 +98,12 @@ class DetailsTabView extends StatelessWidget {
             child: ListView.builder(
               physics: const ScrollPhysics(),
               scrollDirection: Axis.horizontal,
-              itemCount: data.propertyphotos == null ? inventoryDetailsImageUrls.length : allImages.length,
+              itemCount: widget.data.propertyphotos == null ? inventoryDetailsImageUrls.length : allImages.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
                     showImageSliderCarousel(
-                      data.propertyphotos == null ? inventoryDetailsImageUrls : allImages,
+                      widget.data.propertyphotos == null ? inventoryDetailsImageUrls : allImages,
                       index,
                       context,
                     );
@@ -95,7 +121,7 @@ class DetailsTabView extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: Image.network(
-                            data.propertyphotos == null ? inventoryDetailsImageUrls[index] : '${allImages[index]}.png',
+                            widget.data.propertyphotos == null ? inventoryDetailsImageUrls[index] : '${allImages[index]}.png',
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
                               return const Icon(
@@ -113,7 +139,7 @@ class DetailsTabView extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: CustomText(
-                          title: data.propertyphotos == null ? 'Front Elevation' : allTitles[index],
+                          title: widget.data.propertyphotos == null ? 'Front Elevation' : allTitles[index],
                         ),
                       )
                     ],
@@ -126,18 +152,18 @@ class DetailsTabView extends StatelessWidget {
             height: 30,
           ),
         ],
-        if (data.amenities != null) ...[
+        if (widget.data.amenities != null) ...[
           CustomText(
-            title: !isLeadView ? "Overview" : 'Requirements',
+            title: !widget.isLeadView ? "Overview" : 'Requirements',
             fontWeight: FontWeight.w700,
           ),
           Wrap(
             children: List<Widget>.generate(
-              data.amenities!.length,
+              widget.data.amenities!.length,
               (index) => Padding(
                 padding: const EdgeInsets.only(right: 8.0, top: 10),
                 child: CustomChip(
-                  label: Text(data.amenities![index]),
+                  label: Text(widget.data.amenities![index]),
                 ),
               ),
             ),
@@ -154,7 +180,7 @@ class DetailsTabView extends StatelessWidget {
           ),
         ),
         Text(
-          data.comments!,
+          widget.data.comments!,
           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey),
         ),
         const SizedBox(
@@ -171,120 +197,136 @@ class DetailsTabView extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              StatefulBuilder(
-                builder: (context, setState) {
-                  return SizedBox(
-                    height: 100,
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: pickedFilesList.length + 1,
-                        itemBuilder: (context, index) {
-                          if (index < pickedFilesList.length) {
-                            final document = pickedFilesList[index];
-                            return Stack(
-                              children: [
-                                Container(
-                                  height: 99,
-                                  margin: const EdgeInsets.only(right: 15),
-                                  width: 108,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey.withOpacity(0.5)),
-                                    borderRadius: BorderRadius.circular(10),
+              SizedBox(
+                height: 100,
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: widget.data.attachments.length + 1,
+                    itemBuilder: (context, index) {
+                      final attachments = widget.data.attachments;
+                      if (index < attachments.length) {
+                        final attachment = attachments[index];
+                        return Stack(
+                          children: [
+                            Container(
+                              height: 99,
+                              margin: const EdgeInsets.only(right: 15),
+                              width: 108,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey.withOpacity(0.5)),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.image_outlined,
+                                    size: 40,
                                   ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(
-                                        Icons.image_outlined,
-                                        size: 40,
-                                      ),
-                                      CustomText(
-                                        title: selectedDocNameList[index],
-                                        size: 13,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ],
+                                  CustomText(
+                                    title: widget.data.attachments[index].title,
+                                    size: 13,
+                                    fontWeight: FontWeight.w400,
                                   ),
-                                ),
-                                Positioned(
-                                  top: -13,
-                                  right: 0,
-                                  child: IconButton(
-                                    icon: const Icon(
-                                      Icons.cancel,
-                                      size: 16,
+                                ],
+                              ),
+                            ),
+                            Positioned(
+                              top: 0,
+                              right: 10,
+                              child: Row(
+                                children: [
+                                  GestureDetector(
+                                    child: const Icon(
+                                      Icons.download_for_offline,
+                                      size: 18,
                                     ),
-                                    onPressed: () {
+                                    onTap: () {
+                                      AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                      anchorElement.download = 'Attachment file';
+                                      anchorElement.click();
+                                    },
+                                  ),
+                                  GestureDetector(
+                                    child: const Icon(
+                                      Icons.cancel,
+                                      size: 18,
+                                    ),
+                                    onTap: () {
                                       setState(() {
-                                        pickedFilesList.remove(document);
-                                        selectedDocNameList.removeAt(index);
+                                        // widget.pickedFilesList.remove(document);
+                                        // widget.selectedDocNameList.removeAt(index);
+                                        InventoryDetails.deleteAttachment(itemId: widget.id, attachmentIdToDelete: attachment.id!).then(
+                                          (value) => widget.updateData(),
+                                        );
                                       });
                                     },
                                   ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      } else {
+                        return GestureDetector(
+                          onTap: () async {
+                            showUploadDocumentModal(
+                              context,
+                              widget.updateData,
+                              selectedDocsNameList,
+                              selectedFile,
+                              pickedFilesList,
+                              () {
+                                setState(() {});
+                              },
+                              widget.id,
+                            );
+                          },
+                          child: Container(
+                            height: 100,
+                            width: 100,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.withOpacity(0.5)),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.add,
+                                  size: 40,
+                                ),
+                                CustomText(
+                                  title: 'Add more',
+                                  size: 8,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ],
-                            );
-                          } else {
-                            return GestureDetector(
-                              onTap: () async {
-                                showUploadDocumentModal(
-                                  context,
-                                  selectedDocNameList,
-                                  selectedFileName,
-                                  pickedFilesList,
-                                  () {
-                                    setState(() {});
-                                  },
-                                  id,
-                                );
-                              },
-                              child: Container(
-                                height: 100,
-                                width: 100,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey.withOpacity(0.5)),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: const Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.add,
-                                      size: 40,
-                                    ),
-                                    CustomText(
-                                      title: 'Add more',
-                                      size: 8,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          }
-                        }),
-                  );
-                },
+                            ),
+                          ),
+                        );
+                      }
+                    }),
               ),
             ],
           ),
         if (!Responsive.isDesktop(context)) ...[
-          if (isLeadView) ...[
+          if (widget.isLeadView) ...[
             MapViewWidget(
-              state: data.preferredlocality!.state!,
-              city: data.preferredlocality!.city!,
-              addressline1: data.preferredlocality!.addressline1!,
-              addressline2: data.preferredlocality?.addressline2,
+              state: widget.data.preferredlocality!.state!,
+              city: widget.data.preferredlocality!.city!,
+              addressline1: widget.data.preferredlocality!.addressline1!,
+              addressline2: widget.data.preferredlocality?.addressline2,
             ),
           ] else ...[
             MapViewWidget(
-              state: data.propertyaddress!.state!,
-              city: data.propertyaddress!.city!,
-              addressline1: data.propertyaddress!.addressline1!,
-              addressline2: data.propertyaddress?.addressline2,
+              state: widget.data.propertyaddress!.state!,
+              city: widget.data.propertyaddress!.city!,
+              addressline1: widget.data.propertyaddress!.addressline1!,
+              addressline2: widget.data.propertyaddress?.addressline2,
             ),
           ]
         ],

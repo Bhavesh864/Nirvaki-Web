@@ -1,7 +1,6 @@
 // ignore_for_file: invalid_use_of_protected_member
 import 'dart:async';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -35,21 +34,19 @@ class InventoryDetailsScreen extends ConsumerStatefulWidget {
 class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> with TickerProviderStateMixin {
   late TabController tabviewController;
   late Future<InventoryDetails?> inventoryDetails;
-  PlatformFile? selectedImageName;
-  List<PlatformFile> pickedDocuments = [];
-  List<String> selectedDocsName = [];
   int currentSelectedTab = 0;
 
   @override
   void initState() {
     super.initState();
     tabviewController = TabController(length: 4, vsync: this);
-    final workItemId = ref.read(selectedWorkItemId.notifier).state;
-    inventoryDetails = InventoryDetails.getInventoryDetails(workItemId == '' ? widget.inventoryId : workItemId);
+    // final workItemId = ref.read(selectedWorkItemId.notifier).state;
+    // inventoryDetails = InventoryDetails.getInventoryDetails(workItemId == '' ? widget.inventoryId : workItemId);
   }
 
   @override
   Widget build(BuildContext context) {
+    final workItemId = ref.read(selectedWorkItemId.notifier).state;
     return Scaffold(
       appBar: Responsive.isMobile(context)
           ? AppBar(
@@ -69,13 +66,14 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
             )
           : null,
       body: FutureBuilder(
-          future: inventoryDetails,
+          future: InventoryDetails.getInventoryDetails(workItemId == '' ? widget.inventoryId : workItemId),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator.adaptive());
             }
             if (snapshot.hasData) {
               final data = snapshot.data;
+
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -154,8 +152,10 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                           context,
                                           'Assignment',
                                           AssignmentWidget(
-                                            imageUrlAssignTo: data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
-                                            imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                            imageUrlAssignTo:
+                                                data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
+                                            imageUrlCreatedBy:
+                                                data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                             createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                             assignTo: data.assignedto![0].firstname! + data.assignedto![0].firstname!,
                                           ),
@@ -193,9 +193,9 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                 DetailsTabView(
                                   id: data.inventoryId!,
                                   data: data,
-                                  pickedFilesList: pickedDocuments,
-                                  selectedDocNameList: selectedDocsName,
-                                  selectedFileName: selectedImageName,
+                                  updateData: () {
+                                    setState(() {});
+                                  },
                                 ),
                               if (currentSelectedTab == 1) const ActivityTabView(),
                               if (currentSelectedTab == 2) const TodoTabView(),
@@ -214,28 +214,30 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                   if (Responsive.isDesktop(context))
                     Expanded(
                       flex: 1,
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                          children: [
-                            ContactInformation(
-                              customerinfo: data.customerinfo!,
-                            ),
-                            if (Responsive.isDesktop(context))
-                              AssignmentWidget(
-                                imageUrlAssignTo: data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
-                                imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
-                                assignTo: '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
+                      child: SingleChildScrollView(
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            children: [
+                              ContactInformation(
+                                customerinfo: data.customerinfo!,
                               ),
-                            if (Responsive.isDesktop(context))
-                              MapViewWidget(
-                                state: data.propertyaddress!.state!,
-                                city: data.propertyaddress!.city!,
-                                addressline1: data.propertyaddress!.addressline1!,
-                                addressline2: data.propertyaddress?.addressline2,
-                              ),
-                          ],
+                              if (Responsive.isDesktop(context))
+                                AssignmentWidget(
+                                  imageUrlAssignTo: data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
+                                  imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                  createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
+                                  assignTo: '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
+                                ),
+                              if (Responsive.isDesktop(context))
+                                MapViewWidget(
+                                  state: data.propertyaddress!.state!,
+                                  city: data.propertyaddress!.city!,
+                                  addressline1: data.propertyaddress!.addressline1!,
+                                  addressline2: data.propertyaddress?.addressline2,
+                                ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

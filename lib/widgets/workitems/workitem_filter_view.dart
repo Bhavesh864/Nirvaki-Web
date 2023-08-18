@@ -12,7 +12,6 @@ import 'package:yes_broker/widgets/workitems/inventory_checkbox_options.dart';
 
 class FilterOptions {
   List<String> roomConfigurations = [];
-  RangeValues rentRange = RangeValues(10000, 50000);
 }
 
 class WorkItemFilterView extends ConsumerStatefulWidget {
