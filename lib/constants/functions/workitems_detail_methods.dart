@@ -73,9 +73,7 @@ void showImageSliderCarousel(List<String> imageUrls, int initialIndex, BuildCont
   );
 }
 
-void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname) async {
-  print(fileToUpload);
-
+void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname, Function updateState) async {
   final uniqueKey = DateTime.now().microsecondsSinceEpoch.toString();
 
   Reference referenceRoot = FirebaseStorage.instance.ref();
@@ -90,7 +88,6 @@ void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname) 
       await referenceImagesToUpload.putFile(File(fileToUpload.path!));
     }
     final downloadUrl = await referenceImagesToUpload.getDownloadURL();
-    print('downloadurl.-------$downloadUrl');
     Attachments attachments = Attachments(
       id: generateUid(),
       createdby: AppConst.getAccessToken(),
@@ -100,9 +97,9 @@ void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname) 
       type: docname,
     );
     if (id.contains("IN")) {
-      await InventoryDetails.addAttachmentToItems(itemid: id, newAttachment: attachments);
+      await InventoryDetails.addAttachmentToItems(itemid: id, newAttachment: attachments).then((value) => updateState());
     } else if (id.contains("LD")) {
-      await LeadDetails.addAttachmentToItems(itemid: id, newAttachment: attachments);
+      await LeadDetails.addAttachmentToItems(itemid: id, newAttachment: attachments).then((value) => updateState());
     }
     // InventoryDetails.deleteAttachment(itemId: id, attachmentIdToDelete: "1");
   } catch (e) {
@@ -112,6 +109,7 @@ void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname) 
 
 void showUploadDocumentModal(
   BuildContext context,
+  Function updateState,
   List<String> selectedDocName,
   PlatformFile? selectedFile,
   List<PlatformFile> pickedDocuments,
@@ -184,7 +182,7 @@ void showUploadDocumentModal(
                       onPressed: () {
                         if (docName != '' && selectedFile != null) {
                           selectedDocName.add(docName);
-                          uploadFileToFirebase(selectedFile!, id, docName);
+                          uploadFileToFirebase(selectedFile!, id, docName, updateState);
                           onPressed();
                           selectedFile = null;
                           Navigator.of(context).pop();

@@ -29,6 +29,7 @@ class TodoDetailsScreen extends ConsumerStatefulWidget {
 class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with TickerProviderStateMixin {
   late TabController tabviewController;
   late Future<TodoDetails?> todoDetails;
+  List<Attachments> firebaseAttachments = [];
   PlatformFile? selectedImageName;
   List<PlatformFile> pickedDocuments = [];
   List<String> selectedDocsName = [];
@@ -250,6 +251,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                 onTap: () async {
                                                   showUploadDocumentModal(
                                                     context,
+                                                    () {},
                                                     selectedDocsName,
                                                     selectedImageName,
                                                     pickedDocuments,

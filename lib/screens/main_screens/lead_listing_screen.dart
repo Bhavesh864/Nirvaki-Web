@@ -9,7 +9,6 @@ import 'package:yes_broker/widgets/workitems/workitem_filter_view.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
-import '../../constants/firebase/detailsModels/inventory_details.dart';
 import '../../constants/utils/constants.dart';
 import '../../pages/largescreen_dashboard.dart';
 import '../../riverpodstate/selected_workitem.dart';

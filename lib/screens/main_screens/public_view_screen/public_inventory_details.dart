@@ -1,5 +1,4 @@
 // ignore_for_file: invalid_use_of_protected_member
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -33,9 +32,6 @@ class PublicViewInventoryDetails extends ConsumerStatefulWidget {
 class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryDetails> with TickerProviderStateMixin {
   late TabController tabviewController;
   late Future<InventoryDetails?> inventoryDetails;
-  PlatformFile? selectedImageName;
-  List<PlatformFile> pickedDocuments = [];
-  List<String> selectedDocsName = [];
   int currentSelectedTab = 0;
 
   @override
@@ -163,8 +159,10 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                               context,
                                               'Assignment',
                                               AssignmentWidget(
-                                                imageUrlAssignTo: data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
-                                                imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                imageUrlAssignTo:
+                                                    data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
+                                                imageUrlCreatedBy:
+                                                    data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                 createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                                 assignTo: data.assignedto![0].firstname! + data.assignedto![0].firstname!,
                                               ),
@@ -193,9 +191,6 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                     DetailsTabView(
                                       id: data.inventoryId!,
                                       data: data,
-                                      pickedFilesList: pickedDocuments,
-                                      selectedDocNameList: selectedDocsName,
-                                      selectedFileName: selectedImageName,
                                     ),
                                   if (currentSelectedTab == 1) const ActivityTabView(),
                                   if (currentSelectedTab == 2) const TodoTabView(),
