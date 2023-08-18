@@ -8,12 +8,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
-import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart' as IN;
-import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart' as inventory;
+import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart' as lead;
 import 'package:yes_broker/constants/firebase/random_uid.dart';
 
 import '../../Customs/custom_fields.dart';
 import '../../Customs/dropdown_field.dart';
+import '../firebase/detailsModels/todo_details.dart';
 import '../utils/colors.dart';
 
 void showImageSliderCarousel(List<String> imageUrls, int initialIndex, BuildContext context) {
@@ -90,7 +91,7 @@ void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname, 
     final downloadUrl = await referenceImagesToUpload.getDownloadURL();
     print('downloadurl.-------$downloadUrl');
     if (id.contains("IN")) {
-      IN.Attachments attachments = IN.Attachments(
+      inventory.Attachments attachments = inventory.Attachments(
         id: generateUid(),
         createdby: AppConst.getAccessToken(),
         createddate: Timestamp.now(),
@@ -98,8 +99,18 @@ void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname, 
         title: docname,
         type: docname,
       );
-      await IN.InventoryDetails.addAttachmentToItems(itemid: id, newAttachment: attachments);
+      await inventory.InventoryDetails.addAttachmentToItems(itemid: id, newAttachment: attachments);
     } else if (id.contains("LD")) {
+      lead.Attachments attachments = lead.Attachments(
+        id: generateUid(),
+        createdby: AppConst.getAccessToken(),
+        createddate: Timestamp.now(),
+        path: downloadUrl,
+        title: docname,
+        type: docname,
+      );
+      await lead.LeadDetails.addAttachmentToItems(itemid: id, newAttachment: attachments);
+    } else if (id.contains("TD")) {
       Attachments attachments = Attachments(
         id: generateUid(),
         createdby: AppConst.getAccessToken(),
@@ -108,7 +119,7 @@ void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname, 
         title: docname,
         type: docname,
       );
-      await LeadDetails.addAttachmentToItems(itemid: id, newAttachment: attachments);
+      await TodoDetails.addAttachmentToItems(itemid: id, newAttachment: attachments);
     }
 
     // InventoryDetails.deleteAttachment(itemId: id, attachmentIdToDelete: "1");

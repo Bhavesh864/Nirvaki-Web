@@ -359,6 +359,29 @@ class LeadDetails {
     }
   }
 
+  static Future<void> deleteAttachment({required String itemId, required String attachmentIdToDelete}) async {
+    try {
+      QuerySnapshot querySnapshot = await usersCollection.where("leadId", isEqualTo: itemId).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        QueryDocumentSnapshot docSnapshot = querySnapshot.docs.first;
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+        List<dynamic> existingAttachments = data['attachments'] ?? [];
+        List<dynamic> updatedAttachments = [];
+        for (var attachment in existingAttachments) {
+          if (attachment['id'] != attachmentIdToDelete) {
+            updatedAttachments.add(attachment);
+          }
+        }
+        await docSnapshot.reference.update({'attachments': updatedAttachments});
+        print('Attachment deleted successfully from item $itemId');
+      } else {
+        print('Item not found with InventoryId: $itemId');
+      }
+    } catch (error) {
+      print('Failed to delete attachment: $error');
+    }
+  }
+
   static Future<void> updatecardStatus({required String id, required String newStatus}) async {
     try {
       QuerySnapshot querySnapshot = await usersCollection.where("leadId", isEqualTo: id).get();
