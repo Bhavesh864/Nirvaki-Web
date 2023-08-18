@@ -43,12 +43,14 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
   void initState() {
     super.initState();
     tabviewController = TabController(length: 4, vsync: this);
-    final workItemId = ref.read(selectedWorkItemId.notifier).state;
-    leadDetails = LeadDetails.getLeadDetails(workItemId == '' ? widget.leadId : workItemId);
+    // final workItemId = ref.read(selectedWorkItemId.notifier).state;
+    // leadDetails = LeadDetails.getLeadDetails(workItemId == '' ? widget.leadId : workItemId);
   }
 
   @override
   Widget build(BuildContext context) {
+    final workItemId = ref.read(selectedWorkItemId.notifier).state;
+
     return Scaffold(
       appBar: Responsive.isMobile(context)
           ? AppBar(
@@ -68,7 +70,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
             )
           : null,
       body: FutureBuilder(
-          future: leadDetails,
+          future: LeadDetails.getLeadDetails(workItemId == '' ? widget.leadId : workItemId),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator.adaptive());
@@ -198,6 +200,9 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                   id: data.leadId!,
                                   isLeadView: true,
                                   data: data,
+                                  updateData: () {
+                                    setState(() {});
+                                  },
                                 ),
                               if (currentSelectedTab == 1) const ActivityTabView(),
                               if (currentSelectedTab == 2) const TodoTabView(),

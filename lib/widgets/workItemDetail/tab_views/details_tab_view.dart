@@ -56,8 +56,6 @@ class _DetailsTabViewState extends State<DetailsTabView> {
     List<String> allImages = [];
     List<String> allTitles = [];
 
-    print(widget.data.toJson());
-
     if (!widget.isLeadView) {
       final inventoryData = widget.data as InventoryDetails;
       if (inventoryData.propertyphotos != null) {
