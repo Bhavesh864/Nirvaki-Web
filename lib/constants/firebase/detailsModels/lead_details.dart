@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 
 final CollectionReference usersCollection = FirebaseFirestore.instance.collection('leadDetails');
 
