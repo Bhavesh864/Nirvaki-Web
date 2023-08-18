@@ -10,6 +10,7 @@ import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/pages/add_inventory.dart';
 import 'package:yes_broker/pages/add_lead.dart';
 import 'package:yes_broker/pages/add_todo.dart';
+import 'package:yes_broker/pages/edit_todo.dart';
 import 'package:yes_broker/pages/largescreen_dashboard.dart';
 import 'package:yes_broker/routes/routes.dart';
 
@@ -40,11 +41,14 @@ class MyApp extends StatelessWidget {
     notFoundPage: const BeamPage(child: LayoutView()),
     locationBuilder: RoutesLocationBuilder(
       routes: {
-        '/': (p0, p1, p2) => const LayoutView(),
+        '/ ': (p0, p1, p2) => const LayoutView(),
         '/profile': (p0, p1, p2) => const LargeScreen(),
         AppRoutes.addInventory: (p0, p1, p2) => const AddInventory(),
         AppRoutes.addLead: (p0, p1, p2) => const AddLead(),
         AppRoutes.addTodo: (p0, p1, p2) => const AddTodo(),
+        AppRoutes.editTodo: (p0, p1, data) {
+          return const EditTodo();
+        },
       },
     ),
   );

@@ -56,7 +56,6 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
           }
           if (snapshot.hasData) {
             List<CardDetails> todoItemsList = snapshot.data!.where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
-
             List<CardDetails> filterTodoList = todoItemsList.where((item) {
               if (searchController.text.isEmpty) {
                 return true;
@@ -65,11 +64,9 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                 final fullName = "${item.customerinfo!.firstname} ${item.customerinfo!.lastname}".toLowerCase();
                 final title = item.cardTitle!.toLowerCase();
                 final mobileNumber = item.customerinfo!.mobile!.toLowerCase();
-
                 return fullName.contains(searchText) || title.contains(searchText) || mobileNumber.contains(searchText);
               }
             }).toList();
-
             filterTodoList = filterTodoList.where((item) {
               // Check if the status or linkItemType is included in selectedFilters
               final bool isStatusMatch = selectedFilters.isEmpty || selectedFilters.contains(item.status!.toLowerCase());

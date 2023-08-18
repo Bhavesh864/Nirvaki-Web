@@ -4,9 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/pages/edit_todo.dart';
 import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/screens/account_screens/common_screen.dart';
 import 'package:yes_broker/screens/main_screens/inventory_details_screen.dart';
@@ -237,6 +239,13 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                                   type: BeamPageType.scaleTransition,
                                   child: CommonScreen(),
                                 ),
+                            AppRoutes.editTodo: (p0, p1, data) {
+                              return BeamPage(
+                                key: const ValueKey('/edit-todo'),
+                                type: BeamPageType.scaleTransition,
+                                child: EditTodo(cardDetails: data as CardDetails),
+                              );
+                            },
                           },
                         ),
                       ),
