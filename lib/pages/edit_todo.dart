@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:yes_broker/Customs/custom_chip.dart';
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/utils/image_constants.dart';
-import 'package:yes_broker/widgets/card/questions%20card/chip_button.dart';
-
 import '../Customs/custom_text.dart';
 import '../Customs/responsive.dart';
 import '../constants/utils/colors.dart';
