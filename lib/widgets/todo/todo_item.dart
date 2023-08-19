@@ -47,7 +47,7 @@ class _TodoItemState extends State<TodoItem> {
 
     return ListView.builder(
       shrinkWrap: true,
-      physics: Responsive.isMobile(context) ? const NeverScrollableScrollPhysics() : const ClampingScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: userData.length,
       itemBuilder: ((context, index) => Card(
             margin: EdgeInsets.only(

@@ -2,13 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
-
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
+import '../../constants/app_constant.dart';
 
 class ContactInformation extends StatelessWidget {
-  final Customerinfo customerinfo;
+  final dynamic customerinfo;
   const ContactInformation({
     Key? key,
     required this.customerinfo,
@@ -30,12 +29,13 @@ class ContactInformation extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 size: 20,
               ),
-              const CustomChip(
-                label: Icon(
-                  Icons.more_vert,
+              if (!AppConst.getPublicView())
+                const CustomChip(
+                  label: Icon(
+                    Icons.more_vert,
+                  ),
+                  paddingHorizontal: 3,
                 ),
-                paddingHorizontal: 3,
-              ),
             ],
           ),
         ),

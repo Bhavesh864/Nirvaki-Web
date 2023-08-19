@@ -171,21 +171,19 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                                                     nextQuestion,
                                                     context,
                                                   ),
-                                                  if (i == screensDataList[index].questions.length - 1 && screensDataList[index].questions[i].questionOptionType != 'chip')
+                                                  if (i == screensDataList[index].questions.length - 1 &&
+                                                      screensDataList[index].questions[i].questionOptionType != 'chip')
                                                     Container(
                                                       margin: const EdgeInsets.only(top: 10),
                                                       alignment: Alignment.centerRight,
                                                       child: CustomButton(
                                                         text: 'Next',
                                                         onPressed: () {
-                                                          nextQuestion(
-                                                            screensDataList: screensDataList,
-                                                          );
-                                                          // if (_formKey.currentState!.validate()) {
-                                                          //   nextQuestion(
-                                                          //     screensDataList: screensDataList,
-                                                          //   );
-                                                          // }
+                                                          if (_formKey.currentState!.validate()) {
+                                                            nextQuestion(
+                                                              screensDataList: screensDataList,
+                                                            );
+                                                          }
                                                           if (screensDataList[index].title == "Assign to") {
                                                             addDataOnfirestore(notify);
                                                           }

@@ -75,6 +75,7 @@ Future<String> submitTodoAndCardDetails(state) async {
       ),
     ],
     createdBy: AppConst.getAccessToken(),
+    attachments: [],
     createDate: Timestamp.now(),
     linkedWorkItem: [
       LinkedWorkItem(workItemId: cardDetail.workitemId, workItemTitle: cardDetail.cardTitle, workItemDescription: cardDetail.cardDescription, workItemType: cardDetail.cardType)

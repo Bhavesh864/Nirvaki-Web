@@ -10,13 +10,13 @@ customSnackBar({required BuildContext context, required String text}) {
         text: text,
         textColor: Colors.white,
       ),
-      behavior: SnackBarBehavior.floating,
+      behavior: SnackBarBehavior.fixed,
       elevation: 3,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
       dismissDirection: DismissDirection.endToStart,
-      margin: const EdgeInsets.only(bottom: 50, left: 10, right: 10),
+      // margin: const EdgeInsets.only(bottom: 50, left: 10, right: 10),
       duration: const Duration(milliseconds: 3000),
     ),
   );

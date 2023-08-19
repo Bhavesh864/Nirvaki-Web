@@ -203,12 +203,17 @@ class CardDetails {
     }
   }
 
-  static Future<void> updateCardDetails(CardDetails item) async {
+  static Future<void> updateCardStatus({required String id, required String newStatus}) async {
     try {
-      await cardDetailsCollection.doc(item.workitemId).update(item.toJson());
-      // print('Inventory item updated successfully');
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();
+
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'Status': newStatus});
+      }
+
+      print('Card status updated successfully for documents matching criteria.');
     } catch (error) {
-      // print('Failed to update Inventory item: $error');
+      print('Failed to update card status: $error');
     }
   }
 
@@ -219,6 +224,42 @@ class CardDetails {
       print("deleted successfully");
     } catch (error) {
       print('Failed to delete Inventory item: $error');
+    }
+  }
+
+  static Future<void> updatecardTitle({required String id, required String cardTitle}) async {
+    try {
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'cardTitle': cardTitle});
+      }
+      print('cardTitle update');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
+
+  static Future<void> updateCardDate({required String id, required String duedate}) async {
+    try {
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'duedate': duedate});
+      }
+      print('carddate update');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
+
+  static Future<void> updateCardDescription({required String id, required String cardDescription}) async {
+    try {
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'cardDescription': cardDescription});
+      }
+      print('description update');
+    } catch (error) {
+      print('Failed to update card status: $error');
     }
   }
 }

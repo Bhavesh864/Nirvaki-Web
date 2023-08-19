@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 import 'package:random_string/random_string.dart';
+
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
-
-import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' as cards;
-
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
 final randomId = randomNumeric(5);
@@ -102,6 +100,7 @@ Future<String> submitLeadAndCardDetails(state) async {
       preferredlocation: latlng,
       typeofschool: typeofschool,
       transactiontype: transactionType,
+      attachments: [],
       brokerid: currentUser["brokerId"],
       leadcategory: leadCategory,
       propertycategory: propertyCategory,

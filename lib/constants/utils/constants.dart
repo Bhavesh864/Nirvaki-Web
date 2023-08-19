@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
 
 double? height;
 double? width;
@@ -12,8 +13,10 @@ class MenuItem {
   final String label;
   final IconData? iconData;
   final Widget screen;
+  final String nav;
 
   MenuItem({
+    this.nav = '',
     required this.label,
     this.iconData,
     required this.screen,
@@ -202,9 +205,17 @@ Color taskStatusColor(String title) {
     case 'New':
       return Colors.green;
     case 'In progress':
-      return Colors.orangeAccent;
+      return AppColor.locationfinalizedstatuscolor;
     case 'Location Finalised':
-      return Colors.orangeAccent;
+      return AppColor.locationfinalizedstatuscolor;
+    case "Token":
+      return AppColor.tokenstatuscolor;
+    case "Agreement":
+      return AppColor.agreementstatuscolor;
+    case "Negotiation":
+      return AppColor.negotiationstatuscolor;
+    case "Closed":
+      return Colors.grey.shade900;
     default:
       return Colors.blue;
   }
@@ -242,7 +253,7 @@ final List<Map<String, dynamic>> inventoryFilterOtpion = [
   },
   {
     "title": 'Gym',
-    'selected': true,
+    'selected': false,
   },
   {
     "title": 'Gated Community',
@@ -250,11 +261,11 @@ final List<Map<String, dynamic>> inventoryFilterOtpion = [
   },
   {
     "title": 'Parking',
-    'selected': true,
+    'selected': false,
   },
   {
     "title": 'Washing Machine',
-    'selected': true,
+    'selected': false,
   },
   {
     "title": 'Dryer',

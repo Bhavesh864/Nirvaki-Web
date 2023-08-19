@@ -34,6 +34,26 @@ class TodoDetails {
       this.linkedWorkItem,
       this.attachments});
 
+  factory TodoDetails.fromSnapshot(DocumentSnapshot snapshot) {
+    final json = snapshot.data() as Map<String, dynamic>;
+    return TodoDetails(
+      todoName: json["todoName"],
+      todoDescription: json["todoDescription"],
+      todoId: json["todoId"],
+      todoStatus: json["todoStatus"],
+      brokerId: json["brokerId"],
+      assignedto: (json["assignedto"] as List<dynamic>?)?.map((e) => Assignedto.fromJson(e)).toList(),
+      managerId: json["managerId"],
+      createdBy: json["createdBy"],
+      createDate: json["createdate"],
+      todoType: json["todoType"],
+      dueDate: json["dueDate"],
+      linkedWorkItem: (json["linkedWorkItem"] as List<dynamic>?)?.map((e) => LinkedWorkItem.fromJson(e)).toList(),
+      attachments: (json["attachments"] as List<dynamic>?)?.map((e) => Attachments.fromJson(e)).toList(),
+      customerinfo: Customerinfo.fromJson(json["customerinfo"]),
+    );
+  }
+
   TodoDetails.fromJson(Map<String, dynamic> json) {
     if (json["todoType"] is String) {
       todoType = json["todoType"];
@@ -110,9 +130,14 @@ class TodoDetails {
 
   static Future<TodoDetails?> getTodoDetails(String id) async {
     try {
-      final DocumentSnapshot documentSnapshot = await todoDetailsCollection.doc(id).get();
-      final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-      return TodoDetails.fromJson(data);
+      final QuerySnapshot querySnapshot = await todoDetailsCollection.where("todoId", isEqualTo: id).get();
+      for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        if (documentSnapshot.exists) {
+          final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+          return TodoDetails.fromJson(data);
+        }
+      }
+      return null;
     } catch (error) {
       // print('Failed to get Inventory items: $error');
       return null;
@@ -136,20 +161,113 @@ class TodoDetails {
       // print('Failed to update Inventory item: $error');
     }
   }
+
+  static Future<void> addAttachmentToItems({required String itemid, required Attachments newAttachment}) async {
+    try {
+      QuerySnapshot querySnapshot = await todoDetailsCollection.where("todoId", isEqualTo: itemid).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+
+        List<dynamic> existingAttachments = data['attachments'] ?? [];
+        existingAttachments.add(newAttachment.toJson());
+
+        await docSnapshot.reference.update({'attachments': existingAttachments});
+
+        print('Attachment added successfully to item ${docSnapshot.id}');
+      }
+    } catch (error) {
+      print('Failed to add attachment to items: $error');
+    }
+  }
+
+  static Future<void> deleteAttachment({required String itemId, required String attachmentIdToDelete}) async {
+    try {
+      QuerySnapshot querySnapshot = await todoDetailsCollection.where("todoId", isEqualTo: itemId).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        QueryDocumentSnapshot docSnapshot = querySnapshot.docs.first;
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+        List<dynamic> existingAttachments = data['attachments'] ?? [];
+        List<dynamic> updatedAttachments = [];
+        for (var attachment in existingAttachments) {
+          if (attachment['id'] != attachmentIdToDelete) {
+            updatedAttachments.add(attachment);
+          }
+        }
+        await docSnapshot.reference.update({'attachments': updatedAttachments});
+        print('Attachment deleted successfully from item $itemId');
+      } else {
+        print('Item not found with InventoryId: $itemId');
+      }
+    } catch (error) {
+      print('Failed to delete attachment: $error');
+    }
+  }
+
+  static Future<void> updatecardStatus({required String id, required String newStatus}) async {
+    try {
+      QuerySnapshot querySnapshot = await todoDetailsCollection.where("todoId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'todoStatus': newStatus});
+      }
+      print('lead status update');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
+
+  static Future<void> updatetodoName({required String id, required String todoName}) async {
+    try {
+      QuerySnapshot querySnapshot = await todoDetailsCollection.where("todoId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'todoName': todoName});
+      }
+      print('todoname update');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
+
+  static Future<void> updateCardDate({required String id, required String duedate}) async {
+    try {
+      QuerySnapshot querySnapshot = await todoDetailsCollection.where("todoId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'dueDate': duedate});
+      }
+      print('cardTitle update');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
+
+  static Future<void> updateTodoDescription({required String id, required String todoDescription}) async {
+    try {
+      QuerySnapshot querySnapshot = await todoDetailsCollection.where("todoId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'todoDescription': todoDescription});
+      }
+      print('description update');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
 }
 
 class Attachments {
+  String? id;
   String? title;
   String? type;
   String? path;
   String? createdby;
-  Timestamp? createdate;
+  Timestamp? createddate;
 
-  Attachments({this.title, this.type, this.path, this.createdby, this.createdate});
+  Attachments({this.title, this.type, this.path, this.createdby, this.createddate, this.id});
 
   Attachments.fromJson(Map<String, dynamic> json) {
     if (json["title"] is String) {
       title = json["title"];
+    }
+    if (json["id"] is String) {
+      id = json["id"];
     }
     if (json["type"] is String) {
       type = json["type"];
@@ -160,8 +278,8 @@ class Attachments {
     if (json["createdby"] is String) {
       createdby = json["createdby"];
     }
-    if (json["createdate"] is Timestamp) {
-      createdate = json["createdate"];
+    if (json["createddate"] is Timestamp) {
+      createddate = json["createddate"];
     }
   }
 
@@ -171,7 +289,8 @@ class Attachments {
     data["type"] = type;
     data["path"] = path;
     data["createdby"] = createdby;
-    data["createdate"] = createdate;
+    data["createddate"] = createddate;
+    data["id"] = id;
     return data;
   }
 }
