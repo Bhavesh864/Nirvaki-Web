@@ -47,11 +47,8 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
         future: future,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const SizedBox(
-              // height: height! * 0.7,
-              child: Center(
-                child: CircularProgressIndicator.adaptive(),
-              ),
+            return const Center(
+              child: CircularProgressIndicator.adaptive(),
             );
           }
           if (snapshot.hasData) {
@@ -67,17 +64,11 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                 return fullName.contains(searchText) || title.contains(searchText) || mobileNumber.contains(searchText);
               }
             }).toList();
+
             filterTodoList = filterTodoList.where((item) {
-              // Check if the status or linkItemType is included in selectedFilters
               final bool isStatusMatch = selectedFilters.isEmpty || selectedFilters.contains(item.status!.toLowerCase());
               final bool isLinkItemTypeMatch = selectedFilters.isEmpty || selectedFilters.contains(item.linkedItemType == 'IN' ? 'inventory' : 'lead');
               final bool isTodoTypeMatch = selectedFilters.isEmpty || selectedFilters.contains(item.cardType!.toLowerCase());
-
-              // final maping = {
-              //   'status': [],
-              //   'todo': [],
-              //   'type': [],
-              // };
 
               return isStatusMatch || isLinkItemTypeMatch || isTodoTypeMatch;
             }).toList();

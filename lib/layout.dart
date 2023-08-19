@@ -43,7 +43,7 @@ class _LayoutViewState extends State<LayoutView> {
         return Scaffold(
           body: ScreenTypeLayout.builder(
             breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
-            mobile: (p0) => _buildMobileLayout(snapshot.hasData),
+            mobile: (p0) => _buildMobileLayout(!snapshot.hasData),
             tablet: (p0) => _buildTabletLayout(snapshot.hasData),
             desktop: (p0) => _buildDesktopLayout(snapshot.hasData),
           ),
@@ -56,17 +56,17 @@ class _LayoutViewState extends State<LayoutView> {
     if (isAuthenticated) {
       return const SmallScreen();
     } else {
-      final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
+      // final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
 
-      if (location.isNotEmpty && location.contains('inventory-details')) {
-        return PublicViewInventoryDetails(
-          inventoryId: extractItemIdFromPath(location, 'inventory')!,
-        );
-      } else if (location.isNotEmpty && location.contains('lead-details')) {
-        return PublicViewLeadDetails(
-          leadId: extractItemIdFromPath(location, 'lead')!,
-        );
-      }
+      // if (location.isNotEmpty && location.contains('inventory-details')) {
+      //   return PublicViewInventoryDetails(
+      //     inventoryId: extractItemIdFromPath(location, 'inventory')!,
+      //   );
+      // } else if (location.isNotEmpty && location.contains('lead-details')) {
+      //   return PublicViewLeadDetails(
+      //     leadId: extractItemIdFromPath(location, 'lead')!,
+      //   );
+      // }
       return const LoginScreen();
     }
   }
