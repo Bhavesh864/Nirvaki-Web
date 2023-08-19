@@ -10,6 +10,8 @@ import 'package:yes_broker/widgets/todo/todo_filter_view.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/utils/constants.dart';
+import '../../pages/largescreen_dashboard.dart';
+import '../../riverpodstate/selected_workitem.dart';
 import '../../routes/routes.dart';
 import '../../widgets/app/nav_bar.dart';
 import '../../widgets/calendar_view.dart';
@@ -204,7 +206,6 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                                                 itemBuilder: (context, index) => GestureDetector(
                                                   onTap: () {
                                                     final id = filterTodoList[index].workitemId;
-                                                    context.beamToNamed('/todo/todo-details/$id');
 
                                                     // if (id!.contains('IN')) {
                                                     //   if (Responsive.isMobile(context)) {
@@ -218,9 +219,9 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                                                     //   if (Responsive.isMobile(context)) {
                                                     //     Navigator.of(context).pushNamed(AppRoutes.leadDetailsScreen, arguments: id);
                                                     //   } else {
-                                                    //     ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                                    //     ref.read(largeScreenTabsProvider.notifier).update((state) => 8);
-                                                    //     context.beamToNamed('/todo/todo-details/$id');
+                                                    ref.read(selectedWorkItemId.notifier).addItemId(id!);
+                                                    ref.read(largeScreenTabsProvider.notifier).update((state) => 8);
+                                                    context.beamToNamed('/todo/todo-details/$id');
                                                     //   }
                                                     // }
                                                   },
