@@ -17,6 +17,23 @@ class ActivityDetails {
   ActivityDetails(
       {this.activityId, this.activityStatus, this.itemtype, this.itemid, this.brokerid, this.managerid, this.userid, this.createdby, this.createdate, this.activitybody});
 
+  factory ActivityDetails.fromSnapshot(DocumentSnapshot snapshot) {
+    final json = snapshot.data() as Map<String, dynamic>;
+
+    return ActivityDetails(
+      activityId: json["activityId"],
+      activityStatus: json["activityStatus"],
+      itemid: json["itemid"],
+      itemtype: json[""],
+      userid: json["userid"],
+      activitybody: Activitybody.fromJson(json["activitybody"]),
+      brokerid: json["brokerid"],
+      managerid: json["managerid"],
+      createdby: Createdby.fromJson(json["createdby"]),
+      createdate: json["createdate"],
+    );
+  }
+
   ActivityDetails.fromJson(Map<String, dynamic> json) {
     if (json["ActivityID"] is String) {
       activityId = json["ActivityID"];
@@ -87,9 +104,9 @@ class ActivityDetails {
   static Future<void> addactivity(ActivityDetails activityDetails) async {
     try {
       await activityDetailsCollection.doc().set(activityDetails.toJson());
-      // print('Inventory item added successfully');
+      print('Inventory item added successfully');
     } catch (error) {
-      // print('Failed to add Inventory item: $error');
+      print('Failed to add Inventory item: $error');
     }
   }
 
