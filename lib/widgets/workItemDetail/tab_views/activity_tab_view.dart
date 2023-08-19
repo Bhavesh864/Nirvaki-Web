@@ -4,9 +4,15 @@ import 'package:yes_broker/Customs/custom_text.dart';
 
 import '../../timeline_view.dart';
 
-class ActivityTabView extends StatelessWidget {
+class ActivityTabView extends StatefulWidget {
   const ActivityTabView({super.key});
 
+  @override
+  State<ActivityTabView> createState() => _ActivityTabViewState();
+}
+
+class _ActivityTabViewState extends State<ActivityTabView> {
+  final TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -26,8 +32,7 @@ class ActivityTabView extends StatelessWidget {
                   margin: const EdgeInsets.only(right: 20),
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: TextField(
-                    controller: TextEditingController(),
-                    onChanged: (k) {},
+                    controller: controller,
                     decoration: const InputDecoration(
                       hintText: 'Type note here',
                     ),
