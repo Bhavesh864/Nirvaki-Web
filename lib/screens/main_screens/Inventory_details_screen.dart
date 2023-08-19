@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -33,20 +34,22 @@ class InventoryDetailsScreen extends ConsumerStatefulWidget {
 
 class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> with TickerProviderStateMixin {
   late TabController tabviewController;
-  late Future<InventoryDetails?> inventoryDetails;
+  late Stream<QuerySnapshot<Map<String, dynamic>>> inventoryDetails;
   int currentSelectedTab = 0;
 
   @override
   void initState() {
     super.initState();
     tabviewController = TabController(length: 4, vsync: this);
-    // final workItemId = ref.read(selectedWorkItemId.notifier).state;
+    final workItemId = ref.read(selectedWorkItemId.notifier).state;
     // inventoryDetails = InventoryDetails.getInventoryDetails(workItemId == '' ? widget.inventoryId : workItemId);
+    inventoryDetails =
+        FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId == '' ? widget.inventoryId : workItemId).snapshots();
   }
 
   @override
   Widget build(BuildContext context) {
-    final workItemId = ref.read(selectedWorkItemId.notifier).state;
+    // final workItemId = ref.read(selectedWorkItemId.notifier).state;
     return Scaffold(
       appBar: Responsive.isMobile(context)
           ? AppBar(
@@ -65,15 +68,19 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
               toolbarHeight: 50,
             )
           : null,
-      body: FutureBuilder(
-          future: InventoryDetails.getInventoryDetails(workItemId == '' ? widget.inventoryId : workItemId),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator.adaptive());
-            }
-            if (snapshot.hasData) {
-              final data = snapshot.data;
+      body: StreamBuilder(
+        stream: inventoryDetails,
+        // future: InventoryDetails.getInventoryDetails(workItemId == '' ? widget.inventoryId : workItemId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator.adaptive());
+          }
+          if (snapshot.hasData) {
+            final dataList = snapshot.data!.docs;
 
+            List<InventoryDetails> inventoryList = dataList.map((doc) => InventoryDetails.fromSnapshot(doc)).toList();
+
+            for (var data in inventoryList) {
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -92,7 +99,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                 setState: () {
                                   setState(() {});
                                 },
-                                id: data!.inventoryId!,
+                                id: data.inventoryId!,
                                 title: data.inventoryTitle!,
                                 category: data.inventorycategory!,
                                 type: data.inventoryType!,
@@ -193,9 +200,6 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                 DetailsTabView(
                                   id: data.inventoryId!,
                                   data: data,
-                                  updateData: () {
-                                    setState(() {});
-                                  },
                                 ),
                               if (currentSelectedTab == 1) const ActivityTabView(),
                               if (currentSelectedTab == 2) const TodoTabView(),
@@ -244,8 +248,10 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                 ],
               );
             }
-            return const SizedBox();
-          }),
+          }
+          return const SizedBox();
+        },
+      ),
     );
   }
 }

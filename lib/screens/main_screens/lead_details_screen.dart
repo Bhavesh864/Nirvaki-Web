@@ -43,12 +43,14 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
   void initState() {
     super.initState();
     tabviewController = TabController(length: 4, vsync: this);
-    final workItemId = ref.read(selectedWorkItemId.notifier).state;
-    leadDetails = LeadDetails.getLeadDetails(workItemId == '' ? widget.leadId : workItemId);
+    // final workItemId = ref.read(selectedWorkItemId.notifier).state;
+    // leadDetails = LeadDetails.getLeadDetails(workItemId == '' ? widget.leadId : workItemId);
   }
 
   @override
   Widget build(BuildContext context) {
+    final workItemId = ref.read(selectedWorkItemId.notifier).state;
+
     return Scaffold(
       appBar: Responsive.isMobile(context)
           ? AppBar(
@@ -68,7 +70,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
             )
           : null,
       body: FutureBuilder(
-          future: leadDetails,
+          future: LeadDetails.getLeadDetails(workItemId == '' ? widget.leadId : workItemId),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator.adaptive());
@@ -198,6 +200,9 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                   id: data.leadId!,
                                   isLeadView: true,
                                   data: data,
+                                  updateData: () {
+                                    setState(() {});
+                                  },
                                 ),
                               if (currentSelectedTab == 1) const ActivityTabView(),
                               if (currentSelectedTab == 2) const TodoTabView(),
@@ -215,28 +220,30 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                     ),
                     Expanded(
                       flex: 1,
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                          children: [
-                            ContactInformation(
-                              customerinfo: data.customerinfo!,
-                            ),
-                            if (Responsive.isDesktop(context))
-                              AssignmentWidget(
-                                imageUrlAssignTo: data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
-                                imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
-                                assignTo: '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
+                      child: SingleChildScrollView(
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            children: [
+                              ContactInformation(
+                                customerinfo: data.customerinfo!,
                               ),
-                            if (Responsive.isDesktop(context))
-                              MapViewWidget(
-                                state: data.preferredlocality!.state!,
-                                city: data.preferredlocality!.city!,
-                                addressline1: data.preferredlocality!.addressline1!,
-                                addressline2: data.preferredlocality?.addressline2,
-                              ),
-                          ],
+                              if (Responsive.isDesktop(context))
+                                AssignmentWidget(
+                                  imageUrlAssignTo: data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
+                                  imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                  createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
+                                  assignTo: '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
+                                ),
+                              if (Responsive.isDesktop(context))
+                                MapViewWidget(
+                                  state: data.preferredlocality!.state!,
+                                  city: data.preferredlocality!.city!,
+                                  addressline1: data.preferredlocality!.addressline1!,
+                                  addressline2: data.preferredlocality?.addressline2,
+                                ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

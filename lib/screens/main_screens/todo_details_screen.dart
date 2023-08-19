@@ -18,7 +18,6 @@ import '../../constants/utils/constants.dart';
 import '../../riverpodstate/selected_workitem.dart';
 import '../../widgets/app/nav_bar.dart';
 import '../../widgets/workItemDetail/assignment_widget.dart';
-import '../../widgets/workItemDetail/tab_views/activity_tab_view.dart';
 
 class TodoDetailsScreen extends ConsumerStatefulWidget {
   final String todoId;
@@ -31,7 +30,6 @@ class TodoDetailsScreen extends ConsumerStatefulWidget {
 class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with TickerProviderStateMixin {
   late TabController tabviewController;
   late Future<TodoDetails?> todoDetails;
-  List<Attachments> firebaseAttachments = [];
   PlatformFile? selectedImageName;
   List<PlatformFile> pickedDocuments = [];
   List<String> selectedDocsName = [];
@@ -42,8 +40,8 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
   void initState() {
     super.initState();
     tabviewController = TabController(length: 4, vsync: this);
-    final workItemId = ref.read(selectedWorkItemId.notifier).state;
-    todoDetails = TodoDetails.getTodoDetails(workItemId == '' ? widget.todoId : workItemId);
+    // final workItemId = ref.read(selectedWorkItemId.notifier).state;
+    // todoDetails = TodoDetails.getTodoDetails(workItemId == '' ? widget.todoId : workItemId);
   }
 
   void startEditingTodoName(String todoName) {
@@ -62,6 +60,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
 
   @override
   Widget build(BuildContext context) {
+    final workItemId = ref.read(selectedWorkItemId.notifier).state;
     return Scaffold(
       appBar: Responsive.isMobile(context)
           ? AppBar(
@@ -332,6 +331,16 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                         ),
                                                       ],
                                                     ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Positioned(
+                                                top: -13,
+                                                right: 0,
+                                                child: IconButton(
+                                                  icon: const Icon(
+                                                    Icons.cancel,
+                                                    size: 16,
                                                   ),
                                                 );
                                               }
