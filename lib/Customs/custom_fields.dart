@@ -85,6 +85,7 @@ class CustomTextInputState extends State<CustomTextInput> {
           labelText: widget.labelText,
           hintText: widget.hintText,
           hintStyle: widget.hintstyle,
+
           prefixIcon: widget.leftIcon != null ? Icon(widget.leftIcon) : null,
           suffixIcon: widget.rightIcon != null
               ? IconButton(

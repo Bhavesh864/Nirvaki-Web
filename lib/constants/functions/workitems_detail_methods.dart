@@ -121,7 +121,6 @@ void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname, 
       );
       await TodoDetails.addAttachmentToItems(itemid: id, newAttachment: attachments);
     }
-
     // InventoryDetails.deleteAttachment(itemId: id, attachmentIdToDelete: "1");
   } catch (e) {
     print(e);
