@@ -226,6 +226,18 @@ class CardDetails {
       print('Failed to delete Inventory item: $error');
     }
   }
+
+  static Future<void> updatecardTitle({required String id, required String cardTitle}) async {
+    try {
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'cardTitle': cardTitle});
+      }
+      print('cardTitle update');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
 }
 
 class Customerinfo {

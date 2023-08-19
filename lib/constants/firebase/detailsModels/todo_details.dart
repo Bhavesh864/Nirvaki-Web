@@ -194,6 +194,18 @@ class TodoDetails {
       print('Failed to update card status: $error');
     }
   }
+
+  static Future<void> updatetodoName({required String id, required String todoName}) async {
+    try {
+      QuerySnapshot querySnapshot = await todoDetailsCollection.where("todoId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'todoName': todoName});
+      }
+      print('todoname update');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
 }
 
 class Attachments {

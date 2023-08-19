@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:yes_broker/Customs/custom_chip.dart';
+import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/utils/image_constants.dart';
+import 'package:yes_broker/widgets/card/questions%20card/chip_button.dart';
 
 import '../Customs/custom_text.dart';
 import '../Customs/responsive.dart';
@@ -19,7 +22,7 @@ class EditTodo extends StatefulWidget {
 class _EditTodoState extends State<EditTodo> {
   PageController? pageController;
   int currentScreenIndex = 0;
-
+  String? title;
   @override
   void initState() {
     pageController = PageController(initialPage: currentScreenIndex);
@@ -46,13 +49,42 @@ class _EditTodoState extends State<EditTodo> {
               physics: const NeverScrollableScrollPhysics(),
               controller: pageController,
               scrollDirection: Axis.horizontal,
-              itemCount: 2,
+              itemCount: currentScreenIndex == 0 ? 2 : 1,
               itemBuilder: (context, index) {
                 return Center(
-                  child: CardContainer(
-                    cardDetails: widget.cardDetails!,
+                    child: Card(
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                );
+                  child: SingleChildScrollView(
+                    child: Container(
+                      constraints: const BoxConstraints(
+                        minHeight: 0,
+                        maxHeight: double.infinity,
+                      ),
+                      width: Responsive.isMobile(context) ? width! * 0.9 : 650,
+                      padding: const EdgeInsets.all(25),
+                      child: Column(
+                        children: [
+                          if (currentScreenIndex == 0) ...[
+                            CardContainer(
+                              cardDetails: widget.cardDetails!,
+                              onselected: (title) {
+                                setState(() {
+                                  title = title;
+                                  currentScreenIndex = 1;
+                                });
+                              },
+                            ),
+                          ] else ...[
+                            getwidgetBytitle(title)
+                          ]
+                        ],
+                      ),
+                    ),
+                  ),
+                ));
               },
             ),
           ),
@@ -62,48 +94,46 @@ class _EditTodoState extends State<EditTodo> {
   }
 }
 
-List<Widget> items = [];
+Widget getwidgetBytitle(title) {
+  print(title);
+  if (title == "Task Name and Description") {
+    return CustomTextInput(
+      controller: TextEditingController(),
+      hintText: "helo",
+    );
+  } else if (title == "Type of To Do") {
+    CustomChip(
+      label: const Text("data"),
+      onPressed: () {},
+    );
+  }
+  return SizedBox();
+}
 
 class CardContainer extends StatelessWidget {
   final CardDetails cardDetails;
-  const CardContainer({Key? key, required this.cardDetails}) : super(key: key);
-
+  final Function(String title) onselected;
+  const CardContainer({Key? key, required this.cardDetails, required this.onselected}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Card(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+    return Column(
+      children: [
+        const CustomText(
+          softWrap: true,
+          textAlign: TextAlign.center,
+          size: 30,
+          title: "What do you want to edit?",
+          fontWeight: FontWeight.bold,
         ),
-        child: SingleChildScrollView(
-          child: Container(
-            constraints: const BoxConstraints(
-              minHeight: 0,
-              maxHeight: double.infinity,
-            ),
-            width: Responsive.isMobile(context) ? width! * 0.9 : 650,
-            padding: const EdgeInsets.all(25),
-            child: Column(
-              children: [
-                const CustomText(
-                  softWrap: true,
-                  textAlign: TextAlign.center,
-                  size: 30,
-                  title: "What do you want to edit?",
-                  fontWeight: FontWeight.bold,
-                ),
-                for (var chipData in _getChipDataList())
-                  ChipCustom(
-                    title: chipData.title,
-                    text: chipData.text,
-                    onSelect: () {},
-                  ),
-              ],
-            ),
+        for (var chipData in _getChipDataList())
+          ChipCustom(
+            title: chipData.title,
+            text: chipData.text,
+            onSelect: () {
+              onselected(chipData.title);
+            },
           ),
-        ),
-      ),
+      ],
     );
   }
 

@@ -71,20 +71,20 @@ class CardFooter extends StatelessWidget {
                 ),
                 paddingHorizontal: 3,
               ),
-              GestureDetector(
-                onTap: () {
-                  if (cardData.workitemId!.contains("TD")) {
-                    // Navigator.of(context).pushNamed(AppRoutes.editTodo);
-                    context.beamToNamed(AppRoutes.editTodo, data: cardData);
-                  }
-                },
-                child: const CustomChip(
-                  label: Icon(
-                    Icons.edit_outlined,
-                  ),
-                  paddingHorizontal: 3,
-                ),
-              ),
+              // GestureDetector(
+              //   onTap: () {
+              //     if (cardData.workitemId!.contains("TD")) {
+              //       // Navigator.of(context).pushNamed(AppRoutes.editTodo);
+              //       context.beamToNamed(AppRoutes.editTodo, data: cardData);
+              //     }
+              //   },
+              //   child: const CustomChip(
+              //     label: Icon(
+              //       Icons.edit_outlined,
+              //     ),
+              //     paddingHorizontal: 3,
+              //   ),
+              // ),
               const CustomChip(
                 label: Icon(
                   Icons.share_outlined,
