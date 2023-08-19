@@ -1,4 +1,4 @@
-import 'dart:html';
+// import 'dart:html';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -245,9 +245,9 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                     ),
                                     onTap: () {
                                       if (kIsWeb) {
-                                        AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                        anchorElement.download = 'Attachment file';
-                                        anchorElement.click();
+                                        // AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                        // anchorElement.download = 'Attachment file';
+                                        // anchorElement.click();
                                       }
                                     },
                                   ),
@@ -258,17 +258,17 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                     ),
                                     onTap: () {
                                       setState(() {
-                                        // widget.pickedFilesList.remove(document);
-                                        // widget.selectedDocNameList.removeAt(index);
-                                        if (widget.id.contains("IN")) {
-                                          InventoryDetails.deleteAttachment(itemId: widget.id, attachmentIdToDelete: attachment.id!).then(
-                                            (value) => widget.updateData(),
-                                          );
-                                        } else if (widget.id.contains("LD")) {
-                                          LeadDetails.deleteAttachment(itemId: widget.id, attachmentIdToDelete: attachment.id!).then(
-                                            (value) => widget.updateData(),
-                                          );
-                                        }
+                                        showConfirmDeleteAttachment(context, () {
+                                          if (widget.id.contains("IN")) {
+                                            InventoryDetails.deleteAttachment(itemId: widget.id, attachmentIdToDelete: attachment.id!).then(
+                                              (value) => widget.updateData(),
+                                            );
+                                          } else if (widget.id.contains("LD")) {
+                                            LeadDetails.deleteAttachment(itemId: widget.id, attachmentIdToDelete: attachment.id!).then(
+                                              (value) => widget.updateData(),
+                                            );
+                                          }
+                                        });
                                       });
                                     },
                                   ),

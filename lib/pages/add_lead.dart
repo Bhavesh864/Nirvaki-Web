@@ -177,14 +177,11 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                       child: CustomButton(
                                                         text: 'Next',
                                                         onPressed: () {
-                                                          nextQuestion(
-                                                            screensDataList: screensDataList,
-                                                          );
-                                                          // if (_formKey.currentState!.validate()) {
-                                                          //   nextQuestion(
-                                                          //     screensDataList: screensDataList,
-                                                          //   );
-                                                          // }
+                                                          if (_formKey.currentState!.validate()) {
+                                                            nextQuestion(
+                                                              screensDataList: screensDataList,
+                                                            );
+                                                          }
                                                           if (screensDataList[index].title == "Assign to") {
                                                             addDataOnfirestore(notify);
                                                           }

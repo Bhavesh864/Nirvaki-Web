@@ -181,14 +181,11 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                           onPressed: () {
                                                             FocusScope.of(context).unfocus();
 
-                                                            nextQuestion(
-                                                              screensDataList: screensDataList,
-                                                            );
-                                                            // if (_formKey.currentState!.validate()) {
-                                                            //   nextQuestion(
-                                                            //     screensDataList: screensDataList,
-                                                            //   );
-                                                            // }
+                                                            if (_formKey.currentState!.validate()) {
+                                                              nextQuestion(
+                                                                screensDataList: screensDataList,
+                                                              );
+                                                            }
                                                             if (screensDataList[index].title == "Assign to") {
                                                               addDataOnfirestore(notify);
                                                             }
