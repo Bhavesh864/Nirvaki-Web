@@ -238,6 +238,30 @@ class CardDetails {
       print('Failed to update card status: $error');
     }
   }
+
+  static Future<void> updateCardDate({required String id, required String duedate}) async {
+    try {
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'duedate': duedate});
+      }
+      print('carddate update');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
+
+  static Future<void> updateCardDescription({required String id, required String cardDescription}) async {
+    try {
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'cardDescription': cardDescription});
+      }
+      print('description update');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
 }
 
 class Customerinfo {

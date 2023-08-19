@@ -92,6 +92,55 @@ class LeadDetails {
       this.hospitalrooms,
       this.preferredroadwidth});
 
+  factory LeadDetails.fromSnapshot(DocumentSnapshot snapshot) {
+    final json = snapshot.data() as Map<String, dynamic>;
+    return LeadDetails(
+      leadTitle: json["leadTitle"],
+      leadDescription: json["leadDescription"],
+      leadId: json["leadId"],
+      leadStatus: json["leadStatus"],
+      brokerid: json["brokerid"],
+      assignedto: (json["assignedto"] as List<dynamic>?)?.map((e) => Assignedto.fromJson(e)).toList(),
+      managerid: json["managerid"],
+      createdby: Createdby.fromJson(json["createdby"]),
+      createdate: json["createdate"],
+      updatedby: json["updatedby"],
+      updatedate: json["updatedate"],
+      attachments: (json["attachments"] as List<dynamic>?)?.map((e) => Attachments.fromJson(e)).toList(),
+      customerinfo: Customerinfo.fromJson(json["customerinfo"]),
+      comments: json["comments"],
+      leadcategory: json["leadcategory"],
+      leadType: json["leadType"],
+      leadsource: json["leadsource"],
+      propertycategory: json["propertycategory"],
+      propertykind: json["propertykind"],
+      transactiontype: json["transactiontype"],
+      availability: json["availability"],
+      villatype: json["villatype"],
+      roomconfig: json["roomconfig"] == null ? null : Roomconfig.fromJson(json["roomconfig"]),
+      plotdetails: json["plotdetails"] == null ? null : Plotdetails.fromJson(json["plotdetails"]),
+      possessiondate: json["possessiondate"],
+      amenities: json["amenities"] == null ? null : List<String>.from(json["amenities"]),
+      reservedparking: json["reservedparking"] == null ? null : Reservedparking.fromJson(json["reservedparking"]),
+      propertyarea: json["propertyarea"] == null ? null : Propertyarea.fromJson(json["propertyarea"]),
+      preferredlocality: json["preferredlocality"] == null ? null : Preferredlocality.fromJson(json["preferredlocality"]),
+      propertypricerange: json["propertypricerange"] == null ? null : Propertypricerange.fromJson(json["propertypricerange"]),
+      preferredlocation: json["preferredlocation"] == null ? null : List<double>.from(json["preferredlocation"]),
+      propertyarearange: json["propertyarearange"] == null ? null : Propertyarearange.fromJson(json["propertyarearange"]),
+      propertylocation: json["propertylocation"] == null ? null : List<double>.from(json["propertylocation"]),
+      preferredpropertyfacing: json["preferredpropertyfacing"],
+      preferredroadwidth: json["preferredroadwidth"],
+      commericialtype: json["commericialtype"],
+      typeofoffice: json["typeofoffice"],
+      typeofretail: json["typeofretail"],
+      typeofhospitality: json["typeofhospitality"],
+      typeofhealthcare: json["typeofhealthcare"],
+      approvedbeds: json["approvedbeds"],
+      typeofschool: json["typeofschool"],
+      hospitalrooms: json["hospitalrooms"],
+    );
+  }
+
   LeadDetails.fromJson(Map<String, dynamic> json) {
     if (json["leadStatus"] is String) {
       leadStatus = json["leadStatus"];

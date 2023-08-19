@@ -34,6 +34,26 @@ class TodoDetails {
       this.linkedWorkItem,
       this.attachments});
 
+  factory TodoDetails.fromSnapshot(DocumentSnapshot snapshot) {
+    final json = snapshot.data() as Map<String, dynamic>;
+    return TodoDetails(
+      todoName: json["todoName"],
+      todoDescription: json["todoDescription"],
+      todoId: json["todoId"],
+      todoStatus: json["todoStatus"],
+      brokerId: json["brokerId"],
+      assignedto: (json["assignedto"] as List<dynamic>?)?.map((e) => Assignedto.fromJson(e)).toList(),
+      managerId: json["managerId"],
+      createdBy: json["createdBy"],
+      createDate: json["createdate"],
+      todoType: json["todoType"],
+      dueDate: json["dueDate"],
+      linkedWorkItem: (json["linkedWorkItem"] as List<dynamic>?)?.map((e) => LinkedWorkItem.fromJson(e)).toList(),
+      attachments: (json["attachments"] as List<dynamic>?)?.map((e) => Attachments.fromJson(e)).toList(),
+      customerinfo: Customerinfo.fromJson(json["customerinfo"]),
+    );
+  }
+
   TodoDetails.fromJson(Map<String, dynamic> json) {
     if (json["todoType"] is String) {
       todoType = json["todoType"];
@@ -202,6 +222,30 @@ class TodoDetails {
         await docSnapshot.reference.update({'todoName': todoName});
       }
       print('todoname update');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
+
+  static Future<void> updateCardDate({required String id, required String duedate}) async {
+    try {
+      QuerySnapshot querySnapshot = await todoDetailsCollection.where("todoId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'dueDate': duedate});
+      }
+      print('cardTitle update');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
+
+  static Future<void> updateTodoDescription({required String id, required String todoDescription}) async {
+    try {
+      QuerySnapshot querySnapshot = await todoDetailsCollection.where("todoId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'todoDescription': todoDescription});
+      }
+      print('description update');
     } catch (error) {
       print('Failed to update card status: $error');
     }
