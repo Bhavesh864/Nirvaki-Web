@@ -132,7 +132,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                                           columnWidths: {
                                             0: FixedColumnWidth(availableWidth * 0.25), // Adjust the percentages as needed
                                             1: FixedColumnWidth(availableWidth * 0.18),
-                                            2: FixedColumnWidth(availableWidth * 0.1),
+                                            2: FixedColumnWidth(availableWidth * 0.15),
                                             3: FixedColumnWidth(availableWidth * 0.15),
                                             4: FixedColumnWidth(availableWidth * 0.1),
                                             5: FixedColumnWidth(availableWidth * 0.1),
