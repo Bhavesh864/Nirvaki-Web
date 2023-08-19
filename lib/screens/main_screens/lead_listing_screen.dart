@@ -30,6 +30,7 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
   bool isFilterOpen = false;
   bool showTableView = false;
   Future<List<CardDetails>>? future;
+  List<String> selectedFilters = [];
 
   List<CardDetails>? status;
 
@@ -75,6 +76,11 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
 
                 return fullName.contains(searchText) || title.contains(searchText) || mobileNumber.contains(searchText);
               }
+            }).toList();
+
+            filteredleadList = filteredleadList.where((item) {
+              final bool isBedRoomMatch = selectedFilters.isEmpty || selectedFilters.contains('${item.roomconfig!.bedroom!}BHK');
+              return isBedRoomMatch;
             }).toList();
 
             status = filteredleadList;
@@ -234,6 +240,11 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
                             closeFilterView: () {
                               setState(() {
                                 isFilterOpen = false;
+                              });
+                            },
+                            setFilters: (p0) {
+                              setState(() {
+                                selectedFilters = p0;
                               });
                             },
                             originalCardList: filteredleadList,

@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,15 +18,17 @@ class FilterOptions {
 
 class WorkItemFilterView extends ConsumerStatefulWidget {
   final Function closeFilterView;
+  final Function(List<String>) setFilters;
   final List<CardDetails> originalCardList;
 
   const WorkItemFilterView({
     super.key,
     this.closeFilterView = _defaultCloseFunction,
     required this.originalCardList,
+    this.setFilters = _defaultCloseFunction,
   });
 
-  static void _defaultCloseFunction() {}
+  static void _defaultCloseFunction(k) {}
 
   @override
   WorkItemFilterViewState createState() => WorkItemFilterViewState();
@@ -33,6 +37,7 @@ class WorkItemFilterView extends ConsumerStatefulWidget {
 class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
   late FilterOptions filterOptions = FilterOptions();
   List<String> datalist = ['Studio', '1RK', '1BHK', '2BHK', '3BHK', '4BHK', '5BHK', '5BHK +'];
+  RangeValues values = const RangeValues(0, 100);
 
   @override
   Widget build(BuildContext context) {
@@ -137,13 +142,24 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const CustomText(
-                        title: '₹10,0000 - ₹50,000 per month',
+                      CustomText(
+                        title: '₹${values.start.toStringAsFixed(0)} - ₹${values.end.toStringAsFixed(0)} per month',
                         size: 14,
                       ),
-                      Container(
-                        height: 100,
-                        color: AppColor.primary,
+                      // Container(
+                      //   height: 100,
+                      //   color: AppColor.primary,
+                      // ),
+                      RangeSlider(
+                        values: values,
+                        min: 0,
+                        max: 100000,
+                        divisions: 20,
+                        onChanged: (RangeValues newVal) {
+                          setState(() {
+                            values = newVal;
+                          });
+                        },
                       ),
                       const SizedBox(
                         height: 20,
@@ -152,7 +168,6 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
                     ],
                   ),
                 ),
-                // const Spacer(),
                 CustomButton(
                   text: 'Apply Filters',
                   onPressed: () {
@@ -161,18 +176,19 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
 
                     // Apply the filtering logic to your card listing data
                     // final filteredList = widget.originalCardList.where((card) {
-                    //   if (selectedFilters.isEmpty) {
-                    //     return true; // Show all cards if no filters selected
-                    //   }
-                    //   return selectedFilters.any(
-                    //     (filter) => card.roomconfig!.additionalroom!.contains(filter),
-                    //   );
+                    //   // Check if the card's rent is within the selected range
+                    //   double cardRent = card.propertypricerange ?? 0; // Modify based on your data structure
+                    //   return cardRent >= values.start &&
+                    //       cardRent <= values.end &&
+                    //       (selectedFilters.isEmpty || selectedFilters.any((filter) => card.roomconfig?.additionalroom?.contains(filter) ?? false));
                     // }).toList();
 
                     // Update the listing using the filtered results (you need to define originalCardList)
                     // ref.read(filteredCardListProvider.notifier).updateFilteredList(filteredList);
 
-                    widget.closeFilterView();
+                    widget.setFilters(selectedInventoryFiltersProvider.state);
+
+                    // widget.closeFilterView();
                   },
                 ),
               ],

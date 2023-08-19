@@ -17,7 +17,6 @@ import '../../constants/utils/constants.dart';
 import '../../riverpodstate/selected_workitem.dart';
 import '../../widgets/app/nav_bar.dart';
 import '../../widgets/workItemDetail/assignment_widget.dart';
-import '../../widgets/workItemDetail/tab_views/activity_tab_view.dart';
 
 class TodoDetailsScreen extends ConsumerStatefulWidget {
   final String todoId;
@@ -30,7 +29,6 @@ class TodoDetailsScreen extends ConsumerStatefulWidget {
 class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with TickerProviderStateMixin {
   late TabController tabviewController;
   late Future<TodoDetails?> todoDetails;
-  List<Attachments> firebaseAttachments = [];
   PlatformFile? selectedImageName;
   List<PlatformFile> pickedDocuments = [];
   List<String> selectedDocsName = [];
@@ -40,12 +38,13 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
   void initState() {
     super.initState();
     tabviewController = TabController(length: 4, vsync: this);
-    final workItemId = ref.read(selectedWorkItemId.notifier).state;
-    todoDetails = TodoDetails.getTodoDetails(workItemId == '' ? widget.todoId : workItemId);
+    // final workItemId = ref.read(selectedWorkItemId.notifier).state;
+    // todoDetails = TodoDetails.getTodoDetails(workItemId == '' ? widget.todoId : workItemId);
   }
 
   @override
   Widget build(BuildContext context) {
+    final workItemId = ref.read(selectedWorkItemId.notifier).state;
     return Scaffold(
       appBar: Responsive.isMobile(context)
           ? AppBar(
@@ -65,7 +64,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
             )
           : null,
       body: FutureBuilder(
-          future: todoDetails,
+          future: TodoDetails.getTodoDetails(workItemId == '' ? widget.todoId : workItemId),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator.adaptive());
@@ -192,110 +191,104 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
-                                  StatefulBuilder(
-                                    builder: (context, setState) {
-                                      return SizedBox(
-                                        height: 100,
-                                        child: ListView.builder(
-                                          shrinkWrap: true,
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount: pickedDocuments.length + 1,
-                                          itemBuilder: (context, index) {
-                                            if (index < pickedDocuments.length) {
-                                              final document = pickedDocuments[index];
-                                              return Stack(
-                                                children: [
-                                                  Container(
-                                                    height: 99,
-                                                    margin: const EdgeInsets.only(right: 15),
-                                                    width: 108,
-                                                    alignment: Alignment.center,
-                                                    decoration: BoxDecoration(
-                                                      border: Border.all(color: Colors.grey.withOpacity(0.5)),
-                                                      borderRadius: BorderRadius.circular(10),
+                                  SizedBox(
+                                    height: 100,
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: data.attachments!.length + 1,
+                                      itemBuilder: (context, index) {
+                                        if (index < data.attachments!.length) {
+                                          final attachment = data.attachments![index];
+                                          return Stack(
+                                            children: [
+                                              Container(
+                                                height: 99,
+                                                margin: const EdgeInsets.only(right: 15),
+                                                width: 108,
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(color: Colors.grey.withOpacity(0.5)),
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.image_outlined,
+                                                      size: 40,
                                                     ),
-                                                    child: Column(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: [
-                                                        const Icon(
-                                                          Icons.image_outlined,
-                                                          size: 40,
-                                                        ),
-                                                        CustomText(
-                                                          title: selectedDocsName[index],
-                                                          size: 13,
-                                                          fontWeight: FontWeight.w400,
-                                                        ),
-                                                      ],
+                                                    CustomText(
+                                                      title: attachment.title!,
+                                                      size: 13,
+                                                      fontWeight: FontWeight.w400,
                                                     ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Positioned(
+                                                top: -13,
+                                                right: 0,
+                                                child: IconButton(
+                                                  icon: const Icon(
+                                                    Icons.cancel,
+                                                    size: 16,
                                                   ),
-                                                  Positioned(
-                                                    top: -13,
-                                                    right: 0,
-                                                    child: IconButton(
-                                                      icon: const Icon(
-                                                        Icons.cancel,
-                                                        size: 16,
-                                                      ),
-                                                      onPressed: () {
-                                                        setState(() {
-                                                          pickedDocuments.remove(document);
-                                                          selectedDocsName.removeAt(index);
-                                                        });
-                                                      },
-                                                    ),
+                                                  onPressed: () {
+                                                    TodoDetails.deleteAttachment(itemId: data.todoId!, attachmentIdToDelete: attachment.id!)
+                                                        .then((value) => setState(() {}));
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        } else {
+                                          return GestureDetector(
+                                            onTap: () async {
+                                              showUploadDocumentModal(
+                                                context,
+                                                () {
+                                                  setState(() {});
+                                                },
+                                                selectedDocsName,
+                                                selectedImageName,
+                                                pickedDocuments,
+                                                () {},
+                                                data.todoId!,
+                                              );
+                                            },
+                                            child: Container(
+                                              height: 100,
+                                              width: 100,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(color: Colors.grey.withOpacity(0.5)),
+                                                borderRadius: BorderRadius.circular(10),
+                                              ),
+                                              child: const Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.add,
+                                                    size: 40,
+                                                  ),
+                                                  CustomText(
+                                                    title: 'Add more',
+                                                    size: 8,
+                                                    fontWeight: FontWeight.w400,
                                                   ),
                                                 ],
-                                              );
-                                            } else {
-                                              return GestureDetector(
-                                                onTap: () async {
-                                                  showUploadDocumentModal(
-                                                    context,
-                                                    () {},
-                                                    selectedDocsName,
-                                                    selectedImageName,
-                                                    pickedDocuments,
-                                                    () {
-                                                      setState(() {});
-                                                    },
-                                                    '',
-                                                  );
-                                                },
-                                                child: Container(
-                                                  height: 100,
-                                                  width: 100,
-                                                  alignment: Alignment.center,
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(color: Colors.grey.withOpacity(0.5)),
-                                                    borderRadius: BorderRadius.circular(10),
-                                                  ),
-                                                  child: const Column(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    children: [
-                                                      Icon(
-                                                        Icons.add,
-                                                        size: 40,
-                                                      ),
-                                                      CustomText(
-                                                        title: 'Add more',
-                                                        size: 8,
-                                                        fontWeight: FontWeight.w400,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            }
-                                          },
-                                        ),
-                                      );
-                                    },
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                    ),
                                   ),
                                   const SizedBox(
                                     height: 30,
                                   ),
-                                  const ActivityTabView(),
+                                  // const ActivityTabView(),
                                 ],
                               ),
                             ],
