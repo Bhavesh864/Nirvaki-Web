@@ -15,6 +15,7 @@ import 'package:yes_broker/constants/firebase/random_uid.dart';
 
 import '../../Customs/custom_fields.dart';
 import '../../Customs/dropdown_field.dart';
+import '../../widgets/card/questions card/chip_button.dart';
 import '../firebase/detailsModels/todo_details.dart';
 import '../utils/colors.dart';
 
@@ -77,6 +78,7 @@ void showImageSliderCarousel(List<String> imageUrls, int initialIndex, BuildCont
 
 void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname, Function updateState, String titleName) async {
   print('--------title ---$titleName');
+  print(id);
   final uniqueKey = DateTime.now().microsecondsSinceEpoch.toString();
 
   Reference referenceRoot = FirebaseStorage.instance.ref();
@@ -243,6 +245,64 @@ void showUploadDocumentModal(
             ),
           );
         },
+      );
+    },
+  );
+}
+
+void showConfirmDeleteAttachment(BuildContext context, Function onPressYes) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          height: 240,
+          width: 500,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Flexible(
+                    child: Text(
+                      'Do you want to remove insurance document?',
+                      style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    iconSize: 22,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ChipButton(
+                text: 'Yes',
+                onSelect: () {
+                  onPressYes();
+                  Navigator.of(context).pop();
+                },
+              ),
+              ChipButton(
+                text: 'No',
+                onSelect: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        ),
       );
     },
   );

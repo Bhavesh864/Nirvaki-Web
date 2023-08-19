@@ -99,7 +99,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                   setState: () {
                                     setState(() {});
                                   },
-                                  id: data!.leadId!,
+                                  id: data.leadId!,
                                   title: data.leadTitle!,
                                   category: data.leadcategory!,
                                   type: data.leadType!,
@@ -160,8 +160,10 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                             context,
                                             'Assignment',
                                             AssignmentWidget(
-                                              imageUrlAssignTo: data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
-                                              imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                              imageUrlAssignTo:
+                                                  data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
+                                              imageUrlCreatedBy:
+                                                  data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                               createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                               assignTo: data.assignedto![0].firstname! + data.assignedto![0].firstname!,
                                             ),

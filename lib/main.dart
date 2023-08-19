@@ -7,6 +7,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/Hive/timestamp.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
+import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
 import 'package:yes_broker/pages/add_inventory.dart';
 import 'package:yes_broker/pages/add_lead.dart';
 import 'package:yes_broker/pages/add_todo.dart';
@@ -27,14 +28,14 @@ void main() async {
   await Hive.openBox<CardDetails>("carddetails");
 
   runApp(
-    ProviderScope(
+    const ProviderScope(
       child: MyApp(),
     ),
   );
 }
 
 class MyApp extends StatefulWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -54,6 +55,7 @@ class _MyAppState extends State<MyApp> {
         AppRoutes.editTodo: (p0, p1, data) {
           return const EditTodo();
         },
+        AppRoutes.singupscreen: (p0, p1, p2) => const SignUpScreen(),
       },
     ),
   );
