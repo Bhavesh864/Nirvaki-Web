@@ -1,8 +1,10 @@
 // ignore_for_file: invalid_use_of_protected_member
 import 'dart:async';
+import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -134,7 +136,9 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
               if (snapshot.hasData) {
                 final dataList = snapshot.data!.docs;
                 List<TodoDetails> todoList = dataList.map((doc) => TodoDetails.fromSnapshot(doc)).toList();
+
                 for (var data in todoList) {
+                  final attachments = data.attachments;
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -189,7 +193,8 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                             ElevatedButton(
                                               onPressed: () {
                                                 if (todoNameEditingController.text.isNotEmpty) {
-                                                  TodoDetails.updatetodoName(id: data.todoId!, todoName: todoNameEditingController.text).then((value) => cancelEditingTodoName());
+                                                  TodoDetails.updatetodoName(id: data.todoId!, todoName: todoNameEditingController.text)
+                                                      .then((value) => cancelEditingTodoName());
                                                   CardDetails.updatecardTitle(id: data.todoId!, cardTitle: todoNameEditingController.text);
                                                 } else {
                                                   customSnackBar(context: context, text: "Enter the task name");
@@ -327,10 +332,10 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                             child: ListView.builder(
                                               shrinkWrap: true,
                                               scrollDirection: Axis.horizontal,
-                                              itemCount: pickedDocuments.length + 1,
+                                              itemCount: attachments!.length + 1,
                                               itemBuilder: (context, index) {
-                                                if (index < pickedDocuments.length) {
-                                                  final document = pickedDocuments[index];
+                                                if (index < attachments.length) {
+                                                  final attachment = attachments[index];
                                                   return Stack(
                                                     children: [
                                                       Container(
@@ -350,7 +355,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                               size: 40,
                                                             ),
                                                             CustomText(
-                                                              title: selectedDocsName[index],
+                                                              title: attachment.title!,
                                                               size: 13,
                                                               fontWeight: FontWeight.w400,
                                                             ),
@@ -358,19 +363,35 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                         ),
                                                       ),
                                                       Positioned(
-                                                        top: -13,
-                                                        right: 0,
-                                                        child: IconButton(
-                                                          icon: const Icon(
-                                                            Icons.cancel,
-                                                            size: 16,
-                                                          ),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              pickedDocuments.remove(document);
-                                                              selectedDocsName.removeAt(index);
-                                                            });
-                                                          },
+                                                        top: 0,
+                                                        right: 10,
+                                                        child: Row(
+                                                          children: [
+                                                            GestureDetector(
+                                                              child: const Icon(
+                                                                Icons.download_for_offline,
+                                                                size: 18,
+                                                              ),
+                                                              onTap: () {
+                                                                if (kIsWeb) {
+                                                                  AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                                                  anchorElement.download = 'Attachment file';
+                                                                  anchorElement.click();
+                                                                }
+                                                              },
+                                                            ),
+                                                            GestureDetector(
+                                                              child: const Icon(
+                                                                Icons.cancel,
+                                                                size: 18,
+                                                              ),
+                                                              onTap: () {
+                                                                showConfirmDeleteAttachment(context, () {
+                                                                  TodoDetails.deleteAttachment(itemId: data.todoId!, attachmentIdToDelete: attachment.id!);
+                                                                });
+                                                              },
+                                                            ),
+                                                          ],
                                                         ),
                                                       ),
                                                     ],
@@ -387,7 +408,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                         () {
                                                           setState(() {});
                                                         },
-                                                        '',
+                                                        data.todoId!,
                                                       );
                                                     },
                                                     child: Container(
@@ -474,7 +495,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                 if (Responsive.isDesktop(context))
                                   AssignmentWidget(
                                     imageUrlAssignTo: data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
-                                    imageUrlCreatedBy: data.createdBy == null || data.assignedto!.isEmpty ? noImg : data.assignedto![0].image!,
+                                    imageUrlCreatedBy: data.createdBy == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
                                     createdBy: '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
                                     assignTo: '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
                                   ),
