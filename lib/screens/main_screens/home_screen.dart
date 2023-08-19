@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/calendar_view.dart';
 import 'package:yes_broker/widgets/timeline_view.dart';
 import 'package:yes_broker/widgets/workitems/workitems_list.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
   HomeScreenState createState() => HomeScreenState();
 }
 
-class HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends ConsumerState<HomeScreen> {
   late Future<List<CardDetails>> getCardDetails;
 
   @override
@@ -24,6 +26,7 @@ class HomeScreenState extends State<HomeScreen> {
     super.initState();
     getCardDetails = CardDetails.getCardDetails();
     print(AppConst.getAccessToken());
+    // ref.read(selectedWorkItemId.notifier).clear();
   }
 
   @override
@@ -84,17 +87,21 @@ class HomeScreenState extends State<HomeScreen> {
                                 color: AppColor.secondary,
                                 borderRadius: BorderRadius.circular(5),
                               ),
-                              child: const Column(
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Padding(
+                                  const Padding(
                                     padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
                                     child: CustomText(
                                       title: 'Timeline',
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  CustomTimeLineView(),
+                                  Container(
+                                    height: 360,
+                                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                                    child: const CustomTimeLineView(),
+                                  ),
                                 ],
                               ),
                             ),

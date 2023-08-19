@@ -11,4 +11,8 @@ class SelectedWorkItemId extends StateNotifier<String> {
     print('state $id');
     state = id;
   }
+
+  void clear() {
+    state = '';
+  }
 }
