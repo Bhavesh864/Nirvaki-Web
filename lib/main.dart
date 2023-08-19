@@ -33,15 +33,20 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   final routerDelegate = BeamerDelegate(
     setBrowserTabTitle: false,
     notFoundPage: const BeamPage(child: LayoutView()),
     locationBuilder: RoutesLocationBuilder(
       routes: {
-        '/ ': (p0, p1, p2) => const LayoutView(),
+        '/': (p0, p1, p2) => const LayoutView(),
         '/profile': (p0, p1, p2) => const LargeScreen(),
         AppRoutes.addInventory: (p0, p1, p2) => const AddInventory(),
         AppRoutes.addLead: (p0, p1, p2) => const AddLead(),
@@ -52,6 +57,11 @@ class MyApp extends StatelessWidget {
       },
     ),
   );
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

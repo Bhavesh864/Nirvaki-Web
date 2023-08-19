@@ -30,6 +30,7 @@ class InventoryListingScreen extends ConsumerStatefulWidget {
 class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> {
   bool isFilterOpen = false;
   bool showTableView = false;
+  List<String> selectedFilters = [];
   final TextEditingController searchController = TextEditingController();
 
   Future<List<CardDetails>>? future;
@@ -65,6 +66,11 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
 
               return fullName.contains(searchText) || title.contains(searchText) || mobileNumber.contains(searchText);
             }
+          }).toList();
+
+          filteredInventoryList = filteredInventoryList.where((item) {
+            final bool isBedRoomMatch = selectedFilters.isEmpty || selectedFilters.contains('${item.roomconfig!.bedroom!}BHK');
+            return isBedRoomMatch;
           }).toList();
 
           status = filteredInventoryList;
@@ -225,6 +231,11 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                           closeFilterView: () {
                             setState(() {
                               isFilterOpen = false;
+                            });
+                          },
+                          setFilters: (p0) {
+                            setState(() {
+                              selectedFilters = p0;
                             });
                           },
                           originalCardList: inventoryList,
