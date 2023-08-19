@@ -80,7 +80,7 @@ class AssignUser extends StatelessWidget {
                       child: Align(
                         alignment: Alignment.topLeft,
                         child: SizedBox(
-                          width: Responsive.isMobile(context) ? 310 : 500,
+                          width: Responsive.isMobile(context) ? 310 : 450,
                           height: dropdownHeight,
                           child: Material(
                             elevation: 4,

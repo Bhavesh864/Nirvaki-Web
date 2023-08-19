@@ -49,52 +49,105 @@ class InventoryDetails {
   String? typeofschool;
   String? hospitalrooms;
 
-  InventoryDetails(
-      {required this.inventoryTitle,
-      required this.inventoryDescription,
-      required this.inventoryId,
-      required this.inventoryStatus,
-      required this.brokerid,
-      this.assignedto,
-      this.managerid,
-      required this.createdby,
-      this.createdate,
-      this.updatedby,
-      this.updatedate,
-      this.attachments,
-      this.customerinfo,
-      this.comments,
-      this.inventorycategory,
-      this.inventoryType,
-      this.inventorysource,
-      this.propertycategory,
-      this.propertykind,
-      this.transactiontype,
-      this.availability,
-      this.villatype,
-      this.roomconfig,
-      this.plotdetails,
-      this.possessiondate,
-      this.amenities,
-      this.reservedparking,
-      this.propertyarea,
-      this.plotarea,
-      this.propertyprice,
-      this.propertyrent,
-      this.propertyaddress,
-      this.propertylocation,
-      this.propertyfacing,
-      this.propertyphotos,
-      this.commercialphotos,
-      this.propertyvideo,
-      this.commericialtype,
-      this.typeofoffice,
-      this.typeofretail,
-      this.typeofhospitality,
-      this.typeofhealthcare,
-      this.approvedbeds,
-      this.typeofschool,
-      this.hospitalrooms});
+  InventoryDetails({
+    required this.inventoryTitle,
+    required this.inventoryDescription,
+    required this.inventoryId,
+    required this.inventoryStatus,
+    required this.brokerid,
+    this.assignedto,
+    this.managerid,
+    required this.createdby,
+    this.createdate,
+    this.updatedby,
+    this.updatedate,
+    this.attachments,
+    this.customerinfo,
+    this.comments,
+    this.inventorycategory,
+    this.inventoryType,
+    this.inventorysource,
+    this.propertycategory,
+    this.propertykind,
+    this.transactiontype,
+    this.availability,
+    this.villatype,
+    this.roomconfig,
+    this.plotdetails,
+    this.possessiondate,
+    this.amenities,
+    this.reservedparking,
+    this.propertyarea,
+    this.plotarea,
+    this.propertyprice,
+    this.propertyrent,
+    this.propertyaddress,
+    this.propertylocation,
+    this.propertyfacing,
+    this.propertyphotos,
+    this.commercialphotos,
+    this.propertyvideo,
+    this.commericialtype,
+    this.typeofoffice,
+    this.typeofretail,
+    this.typeofhospitality,
+    this.typeofhealthcare,
+    this.approvedbeds,
+    this.typeofschool,
+    this.hospitalrooms,
+  });
+
+  factory InventoryDetails.fromSnapshot(DocumentSnapshot snapshot) {
+    final json = snapshot.data() as Map<String, dynamic>;
+
+    return InventoryDetails(
+      inventoryTitle: json["inventoryTitle"],
+      inventoryDescription: json["inventoryDescription"],
+      inventoryId: json["InventoryId"],
+      inventoryStatus: json["InventoryStatus"],
+      brokerid: json["brokerid"],
+      assignedto: (json["assignedto"] as List<dynamic>?)?.map((e) => Assignedto.fromJson(e)).toList(),
+      managerid: json["managerid"],
+      createdby: Createdby.fromJson(json["createdby"]),
+      createdate: json["createdate"],
+      updatedby: json["updatedby"],
+      updatedate: json["updatedate"],
+      attachments: (json["attachments"] as List<dynamic>?)?.map((e) => Attachments.fromJson(e)).toList(),
+      customerinfo: Customerinfo.fromJson(json["customerinfo"]),
+      comments: json["comments"],
+      inventorycategory: json["inventorycategory"],
+      inventoryType: json["inventoryType"],
+      inventorysource: json["inventorysource"],
+      propertycategory: json["propertycategory"],
+      propertykind: json["propertykind"],
+      transactiontype: json["transactiontype"],
+      availability: json["availability"],
+      villatype: json["villatype"],
+      roomconfig: json["roomconfig"] == null ? null : Roomconfig.fromJson(json["roomconfig"]),
+      plotdetails: json["plotdetails"] == null ? null : Plotdetails.fromJson(json["plotdetails"]),
+      possessiondate: json["possessiondate"],
+      amenities: json["amenities"] == null ? null : List<String>.from(json["amenities"]),
+      reservedparking: json["reservedparking"] == null ? null : Reservedparking.fromJson(json["reservedparking"]),
+      propertyarea: json["propertyarea"] == null ? null : Propertyarea.fromJson(json["propertyarea"]),
+      plotarea: json["plotarea"] == null ? null : Plotarea.fromJson(json["plotarea"]),
+      propertyprice: json["propertyprice"] == null ? null : Propertyprice.fromJson(json["propertyprice"]),
+      propertyrent: json["propertyrent"] == null ? null : Propertyrent.fromJson(json["propertyrent"]),
+      propertyaddress: json["propertyaddress"] == null ? null : Propertyaddress.fromJson(json["propertyaddress"]),
+      propertylocation: json["propertylocation"] == null ? null : List<double>.from(json["propertylocation"]),
+      propertyfacing: json["propertyfacing"],
+      propertyphotos: json["propertyphotos"] == null ? null : Propertyphotos.fromJson(json["propertyphotos"]),
+      commercialphotos: json["commercialphotos"] == null ? null : List<String>.from(json["commercialphotos"]),
+      propertyvideo: json["propertyvideo"],
+      commericialtype: json["commericialtype"],
+      typeofoffice: json["typeofoffice"],
+      typeofretail: json["typeofretail"],
+      typeofhospitality: json["typeofhospitality"],
+      typeofhealthcare: json["typeofhealthcare"],
+      approvedbeds: json["approvedbeds"],
+      typeofschool: json["typeofschool"],
+      hospitalrooms: json["hospitalrooms"],
+    );
+  }
 
   InventoryDetails.fromJson(Map<String, dynamic> json) {
     if (json["inventoryTitle"] is String) {
@@ -354,12 +407,68 @@ class InventoryDetails {
     }
   }
 
-  static Future<void> updateInventoryDetails(InventoryDetails item) async {
+  static Future<void> updateInventoryDetails({required String id, required String item}) async {
     try {
-      await usersCollection.doc(item.inventoryId).update(item.toJson());
+      await usersCollection.doc().update({"status": item});
       // print('Inventory item updated successfully');
     } catch (error) {
       // print('Failed to update Inventory item: $error');
+    }
+  }
+
+  static Future<void> updatecardStatus({required String id, required String newStatus}) async {
+    try {
+      QuerySnapshot querySnapshot = await usersCollection.where("InventoryId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'InventoryStatus': newStatus});
+      }
+      print('inventory status update');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
+
+  static Future<void> addAttachmentToItems({required String itemid, required Attachments newAttachment}) async {
+    try {
+      QuerySnapshot querySnapshot = await usersCollection.where("InventoryId", isEqualTo: itemid).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+
+        List<dynamic> existingAttachments = data['attachments'] ?? [];
+        existingAttachments.add(newAttachment.toJson());
+
+        await docSnapshot.reference.update({'attachments': existingAttachments});
+
+        print('Attachment added successfully to item ${docSnapshot.id}');
+      }
+    } catch (error) {
+      print('Failed to add attachment to items: $error');
+    }
+  }
+
+  static Future<void> deleteAttachment({required String itemId, required String attachmentIdToDelete}) async {
+    try {
+      QuerySnapshot querySnapshot = await usersCollection.where("InventoryId", isEqualTo: itemId).get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        QueryDocumentSnapshot docSnapshot = querySnapshot.docs.first;
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+        List<dynamic> existingAttachments = data['attachments'] ?? [];
+        List<dynamic> updatedAttachments = [];
+        for (var attachment in existingAttachments) {
+          if (attachment['id'] != attachmentIdToDelete) {
+            updatedAttachments.add(attachment);
+          }
+        }
+
+        await docSnapshot.reference.update({'attachments': updatedAttachments});
+
+        print('Attachment deleted successfully from item $itemId');
+      } else {
+        print('Item not found with InventoryId: $itemId');
+      }
+    } catch (error) {
+      print('Failed to delete attachment: $error');
     }
   }
 }
@@ -709,17 +818,21 @@ class Customerinfo {
 }
 
 class Attachments {
+  String? id;
   String? title;
   String? type;
   String? path;
   String? createdby;
-  String? createddate;
+  Timestamp? createddate;
 
-  Attachments({this.title, this.type, this.path, this.createdby, this.createddate});
+  Attachments({this.title, this.type, this.path, this.createdby, this.createddate, this.id});
 
   Attachments.fromJson(Map<String, dynamic> json) {
     if (json["title"] is String) {
       title = json["title"];
+    }
+    if (json["id"] is String) {
+      id = json["id"];
     }
     if (json["type"] is String) {
       type = json["type"];
@@ -742,6 +855,7 @@ class Attachments {
     data["path"] = path;
     data["createdby"] = createdby;
     data["createddate"] = createddate;
+    data["id"] = id;
     return data;
   }
 }

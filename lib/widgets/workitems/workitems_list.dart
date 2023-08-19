@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -5,7 +6,7 @@ import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/providers/selected_workitem.dart';
+import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/card/custom_card.dart';
 
 import '../../pages/largescreen_dashboard.dart';
@@ -26,6 +27,7 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+
     return ScrollConfiguration(
       behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
       child: SingleChildScrollView(
@@ -38,8 +40,8 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
             color: AppColor.secondary,
             borderRadius: BorderRadius.circular(15),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-          margin: const EdgeInsets.symmetric(horizontal: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+          margin: const EdgeInsets.only(left: 8, right: 3),
           child: SafeArea(
             right: false,
             child: Column(
@@ -65,27 +67,51 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                     : Container(),
                 SizedBox(
                   height: Responsive.isMobile(context) ? height : height * 0.79,
-                  // height: MediaQuery.of(context).size.height,
                   child: ListView(
                     shrinkWrap: true,
+                    addRepaintBoundaries: false,
                     physics: widget.isScrollable ? const ScrollPhysics() : const NeverScrollableScrollPhysics(),
                     children: List.generate(
                       widget.getCardDetails.length,
-                      (index) => GestureDetector(
-                        onTap: () {
-                          final id = widget.getCardDetails[index].workitemId;
-                          if (Responsive.isMobile(context)) {
-                            Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
-                          } else {
-                            ref.read(selectedWorkItemId.notifier).addItemId(id!);
-                            ref.read(largeScreenTabsProvider.notifier).update((state) => 7);
-                          }
-                        },
-                        child: CustomCard(index: index, cardDetails: widget.getCardDetails),
-                      ),
+                      (index) {
+                        return GestureDetector(
+                          onTap: () {
+                            final id = widget.getCardDetails[index].workitemId;
+                            if (id!.contains('IN')) {
+                              if (Responsive.isMobile(context)) {
+                                Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
+                                ref.read(selectedWorkItemId.notifier).addItemId(id);
+                              } else {
+                                ref.read(selectedWorkItemId.notifier).addItemId(id);
+                                ref.read(largeScreenTabsProvider.notifier).update((state) => 7);
+                                context.beamToNamed('/inventory/inventory-details/$id');
+                              }
+                            } else if (id.contains('LD')) {
+                              if (Responsive.isMobile(context)) {
+                                Navigator.of(context).pushNamed(AppRoutes.leadDetailsScreen, arguments: id);
+                                ref.read(selectedWorkItemId.notifier).addItemId(id);
+                              } else {
+                                ref.read(selectedWorkItemId.notifier).addItemId(id);
+                                ref.read(largeScreenTabsProvider.notifier).update((state) => 8);
+                                context.beamToNamed('/lead/lead-details/$id');
+                              }
+                            } else if (id.contains('TD')) {
+                              if (Responsive.isMobile(context)) {
+                                Navigator.of(context).pushNamed(AppRoutes.todoDetailsScreen, arguments: id);
+                                ref.read(selectedWorkItemId.notifier).addItemId(id);
+                              } else {
+                                ref.read(selectedWorkItemId.notifier).addItemId(id);
+                                ref.read(largeScreenTabsProvider.notifier).update((state) => 8);
+                                context.beamToNamed('/todo/todo-details/$id');
+                              }
+                            }
+                          },
+                          child: CustomCard(index: index, cardDetails: widget.getCardDetails),
+                        );
+                      },
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 import 'package:random_string/random_string.dart';
+
 import 'package:yes_broker/constants/app_constant.dart';
-import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' as cards;
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
@@ -44,7 +44,7 @@ Future<String> submitInventoryAndcardDetails(state) async {
   final floorNumber = getDataById(state, 30);
   final latlng = getDataById(state, 31);
   final propertyFacing = getDataById(state, 32);
-  // final photos = getDataById(state, 33);
+  final photos = getDataById(state, 33);
   final video = getDataById(state, 34);
   final comments = getDataById(state, 35);
   final User assignto = getDataById(state, 36);
@@ -110,6 +110,7 @@ Future<String> submitInventoryAndcardDetails(state) async {
       inventorysource: inventorySource,
       possessiondate: possession,
       amenities: amenities,
+      attachments: [],
       commercialphotos: commercialphotos,
       propertyrent: Propertyrent(rentamount: rentamount, rentunit: rentunit, securityamount: securityamount, securityunit: securityunit, lockinperiod: lockinperiod),
       availability: availability,
@@ -124,8 +125,8 @@ Future<String> submitInventoryAndcardDetails(state) async {
       plotarea: Plotarea(area: carpetArea, unit: areaUnit),
       propertyaddress: Propertyaddress(state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, floornumber: floorNumber),
       propertylocation: latlng,
-      attachments: [],
       propertyvideo: video,
+      propertyphotos: photos,
       createdate: Timestamp.now(),
       assignedto: [Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)],
       createdby:

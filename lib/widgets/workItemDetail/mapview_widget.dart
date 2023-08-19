@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:yes_broker/Customs/snackbar.dart';
 
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
-import '../../Customs/responsive.dart';
 import '../questionaries/google_maps.dart';
 
 class MapViewWidget extends StatelessWidget {
@@ -12,8 +14,14 @@ class MapViewWidget extends StatelessWidget {
   final String? addressline2;
   const MapViewWidget({super.key, required this.state, required this.city, required this.addressline1, required this.addressline2});
 
+  String getGoogleMapsLink(LatLng latLng) {
+    String link = 'https://www.google.com/maps/search/?api=1&query=${latLng.latitude},${latLng.longitude}';
+    return link;
+  }
+
   @override
   Widget build(BuildContext context) {
+    String googleMapsLink = '';
     return Column(
       children: [
         Padding(
@@ -28,13 +36,19 @@ class MapViewWidget extends StatelessWidget {
               const SizedBox(
                 width: 10,
               ),
-              if (!Responsive.isMobile(context))
-                const CustomChip(
+              InkWell(
+                onTap: () {
+                  Clipboard.setData(ClipboardData(text: googleMapsLink)).then((_) {
+                    customSnackBar(context: context, text: "Google link copied to clipboard");
+                  });
+                },
+                child: const CustomChip(
                   label: Icon(
                     Icons.share_outlined,
                   ),
                   paddingHorizontal: 3,
                 ),
+              ),
             ],
           ),
         ),
@@ -42,7 +56,9 @@ class MapViewWidget extends StatelessWidget {
           height: 200,
           child: CustomGoogleMap(
             isReadOnly: true,
-            onLatLngSelected: (d) {},
+            onLatLngSelected: (latLng) {
+              googleMapsLink = getGoogleMapsLink(latLng);
+            },
             stateName: state,
             cityName: city,
             address1: addressline1,

@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 
 import 'package:responsive_builder/responsive_builder.dart';
@@ -8,28 +9,117 @@ import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/pages/Auth/login/login_screen.dart';
 import 'package:yes_broker/pages/largescreen_dashboard.dart';
 import 'package:yes_broker/pages/smallscreen_dashboard.dart';
+import 'package:yes_broker/screens/main_screens/public_view_screen/public_inventory_details.dart';
+import 'package:yes_broker/screens/main_screens/public_view_screen/public_lead_details.dart';
 
-class LayoutView extends StatelessWidget {
+class LayoutView extends StatefulWidget {
+  const LayoutView({super.key});
+
+  @override
+  State<LayoutView> createState() => _LayoutViewState();
+}
+
+class _LayoutViewState extends State<LayoutView> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
-  LayoutView({super.key});
+
+  @override
+  void initState() {
+    super.initState();
+    final token = UserHiveMethods.getdata("token");
+    if (token != null) {
+      AppConst.setAccessToken(token);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
 
     return StreamBuilder(
-        stream: authentication.authStateChanges(),
-        builder: (context, snapshot) {
-          final token = UserHiveMethods.getdata("token");
-          AppConst.setAccessToken(token);
-          return Scaffold(
-            body: ScreenTypeLayout.builder(
-              breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
-              mobile: (p0) => snapshot.hasData ? const SmallScreen() : const LoginScreen(),
-              tablet: (p0) => snapshot.hasData ? const LargeScreen() : const LoginScreen(),
-              desktop: (p0) => snapshot.hasData ? const LargeScreen() : const LoginScreen(),
-            ),
-          );
-        });
+      stream: authentication.authStateChanges(),
+      builder: (context, snapshot) {
+        AppConst.setIsAuthenticated(snapshot.hasData ? true : false);
+        return Scaffold(
+          body: ScreenTypeLayout.builder(
+            breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
+            mobile: (p0) => _buildMobileLayout(!snapshot.hasData),
+            tablet: (p0) => _buildTabletLayout(snapshot.hasData),
+            desktop: (p0) => _buildDesktopLayout(snapshot.hasData),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildMobileLayout(bool isAuthenticated) {
+    if (isAuthenticated) {
+      return const SmallScreen();
+    } else {
+      // final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
+
+      // if (location.isNotEmpty && location.contains('inventory-details')) {
+      //   return PublicViewInventoryDetails(
+      //     inventoryId: extractItemIdFromPath(location, 'inventory')!,
+      //   );
+      // } else if (location.isNotEmpty && location.contains('lead-details')) {
+      //   return PublicViewLeadDetails(
+      //     leadId: extractItemIdFromPath(location, 'lead')!,
+      //   );
+      // }
+      return const LoginScreen();
+    }
+  }
+
+  Widget _buildTabletLayout(bool isAuthenticated) {
+    if (isAuthenticated) {
+      return const LargeScreen();
+    } else {
+      final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
+
+      if (location.isNotEmpty && location.contains('inventory-details')) {
+        return PublicViewInventoryDetails(
+          inventoryId: extractItemIdFromPath(location, 'inventory')!,
+        );
+      } else if (location.isNotEmpty && location.contains('lead-details')) {
+        return PublicViewLeadDetails(
+          leadId: extractItemIdFromPath(location, 'lead')!,
+        );
+      }
+      return const LoginScreen();
+    }
+  }
+
+  Widget _buildDesktopLayout(bool isAuthenticated) {
+    if (isAuthenticated) {
+      return const LargeScreen();
+    } else {
+      final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
+
+      if (location.isNotEmpty && location.contains('inventory-details')) {
+        AppConst.setPublicView(true);
+        return PublicViewInventoryDetails(
+          inventoryId: extractItemIdFromPath(location, 'inventory')!,
+        );
+      } else if (location.isNotEmpty && location.contains('lead-details')) {
+        AppConst.setPublicView(true);
+
+        return PublicViewLeadDetails(
+          leadId: extractItemIdFromPath(location, 'lead')!,
+        );
+      }
+      return const LoginScreen();
+    }
+  }
+}
+
+String? extractItemIdFromPath(String path, String itemType) {
+  List<String> segments = Uri.parse(path).pathSegments;
+
+  if (segments.length >= 3 && segments[0] == itemType && segments[1] == '$itemType-details') {
+    String itemId = segments[2];
+    return itemId;
+  } else {
+    return null;
   }
 }

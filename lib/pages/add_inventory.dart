@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -99,7 +101,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
-            final String res = notify.state.isNotEmpty ? notify.state[0]["item"] : "Residential";
+            final res = notify.state.isNotEmpty ? notify.state[0]["item"] : "Residential";
             InventoryQuestions? screenData = getcurrentInventory(snapshot, res);
             List<Screen> screensDataList = screenData!.screens;
             return Stack(
@@ -175,23 +177,20 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                         margin: const EdgeInsets.only(top: 10),
                                                         alignment: Alignment.centerRight,
                                                         child: CustomButton(
-                                                          text: 'Next',
+                                                          text: screensDataList[index].title == "Assign to" ? 'Submit' : 'Next',
                                                           onPressed: () {
                                                             FocusScope.of(context).unfocus();
 
-                                                            nextQuestion(
-                                                              screensDataList: screensDataList,
-                                                            );
-                                                            // if (_formKey.currentState!.validate()) {
-                                                            //   nextQuestion(
-                                                            //     screensDataList: screensDataList,
-                                                            //   );
-                                                            // }
+                                                            if (_formKey.currentState!.validate()) {
+                                                              nextQuestion(
+                                                                screensDataList: screensDataList,
+                                                              );
+                                                            }
                                                             if (screensDataList[index].title == "Assign to") {
                                                               addDataOnfirestore(notify);
                                                             }
                                                           },
-                                                          width: 73,
+                                                          width: screensDataList[index].title == "Assign to" ? 90 : 70,
                                                           height: 39,
                                                         ),
                                                       ),
@@ -214,7 +213,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                               isInventory: "IN",
                             )
                           : const Center(
-                              child: CircularProgressIndicator.adaptive(),
+                              child: CircularProgressIndicator(),
                             ),
                 ),
                 inventoryAppBar(screensDataList),

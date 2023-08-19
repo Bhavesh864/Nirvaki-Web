@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/routes/routes.dart';
@@ -9,6 +10,7 @@ import '../constants/firebase/Hive/hive_methods.dart';
 import '../constants/firebase/userModel/broker_info.dart';
 import '../constants/utils/constants.dart';
 import '../screens/account_screens/common_screen.dart';
+import 'largescreen_dashboard.dart';
 
 final currentIndexProvider = StateProvider<int>((ref) {
   return 0;
@@ -16,6 +18,13 @@ final currentIndexProvider = StateProvider<int>((ref) {
 
 class SmallScreen extends ConsumerWidget {
   const SmallScreen({Key? key}) : super(key: key);
+  void userLogout(WidgetRef ref, BuildContext context) {
+    authentication.signOut().then((value) => {Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen)});
+    UserHiveMethods.deleteData(AppConst.getAccessToken());
+    UserHiveMethods.deleteData("token");
+    ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null);
+    ref.read(largeScreenTabsProvider.notifier).update((state) => 0);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,20 +33,50 @@ class SmallScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: mobileAppBar(context, (selectedVal) {
-        if (selectedVal != 'logout') {
+        if (selectedVal != 'Logout') {
           // ref.read(currentIndexProvider.notifier).update((state) => 4);
           final ProfileMenuItems profile = profileMenuItems.firstWhere((element) => element.title == selectedVal);
           ref.read(selectedProfileItemProvider.notifier).setSelectedItem(profile);
         } else if (selectedVal == "Logout") {
-          authentication.signOut().then(
-                (value) => Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen),
-              );
-          UserHiveMethods.deleteData(authentication.currentUser?.uid);
-          UserHiveMethods.deleteData("token");
+          userLogout(ref, context);
         }
       }),
+      // bottomNavigationBar: BottomAppBar(
+      //   shape: const CircularNotchedRectangle(),
+      //   notchMargin: 10,
+      //   child: Container(
+      //     height: 60,
+      //     child: Row(
+      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //       children: [
+      //         Row(
+      //           crossAxisAlignment: CrossAxisAlignment.start,
+      //           children: List.generate(
+      //             bottomBarItems.length,
+      //             (index) => MaterialButton(
+      //               onPressed: () {},
+      //               minWidth: 40,
+      //               child: const Column(
+      //                 mainAxisAlignment: MainAxisAlignment.center,
+      //                 children: [
+      //                   Icon(
+      //                     Icons.dashboard,
+      //                     color: Colors.amber,
+      //                   )
+      //                 ],
+      //               ),
+      //             ),
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         selectedItemColor: AppColor.primary,
+        unselectedItemColor: Colors.grey,
+        showUnselectedLabels: true,
         onTap: (value) => {
           ref.read(currentIndexProvider.notifier).update((state) => value),
           ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null),
@@ -65,7 +104,7 @@ class SmallScreen extends ConsumerWidget {
         ],
       ),
       floatingActionButton: const CustomSpeedDialButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
