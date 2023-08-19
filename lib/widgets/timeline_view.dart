@@ -13,12 +13,19 @@ import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/timeline_item.dart';
 
 class CustomTimeLineView extends ConsumerWidget {
+  final bool fromHome;
   final bool isScrollable;
-  const CustomTimeLineView({super.key, this.isScrollable = true});
+  const CustomTimeLineView({
+    super.key,
+    this.isScrollable = true,
+    this.fromHome = false,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final workitemId = ref.read(selectedWorkItemId.notifier).state;
+
+    print(workitemId);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10),
@@ -58,7 +65,7 @@ class CustomTimeLineView extends ConsumerWidget {
             height: 10,
           ),
           StreamBuilder(
-            stream: workitemId.isEmpty
+            stream: fromHome
                 ? FirebaseFirestore.instance.collection('activityDetails').snapshots()
                 : FirebaseFirestore.instance.collection('activityDetails').where('itemid', isEqualTo: workitemId).snapshots(),
             builder: (context, snapshot) {

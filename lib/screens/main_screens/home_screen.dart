@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:yes_broker/constants/app_constant.dart';
-
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
-
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/calendar_view.dart';
 import 'package:yes_broker/widgets/timeline_view.dart';
 import 'package:yes_broker/widgets/workitems/workitems_list.dart';
@@ -100,7 +98,9 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                                   Container(
                                     height: 360,
                                     margin: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: const CustomTimeLineView(),
+                                    child: const CustomTimeLineView(
+                                      fromHome: true,
+                                    ),
                                   ),
                                 ],
                               ),

@@ -32,17 +32,18 @@ class TimeLineItem extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              CustomChip(
-                label: CustomText(
-                  title: timeLine.itemid!,
-                  size: 12,
+              if (!timeLine.itemid!.contains('TD'))
+                CustomChip(
+                  label: CustomText(
+                    title: timeLine.itemid!,
+                    size: 12,
+                  ),
+                  color: timeLine.itemid!.contains('LD') ? AppColor.leadChipColor : AppColor.inventoryChipColor,
+                  avatar: Icon(
+                    timeLine.itemid!.contains('LD') ? MaterialSymbols.location_home_outlined : MaterialSymbols.location_away,
+                    color: timeLine.itemid!.contains('LD') ? AppColor.leadIconColor : AppColor.inventoryIconColor,
+                  ),
                 ),
-                color: timeLine.itemid!.contains('LD') ? AppColor.leadChipColor : AppColor.inventoryChipColor,
-                avatar: Icon(
-                  timeLine.itemid!.contains('LD') ? MaterialSymbols.location_home_outlined : MaterialSymbols.location_away,
-                  color: timeLine.itemid!.contains('LD') ? AppColor.leadIconColor : AppColor.inventoryIconColor,
-                ),
-              ),
               CustomText(
                 title: timeLine.activitybody!.activitytitle!,
                 size: 12,
