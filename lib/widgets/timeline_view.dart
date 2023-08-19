@@ -74,9 +74,8 @@ class CustomTimeLineView extends ConsumerWidget {
               }
               if (snapshot.hasData) {
                 final dataList = snapshot.data!.docs;
-
                 List<ActivityDetails> activities = dataList.map((e) => ActivityDetails.fromSnapshot(e)).toList();
-
+                activities.sort((a, b) => b.createdate!.compareTo(a.createdate!));
                 return ScrollConfiguration(
                   behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                   child: Expanded(
@@ -109,7 +108,10 @@ class CustomTimeLineView extends ConsumerWidget {
                   ),
                 );
               }
-              return const SizedBox.shrink();
+              return Container(
+                decoration: BoxDecoration(color: Colors.amber),
+                child: Text("data"),
+              );
             },
           ),
         ],
