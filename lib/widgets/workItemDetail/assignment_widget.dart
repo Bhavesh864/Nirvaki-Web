@@ -36,7 +36,7 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
   void submitAssignUser() {
     print(widget.id);
     if (user != null) {
-      if (widget.id!.contains("TD")) {
+      if (widget.id.contains("TD")) {
         todo.Assignedto assign = todo.Assignedto(
           firstname: user?.userfirstname,
           lastname: user?.userlastname,
@@ -44,8 +44,8 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
           userid: user?.userId,
           image: user?.image,
         );
-        todo.TodoDetails.updateAssignUser(itemid: widget.id!, assignedto: assign);
-      } else if (widget.id!.contains("IN")) {
+        todo.TodoDetails.updateAssignUser(itemid: widget.id, assignedto: assign);
+      } else if (widget.id.contains("IN")) {
         print("object");
         inventory.Assignedto assign = inventory.Assignedto(
           firstname: user?.userfirstname,
@@ -54,8 +54,8 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
           userid: user?.userId,
           image: user?.image,
         );
-        inventory.InventoryDetails.updateAssignUser(itemid: widget.id!, assignedto: assign);
-      } else if (widget.id!.contains("LD")) {
+        inventory.InventoryDetails.updateAssignUser(itemid: widget.id, assignedto: assign);
+      } else if (widget.id.contains("LD")) {
         lead.Assignedto assign = lead.Assignedto(
           firstname: user?.userfirstname,
           lastname: user?.userlastname,
@@ -63,7 +63,7 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
           userid: user?.userId,
           image: user?.image,
         );
-        lead.LeadDetails.updateAssignUser(itemid: widget.id!, assignedto: assign);
+        lead.LeadDetails.updateAssignUser(itemid: widget.id, assignedto: assign);
       }
       Assignedto assigncard = Assignedto(
         firstname: user?.userfirstname,
@@ -72,7 +72,7 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
         userid: user?.userId,
         image: user?.image,
       );
-      CardDetails.updateAssignUser(itemid: widget.id!, assignedto: assigncard);
+      CardDetails.updateAssignUser(itemid: widget.id, assignedto: assigncard);
       user = null;
     } else {
       customSnackBar(context: context, text: "please select user");
