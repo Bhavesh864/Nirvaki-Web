@@ -18,7 +18,7 @@ class FilterOptions {
 
 class WorkItemFilterView extends ConsumerStatefulWidget {
   final Function closeFilterView;
-  final Function(List<String>) setFilters;
+  final Function(List<String>, RangeValues) setFilters;
   final List<CardDetails> originalCardList;
 
   const WorkItemFilterView({
@@ -28,7 +28,7 @@ class WorkItemFilterView extends ConsumerStatefulWidget {
     this.setFilters = _defaultCloseFunction,
   });
 
-  static void _defaultCloseFunction(k) {}
+  static void _defaultCloseFunction(k, w) {}
 
   @override
   WorkItemFilterViewState createState() => WorkItemFilterViewState();
@@ -146,15 +146,11 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
                         title: '₹${values.start.toStringAsFixed(0)} - ₹${values.end.toStringAsFixed(0)} per month',
                         size: 14,
                       ),
-                      // Container(
-                      //   height: 100,
-                      //   color: AppColor.primary,
-                      // ),
                       RangeSlider(
                         values: values,
                         min: 0,
-                        max: 100000,
-                        divisions: 20,
+                        max: 500000000,
+                        divisions: 100,
                         onChanged: (RangeValues newVal) {
                           setState(() {
                             values = newVal;
@@ -186,7 +182,7 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
                     // Update the listing using the filtered results (you need to define originalCardList)
                     // ref.read(filteredCardListProvider.notifier).updateFilteredList(filteredList);
 
-                    widget.setFilters(selectedInventoryFiltersProvider.state);
+                    widget.setFilters(selectedInventoryFiltersProvider.state, values);
 
                     // widget.closeFilterView();
                   },

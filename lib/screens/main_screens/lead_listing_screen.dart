@@ -18,6 +18,43 @@ import '../../widgets/card/card_header.dart';
 import '../../widgets/card/custom_card.dart';
 import '../../widgets/top_search_bar.dart';
 
+enum RateUnit {
+  Rupees,
+  Thousands,
+  Lakh,
+  Crore,
+}
+
+double convertToRupees(double value, RateUnit unit) {
+  switch (unit) {
+    case RateUnit.Rupees:
+      return value;
+    case RateUnit.Thousands:
+      return value * 1000;
+    case RateUnit.Lakh:
+      return value * 100000;
+    case RateUnit.Crore:
+      return value * 10000000;
+    default:
+      return value;
+  }
+}
+
+RateUnit getRateUnitFromString(String unitString) {
+  switch (unitString.toLowerCase()) {
+    case 'rupees':
+      return RateUnit.Rupees;
+    case 'thousand':
+      return RateUnit.Thousands;
+    case 'lakh':
+      return RateUnit.Lakh;
+    case 'crore':
+      return RateUnit.Crore;
+    default:
+      return RateUnit.Rupees;
+  }
+}
+
 class LeadListingScreen extends ConsumerStatefulWidget {
   const LeadListingScreen({super.key});
 
@@ -31,6 +68,7 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
   bool showTableView = false;
   Future<List<CardDetails>>? future;
   List<String> selectedFilters = [];
+  RangeValues rateRange = const RangeValues(0, 2000000000);
 
   List<CardDetails>? status;
 
@@ -80,7 +118,15 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
 
             filteredleadList = filteredleadList.where((item) {
               final bool isBedRoomMatch = selectedFilters.isEmpty || selectedFilters.contains('${item.roomconfig!.bedroom!}BHK');
-              return isBedRoomMatch;
+
+              final RateUnit rateStartUnit = getRateUnitFromString(item.propertypricerange!.unit!);
+              final RateUnit rateEndUnit = getRateUnitFromString(item.propertypricerange!.unit!);
+              final double itemRateStart = convertToRupees(double.parse(item.propertypricerange!.arearangestart!), rateStartUnit);
+              final double itemRateEnd = convertToRupees(double.parse(item.propertypricerange!.arearangeend!), rateEndUnit);
+
+              final bool isRateInRange = itemRateStart >= rateRange.start && itemRateEnd <= rateRange.end;
+
+              return isBedRoomMatch && isRateInRange;
             }).toList();
 
             status = filteredleadList;
@@ -242,9 +288,10 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
                                 isFilterOpen = false;
                               });
                             },
-                            setFilters: (p0) {
+                            setFilters: (p0, selectedRange) {
                               setState(() {
                                 selectedFilters = p0;
+                                rateRange = selectedRange;
                               });
                             },
                             originalCardList: filteredleadList,

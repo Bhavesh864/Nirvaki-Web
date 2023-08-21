@@ -68,7 +68,6 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print('user ------ $user');
     return Column(
       children: [
         if (!AppConst.getPublicView())

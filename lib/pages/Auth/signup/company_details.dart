@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -40,7 +41,14 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                 setState(() {
                   isloading = false;
                 }),
-                Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen)
+                if (Responsive.isMobile(context))
+                  {
+                    Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen),
+                  }
+                else
+                  {
+                    context.beamToNamed(AppRoutes.loginScreen),
+                  }
               }
             else
               {
