@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
   }
 
-  void loginwithemailpassword() {
+  void loginwithemailpassword(BuildContext context) {
     final isvalid = key.currentState?.validate();
     if (isvalid!) {
       setState(() {
@@ -42,16 +42,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 setState(() {
                   isloading = false;
                 }),
-                if (Responsive.isMobile(context))
-                  {
-                    Navigator.of(context).pushReplacementNamed(AppRoutes.homeScreen),
-                    AppConst.setPublicView(false),
-                  }
-                else
-                  {
-                    context.beamToNamed('/'),
-                    AppConst.setPublicView(false),
-                  }
+                context.beamToReplacementNamed('/'),
+                AppConst.setPublicView(false),
               }
             else
               {
@@ -127,7 +119,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(
                         width: w,
                         child: CustomButton(
-                            leftIcon: Icons.apple, text: 'Continue with apple', buttonColor: Colors.white, textColor: Colors.black, lefticonColor: Colors.black, onPressed: () {}),
+                            leftIcon: Icons.apple,
+                            text: 'Continue with apple',
+                            buttonColor: Colors.white,
+                            textColor: Colors.black,
+                            lefticonColor: Colors.black,
+                            onPressed: () {}),
                       ),
                       const SizedBox(height: 10),
                       const CustomOrDivider(),
@@ -138,7 +135,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         margin: const EdgeInsets.only(bottom: 5),
                         child: CustomTextInput(controller: emailcontroller, labelText: 'Email address', validator: validateEmail),
                       ),
-                      CustomTextInput(controller: passwordcontroller, labelText: 'Password', obscureText: true, rightIcon: Icons.remove_red_eye, validator: validatePassword),
+                      CustomTextInput(
+                          controller: passwordcontroller, labelText: 'Password', obscureText: true, rightIcon: Icons.remove_red_eye, validator: validatePassword),
                       const SizedBox(height: 10),
                       isloading
                           ? const Center(child: CircularProgressIndicator.adaptive())
@@ -146,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               width: w,
                               child: CustomButton(
                                 text: 'Login',
-                                onPressed: () => loginwithemailpassword(),
+                                onPressed: () => loginwithemailpassword(context),
                                 height: 40.0,
                               ),
                             ),
@@ -155,11 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 10),
                       CustomSignUpNow(
                         onPressSignUp: () {
-                          if (Responsive.isMobile(context)) {
-                            Navigator.pushNamed(context, AppRoutes.singupscreen);
-                          } else {
-                            context.beamToNamed(AppRoutes.singupscreen);
-                          }
+                          context.beamToNamed(AppRoutes.singupscreen);
                         },
                       ),
                     ],

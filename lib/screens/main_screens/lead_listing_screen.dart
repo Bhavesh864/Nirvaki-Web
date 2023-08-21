@@ -119,14 +119,15 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
             filteredleadList = filteredleadList.where((item) {
               final bool isBedRoomMatch = selectedFilters.isEmpty || selectedFilters.contains('${item.roomconfig!.bedroom!}BHK');
 
-              final RateUnit rateStartUnit = getRateUnitFromString(item.propertypricerange!.unit!);
-              final RateUnit rateEndUnit = getRateUnitFromString(item.propertypricerange!.unit!);
-              final double itemRateStart = convertToRupees(double.parse(item.propertypricerange!.arearangestart!), rateStartUnit);
-              final double itemRateEnd = convertToRupees(double.parse(item.propertypricerange!.arearangeend!), rateEndUnit);
+              // final RateUnit rateStartUnit = getRateUnitFromString(item.propertypricerange!.unit!);
+              // final RateUnit rateEndUnit = getRateUnitFromString(item.propertypricerange!.unit!);
+              // final double itemRateStart = convertToRupees(double.parse(item.propertypricerange!.arearangestart!), rateStartUnit);
+              // final double itemRateEnd = convertToRupees(double.parse(item.propertypricerange!.arearangeend!), rateEndUnit);
 
-              final bool isRateInRange = itemRateStart >= rateRange.start && itemRateEnd <= rateRange.end;
+              // final bool isRateInRange = itemRateStart >= rateRange.start && itemRateEnd <= rateRange.end;
 
-              return isBedRoomMatch && isRateInRange;
+              print('${item.roomconfig!.bedroom!}BHK');
+              return isBedRoomMatch;
             }).toList();
 
             status = filteredleadList;
@@ -164,9 +165,13 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
                             },
                             onFilterOpen: () {
                               if (Responsive.isMobile(context)) {
-                                Navigator.of(context).push(AppRoutes.createAnimatedRoute(const WorkItemFilterView(
-                                  originalCardList: [],
-                                )));
+                                Navigator.of(context).push(
+                                  AppRoutes.createAnimatedRoute(
+                                    const WorkItemFilterView(
+                                      originalCardList: [],
+                                    ),
+                                  ),
+                                );
                               } else {
                                 setState(() {
                                   isFilterOpen = true;
@@ -248,7 +253,6 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
                                                   ref.read(selectedWorkItemId.notifier).addItemId(id);
                                                 } else {
                                                   ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                                  ref.read(largeScreenTabsProvider.notifier).update((state) => 8);
                                                   context.beamToNamed('/lead/lead-details/$id');
                                                 }
                                               }

@@ -1,5 +1,6 @@
 // ignore_for_file: invalid_use_of_protected_member
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,6 +9,7 @@ import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/small_custom_profile_image.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import '../../../Customs/custom_text.dart';
+import '../../../constants/firebase/userModel/broker_info.dart';
 import '../../../constants/functions/workitems_detail_methods.dart';
 import '../../../constants/utils/colors.dart';
 import '../../../constants/utils/constants.dart';
@@ -152,7 +154,8 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
                                               'Assignment',
                                               AssignmentWidget(
                                                 assignto: data.assignedto!,
-                                                imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                imageUrlCreatedBy:
+                                                    data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                 createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                               ),
                                             );
@@ -202,15 +205,20 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
                             padding: const EdgeInsets.all(10),
                             child: Column(
                               children: [
-                                ContactInformation(
-                                  customerinfo: data.customerinfo!,
+                                StreamBuilder(
+                                  stream: FirebaseFirestore.instance.collection("brokerInfo").where("brokerid", isEqualTo: data.brokerid).snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      final dataList = snapshot.data?.docs;
+                                      List<BrokerInfo> inventoryList = dataList!.map((doc) => BrokerInfo.fromSnapshot(doc)).toList();
+
+                                      return CompanyInformation(
+                                        companyInfo: inventoryList[0],
+                                      );
+                                    }
+                                    return const SizedBox();
+                                  },
                                 ),
-                                if (Responsive.isDesktop(context))
-                                  AssignmentWidget(
-                                    assignto: data.assignedto!,
-                                    imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                    createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
-                                  ),
                                 if (Responsive.isDesktop(context))
                                   MapViewWidget(
                                     state: data.preferredlocality!.state!,

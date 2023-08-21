@@ -38,11 +38,11 @@ class WorkItemSuccessWidget extends StatelessWidget {
             isBorder: false,
             text: 'Go to Dashboard',
             onPressed: () {
-              if (Responsive.isMobile(context)) {
-                Navigator.of(context).pushNamed(AppRoutes.homeScreen);
-              } else {
-                context.beamToNamed('/');
-              }
+              // if (Responsive.isMobile(context)) {
+              //   Navigator.of(context).pushNamed(AppRoutes.homeScreen);
+              // } else {
+              context.beamToNamed('/');
+              // }
             },
           ),
         )

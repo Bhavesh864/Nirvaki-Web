@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/app_constant.dart';
@@ -10,7 +11,6 @@ import '../constants/firebase/Hive/hive_methods.dart';
 import '../constants/firebase/userModel/broker_info.dart';
 import '../constants/utils/constants.dart';
 import '../screens/account_screens/common_screen.dart';
-import 'largescreen_dashboard.dart';
 
 final currentIndexProvider = StateProvider<int>((ref) {
   return 0;
@@ -19,11 +19,15 @@ final currentIndexProvider = StateProvider<int>((ref) {
 class SmallScreen extends ConsumerWidget {
   const SmallScreen({Key? key}) : super(key: key);
   void userLogout(WidgetRef ref, BuildContext context) {
-    authentication.signOut().then((value) => {Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen)});
+    authentication.signOut().then(
+          (value) => {
+            // Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen),
+            context.beamToReplacementNamed(AppRoutes.loginScreen),
+          },
+        );
     UserHiveMethods.deleteData(AppConst.getAccessToken());
     UserHiveMethods.deleteData("token");
     ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null);
-    ref.read(largeScreenTabsProvider.notifier).update((state) => 0);
   }
 
   @override

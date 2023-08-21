@@ -23,17 +23,16 @@ import 'package:yes_broker/screens/main_screens/todo_listing_screen.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';
 
-final largeScreenTabsProvider = StateProvider<int>((ref) {
-  return 0;
-});
-
 void userLogout(WidgetRef ref, BuildContext context) {
-  context.beamToNamed('/login');
-  authentication.signOut().then((value) => {Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen)});
+  authentication.signOut().then(
+        (value) => {
+          // Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen),
+          context.beamToReplacementNamed(AppRoutes.loginScreen),
+        },
+      );
   UserHiveMethods.deleteData(AppConst.getAccessToken());
   UserHiveMethods.deleteData("token");
   ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null);
-  ref.read(largeScreenTabsProvider.notifier).update((state) => 0);
 }
 
 class LargeScreen extends ConsumerStatefulWidget {
@@ -46,7 +45,6 @@ class LargeScreen extends ConsumerStatefulWidget {
 class LargeScreenState extends ConsumerState<LargeScreen> {
   @override
   Widget build(BuildContext context) {
-    // final currentIndex = ref.watch(largeScreenTabsProvider);
     int currentIndex = 0;
     final beamerKey = GlobalKey<BeamerState>();
 
@@ -107,7 +105,6 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                 LargeScreenNavBar(
                   (selectedVal) {
                     if (selectedVal != 'Logout') {
-                      ref.read(largeScreenTabsProvider.notifier).update((state) => 6);
                       final ProfileMenuItems profile = profileMenuItems.firstWhere((element) => element.title == selectedVal);
                       ref.read(selectedProfileItemProvider.notifier).setSelectedItem(profile);
                       context.beamToNamed('/profile');

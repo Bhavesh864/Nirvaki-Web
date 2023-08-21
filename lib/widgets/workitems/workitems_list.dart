@@ -8,8 +8,6 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/card/custom_card.dart';
-
-import '../../pages/largescreen_dashboard.dart';
 import '../../routes/routes.dart';
 
 class WorkItemsList extends ConsumerStatefulWidget {
@@ -83,7 +81,7 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                                 ref.read(selectedWorkItemId.notifier).addItemId(id);
                               } else {
                                 ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                ref.read(largeScreenTabsProvider.notifier).update((state) => 7);
+
                                 context.beamToNamed('/inventory/inventory-details/$id');
                               }
                             } else if (id.contains('LD')) {
@@ -92,7 +90,6 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                                 ref.read(selectedWorkItemId.notifier).addItemId(id);
                               } else {
                                 ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                ref.read(largeScreenTabsProvider.notifier).update((state) => 8);
                                 context.beamToNamed('/lead/lead-details/$id');
                               }
                             } else if (id.contains('TD')) {
@@ -101,7 +98,6 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                                 ref.read(selectedWorkItemId.notifier).addItemId(id);
                               } else {
                                 ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                ref.read(largeScreenTabsProvider.notifier).update((state) => 8);
                                 context.beamToNamed('/todo/todo-details/$id');
                               }
                             }

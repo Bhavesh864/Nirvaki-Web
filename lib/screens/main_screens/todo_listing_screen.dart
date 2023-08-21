@@ -207,23 +207,21 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                                                   onTap: () {
                                                     final id = filterTodoList[index].workitemId;
 
-                                                    // if (id!.contains('IN')) {
-                                                    //   if (Responsive.isMobile(context)) {
-                                                    //     Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
-                                                    //   } else {
-                                                    //     ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                                    //     ref.read(largeScreenTabsProvider.notifier).update((state) => 7);
-                                                    //     context.beamToNamed('/todo/todo-details/$id');
-                                                    //   }
-                                                    // } else if (id.contains('LD')) {
-                                                    //   if (Responsive.isMobile(context)) {
-                                                    //     Navigator.of(context).pushNamed(AppRoutes.leadDetailsScreen, arguments: id);
-                                                    //   } else {
-                                                    ref.read(selectedWorkItemId.notifier).addItemId(id!);
-                                                    ref.read(largeScreenTabsProvider.notifier).update((state) => 8);
-                                                    context.beamToNamed('/todo/todo-details/$id');
-                                                    //   }
-                                                    // }
+                                                    if (id!.contains('IN')) {
+                                                      if (Responsive.isMobile(context)) {
+                                                        Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
+                                                      } else {
+                                                        ref.read(selectedWorkItemId.notifier).addItemId(id);
+                                                        context.beamToNamed('/todo/todo-details/$id');
+                                                      }
+                                                    } else if (id.contains('LD')) {
+                                                      if (Responsive.isMobile(context)) {
+                                                        Navigator.of(context).pushNamed(AppRoutes.leadDetailsScreen, arguments: id);
+                                                      } else {
+                                                        ref.read(selectedWorkItemId.notifier).addItemId(id!);
+                                                        context.beamToNamed('/todo/todo-details/$id');
+                                                      }
+                                                    }
                                                   },
                                                   child: CustomCard(index: index, cardDetails: filterTodoList),
                                                 ),

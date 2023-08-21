@@ -78,6 +78,8 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
                       IconButton(
                         onPressed: () {
                           widget.closeFilterView();
+                          widget.setFilters([], values);
+                          selectedInventoryFiltersProvider.state = [];
                         },
                         icon: const Icon(
                           Icons.close,
