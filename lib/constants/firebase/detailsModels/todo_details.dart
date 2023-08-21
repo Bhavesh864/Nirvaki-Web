@@ -250,6 +250,24 @@ class TodoDetails {
       print('Failed to update card status: $error');
     }
   }
+
+  static Future<void> updateAssignUser({required String itemid, required Assignedto assignedto}) async {
+    try {
+      QuerySnapshot querySnapshot = await todoDetailsCollection.where("todoId", isEqualTo: itemid).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+
+        List<dynamic> existingassign = data['assignedto'] ?? [];
+        existingassign.add(assignedto.toJson());
+
+        await docSnapshot.reference.update({'assignedto': existingassign});
+
+        print('assign new user to this ${docSnapshot.id}');
+      }
+    } catch (error) {
+      print('Failed to assign user : $error');
+    }
+  }
 }
 
 class Attachments {

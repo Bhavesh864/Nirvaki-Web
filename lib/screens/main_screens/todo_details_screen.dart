@@ -193,8 +193,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                             ElevatedButton(
                                               onPressed: () {
                                                 if (todoNameEditingController.text.isNotEmpty) {
-                                                  TodoDetails.updatetodoName(id: data.todoId!, todoName: todoNameEditingController.text)
-                                                      .then((value) => cancelEditingTodoName());
+                                                  TodoDetails.updatetodoName(id: data.todoId!, todoName: todoNameEditingController.text).then((value) => cancelEditingTodoName());
                                                   CardDetails.updatecardTitle(id: data.todoId!, cardTitle: todoNameEditingController.text);
                                                 } else {
                                                   customSnackBar(context: context, text: "Enter the task name");
@@ -494,10 +493,10 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                 ),
                                 if (Responsive.isDesktop(context))
                                   AssignmentWidget(
-                                    imageUrlAssignTo: data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
+                                    assignto: data.assignedto!,
+                                    id: data.todoId!,
                                     imageUrlCreatedBy: data.createdBy == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
                                     createdBy: '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
-                                    assignTo: '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
                                   ),
                               ],
                             ),

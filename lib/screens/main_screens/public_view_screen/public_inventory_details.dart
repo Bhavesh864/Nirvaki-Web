@@ -159,12 +159,9 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                               context,
                                               'Assignment',
                                               AssignmentWidget(
-                                                imageUrlAssignTo:
-                                                    data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
-                                                imageUrlCreatedBy:
-                                                    data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                assignto: data.assignedto!,
+                                                imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                 createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
-                                                assignTo: data.assignedto![0].firstname! + data.assignedto![0].firstname!,
                                               ),
                                             );
                                           },
@@ -217,10 +214,9 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                 ),
                                 if (Responsive.isDesktop(context))
                                   AssignmentWidget(
-                                    imageUrlAssignTo: data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
+                                    assignto: data.assignedto!,
                                     imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                     createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
-                                    assignTo: '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
                                   ),
                                 if (Responsive.isDesktop(context))
                                   MapViewWidget(
