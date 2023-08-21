@@ -7,9 +7,13 @@ import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
 class AssignUser extends StatelessWidget {
   final Function(User user) addUser;
+  final bool status;
+  final List<dynamic>? assignedUserIds;
   const AssignUser({
     super.key,
     required this.addUser,
+    this.assignedUserIds,
+    this.status = false,
   });
 
   @override
@@ -54,10 +58,18 @@ class AssignUser extends StatelessWidget {
                     //   return const Iterable<String>.empty();
                     // }
                     final String searchText = textEditingValue.text.toLowerCase();
-                    return usersList.where((user) {
-                      final String fullName = '${user.userfirstname} ${user.userlastname}'.toLowerCase();
-                      return fullName.contains(searchText);
-                    }).map((user) => '${user.userfirstname} ${user.userlastname}');
+                    if (status == true) {
+                      return usersList.where((user) {
+                        final String fullName = '${user.userfirstname} ${user.userlastname}'.toLowerCase();
+                        final bool isAssigned = assignedUserIds!.contains(user.userId);
+                        return !isAssigned && fullName.contains(searchText);
+                      }).map((user) => '${user.userfirstname} ${user.userlastname}');
+                    } else {
+                      return usersList.where((user) {
+                        final String fullName = '${user.userfirstname} ${user.userlastname}'.toLowerCase();
+                        return fullName.contains(searchText);
+                      }).map((user) => '${user.userfirstname} ${user.userlastname}');
+                    }
                   },
                   fieldViewBuilder: (context, textEditingController, focusNode, onFieldSubmitted) {
                     return TextField(
