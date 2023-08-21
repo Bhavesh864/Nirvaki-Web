@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 
+import '../../../constants/firebase/userModel/user_info.dart';
 import '../../../constants/utils/colors.dart';
 
 class MobileMemberCard extends StatelessWidget {
-  const MobileMemberCard({super.key});
+  final User user;
+  const MobileMemberCard({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +15,7 @@ class MobileMemberCard extends StatelessWidget {
       child: Card(
         elevation: 5,
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -26,12 +28,13 @@ class MobileMemberCard extends StatelessWidget {
                         clipBehavior: Clip.antiAlias,
                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
                         child: Image.network(
-                          noImg,
+                          user.image.isNotEmpty ? user.image : noImg,
                           width: 25,
+                          fit: BoxFit.cover,
                         ),
                       ),
-                      const SizedBox(width: 3),
-                      const Text("Raj Sharma"),
+                      const SizedBox(width: 5),
+                      Text("${user.userfirstname} ${user.userlastname}"),
                     ],
                   ),
                   Row(
@@ -52,9 +55,9 @@ class MobileMemberCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 4),
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [Text("Role - broker"), Text("Manager - ketki sharma")],
+                children: [Text("Role - ${user.role}"), Text("Manager - ${user.managerName}")],
               )
             ],
           ),

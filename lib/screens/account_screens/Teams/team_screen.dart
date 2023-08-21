@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/custom_fields.dart';
@@ -9,6 +10,7 @@ import 'package:yes_broker/widgets/accounts/Teams/bottom_card.dart';
 import 'package:yes_broker/widgets/accounts/Teams/mobile_member_card.dart';
 import 'package:yes_broker/widgets/accounts/Teams/title_cards.dart';
 
+import '../../../constants/firebase/userModel/user_info.dart';
 import '../../../riverpodstate/add_member_state.dart';
 
 final addMemberScreenStateProvider = StateNotifierProvider<AddMemberScreenStateNotifier, bool>((ref) {
@@ -113,12 +115,27 @@ class TeamScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 20),
               const AppText(text: "Team", fontWeight: FontWeight.w700, fontsize: 16),
-              ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return const MobileMemberCard();
+              StreamBuilder(
+                  stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: currentUser["brokerId"]).snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      );
+                    }
+                    if (snapshot.hasData) {
+                      final usersListSnapshot = snapshot.data!.docs;
+                      List<User> usersList = usersListSnapshot.map((doc) => User.fromSnapshot(doc)).toList();
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: usersList.length,
+                          itemBuilder: (context, index) {
+                            final user = usersList[index];
+                            return MobileMemberCard(user: user);
+                          });
+                    }
+                    return SizedBox();
                   }),
               const SizedBox(height: 12),
               CustomButton(text: "Add Member", onPressed: () => showAlertDialog(context))

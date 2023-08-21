@@ -153,6 +153,7 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
                                               context,
                                               'Assignment',
                                               AssignmentWidget(
+                                                id: data.leadId!,
                                                 assignto: data.assignedto!,
                                                 imageUrlCreatedBy:
                                                     data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,

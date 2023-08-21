@@ -169,6 +169,7 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                               context,
                                               'Assignment',
                                               AssignmentWidget(
+                                                id: data.inventoryId!,
                                                 assignto: data.assignedto!,
                                                 imageUrlCreatedBy:
                                                     data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
