@@ -32,6 +32,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
   bool showTableView = false;
   List<String> selectedFilters = [];
   final TextEditingController searchController = TextEditingController();
+  RangeValues rateRange = const RangeValues(0, 0);
 
   Future<List<CardDetails>>? future;
   List<CardDetails>? status;
@@ -70,7 +71,11 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
 
           filteredInventoryList = filteredInventoryList.where((item) {
             final bool isBedRoomMatch = selectedFilters.isEmpty || selectedFilters.contains('${item.roomconfig!.bedroom!}BHK');
-            return isBedRoomMatch;
+            final double itemRateStart = double.parse(item.propertypricerange!.arearangestart!);
+
+            final bool isRateInRange = itemRateStart >= rateRange.start;
+
+            return isBedRoomMatch && isRateInRange;
           }).toList();
 
           status = filteredInventoryList;
@@ -130,7 +135,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                                         final availableWidth = constraints.maxWidth;
                                         return Table(
                                           columnWidths: {
-                                            0: FixedColumnWidth(availableWidth * 0.25), // Adjust the percentages as needed
+                                            0: FixedColumnWidth(availableWidth * 0.25),
                                             1: FixedColumnWidth(availableWidth * 0.18),
                                             2: FixedColumnWidth(availableWidth * 0.15),
                                             3: FixedColumnWidth(availableWidth * 0.15),
@@ -233,9 +238,10 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                               isFilterOpen = false;
                             });
                           },
-                          setFilters: (p0) {
+                          setFilters: (p0, selectedRange) {
                             setState(() {
                               selectedFilters = p0;
+                              rateRange = selectedRange;
                             });
                           },
                           originalCardList: inventoryList,

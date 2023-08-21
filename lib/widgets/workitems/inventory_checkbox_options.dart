@@ -11,10 +11,10 @@ class WorkItemCheckboxOptions extends ConsumerStatefulWidget {
   const WorkItemCheckboxOptions({super.key});
 
   @override
-  _WorkItemCheckboxOptionsState createState() => _WorkItemCheckboxOptionsState();
+  WorkItemCheckboxOptionsState createState() => WorkItemCheckboxOptionsState();
 }
 
-class _WorkItemCheckboxOptionsState extends ConsumerState<WorkItemCheckboxOptions> {
+class WorkItemCheckboxOptionsState extends ConsumerState<WorkItemCheckboxOptions> {
   @override
   Widget build(BuildContext context) {
     final selectedInventoryFiltersProvider = ref.read(selectedFilterInventory.notifier);

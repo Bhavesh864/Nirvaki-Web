@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 
-double? height;
-double? width;
+double? height = 707;
+double? width = 1440;
 
 // App constants
 const noImg = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";

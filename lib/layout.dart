@@ -1,4 +1,5 @@
 import 'package:beamer/beamer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:responsive_builder/responsive_builder.dart';
@@ -21,11 +22,13 @@ class LayoutView extends StatefulWidget {
 
 class _LayoutViewState extends State<LayoutView> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+  Stream<User?>? authState;
 
   @override
   void initState() {
     super.initState();
     final token = UserHiveMethods.getdata("token");
+    authState = authentication.authStateChanges();
     if (token != null) {
       AppConst.setAccessToken(token);
     }
@@ -37,9 +40,10 @@ class _LayoutViewState extends State<LayoutView> {
     width = MediaQuery.of(context).size.width;
 
     return StreamBuilder(
-      stream: authentication.authStateChanges(),
+      stream: authState,
       builder: (context, snapshot) {
         AppConst.setIsAuthenticated(snapshot.hasData ? true : false);
+
         return Scaffold(
           body: ScreenTypeLayout.builder(
             breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
