@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/small_custom_profile_image.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart' as inventory;
+import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart' as lead;
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart' as todo;
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/widgets/questionaries/assign_user.dart';
@@ -13,9 +16,9 @@ class AssignmentWidget extends StatefulWidget {
   final List<dynamic> assignto;
   final String createdBy;
   final String imageUrlCreatedBy;
-  final String? id;
+  final String id;
 
-  const AssignmentWidget({super.key, required this.createdBy, required this.imageUrlCreatedBy, this.id, required this.assignto});
+  const AssignmentWidget({super.key, required this.createdBy, required this.imageUrlCreatedBy, required this.id, required this.assignto});
 
   @override
   State<AssignmentWidget> createState() => _AssignmentWidgetState();
@@ -31,15 +34,45 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
   }
 
   void submitAssignUser() {
+    print(widget.id);
     if (user != null) {
-      todo.Assignedto assign = todo.Assignedto(
+      if (widget.id!.contains("TD")) {
+        todo.Assignedto assign = todo.Assignedto(
+          firstname: user?.userfirstname,
+          lastname: user?.userlastname,
+          assignedby: AppConst.getAccessToken(),
+          userid: user?.userId,
+          image: user?.image,
+        );
+        todo.TodoDetails.updateAssignUser(itemid: widget.id!, assignedto: assign);
+      } else if (widget.id!.contains("IN")) {
+        print("object");
+        inventory.Assignedto assign = inventory.Assignedto(
+          firstname: user?.userfirstname,
+          lastname: user?.userlastname,
+          assignedby: AppConst.getAccessToken(),
+          userid: user?.userId,
+          image: user?.image,
+        );
+        inventory.InventoryDetails.updateAssignUser(itemid: widget.id!, assignedto: assign);
+      } else if (widget.id!.contains("LD")) {
+        lead.Assignedto assign = lead.Assignedto(
+          firstname: user?.userfirstname,
+          lastname: user?.userlastname,
+          assignedby: AppConst.getAccessToken(),
+          userid: user?.userId,
+          image: user?.image,
+        );
+        lead.LeadDetails.updateAssignUser(itemid: widget.id!, assignedto: assign);
+      }
+      Assignedto assigncard = Assignedto(
         firstname: user?.userfirstname,
         lastname: user?.userlastname,
         assignedby: AppConst.getAccessToken(),
         userid: user?.userId,
         image: user?.image,
       );
-      todo.TodoDetails.updateAssignUser(itemid: widget.id!, assignedto: assign);
+      CardDetails.updateAssignUser(itemid: widget.id!, assignedto: assigncard);
       user = null;
     } else {
       customSnackBar(context: context, text: "please select user");
