@@ -71,11 +71,11 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
 
           filteredInventoryList = filteredInventoryList.where((item) {
             final bool isBedRoomMatch = selectedFilters.isEmpty || selectedFilters.contains('${item.roomconfig!.bedroom!}BHK');
-            final double itemRateStart = double.parse(item.propertypricerange!.arearangestart!);
+            // final double itemRateStart = double.parse(item.propertypricerange!.arearangestart!);
 
-            final bool isRateInRange = itemRateStart >= rateRange.start;
+            // final bool isRateInRange = itemRateStart >= rateRange.start;
 
-            return isBedRoomMatch && isRateInRange;
+            return isBedRoomMatch;
           }).toList();
 
           status = filteredInventoryList;
@@ -198,7 +198,6 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                                                 ref.read(selectedWorkItemId.notifier).addItemId(id);
                                               } else {
                                                 ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                                ref.read(largeScreenTabsProvider.notifier).update((state) => 7);
                                                 context.beamToNamed('/inventory/inventory-details/$id');
                                               }
                                             },
@@ -294,17 +293,14 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
           ),
         ),
         _buildWorkItemTableItem(
-            const Text(
-              'ASSIGNED TO',
-              style: TextStyle(
-                color: AppColor.cardtitleColor,
-              ),
+          const Text(
+            'ASSIGNED TO',
+            style: TextStyle(
+              color: AppColor.cardtitleColor,
             ),
-            align: Alignment.center),
-        // _buildWorkItemTableItem(
-        //   Container(),
-        //   align: Alignment.center,
-        // ),
+          ),
+          align: Alignment.center,
+        ),
       ],
     );
   }
@@ -447,20 +443,17 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
           ),
         ),
         _buildWorkItemTableItem(
-            Container(
-              margin: const EdgeInsets.only(right: 5),
-              height: 20,
-              width: 20,
-              decoration: BoxDecoration(
-                image: DecorationImage(image: NetworkImage(inventoryItem.assignedto![0].image!.isEmpty ? noImg : inventoryItem.assignedto![0].image!), fit: BoxFit.fill),
-                borderRadius: BorderRadius.circular(40),
-              ),
+          Container(
+            margin: const EdgeInsets.only(right: 5),
+            height: 20,
+            width: 20,
+            decoration: BoxDecoration(
+              image: DecorationImage(image: NetworkImage(inventoryItem.assignedto![0].image!.isEmpty ? noImg : inventoryItem.assignedto![0].image!), fit: BoxFit.fill),
+              borderRadius: BorderRadius.circular(40),
             ),
-            align: Alignment.center),
-        // _buildWorkItemTableItem(
-        //   Container(),
-        //   align: Alignment.center,
-        // ),
+          ),
+          align: Alignment.center,
+        ),
       ],
     );
   }

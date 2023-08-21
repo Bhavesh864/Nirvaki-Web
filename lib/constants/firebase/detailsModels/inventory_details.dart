@@ -99,7 +99,6 @@ class InventoryDetails {
 
   factory InventoryDetails.fromSnapshot(DocumentSnapshot snapshot) {
     final json = snapshot.data() as Map<String, dynamic>;
-
     return InventoryDetails(
       inventoryTitle: json["inventoryTitle"],
       inventoryDescription: json["inventoryDescription"],

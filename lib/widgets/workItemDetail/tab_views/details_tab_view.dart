@@ -81,6 +81,11 @@ class _DetailsTabViewState extends State<DetailsTabView> {
             }
           }
         });
+
+        if (AppConst.getPublicView()) {
+          allImages.removeAt(0);
+          allTitles.removeAt(0);
+        }
       }
     }
 

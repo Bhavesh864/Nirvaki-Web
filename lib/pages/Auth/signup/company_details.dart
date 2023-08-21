@@ -41,14 +41,14 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                 setState(() {
                   isloading = false;
                 }),
-                if (Responsive.isMobile(context))
-                  {
-                    Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen),
-                  }
-                else
-                  {
-                    context.beamToNamed(AppRoutes.loginScreen),
-                  }
+                // if (Responsive.isMobile(context))
+                //   {
+                //     Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen),
+                //   }
+                // else
+                //   {
+                context.beamToReplacementNamed(AppRoutes.loginScreen),
+                // }
               }
             else
               {

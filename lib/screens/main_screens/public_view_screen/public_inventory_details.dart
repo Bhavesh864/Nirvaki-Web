@@ -1,10 +1,12 @@
 // ignore_for_file: invalid_use_of_protected_member
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
+import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
 
 import '../../../Customs/custom_text.dart';
@@ -33,6 +35,14 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
   late TabController tabviewController;
   late Future<InventoryDetails?> inventoryDetails;
   int currentSelectedTab = 0;
+
+  // Future<void> fetchData(Future<InventoryDetails?> inventoryDetails) async {
+  //   final inventoryData = await inventoryDetails;
+
+  //   if (inventoryData != null) {
+  //     final BrokerInfo? brokerInfoData = await BrokerInfo.getBrokerInfo(inventoryData.brokerid!);
+  //   }
+  // }
 
   @override
   void initState() {
@@ -160,7 +170,8 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                               'Assignment',
                                               AssignmentWidget(
                                                 assignto: data.assignedto!,
-                                                imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                imageUrlCreatedBy:
+                                                    data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                 createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                               ),
                                             );
@@ -209,15 +220,20 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                             padding: const EdgeInsets.all(10),
                             child: Column(
                               children: [
-                                ContactInformation(
-                                  customerinfo: data.customerinfo!,
+                                StreamBuilder(
+                                  stream: FirebaseFirestore.instance.collection("brokerInfo").where("brokerid", isEqualTo: data.brokerid).snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      final dataList = snapshot.data?.docs;
+                                      List<BrokerInfo> inventoryList = dataList!.map((doc) => BrokerInfo.fromSnapshot(doc)).toList();
+
+                                      return CompanyInformation(
+                                        companyInfo: inventoryList[0],
+                                      );
+                                    }
+                                    return const SizedBox();
+                                  },
                                 ),
-                                if (Responsive.isDesktop(context))
-                                  AssignmentWidget(
-                                    assignto: data.assignedto!,
-                                    imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                    createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
-                                  ),
                                 if (Responsive.isDesktop(context))
                                   MapViewWidget(
                                     state: data.propertyaddress!.state!,
