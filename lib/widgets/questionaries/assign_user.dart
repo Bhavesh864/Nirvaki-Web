@@ -37,26 +37,10 @@ class AssignUser extends StatelessWidget {
                 if (!snapshot.hasData || snapshot.data == null) {
                   return const CircularProgressIndicator.adaptive();
                 }
-                final QuerySnapshot<Map<String, dynamic>> usersListSnapshot = snapshot.data!;
-                final List<User> usersList = usersListSnapshot.docs
-                    .map((doc) => User(
-                          whatsAppNumber: doc["whatsAppNumber"],
-                          brokerId: doc['brokerId'],
-                          status: doc['status'],
-                          userfirstname: doc['userfirstname'],
-                          userlastname: doc['userlastname'],
-                          userId: doc['userId'],
-                          mobile: doc['mobile'],
-                          email: doc['email'],
-                          role: doc['role'],
-                          image: doc['image'],
-                        ))
-                    .toList();
+                final usersListSnapshot = snapshot.data!.docs;
+                List<User> usersList = usersListSnapshot.map((doc) => User.fromSnapshot(doc)).toList();
                 return Autocomplete(
                   optionsBuilder: (TextEditingValue textEditingValue) {
-                    // if (textEditingValue.text.isEmpty) {
-                    //   return const Iterable<String>.empty();
-                    // }
                     final String searchText = textEditingValue.text.toLowerCase();
                     if (status == true) {
                       return usersList.where((user) {
