@@ -160,6 +160,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                             context,
                                             'Assignment',
                                             AssignmentWidget(
+                                              id: data.leadId!,
                                               assignto: data.assignedto!,
                                               imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                               createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
@@ -231,6 +232,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                 ),
                                 if (Responsive.isDesktop(context))
                                   AssignmentWidget(
+                                    id: data.leadId!,
                                     assignto: data.assignedto!,
                                     imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                     createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',

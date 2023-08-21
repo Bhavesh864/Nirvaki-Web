@@ -44,6 +44,15 @@ class LargeScreen extends ConsumerStatefulWidget {
 }
 
 class LargeScreenState extends ConsumerState<LargeScreen> {
+  showdailoginbottom() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return PositionedDialog();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // final currentIndex = ref.watch(largeScreenTabsProvider);
@@ -269,19 +278,49 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                   radius: 28,
                   backgroundColor: AppColor.primary,
                   child: IconButton(
-                    icon: const Icon(
-                      Icons.chat_outlined,
-                      color: Colors.white,
-                      size: 24,
-                    ),
-                    onPressed: () {
-                      popupMenuItem('title');
-                    },
-                  ),
+                      icon: const Icon(
+                        Icons.chat_outlined,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                      onPressed: showdailoginbottom),
                 ),
               ],
             )
           : null,
+    );
+  }
+}
+
+class PositionedDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 45, right: 70),
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'This is a bottom right dialog.',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                child: Text('Close'),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
