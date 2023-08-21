@@ -127,12 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(
                         width: w,
                         child: CustomButton(
-                            leftIcon: Icons.apple,
-                            text: 'Continue with apple',
-                            buttonColor: Colors.white,
-                            textColor: Colors.black,
-                            lefticonColor: Colors.black,
-                            onPressed: () {}),
+                            leftIcon: Icons.apple, text: 'Continue with apple', buttonColor: Colors.white, textColor: Colors.black, lefticonColor: Colors.black, onPressed: () {}),
                       ),
                       const SizedBox(height: 10),
                       const CustomOrDivider(),
@@ -143,8 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         margin: const EdgeInsets.only(bottom: 5),
                         child: CustomTextInput(controller: emailcontroller, labelText: 'Email address', validator: validateEmail),
                       ),
-                      CustomTextInput(
-                          controller: passwordcontroller, labelText: 'Password', obscureText: true, rightIcon: Icons.remove_red_eye, validator: validatePassword),
+                      CustomTextInput(controller: passwordcontroller, labelText: 'Password', obscureText: true, rightIcon: Icons.remove_red_eye, validator: validatePassword),
                       const SizedBox(height: 10),
                       isloading
                           ? const Center(child: CircularProgressIndicator.adaptive())
