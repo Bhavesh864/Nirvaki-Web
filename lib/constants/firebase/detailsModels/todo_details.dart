@@ -256,16 +256,36 @@ class TodoDetails {
       QuerySnapshot querySnapshot = await todoDetailsCollection.where("todoId", isEqualTo: itemid).get();
       for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
         Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
-
         List<dynamic> existingassign = data['assignedto'] ?? [];
         existingassign.add(assignedto.toJson());
-
         await docSnapshot.reference.update({'assignedto': existingassign});
-
         print('assign new user to this ${docSnapshot.id}');
       }
     } catch (error) {
       print('Failed to assign user : $error');
+    }
+  }
+
+  static Future<void> deleteTodoAssignUser({required String itemId, required String userid}) async {
+    try {
+      QuerySnapshot querySnapshot = await todoDetailsCollection.where("todoId", isEqualTo: itemId).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        QueryDocumentSnapshot docSnapshot = querySnapshot.docs.first;
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+        List<dynamic> existinguser = data['assignedto'] ?? [];
+        List<dynamic> updateduser = [];
+        for (var user in existinguser) {
+          if (user['userid'] != userid) {
+            updateduser.add(user);
+          }
+        }
+        await docSnapshot.reference.update({'assignedto': updateduser});
+        print('updated user from this inventory$itemId');
+      } else {
+        print('Item not found with InventoryId: $itemId');
+      }
+    } catch (error) {
+      print('Failed to delete user: $error');
     }
   }
 }

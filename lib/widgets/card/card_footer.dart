@@ -105,9 +105,8 @@ class CardFooter extends StatelessWidget {
           children: cardData.assignedto!.asMap().entries.map((entry) {
             final index = entry.key;
             final user = entry.value;
-            final offset = index * 24.0;
-            return Positioned(
-              right: offset,
+            return Transform.translate(
+              offset: Offset(index * -8.0, 0),
               child: Container(
                 width: 24,
                 height: 24,

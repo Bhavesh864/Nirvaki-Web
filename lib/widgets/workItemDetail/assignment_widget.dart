@@ -34,9 +34,8 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
   }
 
   void submitAssignUser() {
-    print(widget.id);
     if (user != null) {
-      if (widget.id.contains("TD")) {
+      if (widget.id.contains(ItemCategory.isTodo)) {
         todo.Assignedto assign = todo.Assignedto(
           firstname: user?.userfirstname,
           lastname: user?.userlastname,
@@ -45,8 +44,7 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
           image: user?.image,
         );
         todo.TodoDetails.updateAssignUser(itemid: widget.id, assignedto: assign);
-      } else if (widget.id.contains("IN")) {
-        print("object");
+      } else if (widget.id.contains(ItemCategory.isInventory)) {
         inventory.Assignedto assign = inventory.Assignedto(
           firstname: user?.userfirstname,
           lastname: user?.userlastname,
@@ -55,7 +53,7 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
           image: user?.image,
         );
         inventory.InventoryDetails.updateAssignUser(itemid: widget.id, assignedto: assign);
-      } else if (widget.id.contains("LD")) {
+      } else if (widget.id.contains(ItemCategory.isLead)) {
         lead.Assignedto assign = lead.Assignedto(
           firstname: user?.userfirstname,
           lastname: user?.userlastname,
@@ -77,6 +75,17 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
     } else {
       customSnackBar(context: context, text: "please select user");
     }
+  }
+
+  void deleteassignUser(userid) {
+    if (widget.id.contains(ItemCategory.isTodo)) {
+      todo.TodoDetails.deleteTodoAssignUser(itemId: widget.id, userid: userid);
+    } else if (widget.id.contains(ItemCategory.isInventory)) {
+      inventory.InventoryDetails.deleteInventoryAssignUser(itemId: widget.id, userid: userid);
+    } else if (widget.id.contains(ItemCategory.isLead)) {
+      lead.LeadDetails.deleteInventoryAssignUser(itemId: widget.id, userid: userid);
+    }
+    CardDetails.deleteCardAssignUser(itemId: widget.id, userid: userid);
   }
 
   void assginUserToTodo() {
@@ -164,6 +173,7 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
           padding: const EdgeInsets.only(top: 18, bottom: 8),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(Icons.person_add_alt_outlined),
               const Padding(
@@ -180,7 +190,7 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 22),
+                padding: const EdgeInsets.only(left: 5),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -188,13 +198,15 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: widget.assignto.map((item) {
-                        return Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SmallCustomCircularImage(imageUrl: item.image!.isNotEmpty ? item.image! : noImg),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4, top: 4),
-                              child: Text(
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 7),
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(color: AppColor.secondary, borderRadius: BorderRadius.circular(12)),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SmallCustomCircularImage(imageUrl: item.image!.isNotEmpty ? item.image! : noImg),
+                              Text(
                                 "${item.firstname!} ${item.lastname}",
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.left,
@@ -204,8 +216,14 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
-                            ),
-                          ],
+                              const SizedBox(width: 3),
+                              if (widget.assignto.length > 1)
+                                GestureDetector(
+                                  onTap: () => deleteassignUser(item.userid),
+                                  child: const Icon(Icons.close),
+                                ),
+                            ],
+                          ),
                         );
                       }).toList(),
                     ),
