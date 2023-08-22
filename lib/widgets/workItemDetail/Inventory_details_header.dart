@@ -170,9 +170,9 @@ class _HeaderChipsState extends State<HeaderChips> {
               itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
               onSelected: (value) {
                 CardDetails.updateCardStatus(id: widget.id, newStatus: value);
-                if (widget.id.contains("IN")) {
+                if (widget.id.contains(ItemCategory.isInventory)) {
                   InventoryDetails.updatecardStatus(id: widget.id, newStatus: value);
-                } else if (widget.id.contains("LD")) {
+                } else if (widget.id.contains(ItemCategory.isLead)) {
                   LeadDetails.updatecardStatus(id: widget.id, newStatus: value);
                 }
                 currentStatus = value;

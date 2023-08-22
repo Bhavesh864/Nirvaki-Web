@@ -207,7 +207,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                     },
                                   ),
                                 if (currentSelectedTab == 1) const ActivityTabView(),
-                                if (currentSelectedTab == 2) const TodoTabView(),
+                                if (currentSelectedTab == 2) TodoTabView(id: data.leadId!),
                               ],
                             ),
                           ),

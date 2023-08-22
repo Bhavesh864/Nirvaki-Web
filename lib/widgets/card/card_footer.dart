@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import '../../Customs/custom_chip.dart';
+import '../../constants/utils/constants.dart';
 
 class CardFooter extends StatelessWidget {
   final int index;
@@ -99,30 +100,29 @@ class CardFooter extends StatelessWidget {
           ),
         ),
         const Spacer(),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.end,
-        //   children: cardData.assignedto!.asMap().entries.map((entry) {
-        //     final index = entry.key;
-        //     final user = entry.value;
-        //     final offset = index * 24.0;
-        //     return Positioned(
-        //       right: offset,
-        //       child: Container(
-        //         width: 24,
-        //         height: 24,
-        //         decoration: BoxDecoration(
-        //           image: DecorationImage(
-        //             image: NetworkImage(
-        //               user.image!.isEmpty ? noImg : user.image!,
-        //             ),
-        //             fit: BoxFit.fill,
-        //           ),
-        //           borderRadius: BorderRadius.circular(40),
-        //         ),
-        //       ),
-        //     );
-        //   }).toList(),
-        // )
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: cardData.assignedto!.asMap().entries.map((entry) {
+            final index = entry.key;
+            final user = entry.value;
+            return Transform.translate(
+              offset: Offset(index * -8.0, 0),
+              child: Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(
+                      user.image!.isEmpty ? noImg : user.image!,
+                    ),
+                    fit: BoxFit.fill,
+                  ),
+                  borderRadius: BorderRadius.circular(40),
+                ),
+              ),
+            );
+          }).toList(),
+        )
       ],
     );
   }

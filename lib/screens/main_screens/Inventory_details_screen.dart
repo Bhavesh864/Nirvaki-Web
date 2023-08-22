@@ -199,7 +199,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                   data: data,
                                 ),
                               if (currentSelectedTab == 1) const ActivityTabView(),
-                              if (currentSelectedTab == 2) const TodoTabView(),
+                              if (currentSelectedTab == 2) TodoTabView(id: data.inventoryId!),
                             ],
                           ),
                         ),

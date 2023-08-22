@@ -171,8 +171,7 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                               AssignmentWidget(
                                                 id: data.inventoryId!,
                                                 assignto: data.assignedto!,
-                                                imageUrlCreatedBy:
-                                                    data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                 createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                               ),
                                             );
@@ -202,7 +201,6 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                       data: data,
                                     ),
                                   if (currentSelectedTab == 1) const ActivityTabView(),
-                                  if (currentSelectedTab == 2) const TodoTabView(),
                                 ],
                               ),
                             ),
