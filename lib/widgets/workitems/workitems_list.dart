@@ -1,4 +1,3 @@
-import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -6,9 +5,9 @@ import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/card/custom_card.dart';
-import '../../routes/routes.dart';
+
+import '../../constants/functions/navigation/navigation_functions.dart';
 
 class WorkItemsList extends ConsumerStatefulWidget {
   final bool isScrollable;
@@ -75,32 +74,64 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                         return GestureDetector(
                           onTap: () {
                             final id = widget.getCardDetails[index].workitemId;
-                            if (id!.contains('IN')) {
-                              if (Responsive.isMobile(context)) {
-                                Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
-                                ref.read(selectedWorkItemId.notifier).addItemId(id);
-                              } else {
-                                ref.read(selectedWorkItemId.notifier).addItemId(id);
 
-                                context.beamToNamed('/inventory/inventory-details/$id');
-                              }
-                            } else if (id.contains('LD')) {
-                              if (Responsive.isMobile(context)) {
-                                Navigator.of(context).pushNamed(AppRoutes.leadDetailsScreen, arguments: id);
-                                ref.read(selectedWorkItemId.notifier).addItemId(id);
-                              } else {
-                                ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                context.beamToNamed('/lead/lead-details/$id');
-                              }
-                            } else if (id.contains('TD')) {
-                              if (Responsive.isMobile(context)) {
-                                Navigator.of(context).pushNamed(AppRoutes.todoDetailsScreen, arguments: id);
-                                ref.read(selectedWorkItemId.notifier).addItemId(id);
-                              } else {
-                                ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                context.beamToNamed('/todo/todo-details/$id');
-                              }
-                            }
+                            navigateBasedOnId(context, id!, ref);
+
+                            // if (id!.contains('IN')) {
+                            //   if (Responsive.isMobile(context)) {
+                            //     // Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
+                            //     Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //         builder: (context) {
+                            //           return InventoryDetailsScreen(
+                            //             inventoryId: id,
+                            //           );
+                            //         },
+                            //       ),
+                            //     );
+                            //     ref.read(selectedWorkItemId.notifier).addItemId(id);
+                            //   } else {
+                            //     ref.read(selectedWorkItemId.notifier).addItemId(id);
+                            //     context.beamToNamed('/inventory/inventory-details/$id');
+                            //   }
+                            // } else if (id.contains('LD')) {
+                            //   if (Responsive.isMobile(context)) {
+                            //     // Navigator.of(context).pushNamed(AppRoutes.leadDetailsScreen, arguments: id);
+                            //     Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //         builder: (context) {
+                            //           return LeadDetailsScreen(
+                            //             leadId: id,
+                            //           );
+                            //         },
+                            //       ),
+                            //     );
+                            //     ref.read(selectedWorkItemId.notifier).addItemId(id);
+                            //   } else {
+                            //     ref.read(selectedWorkItemId.notifier).addItemId(id);
+                            //     context.beamToNamed('/lead/lead-details/$id');
+                            //   }
+                            // } else if (id.contains('TD')) {
+                            //   if (Responsive.isMobile(context)) {
+                            //     // Navigator.of(context).pushNamed(AppRoutes.todoDetailsScreen, arguments: id);
+                            //     Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //         builder: (context) {
+                            //           return TodoDetailsScreen(
+                            //             todoId: id,
+                            //           );
+                            //         },
+                            //       ),
+                            //     );
+                            //     ref.read(selectedWorkItemId.notifier).addItemId(id);
+                            //   } else {
+                            //     ref.read(selectedWorkItemId.notifier).addItemId(id);
+                            //     context.beamToNamed('/todo/todo-details/$id');
+                            //   }
+                            // }
                           },
                           child: CustomCard(index: index, cardDetails: widget.getCardDetails),
                         );

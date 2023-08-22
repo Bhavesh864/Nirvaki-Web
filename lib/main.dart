@@ -2,9 +2,9 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
-
 import 'package:hive_flutter/adapters.dart';
-import 'package:yes_broker/Customs/responsive.dart';
+import 'firebase_options.dart';
+
 import 'package:yes_broker/constants/firebase/Hive/timestamp.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/pages/Auth/signup/company_details.dart';
@@ -16,8 +16,6 @@ import 'package:yes_broker/pages/add_todo.dart';
 import 'package:yes_broker/pages/edit_todo.dart';
 import 'package:yes_broker/pages/largescreen_dashboard.dart';
 import 'package:yes_broker/routes/routes.dart';
-
-import 'firebase_options.dart';
 import 'package:yes_broker/constants/utils/theme.dart';
 import 'package:yes_broker/layout.dart';
 
@@ -30,20 +28,15 @@ void main() async {
   await Hive.openBox<CardDetails>("carddetails");
 
   runApp(
-    const ProviderScope(
+    ProviderScope(
       child: MyApp(),
     ),
   );
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class MyApp extends StatelessWidget {
+  MyApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
   final routerDelegate = BeamerDelegate(
     setBrowserTabTitle: false,
     notFoundPage: const BeamPage(child: LayoutView()),
@@ -65,27 +58,22 @@ class _MyAppState extends State<MyApp> {
   );
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return !Responsive.isMobile(context)
-        ? MaterialApp.router(
-            backButtonDispatcher: BeamerBackButtonDispatcher(delegate: routerDelegate),
-            debugShowCheckedModeBanner: false,
-            title: 'Brokr',
-            theme: TAppTheme.lightTheme,
-            routeInformationParser: BeamerParser(),
-            routerDelegate: routerDelegate,
-          )
-        : MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Brokr',
-            theme: TAppTheme.lightTheme,
-            home: const LayoutView(),
-            routes: AppRoutes.routesTable,
-          );
+    // return !Responsive.isMobile(context)
+    return MaterialApp.router(
+      backButtonDispatcher: BeamerBackButtonDispatcher(delegate: routerDelegate),
+      debugShowCheckedModeBanner: false,
+      title: 'Brokr',
+      theme: TAppTheme.lightTheme,
+      routeInformationParser: BeamerParser(),
+      routerDelegate: routerDelegate,
+    );
+    // : MaterialApp(
+    //     debugShowCheckedModeBanner: false,
+    //     title: 'Brokr',
+    //     theme: TAppTheme.lightTheme,
+    //     home: const LayoutView(),
+    //     routes: AppRoutes.routesTable,
+    //   );
   }
 }

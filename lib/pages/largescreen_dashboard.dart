@@ -3,37 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/constants/app_constant.dart';
-import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
-import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
-import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
-import 'package:yes_broker/pages/edit_todo.dart';
 import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/screens/account_screens/common_screen.dart';
-import 'package:yes_broker/screens/main_screens/inventory_details_screen.dart';
-import 'package:yes_broker/screens/main_screens/caledar_screen.dart';
-import 'package:yes_broker/screens/main_screens/chat_screen.dart';
-import 'package:yes_broker/screens/main_screens/home_screen.dart';
-import 'package:yes_broker/screens/main_screens/inventory_listing_screen.dart';
-import 'package:yes_broker/screens/main_screens/lead_details_screen.dart';
-import 'package:yes_broker/screens/main_screens/lead_listing_screen.dart';
-import 'package:yes_broker/screens/main_screens/todo_details_screen.dart';
-import 'package:yes_broker/screens/main_screens/todo_listing_screen.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';
 
-void userLogout(WidgetRef ref, BuildContext context) {
-  authentication.signOut().then(
-        (value) => {
-          // Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen),
-          context.beamToReplacementNamed(AppRoutes.loginScreen),
-        },
-      );
-  UserHiveMethods.deleteData(AppConst.getAccessToken());
-  UserHiveMethods.deleteData("token");
-  ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null);
-}
+import '../constants/functions/auth/auth_functions.dart';
+import '../widgets/chat_modal_view.dart';
 
 class LargeScreen extends ConsumerStatefulWidget {
   const LargeScreen({Key? key}) : super(key: key);
@@ -43,11 +21,11 @@ class LargeScreen extends ConsumerStatefulWidget {
 }
 
 class LargeScreenState extends ConsumerState<LargeScreen> {
-  showdailoginbottom() {
+  showChatDialog() {
     showDialog(
       context: context,
       builder: (context) {
-        return PositionedDialog();
+        return const ChatDialogBox();
       },
     );
   }
@@ -88,7 +66,6 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                 minWidth: 60,
                 useIndicator: false,
                 onDestinationSelected: (index) {
-                  // ref.read(largeScreenTabsProvider.notifier).update((state) => index);
                   setState(() {
                     beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[index].nav);
                   });
@@ -123,7 +100,6 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                   },
                 ),
                 Expanded(
-                  // child: sideBarItems[currentIndex].screen,
                   child: Container(
                     decoration: const BoxDecoration(
                       boxShadow: [
@@ -135,127 +111,8 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                         ),
                       ],
                       color: Colors.white,
-                      // color: Color(0xFFF9F9FD),
                     ),
-                    child: Beamer(
-                      createBackButtonDispatcher: true,
-                      key: beamerKey,
-                      routerDelegate: BeamerDelegate(
-                        setBrowserTabTitle: false,
-                        transitionDelegate: const NoAnimationTransitionDelegate(),
-                        locationBuilder: RoutesLocationBuilder(
-                          routes: {
-                            // '*': (p0, p1, p2) => const HomeScreen(),
-                            '*': (p0, state, p2) {
-                              if (state.pathPatternSegments.contains('inventory-details')) {
-                                return BeamPage(
-                                    key: const ValueKey('/inventory-details from home'),
-                                    type: BeamPageType.scaleTransition,
-                                    child: InventoryDetailsScreen(
-                                      inventoryId: state.pathPatternSegments[1],
-                                    ));
-                                // child: InventoryDetailsScreen());
-                              } else if (state.pathPatternSegments.contains('lead-details')) {
-                                return BeamPage(
-                                  key: const ValueKey('/lead-details from home'),
-                                  type: BeamPageType.scaleTransition,
-                                  child: LeadDetailsScreen(
-                                    leadId: state.pathPatternSegments[1],
-                                  ),
-                                );
-                                // child: LeadDetailsScreen());
-                              } else if (state.pathPatternSegments.contains('todo-details')) {
-                                return BeamPage(
-                                  key: const ValueKey('/todo-details from home'),
-                                  type: BeamPageType.scaleTransition,
-                                  child: TodoDetailsScreen(
-                                    todoId: state.pathPatternSegments[1],
-                                  ),
-                                );
-                                // child: LeadDetailsScreen());
-                              }
-                              return const BeamPage(
-                                key: ValueKey('/'),
-                                type: BeamPageType.scaleTransition,
-                                child: HomeScreen(),
-                              );
-                            },
-                            '/todo': (p0, state, p2) {
-                              if (state.pathPatternSegments.contains('todo-details')) {
-                                return BeamPage(
-                                  key: const ValueKey('/todo-details'),
-                                  type: BeamPageType.scaleTransition,
-                                  child: TodoDetailsScreen(
-                                    todoId: state.pathPatternSegments[2],
-                                  ),
-                                );
-                              }
-                              return const BeamPage(
-                                key: ValueKey('/todo'),
-                                type: BeamPageType.scaleTransition,
-                                child: TodoListingScreen(),
-                              );
-                            },
-                            '/inventory': (p0, state, p2) {
-                              if (state.pathPatternSegments.contains('inventory-details')) {
-                                return BeamPage(
-                                  key: const ValueKey('/inventory-details'),
-                                  type: BeamPageType.scaleTransition,
-                                  child: InventoryDetailsScreen(
-                                    inventoryId: state.pathPatternSegments[2],
-                                  ),
-                                );
-                                // child: PublicViewInventoryDetails());
-                              }
-                              return const BeamPage(
-                                key: ValueKey('/inventory-listing'),
-                                type: BeamPageType.scaleTransition,
-                                child: InventoryListingScreen(),
-                              );
-                            },
-                            '/lead': (p0, state, p2) {
-                              if (state.pathPatternSegments.contains('lead-details')) {
-                                return BeamPage(
-                                  key: const ValueKey('/lead-details'),
-                                  type: BeamPageType.scaleTransition,
-                                  child: LeadDetailsScreen(
-                                    leadId: state.pathPatternSegments[2],
-                                  ),
-                                );
-                                // child: PublicViewLeadDetails());
-                              }
-                              return const BeamPage(
-                                key: ValueKey('/lead-listing'),
-                                type: BeamPageType.scaleTransition,
-                                child: LeadListingScreen(),
-                              );
-                            },
-                            '/chat': (p0, p1, p2) => const BeamPage(
-                                  key: ValueKey('/chat'),
-                                  type: BeamPageType.scaleTransition,
-                                  child: ChatScreen(),
-                                ),
-                            '/calendar': (p0, p1, p2) => const BeamPage(
-                                  key: ValueKey('/calendar'),
-                                  type: BeamPageType.scaleTransition,
-                                  child: CalendarScreen(),
-                                ),
-                            '/profile': (p0, p1, p2) => const BeamPage(
-                                  key: ValueKey('/calendar'),
-                                  type: BeamPageType.scaleTransition,
-                                  child: CommonScreen(),
-                                ),
-                            AppRoutes.editTodo: (p0, p1, data) {
-                              return BeamPage(
-                                key: const ValueKey('/edit-todo'),
-                                type: BeamPageType.scaleTransition,
-                                child: EditTodo(cardDetails: data as CardDetails),
-                              );
-                            },
-                          },
-                        ),
-                      ),
-                    ),
+                    child: BeamerScreenNavigation(beamerKey: beamerKey),
                   ),
                 ),
               ],
@@ -275,49 +132,19 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                   radius: 28,
                   backgroundColor: AppColor.primary,
                   child: IconButton(
-                      icon: const Icon(
-                        Icons.chat_outlined,
-                        color: Colors.white,
-                        size: 24,
-                      ),
-                      onPressed: showdailoginbottom),
+                    icon: const Icon(
+                      Icons.chat_outlined,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                    onPressed: () {
+                      showChatDialog();
+                    },
+                  ),
                 ),
               ],
             )
           : null,
-    );
-  }
-}
-
-class PositionedDialog extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 45, right: 70),
-        child: Container(
-          color: Colors.white,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'This is a bottom right dialog.',
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Close the dialog
-                },
-                child: Text('Close'),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

@@ -2,6 +2,7 @@
 import 'dart:async';
 // import 'dart:html';
 
+import 'package:beamer/beamer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -484,11 +485,8 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                 CustomButton(
                                   text: 'View Inventory Details',
                                   onPressed: () {
-                                    // showOwnerDetailsAndAssignToBottomSheet(
-                                    //   context,
-                                    //   'Owner Details',
-                                    //   ContactInformation(customerinfo: data.customerinfo!),
-                                    // );
+                                    ref.read(selectedWorkItemId.notifier).addItemId(data.linkedWorkItem![0].workItemId!);
+                                    context.beamToNamed('/inventory/inventory-details/${data.linkedWorkItem![0].workItemId}');
                                   },
                                   height: 40,
                                 ),

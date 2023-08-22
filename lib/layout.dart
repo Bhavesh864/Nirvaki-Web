@@ -57,7 +57,6 @@ class _LayoutViewState extends State<LayoutView> {
   }
 
   Widget _buildMobileLayout(bool isAuthenticated) {
-    print('is Auth ------$isAuthenticated');
     if (isAuthenticated) {
       return const SmallScreen();
     } else {

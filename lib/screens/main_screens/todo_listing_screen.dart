@@ -10,7 +10,6 @@ import 'package:yes_broker/widgets/todo/todo_filter_view.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/utils/constants.dart';
-import '../../pages/largescreen_dashboard.dart';
 import '../../riverpodstate/selected_workitem.dart';
 import '../../routes/routes.dart';
 import '../../widgets/app/nav_bar.dart';
@@ -207,20 +206,11 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                                                   onTap: () {
                                                     final id = filterTodoList[index].workitemId;
 
-                                                    if (id!.contains('IN')) {
-                                                      if (Responsive.isMobile(context)) {
-                                                        Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
-                                                      } else {
-                                                        ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                                        context.beamToNamed('/todo/todo-details/$id');
-                                                      }
-                                                    } else if (id.contains('LD')) {
-                                                      if (Responsive.isMobile(context)) {
-                                                        Navigator.of(context).pushNamed(AppRoutes.leadDetailsScreen, arguments: id);
-                                                      } else {
-                                                        ref.read(selectedWorkItemId.notifier).addItemId(id!);
-                                                        context.beamToNamed('/todo/todo-details/$id');
-                                                      }
+                                                    if (Responsive.isMobile(context)) {
+                                                      Navigator.of(context).pushNamed(AppRoutes.todoDetailsScreen, arguments: id);
+                                                    } else {
+                                                      ref.read(selectedWorkItemId.notifier).addItemId(id!);
+                                                      context.beamToNamed('/todo/todo-details/$id');
                                                     }
                                                   },
                                                   child: CustomCard(index: index, cardDetails: filterTodoList),

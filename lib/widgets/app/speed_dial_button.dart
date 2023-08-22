@@ -2,7 +2,6 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
-import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 import 'package:yes_broker/routes/routes.dart';
 import '../../constants/utils/colors.dart';
 
@@ -26,13 +25,6 @@ class _CustomSpeedDialButtonState extends State<CustomSpeedDialButton> {
       children: [
         SpeedDialChild(
           onTap: () {
-            // Navigator.of(context).push(
-            //   MaterialPageRoute(
-            //     builder: (context) => const AddWorkItem(
-            //       isInventory: true,
-            //     ),
-            //   ),
-            // );
             context.beamToNamed(AppRoutes.addInventory);
           },
           labelShadow: [
@@ -43,7 +35,7 @@ class _CustomSpeedDialButtonState extends State<CustomSpeedDialButton> {
             )
           ],
           child: const Icon(
-            MaterialSymbols.location_home_outlined,
+            inventoryIcon,
             color: Colors.white,
           ),
           label: 'Inventory',
@@ -52,13 +44,6 @@ class _CustomSpeedDialButtonState extends State<CustomSpeedDialButton> {
         ),
         SpeedDialChild(
           onTap: () {
-            // Navigator.of(context).push(
-            //   MaterialPageRoute(
-            //     builder: (context) => const AddWorkItem(
-            //       isInventory: false,
-            //     ),
-            //   ),
-            // );
             context.beamToNamed(AppRoutes.addLead);
           },
           labelShadow: [
@@ -69,7 +54,7 @@ class _CustomSpeedDialButtonState extends State<CustomSpeedDialButton> {
             )
           ],
           child: const Icon(
-            Icons.person_search_outlined,
+            leadIcon,
             color: Colors.white,
           ),
           label: 'Lead',
@@ -88,7 +73,7 @@ class _CustomSpeedDialButtonState extends State<CustomSpeedDialButton> {
             )
           ],
           child: const Icon(
-            Icons.task_outlined,
+            Icons.task,
             color: Colors.white,
           ),
           label: 'To-do',
