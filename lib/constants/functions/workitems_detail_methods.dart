@@ -12,6 +12,7 @@ import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart' as inventory;
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart' as lead;
 import 'package:yes_broker/constants/firebase/random_uid.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 
 import '../../Customs/custom_fields.dart';
 import '../../Customs/dropdown_field.dart';
@@ -95,7 +96,7 @@ void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname, 
     final downloadUrl = await referenceImagesToUpload.getDownloadURL();
     print('downloadurl.-------$downloadUrl');
 
-    if (id.contains("IN")) {
+    if (id.contains(ItemCategory.isInventory)) {
       inventory.Attachments attachments = inventory.Attachments(
         id: generateUid(),
         createdby: AppConst.getAccessToken(),
@@ -105,7 +106,7 @@ void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname, 
         type: docname,
       );
       await inventory.InventoryDetails.addAttachmentToItems(itemid: id, newAttachment: attachments).then((value) => updateState());
-    } else if (id.contains("LD")) {
+    } else if (id.contains(ItemCategory.isLead)) {
       lead.Attachments attachments = lead.Attachments(
         id: generateUid(),
         createdby: AppConst.getAccessToken(),
@@ -116,7 +117,7 @@ void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname, 
       );
 
       await lead.LeadDetails.addAttachmentToItems(itemid: id, newAttachment: attachments).then((value) => updateState());
-    } else if (id.contains("TD")) {
+    } else if (id.contains(ItemCategory.isTodo)) {
       Attachments attachments = Attachments(
         id: generateUid(),
         createdby: AppConst.getAccessToken(),
