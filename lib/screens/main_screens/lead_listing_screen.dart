@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,12 +7,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/screens/main_screens/lead_details_screen.dart';
 import 'package:yes_broker/widgets/workitems/workitem_filter_view.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/utils/constants.dart';
-import '../../pages/largescreen_dashboard.dart';
 import '../../riverpodstate/selected_workitem.dart';
 import '../../routes/routes.dart';
 import '../../widgets/app/nav_bar.dart';
@@ -249,7 +251,17 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
                                               final id = filteredleadList[index].workitemId;
                                               if (id!.contains('LD')) {
                                                 if (Responsive.isMobile(context)) {
-                                                  Navigator.of(context).pushNamed(AppRoutes.leadDetailsScreen, arguments: id);
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) {
+                                                        return LeadDetailsScreen(
+                                                          leadId: id,
+                                                        );
+                                                      },
+                                                    ),
+                                                  );
+                                                  // Navigator.of(context).pushNamed(AppRoutes.leadDetailsScreen, arguments: id);
                                                   ref.read(selectedWorkItemId.notifier).addItemId(id);
                                                 } else {
                                                   ref.read(selectedWorkItemId.notifier).addItemId(id);

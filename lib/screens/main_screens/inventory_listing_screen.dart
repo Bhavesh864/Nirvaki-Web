@@ -14,11 +14,11 @@ import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/utils/constants.dart';
-import '../../pages/largescreen_dashboard.dart';
 import '../../riverpodstate/selected_workitem.dart';
 import '../../widgets/app/nav_bar.dart';
 import '../../widgets/card/card_header.dart';
 import '../../widgets/card/custom_card.dart';
+import 'Inventory_details_screen.dart';
 
 class InventoryListingScreen extends ConsumerStatefulWidget {
   const InventoryListingScreen({super.key});
@@ -194,7 +194,17 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                                               final id = filteredInventoryList[index].workitemId!;
 
                                               if (Responsive.isMobile(context)) {
-                                                Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
+                                                // Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) {
+                                                      return InventoryDetailsScreen(
+                                                        inventoryId: id,
+                                                      );
+                                                    },
+                                                  ),
+                                                );
                                                 ref.read(selectedWorkItemId.notifier).addItemId(id);
                                               } else {
                                                 ref.read(selectedWorkItemId.notifier).addItemId(id);

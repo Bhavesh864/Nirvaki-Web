@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 
+import '../../screens/account_screens/Teams/team_screen.dart';
+
 double? height = 707;
 double? width = 1440;
 
@@ -318,8 +320,15 @@ List<String> inventoryDetailsImageUrls = [
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlt_j5QPoJpIFeO5ElGNRgoFQGYwM3Y7eotw&usqp=CAU',
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHzKnIon6D6PeqCBGxlroFP-bQzAGTi8fUkg&usqp=CAU',
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgZ3Sg7lP-k0OgUdnUtE0eNT7PmqmqklX8RA&usqp=CAU',
+];
 
-  // Add more image URLs as needed
+List<ProfileMenuItems> profileMenuItems = [
+  ProfileMenuItems(title: "Profile", screen: const Center(child: Text('Screen for Item 1')), id: 1),
+  ProfileMenuItems(title: "Team", screen: const TeamScreen(), id: 2),
+  ProfileMenuItems(title: "Settings", screen: const Center(child: Text('Screen for Item 3')), id: 3),
+  ProfileMenuItems(title: "Subscription", screen: const Center(child: Text('Screen for Item 4')), id: 4),
+  ProfileMenuItems(title: "Help", screen: const Center(child: Text('Screen for Item 1')), id: 5),
+  ProfileMenuItems(title: "Logout", screen: const Center(child: Text('Screen for Item 1')), id: 6),
 ];
 
 // List<String> MenuItems = [

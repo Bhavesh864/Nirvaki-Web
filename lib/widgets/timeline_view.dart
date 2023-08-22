@@ -25,11 +25,8 @@ class CustomTimeLineView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final workitemId = ref.read(selectedWorkItemId.notifier).state;
 
-    print(workitemId);
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10),
-      // margin: const EdgeInsets.symmetric(horizontal: 15),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
@@ -52,7 +49,7 @@ class CustomTimeLineView extends ConsumerWidget {
                 label: Row(
                   children: [
                     CustomText(
-                      title: 'This Week',
+                      title: 'Filter By',
                       size: 10,
                     ),
                     Icon(Icons.arrow_downward_outlined),
@@ -80,7 +77,6 @@ class CustomTimeLineView extends ConsumerWidget {
                   behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                   child: Expanded(
                     child: ListView.builder(
-                      // physics: isScrollable ? const ScrollPhysics() : const NeverScrollableScrollPhysics(),
                       itemCount: activities.length,
                       itemBuilder: (context, index) {
                         return TimelineTile(
