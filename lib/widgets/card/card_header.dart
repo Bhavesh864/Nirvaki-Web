@@ -108,11 +108,11 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                 onSelected: (value) {
                   CardDetails.updateCardStatus(id: cardData.workitemId!, newStatus: value);
                   status![widget.index].status = value;
-                  if (cardData.workitemId!.contains("IN")) {
+                  if (cardData.workitemId!.contains(ItemCategory.isInventory)) {
                     InventoryDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
-                  } else if (cardData.workitemId!.contains("LD")) {
+                  } else if (cardData.workitemId!.contains(ItemCategory.isLead)) {
                     LeadDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
-                  } else if (cardData.workitemId!.contains("TD")) {
+                  } else if (cardData.workitemId!.contains(ItemCategory.isTodo)) {
                     TodoDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
                   }
                   setState(() {});
@@ -156,39 +156,39 @@ bool isTypeisTodo(CardDetails cardData) {
 }
 
 dynamic checkIconByCategory(CardDetails carddata) {
-  if (carddata.workitemId!.contains("IN")) {
+  if (carddata.workitemId!.contains(ItemCategory.isInventory)) {
     return MaterialSymbols.location_home_outlined;
-  } else if (carddata.workitemId!.contains("LD")) {
+  } else if (carddata.workitemId!.contains(ItemCategory.isLead)) {
     return MaterialSymbols.location_away;
-  } else if (carddata.linkedItemType!.contains("LD")) {
+  } else if (carddata.linkedItemType!.contains(ItemCategory.isLead)) {
     return MaterialSymbols.location_away;
-  } else if (carddata.linkedItemType!.contains("IN")) {
+  } else if (carddata.linkedItemType!.contains(ItemCategory.isInventory)) {
     return MaterialSymbols.location_home_outlined;
   }
   return MaterialSymbols.location_home_outlined;
 }
 
 Color checkIconColorByCategory(CardDetails carddata) {
-  if (carddata.workitemId!.contains("IN")) {
+  if (carddata.workitemId!.contains(ItemCategory.isInventory)) {
     return AppColor.inventoryIconColor;
-  } else if (carddata.workitemId!.contains("LD")) {
+  } else if (carddata.workitemId!.contains(ItemCategory.isLead)) {
     return AppColor.leadIconColor;
-  } else if (carddata.linkedItemType!.contains("LD")) {
+  } else if (carddata.linkedItemType!.contains(ItemCategory.isLead)) {
     return AppColor.leadIconColor;
-  } else if (carddata.linkedItemType!.contains("IN")) {
+  } else if (carddata.linkedItemType!.contains(ItemCategory.isInventory)) {
     return AppColor.inventoryIconColor;
   }
   return AppColor.leadIconColor;
 }
 
 Color checkChipColorByCategory(CardDetails carddata) {
-  if (carddata.workitemId!.contains("IN")) {
+  if (carddata.workitemId!.contains(ItemCategory.isInventory)) {
     return AppColor.inventoryChipColor;
-  } else if (carddata.workitemId!.contains("LD")) {
+  } else if (carddata.workitemId!.contains(ItemCategory.isLead)) {
     return AppColor.leadChipColor;
-  } else if (carddata.linkedItemType!.contains("LD")) {
+  } else if (carddata.linkedItemType!.contains(ItemCategory.isLead)) {
     return AppColor.leadChipColor;
-  } else if (carddata.linkedItemType!.contains("IN")) {
+  } else if (carddata.linkedItemType!.contains(ItemCategory.isInventory)) {
     return AppColor.inventoryChipColor;
   }
   return AppColor.inventoryIconColor;

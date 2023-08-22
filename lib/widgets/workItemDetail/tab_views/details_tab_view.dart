@@ -264,11 +264,11 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                     onTap: () {
                                       setState(() {
                                         showConfirmDeleteAttachment(context, () {
-                                          if (widget.id.contains("IN")) {
+                                          if (widget.id.contains(ItemCategory.isInventory)) {
                                             InventoryDetails.deleteAttachment(itemId: widget.id, attachmentIdToDelete: attachment.id!).then(
                                               (value) => widget.updateData(),
                                             );
-                                          } else if (widget.id.contains("LD")) {
+                                          } else if (widget.id.contains(ItemCategory.isLead)) {
                                             LeadDetails.deleteAttachment(itemId: widget.id, attachmentIdToDelete: attachment.id!).then(
                                               (value) => widget.updateData(),
                                             );
