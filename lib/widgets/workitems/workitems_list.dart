@@ -8,8 +8,6 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/card/custom_card.dart';
-
-import '../../pages/largescreen_dashboard.dart';
 import '../../routes/routes.dart';
 
 class WorkItemsList extends ConsumerStatefulWidget {
@@ -94,6 +92,7 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                                     .read(selectedWorkItemId.notifier)
                                     .addItemId(id);
                               } else {
+<<<<<<< HEAD
                                 ref
                                     .read(selectedWorkItemId.notifier)
                                     .addItemId(id);
@@ -102,6 +101,11 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                                     .update((state) => 7);
                                 context.beamToNamed(
                                     '/inventory/inventory-details/$id');
+=======
+                                ref.read(selectedWorkItemId.notifier).addItemId(id);
+
+                                context.beamToNamed('/inventory/inventory-details/$id');
+>>>>>>> 0d25f47c0774f6e26254a7c99729926ee4bcf867
                               }
                             } else if (id.contains('LD')) {
                               if (Responsive.isMobile(context)) {
@@ -112,12 +116,16 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                                     .read(selectedWorkItemId.notifier)
                                     .addItemId(id);
                               } else {
+<<<<<<< HEAD
                                 ref
                                     .read(selectedWorkItemId.notifier)
                                     .addItemId(id);
                                 ref
                                     .read(largeScreenTabsProvider.notifier)
                                     .update((state) => 8);
+=======
+                                ref.read(selectedWorkItemId.notifier).addItemId(id);
+>>>>>>> 0d25f47c0774f6e26254a7c99729926ee4bcf867
                                 context.beamToNamed('/lead/lead-details/$id');
                               }
                             } else if (id.contains('TD')) {
@@ -129,12 +137,16 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                                     .read(selectedWorkItemId.notifier)
                                     .addItemId(id);
                               } else {
+<<<<<<< HEAD
                                 ref
                                     .read(selectedWorkItemId.notifier)
                                     .addItemId(id);
                                 ref
                                     .read(largeScreenTabsProvider.notifier)
                                     .update((state) => 8);
+=======
+                                ref.read(selectedWorkItemId.notifier).addItemId(id);
+>>>>>>> 0d25f47c0774f6e26254a7c99729926ee4bcf867
                                 context.beamToNamed('/todo/todo-details/$id');
                               }
                             }

@@ -12,7 +12,6 @@ class AppColor {
 
   static const leadChipColor = Color(0x0D7109B6);
   static const leadIconColor = Color(0xFF7109B6);
-
   static const mainColor = Color(0xFF000000);
   static const appBgColor = Color(0xFFFAFAFA);
   static const shadowColor = Colors.black87;

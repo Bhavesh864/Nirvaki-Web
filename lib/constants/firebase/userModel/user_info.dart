@@ -52,6 +52,25 @@ class User extends HiveObject {
       required this.image});
 
   // Convert User object to a map
+
+  factory User.fromSnapshot(DocumentSnapshot snapshot) {
+    final json = snapshot.data() as Map<String, dynamic>;
+
+    return User(
+        brokerId: json["brokerId"],
+        status: json["status"],
+        userfirstname: json["userfirstname"],
+        userlastname: json["userlastname"],
+        userId: json["userId"],
+        managerid: json["managerid"],
+        mobile: json["mobile"],
+        managerName: json["managerName"],
+        email: json["email"],
+        image: json["image"],
+        role: json["role"],
+        whatsAppNumber: json["whatsAppNumber"]);
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'brokerId': brokerId,

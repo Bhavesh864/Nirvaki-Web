@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 import 'package:flutter_material_symbols/flutter_material_symbols.dart';
-import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/routes/routes.dart';
 import '../../constants/utils/colors.dart';
 
@@ -22,7 +21,7 @@ class _CustomSpeedDialButtonState extends State<CustomSpeedDialButton> {
       foregroundColor: Colors.white,
       backgroundColor: AppColor.primary,
       overlayColor: Colors.black,
-      renderOverlay: false,
+      // renderOverlay: false,
       overlayOpacity: 0.4,
       children: [
         SpeedDialChild(
@@ -34,11 +33,7 @@ class _CustomSpeedDialButtonState extends State<CustomSpeedDialButton> {
             //     ),
             //   ),
             // );
-            if (Responsive.isMobile(context)) {
-              Navigator.of(context).pushNamed(AppRoutes.addInventory);
-            } else {
-              context.beamToNamed(AppRoutes.addInventory);
-            }
+            context.beamToNamed(AppRoutes.addInventory);
           },
           labelShadow: [
             const BoxShadow(
@@ -64,11 +59,7 @@ class _CustomSpeedDialButtonState extends State<CustomSpeedDialButton> {
             //     ),
             //   ),
             // );
-            if (Responsive.isMobile(context)) {
-              Navigator.of(context).pushNamed(AppRoutes.addLead);
-            } else {
-              context.beamToNamed(AppRoutes.addLead);
-            }
+            context.beamToNamed(AppRoutes.addLead);
           },
           labelShadow: [
             const BoxShadow(
@@ -87,11 +78,7 @@ class _CustomSpeedDialButtonState extends State<CustomSpeedDialButton> {
         ),
         SpeedDialChild(
           onTap: () {
-            if (Responsive.isMobile(context)) {
-              Navigator.of(context).pushNamed(AppRoutes.addTodo);
-            } else {
-              context.beamToNamed(AppRoutes.addTodo);
-            }
+            context.beamToNamed(AppRoutes.addTodo);
           },
           labelShadow: [
             const BoxShadow(

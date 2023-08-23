@@ -1,4 +1,5 @@
 import 'package:beamer/beamer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:responsive_builder/responsive_builder.dart';
@@ -21,11 +22,13 @@ class LayoutView extends StatefulWidget {
 
 class _LayoutViewState extends State<LayoutView> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+  Stream<User?>? authState;
 
   @override
   void initState() {
     super.initState();
     final token = UserHiveMethods.getdata("token");
+    authState = authentication.authStateChanges();
     if (token != null) {
       AppConst.setAccessToken(token);
     }
@@ -37,13 +40,18 @@ class _LayoutViewState extends State<LayoutView> {
     width = MediaQuery.of(context).size.width;
 
     return StreamBuilder(
-      stream: authentication.authStateChanges(),
+      stream: authState,
       builder: (context, snapshot) {
         AppConst.setIsAuthenticated(snapshot.hasData ? true : false);
+
         return Scaffold(
           body: ScreenTypeLayout.builder(
+<<<<<<< HEAD
             breakpoints:
                 const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
+=======
+            breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
+>>>>>>> 0d25f47c0774f6e26254a7c99729926ee4bcf867
             mobile: (p0) => _buildMobileLayout(snapshot.hasData),
             tablet: (p0) => _buildTabletLayout(snapshot.hasData),
             desktop: (p0) => _buildDesktopLayout(snapshot.hasData),
@@ -54,20 +62,10 @@ class _LayoutViewState extends State<LayoutView> {
   }
 
   Widget _buildMobileLayout(bool isAuthenticated) {
+    print('is Auth ------$isAuthenticated');
     if (isAuthenticated) {
       return const SmallScreen();
     } else {
-      // final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
-
-      // if (location.isNotEmpty && location.contains('inventory-details')) {
-      //   return PublicViewInventoryDetails(
-      //     inventoryId: extractItemIdFromPath(location, 'inventory')!,
-      //   );
-      // } else if (location.isNotEmpty && location.contains('lead-details')) {
-      //   return PublicViewLeadDetails(
-      //     leadId: extractItemIdFromPath(location, 'lead')!,
-      //   );
-      // }
       return const LoginScreen();
     }
   }

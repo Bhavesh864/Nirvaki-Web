@@ -43,8 +43,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
     tabviewController = TabController(length: 4, vsync: this);
     final workItemId = ref.read(selectedWorkItemId.notifier).state;
     // inventoryDetails = InventoryDetails.getInventoryDetails(workItemId == '' ? widget.inventoryId : workItemId);
-    inventoryDetails =
-        FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId == '' ? widget.inventoryId : workItemId).snapshots();
+    inventoryDetails = FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId == '' ? widget.inventoryId : workItemId).snapshots();
   }
 
   @override
@@ -159,12 +158,10 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                           context,
                                           'Assignment',
                                           AssignmentWidget(
-                                            imageUrlAssignTo:
-                                                data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
-                                            imageUrlCreatedBy:
-                                                data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                            id: data.inventoryId!,
+                                            assignto: data.assignedto!,
+                                            imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                             createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
-                                            assignTo: data.assignedto![0].firstname! + data.assignedto![0].firstname!,
                                           ),
                                         );
                                       },
@@ -202,7 +199,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                   data: data,
                                 ),
                               if (currentSelectedTab == 1) const ActivityTabView(),
-                              if (currentSelectedTab == 2) const TodoTabView(),
+                              if (currentSelectedTab == 2) TodoTabView(id: data.inventoryId!),
                             ],
                           ),
                         ),
@@ -228,10 +225,10 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                               ),
                               if (Responsive.isDesktop(context))
                                 AssignmentWidget(
-                                  imageUrlAssignTo: data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
+                                  id: data.inventoryId!,
+                                  assignto: data.assignedto!,
                                   imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                   createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
-                                  assignTo: '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
                                 ),
                               if (Responsive.isDesktop(context))
                                 MapViewWidget(

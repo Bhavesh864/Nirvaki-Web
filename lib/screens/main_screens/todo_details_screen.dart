@@ -1,5 +1,9 @@
-// ignore_for_file: invalid_use_of_protected_member
+// ignore_for_file: invalid_use_of_protected_member, avoid_web_libraries_in_flutter
 import 'dart:async';
+<<<<<<< HEAD
+=======
+// import 'dart:html';
+>>>>>>> 0d25f47c0774f6e26254a7c99729926ee4bcf867
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -469,11 +473,19 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen>
                                                                 size: 18,
                                                               ),
                                                               onTap: () {
+<<<<<<< HEAD
                                                                 // if (kIsWeb) {
                                                                 //   AnchorElement anchorElement = AnchorElement(href: attachment.path);
                                                                 //   anchorElement.download = 'Attachment file';
                                                                 //   anchorElement.click();
                                                                 // }
+=======
+                                                                if (kIsWeb) {
+                                                                  // AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                                                  // anchorElement.download = 'Attachment file';
+                                                                  // anchorElement.click();
+                                                                }
+>>>>>>> 0d25f47c0774f6e26254a7c99729926ee4bcf867
                                                               },
                                                             ),
                                                             GestureDetector(
@@ -609,6 +621,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen>
                                 ),
                                 if (Responsive.isDesktop(context))
                                   AssignmentWidget(
+<<<<<<< HEAD
                                     imageUrlAssignTo:
                                         data.assignedto![0].image == null ||
                                                 data.assignedto![0].image!
@@ -623,6 +636,12 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen>
                                         '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
                                     assignTo:
                                         '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
+=======
+                                    assignto: data.assignedto!,
+                                    id: data.todoId!,
+                                    imageUrlCreatedBy: data.createdBy == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
+                                    createdBy: '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
+>>>>>>> 0d25f47c0774f6e26254a7c99729926ee4bcf867
                                   ),
                               ],
                             ),

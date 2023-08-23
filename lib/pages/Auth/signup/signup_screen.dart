@@ -45,7 +45,11 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
   void navigateTopage(SelectedSignupItems notify) {
     final isvalid = key.currentState?.validate();
     if (isvalid!) {
-      Navigator.pushNamed(context, AppRoutes.personalDetailsScreen);
+      // if (Responsive.isMobile(context)) {
+      //   Navigator.pushNamed(context, AppRoutes.personalDetailsScreen);
+      // } else {
+      context.beamToNamed(AppRoutes.personalDetailsScreen);
+      // }
     }
   }
 
@@ -150,11 +154,11 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  if (Responsive.isMobile(context)) {
-                                    Navigator.pushReplacementNamed(context, AppRoutes.loginScreen);
-                                  } else {
-                                    context.beamToNamed(AppRoutes.loginScreen);
-                                  }
+                                  // if (Responsive.isMobile(context)) {
+                                  //   Navigator.pushReplacementNamed(context, AppRoutes.loginScreen);
+                                  // } else {
+                                  context.beamToReplacementNamed(AppRoutes.loginScreen);
+                                  // }
                                 },
                                 child: const CustomText(
                                   title: 'Login',

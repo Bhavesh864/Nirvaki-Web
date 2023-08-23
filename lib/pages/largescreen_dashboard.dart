@@ -23,17 +23,16 @@ import 'package:yes_broker/screens/main_screens/todo_listing_screen.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';
 
-final largeScreenTabsProvider = StateProvider<int>((ref) {
-  return 0;
-});
-
 void userLogout(WidgetRef ref, BuildContext context) {
-  context.beamToNamed('/login');
-  authentication.signOut().then((value) => {Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen)});
+  authentication.signOut().then(
+        (value) => {
+          // Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen),
+          context.beamToReplacementNamed(AppRoutes.loginScreen),
+        },
+      );
   UserHiveMethods.deleteData(AppConst.getAccessToken());
   UserHiveMethods.deleteData("token");
   ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null);
-  ref.read(largeScreenTabsProvider.notifier).update((state) => 0);
 }
 
 class LargeScreen extends ConsumerStatefulWidget {
@@ -44,9 +43,17 @@ class LargeScreen extends ConsumerStatefulWidget {
 }
 
 class LargeScreenState extends ConsumerState<LargeScreen> {
+  showdailoginbottom() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return PositionedDialog();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    // final currentIndex = ref.watch(largeScreenTabsProvider);
     int currentIndex = 0;
     final beamerKey = GlobalKey<BeamerState>();
 
@@ -107,7 +114,6 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                 LargeScreenNavBar(
                   (selectedVal) {
                     if (selectedVal != 'Logout') {
-                      ref.read(largeScreenTabsProvider.notifier).update((state) => 6);
                       final ProfileMenuItems profile = profileMenuItems.firstWhere((element) => element.title == selectedVal);
                       ref.read(selectedProfileItemProvider.notifier).setSelectedItem(profile);
                       context.beamToNamed('/profile');
@@ -269,19 +275,49 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                   radius: 28,
                   backgroundColor: AppColor.primary,
                   child: IconButton(
-                    icon: const Icon(
-                      Icons.chat_outlined,
-                      color: Colors.white,
-                      size: 24,
-                    ),
-                    onPressed: () {
-                      popupMenuItem('title');
-                    },
-                  ),
+                      icon: const Icon(
+                        Icons.chat_outlined,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                      onPressed: showdailoginbottom),
                 ),
               ],
             )
           : null,
+    );
+  }
+}
+
+class PositionedDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 45, right: 70),
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'This is a bottom right dialog.',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                child: Text('Close'),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

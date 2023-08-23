@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -32,13 +33,12 @@ class CommonScreen extends ConsumerWidget {
   const CommonScreen({super.key});
   void logoutaction(WidgetRef ref, BuildContext context) {
     authentication.signOut().then((value) {
-      Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen);
-      // context.beamToReplacementNamed('/');
+      // Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen);
+      context.beamToReplacementNamed('/');
     });
     UserHiveMethods.deleteData(AppConst.getAccessToken());
     ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null);
     UserHiveMethods.deleteData("token");
-    ref.read(largeScreenTabsProvider.notifier).update((state) => 0);
   }
 
   @override

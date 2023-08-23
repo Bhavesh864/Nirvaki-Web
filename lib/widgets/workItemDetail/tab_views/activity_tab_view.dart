@@ -15,10 +15,10 @@ class ActivityTabView extends ConsumerStatefulWidget {
   const ActivityTabView({super.key});
 
   @override
-  _ActivityTabViewState createState() => _ActivityTabViewState();
+  ActivityTabViewState createState() => ActivityTabViewState();
 }
 
-class _ActivityTabViewState extends ConsumerState<ActivityTabView> {
+class ActivityTabViewState extends ConsumerState<ActivityTabView> {
   final TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {

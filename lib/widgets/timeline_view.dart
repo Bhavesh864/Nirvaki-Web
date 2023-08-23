@@ -119,8 +119,8 @@ class CustomTimeLineView extends ConsumerWidget {
                 );
               }
               return Container(
-                decoration: BoxDecoration(color: Colors.amber),
-                child: Text("data"),
+                decoration: const BoxDecoration(color: Colors.amber),
+                child: const Text("data"),
               );
             },
           ),
