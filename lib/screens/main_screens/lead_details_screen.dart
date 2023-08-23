@@ -160,12 +160,10 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                             context,
                                             'Assignment',
                                             AssignmentWidget(
-                                              imageUrlAssignTo:
-                                                  data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
-                                              imageUrlCreatedBy:
-                                                  data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                              id: data.leadId!,
+                                              assignto: data.assignedto!,
+                                              imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                               createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
-                                              assignTo: data.assignedto![0].firstname! + data.assignedto![0].firstname!,
                                             ),
                                           );
                                         },
@@ -209,7 +207,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                     },
                                   ),
                                 if (currentSelectedTab == 1) const ActivityTabView(),
-                                if (currentSelectedTab == 2) const TodoTabView(),
+                                if (currentSelectedTab == 2) TodoTabView(id: data.leadId!),
                               ],
                             ),
                           ),
@@ -234,10 +232,10 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                 ),
                                 if (Responsive.isDesktop(context))
                                   AssignmentWidget(
-                                    imageUrlAssignTo: data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
+                                    id: data.leadId!,
+                                    assignto: data.assignedto!,
                                     imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                     createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
-                                    assignTo: '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
                                   ),
                                 if (Responsive.isDesktop(context))
                                   MapViewWidget(

@@ -100,15 +100,29 @@ class CardFooter extends StatelessWidget {
           ),
         ),
         const Spacer(),
-        Container(
-          margin: const EdgeInsets.only(right: 5),
-          height: 20,
-          width: 20,
-          decoration: BoxDecoration(
-            image: DecorationImage(image: NetworkImage(cardData.assignedto![0].image!.isEmpty ? noImg : cardData.assignedto![0].image!), fit: BoxFit.fill),
-            borderRadius: BorderRadius.circular(40),
-          ),
-        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: cardData.assignedto!.asMap().entries.map((entry) {
+            final index = entry.key;
+            final user = entry.value;
+            return Transform.translate(
+              offset: Offset(index * -8.0, 0),
+              child: Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(
+                      user.image!.isEmpty ? noImg : user.image!,
+                    ),
+                    fit: BoxFit.fill,
+                  ),
+                  borderRadius: BorderRadius.circular(40),
+                ),
+              ),
+            );
+          }).toList(),
+        )
       ],
     );
   }

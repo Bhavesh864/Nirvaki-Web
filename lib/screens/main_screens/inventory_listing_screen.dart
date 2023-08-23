@@ -32,6 +32,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
   bool showTableView = false;
   List<String> selectedFilters = [];
   final TextEditingController searchController = TextEditingController();
+  RangeValues rateRange = const RangeValues(0, 0);
 
   Future<List<CardDetails>>? future;
   List<CardDetails>? status;
@@ -70,6 +71,10 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
 
           filteredInventoryList = filteredInventoryList.where((item) {
             final bool isBedRoomMatch = selectedFilters.isEmpty || selectedFilters.contains('${item.roomconfig!.bedroom!}BHK');
+            // final double itemRateStart = double.parse(item.propertypricerange!.arearangestart!);
+
+            // final bool isRateInRange = itemRateStart >= rateRange.start;
+
             return isBedRoomMatch;
           }).toList();
 
@@ -130,7 +135,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                                         final availableWidth = constraints.maxWidth;
                                         return Table(
                                           columnWidths: {
-                                            0: FixedColumnWidth(availableWidth * 0.25), // Adjust the percentages as needed
+                                            0: FixedColumnWidth(availableWidth * 0.25),
                                             1: FixedColumnWidth(availableWidth * 0.18),
                                             2: FixedColumnWidth(availableWidth * 0.15),
                                             3: FixedColumnWidth(availableWidth * 0.15),
@@ -193,7 +198,6 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                                                 ref.read(selectedWorkItemId.notifier).addItemId(id);
                                               } else {
                                                 ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                                ref.read(largeScreenTabsProvider.notifier).update((state) => 7);
                                                 context.beamToNamed('/inventory/inventory-details/$id');
                                               }
                                             },
@@ -233,9 +237,10 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                               isFilterOpen = false;
                             });
                           },
-                          setFilters: (p0) {
+                          setFilters: (p0, selectedRange) {
                             setState(() {
                               selectedFilters = p0;
+                              rateRange = selectedRange;
                             });
                           },
                           originalCardList: inventoryList,
@@ -288,17 +293,14 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
           ),
         ),
         _buildWorkItemTableItem(
-            const Text(
-              'ASSIGNED TO',
-              style: TextStyle(
-                color: AppColor.cardtitleColor,
-              ),
+          const Text(
+            'ASSIGNED TO',
+            style: TextStyle(
+              color: AppColor.cardtitleColor,
             ),
-            align: Alignment.center),
-        // _buildWorkItemTableItem(
-        //   Container(),
-        //   align: Alignment.center,
-        // ),
+          ),
+          align: Alignment.center,
+        ),
       ],
     );
   }
@@ -441,20 +443,17 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
           ),
         ),
         _buildWorkItemTableItem(
-            Container(
-              margin: const EdgeInsets.only(right: 5),
-              height: 20,
-              width: 20,
-              decoration: BoxDecoration(
-                image: DecorationImage(image: NetworkImage(inventoryItem.assignedto![0].image!.isEmpty ? noImg : inventoryItem.assignedto![0].image!), fit: BoxFit.fill),
-                borderRadius: BorderRadius.circular(40),
-              ),
+          Container(
+            margin: const EdgeInsets.only(right: 5),
+            height: 20,
+            width: 20,
+            decoration: BoxDecoration(
+              image: DecorationImage(image: NetworkImage(inventoryItem.assignedto![0].image!.isEmpty ? noImg : inventoryItem.assignedto![0].image!), fit: BoxFit.fill),
+              borderRadius: BorderRadius.circular(40),
             ),
-            align: Alignment.center),
-        // _buildWorkItemTableItem(
-        //   Container(),
-        //   align: Alignment.center,
-        // ),
+          ),
+          align: Alignment.center,
+        ),
       ],
     );
   }

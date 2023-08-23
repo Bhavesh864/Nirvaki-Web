@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -32,7 +33,11 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
   void navigateTopage(SelectedSignupItems notify) {
     final isvalid = key.currentState?.validate();
     if (isvalid!) {
-      Navigator.pushNamed(context, AppRoutes.companyDetailsScreen);
+      // if (Responsive.isMobile(context)) {
+      //   Navigator.pushNamed(context, AppRoutes.companyDetailsScreen);
+      // } else {
+      context.beamToNamed(AppRoutes.companyDetailsScreen);
+      // }
     }
   }
 

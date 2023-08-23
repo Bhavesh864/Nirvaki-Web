@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
@@ -90,7 +91,8 @@ class CustomForgetPassword extends StatelessWidget {
     return Center(
       child: InkWell(
         onTap: () {
-          Navigator.of(context).pushNamed(AppRoutes.forgetPassword);
+          // Navigator.of(context).pushNamed(AppRoutes.forgetPassword);
+          context.beamToNamed(AppRoutes.forgetPassword);
         },
         child: const CustomText(
           title: 'Forget password?',

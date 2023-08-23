@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
   }
 
-  void loginwithemailpassword() {
+  void loginwithemailpassword(BuildContext context) {
     final isvalid = key.currentState?.validate();
     if (isvalid!) {
       setState(() {
@@ -42,16 +42,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 setState(() {
                   isloading = false;
                 }),
-                if (Responsive.isMobile(context))
-                  {
-                    Navigator.of(context).pushReplacementNamed(AppRoutes.homeScreen),
-                    AppConst.setPublicView(false),
-                  }
-                else
-                  {
-                    context.beamToNamed('/'),
-                    AppConst.setPublicView(false),
-                  }
+                context.beamToReplacementNamed('/'),
+                AppConst.setPublicView(false),
               }
             else
               {
@@ -146,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               width: w,
                               child: CustomButton(
                                 text: 'Login',
-                                onPressed: () => loginwithemailpassword(),
+                                onPressed: () => loginwithemailpassword(context),
                                 height: 40.0,
                               ),
                             ),
@@ -155,11 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 10),
                       CustomSignUpNow(
                         onPressSignUp: () {
-                          if (Responsive.isMobile(context)) {
-                            Navigator.pushNamed(context, AppRoutes.singupscreen);
-                          } else {
-                            context.beamToNamed(AppRoutes.singupscreen);
-                          }
+                          context.beamToNamed(AppRoutes.singupscreen);
                         },
                       ),
                     ],

@@ -1,8 +1,11 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
+
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/widgets/calendar_view.dart';
@@ -43,9 +46,6 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
         if (snapshot.hasData) {
           List<CardDetails> workItems = snapshot.data!.where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
           List<CardDetails> todoItems = snapshot.data!.where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
-          List<CardDetails> filteredItems = todoItems.where((item) {
-            return item.assignedto!.any((user) => user.userid == AppConst.getAccessToken());
-          }).toList();
           return Row(
             children: [
               Expanded(
@@ -54,7 +54,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                   padding: const EdgeInsets.only(top: 8, left: 0),
                   child: WorkItemsList(
                     title: "To do",
-                    getCardDetails: filteredItems,
+                    getCardDetails: todoItems,
                   ),
                 ),
               ),
