@@ -17,6 +17,15 @@ class AppConst {
     }
   }
 
+  static BuildContext? outerContext;
+  static BuildContext? getOuterContext() {
+    return outerContext;
+  }
+
+  static setOuterContext(BuildContext context) {
+    outerContext = context;
+  }
+
   static String? _fcmToken;
   static String? getFcmToken() {
     return _fcmToken;

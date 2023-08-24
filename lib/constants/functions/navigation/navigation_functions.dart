@@ -44,3 +44,19 @@ void navigateBasedOnId(BuildContext context, String id, WidgetRef ref) {
     context.beamToNamed(route);
   }
 }
+
+String navigationUrl(BuildContext context, String id) {
+  final routePrefix = id.substring(0, 2);
+
+  String route = 'inventory/inventory-details/$id';
+
+  if (routePrefix == 'IN') {
+    route = 'inventory/inventory-details/$id';
+  } else if (routePrefix == 'LD') {
+    route = 'lead/lead-details/$id';
+  } else if (routePrefix == 'TD') {
+    route = 'todo/todo-details/$id';
+  }
+
+  return route;
+}

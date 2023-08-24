@@ -3,32 +3,18 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
+import 'package:yes_broker/constants/functions/navigation/navigation_functions.dart';
+import 'package:yes_broker/widgets/workItemDetail/inventory_details_header.dart';
 import '../../Customs/custom_chip.dart';
 import '../../constants/utils/constants.dart';
 
 class CardFooter extends StatelessWidget {
   final int index;
   final List<CardDetails> cardDetails;
-  final bool? call;
-  final bool? whatsapp;
-  final bool? edit;
-  final bool? propertyId;
-  final bool? name;
-  final bool? showAvatarNumber;
-  final bool? showAvatar1;
-  final bool? showAvatar2;
 
   const CardFooter({
     Key? key,
     required this.index,
-    this.call = true,
-    this.whatsapp = true,
-    this.edit = true,
-    this.propertyId = true,
-    this.name = true,
-    this.showAvatarNumber = false,
-    this.showAvatar1 = true,
-    this.showAvatar2 = false,
     required this.cardDetails,
   }) : super(key: key);
 
@@ -83,11 +69,22 @@ class CardFooter extends StatelessWidget {
               //     paddingHorizontal: 3,
               //   ),
               // ),
-              const CustomChip(
-                label: Icon(
-                  Icons.share_outlined,
+              GestureDetector(
+                onTap: () {
+                  shareUrl(
+                    context,
+                    textToCombine: navigationUrl(
+                      context,
+                      cardDetails[index].workitemId!,
+                    ),
+                  );
+                },
+                child: const CustomChip(
+                  label: Icon(
+                    Icons.share_outlined,
+                  ),
+                  paddingHorizontal: 3,
                 ),
-                paddingHorizontal: 3,
               ),
               CustomChip(
                 label: CustomText(

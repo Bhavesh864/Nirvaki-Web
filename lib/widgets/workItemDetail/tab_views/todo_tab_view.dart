@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_chip.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/functions/navigation/navigation_functions.dart';
 import 'package:yes_broker/routes/routes.dart';
@@ -19,11 +20,19 @@ class TodoTabView extends ConsumerStatefulWidget {
   const TodoTabView({super.key, required this.id});
 
   @override
-  _TodoTabViewState createState() => _TodoTabViewState();
+  TodoTabViewState createState() => TodoTabViewState();
 }
 
-class _TodoTabViewState extends ConsumerState<TodoTabView> {
+class TodoTabViewState extends ConsumerState<TodoTabView> {
+  TextEditingController searchController = TextEditingController();
   bool showTableView = false;
+  Future<List<CardDetails>>? future;
+
+  @override
+  void initState() {
+    future = CardDetails.getcardByInventoryId(widget.id);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +46,10 @@ class _TodoTabViewState extends ConsumerState<TodoTabView> {
               SizedBox(
                 width: Responsive.isMobile(context) ? MediaQuery.of(context).size.width * 0.55 : MediaQuery.of(context).size.width * 0.3,
                 child: TextField(
-                  controller: TextEditingController(),
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                  controller: searchController,
                   decoration: const InputDecoration(
                     hintText: 'Search',
                     prefixIcon: Icon(Icons.search),
@@ -64,7 +76,7 @@ class _TodoTabViewState extends ConsumerState<TodoTabView> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      context.beamToNamed(AppRoutes.addTodo);
+                      AppConst.getOuterContext()!.beamToNamed(AppRoutes.addTodo);
                     },
                     child: const Row(
                       children: [
@@ -83,9 +95,8 @@ class _TodoTabViewState extends ConsumerState<TodoTabView> {
           ),
         ),
         FutureBuilder(
-            future: CardDetails.getcardByInventoryId(widget.id),
+            future: future,
             builder: (context, snapshot) {
-              final todoList = snapshot.data;
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const SizedBox(
                   height: 300,
@@ -95,11 +106,18 @@ class _TodoTabViewState extends ConsumerState<TodoTabView> {
                 );
               }
               if (snapshot.hasData) {
+                final todoList = snapshot.data;
+
+                List<CardDetails> filteredList = todoList!.where((card) {
+                  final searchTerm = searchController.text.toLowerCase();
+                  return card.cardTitle!.toLowerCase().contains(searchTerm) || card.cardType!.toLowerCase().contains(searchTerm);
+                }).toList();
+
                 if (showTableView) {
-                  final tableRowList = todoList!.map((e) {
-                    return buildWorkItemRowTile(e, todoList.indexOf(e), todoList);
+                  final tableRowList = filteredList.map((e) {
+                    return buildWorkItemRowTile(e, filteredList.indexOf(e), filteredList);
                   });
-                  return todoList.isNotEmpty
+                  return filteredList.isNotEmpty
                       ? Container(
                           width: double.infinity,
                           margin: const EdgeInsets.symmetric(horizontal: 0),
@@ -137,7 +155,7 @@ class _TodoTabViewState extends ConsumerState<TodoTabView> {
                           ),
                         );
                 } else {
-                  return todoList!.isNotEmpty
+                  return filteredList.isNotEmpty
                       ? Container(
                           decoration: BoxDecoration(
                             color: AppColor.secondary,
@@ -148,17 +166,13 @@ class _TodoTabViewState extends ConsumerState<TodoTabView> {
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: Responsive.isMobile(context) ? 1 : 2,
-                                mainAxisSpacing: 10.0, // Spacing between rows
-                                crossAxisSpacing: 10.0,
-                                mainAxisExtent: 170 // Spacing between columns
-                                ),
-                            itemCount: todoList.length,
+                                crossAxisCount: Responsive.isMobile(context) ? 1 : 2, mainAxisSpacing: 10.0, crossAxisSpacing: 10.0, mainAxisExtent: 170),
+                            itemCount: filteredList.length,
                             itemBuilder: (context, index) => GestureDetector(
                               onTap: () {
-                                navigateBasedOnId(context, todoList[index].workitemId!, ref);
+                                navigateBasedOnId(context, filteredList[index].workitemId!, ref);
                               },
-                              child: CustomCard(cardDetails: todoList, index: index),
+                              child: CustomCard(cardDetails: filteredList, index: index),
                             ),
                           ),
                         )

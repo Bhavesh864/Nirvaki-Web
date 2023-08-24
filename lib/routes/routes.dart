@@ -17,6 +17,7 @@ import 'package:yes_broker/widgets/workitems/workitem_filter_view.dart';
 // Local Files Imports
 import '../Customs/responsive.dart';
 import '../constants/firebase/detailsModels/card_details.dart';
+import '../layout.dart';
 import '../pages/Auth/signup/company_details.dart';
 import '../screens/main_screens/caledar_screen.dart';
 import '../screens/main_screens/chat_screen.dart';
@@ -80,14 +81,14 @@ List<MenuItem> sideBarItems = [
   MenuItem(
     nav: '/chat',
     label: chatPageLabel,
-    iconData: calendarIcon,
-    screen: const CalendarScreen(),
+    iconData: chatIcon,
+    screen: const ChatScreen(),
   ),
   MenuItem(
     nav: '/calendar',
     label: calendarPageLabel,
-    iconData: chatIcon,
-    screen: const ChatScreen(),
+    iconData: calendarIcon,
+    screen: const CalendarScreen(),
   ),
   MenuItem(
     label: profilePageLabel,
@@ -184,6 +185,26 @@ class AppRoutes {
     );
   }
 }
+
+final routerDelegate = BeamerDelegate(
+  setBrowserTabTitle: false,
+  notFoundPage: const BeamPage(child: LayoutView()),
+  locationBuilder: RoutesLocationBuilder(
+    routes: {
+      '/': (p0, p1, p2) => const LayoutView(),
+      '/profile': (p0, p1, p2) => const LargeScreen(),
+      AppRoutes.addInventory: (p0, p1, p2) => const AddInventory(),
+      AppRoutes.addLead: (p0, p1, p2) => const AddLead(),
+      AppRoutes.addTodo: (p0, p1, p2) => const AddTodo(),
+      AppRoutes.editTodo: (p0, p1, data) {
+        return const EditTodo();
+      },
+      AppRoutes.singupscreen: (p0, p1, p2) => const SignUpScreen(),
+      AppRoutes.personalDetailsScreen: (p0, p1, p2) => const PersonalDetailsAuthScreen(),
+      AppRoutes.companyDetailsScreen: (p0, p1, p2) => const CompanyDetailsAuthScreen(),
+    },
+  ),
+);
 
 class BeamerScreenNavigation extends StatelessWidget {
   const BeamerScreenNavigation({
