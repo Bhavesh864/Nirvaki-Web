@@ -1,5 +1,6 @@
 // ignore_for_file: invalid_use_of_protected_member, avoid_web_libraries_in_flutter
 import 'dart:async';
+
 // import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -456,16 +457,16 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                     ),
                                   ),
                                 ),
-                                CustomChip(
-                                  color: AppColor.primary.withOpacity(0.1),
-                                  label: CustomText(
-                                    title: data.linkedWorkItem![0].workItemType!,
-                                    size: 10,
-                                    color: AppColor.primary,
-                                  ),
-                                ),
+                                // CustomChip(
+                                //   color: AppColor.primary.withOpacity(0.1),
+                                //   label: CustomText(
+                                //     title: data.linkedWorkItem![0].workItemType!,
+                                //     size: 10,
+                                //     color: AppColor.primary,
+                                //   ),
+                                // ),
                                 CustomButton(
-                                  text: 'View Inventory Details',
+                                  text: data.linkedWorkItem![0].workItemId!.contains('LD') ? 'View Lead Details' : 'View Inventory Details',
                                   onPressed: () {
                                     navigateBasedOnId(context, data.linkedWorkItem![0].workItemId!, ref);
                                   },

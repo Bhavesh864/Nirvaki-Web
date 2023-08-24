@@ -78,7 +78,7 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
           padding: const EdgeInsets.only(top: 18, bottom: 8),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const Icon(Icons.person_add_alt_outlined),
               const Padding(
