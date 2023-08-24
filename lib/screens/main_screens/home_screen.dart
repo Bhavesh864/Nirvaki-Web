@@ -1,11 +1,8 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
-
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/widgets/calendar_view.dart';
@@ -26,8 +23,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   void initState() {
     super.initState();
     getCardDetails = CardDetails.getCardDetails();
+
     print(AppConst.getAccessToken());
-    // ref.read(selectedWorkItemId.notifier).clear();
   }
 
   @override

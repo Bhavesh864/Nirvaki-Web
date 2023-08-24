@@ -1,24 +1,17 @@
 // ignore_for_file: invalid_use_of_protected_member
-
-import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/constants/functions/navigation/navigation_functions.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/widgets/top_search_bar.dart';
 import 'package:yes_broker/widgets/workitems/workitem_filter_view.dart';
-import '../../Customs/custom_chip.dart';
-import '../../Customs/custom_text.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/utils/constants.dart';
-import '../../pages/largescreen_dashboard.dart';
-import '../../riverpodstate/selected_workitem.dart';
-import '../../widgets/app/nav_bar.dart';
-import '../../widgets/card/card_header.dart';
 import '../../widgets/card/custom_card.dart';
+import '../../widgets/table_view/table_view_widgets.dart';
 
 class InventoryListingScreen extends ConsumerStatefulWidget {
   const InventoryListingScreen({super.key});
@@ -81,7 +74,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
           status = filteredInventoryList;
 
           final tableRowList = filteredInventoryList.map((e) {
-            return _buildWorkItemRowTile(e, filteredInventoryList.indexOf(e), status);
+            return buildWorkItemRowTile(e, filteredInventoryList.indexOf(e), status);
           });
 
           return Row(
@@ -147,7 +140,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                                             horizontalInside: BorderSide(color: Colors.grey.withOpacity(.5), width: 1.5),
                                           ),
                                           children: [
-                                            _buildTableHeader(),
+                                            buildTableHeader(),
                                             ...tableRowList,
                                           ],
                                         );
@@ -184,22 +177,14 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                                                 : Responsive.isTablet(context) || isFilterOpen
                                                     ? 2
                                                     : 3,
-                                            // mainAxisSpacing: 5.0,
                                             crossAxisSpacing: 10.0,
                                             mainAxisExtent: 160),
                                         itemCount: filteredInventoryList.length,
                                         itemBuilder: (context, index) {
+                                          final id = filteredInventoryList[index].workitemId!;
                                           return GestureDetector(
                                             onTap: () {
-                                              final id = filteredInventoryList[index].workitemId!;
-
-                                              if (Responsive.isMobile(context)) {
-                                                Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
-                                                ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                              } else {
-                                                ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                                context.beamToNamed('/inventory/inventory-details/$id');
-                                              }
+                                              navigateBasedOnId(context, id, ref);
                                             },
                                             child: CustomCard(index: index, cardDetails: filteredInventoryList),
                                           );
@@ -254,219 +239,6 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
         }
         return const SizedBox.shrink();
       },
-    );
-  }
-
-  TableRow _buildTableHeader() {
-    return TableRow(
-      children: [
-        _buildWorkItemTableItem(
-          const Text(
-            'DESCRIPTION',
-            style: TextStyle(
-              color: AppColor.cardtitleColor,
-            ),
-          ),
-        ),
-        _buildWorkItemTableItem(
-          const Text(
-            'DETAILS',
-            style: TextStyle(
-              color: AppColor.cardtitleColor,
-            ),
-          ),
-        ),
-        _buildWorkItemTableItem(
-          const Text(
-            'STATUS',
-            style: TextStyle(
-              color: AppColor.cardtitleColor,
-            ),
-          ),
-        ),
-        _buildWorkItemTableItem(
-          const Text(
-            'OWNER',
-            style: TextStyle(
-              color: AppColor.cardtitleColor,
-            ),
-          ),
-        ),
-        _buildWorkItemTableItem(
-          const Text(
-            'ASSIGNED TO',
-            style: TextStyle(
-              color: AppColor.cardtitleColor,
-            ),
-          ),
-          align: Alignment.center,
-        ),
-      ],
-    );
-  }
-
-  TableRow _buildWorkItemRowTile(
-    CardDetails inventoryItem,
-    int index,
-    List<CardDetails>? status,
-  ) {
-    return TableRow(
-      key: ValueKey(inventoryItem.workitemId),
-      children: [
-        _buildWorkItemTableItem(
-          Text(
-            inventoryItem.cardTitle!,
-          ),
-        ),
-        _buildWorkItemTableItem(
-          ListView(
-            scrollDirection: Axis.horizontal,
-            shrinkWrap: true,
-            children: [
-              CustomChip(
-                  label: Icon(
-                    checkIconByCategory(inventoryItem),
-                    color: checkIconColorByCategory(inventoryItem),
-                    size: 18,
-                    // weight: 10.12,
-                  ),
-                  color: checkChipColorByCategory(inventoryItem)),
-              checkNotNUllItem(inventoryItem.roomconfig?.bedroom)
-                  ? CustomChip(
-                      label: CustomText(
-                        title: "${inventoryItem.roomconfig?.bedroom}BHK+${inventoryItem.roomconfig?.additionalroom?[0] ?? ""}",
-                        size: 10,
-                      ),
-                    )
-                  : const SizedBox(),
-              isTypeisTodo(inventoryItem)
-                  ? CustomChip(
-                      color: AppColor.primary.withOpacity(0.1),
-                      label: CustomText(
-                        title: "${inventoryItem.cardType}",
-                        size: 10,
-                        color: AppColor.primary,
-                      ),
-                    )
-                  : const SizedBox(),
-              checkNotNUllItem(inventoryItem.propertyarearange?.arearangestart)
-                  ? CustomChip(
-                      label: CustomText(
-                        title: "${inventoryItem.propertyarearange?.arearangestart} ${inventoryItem.propertyarearange?.unit}",
-                        size: 10,
-                      ),
-                    )
-                  : const SizedBox(),
-              checkNotNUllItem(inventoryItem.propertypricerange?.arearangestart)
-                  ? CustomChip(
-                      label: CustomText(
-                        title: "${inventoryItem.propertypricerange?.arearangestart}${inventoryItem.propertypricerange?.unit}",
-                        size: 10,
-                      ),
-                    )
-                  : const SizedBox(),
-              checkNotNUllItem(inventoryItem.cardCategory)
-                  ? CustomChip(
-                      label: CustomText(
-                        title: inventoryItem.cardCategory!,
-                        size: 10,
-                      ),
-                    )
-                  : const SizedBox(),
-            ],
-          ),
-        ),
-        _buildWorkItemTableItem(
-          PopupMenuButton(
-            initialValue: status ?? inventoryItem.status,
-            splashRadius: 0,
-            padding: EdgeInsets.zero,
-            color: Colors.white.withOpacity(1),
-            offset: const Offset(10, 40),
-            itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
-            onSelected: (value) {
-              CardDetails.updateCardStatus(id: inventoryItem.workitemId!, newStatus: value);
-              status[index].status = value;
-              setState(() {});
-            },
-            child: IntrinsicWidth(
-              child: Chip(
-                label: Row(
-                  children: [
-                    CustomText(
-                      title: status![index].status ?? inventoryItem.status!,
-                      color: taskStatusColor(status[index].status ?? inventoryItem.status!),
-                      size: 10,
-                    ),
-                    Icon(
-                      Icons.expand_more,
-                      size: 18,
-                      color: taskStatusColor(status[index].status ?? inventoryItem.status!),
-                    ),
-                  ],
-                ),
-                backgroundColor: taskStatusColor(status[index].status ?? inventoryItem.status!).withOpacity(0.1),
-              ),
-            ),
-          ),
-        ),
-        _buildWorkItemTableItem(
-          ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              Center(
-                child: Container(
-                  margin: const EdgeInsets.only(right: 3),
-                  child: Text(
-                    "${inventoryItem.customerinfo!.firstname!} ${inventoryItem.customerinfo!.lastname!}",
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-              const CustomChip(
-                label: Icon(
-                  Icons.call_outlined,
-                ),
-                paddingHorizontal: 3,
-              ),
-              const CustomChip(
-                label: FaIcon(
-                  FontAwesomeIcons.whatsapp,
-                ),
-                paddingHorizontal: 3,
-              ),
-            ],
-          ),
-        ),
-        _buildWorkItemTableItem(
-          Container(
-            margin: const EdgeInsets.only(right: 5),
-            height: 20,
-            width: 20,
-            decoration: BoxDecoration(
-              image: DecorationImage(image: NetworkImage(inventoryItem.assignedto![0].image!.isEmpty ? noImg : inventoryItem.assignedto![0].image!), fit: BoxFit.fill),
-              borderRadius: BorderRadius.circular(40),
-            ),
-          ),
-          align: Alignment.center,
-        ),
-      ],
-    );
-  }
-
-  TableCell _buildWorkItemTableItem(Widget child, {Alignment align = Alignment.centerLeft}) {
-    return TableCell(
-      verticalAlignment: TableCellVerticalAlignment.middle,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 0),
-        alignment: align,
-        height: 70,
-        child: child,
-      ),
     );
   }
 }

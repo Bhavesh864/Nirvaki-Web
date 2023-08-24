@@ -36,23 +36,25 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         isloading = true;
       });
-      signinMethod(email: emailcontroller.text, password: passwordcontroller.text).then((value) => {
-            if (value == 'success')
-              {
-                setState(() {
-                  isloading = false;
-                }),
-                context.beamToReplacementNamed('/'),
-                AppConst.setPublicView(false),
-              }
-            else
-              {
-                setState(() {
-                  isloading = false;
-                }),
-                customSnackBar(context: context, text: value!)
-              }
-          });
+      signinMethod(
+              email: emailcontroller.text, password: passwordcontroller.text)
+          .then((value) => {
+                if (value == 'success')
+                  {
+                    setState(() {
+                      isloading = false;
+                    }),
+                    context.beamToReplacementNamed('/'),
+                    AppConst.setPublicView(false),
+                  }
+                else
+                  {
+                    setState(() {
+                      isloading = false;
+                    }),
+                    customSnackBar(context: context, text: value!)
+                  }
+              });
     }
   }
 
@@ -63,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 30),
+          // padding: const EdgeInsets.symmetric(vertical: 30),
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage(authBgImage),
@@ -76,81 +78,99 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           child: Center(
             child: Card(
-              child: Container(
-                width: Responsive.isMobile(context) ? w * 0.9 : 500,
-                padding: const EdgeInsets.all(25),
-                child: Form(
-                  key: key,
-                  child: Column(
-                    children: [
-                      const CustomAppLogo(),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 10),
-                        child: Text(
-                          "Log In",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
+              child: SingleChildScrollView(
+                child: Container(
+                  width: Responsive.isMobile(context) ? w * 0.9 : 500,
+                  height: 430,
+                  padding: const EdgeInsets.all(25),
+                  child: Form(
+                    key: key,
+                    child: Column(
+                      children: [
+                        const CustomAppLogo(),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 10),
+                          child: Text(
+                            "Log In",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      SizedBox(
-                        width: w,
-                        child: CustomButton(
-                          leftIcon: Icons.g_mobiledata_rounded,
-                          text: 'Continue with Google',
-                          lefticonColor: Colors.white,
-                          onPressed: () {},
+                        const SizedBox(height: 10),
+                        // SizedBox(
+                        //   width: w,
+                        //   child: CustomButton(
+                        //     leftIcon: Icons.g_mobiledata_rounded,
+                        //     text: 'Continue with Google',
+                        //     lefticonColor: Colors.white,
+                        //     onPressed: () {},
+                        //   ),
+                        // ),
+                        // const SizedBox(height: 10),
+                        // SizedBox(
+                        //   width: w,
+                        //   child: CustomButton(
+                        //       leftIcon: Icons.facebook_sharp,
+                        //       text: 'Continue with facebook',
+                        //       buttonColor: Colors.white,
+                        //       lefticonColor: Colors.blue,
+                        //       textColor: Colors.black,
+                        //       onPressed: () {}),
+                        // ),
+                        // const SizedBox(height: 10),
+                        // SizedBox(
+                        //   width: w,
+                        //   child: CustomButton(
+                        //       leftIcon: Icons.apple,
+                        //       text: 'Continue with apple',
+                        //       buttonColor: Colors.white,
+                        //       textColor: Colors.black,
+                        //       lefticonColor: Colors.black,
+                        //       onPressed: () {}),
+                        // ),
+                        // const SizedBox(height: 10),
+                        // const CustomOrDivider(),
+                        const SizedBox(
+                          height: 10,
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      SizedBox(
-                        width: w,
-                        child: CustomButton(
-                            leftIcon: Icons.facebook_sharp,
-                            text: 'Continue with facebook',
-                            buttonColor: Colors.white,
-                            lefticonColor: Colors.blue,
-                            textColor: Colors.black,
-                            onPressed: () {}),
-                      ),
-                      const SizedBox(height: 10),
-                      SizedBox(
-                        width: w,
-                        child: CustomButton(
-                            leftIcon: Icons.apple, text: 'Continue with apple', buttonColor: Colors.white, textColor: Colors.black, lefticonColor: Colors.black, onPressed: () {}),
-                      ),
-                      const SizedBox(height: 10),
-                      const CustomOrDivider(),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 5),
-                        child: CustomTextInput(controller: emailcontroller, labelText: 'Email address', validator: validateEmail),
-                      ),
-                      CustomTextInput(controller: passwordcontroller, labelText: 'Password', obscureText: true, rightIcon: Icons.remove_red_eye, validator: validatePassword),
-                      const SizedBox(height: 10),
-                      isloading
-                          ? const Center(child: CircularProgressIndicator.adaptive())
-                          : SizedBox(
-                              width: w,
-                              child: CustomButton(
-                                text: 'Login',
-                                onPressed: () => loginwithemailpassword(context),
-                                height: 40.0,
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 5),
+                          child: CustomTextInput(
+                              controller: emailcontroller,
+                              labelText: 'Email address',
+                              validator: validateEmail),
+                        ),
+                        CustomTextInput(
+                            controller: passwordcontroller,
+                            labelText: 'Password',
+                            obscureText: true,
+                            rightIcon: Icons.remove_red_eye,
+                            validator: validatePassword),
+                        const SizedBox(height: 10),
+                        isloading
+                            ? const Center(
+                                child: CircularProgressIndicator.adaptive())
+                            : SizedBox(
+                                width: w,
+                                child: CustomButton(
+                                  text: 'Login',
+                                  onPressed: () =>
+                                      loginwithemailpassword(context),
+                                  height: 40.0,
+                                ),
                               ),
-                            ),
-                      const SizedBox(height: 10),
-                      const CustomForgetPassword(),
-                      const SizedBox(height: 10),
-                      CustomSignUpNow(
-                        onPressSignUp: () {
-                          context.beamToNamed(AppRoutes.singupscreen);
-                        },
-                      ),
-                    ],
+                        const SizedBox(height: 10),
+                        const CustomForgetPassword(),
+                        const SizedBox(height: 10),
+                        CustomSignUpNow(
+                          onPressSignUp: () {
+                            context.beamToNamed(AppRoutes.singupscreen);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

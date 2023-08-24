@@ -169,24 +169,7 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
                 CustomButton(
                   text: 'Apply Filters',
                   onPressed: () {
-                    // Get the selected filter items from the Riverpod state
-                    // final selectedFilters = selectedInventoryFiltersProvider.state;
-
-                    // Apply the filtering logic to your card listing data
-                    // final filteredList = widget.originalCardList.where((card) {
-                    //   // Check if the card's rent is within the selected range
-                    //   double cardRent = card.propertypricerange ?? 0; // Modify based on your data structure
-                    //   return cardRent >= values.start &&
-                    //       cardRent <= values.end &&
-                    //       (selectedFilters.isEmpty || selectedFilters.any((filter) => card.roomconfig?.additionalroom?.contains(filter) ?? false));
-                    // }).toList();
-
-                    // Update the listing using the filtered results (you need to define originalCardList)
-                    // ref.read(filteredCardListProvider.notifier).updateFilteredList(filteredList);
-
                     widget.setFilters(selectedInventoryFiltersProvider.state, values);
-
-                    // widget.closeFilterView();
                   },
                 ),
               ],
