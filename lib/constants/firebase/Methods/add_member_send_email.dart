@@ -43,6 +43,7 @@ Future<String> sendInvitationEmail({
         mobile: mobile,
         email: email,
         role: role,
+        fcmToken: null,
         image: "");
     await user.User.addUser(items);
     print('Invitation email sent successfully.');
