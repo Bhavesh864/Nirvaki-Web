@@ -1,5 +1,7 @@
 import 'package:beamer/beamer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:responsive_builder/responsive_builder.dart';
@@ -13,6 +15,8 @@ import 'package:yes_broker/pages/smallscreen_dashboard.dart';
 import 'package:yes_broker/screens/main_screens/public_view_screen/public_inventory_details.dart';
 import 'package:yes_broker/screens/main_screens/public_view_screen/public_lead_details.dart';
 
+import 'constants/notification/app_notification.dart';
+
 class LayoutView extends StatefulWidget {
   const LayoutView({super.key});
 
@@ -23,6 +27,7 @@ class LayoutView extends StatefulWidget {
 class _LayoutViewState extends State<LayoutView> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   Stream<User?>? authState;
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   @override
   void initState() {
@@ -31,7 +36,7 @@ class _LayoutViewState extends State<LayoutView> {
     if (token != null) {
       AppConst.setAccessToken(token);
     }
-
+    setAllNotification();
     super.initState();
   }
 

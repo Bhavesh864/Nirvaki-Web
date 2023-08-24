@@ -40,6 +40,7 @@ Future<String> signUpMethod({required state}) async {
         mobile: userMobileNumber,
         email: email,
         role: registerAs,
+        fcmToken: null,
         image: "");
     await User.addUser(items);
     await BrokerInfo.addBrokerInfo(item);

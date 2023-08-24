@@ -1,6 +1,7 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
 import '../../../routes/routes.dart';
 import '../../../screens/account_screens/common_screen.dart';
@@ -14,6 +15,7 @@ void userLogout(WidgetRef ref, BuildContext context) {
           context.beamToReplacementNamed(AppRoutes.loginScreen),
         },
       );
+  User.updateFcmToken(fcmtoken: null, userid: AppConst.getAccessToken()!);
   UserHiveMethods.deleteData(AppConst.getAccessToken());
   UserHiveMethods.deleteData("token");
   ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null);

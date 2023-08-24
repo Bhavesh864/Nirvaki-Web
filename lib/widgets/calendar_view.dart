@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
@@ -25,20 +26,23 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Column(
           children: [
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CustomText(
+                const CustomText(
                   title: 'Calendar',
                   fontWeight: FontWeight.w600,
                 ),
                 Row(
                   children: [
-                    Icon(
-                      Icons.add,
-                      size: 24,
+                    GestureDetector(
+                      onTap: () {},
+                      child: const Icon(
+                        Icons.add,
+                        size: 24,
+                      ),
                     ),
-                    Icon(
+                    const Icon(
                       Icons.more_horiz,
                       size: 24,
                     ),
