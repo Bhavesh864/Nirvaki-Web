@@ -1,9 +1,12 @@
 import 'package:beamer/beamer.dart';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:yes_broker/constants/notification/notification_services.dart';
 import 'firebase_options.dart';
 
 import 'package:yes_broker/constants/firebase/Hive/timestamp.dart';
@@ -26,14 +29,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   getToken();
-  await setupFlutterNotifications();
+  // await setupFlutterNotifications();
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  setAllNotification();
+  // setAllNotification();
   await Hive.initFlutter();
   Hive.registerAdapter(TimestampAdapter());
   await Hive.openBox("users");
   await Hive.openBox<CardDetails>("carddetails");
-
   runApp(
     ProviderScope(
       child: MyApp(),
