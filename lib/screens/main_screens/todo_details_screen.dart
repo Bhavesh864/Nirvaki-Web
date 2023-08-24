@@ -167,7 +167,19 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                 ? SizedBox(
                                                     height: 35,
                                                     width: data.todoName!.length * 10,
-                                                    child: CustomTextInput(controller: todoNameEditingController),
+                                                    child: Focus(
+                                                      onFocusChange: (hasFocus) {
+                                                        if (!hasFocus) {
+                                                          customSnackBar(context: context, text: 'fdsgh');
+                                                          // TodoDetails.updatetodoName(id: data.todoId!, todoName: todoNameEditingController.text)
+                                                          //     .then((value) => cancelEditingTodoName());
+                                                          // CardDetails.updatecardTitle(id: data.todoId!, cardTitle: todoNameEditingController.text);
+                                                        }
+                                                      },
+                                                      child: CustomTextInput(
+                                                        controller: todoNameEditingController,
+                                                      ),
+                                                    ),
                                                   )
                                                 : GestureDetector(
                                                     onTap: () => startEditingTodoName(data.todoName!),
@@ -190,19 +202,19 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                             ),
                                           ),
                                           const SizedBox(width: 16),
-                                          if (isEditingTodoName)
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                if (todoNameEditingController.text.isNotEmpty) {
-                                                  TodoDetails.updatetodoName(id: data.todoId!, todoName: todoNameEditingController.text)
-                                                      .then((value) => cancelEditingTodoName());
-                                                  CardDetails.updatecardTitle(id: data.todoId!, cardTitle: todoNameEditingController.text);
-                                                } else {
-                                                  customSnackBar(context: context, text: "Enter the task name");
-                                                }
-                                              },
-                                              child: const Text("Save"),
-                                            ),
+                                          // if (isEditingTodoName)
+                                          //   ElevatedButton(
+                                          //     onPressed: () {
+                                          //       if (todoNameEditingController.text.isNotEmpty) {
+                                          //         TodoDetails.updatetodoName(id: data.todoId!, todoName: todoNameEditingController.text)
+                                          //             .then((value) => cancelEditingTodoName());
+                                          //         CardDetails.updatecardTitle(id: data.todoId!, cardTitle: todoNameEditingController.text);
+                                          //       } else {
+                                          //         customSnackBar(context: context, text: "Enter the task name");
+                                          //       }
+                                          //     },
+                                          //     child: const Text("Save"),
+                                          //   ),
                                         ],
                                       ),
                                       PopupMenuButton(

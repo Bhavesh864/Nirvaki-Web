@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 
-class CustomCalendarView extends StatelessWidget {
+import '../constants/notification/notification_services.dart';
+
+class CustomCalendarView extends StatefulWidget {
   const CustomCalendarView({super.key});
 
+  @override
+  State<CustomCalendarView> createState() => _CustomCalendarViewState();
+}
+
+class _CustomCalendarViewState extends State<CustomCalendarView> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
