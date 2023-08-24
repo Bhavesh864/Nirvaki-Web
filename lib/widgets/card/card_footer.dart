@@ -69,8 +69,8 @@ class CardFooter extends StatelessWidget {
               //     paddingHorizontal: 3,
               //   ),
               // ),
-              GestureDetector(
-                onTap: () {
+              CustomChip(
+                onPressed: () {
                   shareUrl(
                     context,
                     textToCombine: navigationUrl(
@@ -79,12 +79,10 @@ class CardFooter extends StatelessWidget {
                     ),
                   );
                 },
-                child: const CustomChip(
-                  label: Icon(
-                    Icons.share_outlined,
-                  ),
-                  paddingHorizontal: 3,
+                label: const Icon(
+                  Icons.share_outlined,
                 ),
+                paddingHorizontal: 3,
               ),
               CustomChip(
                 label: CustomText(

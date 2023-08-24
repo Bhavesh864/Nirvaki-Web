@@ -1,6 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
-// import 'dart:html';
+import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -20,8 +20,8 @@ import '../app/app_bar.dart';
 
 Future<void> shareUrl(BuildContext context, {String textToCombine = ''}) async {
   try {
-    // final currentUrl = window.location.href;
-    // await Clipboard.setData(ClipboardData(text: currentUrl + textToCombine));
+    final currentUrl = window.location.href;
+    await Clipboard.setData(ClipboardData(text: currentUrl + textToCombine));
     customSnackBar(context: context, text: 'URL copied to clipboard');
   } catch (e) {
     print('Error sharing URL: $e');
@@ -92,16 +92,14 @@ class InventoryDetailsHeader extends StatelessWidget {
                 status: status,
                 id: id,
               ),
-            GestureDetector(
-              onTap: () {
+            CustomChip(
+              onPressed: () {
                 shareUrl(context);
               },
-              child: const CustomChip(
-                label: Icon(
-                  Icons.share_outlined,
-                ),
-                paddingHorizontal: 3,
+              label: const Icon(
+                Icons.share_outlined,
               ),
+              paddingHorizontal: 3,
             ),
             if (!AppConst.getPublicView() || AppConst.getIsAuthenticated())
               PopupMenuButton(
