@@ -24,13 +24,22 @@ import 'firebase_options.dart';
 import 'package:yes_broker/constants/utils/theme.dart';
 import 'package:yes_broker/layout.dart';
 
+import 'local.notification_service.dart';
+
+Future<void> backgroundHandler(RemoteMessage message) async {
+  print("title----->  ${message.notification!.title}");
+  print("body----->  ${message.notification!.body}");
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   getToken();
   await setupFlutterNotifications();
-  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  setAllNotification();
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+  // FirebaseMessaging.onMessageOpenedApp;
+  // setAllNotification();
+  LocalNotificationService.initialize();
   await Hive.initFlutter();
   Hive.registerAdapter(TimestampAdapter());
   await Hive.openBox("users");
@@ -65,8 +74,10 @@ class _MyAppState extends State<MyApp> {
           return const EditTodo();
         },
         AppRoutes.singupscreen: (p0, p1, p2) => const SignUpScreen(),
-        AppRoutes.personalDetailsScreen: (p0, p1, p2) => const PersonalDetailsAuthScreen(),
-        AppRoutes.companyDetailsScreen: (p0, p1, p2) => const CompanyDetailsAuthScreen(),
+        AppRoutes.personalDetailsScreen: (p0, p1, p2) =>
+            const PersonalDetailsAuthScreen(),
+        AppRoutes.companyDetailsScreen: (p0, p1, p2) =>
+            const CompanyDetailsAuthScreen(),
       },
     ),
   );
@@ -80,7 +91,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return !Responsive.isMobile(context)
         ? MaterialApp.router(
-            backButtonDispatcher: BeamerBackButtonDispatcher(delegate: routerDelegate),
+            backButtonDispatcher:
+                BeamerBackButtonDispatcher(delegate: routerDelegate),
             debugShowCheckedModeBanner: false,
             title: 'Brokr',
             theme: TAppTheme.lightTheme,

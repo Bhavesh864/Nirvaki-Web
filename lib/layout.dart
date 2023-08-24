@@ -1,12 +1,15 @@
 import 'package:beamer/beamer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/local.notification_service.dart';
 import 'package:yes_broker/pages/Auth/login/login_screen.dart';
 import 'package:yes_broker/pages/largescreen_dashboard.dart';
 import 'package:yes_broker/pages/smallscreen_dashboard.dart';
@@ -23,6 +26,18 @@ class LayoutView extends StatefulWidget {
 class _LayoutViewState extends State<LayoutView> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   Stream<User?>? authState;
+  int id = 0;
+  void _showAlertDialog(BuildContext context, title, body) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('$title'),
+          content: Text('$body'),
+        );
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -32,6 +47,36 @@ class _LayoutViewState extends State<LayoutView> {
     if (token != null) {
       AppConst.setAccessToken(token);
     }
+
+    // ============ Foreground notificaiton =============
+    FirebaseMessaging.onMessage.listen(
+      (message) async {
+        print("============== FirebaseMessaging.onMessage.listen =========");
+        if (message.notification != null) {
+          print(message.notification!.title);
+          print(message.notification!.body);
+          _showAlertDialog(
+              context, message.notification!.title, message.notification!.body);
+
+          showNotification(
+              message.notification!.body, message.notification!.title);
+        }
+      },
+    );
+  }
+
+  void showNotification(title, body) async {
+    AndroidNotificationDetails androidDetails =
+        const AndroidNotificationDetails('brokr-in', 'Chat app',
+            priority: Priority.max,
+            importance: Importance.high,
+            icon: '@mipmap/ic_launcher');
+
+    NotificationDetails notifyDetails =
+        NotificationDetails(android: androidDetails);
+
+    await FlutterLocalNotificationsPlugin()
+        .show(id++, title, body, notifyDetails);
   }
 
   @override
@@ -46,12 +91,8 @@ class _LayoutViewState extends State<LayoutView> {
 
         return Scaffold(
           body: ScreenTypeLayout.builder(
-<<<<<<< HEAD
             breakpoints:
                 const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
-=======
-            breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
->>>>>>> 0d25f47c0774f6e26254a7c99729926ee4bcf867
             mobile: (p0) => _buildMobileLayout(snapshot.hasData),
             tablet: (p0) => _buildTabletLayout(snapshot.hasData),
             desktop: (p0) => _buildDesktopLayout(snapshot.hasData),
