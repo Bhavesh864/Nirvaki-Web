@@ -28,7 +28,9 @@ class LayoutView extends StatefulWidget {
 class _LayoutViewState extends State<LayoutView> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   Stream<User?>? authState;
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
 
+  NotificationServices notificationServices = NotificationServices();
   @override
   void initState() {
     final token = UserHiveMethods.getdata("token");
@@ -37,6 +39,19 @@ class _LayoutViewState extends State<LayoutView> {
       AppConst.setAccessToken(token);
     }
 
+    notificationServices.requestNotificationPermission();
+    notificationServices.forgroundMessage();
+    notificationServices.firebaseInit(context);
+    notificationServices.setupInteractMessage(context);
+    notificationServices.isTokenRefresh();
+    notificationServices.getDeviceToken().then((value) {
+      if (kDebugMode) {
+        print('device token');
+        print(value);
+      }
+    });
+
+    // setAllNotification();
     super.initState();
   }
 

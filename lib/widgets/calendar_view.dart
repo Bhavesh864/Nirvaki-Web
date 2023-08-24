@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:yes_broker/constants/firebase/send_notification.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 
@@ -15,6 +15,8 @@ class CustomCalendarView extends StatefulWidget {
 }
 
 class _CustomCalendarViewState extends State<CustomCalendarView> {
+  NotificationServices notificationServices = NotificationServices();
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -28,7 +30,7 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Column(
           children: [
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CustomText(
@@ -37,9 +39,14 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
                 ),
                 Row(
                   children: [
-                    Icon(
-                      Icons.add,
-                      size: 24,
+                    GestureDetector(
+                      onTap: () {
+                        sendNotificationTouser();
+                      },
+                      child: Icon(
+                        Icons.add,
+                        size: 24,
+                      ),
                     ),
                     Icon(
                       Icons.more_horiz,
