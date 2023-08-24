@@ -5,8 +5,6 @@ import 'package:yes_broker/constants/firebase/send_notification.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 
-import '../constants/notification/notification_services.dart';
-
 class CustomCalendarView extends StatefulWidget {
   const CustomCalendarView({super.key});
 
@@ -15,8 +13,6 @@ class CustomCalendarView extends StatefulWidget {
 }
 
 class _CustomCalendarViewState extends State<CustomCalendarView> {
-  NotificationServices notificationServices = NotificationServices();
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

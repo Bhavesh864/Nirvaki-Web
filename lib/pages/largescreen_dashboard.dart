@@ -63,6 +63,7 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
               padding: EdgeInsets.only(top: height! * 0.2),
               child: NavigationRail(
                 backgroundColor: Colors.white,
+                labelType: NavigationRailLabelType.all,
                 minWidth: 60,
                 useIndicator: false,
                 onDestinationSelected: (index) {
@@ -76,7 +77,12 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                       (e) => NavigationRailDestination(
                         icon: Icon(e.iconData),
                         selectedIcon: Icon(e.iconData, color: AppColor.primary),
-                        label: const Text('Yes Broker'),
+                        label: Text(
+                          e.label,
+                          style: const TextStyle(
+                            fontSize: 10,
+                          ),
+                        ),
                       ),
                     )
                     .toList(),

@@ -3,20 +3,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
-import 'package:yes_broker/constants/notification/app_notification.dart';
-import 'package:yes_broker/constants/notification/notification_services.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/pages/Auth/login/login_screen.dart';
 import 'package:yes_broker/pages/largescreen_dashboard.dart';
 import 'package:yes_broker/pages/smallscreen_dashboard.dart';
 import 'package:yes_broker/screens/main_screens/public_view_screen/public_inventory_details.dart';
 import 'package:yes_broker/screens/main_screens/public_view_screen/public_lead_details.dart';
+
+import 'constants/notification/notification_services.dart';
 
 class LayoutView extends StatefulWidget {
   const LayoutView({super.key});

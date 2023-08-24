@@ -8,19 +8,9 @@ import 'firebase_options.dart';
 
 import 'package:yes_broker/constants/firebase/Hive/timestamp.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
-import 'package:yes_broker/pages/Auth/signup/company_details.dart';
-import 'package:yes_broker/pages/Auth/signup/personal_details.dart';
-import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
-import 'package:yes_broker/pages/add_inventory.dart';
-import 'package:yes_broker/pages/add_lead.dart';
-import 'package:yes_broker/pages/add_todo.dart';
-import 'package:yes_broker/pages/edit_todo.dart';
-import 'package:yes_broker/pages/largescreen_dashboard.dart';
 import 'package:yes_broker/routes/routes.dart';
-
 import 'constants/notification/app_notification.dart';
 import 'package:yes_broker/constants/utils/theme.dart';
-import 'package:yes_broker/layout.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,35 +22,16 @@ void main() async {
   Hive.registerAdapter(TimestampAdapter());
   await Hive.openBox("users");
   await Hive.openBox<CardDetails>("carddetails");
+
   runApp(
-    ProviderScope(
+    const ProviderScope(
       child: MyApp(),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
-
-  final routerDelegate = BeamerDelegate(
-    setBrowserTabTitle: false,
-    notFoundPage: const BeamPage(child: LayoutView()),
-    locationBuilder: RoutesLocationBuilder(
-      routes: {
-        '/': (p0, p1, p2) => const LayoutView(),
-        '/profile': (p0, p1, p2) => const LargeScreen(),
-        AppRoutes.addInventory: (p0, p1, p2) => const AddInventory(),
-        AppRoutes.addLead: (p0, p1, p2) => const AddLead(),
-        AppRoutes.addTodo: (p0, p1, p2) => const AddTodo(),
-        AppRoutes.editTodo: (p0, p1, data) {
-          return const EditTodo();
-        },
-        AppRoutes.singupscreen: (p0, p1, p2) => const SignUpScreen(),
-        AppRoutes.personalDetailsScreen: (p0, p1, p2) => const PersonalDetailsAuthScreen(),
-        AppRoutes.companyDetailsScreen: (p0, p1, p2) => const CompanyDetailsAuthScreen(),
-      },
-    ),
-  );
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
