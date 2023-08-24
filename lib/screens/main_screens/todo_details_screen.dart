@@ -215,39 +215,6 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                           setState(() {});
                                         },
                                       ),
-                                      // PopupMenuButton(
-                                      //   initialValue: currentStatus ?? data.todoStatus!,
-                                      //   splashRadius: 0,
-                                      //   padding: EdgeInsets.zero,
-                                      //   color: Colors.white.withOpacity(1),
-                                      //   offset: const Offset(10, 40),
-                                      //   itemBuilder: (context) => todoDropDownList.map((e) => popupMenuItem(e.toString())).toList(),
-                                      //   onSelected: (value) {
-                                      //     CardDetails.updateCardStatus(id: data.todoId!, newStatus: value);
-                                      //     TodoDetails.updatecardStatus(id: data.todoId!, newStatus: value);
-                                      //     currentStatus = value;
-                                      //     setState(() {});
-                                      //   },
-                                      //   child: IntrinsicWidth(
-                                      //     child: Chip(
-                                      //       label: Row(
-                                      //         children: [
-                                      //           CustomText(
-                                      //             title: currentStatus ?? data.todoStatus!,
-                                      //             color: taskStatusColor(currentStatus ?? data.todoStatus!),
-                                      //             size: 10,
-                                      //           ),
-                                      //           Icon(
-                                      //             Icons.expand_more,
-                                      //             size: 18,
-                                      //             color: taskStatusColor(currentStatus ?? data.todoStatus!),
-                                      //           ),
-                                      //         ],
-                                      //       ),
-                                      //       backgroundColor: taskStatusColor(currentStatus ?? data.todoStatus!).withOpacity(0.1),
-                                      //     ),
-                                      //   ),
-                                      // ),
                                     ],
                                   ),
                                   const SizedBox(
