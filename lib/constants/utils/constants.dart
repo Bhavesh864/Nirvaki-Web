@@ -206,7 +206,7 @@ Color taskStatusColor(String title) {
   switch (title) {
     case 'New':
       return Colors.green;
-    case 'In progress':
+    case 'In Progress':
       return AppColor.locationfinalizedstatuscolor;
     case 'Location Finalised':
       return AppColor.locationfinalizedstatuscolor;
@@ -223,13 +223,19 @@ Color taskStatusColor(String title) {
   }
 }
 
-List dropDownStatusDataList = [
+List<String> dropDownStatusDataList = [
   'New',
   'Location Finalised',
   'Negotiation',
   'Token',
   'Agreement',
   'Converted',
+  'Closed',
+];
+
+List<String> todoDropDownList = [
+  'New',
+  'In Progress',
   'Closed',
 ];
 

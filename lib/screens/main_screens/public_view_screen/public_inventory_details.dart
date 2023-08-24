@@ -21,7 +21,6 @@ import '../../../widgets/workItemDetail/contact_information.dart';
 import '../../../widgets/workItemDetail/mapview_widget.dart';
 import '../../../widgets/workItemDetail/tab_views/activity_tab_view.dart';
 import '../../../widgets/workItemDetail/tab_views/details_tab_view.dart';
-import '../../../widgets/workItemDetail/tab_views/todo_tab_view.dart';
 
 class PublicViewInventoryDetails extends ConsumerStatefulWidget {
   final String inventoryId;
@@ -171,7 +170,8 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                               AssignmentWidget(
                                                 id: data.inventoryId!,
                                                 assignto: data.assignedto!,
-                                                imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                imageUrlCreatedBy:
+                                                    data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                 createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                               ),
                                             );

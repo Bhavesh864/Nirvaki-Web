@@ -10,7 +10,6 @@ import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import '../../Customs/custom_text.dart';
-import '../../Customs/small_custom_profile_image.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
@@ -43,7 +42,8 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
     tabviewController = TabController(length: 4, vsync: this);
     final workItemId = ref.read(selectedWorkItemId.notifier).state;
     // inventoryDetails = InventoryDetails.getInventoryDetails(workItemId == '' ? widget.inventoryId : workItemId);
-    inventoryDetails = FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId == '' ? widget.inventoryId : workItemId).snapshots();
+    inventoryDetails =
+        FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId == '' ? widget.inventoryId : workItemId).snapshots();
   }
 
   @override
@@ -69,7 +69,6 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
           : null,
       body: StreamBuilder(
         stream: inventoryDetails,
-        // future: InventoryDetails.getInventoryDetails(workItemId == '' ? widget.inventoryId : workItemId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator.adaptive());
@@ -160,17 +159,36 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                           AssignmentWidget(
                                             id: data.inventoryId!,
                                             assignto: data.assignedto!,
-                                            imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                            imageUrlCreatedBy:
+                                                data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                             createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                           ),
                                         );
                                       },
-                                      child: SmallCustomCircularImage(
-                                        width: 30,
-                                        height: 30,
-                                        imageUrl: data.assignedto![0].image!,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: data.assignedto!.asMap().entries.map((entry) {
+                                          final index = entry.key;
+                                          final user = entry.value;
+                                          return Transform.translate(
+                                            offset: Offset(index * -8.0, 0),
+                                            child: Container(
+                                              width: 24,
+                                              height: 24,
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: NetworkImage(
+                                                    user.image!.isEmpty ? noImg : user.image!,
+                                                  ),
+                                                  fit: BoxFit.fill,
+                                                ),
+                                                borderRadius: BorderRadius.circular(40),
+                                              ),
+                                            ),
+                                          );
+                                        }).toList(),
                                       ),
-                                    ),
+                                    )
                                   ],
                                 ),
                               if (Responsive.isMobile(context))
