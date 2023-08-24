@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
@@ -9,6 +8,8 @@ import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.da
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/widgets/app/dropdown_menu.dart';
+import '../../constants/app_constant.dart';
 import '../../constants/utils/constants.dart';
 import '../app/nav_bar.dart';
 import '../../Customs/custom_chip.dart';
@@ -98,13 +99,11 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                       ),
                     )
                   : const SizedBox(),
-              PopupMenuButton(
-                initialValue: status ?? cardData.status,
-                splashRadius: 0,
-                padding: EdgeInsets.zero,
-                color: Colors.white.withOpacity(1),
-                offset: const Offset(10, 40),
-                itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
+              CustomStatusDropDown(
+                status: status![widget.index].status ?? cardData.status,
+                itemBuilder: (context) => isTypeisTodo(cardData)
+                    ? todoDropDownList.map((e) => popupMenuItem(e.toString())).toList()
+                    : dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
                 onSelected: (value) {
                   CardDetails.updateCardStatus(id: cardData.workitemId!, newStatus: value);
                   status![widget.index].status = value;
@@ -117,23 +116,6 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                   }
                   setState(() {});
                 },
-                child: CustomChip(
-                  label: Row(
-                    children: [
-                      CustomText(
-                        title: status![widget.index].status ?? cardData.status!,
-                        color: taskStatusColor(status![widget.index].status ?? cardData.status!),
-                        size: 10,
-                      ),
-                      Icon(
-                        Icons.expand_more,
-                        size: 18,
-                        color: taskStatusColor(status![widget.index].status ?? cardData.status!),
-                      ),
-                    ],
-                  ),
-                  color: taskStatusColor(status![widget.index].status ?? cardData.status!).withOpacity(0.1),
-                ),
               ),
             ],
           ),
@@ -145,59 +127,5 @@ class CardHeaderState extends ConsumerState<CardHeader> {
         )
       ],
     );
-  }
-}
-
-bool isTypeisTodo(CardDetails cardData) {
-  if (cardData.cardType != "LD" && cardData.cardType != "IN") {
-    return true;
-  }
-  return false;
-}
-
-dynamic checkIconByCategory(CardDetails carddata) {
-  if (carddata.workitemId!.contains(ItemCategory.isInventory)) {
-    return MaterialSymbols.location_home_outlined;
-  } else if (carddata.workitemId!.contains(ItemCategory.isLead)) {
-    return MaterialSymbols.location_away;
-  } else if (carddata.linkedItemType!.contains(ItemCategory.isLead)) {
-    return MaterialSymbols.location_away;
-  } else if (carddata.linkedItemType!.contains(ItemCategory.isInventory)) {
-    return MaterialSymbols.location_home_outlined;
-  }
-  return MaterialSymbols.location_home_outlined;
-}
-
-Color checkIconColorByCategory(CardDetails carddata) {
-  if (carddata.workitemId!.contains(ItemCategory.isInventory)) {
-    return AppColor.inventoryIconColor;
-  } else if (carddata.workitemId!.contains(ItemCategory.isLead)) {
-    return AppColor.leadIconColor;
-  } else if (carddata.linkedItemType!.contains(ItemCategory.isLead)) {
-    return AppColor.leadIconColor;
-  } else if (carddata.linkedItemType!.contains(ItemCategory.isInventory)) {
-    return AppColor.inventoryIconColor;
-  }
-  return AppColor.leadIconColor;
-}
-
-Color checkChipColorByCategory(CardDetails carddata) {
-  if (carddata.workitemId!.contains(ItemCategory.isInventory)) {
-    return AppColor.inventoryChipColor;
-  } else if (carddata.workitemId!.contains(ItemCategory.isLead)) {
-    return AppColor.leadChipColor;
-  } else if (carddata.linkedItemType!.contains(ItemCategory.isLead)) {
-    return AppColor.leadChipColor;
-  } else if (carddata.linkedItemType!.contains(ItemCategory.isInventory)) {
-    return AppColor.inventoryChipColor;
-  }
-  return AppColor.inventoryIconColor;
-}
-
-bool checkNotNUllItem(dynamic data) {
-  if (data != null) {
-    return true;
-  } else {
-    return false;
   }
 }

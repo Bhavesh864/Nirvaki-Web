@@ -77,9 +77,7 @@ void showImageSliderCarousel(List<String> imageUrls, int initialIndex, BuildCont
   );
 }
 
-void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname, Function updateState, String titleName) async {
-  print('--------title ---$titleName');
-  print(id);
+void uploadAttachmentsToFirebaseStorage(PlatformFile fileToUpload, String id, String docname, Function updateState, String titleName) async {
   final uniqueKey = DateTime.now().microsecondsSinceEpoch.toString();
 
   Reference referenceRoot = FirebaseStorage.instance.ref();
@@ -233,7 +231,7 @@ void showUploadDocumentModal(
                       onPressed: () {
                         if (docName != '' && selectedFile != null) {
                           selectedDocName.add(docName);
-                          uploadFileToFirebase(selectedFile!, id, docName, updateState, titleController.text);
+                          uploadAttachmentsToFirebaseStorage(selectedFile!, id, docName, updateState, titleController.text);
                           onPressed();
                           selectedFile = null;
                           Navigator.of(context).pop();
@@ -270,16 +268,18 @@ void showConfirmDeleteAttachment(BuildContext context, Function onPressYes) {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Flexible(
+                  Flexible(
                     child: Text(
                       'Do you want to remove insurance document?',
-                      style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: Responsive.isMobile(context) ? 22 : 26, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    iconSize: 22,
-                    onPressed: () {
+                  InkWell(
+                    child: const Icon(
+                      Icons.close,
+                      size: 22,
+                    ),
+                    onTap: () {
                       Navigator.of(context).pop();
                     },
                   ),

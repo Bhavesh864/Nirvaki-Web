@@ -12,6 +12,8 @@ import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
+import 'package:yes_broker/constants/functions/navigation/navigation_functions.dart';
+import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
@@ -166,89 +168,68 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen>
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 8.0), // Adjust as needed
-                                            child: isEditingTodoName
-                                                ? SizedBox(
-                                                    height: 35,
-                                                    width:
-                                                        data.todoName!.length *
-                                                            10,
-                                                    child: CustomTextInput(
-                                                        controller:
-                                                            todoNameEditingController),
-                                                  )
-                                                : GestureDetector(
-                                                    onTap: () =>
-                                                        startEditingTodoName(
-                                                            data.todoName!),
-                                                    child: Text(
-                                                      data.todoName!,
-                                                      style: const TextStyle(
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
+                                      isEditingTodoName
+                                          ? SizedBox(
+                                              height: 35,
+                                              width: data.todoName!.length * 9,
+                                              child: CustomTextInput(
+                                                  controller:
+                                                      todoNameEditingController),
+                                            )
+                                          : Flexible(
+                                              child: GestureDetector(
+                                                onTap: () =>
+                                                    startEditingTodoName(
+                                                        data.todoName!),
+                                                child: Text(
+                                                  data.todoName!,
+                                                  style: const TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.w500,
                                                   ),
-                                          ),
-                                          CustomChip(
-                                            color: AppColor.primary
-                                                .withOpacity(0.1),
-                                            label: CustomText(
-                                              title: data.todoType!,
-                                              size: 10,
-                                              color: AppColor.primary,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
                                             ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: CustomChip(
+                                          color:
+                                              AppColor.primary.withOpacity(0.1),
+                                          label: CustomText(
+                                            title: data.todoType!,
+                                            size: 10,
+                                            color: AppColor.primary,
                                           ),
-                                          const SizedBox(width: 16),
-                                          if (isEditingTodoName)
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                if (todoNameEditingController
-                                                    .text.isNotEmpty) {
-                                                  TodoDetails.updatetodoName(
-                                                          id: data.todoId!,
-                                                          todoName:
-                                                              todoNameEditingController
-                                                                  .text)
-                                                      .then((value) =>
-                                                          cancelEditingTodoName());
-                                                  CardDetails.updatecardTitle(
-                                                      id: data.todoId!,
-                                                      cardTitle:
-                                                          todoNameEditingController
-                                                              .text);
-                                                } else {
-                                                  customSnackBar(
-                                                      context: context,
-                                                      text:
-                                                          "Enter the task name");
-                                                }
-                                              },
-                                              child: const Text("Save"),
-                                            ),
-                                        ],
+                                        ),
                                       ),
-                                      PopupMenuButton(
-                                        splashRadius: 0,
-                                        padding: EdgeInsets.zero,
-                                        color: Colors.white.withOpacity(1),
-                                        offset: const Offset(10, 40),
+                                      // if (isEditingTodoName)
+                                      //   Padding(
+                                      //     padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                      //     child: ElevatedButton(
+                                      //       onPressed: () {
+                                      //         if (todoNameEditingController.text.isNotEmpty) {
+                                      //           TodoDetails.updatetodoName(id: data.todoId!, todoName: todoNameEditingController.text)
+                                      //               .then((value) => cancelEditingTodoName());
+                                      //           CardDetails.updatecardTitle(id: data.todoId!, cardTitle: todoNameEditingController.text);
+                                      //         } else {
+                                      //           customSnackBar(context: context, text: "Enter the task name");
+                                      //         }
+                                      //       },
+                                      //       child: const Text("Save"),
+                                      //     ),
+                                      //   ),
+                                      CustomStatusDropDown(
+                                        status:
+                                            currentStatus ?? data.todoStatus!,
                                         itemBuilder: (context) =>
-                                            dropDownStatusDataList
+                                            todoDropDownList
                                                 .map((e) =>
                                                     popupMenuItem(e.toString()))
                                                 .toList(),
@@ -262,33 +243,6 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen>
                                           currentStatus = value;
                                           setState(() {});
                                         },
-                                        child: IntrinsicWidth(
-                                          child: Chip(
-                                            label: Row(
-                                              children: [
-                                                CustomText(
-                                                  title: currentStatus ??
-                                                      data.todoStatus!,
-                                                  color: taskStatusColor(
-                                                      currentStatus ??
-                                                          data.todoStatus!),
-                                                  size: 10,
-                                                ),
-                                                Icon(
-                                                  Icons.expand_more,
-                                                  size: 18,
-                                                  color: taskStatusColor(
-                                                      currentStatus ??
-                                                          data.todoStatus!),
-                                                ),
-                                              ],
-                                            ),
-                                            backgroundColor: taskStatusColor(
-                                                    currentStatus ??
-                                                        data.todoStatus!)
-                                                .withOpacity(0.1),
-                                          ),
-                                        ),
                                       ),
                                     ],
                                   ),
@@ -579,32 +533,35 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen>
                           child: Container(
                             padding: const EdgeInsets.all(10),
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 8.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Flexible(
-                                        child: CustomText(
-                                          title: data.linkedWorkItem![0]
-                                              .workItemTitle!,
-                                          fontWeight: FontWeight.w600,
-                                          size: 20,
-                                        ),
-                                      ),
-                                    ],
+                                  child: Flexible(
+                                    child: CustomText(
+                                      title: data
+                                          .linkedWorkItem![0].workItemTitle!,
+                                      fontWeight: FontWeight.w600,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ),
+                                CustomChip(
+                                  color: AppColor.primary.withOpacity(0.1),
+                                  label: CustomText(
+                                    title:
+                                        data.linkedWorkItem![0].workItemType!,
+                                    size: 10,
+                                    color: AppColor.primary,
                                   ),
                                 ),
                                 CustomButton(
                                   text: 'View Inventory Details',
                                   onPressed: () {
-                                    // showOwnerDetailsAndAssignToBottomSheet(
-                                    //   context,
-                                    //   'Owner Details',
-                                    //   ContactInformation(customerinfo: data.customerinfo!),
-                                    // );
+                                    navigateBasedOnId(
+                                        context,
+                                        data.linkedWorkItem![0].workItemId!,
+                                        ref);
                                   },
                                   height: 40,
                                 ),

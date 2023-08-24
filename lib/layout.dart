@@ -41,43 +41,62 @@ class _LayoutViewState extends State<LayoutView> {
 
   @override
   void initState() {
-    super.initState();
     final token = UserHiveMethods.getdata("token");
     authState = authentication.authStateChanges();
     if (token != null) {
       AppConst.setAccessToken(token);
     }
 
-    // ============ Foreground notificaiton =============
-    FirebaseMessaging.onMessage.listen(
-      (message) async {
-        print("============== FirebaseMessaging.onMessage.listen =========");
-        if (message.notification != null) {
-          print(message.notification!.title);
-          print(message.notification!.body);
-          _showAlertDialog(
-              context, message.notification!.title, message.notification!.body);
-
-          showNotification(
-              message.notification!.body, message.notification!.title);
-        }
-      },
-    );
+    super.initState();
   }
 
-  void showNotification(title, body) async {
-    AndroidNotificationDetails androidDetails =
-        const AndroidNotificationDetails('brokr-in', 'Chat app',
-            priority: Priority.max,
-            importance: Importance.high,
-            icon: '@mipmap/ic_launcher');
+  // void showNotification() async {
+  //   AndroidNotificationDetails androidDetails = const AndroidNotificationDetails('brokr', 'Chat app', priority: Priority.max, importance: Importance.high);
+  //   NotificationDetails notifyDetails = NotificationDetails(android: androidDetails);
+  //   print("Before showNotification");
+  //   await notificationsPlugin.show(0, 'Chat App Title', 'This is body', notifyDetails);
+  //   print("After showNotification");
+  // }
 
-    NotificationDetails notifyDetails =
-        NotificationDetails(android: androidDetails);
+  // setupnotification() async {
+  //   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  //   const AndroidInitializationSettings androidInitializationSettings = AndroidInitializationSettings("@mipmap/ic_launcher");
+  //   const DarwinInitializationSettings darwinInitializationSettings = DarwinInitializationSettings();
+  //   const InitializationSettings initializationSettings = InitializationSettings(android: androidInitializationSettings, iOS: darwinInitializationSettings);
+  //   const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  //     'high_importance_channel', // id
+  //     'High Importance Notifications', // title
+  //     description: 'This channel is used for important notifications.', // description
+  //     importance: Importance.max,
+  //   );
+  //   createChannel(channel);
 
-    await FlutterLocalNotificationsPlugin()
-        .show(id++, title, body, notifyDetails);
-  }
+  //   flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  //   FirebaseMessaging.onMessage.listen((event) async {
+  //     final notication = event.notification;
+  //     final android = event.notification?.android;
+  //     if (notication != null && android != null) {
+  //       flutterLocalNotificationsPlugin.show(
+  //         notication.hashCode,
+  //         notication.title,
+  //         notication.body,
+  //         NotificationDetails(
+  //           android: AndroidNotificationDetails(
+  //             channel.id,
+  //             channel.name,
+  //             channelDescription: channel.description,
+  //           ),
+  //         ),
+  //       );
+  //     }
+  //   });
+  // }
+
+  // void createChannel(AndroidNotificationChannel channel) async {
+  //   final FlutterLocalNotificationsPlugin plugin = FlutterLocalNotificationsPlugin();
+  //   await plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +122,6 @@ class _LayoutViewState extends State<LayoutView> {
   }
 
   Widget _buildMobileLayout(bool isAuthenticated) {
-    print('is Auth ------$isAuthenticated');
     if (isAuthenticated) {
       return const SmallScreen();
     } else {

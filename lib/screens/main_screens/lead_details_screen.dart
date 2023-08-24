@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/Customs/small_custom_profile_image.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import '../../Customs/custom_text.dart';
@@ -46,7 +45,6 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
     tabviewController = TabController(length: 4, vsync: this);
     final workItemId = ref.read(selectedWorkItemId.notifier).state;
     leadDetails = FirebaseFirestore.instance.collection('leadDetails').where('leadId', isEqualTo: workItemId == '' ? widget.leadId : workItemId).snapshots();
-    // leadDetails = LeadDetails.getLeadDetails(workItemId == '' ? widget.leadId : workItemId);
   }
 
   @override
@@ -162,15 +160,34 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                             AssignmentWidget(
                                               id: data.leadId!,
                                               assignto: data.assignedto!,
-                                              imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                              imageUrlCreatedBy:
+                                                  data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                               createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                             ),
                                           );
                                         },
-                                        child: SmallCustomCircularImage(
-                                          width: 30,
-                                          height: 30,
-                                          imageUrl: data.assignedto![0].image!,
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: data.assignedto!.asMap().entries.map((entry) {
+                                            final index = entry.key;
+                                            final user = entry.value;
+                                            return Transform.translate(
+                                              offset: Offset(index * -8.0, 0),
+                                              child: Container(
+                                                width: 24,
+                                                height: 24,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image: NetworkImage(
+                                                      user.image!.isEmpty ? noImg : user.image!,
+                                                    ),
+                                                    fit: BoxFit.fill,
+                                                  ),
+                                                  borderRadius: BorderRadius.circular(40),
+                                                ),
+                                              ),
+                                            );
+                                          }).toList(),
                                         ),
                                       ),
                                     ],

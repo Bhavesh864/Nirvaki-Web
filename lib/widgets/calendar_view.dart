@@ -4,9 +4,14 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 
-class CustomCalendarView extends StatelessWidget {
+class CustomCalendarView extends StatefulWidget {
   const CustomCalendarView({super.key});
 
+  @override
+  State<CustomCalendarView> createState() => _CustomCalendarViewState();
+}
+
+class _CustomCalendarViewState extends State<CustomCalendarView> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

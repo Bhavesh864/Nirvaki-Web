@@ -1,11 +1,9 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:yes_broker/Customs/responsive.dart';
 
 import '../../Customs/custom_fields.dart';
 import '../../Customs/custom_text.dart';
-import '../../routes/routes.dart';
 
 class WorkItemSuccessWidget extends StatelessWidget {
   final String isInventory;
