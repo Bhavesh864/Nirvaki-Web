@@ -74,64 +74,7 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                         return GestureDetector(
                           onTap: () {
                             final id = widget.getCardDetails[index].workitemId;
-
                             navigateBasedOnId(context, id!, ref);
-
-                            // if (id!.contains('IN')) {
-                            //   if (Responsive.isMobile(context)) {
-                            //     // Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
-                            //     Navigator.push(
-                            //       context,
-                            //       MaterialPageRoute(
-                            //         builder: (context) {
-                            //           return InventoryDetailsScreen(
-                            //             inventoryId: id,
-                            //           );
-                            //         },
-                            //       ),
-                            //     );
-                            //     ref.read(selectedWorkItemId.notifier).addItemId(id);
-                            //   } else {
-                            //     ref.read(selectedWorkItemId.notifier).addItemId(id);
-                            //     context.beamToNamed('/inventory/inventory-details/$id');
-                            //   }
-                            // } else if (id.contains('LD')) {
-                            //   if (Responsive.isMobile(context)) {
-                            //     // Navigator.of(context).pushNamed(AppRoutes.leadDetailsScreen, arguments: id);
-                            //     Navigator.push(
-                            //       context,
-                            //       MaterialPageRoute(
-                            //         builder: (context) {
-                            //           return LeadDetailsScreen(
-                            //             leadId: id,
-                            //           );
-                            //         },
-                            //       ),
-                            //     );
-                            //     ref.read(selectedWorkItemId.notifier).addItemId(id);
-                            //   } else {
-                            //     ref.read(selectedWorkItemId.notifier).addItemId(id);
-                            //     context.beamToNamed('/lead/lead-details/$id');
-                            //   }
-                            // } else if (id.contains('TD')) {
-                            //   if (Responsive.isMobile(context)) {
-                            //     // Navigator.of(context).pushNamed(AppRoutes.todoDetailsScreen, arguments: id);
-                            //     Navigator.push(
-                            //       context,
-                            //       MaterialPageRoute(
-                            //         builder: (context) {
-                            //           return TodoDetailsScreen(
-                            //             todoId: id,
-                            //           );
-                            //         },
-                            //       ),
-                            //     );
-                            //     ref.read(selectedWorkItemId.notifier).addItemId(id);
-                            //   } else {
-                            //     ref.read(selectedWorkItemId.notifier).addItemId(id);
-                            //     context.beamToNamed('/todo/todo-details/$id');
-                            //   }
-                            // }
                           },
                           child: CustomCard(index: index, cardDetails: widget.getCardDetails),
                         );

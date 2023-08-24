@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:yes_broker/Customs/small_custom_profile_image.dart';
-import 'package:yes_broker/Customs/snackbar.dart';
-import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
-import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart' as inventory;
-import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart' as lead;
-import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart' as todo;
-import 'package:yes_broker/constants/utils/constants.dart';
-import 'package:yes_broker/widgets/questionaries/assign_user.dart';
 
+import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/Customs/small_custom_profile_image.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/userModel/user_info.dart';
+import '../../constants/functions/assingment_methods.dart';
 import '../../constants/utils/colors.dart';
 
 class AssignmentWidget extends StatefulWidget {
@@ -18,114 +14,23 @@ class AssignmentWidget extends StatefulWidget {
   final String imageUrlCreatedBy;
   final String id;
 
-  const AssignmentWidget({super.key, required this.createdBy, required this.imageUrlCreatedBy, required this.id, required this.assignto});
+  const AssignmentWidget({
+    super.key,
+    required this.createdBy,
+    required this.imageUrlCreatedBy,
+    required this.id,
+    required this.assignto,
+  });
 
   @override
   State<AssignmentWidget> createState() => _AssignmentWidgetState();
 }
 
 class _AssignmentWidgetState extends State<AssignmentWidget> {
-  User? user;
-
   void assign(User assignedUser) {
     setState(() {
       user = assignedUser;
     });
-  }
-
-  void submitAssignUser() {
-    if (user != null) {
-      if (widget.id.contains(ItemCategory.isTodo)) {
-        todo.Assignedto assign = todo.Assignedto(
-          firstname: user?.userfirstname,
-          lastname: user?.userlastname,
-          assignedby: AppConst.getAccessToken(),
-          userid: user?.userId,
-          image: user?.image,
-        );
-        todo.TodoDetails.updateAssignUser(itemid: widget.id, assignedto: assign);
-      } else if (widget.id.contains(ItemCategory.isInventory)) {
-        inventory.Assignedto assign = inventory.Assignedto(
-          firstname: user?.userfirstname,
-          lastname: user?.userlastname,
-          assignedby: AppConst.getAccessToken(),
-          userid: user?.userId,
-          image: user?.image,
-        );
-        inventory.InventoryDetails.updateAssignUser(itemid: widget.id, assignedto: assign);
-      } else if (widget.id.contains(ItemCategory.isLead)) {
-        lead.Assignedto assign = lead.Assignedto(
-          firstname: user?.userfirstname,
-          lastname: user?.userlastname,
-          assignedby: AppConst.getAccessToken(),
-          userid: user?.userId,
-          image: user?.image,
-        );
-        lead.LeadDetails.updateAssignUser(itemid: widget.id, assignedto: assign);
-      }
-      Assignedto assigncard = Assignedto(
-        firstname: user?.userfirstname,
-        lastname: user?.userlastname,
-        assignedby: AppConst.getAccessToken(),
-        userid: user?.userId,
-        image: user?.image,
-      );
-      CardDetails.updateAssignUser(itemid: widget.id, assignedto: assigncard);
-      user = null;
-    } else {
-      customSnackBar(context: context, text: "please select user");
-    }
-  }
-
-  void deleteassignUser(userid) {
-    if (widget.id.contains(ItemCategory.isTodo)) {
-      todo.TodoDetails.deleteTodoAssignUser(itemId: widget.id, userid: userid);
-    } else if (widget.id.contains(ItemCategory.isInventory)) {
-      inventory.InventoryDetails.deleteInventoryAssignUser(itemId: widget.id, userid: userid);
-    } else if (widget.id.contains(ItemCategory.isLead)) {
-      lead.LeadDetails.deleteInventoryAssignUser(itemId: widget.id, userid: userid);
-    }
-    CardDetails.deleteCardAssignUser(itemId: widget.id, userid: userid);
-  }
-
-  void assginUserToTodo() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Dialog(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                child: Container(
-                  padding: const EdgeInsets.all(15),
-                  height: 200,
-                  width: 500,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      AssignUser(
-                        status: true,
-                        addUser: (user) {
-                          assign(user);
-                        },
-                        assignedUserIds: widget.assignto.map((item) => item.userid).toList(),
-                      ),
-                      const SizedBox(height: 50),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: ElevatedButton(
-                          onPressed: submitAssignUser,
-                          child: const Text("Add"),
-                        ),
-                      )
-                    ],
-                  ),
-                )));
-      },
-    );
   }
 
   @override
@@ -219,7 +124,12 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
                               const SizedBox(width: 3),
                               if (widget.assignto.length > 1)
                                 GestureDetector(
-                                  onTap: () => deleteassignUser(item.userid),
+                                  onTap: () {
+                                    deleteassignUser(item.userid, widget.id);
+                                    if (Responsive.isMobile(context)) {
+                                      Navigator.of(context).pop();
+                                    }
+                                  },
                                   child: const Icon(Icons.close),
                                 ),
                             ],
@@ -228,7 +138,17 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
                       }).toList(),
                     ),
                     GestureDetector(
-                      onTap: () => assginUserToTodo(),
+                      onTap: () {
+                        assginUserToTodo(
+                          context,
+                          assign,
+                          widget.assignto,
+                          widget.id,
+                          () {
+                            Navigator.of(context).pop();
+                          },
+                        );
+                      },
                       child: const Padding(
                         padding: EdgeInsets.only(top: 14),
                         child: Row(

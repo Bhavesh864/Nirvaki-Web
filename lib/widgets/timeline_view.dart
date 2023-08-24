@@ -73,36 +73,45 @@ class CustomTimeLineView extends ConsumerWidget {
                 final dataList = snapshot.data!.docs;
                 List<ActivityDetails> activities = dataList.map((e) => ActivityDetails.fromSnapshot(e)).toList();
                 activities.sort((a, b) => b.createdate!.compareTo(a.createdate!));
-                return ScrollConfiguration(
-                  behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                  child: Expanded(
-                    child: ListView.builder(
-                      itemCount: activities.length,
-                      itemBuilder: (context, index) {
-                        return TimelineTile(
-                          isFirst: index == 0 ? true : false,
-                          indicatorStyle: const IndicatorStyle(
-                            color: AppColor.primary,
-                            height: 8,
-                            width: 8,
-                            padding: EdgeInsets.only(
-                              left: 15,
+                if (activities.isNotEmpty) {
+                  return ScrollConfiguration(
+                    behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                    child: Expanded(
+                      child: ListView.builder(
+                        itemCount: activities.length,
+                        itemBuilder: (context, index) {
+                          return TimelineTile(
+                            isFirst: index == 0 ? true : false,
+                            indicatorStyle: const IndicatorStyle(
+                              color: AppColor.primary,
+                              height: 8,
+                              width: 8,
+                              padding: EdgeInsets.only(
+                                left: 15,
+                              ),
                             ),
-                          ),
-                          beforeLineStyle: const LineStyle(
-                            color: AppColor.primary,
-                            thickness: 2,
-                          ),
-                          alignment: TimelineAlign.start,
-                          endChild: TimeLineItem(
-                            index: index,
-                            activitiesList: activities,
-                          ),
-                        );
-                      },
+                            beforeLineStyle: const LineStyle(
+                              color: AppColor.primary,
+                              thickness: 2,
+                            ),
+                            alignment: TimelineAlign.start,
+                            endChild: TimeLineItem(
+                              index: index,
+                              activitiesList: activities,
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                );
+                  );
+                } else {
+                  return const Padding(
+                    padding: EdgeInsets.only(top: 40.0),
+                    child: Center(
+                      child: CustomText(title: 'No Activities to show!'),
+                    ),
+                  );
+                }
               }
               return Container(
                 decoration: const BoxDecoration(color: Colors.amber),
