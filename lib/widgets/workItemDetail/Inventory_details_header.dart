@@ -1,5 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
+// import 'dart:html';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../Customs/custom_chip.dart';
@@ -11,6 +17,16 @@ import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
 import '../app/nav_bar.dart';
 import '../app/app_bar.dart';
+
+Future<void> shareUrl(BuildContext context, {String textToCombine = ''}) async {
+  try {
+    // final currentUrl = window.location.href;
+    // await Clipboard.setData(ClipboardData(text: currentUrl + textToCombine));
+    customSnackBar(context: context, text: 'URL copied to clipboard');
+  } catch (e) {
+    print('Error sharing URL: $e');
+  }
+}
 
 class InventoryDetailsHeader extends StatelessWidget {
   final String title;
@@ -35,6 +51,16 @@ class InventoryDetailsHeader extends StatelessWidget {
     required this.unit,
     required this.setState,
   });
+
+  // Future<void> shareUrl(BuildContext context) async {
+  //   try {
+  //     final currentUrl = window.location.href;
+  //     await Clipboard.setData(ClipboardData(text: currentUrl));
+  //     customSnackBar(context: context, text: 'URL copied to clipboard');
+  //   } catch (e) {
+  //     print('Error sharing URL: $e');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -66,11 +92,16 @@ class InventoryDetailsHeader extends StatelessWidget {
                 status: status,
                 id: id,
               ),
-            const CustomChip(
-              label: Icon(
-                Icons.share_outlined,
+            GestureDetector(
+              onTap: () {
+                shareUrl(context);
+              },
+              child: const CustomChip(
+                label: Icon(
+                  Icons.share_outlined,
+                ),
+                paddingHorizontal: 3,
               ),
-              paddingHorizontal: 3,
             ),
             if (!AppConst.getPublicView() || AppConst.getIsAuthenticated())
               PopupMenuButton(
@@ -85,6 +116,8 @@ class InventoryDetailsHeader extends StatelessWidget {
                         if (e.contains('Public')) {
                           AppConst.setPublicView(!AppConst.getPublicView());
                           setState();
+                        } else {
+                          // AppConst.getOuterContext()!.beamToNamed(AppRoutes.addInventory);
                         }
                       }, showicon: true, icon: e['icon']),
                     )
