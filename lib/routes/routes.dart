@@ -147,7 +147,9 @@ class AppRoutes {
   static const String addTodo = '/add_todoItem_screen';
 
   static Map<String, WidgetBuilder> routesTable = {
-    homeScreen: (context) => Responsive.isMobile(context) ? const SmallScreen() : const LargeScreen(),
+    homeScreen: (context) => Responsive.isMobile(context)
+        ? const SmallScreen()
+        : const LargeScreen(),
     loginScreen: (context) => const LoginScreen(),
     singupscreen: (context) => const SignUpScreen(),
     forgetPassword: (context) => const ForgetPassword(),
@@ -175,7 +177,8 @@ class AppRoutes {
         const begin = Offset(1.0, 0.0);
         const end = Offset.zero;
         const curve = Curves.easeInOut;
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
         var offsetAnimation = animation.drive(tween);
         return SlideTransition(position: offsetAnimation, child: child);
       },

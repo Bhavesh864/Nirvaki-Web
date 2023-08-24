@@ -30,15 +30,24 @@ Future<void> setupFlutterNotifications() async {
   channel = const AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
-    description: 'This channel is used for important notifications.', // description
+    description:
+        'This channel is used for important notifications.', // description
     importance: Importance.max,
   );
 
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  const AndroidInitializationSettings androidInitializationSettings = AndroidInitializationSettings("@mipmap/ic_launcher");
-  const DarwinInitializationSettings darwinInitializationSettings = DarwinInitializationSettings();
-  await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
-  const initializationSettings = InitializationSettings(android: androidInitializationSettings, iOS: darwinInitializationSettings);
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  const AndroidInitializationSettings androidInitializationSettings =
+      AndroidInitializationSettings("@mipmap/ic_launcher");
+  const DarwinInitializationSettings darwinInitializationSettings =
+      DarwinInitializationSettings();
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+  const initializationSettings = InitializationSettings(
+      android: androidInitializationSettings,
+      iOS: darwinInitializationSettings);
   flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
   /// Update the iOS foreground notification presentation options to allow
@@ -128,7 +137,8 @@ Future<String?> getToken() async {
 Future<void> setupInteractedMessage() async {
   // Get any messages which caused the application to open from
   // a terminated state.
-  RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+  RemoteMessage? initialMessage =
+      await FirebaseMessaging.instance.getInitialMessage();
   // If the message also contains a data property with a "type" of "chat",
   // navigate to a chat screen
   if (initialMessage != null) {
