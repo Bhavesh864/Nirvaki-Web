@@ -1,11 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member, avoid_web_libraries_in_flutter
 import 'dart:async';
 // import 'dart:html';
-<<<<<<< HEAD
-import 'package:beamer/beamer.dart';
-=======
 
->>>>>>> 5b42c05a1e778a74558646922fec55f44a393916
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -15,7 +11,10 @@ import 'package:intl/intl.dart';
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
+import 'package:yes_broker/constants/firebase/send_notification.dart';
+import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/functions/navigation/navigation_functions.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../Customs/custom_chip.dart';
@@ -214,6 +213,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                         onSelected: (value) {
                                           CardDetails.updateCardStatus(id: data.todoId!, newStatus: value);
                                           TodoDetails.updatecardStatus(id: data.todoId!, newStatus: value);
+                                          notifyToUser(itemdetail: data, content: "${data.todoName} status change to $value", title: "${data.todoId} status changed");
                                           currentStatus = value;
                                           setState(() {});
                                         },

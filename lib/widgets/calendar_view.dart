@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:yes_broker/constants/firebase/send_notification.dart';
+
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 
@@ -29,22 +29,20 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CustomText(
+                const CustomText(
                   title: 'Calendar',
                   fontWeight: FontWeight.w600,
                 ),
                 Row(
                   children: [
                     GestureDetector(
-                      onTap: () {
-                        sendNotificationTouser();
-                      },
-                      child: Icon(
+                      onTap: () {},
+                      child: const Icon(
                         Icons.add,
                         size: 24,
                       ),
                     ),
-                    Icon(
+                    const Icon(
                       Icons.more_horiz,
                       size: 24,
                     ),
