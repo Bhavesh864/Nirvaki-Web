@@ -181,9 +181,9 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                                             mainAxisExtent: 160),
                                         itemCount: filteredInventoryList.length,
                                         itemBuilder: (context, index) {
+                                          final id = filteredInventoryList[index].workitemId!;
                                           return GestureDetector(
                                             onTap: () {
-                                              final id = filteredInventoryList[index].workitemId!;
                                               navigateBasedOnId(context, id, ref);
                                             },
                                             child: CustomCard(index: index, cardDetails: filteredInventoryList),
