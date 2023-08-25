@@ -12,10 +12,10 @@ import 'package:intl/intl.dart';
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
-import 'package:yes_broker/constants/app_constant.dart';
+
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
 import 'package:yes_broker/constants/firebase/send_notification.dart';
-import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+
 import 'package:yes_broker/constants/functions/navigation/navigation_functions.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../Customs/custom_chip.dart';
@@ -38,6 +38,7 @@ class TodoDetailsScreen extends ConsumerStatefulWidget {
 }
 
 class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with TickerProviderStateMixin {
+  FocusNode firstFocusNode = FocusNode();
   late TabController tabviewController;
   late Stream<QuerySnapshot<Map<String, dynamic>>> todoDetails;
   List<Attachments> firebaseAttachments = [];
@@ -166,7 +167,20 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                           ? SizedBox(
                                               height: 35,
                                               width: data.todoName!.length * 9,
-                                              child: CustomTextInput(controller: todoNameEditingController),
+                                              child: CustomTextInput(
+                                                controller: todoNameEditingController,
+                                                onFieldSubmitted: (newValue) {
+                                                  if (newValue.isNotEmpty) {
+                                                    TodoDetails.updatetodoName(id: data.todoId!, todoName: newValue).then((value) => setState(() {
+                                                          isEditingTodoName = false;
+                                                          todoNameEditingController.clear();
+                                                        }));
+                                                    CardDetails.updatecardTitle(id: data.todoId!, cardTitle: newValue);
+                                                  } else {
+                                                    customSnackBar(context: context, text: "Enter the task name");
+                                                  }
+                                                },
+                                              ),
                                             )
                                           : Flexible(
                                               child: GestureDetector(
@@ -214,9 +228,9 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                         onSelected: (value) {
                                           CardDetails.updateCardStatus(id: data.todoId!, newStatus: value);
                                           TodoDetails.updatecardStatus(id: data.todoId!, newStatus: value);
-                                          notifyToUser(itemdetail: data, content: "${data.todoName} status change to $value", title: "${data.todoId} status changed");
                                           currentStatus = value;
                                           setState(() {});
+                                          notifyToUser(itemdetail: data, content: "${data.todoName} status change to $value", title: "${data.todoId} status changed");
                                         },
                                       ),
                                     ],
