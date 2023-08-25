@@ -1,8 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
-
-// import 'dart:html';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
@@ -195,11 +192,14 @@ class _HeaderChipsState extends State<HeaderChips> {
         if (!AppConst.getPublicView())
           CustomStatusDropDown(
             status: currentStatus ?? widget.status,
-            itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
+            itemBuilder: (context) => dropDownStatusDataList
+                .map((e) => popupMenuItem(e.toString()))
+                .toList(),
             onSelected: (value) {
               CardDetails.updateCardStatus(id: widget.id, newStatus: value);
               if (widget.id.contains(ItemCategory.isInventory)) {
-                InventoryDetails.updatecardStatus(id: widget.id, newStatus: value);
+                InventoryDetails.updatecardStatus(
+                    id: widget.id, newStatus: value);
               } else if (widget.id.contains(ItemCategory.isLead)) {
                 LeadDetails.updatecardStatus(id: widget.id, newStatus: value);
               }
