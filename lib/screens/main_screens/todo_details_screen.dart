@@ -125,27 +125,32 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
               toolbarHeight: 50,
             )
           : null,
-      body: GestureDetector(
-        onTap: () {
-          if (isEditingTodoName) {
-            cancelEditingTodoName();
-          } else if (iseditingTodoDescription) {
-            cancelEditingTodoDescription();
-          }
-        },
-        child: StreamBuilder(
-            stream: todoDetails,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator.adaptive());
-              }
-              if (snapshot.hasData) {
-                final dataList = snapshot.data!.docs;
-                List<TodoDetails> todoList = dataList.map((doc) => TodoDetails.fromSnapshot(doc)).toList();
+      body: StreamBuilder(
+          stream: todoDetails,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator.adaptive());
+            }
+            if (snapshot.hasData) {
+              final dataList = snapshot.data!.docs;
+              List<TodoDetails> todoList = dataList.map((doc) => TodoDetails.fromSnapshot(doc)).toList();
 
-                for (var data in todoList) {
-                  final attachments = data.attachments;
-                  return Row(
+              for (var data in todoList) {
+                final attachments = data.attachments;
+                return GestureDetector(
+                  onTap: () {
+                    if (isEditingTodoName) {
+                      TodoDetails.updatetodoName(id: data.todoId!, todoName: todoNameEditingController.text).then((value) => setState(() {
+                            isEditingTodoName = false;
+                            todoNameEditingController.clear();
+                          }));
+                      CardDetails.updatecardTitle(id: data.todoId!, cardTitle: todoNameEditingController.text);
+                      cancelEditingTodoName();
+                    } else if (iseditingTodoDescription) {
+                      cancelEditingTodoDescription();
+                    }
+                  },
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
@@ -230,7 +235,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                           TodoDetails.updatecardStatus(id: data.todoId!, newStatus: value);
                                           currentStatus = value;
                                           setState(() {});
-                                          notifyToUser(itemdetail: data, content: "${data.todoName} status change to $value", title: "${data.todoId} status changed");
+                                          notifyToUser(itemdetail: data, content: "${data.todoId} status change to $value", title: "${data.todoName} status changed");
                                         },
                                       ),
                                     ],
@@ -501,14 +506,14 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                           ),
                         ),
                     ],
-                  );
-                }
+                  ),
+                );
               }
-              return Container(
-                color: Colors.amber,
-              );
-            }),
-      ),
+            }
+            return Container(
+              color: Colors.amber,
+            );
+          }),
     );
   }
 }

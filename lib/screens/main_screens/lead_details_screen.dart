@@ -98,6 +98,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                     setState(() {});
                                   },
                                   id: data.leadId!,
+                                  inventoryDetails: data,
                                   title: data.leadTitle!,
                                   category: data.leadcategory!,
                                   type: data.leadType!,
@@ -115,6 +116,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                       type: data.leadType!,
                                       propertyCategory: data.propertycategory!,
                                       status: data.leadStatus!,
+                                      inventoryDetails: data,
                                     ),
                                   ),
                                 ListTile(
@@ -160,8 +162,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                             AssignmentWidget(
                                               id: data.leadId!,
                                               assignto: data.assignedto!,
-                                              imageUrlCreatedBy:
-                                                  data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                              imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                               createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                             ),
                                           );

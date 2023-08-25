@@ -9,6 +9,8 @@ import 'package:yes_broker/widgets/calendar_view.dart';
 import 'package:yes_broker/widgets/timeline_view.dart';
 import 'package:yes_broker/widgets/workitems/workitems_list.dart';
 
+import '../../pages/add_inventory.dart';
+
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -23,7 +25,6 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   void initState() {
     super.initState();
     getCardDetails = CardDetails.getCardDetails();
-
     print(AppConst.getAccessToken());
   }
 
