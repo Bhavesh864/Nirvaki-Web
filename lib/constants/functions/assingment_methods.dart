@@ -6,6 +6,7 @@ import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart' as inventory;
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart' as lead;
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart' as todo;
+import 'package:yes_broker/constants/firebase/send_notification.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/widgets/questionaries/assign_user.dart';
 
@@ -14,7 +15,7 @@ import '../firebase/userModel/user_info.dart';
 
 User? user;
 
-void submitAssignUser(String id, BuildContext context) {
+void submitAssignUser(String id, BuildContext context, dynamic assignto) async {
   if (user != null) {
     if (id.contains(ItemCategory.isTodo)) {
       todo.Assignedto assign = todo.Assignedto(
@@ -53,6 +54,8 @@ void submitAssignUser(String id, BuildContext context) {
     );
     CardDetails.updateAssignUser(itemid: id, assignedto: assigncard);
     user = null;
+    // await Future.delayed(const Duration(seconds: 20));
+    // notifyToUser(assignedto: assignto, title: "Assign new $id", content: "New $id Assign To You");
   } else {
     customSnackBar(context: context, text: "please select user");
   }
@@ -100,7 +103,7 @@ void assginUserToTodo(BuildContext context, Function assign, List<dynamic> assig
                   alignment: Alignment.bottomRight,
                   child: ElevatedButton(
                     onPressed: () {
-                      submitAssignUser(id, context);
+                      submitAssignUser(id, context, assignto);
                       Navigator.of(context).pop();
                       if (Responsive.isMobile(context)) {
                         popBottomSheet();

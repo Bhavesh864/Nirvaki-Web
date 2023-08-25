@@ -89,7 +89,7 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                     TodoDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
                   }
                   setState(() {});
-                  notifyToUser(itemdetail: cardData, content: "${cardData.cardTitle} status change to $value", title: "${cardData.workitemId} status changed");
+                  notifyToUser(assignedto: cardData.assignedto, content: "${cardData.cardTitle} status change to $value", title: "${cardData.workitemId} status changed");
                 },
               ),
               checkNotNUllItem(cardData.roomconfig?.bedroom)

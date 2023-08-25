@@ -199,7 +199,6 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                       id: data.inventoryId!,
                                       data: data,
                                     ),
-                                  if (currentSelectedTab == 1) const ActivityTabView(),
                                 ],
                               ),
                             ),

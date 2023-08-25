@@ -31,9 +31,9 @@ Future<void> sendNotificationTouser({required String token, required String titl
   });
 }
 
-void notifyToUser({required dynamic itemdetail, required String title, required String content}) async {
+void notifyToUser({required dynamic assignedto, required String title, required String content}) async {
   List<String> userids = [];
-  for (var data in itemdetail.assignedto!) {
+  for (var data in assignedto) {
     userids.add(data.userid!);
     print("object=======>$userids");
   }

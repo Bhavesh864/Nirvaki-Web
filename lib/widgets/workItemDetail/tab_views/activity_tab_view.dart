@@ -7,12 +7,15 @@ import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/constants/firebase/Methods/add_activity.dart';
+
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 
+import '../../../constants/firebase/send_notification.dart';
 import '../../timeline_view.dart';
 
 class ActivityTabView extends ConsumerStatefulWidget {
-  const ActivityTabView({super.key});
+  final dynamic details;
+  const ActivityTabView({required this.details, super.key});
 
   @override
   ActivityTabViewState createState() => ActivityTabViewState();
@@ -51,6 +54,7 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
                   onPressed: () {
                     if (controller.text.isNotEmpty) {
                       submitActivity(itemid: workItemId, activitytitle: controller.text);
+                      notifyToUser(assignedto: widget.details.assignedto, content: "$workItemId added new Activity", title: controller.text);
                       controller.clear();
                     } else {
                       customSnackBar(context: context, text: 'Please enter note to submit');
