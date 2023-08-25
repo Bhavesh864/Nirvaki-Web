@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../Customs/responsive.dart';
 import '../../../riverpodstate/selected_workitem.dart';
-import '../../../screens/main_screens/Inventory_details_screen.dart';
+import '../../../screens/main_screens/inventory_details_screen.dart';
 import '../../../screens/main_screens/home_screen.dart';
 import '../../../screens/main_screens/lead_details_screen.dart';
 import '../../../screens/main_screens/todo_details_screen.dart';
