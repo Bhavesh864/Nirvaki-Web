@@ -31,6 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void loginwithemailpassword(BuildContext context) {
+    FocusScope.of(context).unfocus();
     final isvalid = key.currentState?.validate();
     if (isvalid!) {
       setState(() {

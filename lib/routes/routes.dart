@@ -9,6 +9,7 @@ import 'package:yes_broker/pages/Auth/set_new_password.dart';
 import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
 import 'package:yes_broker/pages/add_todo.dart';
 import 'package:yes_broker/pages/edit_todo.dart';
+import 'package:yes_broker/screens/main_screens/chat_list_screen.dart';
 import 'package:yes_broker/screens/main_screens/inventory_details_screen.dart';
 import 'package:yes_broker/screens/main_screens/lead_details_screen.dart';
 import 'package:yes_broker/screens/main_screens/todo_details_screen.dart';
@@ -20,7 +21,6 @@ import '../constants/firebase/detailsModels/card_details.dart';
 import '../layout.dart';
 import '../pages/Auth/signup/company_details.dart';
 import '../screens/main_screens/caledar_screen.dart';
-import '../screens/main_screens/chat_screen.dart';
 import '../screens/main_screens/home_screen.dart';
 import '../screens/main_screens/inventory_listing_screen.dart';
 import '../screens/main_screens/lead_listing_screen.dart';
@@ -82,7 +82,7 @@ List<MenuItem> sideBarItems = [
     nav: '/chat',
     label: chatPageLabel,
     iconData: chatIcon,
-    screen: const ChatScreen(),
+    screen: const ChatListScreen(),
   ),
   MenuItem(
     nav: '/calendar',
@@ -125,7 +125,7 @@ List<BottomBarItem> bottomBarItems = [
   BottomBarItem(
     label: chatPageLabel,
     iconData: chatIcon,
-    screen: const ChatScreen(),
+    screen: const ChatListScreen(),
   ),
 ];
 
@@ -203,8 +203,10 @@ final routerDelegate = BeamerDelegate(
         return const EditTodo();
       },
       AppRoutes.singupscreen: (p0, p1, p2) => const SignUpScreen(),
-      AppRoutes.personalDetailsScreen: (p0, p1, p2) => const PersonalDetailsAuthScreen(),
-      AppRoutes.companyDetailsScreen: (p0, p1, p2) => const CompanyDetailsAuthScreen(),
+      AppRoutes.personalDetailsScreen: (p0, p1, p2) =>
+          const PersonalDetailsAuthScreen(),
+      AppRoutes.companyDetailsScreen: (p0, p1, p2) =>
+          const CompanyDetailsAuthScreen(),
     },
   ),
 );
@@ -315,7 +317,7 @@ class BeamerScreenNavigation extends StatelessWidget {
             '/chat': (p0, p1, p2) => const BeamPage(
                   key: ValueKey('/chat'),
                   type: BeamPageType.scaleTransition,
-                  child: ChatScreen(),
+                  child: ChatListScreen(),
                 ),
             '/calendar': (p0, p1, p2) => const BeamPage(
                   key: ValueKey('/calendar'),
