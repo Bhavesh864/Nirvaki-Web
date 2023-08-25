@@ -211,7 +211,7 @@ class _HeaderChipsState extends State<HeaderChips> {
               setState(() {});
               print(widget.inventoryDetails?.assignedto?[0].userid);
               notifyToUser(
-                  itemdetail: widget.inventoryDetails,
+                  assignedto: widget.inventoryDetails.assignedto,
                   content: "${widget.id} status change to $value",
                   title: "${widget.id.contains(ItemCategory.isInventory) ? "Inventory" : "Lead"} status changed");
             },

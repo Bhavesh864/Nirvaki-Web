@@ -235,7 +235,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                           TodoDetails.updatecardStatus(id: data.todoId!, newStatus: value);
                                           currentStatus = value;
                                           setState(() {});
-                                          notifyToUser(itemdetail: data, content: "${data.todoId} status change to $value", title: "${data.todoName} status changed");
+                                          notifyToUser(assignedto: data.assignedto, content: "${data.todoId} status change to $value", title: "${data.todoName} status changed");
                                         },
                                       ),
                                     ],
@@ -446,7 +446,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                       const SizedBox(
                                         height: 30,
                                       ),
-                                      const ActivityTabView(),
+                                      ActivityTabView(details: data),
                                     ],
                                   ),
                                 ],

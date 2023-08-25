@@ -110,7 +110,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                 Padding(
                                   padding: const EdgeInsets.only(top: 10),
                                   child: HeaderChips(
-                                    inventoryDetails: data,
+                                      inventoryDetails: data,
                                       category: data.inventorycategory!,
                                       type: data.inventoryType!,
                                       propertyCategory: data.propertycategory!,
@@ -216,7 +216,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                   id: data.inventoryId!,
                                   data: data,
                                 ),
-                              if (currentSelectedTab == 1) const ActivityTabView(),
+                              if (currentSelectedTab == 1) ActivityTabView(details: data),
                               if (currentSelectedTab == 2) TodoTabView(id: data.inventoryId!),
                             ],
                           ),
