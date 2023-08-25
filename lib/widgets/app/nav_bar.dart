@@ -11,27 +11,40 @@ import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/utils/constants.dart';
 
-class UserNotifier extends StateNotifier<User> {
-  UserNotifier()
-      : super(
-          User(
-              whatsAppNumber: "whatsAppNumber",
-              brokerId: 'brokerId',
-              status: 'status',
-              userfirstname: 'userfirstname',
-              userlastname: 'userlastname',
-              userId: 'userId',
-              mobile: "3434",
-              email: 'email',
-              role: 'role',
-              image: 'image',
-              fcmToken: "fcmToken"),
-        );
-}
+// final userProvider = StateNotifierProvider<UserNotifier, User>((ref) {
+//   return UserNotifier();
+// });
 
-final userProvider = StateProvider<UserNotifier>((ref) {
-  return UserNotifier();
-});
+// class UserNotifier extends StateNotifier<User> {
+//   UserNotifier()
+//       : super(
+//           User(
+//               whatsAppNumber: "whatsAppNumber",
+//               brokerId: 'brokerId',
+//               status: 'status',
+//               userfirstname: 'userfirstname',
+//               userlastname: 'userlastname',
+//               userId: 'userId',
+//               mobile: "3434",
+//               email: 'email',
+//               role: 'role',
+//               image: 'image',
+//               fcmToken: "fcmToken"),
+//         );
+
+//   void addCurrentState(User currentUser) {
+//     state = currentUser;
+//   }
+// }
+
+final userProvider = FutureProvider<User>(
+  (ref) async {
+    final User? initialCardDetails = await User.getUser(AppConst.getAccessToken()!);
+    // final initialStatuses = initialCardDetails.map((card) => card.status).toList();
+
+    return initialCardDetails!;
+  },
+);
 
 class LargeScreenNavBar extends ConsumerWidget {
   final void Function(String) onOptionSelect;
@@ -57,80 +70,84 @@ class LargeScreenNavBar extends ConsumerWidget {
       child: FutureBuilder(
         future: User.getUser(token!),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            ref.read(userProvider).state = snapshot.data!;
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                largeScreenView("${snapshot.data?.userfirstname} ${snapshot.data?.userlastname}", context),
-                const Spacer(),
-                Stack(
-                  children: <Widget>[
-                    InkWell(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return const NotificationDialogBox();
-                          },
-                        );
-                      },
-                      child: const Icon(
-                        Icons.notifications_none,
-                        size: 25,
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData) {
+              ref.read(userProvider.future).then((value) {
+                print(value.managerName);
+              });
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  largeScreenView("${snapshot.data?.userfirstname} ${snapshot.data?.userlastname}", context),
+                  const Spacer(),
+                  Stack(
+                    children: <Widget>[
+                      InkWell(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return const NotificationDialogBox();
+                            },
+                          );
+                        },
+                        child: const Icon(
+                          Icons.notifications_none,
+                          size: 25,
+                        ),
                       ),
-                    ),
-                    Positioned(
-                      right: 0,
-                      child: Container(
-                        padding: const EdgeInsets.all(1),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        constraints: const BoxConstraints(
-                          minWidth: 12,
-                          minHeight: 12,
-                        ),
-                        child: const Text(
-                          '2',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 8,
+                      Positioned(
+                        right: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(1),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(6),
                           ),
-                          textAlign: TextAlign.center,
+                          constraints: const BoxConstraints(
+                            minWidth: 12,
+                            minHeight: 12,
+                          ),
+                          child: const Text(
+                            '2',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 8,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                PopupMenuButton(
-                  onCanceled: () {},
-                  onSelected: (value) {
-                    onOptionSelect(value);
-                  },
-                  color: Colors.white.withOpacity(1),
-                  offset: const Offset(200, 40),
-                  itemBuilder: (contex) => profileMenuItems.map(
-                    (e) {
-                      return popupMenuItem(e.title);
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  PopupMenuButton(
+                    onCanceled: () {},
+                    onSelected: (value) {
+                      onOptionSelect(value);
                     },
-                  ).toList(),
-                  child: Container(
-                    height: 30,
-                    width: 30,
-                    margin: const EdgeInsets.only(right: 10),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(snapshot.data!.image.isEmpty ? noImg : snapshot.data!.image)),
-                      borderRadius: BorderRadius.circular(10),
+                    color: Colors.white.withOpacity(1),
+                    offset: const Offset(200, 40),
+                    itemBuilder: (contex) => profileMenuItems.map(
+                      (e) {
+                        return popupMenuItem(e.title);
+                      },
+                    ).toList(),
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      margin: const EdgeInsets.only(right: 10),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(snapshot.data!.image.isEmpty ? noImg : snapshot.data!.image)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            );
+                ],
+              );
+            }
           }
           return const SizedBox();
         },
