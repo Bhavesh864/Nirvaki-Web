@@ -1,4 +1,4 @@
-// ignore_for_file: invalid_use_of_protected_member
+// ignore_for_file: invalid_use_of_protected_member, file_names
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -42,7 +42,8 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
     tabviewController = TabController(length: 4, vsync: this);
     final workItemId = ref.read(selectedWorkItemId.notifier).state;
     // inventoryDetails = InventoryDetails.getInventoryDetails(workItemId == '' ? widget.inventoryId : workItemId);
-    inventoryDetails = FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId == '' ? widget.inventoryId : workItemId).snapshots();
+    inventoryDetails =
+        FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId == '' ? widget.inventoryId : workItemId).snapshots();
   }
 
   @override
@@ -160,7 +161,8 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                           AssignmentWidget(
                                             id: data.inventoryId!,
                                             assignto: data.assignedto!,
-                                            imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                            imageUrlCreatedBy:
+                                                data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                             createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                           ),
                                         );
