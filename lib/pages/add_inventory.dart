@@ -60,6 +60,8 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
           curve: Curves.easeInOut,
         );
       });
+
+      // pageController!.animateToPage(currentScreenIndex + 2, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
     } else {
       setState(() {});
     }
@@ -179,7 +181,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                         child: CustomButton(
                                                           text: screensDataList[index].title == "Assign to" ? 'Submit' : 'Next',
                                                           onPressed: () {
-                                                            FocusScope.of(context).unfocus();
+                                                            // FocusScope.of(context).unfocus();
 
                                                             if (_formKey.currentState!.validate()) {
                                                               nextQuestion(

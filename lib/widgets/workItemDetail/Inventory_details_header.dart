@@ -1,8 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:html';
+// import 'dart:html';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
@@ -20,8 +19,8 @@ import '../app/app_bar.dart';
 
 Future<void> shareUrl(BuildContext context, {String textToCombine = ''}) async {
   try {
-    final currentUrl = window.location.href;
-    await Clipboard.setData(ClipboardData(text: currentUrl + textToCombine));
+    // final currentUrl = window.location.href;
+    // await Clipboard.setData(ClipboardData(text: currentUrl + textToCombine));
     customSnackBar(context: context, text: 'URL copied to clipboard');
   } catch (e) {
     print('Error sharing URL: $e');
