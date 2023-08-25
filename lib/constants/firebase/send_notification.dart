@@ -35,11 +35,15 @@ void notifyToUser({required dynamic itemdetail, required String title, required 
   List<String> userids = [];
   for (var data in itemdetail.assignedto!) {
     userids.add(data.userid!);
+    print("object=======>$userids");
   }
   List<String> tokens = await User.getUserTokensByIds(userids);
+  print("tokens$tokens");
   for (var token in tokens) {
     if (AppConst.getFcmToken() != token) {
       await sendNotificationTouser(token: token, title: title, content: content);
+      print("notification send");
     }
   }
+  print('object');
 }

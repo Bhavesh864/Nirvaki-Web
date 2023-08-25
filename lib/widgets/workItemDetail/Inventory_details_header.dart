@@ -1,11 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:html';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/Customs/snackbar.dart';
+
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../Customs/custom_chip.dart';
@@ -19,13 +17,13 @@ import '../app/nav_bar.dart';
 import '../app/app_bar.dart';
 
 Future<void> shareUrl(BuildContext context, {String textToCombine = ''}) async {
-  try {
-    final currentUrl = window.location.href;
-    await Clipboard.setData(ClipboardData(text: currentUrl + textToCombine));
-    customSnackBar(context: context, text: 'URL copied to clipboard');
-  } catch (e) {
-    print('Error sharing URL: $e');
-  }
+  // try {
+  //   final currentUrl = window.location.href;
+  //   await Clipboard.setData(ClipboardData(text: currentUrl + textToCombine));
+  //   customSnackBar(context: context, text: 'URL copied to clipboard');
+  // } catch (e) {
+  //   print('Error sharing URL: $e');
+  // }
 }
 
 class InventoryDetailsHeader extends StatelessWidget {
