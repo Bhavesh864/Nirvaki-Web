@@ -31,8 +31,7 @@ class MessageBox extends StatelessWidget {
           alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment:
-                isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
+            mainAxisAlignment: isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
             children: [
               if (!isSender) ...[
                 const CircleAvatar(
@@ -40,23 +39,18 @@ class MessageBox extends StatelessWidget {
                   backgroundImage: AssetImage(profileImage),
                 ),
                 const SizedBox(width: 2),
-                Image.asset('assets/images/receiveMsgTip.png'),
+                // Image.asset('assets/images/receiveMsgTip.png'),
               ],
               Container(
                 constraints: BoxConstraints(
                   maxWidth: width * 3 / 4,
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
                   color: isSender ? AppColor.primary : AppColor.secondary,
                   borderRadius: BorderRadius.only(
-                    topLeft: isSender
-                        ? const Radius.circular(8)
-                        : const Radius.circular(0),
-                    topRight: isSender
-                        ? const Radius.circular(0)
-                        : const Radius.circular(8),
+                    topLeft: isSender ? const Radius.circular(8) : const Radius.circular(0),
+                    topRight: isSender ? const Radius.circular(0) : const Radius.circular(8),
                     bottomLeft: const Radius.circular(8),
                     bottomRight: const Radius.circular(8),
                   ),
@@ -90,11 +84,7 @@ class MessageBox extends StatelessWidget {
                         Text(
                           '11:20 PM',
                           textAlign: TextAlign.end,
-                          style: TextStyle(
-                              color: isSender
-                                  ? Colors.white
-                                  : AppColor.inActiveColor,
-                              fontSize: 12),
+                          style: TextStyle(color: isSender ? Colors.white : AppColor.inActiveColor, fontSize: 12),
                         ),
                         if (isSender)
                           const Padding(
