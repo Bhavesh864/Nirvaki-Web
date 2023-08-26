@@ -20,6 +20,7 @@ import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
+import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
@@ -219,7 +220,11 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                           TodoDetails.updatecardStatus(id: data.todoId!, newStatus: value);
                                           currentStatus = value;
                                           setState(() {});
-                                          notifyToUser(assignedto: data.assignedto, content: "${data.todoId} status change to $value", title: "${data.todoName} status changed");
+                                          notifyToUser(
+                                              itemid: data.todoId!,
+                                              assignedto: data.assignedto,
+                                              content: "${currentUser["userfirstname"]} ${currentUser["userlastname"]} change status to $value",
+                                              title: "${data.todoName} status changed");
                                         },
                                       ),
                                     ],

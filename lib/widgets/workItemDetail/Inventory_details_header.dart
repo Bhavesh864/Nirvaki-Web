@@ -14,6 +14,7 @@ import '../../Customs/snackbar.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
+import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
 import '../app/nav_bar.dart';
@@ -211,8 +212,9 @@ class _HeaderChipsState extends State<HeaderChips> {
               setState(() {});
               print(widget.inventoryDetails?.assignedto?[0].userid);
               notifyToUser(
+                  itemid: widget.id,
                   assignedto: widget.inventoryDetails.assignedto,
-                  content: "${widget.id} status change to $value",
+                  content: "${currentUser["userfirstname"]} ${currentUser["userlastname"]} change status to $value",
                   title: "${widget.id.contains(ItemCategory.isInventory) ? "Inventory" : "Lead"} status changed");
             },
           ),
