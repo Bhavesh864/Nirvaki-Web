@@ -35,12 +35,12 @@ class AppConst {
     _fcmToken = token;
   }
 
-  static String? _accessToken;
-  static String? getAccessToken() {
+  static dynamic _accessToken;
+  static dynamic getAccessToken() {
     return _accessToken;
   }
 
-  static setAccessToken(String token) {
+  static setAccessToken(dynamic token) {
     _accessToken = token;
   }
 
