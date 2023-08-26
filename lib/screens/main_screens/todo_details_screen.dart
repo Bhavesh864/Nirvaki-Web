@@ -1,15 +1,13 @@
 // ignore_for_file: invalid_use_of_protected_member, avoid_web_libraries_in_flutter
 import 'dart:async';
 
-import 'dart:html';
+// import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
@@ -469,11 +467,11 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                                   size: 18,
                                                                 ),
                                                                 onTap: () {
-                                                                  if (kIsWeb) {
-                                                                    AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                                                    anchorElement.download = 'Attachment file';
-                                                                    anchorElement.click();
-                                                                  }
+                                                                  // if (kIsWeb) {
+                                                                  //   AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                                                  //   anchorElement.download = 'Attachment file';
+                                                                  //   anchorElement.click();
+                                                                  // }
                                                                 },
                                                               ),
                                                               GestureDetector(

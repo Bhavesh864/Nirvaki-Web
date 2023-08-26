@@ -2,16 +2,12 @@
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.INTERNET" />
-<<<<<<< HEAD
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
 
-=======
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
->>>>>>> 8e3173c9a31ab34e10e9613f1b2c7ef451a37a57
     <application
         android:label="yes_broker"
         android:name="${applicationName}"
