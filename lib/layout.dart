@@ -1,9 +1,7 @@
 import 'package:beamer/beamer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
@@ -100,7 +98,8 @@ class _LayoutViewState extends State<LayoutView> {
 
         return Scaffold(
           body: ScreenTypeLayout.builder(
-            breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
+            breakpoints:
+                const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
             mobile: (p0) => _buildMobileLayout(snapshot.hasData),
             tablet: (p0) => _buildTabletLayout(snapshot.hasData),
             desktop: (p0) => _buildDesktopLayout(snapshot.hasData),
@@ -122,7 +121,11 @@ class _LayoutViewState extends State<LayoutView> {
     if (isAuthenticated) {
       return const LargeScreen();
     } else {
-      final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
+      final location = Beamer.of(context)
+          .currentBeamLocation
+          .state
+          .routeInformation
+          .location!;
 
       if (location.isNotEmpty && location.contains('inventory-details')) {
         return PublicViewInventoryDetails(
@@ -141,7 +144,11 @@ class _LayoutViewState extends State<LayoutView> {
     if (isAuthenticated) {
       return const LargeScreen();
     } else {
-      final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
+      final location = Beamer.of(context)
+          .currentBeamLocation
+          .state
+          .routeInformation
+          .location!;
 
       if (location.isNotEmpty && location.contains('inventory-details')) {
         AppConst.setPublicView(true);
@@ -163,7 +170,9 @@ class _LayoutViewState extends State<LayoutView> {
 String? extractItemIdFromPath(String path, String itemType) {
   List<String> segments = Uri.parse(path).pathSegments;
 
-  if (segments.length >= 3 && segments[0] == itemType && segments[1] == '$itemType-details') {
+  if (segments.length >= 3 &&
+      segments[0] == itemType &&
+      segments[1] == '$itemType-details') {
     String itemId = segments[2];
     return itemId;
   } else {

@@ -12,6 +12,13 @@ import 'package:yes_broker/routes/routes.dart';
 import 'constants/notification/app_notification.dart';
 import 'package:yes_broker/constants/utils/theme.dart';
 
+import 'local.notification_service.dart';
+
+Future<void> backgroundHandler(RemoteMessage message) async {
+  print("title----->  ${message.notification!.title}");
+  print("body----->  ${message.notification!.body}");
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -35,7 +42,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      backButtonDispatcher: BeamerBackButtonDispatcher(delegate: routerDelegate),
+      backButtonDispatcher:
+          BeamerBackButtonDispatcher(delegate: routerDelegate),
       debugShowCheckedModeBanner: false,
       title: 'Brokr',
       theme: TAppTheme.lightTheme,
