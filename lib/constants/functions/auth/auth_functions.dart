@@ -19,6 +19,9 @@ void userLogout(WidgetRef ref, BuildContext context) {
   UserHiveMethods.deleteData(AppConst.getAccessToken());
   UserHiveMethods.deleteData("token");
   ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null);
+  final user = UserHiveMethods.getdata(AppConst.getAccessToken());
+  print("user======>$user");
+  AppConst.setAccessToken(null);
 }
 
 
