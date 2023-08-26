@@ -188,6 +188,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen>
                                               height: 35,
                                               width: data.todoName!.length * 9,
                                               child: CustomTextInput(
+                                                autofocus: true,
                                                 controller:
                                                     todoNameEditingController,
                                                 onFieldSubmitted: (newValue) {

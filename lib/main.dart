@@ -12,8 +12,6 @@ import 'package:yes_broker/routes/routes.dart';
 import 'constants/notification/app_notification.dart';
 import 'package:yes_broker/constants/utils/theme.dart';
 
-import 'local.notification_service.dart';
-
 Future<void> backgroundHandler(RemoteMessage message) async {
   print("title----->  ${message.notification!.title}");
   print("body----->  ${message.notification!.body}");
