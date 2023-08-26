@@ -78,12 +78,12 @@ List<MenuItem> sideBarItems = [
     iconData: leadIcon,
     screen: const LeadListingScreen(),
   ),
-  MenuItem(
-    nav: '/chat',
-    label: chatPageLabel,
-    iconData: chatIcon,
-    screen: const ChatScreen(),
-  ),
+  // MenuItem(
+  //   nav: '/chat',
+  //   label: chatPageLabel,
+  //   iconData: chatIcon,
+  //   screen: const ChatScreen(),
+  // ),
   MenuItem(
     nav: '/calendar',
     label: calendarPageLabel,
