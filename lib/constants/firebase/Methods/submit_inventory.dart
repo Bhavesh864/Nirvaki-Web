@@ -65,8 +65,6 @@ Future<String> submitInventoryAndcardDetails(state) async {
   final securityunit = getDataById(state, 51);
   final lockinperiod = getDataById(state, 52);
   final commercialphotos = getDataById(state, 53);
-  Box box = Hive.box("users");
-  final currentUser = box.get(AppConst.getAccessToken());
 
   final cards.CardDetails card = cards.CardDetails(
       workitemId: "IN$randomId",

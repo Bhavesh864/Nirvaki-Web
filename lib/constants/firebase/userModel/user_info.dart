@@ -144,7 +144,7 @@ class User extends HiveObject {
   static Future<User?> getUser(String userId) async {
     try {
       final hiveUserData = UserHiveMethods.getdata(userId);
-      print("userhiveform=====>$hiveUserData");
+      // print("userhiveform=====>$hiveUserData");
       if (hiveUserData != null) {
         final Map<String, dynamic> userDataMap = Map.from(hiveUserData);
         final User user = User.fromMap(userDataMap);

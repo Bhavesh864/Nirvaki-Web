@@ -133,7 +133,7 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                               }),
                           DropDownField(
                               title: "Role",
-                              optionsList: const ["Employe", "Manager"],
+                              optionsList: const ["Employee", "Manager"],
                               onchanged: (e) {
                                 setState(() {
                                   role = e;

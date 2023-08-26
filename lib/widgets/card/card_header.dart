@@ -11,6 +11,7 @@ import 'package:yes_broker/constants/firebase/send_notification.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../constants/app_constant.dart';
+import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/utils/constants.dart';
 import '../app/nav_bar.dart';
 import '../../Customs/custom_chip.dart';
@@ -89,7 +90,12 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                     TodoDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
                   }
                   setState(() {});
-                  notifyToUser(assignedto: cardData.assignedto, content: "${cardData.cardTitle} status change to $value", title: "${cardData.workitemId} status changed");
+                  notifyToUser(
+                    itemid: cardData.workitemId!,
+                    assignedto: cardData.assignedto,
+                    content: "${currentUser["userfirstname"]} ${currentUser["userlastname"]} change status to $value",
+                    title: "${cardData.workitemId} status changed",
+                  );
                 },
               ),
               checkNotNUllItem(cardData.roomconfig?.bedroom)
