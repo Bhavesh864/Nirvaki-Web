@@ -1,11 +1,9 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:yes_broker/Customs/responsive.dart';
 
-import '../../Customs/custom_fields.dart';
-import '../../Customs/custom_text.dart';
-import '../../routes/routes.dart';
+import '../../customs/custom_fields.dart';
+import '../../customs/custom_text.dart';
 
 class WorkItemSuccessWidget extends StatelessWidget {
   final String isInventory;
@@ -38,11 +36,11 @@ class WorkItemSuccessWidget extends StatelessWidget {
             isBorder: false,
             text: 'Go to Dashboard',
             onPressed: () {
-              if (Responsive.isMobile(context)) {
-                Navigator.of(context).pushNamed(AppRoutes.homeScreen);
-              } else {
-                context.beamToNamed('/');
-              }
+              // if (Responsive.isMobile(context)) {
+              //   Navigator.of(context).pushNamed(AppRoutes.homeScreen);
+              // } else {
+              context.beamToNamed('/');
+              // }
             },
           ),
         )

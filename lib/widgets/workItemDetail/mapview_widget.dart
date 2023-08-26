@@ -36,18 +36,16 @@ class MapViewWidget extends StatelessWidget {
               const SizedBox(
                 width: 10,
               ),
-              InkWell(
-                onTap: () {
+              CustomChip(
+                onPressed: () {
                   Clipboard.setData(ClipboardData(text: googleMapsLink)).then((_) {
                     customSnackBar(context: context, text: "Google link copied to clipboard");
                   });
                 },
-                child: const CustomChip(
-                  label: Icon(
-                    Icons.share_outlined,
-                  ),
-                  paddingHorizontal: 3,
+                label: const Icon(
+                  Icons.share_outlined,
                 ),
+                paddingHorizontal: 3,
               ),
             ],
           ),

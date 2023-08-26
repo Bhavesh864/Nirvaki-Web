@@ -6,15 +6,16 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/customs/custom_text.dart';
+import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart' as inventory;
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart' as lead;
 import 'package:yes_broker/constants/firebase/random_uid.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 
-import '../../Customs/custom_fields.dart';
-import '../../Customs/dropdown_field.dart';
+import '../../customs/custom_fields.dart';
+import '../../customs/dropdown_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
 import '../firebase/detailsModels/todo_details.dart';
 import '../utils/colors.dart';
@@ -76,9 +77,7 @@ void showImageSliderCarousel(List<String> imageUrls, int initialIndex, BuildCont
   );
 }
 
-void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname, Function updateState, String titleName) async {
-  print('--------title ---$titleName');
-  print(id);
+void uploadAttachmentsToFirebaseStorage(PlatformFile fileToUpload, String id, String docname, Function updateState, String titleName) async {
   final uniqueKey = DateTime.now().microsecondsSinceEpoch.toString();
 
   Reference referenceRoot = FirebaseStorage.instance.ref();
@@ -95,7 +94,7 @@ void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname, 
     final downloadUrl = await referenceImagesToUpload.getDownloadURL();
     print('downloadurl.-------$downloadUrl');
 
-    if (id.contains("IN")) {
+    if (id.contains(ItemCategory.isInventory)) {
       inventory.Attachments attachments = inventory.Attachments(
         id: generateUid(),
         createdby: AppConst.getAccessToken(),
@@ -105,7 +104,7 @@ void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname, 
         type: docname,
       );
       await inventory.InventoryDetails.addAttachmentToItems(itemid: id, newAttachment: attachments).then((value) => updateState());
-    } else if (id.contains("LD")) {
+    } else if (id.contains(ItemCategory.isLead)) {
       lead.Attachments attachments = lead.Attachments(
         id: generateUid(),
         createdby: AppConst.getAccessToken(),
@@ -116,7 +115,7 @@ void uploadFileToFirebase(PlatformFile fileToUpload, String id, String docname, 
       );
 
       await lead.LeadDetails.addAttachmentToItems(itemid: id, newAttachment: attachments).then((value) => updateState());
-    } else if (id.contains("TD")) {
+    } else if (id.contains(ItemCategory.isTodo)) {
       Attachments attachments = Attachments(
         id: generateUid(),
         createdby: AppConst.getAccessToken(),
@@ -156,8 +155,8 @@ void showUploadDocumentModal(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               child: Container(
                 padding: const EdgeInsets.all(15),
-                height: docName == 'Other' ? 350 : 300,
-                width: 500,
+                height: docName == 'Other' ? 400 : 300,
+                width: Responsive.isMobile(context) ? width : 500,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -232,7 +231,7 @@ void showUploadDocumentModal(
                       onPressed: () {
                         if (docName != '' && selectedFile != null) {
                           selectedDocName.add(docName);
-                          uploadFileToFirebase(selectedFile!, id, docName, updateState, titleController.text);
+                          uploadAttachmentsToFirebaseStorage(selectedFile!, id, docName, updateState, titleController.text);
                           onPressed();
                           selectedFile = null;
                           Navigator.of(context).pop();
@@ -269,16 +268,18 @@ void showConfirmDeleteAttachment(BuildContext context, Function onPressYes) {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Flexible(
+                  Flexible(
                     child: Text(
                       'Do you want to remove insurance document?',
-                      style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: Responsive.isMobile(context) ? 22 : 26, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    iconSize: 22,
-                    onPressed: () {
+                  InkWell(
+                    child: const Icon(
+                      Icons.close,
+                      size: 22,
+                    ),
+                    onTap: () {
                       Navigator.of(context).pop();
                     },
                   ),

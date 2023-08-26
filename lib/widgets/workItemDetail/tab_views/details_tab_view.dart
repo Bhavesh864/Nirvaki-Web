@@ -1,6 +1,5 @@
 // import 'dart:html';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
@@ -81,6 +80,11 @@ class _DetailsTabViewState extends State<DetailsTabView> {
             }
           }
         });
+
+        if (AppConst.getPublicView()) {
+          allImages.removeAt(0);
+          allTitles.removeAt(0);
+        }
       }
     }
 
@@ -244,11 +248,11 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                       size: 18,
                                     ),
                                     onTap: () {
-                                      if (kIsWeb) {
-                                        // AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                        // anchorElement.download = 'Attachment file';
-                                        // anchorElement.click();
-                                      }
+                                      // if (kIsWeb) {
+                                      //   AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                      //   anchorElement.download = 'Attachment file';
+                                      //   anchorElement.click();
+                                      // }
                                     },
                                   ),
                                   GestureDetector(
@@ -259,11 +263,11 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                     onTap: () {
                                       setState(() {
                                         showConfirmDeleteAttachment(context, () {
-                                          if (widget.id.contains("IN")) {
+                                          if (widget.id.contains(ItemCategory.isInventory)) {
                                             InventoryDetails.deleteAttachment(itemId: widget.id, attachmentIdToDelete: attachment.id!).then(
                                               (value) => widget.updateData(),
                                             );
-                                          } else if (widget.id.contains("LD")) {
+                                          } else if (widget.id.contains(ItemCategory.isLead)) {
                                             LeadDetails.deleteAttachment(itemId: widget.id, attachmentIdToDelete: attachment.id!).then(
                                               (value) => widget.updateData(),
                                             );

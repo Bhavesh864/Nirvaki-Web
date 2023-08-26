@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 
 //-------------------------------------------TextformField-------------------------------------->
@@ -10,10 +10,12 @@ class CustomTextInput extends StatefulWidget {
   final VoidCallback? ontap;
   final Widget? label;
   final bool enabled;
+  final FocusNode? focusnode;
   final String? hintText;
   final IconData? leftIcon;
   final bool? obscureText;
   final bool? readonly;
+  final bool? autofocus;
   final IconData? rightIcon;
   final bool? indense;
   final String? initialvalue;
@@ -21,6 +23,7 @@ class CustomTextInput extends StatefulWidget {
   final int? maxLength;
   final int? maxLines;
   final int? minLines;
+  final Function(String text)? onFieldSubmitted;
   final TextStyle? hintstyle;
   final FormFieldValidator<String>? validator;
   final Function(String)? onChanged;
@@ -32,6 +35,7 @@ class CustomTextInput extends StatefulWidget {
       this.hintText,
       this.indense,
       this.leftIcon,
+      this.focusnode,
       this.ontap,
       this.hintstyle = const TextStyle(color: Colors.grey),
       this.rightIcon,
@@ -46,7 +50,9 @@ class CustomTextInput extends StatefulWidget {
       this.readonly = false,
       this.label,
       this.enabled = true,
-      this.contentPadding = 0})
+      this.autofocus = false,
+      this.contentPadding = 0,
+      this.onFieldSubmitted})
       : super(key: key);
 
   @override
@@ -67,8 +73,11 @@ class CustomTextInputState extends State<CustomTextInput> {
     return SizedBox(
       height: 65,
       child: TextFormField(
+        autofocus: widget.autofocus!,
+        focusNode: widget.focusnode,
         enabled: widget.enabled,
         onTap: widget.ontap,
+        onFieldSubmitted: widget.onFieldSubmitted,
         style: const TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.w400,
@@ -81,7 +90,8 @@ class CustomTextInputState extends State<CustomTextInput> {
             borderSide: const BorderSide(color: Colors.red, width: 1),
           ),
           label: widget.label,
-          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
           labelText: widget.labelText,
           hintText: widget.hintText,
           hintStyle: widget.hintstyle,
@@ -197,13 +207,17 @@ class _CustomButtonState extends State<CustomButton> {
           width: widget.width,
           padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
           decoration: BoxDecoration(
-            border: widget.isBorder! ? Border.all(color: widget.borderColor!) : null,
+            border: widget.isBorder!
+                ? Border.all(color: widget.borderColor!)
+                : null,
             color: widget.buttonColor,
             // color: widget.buttonColor.withOpacity(isPressed ? 0.8 : 1.0),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
-            mainAxisAlignment: widget.titleLeft ? MainAxisAlignment.start : MainAxisAlignment.center,
+            mainAxisAlignment: widget.titleLeft
+                ? MainAxisAlignment.start
+                : MainAxisAlignment.center,
             children: [
               if (widget.leftIcon != null)
                 Padding(

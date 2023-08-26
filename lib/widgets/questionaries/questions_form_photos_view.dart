@@ -157,7 +157,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
           images[index] = selected;
           webImages[index] = null;
         });
-        print('for mobile  ${pickedImage.path}');
+        // print('for mobile  ${pickedImage.path}');
 
         uploadImageToFirebase(index, selected);
       }

@@ -1,14 +1,16 @@
 // ignore_for_file: invalid_use_of_protected_member
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:yes_broker/Customs/custom_fields.dart';
-import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/customs/custom_fields.dart';
+import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
+import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
 
-import '../../../Customs/custom_text.dart';
-import '../../../Customs/small_custom_profile_image.dart';
+import '../../../customs/custom_text.dart';
+import '../../../customs/small_custom_profile_image.dart';
 import '../../../constants/functions/workitems_detail_methods.dart';
 import '../../../constants/utils/colors.dart';
 import '../../../constants/utils/constants.dart';
@@ -17,9 +19,7 @@ import '../../../widgets/workItemDetail/inventory_details_header.dart';
 import '../../../widgets/workItemDetail/assignment_widget.dart';
 import '../../../widgets/workItemDetail/contact_information.dart';
 import '../../../widgets/workItemDetail/mapview_widget.dart';
-import '../../../widgets/workItemDetail/tab_views/activity_tab_view.dart';
 import '../../../widgets/workItemDetail/tab_views/details_tab_view.dart';
-import '../../../widgets/workItemDetail/tab_views/todo_tab_view.dart';
 
 class PublicViewInventoryDetails extends ConsumerStatefulWidget {
   final String inventoryId;
@@ -33,6 +33,14 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
   late TabController tabviewController;
   late Future<InventoryDetails?> inventoryDetails;
   int currentSelectedTab = 0;
+
+  // Future<void> fetchData(Future<InventoryDetails?> inventoryDetails) async {
+  //   final inventoryData = await inventoryDetails;
+
+  //   if (inventoryData != null) {
+  //     final BrokerInfo? brokerInfoData = await BrokerInfo.getBrokerInfo(inventoryData.brokerid!);
+  //   }
+  // }
 
   @override
   void initState() {
@@ -159,12 +167,11 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                               context,
                                               'Assignment',
                                               AssignmentWidget(
-                                                imageUrlAssignTo:
-                                                    data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
+                                                id: data.inventoryId!,
+                                                assignto: data.assignedto!,
                                                 imageUrlCreatedBy:
                                                     data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                 createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
-                                                assignTo: data.assignedto![0].firstname! + data.assignedto![0].firstname!,
                                               ),
                                             );
                                           },
@@ -192,8 +199,6 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                       id: data.inventoryId!,
                                       data: data,
                                     ),
-                                  if (currentSelectedTab == 1) const ActivityTabView(),
-                                  if (currentSelectedTab == 2) const TodoTabView(),
                                 ],
                               ),
                             ),
@@ -212,16 +217,20 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                             padding: const EdgeInsets.all(10),
                             child: Column(
                               children: [
-                                ContactInformation(
-                                  customerinfo: data.customerinfo!,
+                                StreamBuilder(
+                                  stream: FirebaseFirestore.instance.collection("brokerInfo").where("brokerid", isEqualTo: data.brokerid).snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      final dataList = snapshot.data?.docs;
+                                      List<BrokerInfo> inventoryList = dataList!.map((doc) => BrokerInfo.fromSnapshot(doc)).toList();
+
+                                      return CompanyInformation(
+                                        companyInfo: inventoryList[0],
+                                      );
+                                    }
+                                    return const SizedBox();
+                                  },
                                 ),
-                                if (Responsive.isDesktop(context))
-                                  AssignmentWidget(
-                                    imageUrlAssignTo: data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
-                                    imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                    createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
-                                    assignTo: '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
-                                  ),
                                 if (Responsive.isDesktop(context))
                                   MapViewWidget(
                                     state: data.propertyaddress!.state!,

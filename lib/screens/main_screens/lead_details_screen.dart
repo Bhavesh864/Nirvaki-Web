@@ -5,12 +5,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:yes_broker/Customs/custom_fields.dart';
-import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/Customs/small_custom_profile_image.dart';
+import 'package:yes_broker/customs/custom_fields.dart';
+import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
+import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
-import '../../Customs/custom_text.dart';
+import '../../customs/custom_text.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
@@ -46,7 +46,6 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
     tabviewController = TabController(length: 4, vsync: this);
     final workItemId = ref.read(selectedWorkItemId.notifier).state;
     leadDetails = FirebaseFirestore.instance.collection('leadDetails').where('leadId', isEqualTo: workItemId == '' ? widget.leadId : workItemId).snapshots();
-    // leadDetails = LeadDetails.getLeadDetails(workItemId == '' ? widget.leadId : workItemId);
   }
 
   @override
@@ -100,6 +99,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                     setState(() {});
                                   },
                                   id: data.leadId!,
+                                  inventoryDetails: data,
                                   title: data.leadTitle!,
                                   category: data.leadcategory!,
                                   type: data.leadType!,
@@ -117,6 +117,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                       type: data.leadType!,
                                       propertyCategory: data.propertycategory!,
                                       status: data.leadStatus!,
+                                      inventoryDetails: data,
                                     ),
                                   ),
                                 ListTile(
@@ -160,19 +161,37 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                             context,
                                             'Assignment',
                                             AssignmentWidget(
-                                              imageUrlAssignTo:
-                                                  data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
+                                              id: data.leadId!,
+                                              assignto: data.assignedto!,
                                               imageUrlCreatedBy:
                                                   data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                               createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
-                                              assignTo: data.assignedto![0].firstname! + data.assignedto![0].firstname!,
                                             ),
                                           );
                                         },
-                                        child: SmallCustomCircularImage(
-                                          width: 30,
-                                          height: 30,
-                                          imageUrl: data.assignedto![0].image!,
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: data.assignedto!.asMap().entries.map((entry) {
+                                            final index = entry.key;
+                                            final user = entry.value;
+                                            return Transform.translate(
+                                              offset: Offset(index * -8.0, 0),
+                                              child: Container(
+                                                width: 24,
+                                                height: 24,
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(color: Colors.white),
+                                                  image: DecorationImage(
+                                                    image: NetworkImage(
+                                                      user.image!.isEmpty ? noImg : user.image!,
+                                                    ),
+                                                    fit: BoxFit.fill,
+                                                  ),
+                                                  borderRadius: BorderRadius.circular(40),
+                                                ),
+                                              ),
+                                            );
+                                          }).toList(),
                                         ),
                                       ),
                                     ],
@@ -208,8 +227,8 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                       setState(() {});
                                     },
                                   ),
-                                if (currentSelectedTab == 1) const ActivityTabView(),
-                                if (currentSelectedTab == 2) const TodoTabView(),
+                                if (currentSelectedTab == 1) ActivityTabView(details: data),
+                                if (currentSelectedTab == 2) TodoTabView(id: data.leadId!),
                               ],
                             ),
                           ),
@@ -234,10 +253,10 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                 ),
                                 if (Responsive.isDesktop(context))
                                   AssignmentWidget(
-                                    imageUrlAssignTo: data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
+                                    id: data.leadId!,
+                                    assignto: data.assignedto!,
                                     imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                     createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
-                                    assignTo: '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
                                   ),
                                 if (Responsive.isDesktop(context))
                                   MapViewWidget(

@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
-import 'package:yes_broker/screens/account_screens/common_screen.dart';
 import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
 
 AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect) {
-  // final width = MediaQuery.of(context).size.width;
   return AppBar(
     foregroundColor: Colors.black,
     scrolledUnderElevation: 0.0,
-    // toolbarHeight: 50,
     backgroundColor: Colors.white,
     title: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -24,8 +22,6 @@ AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect) 
             fontWeight: FontWeight.bold,
             size: 16,
           ),
-          // tablet: (p0) => largeScreenView(),
-          // desktop: (p0) => largeScreenView(),
         ),
       ],
     ),
@@ -46,14 +42,13 @@ AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect) 
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Container(
-                  height: 30,
-                  width: 30,
+                  height: 25,
+                  width: 35,
                   margin: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(snapshot.data!.image.isEmpty ? noImg : snapshot.data!.image.toString())),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  // child: Text(width.toString()),
                 );
               }
               return const SizedBox();

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 
-double? height;
-double? width;
+import '../../screens/account_screens/Teams/team_screen.dart';
+
+double? height = 707;
+double? width = 1440;
 
 // App constants
 const noImg = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
@@ -204,7 +206,7 @@ Color taskStatusColor(String title) {
   switch (title) {
     case 'New':
       return Colors.green;
-    case 'In progress':
+    case 'In Progress':
       return AppColor.locationfinalizedstatuscolor;
     case 'Location Finalised':
       return AppColor.locationfinalizedstatuscolor;
@@ -221,13 +223,20 @@ Color taskStatusColor(String title) {
   }
 }
 
-List dropDownStatusDataList = [
+List<String> dropDownStatusDataList = [
   'New',
+  'In Progress',
   'Location Finalised',
   'Negotiation',
   'Token',
   'Agreement',
   'Converted',
+  'Closed',
+];
+
+List<String> todoDropDownList = [
+  'New',
+  'In Progress',
   'Closed',
 ];
 
@@ -318,8 +327,15 @@ List<String> inventoryDetailsImageUrls = [
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlt_j5QPoJpIFeO5ElGNRgoFQGYwM3Y7eotw&usqp=CAU',
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHzKnIon6D6PeqCBGxlroFP-bQzAGTi8fUkg&usqp=CAU',
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgZ3Sg7lP-k0OgUdnUtE0eNT7PmqmqklX8RA&usqp=CAU',
+];
 
-  // Add more image URLs as needed
+List<ProfileMenuItems> profileMenuItems = [
+  ProfileMenuItems(title: "Profile", screen: const Center(child: Text('Screen for Item 1')), id: 1),
+  ProfileMenuItems(title: "Team", screen: const TeamScreen(), id: 2),
+  ProfileMenuItems(title: "Settings", screen: const Center(child: Text('Screen for Item 3')), id: 3),
+  ProfileMenuItems(title: "Subscription", screen: const Center(child: Text('Screen for Item 4')), id: 4),
+  ProfileMenuItems(title: "Help", screen: const Center(child: Text('Screen for Item 1')), id: 5),
+  ProfileMenuItems(title: "Logout", screen: const Center(child: Text('Screen for Item 1')), id: 6),
 ];
 
 // List<String> MenuItems = [
@@ -331,32 +347,37 @@ List<String> inventoryDetailsImageUrls = [
 //   'Logout',
 // ];
 
-
 // final _questions = [
-  //   'Which Property Category does this inventory Fall under ?',
-  //   'What Category does this inventory belong to?',
-  //   'What is the specific type of Property?',
-  //   'From where did you source this inventory?',
-  //   'What kind of property would you like to list?',
-  // ];
+//   'Which Property Category does this inventory Fall under ?',
+//   'What Category does this inventory belong to?',
+//   'What is the specific type of Property?',
+//   'From where did you source this inventory?',
+//   'What kind of property would you like to list?',
+// ];
 
-  // List answers = [
-  //   ['Residential', 'Commercial'],
-  //   ['Rent', 'Sell'],
-  //   ['Direct', 'Broker'],
-  //   [
-  //     '99Acers',
-  //     'Magic Bricks',
-  //     'Housing.com',
-  //     'Social Media',
-  //     'Data Calling',
-  //     'Other',
-  //   ],
-  //   [
-  //     'Apartment',
-  //     'Independent House/Villa ',
-  //     'Builder Floor ',
-  //     'Plot',
-  //     'Farm House',
-  //   ],
-  // ];
+// List answers = [
+//   ['Residential', 'Commercial'],
+//   ['Rent', 'Sell'],
+//   ['Direct', 'Broker'],
+//   [
+//     '99Acers',
+//     'Magic Bricks',
+//     'Housing.com',
+//     'Social Media',
+//     'Data Calling',
+//     'Other',
+//   ],
+//   [
+//     'Apartment',
+//     'Independent House/Villa ',
+//     'Builder Floor ',
+//     'Plot',
+//     'Farm House',
+//   ],
+// ];
+
+class ItemCategory {
+  static String isInventory = "IN";
+  static String isLead = "LD";
+  static String isTodo = "TD";
+}

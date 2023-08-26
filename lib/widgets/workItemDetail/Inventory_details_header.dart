@@ -1,15 +1,32 @@
+// ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
+
 import 'package:yes_broker/Customs/responsive.dart';
+
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
+import 'package:yes_broker/constants/firebase/send_notification.dart';
+import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
+import '../../Customs/snackbar.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
+import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
 import '../app/nav_bar.dart';
 import '../app/app_bar.dart';
+
+Future<void> shareUrl(BuildContext context, {String textToCombine = ''}) async {
+  try {
+    // final currentUrl = window.location.href;
+    // await Clipboard.setData(ClipboardData(text: currentUrl + textToCombine));
+    customSnackBar(context: context, text: 'URL copied to clipboard');
+  } catch (e) {
+    print('Error sharing URL: $e');
+  }
+}
 
 class InventoryDetailsHeader extends StatelessWidget {
   final String title;
@@ -21,11 +38,13 @@ class InventoryDetailsHeader extends StatelessWidget {
   final String? price;
   final String? unit;
   final Function setState;
+  final dynamic inventoryDetails;
 
   const InventoryDetailsHeader({
     super.key,
     required this.title,
     required this.id,
+    this.inventoryDetails,
     required this.category,
     required this.propertyCategory,
     required this.status,
@@ -34,6 +53,16 @@ class InventoryDetailsHeader extends StatelessWidget {
     required this.unit,
     required this.setState,
   });
+
+  // Future<void> shareUrl(BuildContext context) async {
+  //   try {
+  //     final currentUrl = window.location.href;
+  //     await Clipboard.setData(ClipboardData(text: currentUrl));
+  //     customSnackBar(context: context, text: 'URL copied to clipboard');
+  //   } catch (e) {
+  //     print('Error sharing URL: $e');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -59,14 +88,18 @@ class InventoryDetailsHeader extends StatelessWidget {
             ),
             if (!Responsive.isMobile(context))
               HeaderChips(
+                inventoryDetails: inventoryDetails,
                 category: category,
                 type: type,
                 propertyCategory: propertyCategory,
                 status: status,
                 id: id,
               ),
-            const CustomChip(
-              label: Icon(
+            CustomChip(
+              onPressed: () {
+                shareUrl(context);
+              },
+              label: const Icon(
                 Icons.share_outlined,
               ),
               paddingHorizontal: 3,
@@ -84,6 +117,8 @@ class InventoryDetailsHeader extends StatelessWidget {
                         if (e.contains('Public')) {
                           AppConst.setPublicView(!AppConst.getPublicView());
                           setState();
+                        } else {
+                          // AppConst.getOuterContext()!.beamToNamed(AppRoutes.addInventory);
                         }
                       }, showicon: true, icon: e['icon']),
                     )
@@ -113,6 +148,7 @@ class HeaderChips extends StatefulWidget {
   final String propertyCategory;
   final String status;
   final String id;
+  final dynamic inventoryDetails;
 
   const HeaderChips({
     super.key,
@@ -121,6 +157,7 @@ class HeaderChips extends StatefulWidget {
     required this.propertyCategory,
     required this.status,
     required this.id,
+    this.inventoryDetails,
   });
 
   @override
@@ -159,45 +196,28 @@ class _HeaderChipsState extends State<HeaderChips> {
           ),
         ),
         if (!AppConst.getPublicView())
-          SizedBox(
-            // width: 100,
-            child: PopupMenuButton(
-              initialValue: widget.status,
-              splashRadius: 0,
-              padding: EdgeInsets.zero,
-              color: Colors.white.withOpacity(1),
-              offset: const Offset(10, 40),
-              itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
-              onSelected: (value) {
-                CardDetails.updateCardStatus(id: widget.id, newStatus: value);
-                if (widget.id.contains("IN")) {
-                  InventoryDetails.updatecardStatus(id: widget.id, newStatus: value);
-                } else if (widget.id.contains("LD")) {
-                  LeadDetails.updatecardStatus(id: widget.id, newStatus: value);
-                }
-                currentStatus = value;
-                setState(() {});
-              },
-              child: IntrinsicWidth(
-                child: Chip(
-                  label: Row(
-                    children: [
-                      CustomText(
-                        title: currentStatus ?? widget.status,
-                        color: taskStatusColor(currentStatus ?? widget.status),
-                        size: 10,
-                      ),
-                      Icon(
-                        Icons.expand_more,
-                        size: 18,
-                        color: taskStatusColor(currentStatus ?? widget.status),
-                      ),
-                    ],
-                  ),
-                  backgroundColor: taskStatusColor(currentStatus ?? widget.status).withOpacity(0.1),
-                ),
-              ),
-            ),
+          CustomStatusDropDown(
+            status: currentStatus ?? widget.status,
+            itemBuilder: (context) => dropDownStatusDataList
+                .map((e) => popupMenuItem(e.toString()))
+                .toList(),
+            onSelected: (value) {
+              CardDetails.updateCardStatus(id: widget.id, newStatus: value);
+              if (widget.id.contains(ItemCategory.isInventory)) {
+                InventoryDetails.updatecardStatus(
+                    id: widget.id, newStatus: value);
+              } else if (widget.id.contains(ItemCategory.isLead)) {
+                LeadDetails.updatecardStatus(id: widget.id, newStatus: value);
+              }
+              currentStatus = value;
+              setState(() {});
+              print(widget.inventoryDetails?.assignedto?[0].userid);
+              notifyToUser(
+                  itemid: widget.id,
+                  assignedto: widget.inventoryDetails.assignedto,
+                  content: "${currentUser["userfirstname"]} ${currentUser["userlastname"]} change status to $value",
+                  title: "${widget.id.contains(ItemCategory.isInventory) ? "Inventory" : "Lead"} status changed");
+            },
           ),
       ],
     );

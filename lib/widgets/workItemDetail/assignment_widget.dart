@@ -1,74 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:yes_broker/Customs/small_custom_profile_image.dart';
-import 'package:yes_broker/widgets/questionaries/assign_user.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/Customs/small_custom_profile_image.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/widgets/app/nav_bar.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/userModel/user_info.dart';
+import '../../constants/functions/assingment_methods.dart';
 import '../../constants/utils/colors.dart';
 
-class AssignmentWidget extends StatefulWidget {
+class AssignmentWidget extends ConsumerStatefulWidget {
+  final List<dynamic> assignto;
   final String createdBy;
-  final String assignTo;
-  final String imageUrlAssignTo;
   final String imageUrlCreatedBy;
+  final String id;
 
   const AssignmentWidget({
     super.key,
     required this.createdBy,
-    required this.assignTo,
-    required this.imageUrlAssignTo,
     required this.imageUrlCreatedBy,
+    required this.id,
+    required this.assignto,
   });
 
   @override
-  State<AssignmentWidget> createState() => _AssignmentWidgetState();
+  AssignmentWidgetState createState() => AssignmentWidgetState();
 }
 
-class _AssignmentWidgetState extends State<AssignmentWidget> {
-  User? user;
-
-  void assginUserToTodo() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Dialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              child: Container(
-                padding: const EdgeInsets.all(15),
-                height: 200,
-                width: 500,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    AssignUser(
-                      addUser: (user) {
-                        user = user;
-                      },
-                    ),
-                    const SizedBox(height: 50),
-                    Align(
-                        alignment: Alignment.bottomRight,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              print(user);
-                            },
-                            child: const Text("Add")))
-                  ],
-                ),
-              )),
-        );
-      },
-    );
+class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
+  void assign(User assignedUser) {
+    setState(() {
+      user = assignedUser;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    print('user ------ $user');
     return Column(
       children: [
         if (!AppConst.getPublicView())
@@ -112,6 +80,7 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
           padding: const EdgeInsets.only(top: 18, bottom: 8),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const Icon(Icons.person_add_alt_outlined),
               const Padding(
@@ -128,52 +97,84 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 22),
+                padding: const EdgeInsets.only(left: 5),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Row(
+                    Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SmallCustomCircularImage(imageUrl: widget.imageUrlAssignTo),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 4, top: 4),
-                          child: Text(
-                            widget.assignTo,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.left,
-                            style: const TextStyle(
-                              color: AppColor.primary,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                            ),
+                      children: widget.assignto.map((item) {
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 7),
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(color: AppColor.secondary, borderRadius: BorderRadius.circular(12)),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SmallCustomCircularImage(imageUrl: item.image!.isNotEmpty ? item.image! : noImg),
+                              Text(
+                                "${item.firstname!} ${item.lastname}",
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.left,
+                                style: const TextStyle(
+                                  color: AppColor.primary,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              const SizedBox(width: 3),
+                              if (widget.assignto.length > 1)
+                                currentUser["role"] != "Employee"
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          deleteassignUser(item.userid, widget.id);
+                                          if (Responsive.isMobile(context)) {
+                                            Navigator.of(context).pop();
+                                          }
+                                        },
+                                        child: const Icon(Icons.close),
+                                      )
+                                    : const SizedBox.shrink(),
+                            ],
                           ),
-                        ),
-                      ],
+                        );
+                      }).toList(),
                     ),
-                    GestureDetector(
-                      onTap: () => assginUserToTodo(),
-                      child: const Padding(
-                        padding: EdgeInsets.only(top: 14),
-                        child: Row(
-                          children: [
-                            Icon(Icons.add),
-                            Padding(
-                              padding: EdgeInsets.only(left: 6),
-                              child: Text("Add More",
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    color: AppColor.primary,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                  )),
+                    currentUser["role"] != "Employee"
+                        ? GestureDetector(
+                            onTap: () {
+                              assginUserToTodo(
+                                context,
+                                assign,
+                                widget.assignto,
+                                widget.id,
+                                () {
+                                  Navigator.of(context).pop();
+                                },
+                              );
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.only(top: 14),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.add),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 6),
+                                    child: Text("Add More",
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                          color: AppColor.primary,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                        )),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
+                          )
+                        : const SizedBox(),
                   ],
                 ),
               ),

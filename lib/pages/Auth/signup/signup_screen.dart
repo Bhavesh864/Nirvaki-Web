@@ -2,15 +2,15 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:yes_broker/Customs/custom_fields.dart';
-import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/customs/custom_fields.dart';
+import 'package:yes_broker/customs/responsive.dart';
 
 import 'package:yes_broker/riverpodstate/sign_up_state.dart';
 
 import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/widgets/auth/common_auth_widgets.dart';
-import '../../../Customs/custom_text.dart';
+import '../../../customs/custom_text.dart';
 import '../../../constants/utils/colors.dart';
 import '../../../constants/utils/image_constants.dart';
 
@@ -45,7 +45,11 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
   void navigateTopage(SelectedSignupItems notify) {
     final isvalid = key.currentState?.validate();
     if (isvalid!) {
-      Navigator.pushNamed(context, AppRoutes.personalDetailsScreen);
+      // if (Responsive.isMobile(context)) {
+      //   Navigator.pushNamed(context, AppRoutes.personalDetailsScreen);
+      // } else {
+      context.beamToNamed(AppRoutes.personalDetailsScreen);
+      // }
     }
   }
 
@@ -75,96 +79,98 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
             ),
             child: Center(
               child: Card(
-                child: Container(
-                  width: Responsive.isMobile(context) ? w * 0.9 : 500,
-                  padding: const EdgeInsets.all(25),
-                  child: Form(
-                    key: key,
-                    child: Column(
-                      // crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const CustomAppLogo(),
-                        const Padding(
-                          padding: EdgeInsets.only(top: 10),
-                          child: Text(
-                            "Sign Up",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
+                child: SingleChildScrollView(
+                  child: Container(
+                    width: Responsive.isMobile(context) ? w * 0.9 : 500,
+                    padding: const EdgeInsets.all(25),
+                    child: Form(
+                      key: key,
+                      child: Column(
+                        // crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const CustomAppLogo(),
+                          const Padding(
+                            padding: EdgeInsets.only(top: 10),
+                            child: Text(
+                              "Sign Up",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 5),
-                          child: CustomTextInput(
-                              controller: emailcontroller,
-                              labelText: 'Email address',
-                              validator: validateEmail,
-                              onChanged: (value) {
-                                notify.add({"id": 1, "item": value.trim()});
-                              }),
-                        ),
-                        CustomTextInput(
-                          controller: passwordcontroller,
-                          labelText: 'Password',
-                          validator: validatePassword,
-                          obscureText: true,
-                          // rightIcon: Icons.remove_red_eye,
-                        ),
-                        const Text('Use a minimum of 10 characters with at-least one-special symbol and one upper case letter. '),
-                        const SizedBox(height: 15),
-                        CustomTextInput(
-                            controller: reenteredpasswordcontroller,
-                            labelText: 'Re-enter Password',
-                            obscureText: true,
-                            onChanged: (value) {
-                              notify.add({"id": 2, "item": value.trim()});
-                            },
-                            rightIcon: Icons.remove_red_eye,
-                            validator: validateReenteredPassword),
-                        const SizedBox(height: 10),
-                        isloading
-                            ? const Center(child: CircularProgressIndicator.adaptive())
-                            : SizedBox(
-                                width: w,
-                                child: CustomButton(
-                                  text: 'Sign up',
-                                  onPressed: () => navigateTopage(notify),
-                                  height: 40.0,
-                                ),
-                              ),
-                        const SizedBox(height: 10),
-                        Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const CustomText(
-                                title: 'Already Have an account?',
-                                color: Colors.grey,
-                              ),
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  if (Responsive.isMobile(context)) {
-                                    Navigator.pushReplacementNamed(context, AppRoutes.loginScreen);
-                                  } else {
-                                    context.beamToNamed(AppRoutes.loginScreen);
-                                  }
-                                },
-                                child: const CustomText(
-                                  title: 'Login',
-                                  color: AppColor.primary,
-                                ),
-                              ),
-                            ],
+                          const SizedBox(
+                            height: 10,
                           ),
-                        )
-                      ],
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 5),
+                            child: CustomTextInput(
+                                controller: emailcontroller,
+                                labelText: 'Email address',
+                                validator: validateEmail,
+                                onChanged: (value) {
+                                  notify.add({"id": 1, "item": value.trim()});
+                                }),
+                          ),
+                          CustomTextInput(
+                            controller: passwordcontroller,
+                            labelText: 'Password',
+                            validator: validatePassword,
+                            obscureText: true,
+                            // rightIcon: Icons.remove_red_eye,
+                          ),
+                          const Text('Use a minimum of 10 characters with at-least one-special symbol and one upper case letter. '),
+                          const SizedBox(height: 15),
+                          CustomTextInput(
+                              controller: reenteredpasswordcontroller,
+                              labelText: 'Re-enter Password',
+                              obscureText: true,
+                              onChanged: (value) {
+                                notify.add({"id": 2, "item": value.trim()});
+                              },
+                              rightIcon: Icons.remove_red_eye,
+                              validator: validateReenteredPassword),
+                          const SizedBox(height: 10),
+                          isloading
+                              ? const Center(child: CircularProgressIndicator.adaptive())
+                              : SizedBox(
+                                  width: w,
+                                  child: CustomButton(
+                                    text: 'Sign up',
+                                    onPressed: () => navigateTopage(notify),
+                                    height: 40.0,
+                                  ),
+                                ),
+                          const SizedBox(height: 10),
+                          Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const CustomText(
+                                  title: 'Already Have an account?',
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    // if (Responsive.isMobile(context)) {
+                                    //   Navigator.pushReplacementNamed(context, AppRoutes.loginScreen);
+                                    // } else {
+                                    context.beamToReplacementNamed(AppRoutes.loginScreen);
+                                    // }
+                                  },
+                                  child: const CustomText(
+                                    title: 'Login',
+                                    color: AppColor.primary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
