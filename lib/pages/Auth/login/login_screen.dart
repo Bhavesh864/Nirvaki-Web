@@ -32,29 +32,34 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void loginwithemailpassword(BuildContext context) {
+    FocusScope.of(context).unfocus();
     final isvalid = key.currentState?.validate();
     if (isvalid!) {
       setState(() {
         isloading = true;
       });
-      signinMethod(email: emailcontroller.text, password: passwordcontroller.text).then((value) => {
-            if (value == 'success')
-              {
-                setState(() {
-                  isloading = false;
-                }),
-                context.beamToReplacementNamed('/'),
-                User.updateFcmToken(fcmtoken: AppConst.getFcmToken()!, userid: AppConst.getAccessToken()!),
-                AppConst.setPublicView(false),
-              }
-            else
-              {
-                setState(() {
-                  isloading = false;
-                }),
-                customSnackBar(context: context, text: value!)
-              }
-          });
+      signinMethod(
+              email: emailcontroller.text, password: passwordcontroller.text)
+          .then((value) => {
+                if (value == 'success')
+                  {
+                    setState(() {
+                      isloading = false;
+                    }),
+                    context.beamToReplacementNamed('/'),
+                    User.updateFcmToken(
+                        fcmtoken: AppConst.getFcmToken()!,
+                        userid: AppConst.getAccessToken()!),
+                    AppConst.setPublicView(false),
+                  }
+                else
+                  {
+                    setState(() {
+                      isloading = false;
+                    }),
+                    customSnackBar(context: context, text: value!)
+                  }
+              });
     }
   }
 
@@ -137,17 +142,27 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         Container(
                           margin: const EdgeInsets.only(bottom: 5),
-                          child: CustomTextInput(controller: emailcontroller, labelText: 'Email address', validator: validateEmail),
+                          child: CustomTextInput(
+                              controller: emailcontroller,
+                              labelText: 'Email address',
+                              validator: validateEmail),
                         ),
-                        CustomTextInput(controller: passwordcontroller, labelText: 'Password', obscureText: true, rightIcon: Icons.remove_red_eye, validator: validatePassword),
+                        CustomTextInput(
+                            controller: passwordcontroller,
+                            labelText: 'Password',
+                            obscureText: true,
+                            rightIcon: Icons.remove_red_eye,
+                            validator: validatePassword),
                         const SizedBox(height: 10),
                         isloading
-                            ? const Center(child: CircularProgressIndicator.adaptive())
+                            ? const Center(
+                                child: CircularProgressIndicator.adaptive())
                             : SizedBox(
                                 width: w,
                                 child: CustomButton(
                                   text: 'Login',
-                                  onPressed: () => loginwithemailpassword(context),
+                                  onPressed: () =>
+                                      loginwithemailpassword(context),
                                   height: 40.0,
                                 ),
                               ),

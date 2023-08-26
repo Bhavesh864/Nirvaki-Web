@@ -5,7 +5,6 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -219,7 +218,8 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                           TodoDetails.updatecardStatus(id: data.todoId!, newStatus: value);
                                           currentStatus = value;
                                           setState(() {});
-                                          notifyToUser(assignedto: data.assignedto, content: "${data.todoId} status change to $value", title: "${data.todoName} status changed");
+                                          notifyToUser(
+                                              assignedto: data.assignedto, content: "${data.todoId} status change to $value", title: "${data.todoName} status changed");
                                         },
                                       ),
                                     ],
@@ -443,11 +443,11 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                                   size: 18,
                                                                 ),
                                                                 onTap: () {
-                                                                  if (kIsWeb) {
-                                                                    // AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                                                    // anchorElement.download = 'Attachment file';
-                                                                    // anchorElement.click();
-                                                                  }
+                                                                  // if (kIsWeb) {
+                                                                  // AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                                                  // anchorElement.download = 'Attachment file';
+                                                                  // anchorElement.click();
+                                                                  // }
                                                                 },
                                                               ),
                                                               GestureDetector(
