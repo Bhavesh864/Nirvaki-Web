@@ -96,80 +96,82 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 5),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: widget.assignto.map((item) {
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 7),
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(color: AppColor.secondary, borderRadius: BorderRadius.circular(12)),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SmallCustomCircularImage(imageUrl: item.image!.isNotEmpty ? item.image! : noImg),
-                              Text(
-                                "${item.firstname!} ${item.lastname}",
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.left,
-                                style: const TextStyle(
-                                  color: AppColor.primary,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              const SizedBox(width: 3),
-                              if (widget.assignto.length > 1)
-                                GestureDetector(
-                                  onTap: () {
-                                    deleteassignUser(item.userid, widget.id);
-                                    if (Responsive.isMobile(context)) {
-                                      Navigator.of(context).pop();
-                                    }
-                                  },
-                                  child: const Icon(Icons.close),
-                                ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        assginUserToTodo(
-                          context,
-                          assign,
-                          widget.assignto,
-                          widget.id,
-                          () {
-                            Navigator.of(context).pop();
-                          },
-                        );
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.only(top: 14),
-                        child: Row(
-                          children: [
-                            Icon(Icons.add),
-                            Padding(
-                              padding: EdgeInsets.only(left: 6),
-                              child: Text("Add More",
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: widget.assignto.map((item) {
+                          return Container(
+                            margin: const EdgeInsets.only(bottom: 7),
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(color: AppColor.secondary, borderRadius: BorderRadius.circular(12)),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SmallCustomCircularImage(imageUrl: item.image!.isNotEmpty ? item.image! : noImg),
+                                Text(
+                                  "${item.firstname!} ${item.lastname}",
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.left,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: AppColor.primary,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
-                                  )),
+                                  ),
+                                ),
+                                const SizedBox(width: 3),
+                                if (widget.assignto.length > 1)
+                                  GestureDetector(
+                                    onTap: () {
+                                      deleteassignUser(item.userid, widget.id);
+                                      if (Responsive.isMobile(context)) {
+                                        Navigator.of(context).pop();
+                                      }
+                                    },
+                                    child: const Icon(Icons.close),
+                                  ),
+                              ],
                             ),
-                          ],
+                          );
+                        }).toList(),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          assginUserToTodo(
+                            context,
+                            assign,
+                            widget.assignto,
+                            widget.id,
+                            () {
+                              Navigator.of(context).pop();
+                            },
+                          );
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.only(top: 14),
+                          child: Row(
+                            children: [
+                              Icon(Icons.add),
+                              Padding(
+                                padding: EdgeInsets.only(left: 6),
+                                child: Text("Add More",
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: AppColor.primary,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    )),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],

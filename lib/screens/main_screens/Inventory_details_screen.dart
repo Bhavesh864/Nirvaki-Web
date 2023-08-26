@@ -178,6 +178,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                               width: 24,
                                               height: 24,
                                               decoration: BoxDecoration(
+                                                border: Border.all(color: Colors.white),
                                                 image: DecorationImage(
                                                   image: NetworkImage(
                                                     user.image!.isEmpty ? noImg : user.image!,

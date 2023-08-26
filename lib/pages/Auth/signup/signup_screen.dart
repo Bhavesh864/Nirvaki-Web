@@ -2,15 +2,15 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:yes_broker/Customs/custom_fields.dart';
-import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/customs/custom_fields.dart';
+import 'package:yes_broker/customs/responsive.dart';
 
 import 'package:yes_broker/riverpodstate/sign_up_state.dart';
 
 import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/widgets/auth/common_auth_widgets.dart';
-import '../../../Customs/custom_text.dart';
+import '../../../customs/custom_text.dart';
 import '../../../constants/utils/colors.dart';
 import '../../../constants/utils/image_constants.dart';
 

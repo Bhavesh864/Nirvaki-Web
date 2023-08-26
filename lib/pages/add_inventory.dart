@@ -3,15 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/customs/custom_text.dart';
+import 'package:yes_broker/customs/responsive.dart';
 
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 
 import 'package:yes_broker/constants/functions/get_inventory_questions_widgets.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/widgets/questionaries/workitem_success.dart';
-import '../Customs/custom_fields.dart';
+import '../customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
 import '../riverpodstate/all_selected_ansers_provider.dart';
 

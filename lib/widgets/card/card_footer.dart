@@ -96,28 +96,58 @@ class CardFooter extends StatelessWidget {
         ),
         const Spacer(),
         Row(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.end,
-          children: cardData.assignedto!.asMap().entries.map((entry) {
+          children: cardData.assignedto!
+              .sublist(
+                  0,
+                  cardData.assignedto!.length < 2
+                      ? 1
+                      : cardData.assignedto!.length < 3
+                          ? 2
+                          : 3)
+              .asMap()
+              .entries
+              .map((entry) {
             final index = entry.key;
             final user = entry.value;
             return Transform.translate(
               offset: Offset(index * -8.0, 0),
               child: Container(
+                margin: EdgeInsets.zero,
                 width: 24,
                 height: 24,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      user.image!.isEmpty ? noImg : user.image!,
-                    ),
-                    fit: BoxFit.fill,
-                  ),
-                  borderRadius: BorderRadius.circular(40),
-                ),
+                decoration: index > 1
+                    ? BoxDecoration(
+                        border: Border.all(color: Colors.white),
+                        color: index > 1 ? Colors.grey.shade300 : null,
+                        borderRadius: BorderRadius.circular(40),
+                      )
+                    : BoxDecoration(
+                        border: Border.all(color: Colors.white),
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            user.image!.isEmpty ? noImg : user.image!,
+                          ),
+                          fit: BoxFit.fill,
+                        ),
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                child: index > 1
+                    ? Center(
+                        child: CustomText(
+                          title: '+${cardData.assignedto!.length - 2}',
+                          color: Colors.black,
+                          size: 9,
+                          // textAlign: TextAlign.center,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )
+                    : null,
               ),
             );
           }).toList(),
-        )
+        ),
       ],
     );
   }

@@ -1,10 +1,11 @@
 // ignore_for_file: invalid_use_of_protected_member, avoid_web_libraries_in_flutter
 import 'dart:async';
 
-// import 'dart:html';
+import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -255,28 +256,48 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                           },
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.end,
-                                            children: data.assignedto!.asMap().entries.map((entry) {
+                                            children: data.assignedto!
+                                                .sublist(
+                                                    0,
+                                                    data.assignedto!.length < 2
+                                                        ? 1
+                                                        : data.assignedto!.length < 3
+                                                            ? 2
+                                                            : 3)
+                                                .asMap()
+                                                .entries
+                                                .map((entry) {
                                               final index = entry.key;
                                               final user = entry.value;
                                               return Transform.translate(
-                                                offset: Offset(index * -8.0, 0),
+                                                offset: Offset(index * -9.0, 0),
                                                 child: Container(
                                                   width: 24,
                                                   height: 24,
-                                                  decoration: BoxDecoration(
-                                                    color: index > 1 ? Colors.grey : null,
-                                                    image: DecorationImage(
-                                                      image: NetworkImage(
-                                                        user.image!.isEmpty ? noImg : user.image!,
-                                                      ),
-                                                      fit: BoxFit.fill,
-                                                    ),
-                                                    borderRadius: BorderRadius.circular(40),
-                                                  ),
+                                                  decoration: index > 1
+                                                      ? BoxDecoration(
+                                                          border: Border.all(color: Colors.white),
+                                                          color: index > 1 ? Colors.grey.shade300 : null,
+                                                          borderRadius: BorderRadius.circular(40),
+                                                        )
+                                                      : BoxDecoration(
+                                                          border: Border.all(color: Colors.white),
+                                                          image: DecorationImage(
+                                                            image: NetworkImage(
+                                                              user.image!.isEmpty ? noImg : user.image!,
+                                                            ),
+                                                            fit: BoxFit.fill,
+                                                          ),
+                                                          borderRadius: BorderRadius.circular(40),
+                                                        ),
                                                   child: index > 1
-                                                      ? CustomText(
-                                                          title: ' +${index - 1}',
-                                                          color: Colors.black,
+                                                      ? Center(
+                                                          child: CustomText(
+                                                            title: '+${data.assignedto!.length - 2}',
+                                                            color: Colors.black,
+                                                            size: 9,
+                                                            fontWeight: FontWeight.w600,
+                                                          ),
                                                         )
                                                       : null,
                                                 ),
@@ -443,11 +464,11 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                                   size: 18,
                                                                 ),
                                                                 onTap: () {
-                                                                  // if (kIsWeb) {
-                                                                  // AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                                                  // anchorElement.download = 'Attachment file';
-                                                                  // anchorElement.click();
-                                                                  // }
+                                                                  if (kIsWeb) {
+                                                                    AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                                                    anchorElement.download = 'Attachment file';
+                                                                    anchorElement.click();
+                                                                  }
                                                                 },
                                                               ),
                                                               GestureDetector(
@@ -556,14 +577,6 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                     ),
                                   ),
                                 ),
-                                // CustomChip(
-                                //   color: AppColor.primary.withOpacity(0.1),
-                                //   label: CustomText(
-                                //     title: data.linkedWorkItem![0].workItemType!,
-                                //     size: 10,
-                                //     color: AppColor.primary,
-                                //   ),
-                                // ),
                                 CustomButton(
                                   text: data.linkedWorkItem![0].workItemId!.contains('LD') ? 'View Lead Details' : 'View Inventory Details',
                                   onPressed: () {

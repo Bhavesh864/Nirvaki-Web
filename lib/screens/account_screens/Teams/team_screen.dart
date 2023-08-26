@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yes_broker/Customs/custom_fields.dart';
-import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/Customs/text_utility.dart';
+import 'package:yes_broker/customs/custom_fields.dart';
+import 'package:yes_broker/customs/responsive.dart';
+import 'package:yes_broker/customs/text_utility.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/screens/account_screens/Teams/AddMembers/add_member_screen.dart';
 import 'package:yes_broker/widgets/accounts/Teams/bottom_card.dart';

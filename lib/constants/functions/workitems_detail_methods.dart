@@ -6,16 +6,16 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/customs/custom_text.dart';
+import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart' as inventory;
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart' as lead;
 import 'package:yes_broker/constants/firebase/random_uid.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 
-import '../../Customs/custom_fields.dart';
-import '../../Customs/dropdown_field.dart';
+import '../../customs/custom_fields.dart';
+import '../../customs/dropdown_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
 import '../firebase/detailsModels/todo_details.dart';
 import '../utils/colors.dart';
@@ -155,8 +155,8 @@ void showUploadDocumentModal(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               child: Container(
                 padding: const EdgeInsets.all(15),
-                height: docName == 'Other' ? 350 : 300,
-                width: 500,
+                height: docName == 'Other' ? 400 : 300,
+                width: Responsive.isMobile(context) ? width : 500,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                 ),

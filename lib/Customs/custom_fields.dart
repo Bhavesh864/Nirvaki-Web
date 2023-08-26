@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 
 //-------------------------------------------TextformField-------------------------------------->

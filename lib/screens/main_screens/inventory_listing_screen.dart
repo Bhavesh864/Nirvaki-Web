@@ -172,13 +172,14 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                                         shrinkWrap: true,
                                         physics: const ScrollPhysics(),
                                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: Responsive.isMobile(context)
-                                                ? 1
-                                                : Responsive.isTablet(context) || isFilterOpen
-                                                    ? 2
-                                                    : 3,
-                                            crossAxisSpacing: 10.0,
-                                            mainAxisExtent: 160),
+                                          crossAxisCount: Responsive.isMobile(context)
+                                              ? 1
+                                              : Responsive.isTablet(context) || isFilterOpen
+                                                  ? 2
+                                                  : 3,
+                                          crossAxisSpacing: 10.0,
+                                          mainAxisExtent: 150,
+                                        ),
                                         itemCount: filteredInventoryList.length,
                                         itemBuilder: (context, index) {
                                           final id = filteredInventoryList[index].workitemId!;
