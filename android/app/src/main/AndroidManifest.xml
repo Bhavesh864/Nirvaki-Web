@@ -2,16 +2,12 @@
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.INTERNET" />
-<<<<<<< HEAD
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
 
-=======
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
->>>>>>> 60286dd3c58bc786ad34b2eec9ba2ca52eb9dbb9
     <application
         android:label="yes_broker"
         android:name="${applicationName}"
@@ -63,7 +59,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD7KtQoq29-5TqELLdPBSQoqCD376-qGjA" />
-<<<<<<< HEAD
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="brokr-in" 
@@ -74,11 +69,5 @@
             <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
         </intent-filter>
     </receiver> -->
-=======
-       <meta-data
-       android:name="com.google.firebase.messaging.default_notification_channel_id"
-        android:value="high_importance_channel" />
-       
->>>>>>> 60286dd3c58bc786ad34b2eec9ba2ca52eb9dbb9
     </application>
 </manifest>
