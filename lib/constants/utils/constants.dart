@@ -225,11 +225,11 @@ Color taskStatusColor(String title) {
 
 List<String> dropDownStatusDataList = [
   'New',
+  'In Progress',
   'Location Finalised',
   'Negotiation',
   'Token',
   'Agreement',
-  'In Progress',
   'Converted',
   'Closed',
 ];

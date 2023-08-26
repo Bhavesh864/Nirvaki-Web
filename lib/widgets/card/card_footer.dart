@@ -4,7 +4,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import '../../Customs/custom_chip.dart';
+import '../../constants/functions/navigation/navigation_functions.dart';
 import '../../constants/utils/constants.dart';
+import '../workItemDetail/Inventory_details_header.dart';
 
 class CardFooter extends StatelessWidget {
   final int index;
@@ -67,22 +69,20 @@ class CardFooter extends StatelessWidget {
               //     paddingHorizontal: 3,
               //   ),
               // ),
-              GestureDetector(
-                onTap: () {
-                  // shareUrl(
-                  //   context,
-                  //   textToCombine: navigationUrl(
-                  //     context,
-                  //     cardDetails[index].workitemId!,
-                  //   ),
-                  // );
+              CustomChip(
+                onPressed: () {
+                  shareUrl(
+                    context,
+                    textToCombine: navigationUrl(
+                      context,
+                      cardDetails[index].workitemId!,
+                    ),
+                  );
                 },
-                child: const CustomChip(
-                  label: Icon(
-                    Icons.share_outlined,
-                  ),
-                  paddingHorizontal: 3,
+                label: const Icon(
+                  Icons.share_outlined,
                 ),
+                paddingHorizontal: 3,
               ),
               CustomChip(
                 label: CustomText(

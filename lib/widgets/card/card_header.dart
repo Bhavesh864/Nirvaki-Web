@@ -7,6 +7,7 @@ import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
+import 'package:yes_broker/constants/firebase/send_notification.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../constants/app_constant.dart';
@@ -49,14 +50,48 @@ class CardHeaderState extends ConsumerState<CardHeader> {
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
             children: [
+              // Container(
+              //   padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(6),
+              //     color: checkChipColorByCategory(cardData),
+              //   ),
+              //   child: Icon(
+              //     checkIconByCategory(cardData),
+              //     color: checkIconColorByCategory(cardData),
+              //     size: 16,
+              //     // weight: 10.12,
+              //   ),
+              // ),
               CustomChip(
-                  label: Icon(
-                    checkIconByCategory(cardData),
-                    color: checkIconColorByCategory(cardData),
-                    size: 18,
-                    // weight: 10.12,
-                  ),
-                  color: checkChipColorByCategory(cardData)),
+                paddingHorizontal: 0,
+                label: Icon(
+                  checkIconByCategory(cardData),
+                  color: checkIconColorByCategory(cardData),
+                  size: 16,
+                  // weight: 10.12,
+                ),
+                color: checkChipColorByCategory(cardData),
+              ),
+              CustomStatusDropDown(
+                status: status![widget.index].status ?? cardData.status,
+                itemBuilder: (context) => isTypeisTodo(cardData)
+                    ? todoDropDownList.map((e) => popupMenuItem(e.toString())).toList()
+                    : dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
+                onSelected: (value) {
+                  CardDetails.updateCardStatus(id: cardData.workitemId!, newStatus: value);
+                  status![widget.index].status = value;
+                  if (cardData.workitemId!.contains(ItemCategory.isInventory)) {
+                    InventoryDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
+                  } else if (cardData.workitemId!.contains(ItemCategory.isLead)) {
+                    LeadDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
+                  } else if (cardData.workitemId!.contains(ItemCategory.isTodo)) {
+                    TodoDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
+                  }
+                  setState(() {});
+                  notifyToUser(itemdetail: cardData, content: "${cardData.cardTitle} status change to $value", title: "${cardData.workitemId} status changed");
+                },
+              ),
               checkNotNUllItem(cardData.roomconfig?.bedroom)
                   ? CustomChip(
                       label: CustomText(
@@ -99,24 +134,6 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                       ),
                     )
                   : const SizedBox(),
-              CustomStatusDropDown(
-                status: status![widget.index].status ?? cardData.status,
-                itemBuilder: (context) => isTypeisTodo(cardData)
-                    ? todoDropDownList.map((e) => popupMenuItem(e.toString())).toList()
-                    : dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
-                onSelected: (value) {
-                  CardDetails.updateCardStatus(id: cardData.workitemId!, newStatus: value);
-                  status![widget.index].status = value;
-                  if (cardData.workitemId!.contains(ItemCategory.isInventory)) {
-                    InventoryDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
-                  } else if (cardData.workitemId!.contains(ItemCategory.isLead)) {
-                    LeadDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
-                  } else if (cardData.workitemId!.contains(ItemCategory.isTodo)) {
-                    TodoDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
-                  }
-                  setState(() {});
-                },
-              ),
             ],
           ),
         ),

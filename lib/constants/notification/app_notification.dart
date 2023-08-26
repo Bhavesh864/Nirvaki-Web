@@ -1,20 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 
+@pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // showFlutterNotification(message);
-
-  AndroidNotificationDetails androidDetails = const AndroidNotificationDetails(
-      'brokr-in', 'Chat app',
-      priority: Priority.max,
-      importance: Importance.high,
-      icon: "@mipmap/ic_launcher");
-  NotificationDetails notifyDetails =
-      NotificationDetails(android: androidDetails);
-  await flutterLocalNotificationsPlugin.show(0, message.notification?.title,
-      message.notification?.body, notifyDetails);
-
+  await Firebase.initializeApp();
+  await showFlutterNotification(message);
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
   if (kDebugMode) {
     print('Handling a background message ${message.notification}');
   }
@@ -25,68 +21,49 @@ late AndroidNotificationChannel channel;
 
 bool isFlutterLocalNotificationsInitialized = false;
 
-// /// Initialize the [FlutterLocalNotificationsPlugin] package.
-// late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
 Future<void> setupFlutterNotifications() async {
-  if (kIsWeb) {
+  if (isFlutterLocalNotificationsInitialized) {
     return;
   }
+  channel = const AndroidNotificationChannel(
+    'high_importance_channel', // id
+    'High Importance Notifications', // title
+    description: 'This channel is used for important notifications.', // description
+    importance: Importance.max,
+  );
 
-  if (!isFlutterLocalNotificationsInitialized) {
-    channel = const AndroidNotificationChannel(
-      'brokr', // id
-      'brokr', // title
-      description:
-          'This channel is used for important notifications.', // description
-      importance: Importance.max,
-    );
-    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    const AndroidInitializationSettings androidInitializationSettings =
-        AndroidInitializationSettings("@mipmap/ic_launcher");
-    const DarwinInitializationSettings darwinInitializationSettings =
-        DarwinInitializationSettings();
+  await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
 
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.requestPermission();
-
-    const initializationSettings = InitializationSettings(
-        android: androidInitializationSettings,
-        iOS: darwinInitializationSettings);
-
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-
-    isFlutterLocalNotificationsInitialized = true;
-  }
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+  isFlutterLocalNotificationsInitialized = true;
 }
 
 Future<void> showFlutterNotification(RemoteMessage message) async {
-  if (!kIsWeb) {
-    RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
-    if (notification != null && android != null) {
-      print("before");
-      flutterLocalNotificationsPlugin.show(
-        notification.hashCode,
-        notification.title,
-        notification.body,
-        NotificationDetails(
-          android: AndroidNotificationDetails(channel.id, channel.name,
-              channelDescription: channel.description, icon: ""),
+  RemoteNotification? notification = message.notification;
+  AndroidNotification? android = message.notification?.android;
+  if (notification != null && android != null && !kIsWeb) {
+    flutterLocalNotificationsPlugin.show(
+      notification.hashCode,
+      notification.title,
+      notification.body,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          channel.id.toString(),
+          channel.name.toString(),
+          channelDescription: channel.description,
+          importance: Importance.max,
+          priority: Priority.max,
+          icon: '@mipmap/ic_launcher',
+          ticker: 'ticker',
         ),
-      );
-      print("after");
-    }
+      ),
+    );
   }
 }
 
@@ -95,20 +72,13 @@ Future<void> showFlutterNotification(RemoteMessage message) async {
 FirebaseMessaging messaging = FirebaseMessaging.instance;
 
 Future<void> setAllNotification() async {
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    showFlutterNotification(message);
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    await showFlutterNotification(message);
     if (kDebugMode) {
       print('handling a foreground app $message');
     }
   });
 }
-
-// FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-//   if (kDebugMode) {
-//     print('handling a onmessage opened app $message');
-//   }
-//   showFlutterNotification(message);
-// });
 
 Future<NotificationSettings> requestPermissions() async {
   NotificationSettings settings = await messaging.requestPermission(
@@ -130,10 +100,11 @@ Future<String?> getToken() async {
   try {
     final setting = await requestPermissions();
     if (setting.authorizationStatus == AuthorizationStatus.authorized) {
-      String? token = await messaging.getToken();
+      String? token = await messaging.getToken(vapidKey: "BI8BYeg_2RdKlfKGL0EdOZ1s3WUdp8pPE449gusmPFsQ1-DC_l_Z7B6o0aJvI5ANVO19udscj4RDKCNTHHZKoUA");
       if (kDebugMode) {
-        print('FCM token==========: $token');
+        print('FCM token: $token');
       }
+      AppConst.setFcmToken(token!);
       return token;
     }
     return null;

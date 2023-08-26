@@ -2,11 +2,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/Customs/snackbar.dart';
+
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
+import 'package:yes_broker/constants/firebase/send_notification.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
+import '../../Customs/snackbar.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
@@ -35,11 +37,13 @@ class InventoryDetailsHeader extends StatelessWidget {
   final String? price;
   final String? unit;
   final Function setState;
+  final dynamic inventoryDetails;
 
   const InventoryDetailsHeader({
     super.key,
     required this.title,
     required this.id,
+    this.inventoryDetails,
     required this.category,
     required this.propertyCategory,
     required this.status,
@@ -83,22 +87,21 @@ class InventoryDetailsHeader extends StatelessWidget {
             ),
             if (!Responsive.isMobile(context))
               HeaderChips(
+                inventoryDetails: inventoryDetails,
                 category: category,
                 type: type,
                 propertyCategory: propertyCategory,
                 status: status,
                 id: id,
               ),
-            GestureDetector(
-              onTap: () {
+            CustomChip(
+              onPressed: () {
                 shareUrl(context);
               },
-              child: const CustomChip(
-                label: Icon(
-                  Icons.share_outlined,
-                ),
-                paddingHorizontal: 3,
+              label: const Icon(
+                Icons.share_outlined,
               ),
+              paddingHorizontal: 3,
             ),
             if (!AppConst.getPublicView() || AppConst.getIsAuthenticated())
               PopupMenuButton(
@@ -144,6 +147,7 @@ class HeaderChips extends StatefulWidget {
   final String propertyCategory;
   final String status;
   final String id;
+  final dynamic inventoryDetails;
 
   const HeaderChips({
     super.key,
@@ -152,6 +156,7 @@ class HeaderChips extends StatefulWidget {
     required this.propertyCategory,
     required this.status,
     required this.id,
+    this.inventoryDetails,
   });
 
   @override
@@ -205,6 +210,11 @@ class _HeaderChipsState extends State<HeaderChips> {
               }
               currentStatus = value;
               setState(() {});
+              print(widget.inventoryDetails?.assignedto?[0].userid);
+              notifyToUser(
+                  itemdetail: widget.inventoryDetails,
+                  content: "${widget.id} status change to $value",
+                  title: "${widget.id.contains(ItemCategory.isInventory) ? "Inventory" : "Lead"} status changed");
             },
           ),
       ],

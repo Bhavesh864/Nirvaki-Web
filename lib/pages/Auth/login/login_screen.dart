@@ -1,15 +1,16 @@
 import 'package:beamer/beamer.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/constants/app_constant.dart';
-
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/widgets/auth/common_auth_widgets.dart';
+import '../../../constants/firebase/Methods/sign_in_method.dart';
 import '../../../constants/utils/image_constants.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -46,6 +47,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       isloading = false;
                     }),
                     context.beamToReplacementNamed('/'),
+                    User.updateFcmToken(
+                        fcmtoken: AppConst.getFcmToken()!,
+                        userid: AppConst.getAccessToken()!),
                     AppConst.setPublicView(false),
                   }
                 else

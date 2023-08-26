@@ -7,8 +7,10 @@ import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/constants/firebase/Methods/add_activity.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 
+import '../../../Customs/responsive.dart';
 import '../../timeline_view.dart';
 
 class ActivityTabView extends ConsumerStatefulWidget {
@@ -25,8 +27,9 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
     final workItemId = ref.read(selectedWorkItemId.notifier).state;
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Wrap(
+          runSpacing: 20,
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const CustomText(
               title: 'Activity',
@@ -37,8 +40,8 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  margin: const EdgeInsets.only(right: 20),
-                  width: MediaQuery.of(context).size.width * 0.3,
+                  margin: const EdgeInsets.only(right: 10),
+                  width: Responsive.isMobile(context) ? width! * 0.6 : 400,
                   child: TextField(
                     controller: controller,
                     decoration: const InputDecoration(
