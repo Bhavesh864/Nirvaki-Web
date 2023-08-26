@@ -19,7 +19,6 @@ import '../../../widgets/workItemDetail/inventory_details_header.dart';
 import '../../../widgets/workItemDetail/assignment_widget.dart';
 import '../../../widgets/workItemDetail/contact_information.dart';
 import '../../../widgets/workItemDetail/mapview_widget.dart';
-import '../../../widgets/workItemDetail/tab_views/activity_tab_view.dart';
 import '../../../widgets/workItemDetail/tab_views/details_tab_view.dart';
 
 class PublicViewInventoryDetails extends ConsumerStatefulWidget {

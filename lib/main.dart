@@ -34,7 +34,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return !Responsive.isMobile(context)
     return MaterialApp.router(
       backButtonDispatcher: BeamerBackButtonDispatcher(delegate: routerDelegate),
       debugShowCheckedModeBanner: false,
@@ -43,12 +42,5 @@ class MyApp extends StatelessWidget {
       routeInformationParser: BeamerParser(),
       routerDelegate: routerDelegate,
     );
-    // : MaterialApp(
-    //     debugShowCheckedModeBanner: false,
-    //     title: 'Brokr',
-    //     theme: TAppTheme.lightTheme,
-    //     home: const LayoutView(),
-    //     routes: AppRoutes.routesTable,
-    //   );
   }
 }
