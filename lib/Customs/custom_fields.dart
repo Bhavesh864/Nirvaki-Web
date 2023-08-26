@@ -10,6 +10,7 @@ class CustomTextInput extends StatefulWidget {
   final VoidCallback? ontap;
   final Widget? label;
   final bool enabled;
+  final FocusNode? focusnode;
   final String? hintText;
   final IconData? leftIcon;
   final bool? obscureText;
@@ -21,6 +22,7 @@ class CustomTextInput extends StatefulWidget {
   final int? maxLength;
   final int? maxLines;
   final int? minLines;
+  final Function(String text)? onFieldSubmitted;
   final TextStyle? hintstyle;
   final FormFieldValidator<String>? validator;
   final Function(String)? onChanged;
@@ -32,6 +34,7 @@ class CustomTextInput extends StatefulWidget {
       this.hintText,
       this.indense,
       this.leftIcon,
+      this.focusnode,
       this.ontap,
       this.hintstyle = const TextStyle(color: Colors.grey),
       this.rightIcon,
@@ -46,7 +49,8 @@ class CustomTextInput extends StatefulWidget {
       this.readonly = false,
       this.label,
       this.enabled = true,
-      this.contentPadding = 0})
+      this.contentPadding = 0,
+      this.onFieldSubmitted})
       : super(key: key);
 
   @override
@@ -67,8 +71,10 @@ class CustomTextInputState extends State<CustomTextInput> {
     return SizedBox(
       height: 65,
       child: TextFormField(
+        focusNode: widget.focusnode,
         enabled: widget.enabled,
         onTap: widget.ontap,
+        onFieldSubmitted: widget.onFieldSubmitted,
         style: const TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.w400,

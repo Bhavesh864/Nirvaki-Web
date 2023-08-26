@@ -1,4 +1,4 @@
-// ignore_for_file: invalid_use_of_protected_member
+// ignore_for_file: invalid_use_of_protected_member, file_names
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -105,11 +105,13 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                 status: data.inventoryStatus!,
                                 price: data.propertyprice?.price,
                                 unit: data.propertyprice?.unit,
+                                inventoryDetails: data,
                               ),
                               if (Responsive.isMobile(context))
                                 Padding(
                                   padding: const EdgeInsets.only(top: 10),
                                   child: HeaderChips(
+                                      inventoryDetails: data,
                                       category: data.inventorycategory!,
                                       type: data.inventoryType!,
                                       propertyCategory: data.propertycategory!,

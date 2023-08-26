@@ -87,7 +87,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
         return data;
       }
     }
-    return null;
+    return snapshot.data?[0];
   }
 
   @override
@@ -169,8 +169,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                     notify,
                                                     nextQuestion,
                                                   ),
-                                                  if (i == screensDataList[index].questions.length - 1 &&
-                                                      screensDataList[index].questions[i].questionOptionType != 'chip')
+                                                  if (i == screensDataList[index].questions.length - 1 && screensDataList[index].questions[i].questionOptionType != 'chip')
                                                     Container(
                                                       margin: const EdgeInsets.only(top: 10),
                                                       alignment: Alignment.centerRight,

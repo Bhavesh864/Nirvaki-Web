@@ -25,13 +25,20 @@ class CustomChip extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
+        padding: EdgeInsets.zero,
         margin: EdgeInsets.only(left: Responsive.isMobile(context) ? 0 : 1, right: Responsive.isMobile(context) ? 8 : 1),
-        child: Chip(
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          avatar: avatar,
-          labelPadding: EdgeInsets.symmetric(horizontal: paddingHorizontal ?? 1, vertical: 0),
-          backgroundColor: color,
-          label: label,
+        child: Transform(
+          transform: Matrix4.identity()..scale(0.9),
+          child: Chip(
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            avatar: avatar,
+            labelPadding: EdgeInsets.symmetric(horizontal: paddingHorizontal ?? 1, vertical: 0),
+            backgroundColor: color,
+            label: Container(
+              padding: EdgeInsets.zero,
+              child: label,
+            ),
+          ),
         ),
       ),
     );
