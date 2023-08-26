@@ -174,6 +174,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                               height: 35,
                                               width: data.todoName!.length * 9,
                                               child: CustomTextInput(
+                                                autofocus: true,
                                                 controller: todoNameEditingController,
                                                 onFieldSubmitted: (newValue) {
                                                   if (newValue.isNotEmpty) {
