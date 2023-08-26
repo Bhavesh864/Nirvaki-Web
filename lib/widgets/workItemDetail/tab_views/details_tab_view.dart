@@ -1,6 +1,5 @@
-import 'dart:html';
+// import 'dart:html';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
@@ -249,11 +248,11 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                       size: 18,
                                     ),
                                     onTap: () {
-                                      if (kIsWeb) {
-                                        AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                        anchorElement.download = 'Attachment file';
-                                        anchorElement.click();
-                                      }
+                                      // if (kIsWeb) {
+                                      //   AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                      //   anchorElement.download = 'Attachment file';
+                                      //   anchorElement.click();
+                                      // }
                                     },
                                   ),
                                   GestureDetector(
