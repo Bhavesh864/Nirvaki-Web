@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -101,16 +103,12 @@ class _DetailsTabViewState extends State<DetailsTabView> {
             child: ListView.builder(
               physics: const ScrollPhysics(),
               scrollDirection: Axis.horizontal,
-              itemCount: widget.data.propertyphotos == null
-                  ? inventoryDetailsImageUrls.length
-                  : allImages.length,
+              itemCount: widget.data.propertyphotos == null ? inventoryDetailsImageUrls.length : allImages.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
                     showImageSliderCarousel(
-                      widget.data.propertyphotos == null
-                          ? inventoryDetailsImageUrls
-                          : allImages,
+                      widget.data.propertyphotos == null ? inventoryDetailsImageUrls : allImages,
                       index,
                       context,
                     );
@@ -128,9 +126,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: Image.network(
-                            widget.data.propertyphotos == null
-                                ? inventoryDetailsImageUrls[index]
-                                : '${allImages[index]}.png',
+                            widget.data.propertyphotos == null ? inventoryDetailsImageUrls[index] : '${allImages[index]}.png',
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
                               return const Icon(
@@ -140,11 +136,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                               );
                             },
                             loadingBuilder: (context, child, loadingProgress) {
-                              return loadingProgress == null
-                                  ? child
-                                  : const Center(
-                                      child:
-                                          CircularProgressIndicator.adaptive());
+                              return loadingProgress == null ? child : const Center(child: CircularProgressIndicator.adaptive());
                             },
                           ),
                         ),
@@ -152,9 +144,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: CustomText(
-                          title: widget.data.propertyphotos == null
-                              ? 'Front Elevation'
-                              : allTitles[index],
+                          title: widget.data.propertyphotos == null ? 'Front Elevation' : allTitles[index],
                         ),
                       )
                     ],
@@ -196,8 +186,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
         ),
         Text(
           widget.data.comments!,
-          style: const TextStyle(
-              fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey),
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey),
         ),
         const SizedBox(
           height: 30,
@@ -231,8 +220,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                               width: 108,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.grey.withOpacity(0.5)),
+                                border: Border.all(color: Colors.grey.withOpacity(0.5)),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Column(
@@ -262,9 +250,9 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                     ),
                                     onTap: () {
                                       if (kIsWeb) {
-                                        // AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                        // anchorElement.download = 'Attachment file';
-                                        // anchorElement.click();
+                                        AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                        anchorElement.download = 'Attachment file';
+                                        anchorElement.click();
                                       }
                                     },
                                   ),
@@ -275,24 +263,13 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                     ),
                                     onTap: () {
                                       setState(() {
-                                        showConfirmDeleteAttachment(context,
-                                            () {
-                                          if (widget.id.contains(
-                                              ItemCategory.isInventory)) {
-                                            InventoryDetails.deleteAttachment(
-                                                    itemId: widget.id,
-                                                    attachmentIdToDelete:
-                                                        attachment.id!)
-                                                .then(
+                                        showConfirmDeleteAttachment(context, () {
+                                          if (widget.id.contains(ItemCategory.isInventory)) {
+                                            InventoryDetails.deleteAttachment(itemId: widget.id, attachmentIdToDelete: attachment.id!).then(
                                               (value) => widget.updateData(),
                                             );
-                                          } else if (widget.id
-                                              .contains(ItemCategory.isLead)) {
-                                            LeadDetails.deleteAttachment(
-                                                    itemId: widget.id,
-                                                    attachmentIdToDelete:
-                                                        attachment.id!)
-                                                .then(
+                                          } else if (widget.id.contains(ItemCategory.isLead)) {
+                                            LeadDetails.deleteAttachment(itemId: widget.id, attachmentIdToDelete: attachment.id!).then(
                                               (value) => widget.updateData(),
                                             );
                                           }
@@ -325,8 +302,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                             width: 100,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.grey.withOpacity(0.5)),
+                              border: Border.all(color: Colors.grey.withOpacity(0.5)),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: const Column(

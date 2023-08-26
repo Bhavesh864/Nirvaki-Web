@@ -230,44 +230,27 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
                                           shrinkWrap: true,
                                           physics: const ScrollPhysics(),
                                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: Responsive.isMobile(context)
-                                                  ? 1
-                                                  : Responsive.isTablet(context) || isFilterOpen
-                                                      ? 2
-                                                      : 3,
-                                              // mainAxisSpacing: 5.0,
-                                              crossAxisSpacing: 10.0,
-                                              mainAxisExtent: 160),
+                                            crossAxisCount: Responsive.isMobile(context)
+                                                ? 1
+                                                : Responsive.isTablet(context) || isFilterOpen
+                                                    ? 2
+                                                    : 3,
+                                            // mainAxisSpacing: 5.0,
+                                            crossAxisSpacing: 10.0,
+                                            mainAxisExtent: 150,
+                                          ),
                                           itemCount: filteredleadList.length,
                                           itemBuilder: (context, index) => GestureDetector(
                                             onTap: () {
                                               final id = filteredleadList[index].workitemId;
                                               navigateBasedOnId(context, id!, ref);
-                                              // if (id!.contains('LD')) {
-                                              //   if (Responsive.isMobile(context)) {
-                                              //     Navigator.push(
-                                              //       context,
-                                              //       MaterialPageRoute(
-                                              //         builder: (context) {
-                                              //           return LeadDetailsScreen(
-                                              //             leadId: id,
-                                              //           );
-                                              //         },
-                                              //       ),
-                                              //     );
-                                              //     ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                              //   } else {
-                                              //     ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                              //     context.beamToNamed('/lead/lead-details/$id');
-                                              //   }
-                                              // }
                                             },
                                             child: CustomCard(index: index, cardDetails: filteredleadList),
                                           ),
                                         )
                                       : const Center(
                                           child: Text(
-                                            "No results found.", // Customize the message
+                                            "No results found.",
                                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                           ),
                                         ),

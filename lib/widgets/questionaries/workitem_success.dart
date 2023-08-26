@@ -2,8 +2,8 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../Customs/custom_fields.dart';
-import '../../Customs/custom_text.dart';
+import '../../customs/custom_fields.dart';
+import '../../customs/custom_text.dart';
 
 class WorkItemSuccessWidget extends StatelessWidget {
   final String isInventory;
