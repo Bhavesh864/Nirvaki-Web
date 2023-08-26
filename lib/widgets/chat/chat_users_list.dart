@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/image_constants.dart';
+import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/screens/main_screens/chat_screen.dart';
 
 class ChatUserList extends StatelessWidget {
@@ -30,6 +31,7 @@ class UserList extends StatelessWidget {
       color: Colors.white,
       child: ListTile(
         onTap: () {
+          // Navigator.of(context).push(AppRoutes.createAnimatedRoute(ChatScreen(user: user)));
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (ctx) => ChatScreen(
