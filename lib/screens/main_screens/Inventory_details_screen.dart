@@ -1,4 +1,4 @@
-// ignore_for_file: invalid_use_of_protected_member
+// ignore_for_file: invalid_use_of_protected_member, file_names
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,7 +10,6 @@ import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import '../../Customs/custom_text.dart';
-import '../../Customs/small_custom_profile_image.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
@@ -70,7 +69,6 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
           : null,
       body: StreamBuilder(
         stream: inventoryDetails,
-        // future: InventoryDetails.getInventoryDetails(workItemId == '' ? widget.inventoryId : workItemId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator.adaptive());
@@ -107,11 +105,13 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                 status: data.inventoryStatus!,
                                 price: data.propertyprice?.price,
                                 unit: data.propertyprice?.unit,
+                                inventoryDetails: data,
                               ),
                               if (Responsive.isMobile(context))
                                 Padding(
                                   padding: const EdgeInsets.only(top: 10),
                                   child: HeaderChips(
+                                      inventoryDetails: data,
                                       category: data.inventorycategory!,
                                       type: data.inventoryType!,
                                       propertyCategory: data.propertycategory!,
@@ -159,21 +159,39 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                           context,
                                           'Assignment',
                                           AssignmentWidget(
-                                            imageUrlAssignTo:
-                                                data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
+                                            id: data.inventoryId!,
+                                            assignto: data.assignedto!,
                                             imageUrlCreatedBy:
                                                 data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                             createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
-                                            assignTo: data.assignedto![0].firstname! + data.assignedto![0].firstname!,
                                           ),
                                         );
                                       },
-                                      child: SmallCustomCircularImage(
-                                        width: 30,
-                                        height: 30,
-                                        imageUrl: data.assignedto![0].image!,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: data.assignedto!.asMap().entries.map((entry) {
+                                          final index = entry.key;
+                                          final user = entry.value;
+                                          return Transform.translate(
+                                            offset: Offset(index * -8.0, 0),
+                                            child: Container(
+                                              width: 24,
+                                              height: 24,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(color: Colors.white),
+                                                image: DecorationImage(
+                                                  image: NetworkImage(
+                                                    user.image!.isEmpty ? noImg : user.image!,
+                                                  ),
+                                                  fit: BoxFit.fill,
+                                                ),
+                                                borderRadius: BorderRadius.circular(40),
+                                              ),
+                                            ),
+                                          );
+                                        }).toList(),
                                       ),
-                                    ),
+                                    )
                                   ],
                                 ),
                               if (Responsive.isMobile(context))
@@ -201,8 +219,8 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                   id: data.inventoryId!,
                                   data: data,
                                 ),
-                              if (currentSelectedTab == 1) const ActivityTabView(),
-                              if (currentSelectedTab == 2) const TodoTabView(),
+                              if (currentSelectedTab == 1) ActivityTabView(details: data),
+                              if (currentSelectedTab == 2) TodoTabView(id: data.inventoryId!),
                             ],
                           ),
                         ),
@@ -228,10 +246,10 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                               ),
                               if (Responsive.isDesktop(context))
                                 AssignmentWidget(
-                                  imageUrlAssignTo: data.assignedto![0].image == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
+                                  id: data.inventoryId!,
+                                  assignto: data.assignedto!,
                                   imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                   createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
-                                  assignTo: '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
                                 ),
                               if (Responsive.isDesktop(context))
                                 MapViewWidget(

@@ -8,10 +8,10 @@ import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/questionaries/questions_form_photos_view.dart';
 import 'package:yes_broker/widgets/questionaries/assign_user.dart';
 import 'package:yes_broker/widgets/questionaries/google_maps.dart';
-import '../../Customs/custom_fields.dart';
-import '../../Customs/custom_text.dart';
-import '../../Customs/dropdown_field.dart';
-import '../../Customs/label_text_field.dart';
+import '../../customs/custom_fields.dart';
+import '../../customs/custom_text.dart';
+import '../../customs/dropdown_field.dart';
+import '../../customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
 import '../utils/colors.dart';
 

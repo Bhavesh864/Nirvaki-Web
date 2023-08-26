@@ -3,30 +3,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:yes_broker/Customs/custom_fields.dart';
-import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/Customs/snackbar.dart';
+import 'package:yes_broker/customs/custom_fields.dart';
+import 'package:yes_broker/customs/custom_text.dart';
+import 'package:yes_broker/customs/snackbar.dart';
 import 'package:yes_broker/constants/firebase/Methods/add_activity.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 
+import '../../../customs/responsive.dart';
+import '../../../constants/firebase/send_notification.dart';
 import '../../timeline_view.dart';
 
 class ActivityTabView extends ConsumerStatefulWidget {
-  const ActivityTabView({super.key});
+  final dynamic details;
+  const ActivityTabView({required this.details, super.key});
 
   @override
-  _ActivityTabViewState createState() => _ActivityTabViewState();
+  ActivityTabViewState createState() => ActivityTabViewState();
 }
 
-class _ActivityTabViewState extends ConsumerState<ActivityTabView> {
+class ActivityTabViewState extends ConsumerState<ActivityTabView> {
   final TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final workItemId = ref.read(selectedWorkItemId.notifier).state;
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Wrap(
+          runSpacing: 20,
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const CustomText(
               title: 'Activity',
@@ -37,8 +42,8 @@ class _ActivityTabViewState extends ConsumerState<ActivityTabView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  margin: const EdgeInsets.only(right: 20),
-                  width: MediaQuery.of(context).size.width * 0.3,
+                  margin: const EdgeInsets.only(right: 10),
+                  width: Responsive.isMobile(context) ? width! * 0.6 : 400,
                   child: TextField(
                     controller: controller,
                     decoration: const InputDecoration(
@@ -51,6 +56,7 @@ class _ActivityTabViewState extends ConsumerState<ActivityTabView> {
                   onPressed: () {
                     if (controller.text.isNotEmpty) {
                       submitActivity(itemid: workItemId, activitytitle: controller.text);
+                      notifyToUser(assignedto: widget.details.assignedto, content: "$workItemId added new Activity", title: controller.text ,itemid:workItemId);
                       controller.clear();
                     } else {
                       customSnackBar(context: context, text: 'Please enter note to submit');

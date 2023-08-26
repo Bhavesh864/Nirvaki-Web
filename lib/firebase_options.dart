@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+//
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -67,7 +68,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '868897852943',
     projectId: 'brokr-in',
     storageBucket: 'brokr-in.appspot.com',
-    iosClientId: '868897852943-sa7p0lub6upq9b3rjkrthd5vhdu6gial.apps.googleusercontent.com',
+    iosClientId:
+        '868897852943-sa7p0lub6upq9b3rjkrthd5vhdu6gial.apps.googleusercontent.com',
     iosBundleId: 'com.example.yesBroker',
   );
 
@@ -77,7 +79,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '868897852943',
     projectId: 'brokr-in',
     storageBucket: 'brokr-in.appspot.com',
-    iosClientId: '868897852943-vitn6u89j8pt3kegcodic5aqglc13qeg.apps.googleusercontent.com',
+    iosClientId:
+        '868897852943-vitn6u89j8pt3kegcodic5aqglc13qeg.apps.googleusercontent.com',
     iosBundleId: 'com.example.yesBroker.RunnerTests',
   );
 }

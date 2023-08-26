@@ -37,6 +37,8 @@ class User extends HiveObject {
   String? managerid;
   @HiveField(11)
   String? managerName;
+  @HiveField(12)
+  String? fcmToken;
   User(
       {required this.brokerId,
       required this.status,
@@ -44,6 +46,7 @@ class User extends HiveObject {
       required this.userlastname,
       required this.userId,
       required this.mobile,
+      required this.fcmToken,
       this.managerName,
       this.managerid,
       required this.email,
@@ -52,6 +55,26 @@ class User extends HiveObject {
       required this.image});
 
   // Convert User object to a map
+
+  factory User.fromSnapshot(DocumentSnapshot snapshot) {
+    final json = snapshot.data() as Map<String, dynamic>;
+
+    return User(
+        brokerId: json["brokerId"],
+        status: json["status"],
+        fcmToken: json["fcmToken"],
+        userfirstname: json["userfirstname"],
+        userlastname: json["userlastname"],
+        userId: json["userId"],
+        managerid: json["managerid"],
+        mobile: json["mobile"],
+        managerName: json["managerName"],
+        email: json["email"],
+        image: json["image"],
+        role: json["role"],
+        whatsAppNumber: json["whatsAppNumber"]);
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'brokerId': brokerId,
@@ -65,7 +88,8 @@ class User extends HiveObject {
       "managerName": managerName,
       'userId': userId,
       "status": status,
-      'image': image
+      'image': image,
+      "fcmToken": fcmToken,
     };
   }
 
@@ -81,6 +105,7 @@ class User extends HiveObject {
         role: map['role'],
         userId: map['userId'],
         status: map['status'],
+        fcmToken: map["fcmToken"],
         managerName: map["managerName"],
         managerid: map["managerid"],
         image: map['image']);
@@ -119,7 +144,7 @@ class User extends HiveObject {
   static Future<User?> getUser(String userId) async {
     try {
       final hiveUserData = UserHiveMethods.getdata(userId);
-      print("userhiveform=====>$hiveUserData");
+      // print("userhiveform=====>$hiveUserData");
       if (hiveUserData != null) {
         final Map<String, dynamic> userDataMap = Map.from(hiveUserData);
         final User user = User.fromMap(userDataMap);
@@ -153,6 +178,15 @@ class User extends HiveObject {
     }
   }
 
+  static Future<void> updateFcmToken({required dynamic fcmtoken, required String userid}) async {
+    try {
+      await usersCollection.doc(userid).update({"fcmToken": fcmtoken});
+      print('User updated successfully');
+    } catch (error) {
+      print('Failed to update user: $error');
+    }
+  }
+
   static Future<void> deleteUser(String userId) async {
     try {
       await usersCollection.doc(userId).delete();
@@ -161,32 +195,25 @@ class User extends HiveObject {
       // print('Failed to delete user: $error');
     }
   }
-}
 
-Future<String?> signinMethod({required email, required password}) async {
-  String res = 'Something went wrong';
-  try {
-    await auth.signInWithEmailAndPassword(email: email, password: password);
-    final uid = FirebaseAuth.instance.currentUser!.uid;
-    UserHiveMethods.addData(key: "token", data: uid);
-    AppConst.setAccessToken(uid);
-    res = "success";
-    return res;
-  } on FirebaseAuthException catch (e) {
-    if (e.code == 'user-not-found') {
-      return 'No user found for that email.';
-    } else if (e.code == 'wrong-password') {
-      return 'Wrong password provided for that user.';
-    } else if (e.code == "email-already-in-use") {
-      return "The account already exists for that email";
-    } else if (e.code == "weak-password") {
-      return "The password provided is too weak.";
+  static Future<List<String>> getUserTokensByIds(List<String> userIds) async {
+    List<String> userTokens = [];
+    try {
+      for (String userId in userIds) {
+        DocumentSnapshot userDoc = await usersCollection.doc(userId).get();
+        if (userDoc.exists) {
+          String appFcmToken = userDoc['fcmToken'];
+          if (appFcmToken.isNotEmpty) {
+            userTokens.add(appFcmToken);
+          }
+        }
+      }
+    } catch (e) {
+      print('Error fetching user tokens: $e');
     }
-    return e.toString();
-  } catch (E) {
-    return E.toString();
+    print("usertokens=======$userTokens");
+    return userTokens;
   }
-  // return null;
 }
 
 // void main() async {

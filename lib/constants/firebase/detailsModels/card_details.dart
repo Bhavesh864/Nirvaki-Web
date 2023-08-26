@@ -3,8 +3,6 @@ import 'package:hive/hive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 
 final CollectionReference cardDetailsCollection = FirebaseFirestore.instance.collection('cardDetails');
-Box box = Hive.box("users");
-final currentUser = box.get(AppConst.getAccessToken());
 
 @HiveType(typeId: 1)
 class CardDetails {
@@ -182,7 +180,10 @@ class CardDetails {
         final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         return CardDetails.fromJson(data);
       }).toList();
-      return inventoryItems;
+      final item = inventoryItems.where((item) {
+        return item.assignedto!.any((user) => user.userid == AppConst.getAccessToken());
+      }).toList();
+      return item;
     } catch (error) {
       print('Failed to get Inventory items: $error');
       return [];
@@ -191,12 +192,15 @@ class CardDetails {
 
   static Future<List<CardDetails>> getcardByInventoryId(id) async {
     try {
-      final QuerySnapshot querySnapshot = await cardDetailsCollection.orderBy("createdate", descending: true).where("linkedItemId", isEqualTo: id).get();
+      final QuerySnapshot querySnapshot = await cardDetailsCollection.where("linkedItemId", isEqualTo: id).get();
       final List<CardDetails> inventoryItems = querySnapshot.docs.map((doc) {
         final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         return CardDetails.fromJson(data);
       }).toList();
-      return inventoryItems;
+      final item = inventoryItems.where((item) {
+        return item.assignedto!.any((user) => user.userid == AppConst.getAccessToken());
+      }).toList();
+      return item;
     } catch (error) {
       print('Failed to get Inventory items: $error');
       return [];
@@ -260,6 +264,47 @@ class CardDetails {
       print('description update');
     } catch (error) {
       print('Failed to update card status: $error');
+    }
+  }
+
+  static Future<void> updateAssignUser({required String itemid, required Assignedto assignedto}) async {
+    try {
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: itemid).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+
+        List<dynamic> existingassign = data['assignedto'] ?? [];
+        existingassign.add(assignedto.toJson());
+
+        await docSnapshot.reference.update({'assignedto': existingassign});
+
+        print('assign new user to this ${docSnapshot.id}');
+      }
+    } catch (error) {
+      print('Failed to assign user : $error');
+    }
+  }
+
+  static Future<void> deleteCardAssignUser({required String itemId, required String userid}) async {
+    try {
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: itemId).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        QueryDocumentSnapshot docSnapshot = querySnapshot.docs.first;
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+        List<dynamic> existinguser = data['assignedto'] ?? [];
+        List<dynamic> updateduser = [];
+        for (var user in existinguser) {
+          if (user['userid'] != userid) {
+            updateduser.add(user);
+          }
+        }
+        await docSnapshot.reference.update({'assignedto': updateduser});
+        print('updated user from this inventory$itemId');
+      } else {
+        print('Item not found with InventoryId: $itemId');
+      }
+    } catch (error) {
+      print('Failed to delete user: $error');
     }
   }
 }

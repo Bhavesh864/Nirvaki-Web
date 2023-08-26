@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
@@ -8,7 +7,11 @@ import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
+import 'package:yes_broker/constants/firebase/send_notification.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/widgets/app/dropdown_menu.dart';
+import '../../constants/app_constant.dart';
+import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/utils/constants.dart';
 import '../app/nav_bar.dart';
 import '../../Customs/custom_chip.dart';
@@ -48,14 +51,53 @@ class CardHeaderState extends ConsumerState<CardHeader> {
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
             children: [
+              // Container(
+              //   padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(6),
+              //     color: checkChipColorByCategory(cardData),
+              //   ),
+              //   child: Icon(
+              //     checkIconByCategory(cardData),
+              //     color: checkIconColorByCategory(cardData),
+              //     size: 16,
+              //     // weight: 10.12,
+              //   ),
+              // ),
               CustomChip(
-                  label: Icon(
-                    checkIconByCategory(cardData),
-                    color: checkIconColorByCategory(cardData),
-                    size: 18,
-                    // weight: 10.12,
-                  ),
-                  color: checkChipColorByCategory(cardData)),
+                paddingHorizontal: 0,
+                label: Icon(
+                  checkIconByCategory(cardData),
+                  color: checkIconColorByCategory(cardData),
+                  size: 16,
+                  // weight: 10.12,
+                ),
+                color: checkChipColorByCategory(cardData),
+              ),
+              CustomStatusDropDown(
+                status: status![widget.index].status ?? cardData.status,
+                itemBuilder: (context) => isTypeisTodo(cardData)
+                    ? todoDropDownList.map((e) => popupMenuItem(e.toString())).toList()
+                    : dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
+                onSelected: (value) {
+                  CardDetails.updateCardStatus(id: cardData.workitemId!, newStatus: value);
+                  status![widget.index].status = value;
+                  if (cardData.workitemId!.contains(ItemCategory.isInventory)) {
+                    InventoryDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
+                  } else if (cardData.workitemId!.contains(ItemCategory.isLead)) {
+                    LeadDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
+                  } else if (cardData.workitemId!.contains(ItemCategory.isTodo)) {
+                    TodoDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
+                  }
+                  setState(() {});
+                  notifyToUser(
+                    itemid: cardData.workitemId!,
+                    assignedto: cardData.assignedto,
+                    content: "${currentUser["userfirstname"]} ${currentUser["userlastname"]} change status to $value",
+                    title: "${cardData.workitemId} status changed",
+                  );
+                },
+              ),
               checkNotNUllItem(cardData.roomconfig?.bedroom)
                   ? CustomChip(
                       label: CustomText(
@@ -98,43 +140,6 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                       ),
                     )
                   : const SizedBox(),
-              PopupMenuButton(
-                initialValue: status ?? cardData.status,
-                splashRadius: 0,
-                padding: EdgeInsets.zero,
-                color: Colors.white.withOpacity(1),
-                offset: const Offset(10, 40),
-                itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
-                onSelected: (value) {
-                  CardDetails.updateCardStatus(id: cardData.workitemId!, newStatus: value);
-                  status![widget.index].status = value;
-                  if (cardData.workitemId!.contains("IN")) {
-                    InventoryDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
-                  } else if (cardData.workitemId!.contains("LD")) {
-                    LeadDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
-                  } else if (cardData.workitemId!.contains("TD")) {
-                    TodoDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
-                  }
-                  setState(() {});
-                },
-                child: CustomChip(
-                  label: Row(
-                    children: [
-                      CustomText(
-                        title: status![widget.index].status ?? cardData.status!,
-                        color: taskStatusColor(status![widget.index].status ?? cardData.status!),
-                        size: 10,
-                      ),
-                      Icon(
-                        Icons.expand_more,
-                        size: 18,
-                        color: taskStatusColor(status![widget.index].status ?? cardData.status!),
-                      ),
-                    ],
-                  ),
-                  color: taskStatusColor(status![widget.index].status ?? cardData.status!).withOpacity(0.1),
-                ),
-              ),
             ],
           ),
         ),
@@ -145,59 +150,5 @@ class CardHeaderState extends ConsumerState<CardHeader> {
         )
       ],
     );
-  }
-}
-
-bool isTypeisTodo(CardDetails cardData) {
-  if (cardData.cardType != "LD" && cardData.cardType != "IN") {
-    return true;
-  }
-  return false;
-}
-
-dynamic checkIconByCategory(CardDetails carddata) {
-  if (carddata.workitemId!.contains("IN")) {
-    return MaterialSymbols.location_home_outlined;
-  } else if (carddata.workitemId!.contains("LD")) {
-    return MaterialSymbols.location_away;
-  } else if (carddata.linkedItemType!.contains("LD")) {
-    return MaterialSymbols.location_away;
-  } else if (carddata.linkedItemType!.contains("IN")) {
-    return MaterialSymbols.location_home_outlined;
-  }
-  return MaterialSymbols.location_home_outlined;
-}
-
-Color checkIconColorByCategory(CardDetails carddata) {
-  if (carddata.workitemId!.contains("IN")) {
-    return AppColor.inventoryIconColor;
-  } else if (carddata.workitemId!.contains("LD")) {
-    return AppColor.leadIconColor;
-  } else if (carddata.linkedItemType!.contains("LD")) {
-    return AppColor.leadIconColor;
-  } else if (carddata.linkedItemType!.contains("IN")) {
-    return AppColor.inventoryIconColor;
-  }
-  return AppColor.leadIconColor;
-}
-
-Color checkChipColorByCategory(CardDetails carddata) {
-  if (carddata.workitemId!.contains("IN")) {
-    return AppColor.inventoryChipColor;
-  } else if (carddata.workitemId!.contains("LD")) {
-    return AppColor.leadChipColor;
-  } else if (carddata.linkedItemType!.contains("LD")) {
-    return AppColor.leadChipColor;
-  } else if (carddata.linkedItemType!.contains("IN")) {
-    return AppColor.inventoryChipColor;
-  }
-  return AppColor.inventoryIconColor;
-}
-
-bool checkNotNUllItem(dynamic data) {
-  if (data != null) {
-    return true;
-  } else {
-    return false;
   }
 }

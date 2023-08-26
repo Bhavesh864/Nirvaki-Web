@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/foundation.dart';
-import 'package:image_picker/image_picker.dart';
 
 final CollectionReference brokerInfosCollection = FirebaseFirestore.instance.collection('brokerInfo');
 
@@ -14,7 +13,7 @@ class BrokerInfo {
   String? brokercompanynumber;
   String? brokercompanywhatsapp;
   String? brokercompanyemail;
-  XFile? brokerlogo;
+  String? brokerlogo;
   String role;
   Map<String, dynamic> brokercompanyaddress;
   BrokerInfo({
@@ -28,6 +27,18 @@ class BrokerInfo {
     required this.brokercompanyaddress,
   });
 
+  factory BrokerInfo.fromSnapshot(DocumentSnapshot snapshot) {
+    final json = snapshot.data() as Map<String, dynamic>;
+    return BrokerInfo(
+        brokerid: json["brokerid"],
+        companyname: json["companyname"],
+        brokercompanynumber: json["brokercompanynumber"],
+        brokercompanywhatsapp: json["brokercompanywhatsapp"],
+        brokercompanyemail: json["brokercompanyemail"],
+        brokerlogo: json["brokerlogo"],
+        brokercompanyaddress: json["brokercompanyaddress"],
+        role: json["role"]);
+  }
   // Convert BrokerInfo object to a map
   Map<String, dynamic> toMap() {
     return {
@@ -66,9 +77,9 @@ class BrokerInfo {
     }
   }
 
-  static Future<BrokerInfo?> getBrokerInfo(String brokerInfo) async {
+  static Future<BrokerInfo?> getBrokerInfo(String brokerid) async {
     try {
-      final DocumentSnapshot documentSnapshot = await brokerInfosCollection.doc(brokerInfo).get();
+      final DocumentSnapshot documentSnapshot = await brokerInfosCollection.doc(brokerid).get();
       if (documentSnapshot.exists) {
         final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
         return BrokerInfo.fromMap(data);

@@ -3,12 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:yes_broker/Customs/custom_fields.dart';
-import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/customs/custom_fields.dart';
+import 'package:yes_broker/customs/custom_text.dart';
+import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
-import 'package:yes_broker/Customs/custom_chip.dart';
+import 'package:yes_broker/customs/custom_chip.dart';
 import 'package:yes_broker/riverpodstate/filter_list_items_provider.dart';
 import 'package:yes_broker/widgets/workitems/inventory_checkbox_options.dart';
 
@@ -18,7 +18,7 @@ class FilterOptions {
 
 class WorkItemFilterView extends ConsumerStatefulWidget {
   final Function closeFilterView;
-  final Function(List<String>) setFilters;
+  final Function(List<String>, RangeValues) setFilters;
   final List<CardDetails> originalCardList;
 
   const WorkItemFilterView({
@@ -28,7 +28,7 @@ class WorkItemFilterView extends ConsumerStatefulWidget {
     this.setFilters = _defaultCloseFunction,
   });
 
-  static void _defaultCloseFunction(k) {}
+  static void _defaultCloseFunction(k, w) {}
 
   @override
   WorkItemFilterViewState createState() => WorkItemFilterViewState();
@@ -78,6 +78,8 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
                       IconButton(
                         onPressed: () {
                           widget.closeFilterView();
+                          widget.setFilters([], values);
+                          selectedInventoryFiltersProvider.state = [];
                         },
                         icon: const Icon(
                           Icons.close,
@@ -146,15 +148,11 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
                         title: '₹${values.start.toStringAsFixed(0)} - ₹${values.end.toStringAsFixed(0)} per month',
                         size: 14,
                       ),
-                      // Container(
-                      //   height: 100,
-                      //   color: AppColor.primary,
-                      // ),
                       RangeSlider(
                         values: values,
                         min: 0,
-                        max: 100000,
-                        divisions: 20,
+                        max: 500000000,
+                        divisions: 100,
                         onChanged: (RangeValues newVal) {
                           setState(() {
                             values = newVal;
@@ -171,24 +169,7 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
                 CustomButton(
                   text: 'Apply Filters',
                   onPressed: () {
-                    // Get the selected filter items from the Riverpod state
-                    // final selectedFilters = selectedInventoryFiltersProvider.state;
-
-                    // Apply the filtering logic to your card listing data
-                    // final filteredList = widget.originalCardList.where((card) {
-                    //   // Check if the card's rent is within the selected range
-                    //   double cardRent = card.propertypricerange ?? 0; // Modify based on your data structure
-                    //   return cardRent >= values.start &&
-                    //       cardRent <= values.end &&
-                    //       (selectedFilters.isEmpty || selectedFilters.any((filter) => card.roomconfig?.additionalroom?.contains(filter) ?? false));
-                    // }).toList();
-
-                    // Update the listing using the filtered results (you need to define originalCardList)
-                    // ref.read(filteredCardListProvider.notifier).updateFilteredList(filteredList);
-
-                    widget.setFilters(selectedInventoryFiltersProvider.state);
-
-                    // widget.closeFilterView();
+                    widget.setFilters(selectedInventoryFiltersProvider.state, values);
                   },
                 ),
               ],

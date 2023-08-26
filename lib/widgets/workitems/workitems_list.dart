@@ -1,4 +1,3 @@
-import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -6,18 +5,21 @@ import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/card/custom_card.dart';
 
-import '../../pages/largescreen_dashboard.dart';
-import '../../routes/routes.dart';
+import '../../constants/functions/navigation/navigation_functions.dart';
 
 class WorkItemsList extends ConsumerStatefulWidget {
   final bool isScrollable;
   final bool headerShow;
   final String title;
   final List<CardDetails> getCardDetails;
-  const WorkItemsList({super.key, this.headerShow = true, required this.title, required this.getCardDetails, this.isScrollable = true});
+  const WorkItemsList(
+      {super.key,
+      this.headerShow = true,
+      required this.title,
+      required this.getCardDetails,
+      this.isScrollable = true});
 
   @override
   WorkItemsListState createState() => WorkItemsListState();
@@ -48,7 +50,8 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
               children: [
                 widget.headerShow
                     ? Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 0),
                         height: 50,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -70,43 +73,19 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                   child: ListView(
                     shrinkWrap: true,
                     addRepaintBoundaries: false,
-                    physics: widget.isScrollable ? const ScrollPhysics() : const NeverScrollableScrollPhysics(),
+                    physics: widget.isScrollable
+                        ? const ScrollPhysics()
+                        : const NeverScrollableScrollPhysics(),
                     children: List.generate(
                       widget.getCardDetails.length,
                       (index) {
                         return GestureDetector(
                           onTap: () {
                             final id = widget.getCardDetails[index].workitemId;
-                            if (id!.contains('IN')) {
-                              if (Responsive.isMobile(context)) {
-                                Navigator.of(context).pushNamed(AppRoutes.inventoryDetailsScreen, arguments: id);
-                                ref.read(selectedWorkItemId.notifier).addItemId(id);
-                              } else {
-                                ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                ref.read(largeScreenTabsProvider.notifier).update((state) => 7);
-                                context.beamToNamed('/inventory/inventory-details/$id');
-                              }
-                            } else if (id.contains('LD')) {
-                              if (Responsive.isMobile(context)) {
-                                Navigator.of(context).pushNamed(AppRoutes.leadDetailsScreen, arguments: id);
-                                ref.read(selectedWorkItemId.notifier).addItemId(id);
-                              } else {
-                                ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                ref.read(largeScreenTabsProvider.notifier).update((state) => 8);
-                                context.beamToNamed('/lead/lead-details/$id');
-                              }
-                            } else if (id.contains('TD')) {
-                              if (Responsive.isMobile(context)) {
-                                Navigator.of(context).pushNamed(AppRoutes.todoDetailsScreen, arguments: id);
-                                ref.read(selectedWorkItemId.notifier).addItemId(id);
-                              } else {
-                                ref.read(selectedWorkItemId.notifier).addItemId(id);
-                                ref.read(largeScreenTabsProvider.notifier).update((state) => 8);
-                                context.beamToNamed('/todo/todo-details/$id');
-                              }
-                            }
+                            navigateBasedOnId(context, id!, ref);
                           },
-                          child: CustomCard(index: index, cardDetails: widget.getCardDetails),
+                          child: CustomCard(
+                              index: index, cardDetails: widget.getCardDetails),
                         );
                       },
                     ),

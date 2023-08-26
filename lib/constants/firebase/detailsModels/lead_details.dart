@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-final CollectionReference usersCollection = FirebaseFirestore.instance.collection('leadDetails');
+final CollectionReference leadDetailsCollection = FirebaseFirestore.instance.collection('leadDetails');
 
 class LeadDetails {
   String? leadStatus;
@@ -350,7 +350,7 @@ class LeadDetails {
 
   static Future<LeadDetails?> getLeadDetails(itemid) async {
     try {
-      final QuerySnapshot querySnapshot = await usersCollection.where("leadId", isEqualTo: itemid).get();
+      final QuerySnapshot querySnapshot = await leadDetailsCollection.where("leadId", isEqualTo: itemid).get();
       for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
         if (documentSnapshot.exists) {
           final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
@@ -366,7 +366,7 @@ class LeadDetails {
 
   static Future<LeadDetails?> getLeadQuestion(itemid) async {
     try {
-      final QuerySnapshot querySnapshot = await usersCollection.where("InventoryId", isEqualTo: itemid).get();
+      final QuerySnapshot querySnapshot = await leadDetailsCollection.where("InventoryId", isEqualTo: itemid).get();
       for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
         if (documentSnapshot.exists) {
           final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
@@ -382,7 +382,7 @@ class LeadDetails {
 
   static Future<void> addLeadDetails(LeadDetails inventory) async {
     try {
-      await usersCollection.doc().set(inventory.toJson());
+      await leadDetailsCollection.doc().set(inventory.toJson());
       // print('Inventory item added successfully');
     } catch (error) {
       // print('Failed to add Inventory item: $error');
@@ -391,7 +391,7 @@ class LeadDetails {
 
   static Future<void> addAttachmentToItems({required String itemid, required Attachments newAttachment}) async {
     try {
-      QuerySnapshot querySnapshot = await usersCollection.where("leadId", isEqualTo: itemid).get();
+      QuerySnapshot querySnapshot = await leadDetailsCollection.where("leadId", isEqualTo: itemid).get();
       for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
         Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
 
@@ -409,7 +409,7 @@ class LeadDetails {
 
   static Future<void> deleteAttachment({required String itemId, required String attachmentIdToDelete}) async {
     try {
-      QuerySnapshot querySnapshot = await usersCollection.where("leadId", isEqualTo: itemId).get();
+      QuerySnapshot querySnapshot = await leadDetailsCollection.where("leadId", isEqualTo: itemId).get();
       if (querySnapshot.docs.isNotEmpty) {
         QueryDocumentSnapshot docSnapshot = querySnapshot.docs.first;
         Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
@@ -432,13 +432,52 @@ class LeadDetails {
 
   static Future<void> updatecardStatus({required String id, required String newStatus}) async {
     try {
-      QuerySnapshot querySnapshot = await usersCollection.where("leadId", isEqualTo: id).get();
+      QuerySnapshot querySnapshot = await leadDetailsCollection.where("leadId", isEqualTo: id).get();
       for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
         await docSnapshot.reference.update({'leadStatus': newStatus});
       }
       print('lead status update');
     } catch (error) {
       print('Failed to update card status: $error');
+    }
+  }
+
+  static Future<void> updateAssignUser({required String itemid, required Assignedto assignedto}) async {
+    try {
+      QuerySnapshot querySnapshot = await leadDetailsCollection.where("leadId", isEqualTo: itemid).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+        List<dynamic> existingassign = data['assignedto'] ?? [];
+        existingassign.add(assignedto.toJson());
+        await docSnapshot.reference.update({'assignedto': existingassign});
+
+        print('assign new user to this ${docSnapshot.id}');
+      }
+    } catch (error) {
+      print('Failed to assign user : $error');
+    }
+  }
+
+  static Future<void> deleteInventoryAssignUser({required String itemId, required String userid}) async {
+    try {
+      QuerySnapshot querySnapshot = await leadDetailsCollection.where("leadId", isEqualTo: itemId).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        QueryDocumentSnapshot docSnapshot = querySnapshot.docs.first;
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+        List<dynamic> existinguser = data['assignedto'] ?? [];
+        List<dynamic> updateduser = [];
+        for (var user in existinguser) {
+          if (user['userid'] != userid) {
+            updateduser.add(user);
+          }
+        }
+        await docSnapshot.reference.update({'assignedto': updateduser});
+        print('updated user from this inventory$itemId');
+      } else {
+        print('Item not found with InventoryId: $itemId');
+      }
+    } catch (error) {
+      print('Failed to delete user: $error');
     }
   }
 }

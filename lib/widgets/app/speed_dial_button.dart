@@ -2,9 +2,8 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
-import 'package:flutter_material_symbols/flutter_material_symbols.dart';
-import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/routes/routes.dart';
+import '../../constants/app_constant.dart';
 import '../../constants/utils/colors.dart';
 
 class CustomSpeedDialButton extends StatefulWidget {
@@ -17,28 +16,18 @@ class CustomSpeedDialButton extends StatefulWidget {
 class _CustomSpeedDialButtonState extends State<CustomSpeedDialButton> {
   @override
   Widget build(BuildContext context) {
+    AppConst.setOuterContext(context);
     return SpeedDial(
       animatedIcon: AnimatedIcons.add_event,
       foregroundColor: Colors.white,
       backgroundColor: AppColor.primary,
       overlayColor: Colors.black,
-      renderOverlay: false,
+      // renderOverlay: false,
       overlayOpacity: 0.4,
       children: [
         SpeedDialChild(
           onTap: () {
-            // Navigator.of(context).push(
-            //   MaterialPageRoute(
-            //     builder: (context) => const AddWorkItem(
-            //       isInventory: true,
-            //     ),
-            //   ),
-            // );
-            if (Responsive.isMobile(context)) {
-              Navigator.of(context).pushNamed(AppRoutes.addInventory);
-            } else {
-              context.beamToNamed(AppRoutes.addInventory);
-            }
+            context.beamToNamed(AppRoutes.addInventory);
           },
           labelShadow: [
             const BoxShadow(
@@ -48,7 +37,7 @@ class _CustomSpeedDialButtonState extends State<CustomSpeedDialButton> {
             )
           ],
           child: const Icon(
-            MaterialSymbols.location_home_outlined,
+            inventoryIcon,
             color: Colors.white,
           ),
           label: 'Inventory',
@@ -57,18 +46,7 @@ class _CustomSpeedDialButtonState extends State<CustomSpeedDialButton> {
         ),
         SpeedDialChild(
           onTap: () {
-            // Navigator.of(context).push(
-            //   MaterialPageRoute(
-            //     builder: (context) => const AddWorkItem(
-            //       isInventory: false,
-            //     ),
-            //   ),
-            // );
-            if (Responsive.isMobile(context)) {
-              Navigator.of(context).pushNamed(AppRoutes.addLead);
-            } else {
-              context.beamToNamed(AppRoutes.addLead);
-            }
+            context.beamToNamed(AppRoutes.addLead);
           },
           labelShadow: [
             const BoxShadow(
@@ -78,7 +56,7 @@ class _CustomSpeedDialButtonState extends State<CustomSpeedDialButton> {
             )
           ],
           child: const Icon(
-            Icons.person_search_outlined,
+            leadIcon,
             color: Colors.white,
           ),
           label: 'Lead',
@@ -87,11 +65,7 @@ class _CustomSpeedDialButtonState extends State<CustomSpeedDialButton> {
         ),
         SpeedDialChild(
           onTap: () {
-            if (Responsive.isMobile(context)) {
-              Navigator.of(context).pushNamed(AppRoutes.addTodo);
-            } else {
-              context.beamToNamed(AppRoutes.addTodo);
-            }
+            context.beamToNamed(AppRoutes.addTodo);
           },
           labelShadow: [
             const BoxShadow(
@@ -101,7 +75,7 @@ class _CustomSpeedDialButtonState extends State<CustomSpeedDialButton> {
             )
           ],
           child: const Icon(
-            Icons.task_outlined,
+            Icons.task,
             color: Colors.white,
           ),
           label: 'To-do',

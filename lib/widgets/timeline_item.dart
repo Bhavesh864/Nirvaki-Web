@@ -17,8 +17,8 @@ class TimeLineItem extends StatelessWidget {
   Widget build(BuildContext context) {
     var timeLine = activitiesList[index];
     return Container(
-      padding: const EdgeInsets.only(top: 10, left: 5),
-      height: 88,
+      padding: const EdgeInsets.only(top: 0, left: 5),
+      height: 100,
       width: 100,
       margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
       decoration: const BoxDecoration(
@@ -27,7 +27,7 @@ class TimeLineItem extends StatelessWidget {
         ),
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -54,7 +54,7 @@ class TimeLineItem extends StatelessWidget {
             horizontalTitleGap: 6,
             titleAlignment: ListTileTitleAlignment.center,
             leading: Container(
-              height: 20,
+              // height: 20,
               width: 20,
               decoration: BoxDecoration(
                 image: const DecorationImage(image: AssetImage(profileImage)),

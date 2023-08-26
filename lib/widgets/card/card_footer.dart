@@ -1,34 +1,20 @@
 import 'package:flutter/material.dart';
-
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
-import 'package:yes_broker/constants/utils/constants.dart';
 import '../../Customs/custom_chip.dart';
+import '../../constants/functions/navigation/navigation_functions.dart';
+import '../../constants/utils/constants.dart';
+import '../workItemDetail/Inventory_details_header.dart';
 
 class CardFooter extends StatelessWidget {
   final int index;
   final List<CardDetails> cardDetails;
-  final bool? call;
-  final bool? whatsapp;
-  final bool? edit;
-  final bool? propertyId;
-  final bool? name;
-  final bool? showAvatarNumber;
-  final bool? showAvatar1;
-  final bool? showAvatar2;
 
   const CardFooter({
     Key? key,
     required this.index,
-    this.call = true,
-    this.whatsapp = true,
-    this.edit = true,
-    this.propertyId = true,
-    this.name = true,
-    this.showAvatarNumber = false,
-    this.showAvatar1 = true,
-    this.showAvatar2 = false,
     required this.cardDetails,
   }) : super(key: key);
 
@@ -83,8 +69,17 @@ class CardFooter extends StatelessWidget {
               //     paddingHorizontal: 3,
               //   ),
               // ),
-              const CustomChip(
-                label: Icon(
+              CustomChip(
+                onPressed: () {
+                  shareUrl(
+                    context,
+                    textToCombine: navigationUrl(
+                      context,
+                      cardDetails[index].workitemId!,
+                    ),
+                  );
+                },
+                label: const Icon(
                   Icons.share_outlined,
                 ),
                 paddingHorizontal: 3,
@@ -100,14 +95,58 @@ class CardFooter extends StatelessWidget {
           ),
         ),
         const Spacer(),
-        Container(
-          margin: const EdgeInsets.only(right: 5),
-          height: 20,
-          width: 20,
-          decoration: BoxDecoration(
-            image: DecorationImage(image: NetworkImage(cardData.assignedto![0].image!.isEmpty ? noImg : cardData.assignedto![0].image!), fit: BoxFit.fill),
-            borderRadius: BorderRadius.circular(40),
-          ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: cardData.assignedto!
+              .sublist(
+                  0,
+                  cardData.assignedto!.length < 2
+                      ? 1
+                      : cardData.assignedto!.length < 3
+                          ? 2
+                          : 3)
+              .asMap()
+              .entries
+              .map((entry) {
+            final index = entry.key;
+            final user = entry.value;
+            return Transform.translate(
+              offset: Offset(index * -8.0, 0),
+              child: Container(
+                margin: EdgeInsets.zero,
+                width: 24,
+                height: 24,
+                decoration: index > 1
+                    ? BoxDecoration(
+                        border: Border.all(color: Colors.white),
+                        color: index > 1 ? Colors.grey.shade300 : null,
+                        borderRadius: BorderRadius.circular(40),
+                      )
+                    : BoxDecoration(
+                        border: Border.all(color: Colors.white),
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            user.image!.isEmpty ? noImg : user.image!,
+                          ),
+                          fit: BoxFit.fill,
+                        ),
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                child: index > 1
+                    ? Center(
+                        child: CustomText(
+                          title: '+${cardData.assignedto!.length - 2}',
+                          color: Colors.black,
+                          size: 9,
+                          // textAlign: TextAlign.center,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )
+                    : null,
+              ),
+            );
+          }).toList(),
         ),
       ],
     );
