@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/small_custom_profile_image.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
-import 'package:yes_broker/widgets/app/nav_bar.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/assingment_methods.dart';
