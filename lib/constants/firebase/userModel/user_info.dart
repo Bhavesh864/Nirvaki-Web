@@ -2,9 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
+
+import '../../../riverpodstate/user_data.dart';
 
 final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
 Box box = Hive.box("users");
@@ -141,7 +144,7 @@ class User extends HiveObject {
     }
   }
 
-  static Future<User?> getUser(String userId) async {
+  static Future<User?> getUser(String userId, WidgetRef ref) async {
     try {
       final hiveUserData = UserHiveMethods.getdata(userId);
       // print("userhiveform=====>$hiveUserData");
@@ -154,6 +157,7 @@ class User extends HiveObject {
         if (documentSnapshot.exists) {
           final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
           final User user = User.fromMap(data);
+          ref.read(userDataProvider.notifier).storeUserData(user);
           UserHiveMethods.addData(key: userId, data: user.toMap());
           return user;
         } else {
