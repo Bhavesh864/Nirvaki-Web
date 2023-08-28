@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -144,8 +143,7 @@ Future<String?> getToken() async {
 Future<void> setupInteractedMessage() async {
   // Get any messages which caused the application to open from
   // a terminated state.
-  RemoteMessage? initialMessage =
-      await FirebaseMessaging.instance.getInitialMessage();
+  RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
   // If the message also contains a data property with a "type" of "chat",
   // navigate to a chat screen
   if (initialMessage != null) {

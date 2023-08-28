@@ -1,8 +1,11 @@
-import 'dart:html';
+// ignore_for_file: avoid_web_libraries_in_flutter
 
+import 'dart:html' show AnchorElement;
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
+
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
