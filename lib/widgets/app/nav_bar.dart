@@ -296,8 +296,8 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                                     Navigator.of(context).pop();
                                   },
                                   titleAlignment: ListTileTitleAlignment.top,
-                                  leading: const CircleAvatar(
-                                    backgroundImage: NetworkImage(noImg),
+                                  leading: CircleAvatar(
+                                    backgroundImage: NetworkImage(notificationData.imageUrl!.isNotEmpty ? notificationData.imageUrl! : noImg),
                                   ),
                                   title: SizedBox(
                                     height: 80,

@@ -1,19 +1,22 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 import 'package:yes_broker/routes/routes.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/utils/colors.dart';
+import '../../pages/add_inventory.dart' as inventory;
+import '../../pages/add_lead.dart';
 
-class CustomSpeedDialButton extends StatefulWidget {
+class CustomSpeedDialButton extends ConsumerStatefulWidget {
   const CustomSpeedDialButton({super.key});
 
   @override
-  State<CustomSpeedDialButton> createState() => _CustomSpeedDialButtonState();
+  CustomSpeedDialButtonState createState() => CustomSpeedDialButtonState();
 }
 
-class _CustomSpeedDialButtonState extends State<CustomSpeedDialButton> {
+class CustomSpeedDialButtonState extends ConsumerState<CustomSpeedDialButton> {
   @override
   Widget build(BuildContext context) {
     AppConst.setOuterContext(context);
@@ -28,6 +31,7 @@ class _CustomSpeedDialButtonState extends State<CustomSpeedDialButton> {
         SpeedDialChild(
           onTap: () {
             context.beamToNamed(AppRoutes.addInventory);
+            ref.read(inventory.myArrayProvider.notifier).resetState();
           },
           labelShadow: [
             const BoxShadow(
@@ -47,6 +51,7 @@ class _CustomSpeedDialButtonState extends State<CustomSpeedDialButton> {
         SpeedDialChild(
           onTap: () {
             context.beamToNamed(AppRoutes.addLead);
+            ref.read(myArrayProvider.notifier).resetState();
           },
           labelShadow: [
             const BoxShadow(

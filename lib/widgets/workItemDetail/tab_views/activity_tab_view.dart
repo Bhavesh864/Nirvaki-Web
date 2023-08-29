@@ -56,7 +56,7 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
                   onPressed: () {
                     if (controller.text.isNotEmpty) {
                       submitActivity(itemid: workItemId, activitytitle: controller.text);
-                      notifyToUser(assignedto: widget.details.assignedto, content: "$workItemId added new Activity", title: controller.text ,itemid:workItemId);
+                      notifyToUser(assignedto: widget.details.assignedto, content: "$workItemId added new Activity", title: controller.text, itemid: workItemId);
                       controller.clear();
                     } else {
                       customSnackBar(context: context, text: 'Please enter note to submit');

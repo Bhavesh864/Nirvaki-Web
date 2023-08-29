@@ -27,6 +27,10 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
     print('state: $state');
   }
 
+  void resetState() {
+    state = [];
+  }
+
   Future<String> submitInventory() async {
     final String res = await submitInventoryAndcardDetails(state);
     return res;
