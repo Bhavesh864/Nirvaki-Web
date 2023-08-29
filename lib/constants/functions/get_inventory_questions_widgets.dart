@@ -15,18 +15,28 @@ import '../../customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
 import '../utils/colors.dart';
 
-Widget buildInventoryQuestions(Question question, List<Screen> screensDataList, int currentScreenIndex, AllChipSelectedAnwers notify, Function nextQuestion) {
+Widget buildInventoryQuestions(
+  Question question,
+  List<Screen> screensDataList,
+  int currentScreenIndex,
+  AllChipSelectedAnwers notify,
+  Function nextQuestion,
+  bool isRentSelected,
+) {
   if (question.questionOptionType == 'chip') {
     return Column(
       children: [
         for (var option in question.questionOption)
           StatefulBuilder(builder: (context, setState) {
+            if (isRentSelected && option == "Plot") {
+              return const SizedBox();
+            }
             return ChipButton(
               text: option,
               onSelect: () {
+                nextQuestion(screensDataList: screensDataList, option: option);
                 if (currentScreenIndex < screensDataList.length - 1) {
                   notify.add({"id": question.questionId, "item": option});
-                  nextQuestion(screensDataList: screensDataList, option: option);
                 } else {
                   // Handle reaching the last question
                 }
