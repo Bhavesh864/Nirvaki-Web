@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_web_libraries_in_flutter
 
-import 'dart:html' show AnchorElement;
+// import 'dart:html' show AnchorElement;
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -253,9 +253,9 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                     ),
                                     onTap: () {
                                       if (kIsWeb) {
-                                        AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                        anchorElement.download = 'Attachment file';
-                                        anchorElement.click();
+                                        // AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                        // anchorElement.download = 'Attachment file';
+                                        // anchorElement.click();
                                       }
                                     },
                                   ),

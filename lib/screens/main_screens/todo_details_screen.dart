@@ -1,7 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member, avoid_web_libraries_in_flutter
 import 'dart:async';
 
-import 'dart:html';
+// import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -469,9 +469,9 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                                 ),
                                                                 onTap: () {
                                                                   if (kIsWeb) {
-                                                                    AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                                                    anchorElement.download = 'Attachment file';
-                                                                    anchorElement.click();
+                                                                    // AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                                                    // anchorElement.download = 'Attachment file';
+                                                                    // anchorElement.click();
                                                                   }
                                                                 },
                                                               ),
