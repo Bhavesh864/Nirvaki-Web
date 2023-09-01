@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/widgets/chat/chat_input.dart';
 import 'package:yes_broker/widgets/chat/chat_screen_header.dart';
 import 'package:yes_broker/widgets/chat/message_box.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key, required this.user});
-  final user;
+  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class ChatScreen extends StatelessWidget {
 
 class ChatScreenBody extends StatefulWidget {
   const ChatScreenBody({super.key, required this.user});
-  final user;
+  final User user;
 
   @override
   State<ChatScreenBody> createState() => _ChatScreenBodyState();

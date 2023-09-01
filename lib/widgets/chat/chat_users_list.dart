@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
+import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/constants/utils/image_constants.dart';
-import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/screens/main_screens/chat_screen.dart';
 
 class ChatUserList extends StatelessWidget {
   const ChatUserList({super.key, required this.users});
 
   // ignore: prefer_typing_uninitialized_variables
-  final users;
+  final List<User> users;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,8 @@ class UserList extends StatelessWidget {
   const UserList({super.key, required this.user});
 
   // ignore: prefer_typing_uninitialized_variables
-  final user;
+  // final user;
+  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,6 @@ class UserList extends StatelessWidget {
       color: Colors.white,
       child: ListTile(
         onTap: () {
-          // Navigator.of(context).push(AppRoutes.createAnimatedRoute(ChatScreen(user: user)));
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (ctx) => ChatScreen(
@@ -42,37 +43,39 @@ class UserList extends StatelessWidget {
         },
         splashColor: Colors.grey[350],
         leading: Hero(
-          tag: user["id"],
-          child: const CircleAvatar(
-              radius: 26, backgroundImage: AssetImage(profileImage)),
+          tag: user.userId,
+          child: CircleAvatar(
+              radius: 26,
+              backgroundImage:
+                  NetworkImage(user.image.isEmpty ? noImg : user.image)),
         ),
         title: Flexible(
           child: AppText(
-            text: '${user["title"]}',
+            text: '${user.userfirstname} ${user.userlastname} ',
             textColor: const Color.fromRGBO(44, 44, 46, 1),
             fontWeight: FontWeight.w500,
             fontsize: 16,
           ),
         ),
-        subtitle: Row(
+        subtitle: const Row(
           children: [
             // ignore: unrelated_type_equality_checks
-            if (user["seen"] == true)
-              const Padding(
-                padding: EdgeInsets.only(right: 5),
-                child: Icon(
-                  Icons.done_all,
-                  size: 20,
-                  color: Color.fromRGBO(31, 162, 255, 1),
-                ),
-              ),
+            // if (user["seen"] == true)
+            //   const Padding(
+            //     padding: EdgeInsets.only(right: 5),
+            //     child: Icon(
+            //       Icons.done_all,
+            //       size: 20,
+            //       color: Color.fromRGBO(31, 162, 255, 1),
+            //     ),
+            //   ),
             Flexible(
               child: Padding(
-                padding: const EdgeInsets.only(right: 10),
+                padding: EdgeInsets.only(right: 10),
                 child: AppText(
                   overflow: TextOverflow.ellipsis,
-                  text: '${user["message"]}',
-                  textColor: const Color.fromRGBO(155, 155, 155, 1),
+                  text: 'Hey,',
+                  textColor: Color.fromRGBO(155, 155, 155, 1),
                   fontWeight: FontWeight.w400,
                   fontsize: 15,
                   maxLines: 1,
@@ -83,15 +86,15 @@ class UserList extends StatelessWidget {
         ),
         trailing: Column(
           children: [
-            AppText(
-              text: '${user["time"]}',
-              textColor: const Color.fromRGBO(155, 155, 155, 1),
+            const AppText(
+              text: '11:20 am',
+              textColor: Color.fromRGBO(155, 155, 155, 1),
               fontWeight: FontWeight.w400,
               fontsize: 12,
               maxLines: 1,
             ),
             // ignore: unrelated_type_equality_checks
-            if (user["seen"] == true)
+            if (true)
               Container(
                 margin: const EdgeInsets.only(top: 5),
                 width: 20,
@@ -100,10 +103,10 @@ class UserList extends StatelessWidget {
                   color: AppColor.primary,
                   shape: BoxShape.circle,
                 ),
-                child: Center(
+                child: const Center(
                   child: Text(
-                    '${user["unRead"]}',
-                    style: const TextStyle(
+                    '2',
+                    style: TextStyle(
                       color: Colors.white,
                       fontSize: 11,
                       fontWeight: FontWeight.bold,

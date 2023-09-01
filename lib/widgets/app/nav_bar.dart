@@ -39,7 +39,8 @@ import '../../constants/utils/constants.dart';
 
 final userProvider = FutureProvider<User>(
   (ref) async {
-    final User? initialCardDetails = await User.getUser(AppConst.getAccessToken()!);
+    final User? initialCardDetails =
+        await User.getUser(AppConst.getAccessToken()!);
     // final initialStatuses = initialCardDetails.map((card) => card.status).toList();
 
     return initialCardDetails!;
@@ -78,7 +79,9 @@ class LargeScreenNavBar extends ConsumerWidget {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  largeScreenView("${snapshot.data?.userfirstname} ${snapshot.data?.userlastname}", context),
+                  largeScreenView(
+                      "${snapshot.data?.userfirstname} ${snapshot.data?.userlastname}",
+                      context),
                   const Spacer(),
                   Stack(
                     children: <Widget>[
@@ -140,7 +143,11 @@ class LargeScreenNavBar extends ConsumerWidget {
                       width: 30,
                       margin: const EdgeInsets.only(right: 10),
                       decoration: BoxDecoration(
-                        image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(snapshot.data!.image.isEmpty ? noImg : snapshot.data!.image)),
+                        image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(snapshot.data!.image.isEmpty
+                                ? noImg
+                                : snapshot.data!.image)),
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
@@ -193,7 +200,9 @@ Widget largeScreenView(String name, BuildContext context) {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CustomText(
-          title: capitalizeFirstLetter(name) != 'Public View' ? 'Welcome, ${capitalizeFirstLetter(name)}' : capitalizeFirstLetter(name),
+          title: capitalizeFirstLetter(name) != 'Public View'
+              ? 'Welcome, ${capitalizeFirstLetter(name)}'
+              : capitalizeFirstLetter(name),
           fontWeight: FontWeight.bold,
         ),
         Center(
@@ -284,8 +293,10 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
                               children: [
                                 Text(
                                   'Ravi Sharma have assigned a new lead to you. ',
-                                  maxLines: 3, // Adjust the maximum number of lines as needed
-                                  overflow: TextOverflow.ellipsis, // Handle text overflow
+                                  maxLines:
+                                      3, // Adjust the maximum number of lines as needed
+                                  overflow: TextOverflow
+                                      .ellipsis, // Handle text overflow
                                 ),
                                 Spacer(),
                                 CustomText(
