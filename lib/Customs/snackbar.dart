@@ -12,9 +12,29 @@ customSnackBar({required BuildContext context, required String text}) {
       ),
       behavior: SnackBarBehavior.fixed,
       elevation: 3,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+      // shape: RoundedRectangleBorder(
+      //   borderRadius: BorderRadius.circular(10.0),
+      // ),
+      dismissDirection: DismissDirection.endToStart,
+      // margin: const EdgeInsets.only(bottom: 50, left: 10, right: 10),
+      duration: const Duration(milliseconds: 3000),
+    ),
+  );
+}
+
+fadedCustomSnackBar({required BuildContext context, required String text}) {
+  return ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      backgroundColor: AppColor.primary,
+      content: AppText(
+        text: text,
+        textColor: Colors.white,
       ),
+      behavior: SnackBarBehavior.fixed,
+      // elevation: 3,
+      // shape: RoundedRectangleBorder(
+      //   borderRadius: BorderRadius.circular(10.0),
+      // ),
       dismissDirection: DismissDirection.endToStart,
       // margin: const EdgeInsets.only(bottom: 50, left: 10, right: 10),
       duration: const Duration(milliseconds: 3000),
