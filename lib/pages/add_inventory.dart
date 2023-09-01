@@ -15,7 +15,8 @@ import '../customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
 import '../riverpodstate/all_selected_ansers_provider.dart';
 
-final myArrayProvider = StateNotifierProvider<AllChipSelectedAnwers, List<Map<String, dynamic>>>(
+final myArrayProvider =
+    StateNotifierProvider<AllChipSelectedAnwers, List<Map<String, dynamic>>>(
   (ref) => AllChipSelectedAnwers(),
 );
 
@@ -87,7 +88,8 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     }
   }
 
-  InventoryQuestions? getcurrentInventory(AsyncSnapshot<List<InventoryQuestions>> snapshot, option) {
+  InventoryQuestions? getcurrentInventory(
+      AsyncSnapshot<List<InventoryQuestions>> snapshot, option) {
     for (var data in snapshot.data!) {
       if (data.type == option) {
         return data;
@@ -108,8 +110,11 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (snapshot.hasData) {
-              final res = notify.state.isNotEmpty ? notify.state[0]["item"] : "Residential";
-              InventoryQuestions? screenData = getcurrentInventory(snapshot, res);
+              final res = notify.state.isNotEmpty
+                  ? notify.state[0]["item"]
+                  : "Residential";
+              InventoryQuestions? screenData =
+                  getcurrentInventory(snapshot, res);
               List<Screen> screensDataList = screenData!.screens;
               return Stack(
                 children: [
@@ -138,39 +143,60 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                     child: Container(
                                       constraints: BoxConstraints(
                                         minHeight: 0,
-                                        maxHeight: Responsive.isMobile(context) ? height! * 0.8 : height! * 0.88,
+                                        maxHeight: Responsive.isMobile(context)
+                                            ? height! * 0.8
+                                            : height! * 0.88,
                                       ),
-                                      width: Responsive.isMobile(context) ? width! * 0.9 : 650,
+                                      width: Responsive.isMobile(context)
+                                          ? width! * 0.9
+                                          : 650,
                                       padding: const EdgeInsets.all(25),
                                       child: ScrollConfiguration(
-                                        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                                        behavior:
+                                            ScrollConfiguration.of(context)
+                                                .copyWith(scrollbars: false),
                                         child: SingleChildScrollView(
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              if (screensDataList[index].title != null)
+                                              if (screensDataList[index]
+                                                      .title !=
+                                                  null)
                                                 CustomText(
                                                   softWrap: true,
                                                   textAlign: TextAlign.center,
                                                   size: 30,
-                                                  title: screensDataList[index].title.toString(),
+                                                  title: screensDataList[index]
+                                                      .title
+                                                      .toString(),
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ListView.builder(
                                                 shrinkWrap: true,
-                                                physics: const NeverScrollableScrollPhysics(),
-                                                itemCount: screensDataList[index].questions.length,
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                itemCount:
+                                                    screensDataList[index]
+                                                        .questions
+                                                        .length,
                                                 itemBuilder: (context, i) {
-                                                  final question = screensDataList[index].questions[i];
+                                                  final question =
+                                                      screensDataList[index]
+                                                          .questions[i];
                                                   return Column(
                                                     children: [
-                                                      if (screensDataList[index].title == null)
+                                                      if (screensDataList[index]
+                                                              .title ==
+                                                          null)
                                                         CustomText(
                                                           softWrap: true,
-                                                          textAlign: TextAlign.center,
+                                                          textAlign:
+                                                              TextAlign.center,
                                                           size: 30,
-                                                          title: question.questionTitle,
-                                                          fontWeight: FontWeight.bold,
+                                                          title: question
+                                                              .questionTitle,
+                                                          fontWeight:
+                                                              FontWeight.bold,
                                                         ),
                                                       buildInventoryQuestions(
                                                         question,
@@ -179,25 +205,55 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                         notify,
                                                         nextQuestion,
                                                       ),
-                                                      if (i == screensDataList[index].questions.length - 1 && question.questionOptionType != 'chip')
+                                                      if (i ==
+                                                              screensDataList[
+                                                                          index]
+                                                                      .questions
+                                                                      .length -
+                                                                  1 &&
+                                                          question.questionOptionType !=
+                                                              'chip')
                                                         Container(
-                                                          margin: const EdgeInsets.only(top: 10),
-                                                          alignment: Alignment.centerRight,
+                                                          margin:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 10),
+                                                          alignment: Alignment
+                                                              .centerRight,
                                                           child: CustomButton(
-                                                            text: screensDataList[index].title == "Assign to" ? 'Submit' : 'Next',
+                                                            text: screensDataList[
+                                                                            index]
+                                                                        .title ==
+                                                                    "Assign to"
+                                                                ? 'Submit'
+                                                                : 'Next',
                                                             onPressed: () {
-                                                              FocusScope.of(context).unfocus();
+                                                              FocusScope.of(
+                                                                      context)
+                                                                  .unfocus();
 
-                                                              if (_formKey.currentState!.validate()) {
+                                                              if (_formKey
+                                                                  .currentState!
+                                                                  .validate()) {
                                                                 nextQuestion(
-                                                                  screensDataList: screensDataList,
+                                                                  screensDataList:
+                                                                      screensDataList,
                                                                 );
                                                               }
-                                                              if (screensDataList[index].title == "Assign to") {
-                                                                addDataOnfirestore(notify);
+                                                              if (screensDataList[
+                                                                          index]
+                                                                      .title ==
+                                                                  "Assign to") {
+                                                                addDataOnfirestore(
+                                                                    notify);
                                                               }
                                                             },
-                                                            width: screensDataList[index].title == "Assign to" ? 90 : 70,
+                                                            width: screensDataList[
+                                                                            index]
+                                                                        .title ==
+                                                                    "Assign to"
+                                                                ? 90
+                                                                : 70,
                                                             height: 39,
                                                           ),
                                                         ),
@@ -242,8 +298,10 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
           child: AppBar(
             leading: IconButton(
               onPressed: () {
-                final currentScreenQuestions = screensDataList[currentScreenIndex].questions;
-                final ids = currentScreenQuestions.map((q) => q.questionId).toList();
+                final currentScreenQuestions =
+                    screensDataList[currentScreenIndex].questions;
+                final ids =
+                    currentScreenQuestions.map((q) => q.questionId).toList();
                 goBack(ids);
               },
               icon: const Icon(
