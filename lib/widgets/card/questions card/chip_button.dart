@@ -9,6 +9,8 @@ class ChipButton extends StatelessWidget {
   final double width;
   final VoidCallback onSelect;
   final TextAlign? textAlign;
+  final Color bgColor;
+
   const ChipButton({
     super.key,
     this.isSmall = false,
@@ -16,6 +18,7 @@ class ChipButton extends StatelessWidget {
     required this.text,
     required this.onSelect,
     this.width = double.infinity,
+    this.bgColor = AppColor.secondary,
   });
 
   @override
@@ -33,8 +36,9 @@ class ChipButton extends StatelessWidget {
           ),
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: AppColor.secondary,
+            color: bgColor,
             borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: bgColor == AppColor.primary.withOpacity(0.05) ? AppColor.secondary : AppColor.primary.withOpacity(0.2)),
           ),
           child: CustomText(
             textAlign: textAlign,

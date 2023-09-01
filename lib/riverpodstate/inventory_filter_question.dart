@@ -35,3 +35,15 @@ class FilterPlotQuestionary extends StateNotifier<bool> {
     state = selectedValue;
   }
 }
+
+final filterCommercialQuestion = StateNotifierProvider<FilterCommercialQuestionary, bool>(
+  (ref) => FilterCommercialQuestionary(),
+);
+
+class FilterCommercialQuestionary extends StateNotifier<bool> {
+  FilterCommercialQuestionary() : super(true);
+
+  void toggleCommericalQuestionary(bool selectedValue) {
+    state = selectedValue;
+  }
+}

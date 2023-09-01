@@ -371,9 +371,12 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(myArrayProvider.notifier);
+    final List<Map<String, dynamic>> selectedValues = ref.read(myArrayProvider);
     final isRentSelected = ref.read(filterRentQuestion);
     final isVillaSelected = ref.read(filterVillaQuestion);
     final isPlotSelected = ref.read(filterPlotQuestion);
+    final isCommericalSelected = ref.read(filterCommercialQuestion);
+
     return Scaffold(
       body: FutureBuilder<List<InventoryQuestions>>(
           future: getQuestions,
@@ -389,8 +392,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
               if (!currentScreenList.contains(screensDataList[0])) {
                 currentScreenList = screensDataList;
               }
-              var a = 10;
-              if (a > 5) {
+              if (!isCommericalSelected) {
                 if (isRentSelected) {
                   final arr = ["S8", "S10", "S15", "S6"];
                   final filter = screensDataList.where((element) => !arr.contains(element.screenId)).toList();
@@ -401,8 +403,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                   currentScreenList = filter;
                 }
                 if (isVillaSelected) {
-                  final arr = ["S6"];
-                  final filter = screensDataList.firstWhere((element) => arr.contains(element.screenId));
+                  final filter = screensDataList.firstWhere((element) => element.screenId == "S6");
                   currentScreenList.insert(5, filter);
                 }
                 if (isPlotSelected) {
@@ -483,6 +484,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                         notify,
                                                         nextQuestion,
                                                         isRentSelected,
+                                                        selectedValues,
                                                       ),
                                                       if (i == currentScreenList[index].questions.length - 1 && question.questionOptionType != 'chip')
                                                         Container(
@@ -575,5 +577,11 @@ void updateListInventory(WidgetRef ref, option) {
   }
   if (option == "Apartment" || option == "Builder Floor" || option == "Independent House/Villa" || option == "Farm House") {
     ref.read(filterPlotQuestion.notifier).togglePlotQuestionary(false);
+  }
+  if (option == "Residential") {
+    ref.read(filterCommercialQuestion.notifier).toggleCommericalQuestionary(false);
+  }
+  if (option == "Commercial") {
+    ref.read(filterCommercialQuestion.notifier).toggleCommericalQuestionary(true);
   }
 }
