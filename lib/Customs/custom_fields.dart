@@ -15,6 +15,7 @@ class CustomTextInput extends StatefulWidget {
   final IconData? leftIcon;
   final bool? obscureText;
   final bool? readonly;
+  final bool? autofocus;
   final IconData? rightIcon;
   final bool? indense;
   final String? initialvalue;
@@ -49,6 +50,7 @@ class CustomTextInput extends StatefulWidget {
       this.readonly = false,
       this.label,
       this.enabled = true,
+      this.autofocus = false,
       this.contentPadding = 0,
       this.onFieldSubmitted})
       : super(key: key);
@@ -71,6 +73,7 @@ class CustomTextInputState extends State<CustomTextInput> {
     return SizedBox(
       height: 65,
       child: TextFormField(
+        autofocus: widget.autofocus!,
         focusNode: widget.focusnode,
         enabled: widget.enabled,
         onTap: widget.ontap,

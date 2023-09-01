@@ -1,62 +1,41 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:yes_broker/Customs/text_utility.dart';
+import 'package:yes_broker/constants/app_constant.dart';
+import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/screens/main_screens/create_group_screen.dart';
 import 'package:yes_broker/widgets/chat/chat_users_list.dart';
-
-final arr = [
-  {
-    "id": "01",
-    'title': 'Madhav Sewag',
-    'message': 'Hey, how are you',
-    'time': '14:20',
-    'seen': false,
-    'unRead': '0'
-  },
-  {
-    "id": "02",
-    'title': 'John Smith',
-    'message': 'Bye',
-    'time': '11: 01',
-    'seen': true,
-    'unRead': '1'
-  },
-  {
-    "id": "03",
-    'title': 'Manish Chayal',
-    'message': 'Hii',
-    'time': '10:00',
-    'seen': false,
-    'unRead': '0'
-  },
-  {
-    "id": "04",
-    'title': 'Bhavesh',
-    'message': 'Hello, nice',
-    'time': '16:33',
-    'seen': false,
-    'unRead': '0'
-  },
-  {
-    "id": "05",
-    'title': 'Gopal Verma',
-    'message': 'Hy, how are you',
-    'time': '22:20',
-    'seen': true,
-    'unRead': '5'
-  },
-  {
-    "id": "06",
-    'title': 'Saurabh Mehra',
-    'message': 'Okay',
-    'time': '14:22',
-    'seen': false,
-    'unRead': '0'
-  },
-];
 
 class ChatListScreen extends StatelessWidget {
   const ChatListScreen({super.key});
   @override
   Widget build(BuildContext context) {
+    List<User> list = [];
     return Scaffold(
+      appBar: AppBar(
+          centerTitle: false,
+          title: const AppText(
+            text: 'Chat',
+            fontsize: 15,
+            textColor: Colors.black,
+            fontWeight: FontWeight.w600,
+          ),
+          actions: [
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (ctx) => CreateGroupScreen(list: list)));
+              },
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                child: Icon(
+                  Icons.add_circle_outline,
+                  color: Color.fromARGB(255, 92, 91, 91),
+                  size: 25,
+                ),
+              ),
+            )
+          ]),
       backgroundColor: Colors.white,
       body: Column(
         children: [
@@ -66,7 +45,31 @@ class ChatListScreen extends StatelessWidget {
               decoration: const BoxDecoration(
                 color: Colors.white,
               ),
-              child: ChatUserList(users: arr),
+              child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection("users")
+                      .where("brokerId", isEqualTo: currentUser["brokerId"])
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      );
+                    }
+                    if (snapshot.hasData) {
+                      final usersListSnapshot = snapshot.data!.docs;
+                      List<User> usersList = usersListSnapshot
+                          .map((doc) => User.fromSnapshot(doc))
+                          .toList();
+                      List<User> filterUser = usersList
+                          .where((element) =>
+                              element.userId != AppConst.getAccessToken())
+                          .toList();
+                      list = filterUser;
+                      return ChatUserList(users: filterUser);
+                    }
+                    return const SizedBox();
+                  }),
             ),
           ),
         ],
