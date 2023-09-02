@@ -1,7 +1,11 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:yes_broker/constants/app_constant.dart';
+
+import 'package:yes_broker/constants/firebase/random_uid.dart';
 import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/snackbar.dart';
 import 'package:yes_broker/customs/text_utility.dart';
@@ -11,29 +15,60 @@ import '../../constants/firebase/userModel/user_info.dart';
 import '../../widgets/chat/group/newgroup_user_list.dart';
 
 class CreateGroupScreen extends StatefulWidget {
+  final List<User>? list;
   const CreateGroupScreen({super.key, this.list});
 
-  final List<User>? list;
   @override
   State<CreateGroupScreen> createState() => _CreateGroupScreenState();
 }
 
 class _CreateGroupScreenState extends State<CreateGroupScreen> {
-  var isConfirm = false;
+  bool isConfirm = false;
   final groupNameController = TextEditingController();
   List<String> selectedUser = [];
   File? groupIcon;
-  late Future<List<User>> userList;
+  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+
   void toggleUser(String user) {
-    if (selectedUser.contains(user)) {
-      setState(() {
+    setState(() {
+      if (selectedUser.contains(user)) {
         selectedUser.remove(user);
-      });
-    } else {
-      setState(() {
+      } else {
         selectedUser.add(user);
-      });
-    }
+      }
+    });
+  }
+
+  void createGroup() async {
+    User? userDetails = await User.getUser(AppConst.getAccessToken());
+    String generatedId = generateUid();
+    String groupId = '${userDetails!.userfirstname}_$generatedId';
+
+    await firebaseFirestore.collection('groups').doc().set({
+      'id': groupId,
+      'members': [...selectedUser, AppConst.getAccessToken()],
+      'groupName': groupNameController.text,
+      "groupIcon": "",
+      // "groupIcon": File(groupIcon!.path),
+      "admin": AppConst.getAccessToken(),
+      "adminName": userDetails.userfirstname,
+      "createdAt": DateTime.now().toString(),
+      "isGroup": true,
+      "recentMessage": "",
+      "recentMsgSenderId": "",
+    });
+
+    // for (var i = 0; i < selectedUser.length; i++) {
+    //   String uid = selectedUser[i];
+    //   await firebaseFirestore.collection('users').doc(uid).collection('groups').doc().set({
+    //     'groupName': groupNameController.text,
+    //     'id': groupId,
+    //   });
+    // }
+    setState(() {
+      selectedUser = [];
+      isConfirm = false;
+    });
   }
 
   Future<void> selectImagee() async {
@@ -44,13 +79,8 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    userList = User.getAllUsers();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    print(selectedUser);
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.black,
@@ -110,6 +140,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                   toggleUser(user);
                 },
               ),
+              // child: SizedBox(),
             ),
           ),
         ],
@@ -135,11 +166,8 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
             return;
           }
           fadedCustomSnackBar(context: context, text: '${groupNameController.text} Group Created');
+          createGroup();
           Navigator.of(context).pop();
-          setState(() {
-            selectedUser = [];
-            isConfirm = false;
-          });
         },
         backgroundColor: AppColor.primary,
         child: isConfirm ? const Icon(Icons.check) : const Icon(Icons.arrow_forward_outlined),
