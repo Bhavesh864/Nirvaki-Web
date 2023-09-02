@@ -1,14 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
-<<<<<<< HEAD
-// import 'dart:html';
-
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-=======
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
->>>>>>> 634c2fbfa52e51e8cf049308e9070a4d91ef65db
 
 import 'package:yes_broker/Customs/responsive.dart';
 
@@ -132,8 +125,10 @@ class InventoryDetailsHeader extends ConsumerWidget {
                           setState();
                         } else if (e.contains("Edit")) {
                           ref.read(myArrayProvider.notifier).resetState();
-                          Future.delayed(const Duration(milliseconds: 500)).then(
-                            (value) => AppConst.getOuterContext()!.beamToNamed(AppRoutes.addInventory),
+                          Future.delayed(const Duration(milliseconds: 500))
+                              .then(
+                            (value) => AppConst.getOuterContext()!
+                                .beamToNamed(AppRoutes.addInventory),
                           );
                         }
                       }, showicon: true, icon: e['icon']),

@@ -9,7 +9,8 @@ import 'package:yes_broker/constants/utils/constants.dart';
 import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
 
-AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect, WidgetRef ref) {
+AppBar mobileAppBar(
+    BuildContext context, void Function(String) onOptionSelect, WidgetRef ref) {
   return AppBar(
     foregroundColor: Colors.black,
     scrolledUnderElevation: 0.0,
@@ -18,7 +19,8 @@ AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect, 
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         ScreenTypeLayout.builder(
-          breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
+          breakpoints:
+              const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
           mobile: (p0) => const CustomText(
             title: 'YesBroker',
             fontWeight: FontWeight.bold,
@@ -40,7 +42,8 @@ AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect, 
           },
         ).toList(),
         child: FutureBuilder(
-            future: User.getUser(AppConst.getAccessToken().toString(), ref),
+            future:
+                User.getUser(AppConst.getAccessToken().toString(), ref: ref),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 // Future.delayed(const Duration(seconds: 1)).then((value) => {ref.read(userDataProvider.notifier).storeUserData(snapshot.data!)});
@@ -49,7 +52,11 @@ AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect, 
                   width: 35,
                   margin: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(snapshot.data!.image.isEmpty ? noImg : snapshot.data!.image.toString())),
+                    image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(snapshot.data!.image.isEmpty
+                            ? noImg
+                            : snapshot.data!.image.toString())),
                     borderRadius: BorderRadius.circular(12),
                   ),
                 );
@@ -61,7 +68,9 @@ AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect, 
   );
 }
 
-PopupMenuItem appBarPopupMenuItem(String title, void Function(String) onOptionSelect, {IconData icon = Icons.abc, bool showicon = false}) {
+PopupMenuItem appBarPopupMenuItem(
+    String title, void Function(String) onOptionSelect,
+    {IconData icon = Icons.abc, bool showicon = false}) {
   return PopupMenuItem(
     onTap: () {
       onOptionSelect(title);
