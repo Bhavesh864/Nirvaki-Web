@@ -157,7 +157,7 @@ class User extends HiveObject {
         if (documentSnapshot.exists) {
           final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
           final User user = User.fromMap(data);
-          ref.read(userDataProvider.notifier).storeUserData(user);
+          ref?.read(userDataProvider.notifier).storeUserData(user);
           UserHiveMethods.addData(key: userId, data: user.toMap());
           return user;
         } else {
