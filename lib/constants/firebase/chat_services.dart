@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/gestures.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 
 import 'package:yes_broker/constants/firebase/userModel/message.dart';
@@ -13,6 +14,7 @@ class ChatService {
   Future<void> sendMessage(String receiverId, String message) async {
     final User? user = await User.getUser(AppConst.getAccessToken());
     final Timestamp timestamp = Timestamp.now();
+    print("timestamp--> $timestamp");
 
     UserChatMessage newMessage = UserChatMessage(
       senderId: user!.userId,
