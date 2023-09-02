@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yes_broker/Customs/custom_fields.dart';
+import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/card/questions%20card/chip_button.dart';
 
-import '../../../Customs/custom_text.dart';
-import '../../../Customs/responsive.dart';
+import '../../../customs/custom_text.dart';
+import '../../../customs/responsive.dart';
 
 class ChipButtonCard extends StatelessWidget {
   final String question;

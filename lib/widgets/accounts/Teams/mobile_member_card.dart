@@ -24,13 +24,10 @@ class MobileMemberCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Container(
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                        child: Image.network(
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundImage: NetworkImage(
                           user.image.isNotEmpty ? user.image : noImg,
-                          width: 25,
-                          fit: BoxFit.cover,
                         ),
                       ),
                       const SizedBox(width: 5),

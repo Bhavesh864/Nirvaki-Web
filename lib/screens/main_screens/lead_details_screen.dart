@@ -5,11 +5,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:yes_broker/Customs/custom_fields.dart';
-import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/customs/custom_fields.dart';
+import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
-import '../../Customs/custom_text.dart';
+import '../../customs/custom_text.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
@@ -162,7 +162,8 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                             AssignmentWidget(
                                               id: data.leadId!,
                                               assignto: data.assignedto!,
-                                              imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                              imageUrlCreatedBy:
+                                                  data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                               createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                             ),
                                           );
@@ -178,6 +179,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                                 width: 24,
                                                 height: 24,
                                                 decoration: BoxDecoration(
+                                                  border: Border.all(color: Colors.white),
                                                   image: DecorationImage(
                                                     image: NetworkImage(
                                                       user.image!.isEmpty ? noImg : user.image!,
@@ -224,7 +226,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                       setState(() {});
                                     },
                                   ),
-                                if (currentSelectedTab == 1) const ActivityTabView(),
+                                if (currentSelectedTab == 1) ActivityTabView(details: data),
                                 if (currentSelectedTab == 2) TodoTabView(id: data.leadId!),
                               ],
                             ),

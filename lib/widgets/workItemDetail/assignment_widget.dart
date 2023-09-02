@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/small_custom_profile_image.dart';
@@ -8,7 +9,7 @@ import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/assingment_methods.dart';
 import '../../constants/utils/colors.dart';
 
-class AssignmentWidget extends StatefulWidget {
+class AssignmentWidget extends ConsumerStatefulWidget {
   final List<dynamic> assignto;
   final String createdBy;
   final String imageUrlCreatedBy;
@@ -23,10 +24,10 @@ class AssignmentWidget extends StatefulWidget {
   });
 
   @override
-  State<AssignmentWidget> createState() => _AssignmentWidgetState();
+  AssignmentWidgetState createState() => AssignmentWidgetState();
 }
 
-class _AssignmentWidgetState extends State<AssignmentWidget> {
+class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
   void assign(User assignedUser) {
     setState(() {
       user = assignedUser;
@@ -123,52 +124,56 @@ class _AssignmentWidgetState extends State<AssignmentWidget> {
                               ),
                               const SizedBox(width: 3),
                               if (widget.assignto.length > 1)
-                                GestureDetector(
-                                  onTap: () {
-                                    deleteassignUser(item.userid, widget.id);
-                                    if (Responsive.isMobile(context)) {
-                                      Navigator.of(context).pop();
-                                    }
-                                  },
-                                  child: const Icon(Icons.close),
-                                ),
+                                currentUser["role"] != "Employee"
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          deleteassignUser(item.userid, widget.id);
+                                          if (Responsive.isMobile(context)) {
+                                            Navigator.of(context).pop();
+                                          }
+                                        },
+                                        child: const Icon(Icons.close),
+                                      )
+                                    : const SizedBox.shrink(),
                             ],
                           ),
                         );
                       }).toList(),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        assginUserToTodo(
-                          context,
-                          assign,
-                          widget.assignto,
-                          widget.id,
-                          () {
-                            Navigator.of(context).pop();
-                          },
-                        );
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.only(top: 14),
-                        child: Row(
-                          children: [
-                            Icon(Icons.add),
-                            Padding(
-                              padding: EdgeInsets.only(left: 6),
-                              child: Text("Add More",
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    color: AppColor.primary,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                  )),
+                    currentUser["role"] != "Employee"
+                        ? GestureDetector(
+                            onTap: () {
+                              assginUserToTodo(
+                                context,
+                                assign,
+                                widget.assignto,
+                                widget.id,
+                                () {
+                                  Navigator.of(context).pop();
+                                },
+                              );
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.only(top: 14),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.add),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 6),
+                                    child: Text("Add More",
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                          color: AppColor.primary,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                        )),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
+                          )
+                        : const SizedBox(),
                   ],
                 ),
               ),

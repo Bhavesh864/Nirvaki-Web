@@ -3,17 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/widgets/card/questions%20card/chip_button.dart';
 
-import '../../../Customs/custom_fields.dart';
-import '../../../Customs/custom_text.dart';
-import '../../../Customs/responsive.dart';
+import '../../../customs/custom_fields.dart';
+import '../../../customs/custom_text.dart';
+import '../../../customs/responsive.dart';
 
 class DropDownCard extends StatefulWidget {
   final List<dynamic>? values;
   final String? question;
   final int? id;
   final VoidCallback? onSelect;
-  const DropDownCard(
-      {super.key, this.values, this.question, this.id, this.onSelect});
+  const DropDownCard({super.key, this.values, this.question, this.id, this.onSelect});
 
   @override
   State<DropDownCard> createState() => _DropDownCardState();
@@ -56,10 +55,7 @@ class _DropDownCardState extends State<DropDownCard> {
                   height: 15,
                 ),
                 Theme(
-                  data: ThemeData(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      hoverColor: Colors.transparent),
+                  data: ThemeData(splashColor: Colors.transparent, highlightColor: Colors.transparent, hoverColor: Colors.transparent),
                   child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: widget.values?.length,
@@ -97,8 +93,7 @@ class _DropDownCardState extends State<DropDownCard> {
                                       icon: const Icon(Icons.expand_more),
                                       isExpanded: true,
                                       borderRadius: BorderRadius.circular(6),
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 0),
+                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                                       value: selectedValues[index],
                                       onChanged: (newValue) {
                                         setState(() {
@@ -119,8 +114,7 @@ class _DropDownCardState extends State<DropDownCard> {
                                   children: optionsList.map((value) {
                                     if (widget.id == 10) {
                                       return Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 5, vertical: 6),
+                                        margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 6),
                                         child: ChipButton(
                                           text: value,
                                           onSelect: () {},
@@ -129,16 +123,11 @@ class _DropDownCardState extends State<DropDownCard> {
                                       );
                                     }
                                     return Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 5, vertical: 6),
+                                        margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 6),
                                         child: CustomChoiceChip(
                                           label: value,
-                                          labelColor:
-                                              selectedChoices.contains(value)
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                          selected:
-                                              selectedChoices.contains(value),
+                                          labelColor: selectedChoices.contains(value) ? Colors.white : Colors.black,
+                                          selected: selectedChoices.contains(value),
                                           onSelected: (selected) {
                                             setState(() {
                                               if (selected) {

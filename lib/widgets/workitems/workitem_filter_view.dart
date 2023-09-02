@@ -3,12 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:yes_broker/Customs/custom_fields.dart';
-import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/customs/custom_fields.dart';
+import 'package:yes_broker/customs/custom_text.dart';
+import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
-import 'package:yes_broker/Customs/custom_chip.dart';
+import 'package:yes_broker/customs/custom_chip.dart';
 import 'package:yes_broker/riverpodstate/filter_list_items_provider.dart';
 import 'package:yes_broker/widgets/workitems/inventory_checkbox_options.dart';
 
