@@ -81,7 +81,9 @@ class LargeScreenNavBar extends ConsumerWidget {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  largeScreenView("${snapshot.data?.userfirstname} ${snapshot.data?.userlastname}", context),
+                  largeScreenView(
+                      "${snapshot.data?.userfirstname} ${snapshot.data?.userlastname}",
+                      context),
                   const Spacer(),
                   Stack(
                     children: <Widget>[
@@ -143,7 +145,11 @@ class LargeScreenNavBar extends ConsumerWidget {
                       width: 30,
                       margin: const EdgeInsets.only(right: 10),
                       decoration: BoxDecoration(
-                        image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(snapshot.data!.image.isEmpty ? noImg : snapshot.data!.image)),
+                        image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(snapshot.data!.image.isEmpty
+                                ? noImg
+                                : snapshot.data!.image)),
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
@@ -196,7 +202,9 @@ Widget largeScreenView(String name, BuildContext context) {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CustomText(
-          title: capitalizeFirstLetter(name) != 'Public View' ? 'Welcome, ${capitalizeFirstLetter(name)}' : capitalizeFirstLetter(name),
+          title: capitalizeFirstLetter(name) != 'Public View'
+              ? 'Welcome, ${capitalizeFirstLetter(name)}'
+              : capitalizeFirstLetter(name),
           fontWeight: FontWeight.bold,
         ),
         Center(
@@ -275,40 +283,58 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                   height: 550,
                   width: 440,
                   child: StreamBuilder(
-                      stream: notificationcollection.collection("notification").where("userId", isEqualTo: AppConst.getAccessToken()).snapshots(),
+                      stream: notificationcollection
+                          .collection("notification")
+                          .where("userId", isEqualTo: AppConst.getAccessToken())
+                          .snapshots(),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const Center(child: CircularProgressIndicator.adaptive());
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator.adaptive());
                         }
                         if (snapshot.hasData) {
                           final dataList = snapshot.data!.docs;
-                          List<NotificationModel> notification = dataList.map((doc) => NotificationModel.fromSnapshot(doc)).toList();
-                          notification.sort((a, b) => b.receiveDate!.compareTo(a.receiveDate!));
+                          List<NotificationModel> notification = dataList
+                              .map((doc) => NotificationModel.fromSnapshot(doc))
+                              .toList();
+                          notification.sort((a, b) =>
+                              b.receiveDate!.compareTo(a.receiveDate!));
                           return ListView.separated(
                             itemBuilder: (context, index) {
-                              final firestoreTimestamp = notification[index].receiveDate;
-                              final formattedTime = TimeFormatter.formatFirestoreTimestamp(firestoreTimestamp);
+                              final firestoreTimestamp =
+                                  notification[index].receiveDate;
+                              final formattedTime =
+                                  TimeFormatter.formatFirestoreTimestamp(
+                                      firestoreTimestamp);
                               final notificationData = notification[index];
                               return SizedBox(
                                 child: ListTile(
                                   onTap: () {
-                                    navigateBasedOnId(context, notificationData.linkedItemId!, ref);
+                                    navigateBasedOnId(context,
+                                        notificationData.linkedItemId!, ref);
                                     Navigator.of(context).pop();
                                   },
                                   titleAlignment: ListTileTitleAlignment.top,
                                   leading: CircleAvatar(
-                                    backgroundImage: NetworkImage(notificationData.imageUrl!.isNotEmpty ? notificationData.imageUrl! : noImg),
+                                    backgroundImage: NetworkImage(
+                                        notificationData.imageUrl!.isNotEmpty
+                                            ? notificationData.imageUrl!
+                                            : noImg),
                                   ),
                                   title: SizedBox(
                                     height: 80,
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Text(
                                           notificationData.notificationContent!,
-                                          maxLines: 3, // Adjust the maximum number of lines as needed
-                                          overflow: TextOverflow.ellipsis, // Handle text overflow
+                                          maxLines:
+                                              3, // Adjust the maximum number of lines as needed
+                                          overflow: TextOverflow
+                                              .ellipsis, // Handle text overflow
                                         ),
                                         const Spacer(),
                                         CustomText(

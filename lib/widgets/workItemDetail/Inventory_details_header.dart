@@ -125,8 +125,10 @@ class InventoryDetailsHeader extends ConsumerWidget {
                           setState();
                         } else if (e.contains("Edit")) {
                           ref.read(myArrayProvider.notifier).resetState();
-                          Future.delayed(const Duration(milliseconds: 500)).then(
-                            (value) => AppConst.getOuterContext()!.beamToNamed(AppRoutes.addInventory),
+                          Future.delayed(const Duration(milliseconds: 500))
+                              .then(
+                            (value) => AppConst.getOuterContext()!
+                                .beamToNamed(AppRoutes.addInventory),
                           );
                         }
                       }, showicon: true, icon: e['icon']),
