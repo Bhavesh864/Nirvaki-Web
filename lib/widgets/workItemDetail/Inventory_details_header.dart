@@ -208,11 +208,14 @@ class _HeaderChipsState extends State<HeaderChips> {
         if (!AppConst.getPublicView())
           CustomStatusDropDown(
             status: currentStatus ?? widget.status,
-            itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
+            itemBuilder: (context) => dropDownStatusDataList
+                .map((e) => popupMenuItem(e.toString()))
+                .toList(),
             onSelected: (value) {
               CardDetails.updateCardStatus(id: widget.id, newStatus: value);
               if (widget.id.contains(ItemCategory.isInventory)) {
-                InventoryDetails.updatecardStatus(id: widget.id, newStatus: value);
+                InventoryDetails.updatecardStatus(
+                    id: widget.id, newStatus: value);
               } else if (widget.id.contains(ItemCategory.isLead)) {
                 LeadDetails.updatecardStatus(id: widget.id, newStatus: value);
               }
@@ -221,8 +224,10 @@ class _HeaderChipsState extends State<HeaderChips> {
               notifyToUser(
                   itemid: widget.id,
                   assignedto: widget.inventoryDetails.assignedto,
-                  content: "${currentUser["userfirstname"]} ${currentUser["userlastname"]} change status to $value",
-                  title: "${widget.id.contains(ItemCategory.isInventory) ? "Inventory" : "Lead"} status changed");
+                  content:
+                      "${currentUser["userfirstname"]} ${currentUser["userlastname"]} change status to $value",
+                  title:
+                      "${widget.id.contains(ItemCategory.isInventory) ? "Inventory" : "Lead"} status changed");
             },
           ),
       ],
