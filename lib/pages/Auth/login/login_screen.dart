@@ -2,9 +2,9 @@ import 'package:beamer/beamer.dart';
 
 import 'package:flutter/material.dart';
 
-import 'package:yes_broker/Customs/custom_fields.dart';
-import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/Customs/snackbar.dart';
+import 'package:yes_broker/customs/custom_fields.dart';
+import 'package:yes_broker/customs/responsive.dart';
+import 'package:yes_broker/customs/snackbar.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
@@ -38,28 +38,24 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         isloading = true;
       });
-      signinMethod(
-              email: emailcontroller.text, password: passwordcontroller.text)
-          .then((value) => {
-                if (value == 'success')
-                  {
-                    setState(() {
-                      isloading = false;
-                    }),
-                    context.beamToReplacementNamed('/'),
-                    User.updateFcmToken(
-                        fcmtoken: AppConst.getFcmToken()!,
-                        userid: AppConst.getAccessToken()!),
-                    AppConst.setPublicView(false),
-                  }
-                else
-                  {
-                    setState(() {
-                      isloading = false;
-                    }),
-                    customSnackBar(context: context, text: value!)
-                  }
-              });
+      signinMethod(email: emailcontroller.text, password: passwordcontroller.text).then((value) => {
+            if (value == 'success')
+              {
+                setState(() {
+                  isloading = false;
+                }),
+                context.beamToReplacementNamed('/'),
+                User.updateFcmToken(fcmtoken: AppConst.getFcmToken()!, userid: AppConst.getAccessToken()!),
+                AppConst.setPublicView(false),
+              }
+            else
+              {
+                setState(() {
+                  isloading = false;
+                }),
+                customSnackBar(context: context, text: value!)
+              }
+          });
     }
   }
 
@@ -142,27 +138,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         Container(
                           margin: const EdgeInsets.only(bottom: 5),
-                          child: CustomTextInput(
-                              controller: emailcontroller,
-                              labelText: 'Email address',
-                              validator: validateEmail),
+                          child: CustomTextInput(controller: emailcontroller, labelText: 'Email address', validator: validateEmail),
                         ),
                         CustomTextInput(
-                            controller: passwordcontroller,
-                            labelText: 'Password',
-                            obscureText: true,
-                            rightIcon: Icons.remove_red_eye,
-                            validator: validatePassword),
+                            controller: passwordcontroller, labelText: 'Password', obscureText: true, rightIcon: Icons.remove_red_eye, validator: validatePassword),
                         const SizedBox(height: 10),
                         isloading
-                            ? const Center(
-                                child: CircularProgressIndicator.adaptive())
+                            ? const Center(child: CircularProgressIndicator.adaptive())
                             : SizedBox(
                                 width: w,
                                 child: CustomButton(
                                   text: 'Login',
-                                  onPressed: () =>
-                                      loginwithemailpassword(context),
+                                  onPressed: () => loginwithemailpassword(context),
                                   height: 40.0,
                                 ),
                               ),

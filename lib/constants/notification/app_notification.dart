@@ -1,16 +1,29 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:yes_broker/constants/app_constant.dart';
+import 'package:yes_broker/constants/firebase/userModel/notification_model.dart';
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  await showFlutterNotification(message);
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
+  // await Firebase.initializeApp();
+  // await showFlutterNotification(message);
+  // // If you're going to use other Firebase services in the background, such as Firestore,
+  // // make sure you call `initializeApp` before using other Firebase services.
+  if (message.notification != null) {
+    NotificationModel notificationModel = NotificationModel(
+      title: message.notification?.title,
+      notificationContent: message.notification?.body,
+      receiveDate: Timestamp.now(),
+      linkedItemId: message.data["id"],
+      imageUrl: "",
+      userId: AppConst.getAccessToken(),
+    );
+    await NotificationModel.addNotification(notificationModel);
+  }
   if (kDebugMode) {
     print('Handling a background message ${message.notification}');
   }
@@ -74,6 +87,17 @@ FirebaseMessaging messaging = FirebaseMessaging.instance;
 Future<void> setAllNotification() async {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     await showFlutterNotification(message);
+    if (message.notification != null) {
+      NotificationModel notificationModel = NotificationModel(
+        title: message.notification?.title,
+        notificationContent: message.notification?.body,
+        receiveDate: Timestamp.now(),
+        linkedItemId: message.data["id"],
+        imageUrl: "",
+        userId: AppConst.getAccessToken(),
+      );
+      await NotificationModel.addNotification(notificationModel);
+    }
     if (kDebugMode) {
       print('handling a foreground app $message');
     }
@@ -119,8 +143,7 @@ Future<String?> getToken() async {
 Future<void> setupInteractedMessage() async {
   // Get any messages which caused the application to open from
   // a terminated state.
-  RemoteMessage? initialMessage =
-      await FirebaseMessaging.instance.getInitialMessage();
+  RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
   // If the message also contains a data property with a "type" of "chat",
   // navigate to a chat screen
   if (initialMessage != null) {

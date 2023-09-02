@@ -1,12 +1,15 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'package:beamer/beamer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_chip.dart';
 import 'package:yes_broker/constants/app_constant.dart';
+import 'package:yes_broker/constants/firebase/userModel/notification_model.dart';
 import '../../constants/firebase/userModel/user_info.dart';
+import '../../constants/functions/time_formatter.dart';
 import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/utils/constants.dart';
@@ -39,8 +42,7 @@ import '../../constants/utils/constants.dart';
 
 final userProvider = FutureProvider<User>(
   (ref) async {
-    final User? initialCardDetails =
-        await User.getUser(AppConst.getAccessToken()!);
+    final User? initialCardDetails = await User.getUser(AppConst.getAccessToken()!);
     // final initialStatuses = initialCardDetails.map((card) => card.status).toList();
 
     return initialCardDetails!;
@@ -79,9 +81,7 @@ class LargeScreenNavBar extends ConsumerWidget {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  largeScreenView(
-                      "${snapshot.data?.userfirstname} ${snapshot.data?.userlastname}",
-                      context),
+                  largeScreenView("${snapshot.data?.userfirstname} ${snapshot.data?.userlastname}", context),
                   const Spacer(),
                   Stack(
                     children: <Widget>[
@@ -143,11 +143,7 @@ class LargeScreenNavBar extends ConsumerWidget {
                       width: 30,
                       margin: const EdgeInsets.only(right: 10),
                       decoration: BoxDecoration(
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(snapshot.data!.image.isEmpty
-                                ? noImg
-                                : snapshot.data!.image)),
+                        image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(snapshot.data!.image.isEmpty ? noImg : snapshot.data!.image)),
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
@@ -200,9 +196,7 @@ Widget largeScreenView(String name, BuildContext context) {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CustomText(
-          title: capitalizeFirstLetter(name) != 'Public View'
-              ? 'Welcome, ${capitalizeFirstLetter(name)}'
-              : capitalizeFirstLetter(name),
+          title: capitalizeFirstLetter(name) != 'Public View' ? 'Welcome, ${capitalizeFirstLetter(name)}' : capitalizeFirstLetter(name),
           fontWeight: FontWeight.bold,
         ),
         Center(
@@ -244,6 +238,7 @@ class NotificationDialogBox extends StatefulWidget {
 }
 
 class _NotificationDialogBoxState extends State<NotificationDialogBox> {
+  FirebaseFirestore notificationcollection = FirebaseFirestore.instance;
   bool isChatOpen = false;
 
   @override
@@ -278,50 +273,65 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
                 ),
                 SizedBox(
                   height: 550,
-                  child: ListView.separated(
-                    itemBuilder: (context, index) {
-                      return const SizedBox(
-                        height: 100,
-                        child: ListTile(
-                          titleAlignment: ListTileTitleAlignment.top,
-                          leading: CircleAvatar(),
-                          title: SizedBox(
-                            height: 100,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'Ravi Sharma have assigned a new lead to you. ',
-                                  maxLines:
-                                      3, // Adjust the maximum number of lines as needed
-                                  overflow: TextOverflow
-                                      .ellipsis, // Handle text overflow
+                  width: 440,
+                  child: StreamBuilder(
+                      stream: notificationcollection.collection("notification").where("userId", isEqualTo: AppConst.getAccessToken()).snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(child: CircularProgressIndicator.adaptive());
+                        }
+                        if (snapshot.hasData) {
+                          final dataList = snapshot.data!.docs;
+                          List<NotificationModel> notification = dataList.map((doc) => NotificationModel.fromSnapshot(doc)).toList();
+                          notification.sort((a, b) => b.receiveDate!.compareTo(a.receiveDate!));
+                          return ListView.separated(
+                            itemBuilder: (context, index) {
+                              final firestoreTimestamp = notification[index].receiveDate;
+                              final formattedTime = TimeFormatter.formatFirestoreTimestamp(firestoreTimestamp);
+                              return SizedBox(
+                                child: ListTile(
+                                  titleAlignment: ListTileTitleAlignment.top,
+                                  leading: const CircleAvatar(
+                                    backgroundImage: NetworkImage(noImg),
+                                  ),
+                                  title: SizedBox(
+                                    height: 80,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          notification[index].notificationContent!,
+                                          maxLines: 3, // Adjust the maximum number of lines as needed
+                                          overflow: TextOverflow.ellipsis, // Handle text overflow
+                                        ),
+                                        const Spacer(),
+                                        CustomText(
+                                          title: formattedTime,
+                                          color: const Color(0xFF9B9B9B),
+                                          size: 14,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  trailing: CustomChip(
+                                    paddingHorizontal: 0,
+                                    label: CustomText(
+                                      title: notification[index].linkedItemId!,
+                                      size: 10,
+                                    ),
+                                  ),
                                 ),
-                                Spacer(),
-                                CustomText(
-                                  title: 'Today at 9:42 AM',
-                                  color: Color(0xFF9B9B9B),
-                                  size: 14,
-                                ),
-                              ],
-                            ),
-                          ),
-                          trailing: CustomChip(
-                            paddingHorizontal: 0,
-                            label: CustomText(
-                              title: 'IN123 ',
-                              size: 10,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return const Divider();
-                    },
-                    itemCount: 5,
-                  ),
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return const Divider();
+                            },
+                            itemCount: notification.length,
+                          );
+                        }
+                        return const SizedBox();
+                      }),
                 ),
               ] else ...[
                 Column(

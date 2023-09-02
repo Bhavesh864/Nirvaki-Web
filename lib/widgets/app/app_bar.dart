@@ -42,14 +42,13 @@ AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect) 
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Container(
-                  height: 30,
-                  width: 30,
+                  height: 25,
+                  width: 35,
                   margin: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(snapshot.data!.image.isEmpty ? noImg : snapshot.data!.image.toString())),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  // child: Text(width.toString()),
                 );
               }
               return const SizedBox();

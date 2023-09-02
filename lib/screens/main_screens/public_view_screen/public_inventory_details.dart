@@ -3,14 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:yes_broker/Customs/custom_fields.dart';
-import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/customs/custom_fields.dart';
+import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
 
-import '../../../Customs/custom_text.dart';
-import '../../../Customs/small_custom_profile_image.dart';
+import '../../../customs/custom_text.dart';
+import '../../../customs/small_custom_profile_image.dart';
 import '../../../constants/functions/workitems_detail_methods.dart';
 import '../../../constants/utils/colors.dart';
 import '../../../constants/utils/constants.dart';
@@ -19,7 +19,6 @@ import '../../../widgets/workItemDetail/inventory_details_header.dart';
 import '../../../widgets/workItemDetail/assignment_widget.dart';
 import '../../../widgets/workItemDetail/contact_information.dart';
 import '../../../widgets/workItemDetail/mapview_widget.dart';
-import '../../../widgets/workItemDetail/tab_views/activity_tab_view.dart';
 import '../../../widgets/workItemDetail/tab_views/details_tab_view.dart';
 
 class PublicViewInventoryDetails extends ConsumerStatefulWidget {
@@ -170,7 +169,8 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                               AssignmentWidget(
                                                 id: data.inventoryId!,
                                                 assignto: data.assignedto!,
-                                                imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                imageUrlCreatedBy:
+                                                    data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                 createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                               ),
                                             );
@@ -199,7 +199,6 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                       id: data.inventoryId!,
                                       data: data,
                                     ),
-                                  if (currentSelectedTab == 1) const ActivityTabView(),
                                 ],
                               ),
                             ),

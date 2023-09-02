@@ -1,5 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
+// import 'dart:html';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
 
@@ -8,10 +11,10 @@ import 'package:yes_broker/constants/firebase/send_notification.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
-import '../../Customs/snackbar.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
+import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
 import '../app/nav_bar.dart';
@@ -19,9 +22,13 @@ import '../app/app_bar.dart';
 
 Future<void> shareUrl(BuildContext context, {String textToCombine = ''}) async {
   try {
+    // final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
+    // print(location);
+
     // final currentUrl = window.location.href;
-    // await Clipboard.setData(ClipboardData(text: currentUrl + textToCombine));
-    customSnackBar(context: context, text: 'URL copied to clipboard');
+    // Clipboard.setData(ClipboardData(text: currentUrl + textToCombine)).then((_) {
+    // customSnackBar(context: context, text: 'URL copied to clipboard');
+    // });
   } catch (e) {
     print('Error sharing URL: $e');
   }
@@ -129,13 +136,14 @@ class InventoryDetailsHeader extends StatelessWidget {
                   paddingHorizontal: 3,
                 ),
               ),
+            const Spacer(),
+            if (!Responsive.isMobile(context) && !AppConst.getPublicView())
+              CustomText(
+                title: price != null ? '$price$unit' : '50k/month',
+                color: AppColor.primary,
+              ),
           ],
         ),
-        if (!Responsive.isMobile(context))
-          CustomText(
-            title: price != null ? '$price$unit' : '50k/month',
-            color: AppColor.primary,
-          ),
       ],
     );
   }
@@ -197,25 +205,28 @@ class _HeaderChipsState extends State<HeaderChips> {
         if (!AppConst.getPublicView())
           CustomStatusDropDown(
             status: currentStatus ?? widget.status,
-            itemBuilder: (context) => dropDownStatusDataList
-                .map((e) => popupMenuItem(e.toString()))
-                .toList(),
+            itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
             onSelected: (value) {
               CardDetails.updateCardStatus(id: widget.id, newStatus: value);
               if (widget.id.contains(ItemCategory.isInventory)) {
-                InventoryDetails.updatecardStatus(
-                    id: widget.id, newStatus: value);
+                InventoryDetails.updatecardStatus(id: widget.id, newStatus: value);
               } else if (widget.id.contains(ItemCategory.isLead)) {
                 LeadDetails.updatecardStatus(id: widget.id, newStatus: value);
               }
               currentStatus = value;
               setState(() {});
-              print(widget.inventoryDetails?.assignedto?[0].userid);
               notifyToUser(
+<<<<<<< HEAD
                   itemdetail: widget.inventoryDetails,
                   content: "${widget.id} status change to $value",
                   title:
                       "${widget.id.contains(ItemCategory.isInventory) ? "Inventory" : "Lead"} status changed");
+=======
+                  itemid: widget.id,
+                  assignedto: widget.inventoryDetails.assignedto,
+                  content: "${currentUser["userfirstname"]} ${currentUser["userlastname"]} change status to $value",
+                  title: "${widget.id.contains(ItemCategory.isInventory) ? "Inventory" : "Lead"} status changed");
+>>>>>>> 8a3ffc75a6ebf5661978268669fdd1b2c94d1db8
             },
           ),
       ],

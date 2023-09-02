@@ -3,8 +3,6 @@ import 'package:hive/hive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 
 final CollectionReference cardDetailsCollection = FirebaseFirestore.instance.collection('cardDetails');
-Box box = Hive.box("users");
-final currentUser = box.get(AppConst.getAccessToken());
 
 @HiveType(typeId: 1)
 class CardDetails {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
-import 'package:yes_broker/constants/utils/image_constants.dart';
 import 'package:yes_broker/screens/main_screens/chat_user_profile.dart';
 
 class ChatScreenHeader extends StatelessWidget {
@@ -41,10 +41,7 @@ class ChatScreenHeader extends StatelessWidget {
             children: [
               Hero(
                 tag: user.userId,
-                child: CircleAvatar(
-                    radius: 24,
-                    backgroundImage:
-                        NetworkImage(user.image.isEmpty ? noImg : user.image)),
+                child: CircleAvatar(radius: 24, backgroundImage: NetworkImage(user.image.isEmpty ? noImg : user.image)),
               ),
               const SizedBox(
                 width: 12,

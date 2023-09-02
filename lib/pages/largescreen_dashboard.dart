@@ -45,10 +45,8 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
       currentIndex = 2;
     } else if (path.contains('/lead')) {
       currentIndex = 3;
-    } else if (path.contains('/chat')) {
-      currentIndex = 4;
     } else if (path.contains('/calendar')) {
-      currentIndex = 5;
+      currentIndex = 4;
     }
 
     return Scaffold(
@@ -72,7 +70,7 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                   });
                 },
                 destinations: sideBarItems
-                    .sublist(0, 6)
+                    .sublist(0, 5)
                     .map(
                       (e) => NavigationRailDestination(
                         icon: Icon(e.iconData),
@@ -86,7 +84,7 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                       ),
                     )
                     .toList(),
-                selectedIndex: currentIndex > 5 ? 0 : currentIndex,
+                selectedIndex: currentIndex > 4 ? 0 : currentIndex,
               ),
             ),
           ),

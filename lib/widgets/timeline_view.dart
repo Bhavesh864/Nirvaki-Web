@@ -8,6 +8,7 @@ import 'package:timeline_tile/timeline_tile.dart';
 import 'package:yes_broker/Customs/custom_chip.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/activity_details.dart';
+import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/timeline_item.dart';
@@ -63,29 +64,19 @@ class CustomTimeLineView extends ConsumerWidget {
           ),
           StreamBuilder(
             stream: fromHome
-                ? FirebaseFirestore.instance
-                    .collection('activityDetails')
-                    .snapshots()
-                : FirebaseFirestore.instance
-                    .collection('activityDetails')
-                    .where('itemid', isEqualTo: workitemId)
-                    .snapshots(),
+                ? FirebaseFirestore.instance.collection('activityDetails').where("brokerid", isEqualTo: currentUser["brokerId"]).snapshots()
+                : FirebaseFirestore.instance.collection('activityDetails').where('itemid', isEqualTo: workitemId).snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                    child: CircularProgressIndicator.adaptive());
+                return const Center(child: CircularProgressIndicator.adaptive());
               }
               if (snapshot.hasData) {
                 final dataList = snapshot.data!.docs;
-                List<ActivityDetails> activities = dataList
-                    .map((e) => ActivityDetails.fromSnapshot(e))
-                    .toList();
-                activities
-                    .sort((a, b) => b.createdate!.compareTo(a.createdate!));
+                List<ActivityDetails> activities = dataList.map((e) => ActivityDetails.fromSnapshot(e)).toList();
+                activities.sort((a, b) => b.createdate!.compareTo(a.createdate!));
                 if (activities.isNotEmpty) {
                   return ScrollConfiguration(
-                    behavior: ScrollConfiguration.of(context)
-                        .copyWith(scrollbars: false),
+                    behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                     child: Expanded(
                       child: ListView.builder(
                         itemCount: activities.length,
