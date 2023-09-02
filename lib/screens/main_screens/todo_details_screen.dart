@@ -5,6 +5,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -467,11 +468,11 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                                   size: 18,
                                                                 ),
                                                                 onTap: () {
-                                                                  // if (kIsWeb) {
-                                                                  //   AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                                                  //   anchorElement.download = 'Attachment file';
-                                                                  //   anchorElement.click();
-                                                                  // }
+                                                                  if (kIsWeb) {
+                                                                    // AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                                                    // anchorElement.download = 'Attachment file';
+                                                                    // anchorElement.click();
+                                                                  }
                                                                 },
                                                               ),
                                                               GestureDetector(

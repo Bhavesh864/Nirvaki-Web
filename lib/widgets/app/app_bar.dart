@@ -40,7 +40,7 @@ AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect, 
           },
         ).toList(),
         child: FutureBuilder(
-            future: User.getUser(AppConst.getAccessToken().toString(), ref),
+            future: User.getUser(AppConst.getAccessToken().toString(), ref: ref),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 // Future.delayed(const Duration(seconds: 1)).then((value) => {ref.read(userDataProvider.notifier).storeUserData(snapshot.data!)});
