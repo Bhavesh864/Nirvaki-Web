@@ -35,7 +35,8 @@ class TodoDetailsScreen extends ConsumerStatefulWidget {
   TodoDetailsScreenState createState() => TodoDetailsScreenState();
 }
 
-class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with TickerProviderStateMixin {
+class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen>
+    with TickerProviderStateMixin {
   FocusNode firstFocusNode = FocusNode();
   late TabController tabviewController;
   late Stream<QuerySnapshot<Map<String, dynamic>>> todoDetails;
@@ -47,14 +48,19 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
   bool isEditingTodoName = false;
   bool iseditingTodoDescription = false;
   TextEditingController todoNameEditingController = TextEditingController();
-  TextEditingController todoDescriptionEditingController = TextEditingController();
+  TextEditingController todoDescriptionEditingController =
+      TextEditingController();
 
   @override
   void initState() {
     super.initState();
     tabviewController = TabController(length: 4, vsync: this);
     final workItemId = ref.read(selectedWorkItemId.notifier).state;
-    todoDetails = FirebaseFirestore.instance.collection('todoDetails').where('todoId', isEqualTo: workItemId == '' ? widget.todoId : workItemId).snapshots();
+    todoDetails = FirebaseFirestore.instance
+        .collection('todoDetails')
+        .where('todoId',
+            isEqualTo: workItemId == '' ? widget.todoId : workItemId)
+        .snapshots();
   }
 
   void startEditingTodoName(String todoName) {
@@ -97,8 +103,10 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
           return;
         }
         DateFormat formatter = DateFormat('dd-MM-yyyy');
-        TodoDetails.updateCardDate(id: itemid, duedate: formatter.format(pickedDate));
-        CardDetails.updateCardDate(id: itemid, duedate: formatter.format(pickedDate));
+        TodoDetails.updateCardDate(
+            id: itemid, duedate: formatter.format(pickedDate));
+        CardDetails.updateCardDate(
+            id: itemid, duedate: formatter.format(pickedDate));
       },
     );
   }
@@ -131,18 +139,24 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
             }
             if (snapshot.hasData) {
               final dataList = snapshot.data!.docs;
-              List<TodoDetails> todoList = dataList.map((doc) => TodoDetails.fromSnapshot(doc)).toList();
+              List<TodoDetails> todoList =
+                  dataList.map((doc) => TodoDetails.fromSnapshot(doc)).toList();
 
               for (var data in todoList) {
                 final attachments = data.attachments;
                 return GestureDetector(
                   onTap: () {
                     if (isEditingTodoName) {
-                      TodoDetails.updatetodoName(id: data.todoId!, todoName: todoNameEditingController.text).then((value) => setState(() {
-                            isEditingTodoName = false;
-                            todoNameEditingController.clear();
-                          }));
-                      CardDetails.updatecardTitle(id: data.todoId!, cardTitle: todoNameEditingController.text);
+                      TodoDetails.updatetodoName(
+                              id: data.todoId!,
+                              todoName: todoNameEditingController.text)
+                          .then((value) => setState(() {
+                                isEditingTodoName = false;
+                                todoNameEditingController.clear();
+                              }));
+                      CardDetails.updatecardTitle(
+                          id: data.todoId!,
+                          cardTitle: todoNameEditingController.text);
                       cancelEditingTodoName();
                     } else if (iseditingTodoDescription) {
                       cancelEditingTodoDescription();
@@ -154,10 +168,12 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                       Expanded(
                         flex: 3,
                         child: ScrollConfiguration(
-                          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                          behavior: ScrollConfiguration.of(context)
+                              .copyWith(scrollbars: false),
                           child: SingleChildScrollView(
                             child: Container(
-                              padding: const EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 10),
+                              padding: const EdgeInsets.only(
+                                  left: 20, top: 20, bottom: 20, right: 10),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,23 +189,36 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                               width: data.todoName!.length * 9,
                                               child: CustomTextInput(
                                                 autofocus: true,
-                                                controller: todoNameEditingController,
+                                                controller:
+                                                    todoNameEditingController,
                                                 onFieldSubmitted: (newValue) {
                                                   if (newValue.isNotEmpty) {
-                                                    TodoDetails.updatetodoName(id: data.todoId!, todoName: newValue).then((value) => setState(() {
-                                                          isEditingTodoName = false;
-                                                          todoNameEditingController.clear();
-                                                        }));
-                                                    CardDetails.updatecardTitle(id: data.todoId!, cardTitle: newValue);
+                                                    TodoDetails.updatetodoName(
+                                                            id: data.todoId!,
+                                                            todoName: newValue)
+                                                        .then((value) =>
+                                                            setState(() {
+                                                              isEditingTodoName =
+                                                                  false;
+                                                              todoNameEditingController
+                                                                  .clear();
+                                                            }));
+                                                    CardDetails.updatecardTitle(
+                                                        id: data.todoId!,
+                                                        cardTitle: newValue);
                                                   } else {
-                                                    customSnackBar(context: context, text: "Enter the task name");
+                                                    customSnackBar(
+                                                        context: context,
+                                                        text:
+                                                            "Enter the task name");
                                                   }
                                                 },
                                               ),
                                             )
                                           : GestureDetector(
                                               onTap: () {
-                                                startEditingTodoName(data.todoName!);
+                                                startEditingTodoName(
+                                                    data.todoName!);
                                               },
                                               child: Text(
                                                 data.todoName!,
@@ -201,9 +230,11 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                               ),
                                             ),
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 8.0),
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
                                         child: CustomChip(
-                                          color: AppColor.primary.withOpacity(0.1),
+                                          color:
+                                              AppColor.primary.withOpacity(0.1),
                                           label: CustomText(
                                             title: data.todoType!,
                                             size: 10,
@@ -212,18 +243,29 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                         ),
                                       ),
                                       CustomStatusDropDown(
-                                        status: currentStatus ?? data.todoStatus!,
-                                        itemBuilder: (context) => todoDropDownList.map((e) => popupMenuItem(e.toString())).toList(),
+                                        status:
+                                            currentStatus ?? data.todoStatus!,
+                                        itemBuilder: (context) =>
+                                            todoDropDownList
+                                                .map((e) =>
+                                                    popupMenuItem(e.toString()))
+                                                .toList(),
                                         onSelected: (value) {
-                                          CardDetails.updateCardStatus(id: data.todoId!, newStatus: value);
-                                          TodoDetails.updatecardStatus(id: data.todoId!, newStatus: value);
+                                          CardDetails.updateCardStatus(
+                                              id: data.todoId!,
+                                              newStatus: value);
+                                          TodoDetails.updatecardStatus(
+                                              id: data.todoId!,
+                                              newStatus: value);
                                           currentStatus = value;
                                           setState(() {});
                                           notifyToUser(
                                               itemid: data.todoId!,
                                               assignedto: data.assignedto,
-                                              content: "${currentUser["userfirstname"]} ${currentUser["userlastname"]} change status to $value",
-                                              title: "${data.todoName} status changed");
+                                              content:
+                                                  "${currentUser["userfirstname"]} ${currentUser["userlastname"]} change status to $value",
+                                              title:
+                                                  "${data.todoName} status changed");
                                         },
                                       ),
                                     ],
@@ -235,9 +277,17 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                     Row(
                                       children: [
                                         CustomButton(
-                                          text: data.linkedWorkItem![0].workItemId!.contains('LD') ? 'View Lead Details' : 'View Inventory Details',
+                                          text: data.linkedWorkItem![0]
+                                                  .workItemId!
+                                                  .contains('LD')
+                                              ? 'View Lead Details'
+                                              : 'View Inventory Details',
                                           onPressed: () {
-                                            navigateBasedOnId(context, data.linkedWorkItem![0].workItemId!, ref);
+                                            navigateBasedOnId(
+                                                context,
+                                                data.linkedWorkItem![0]
+                                                    .workItemId!,
+                                                ref);
                                           },
                                           height: 40,
                                         ),
@@ -252,19 +302,29 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                               AssignmentWidget(
                                                 assignto: data.assignedto!,
                                                 id: data.todoId!,
-                                                imageUrlCreatedBy: data.createdBy == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
-                                                createdBy: '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
+                                                imageUrlCreatedBy:
+                                                    data.createdBy == null ||
+                                                            data.assignedto![0]
+                                                                .image!.isEmpty
+                                                        ? noImg
+                                                        : data.assignedto![0]
+                                                            .image!,
+                                                createdBy:
+                                                    '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
                                               ),
                                             );
                                           },
                                           child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
                                             children: data.assignedto!
                                                 .sublist(
                                                     0,
                                                     data.assignedto!.length < 2
                                                         ? 1
-                                                        : data.assignedto!.length < 3
+                                                        : data.assignedto!
+                                                                    .length <
+                                                                3
                                                             ? 2
                                                             : 3)
                                                 .asMap()
@@ -279,27 +339,44 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                   height: 24,
                                                   decoration: index > 1
                                                       ? BoxDecoration(
-                                                          border: Border.all(color: Colors.white),
-                                                          color: index > 1 ? Colors.grey.shade300 : null,
-                                                          borderRadius: BorderRadius.circular(40),
+                                                          border: Border.all(
+                                                              color:
+                                                                  Colors.white),
+                                                          color: index > 1
+                                                              ? Colors
+                                                                  .grey.shade300
+                                                              : null,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(40),
                                                         )
                                                       : BoxDecoration(
-                                                          border: Border.all(color: Colors.white),
-                                                          image: DecorationImage(
+                                                          border: Border.all(
+                                                              color:
+                                                                  Colors.white),
+                                                          image:
+                                                              DecorationImage(
                                                             image: NetworkImage(
-                                                              user.image!.isEmpty ? noImg : user.image!,
+                                                              user.image!
+                                                                      .isEmpty
+                                                                  ? noImg
+                                                                  : user.image!,
                                                             ),
                                                             fit: BoxFit.fill,
                                                           ),
-                                                          borderRadius: BorderRadius.circular(40),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(40),
                                                         ),
                                                   child: index > 1
                                                       ? Center(
                                                           child: CustomText(
-                                                            title: '+${data.assignedto!.length - 2}',
+                                                            title:
+                                                                '+${data.assignedto!.length - 2}',
                                                             color: Colors.black,
                                                             size: 9,
-                                                            fontWeight: FontWeight.w600,
+                                                            fontWeight:
+                                                                FontWeight.w600,
                                                           ),
                                                         )
                                                       : null,
@@ -346,7 +423,8 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                     ),
                                   ],
                                   Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       const Padding(
                                         padding: EdgeInsets.only(bottom: 8.0),
@@ -357,7 +435,9 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                       ),
                                       const SizedBox(width: 10),
                                       GestureDetector(
-                                        onTap: () => startEditingTodoDescription(data.todoDescription!),
+                                        onTap: () =>
+                                            startEditingTodoDescription(
+                                                data.todoDescription!),
                                         child: const CustomChip(
                                           label: Icon(
                                             Icons.edit_outlined,
@@ -371,26 +451,47 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                   iseditingTodoDescription
                                       ? SizedBox(
                                           width: 350,
-                                          child: Textarea(controller: todoDescriptionEditingController),
+                                          child: Textarea(
+                                              controller:
+                                                  todoDescriptionEditingController),
                                         )
                                       : Text(
                                           data.todoDescription!,
-                                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey),
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.grey),
                                         ),
                                   const SizedBox(height: 10),
                                   if (iseditingTodoDescription)
                                     Row(
                                       children: [
-                                        TextButton(onPressed: () => cancelEditingTodoDescription(), child: const Text("Cancel")),
+                                        TextButton(
+                                            onPressed: () =>
+                                                cancelEditingTodoDescription(),
+                                            child: const Text("Cancel")),
                                         const SizedBox(width: 10),
                                         ElevatedButton(
                                           onPressed: () {
-                                            if (todoDescriptionEditingController.text.isNotEmpty) {
-                                              TodoDetails.updateTodoDescription(id: data.todoId!, todoDescription: todoDescriptionEditingController.text)
-                                                  .then((value) => cancelEditingTodoDescription());
-                                              CardDetails.updateCardDescription(id: data.todoId!, cardDescription: todoDescriptionEditingController.text);
+                                            if (todoDescriptionEditingController
+                                                .text.isNotEmpty) {
+                                              TodoDetails.updateTodoDescription(
+                                                      id: data.todoId!,
+                                                      todoDescription:
+                                                          todoDescriptionEditingController
+                                                              .text)
+                                                  .then((value) =>
+                                                      cancelEditingTodoDescription());
+                                              CardDetails.updateCardDescription(
+                                                  id: data.todoId!,
+                                                  cardDescription:
+                                                      todoDescriptionEditingController
+                                                          .text);
                                             } else {
-                                              customSnackBar(context: context, text: "Enter the Description");
+                                              customSnackBar(
+                                                  context: context,
+                                                  text:
+                                                      "Enter the Description");
                                             }
                                           },
                                           child: const Text("Save"),
@@ -407,7 +508,8 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                     ),
                                   ],
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const Padding(
                                         padding: EdgeInsets.only(bottom: 8.0),
@@ -425,33 +527,56 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                 height: 100,
                                                 child: ListView.builder(
                                                   shrinkWrap: true,
-                                                  scrollDirection: Axis.horizontal,
-                                                  itemCount: attachments!.length,
-                                                  itemBuilder: (context, index) {
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemCount:
+                                                      attachments!.length,
+                                                  itemBuilder:
+                                                      (context, index) {
                                                     // if (index < attachments.length) {
-                                                    final attachment = attachments[index];
+                                                    final attachment =
+                                                        attachments[index];
                                                     return Stack(
                                                       children: [
                                                         Container(
                                                           height: 99,
-                                                          margin: const EdgeInsets.only(right: 15),
+                                                          margin:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  right: 15),
                                                           width: 108,
-                                                          alignment: Alignment.center,
-                                                          decoration: BoxDecoration(
-                                                            border: Border.all(color: Colors.grey.withOpacity(0.5)),
-                                                            borderRadius: BorderRadius.circular(10),
+                                                          alignment:
+                                                              Alignment.center,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            border: Border.all(
+                                                                color: Colors
+                                                                    .grey
+                                                                    .withOpacity(
+                                                                        0.5)),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
                                                           ),
                                                           child: Column(
-                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
                                                             children: [
                                                               const Icon(
-                                                                Icons.image_outlined,
+                                                                Icons
+                                                                    .image_outlined,
                                                                 size: 40,
                                                               ),
                                                               CustomText(
-                                                                title: attachment.title!,
+                                                                title:
+                                                                    attachment
+                                                                        .title!,
                                                                 size: 13,
-                                                                fontWeight: FontWeight.w400,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
                                                               ),
                                                             ],
                                                           ),
@@ -462,34 +587,35 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                           child: Row(
                                                             children: [
                                                               GestureDetector(
-                                                                child: const Icon(
-                                                                  Icons.download_for_offline,
+                                                                child:
+                                                                    const Icon(
+                                                                  Icons
+                                                                      .download_for_offline,
                                                                   size: 18,
                                                                 ),
                                                                 onTap: () {
-<<<<<<< HEAD
-                                                                  if (kIsWeb) {
-                                                                    // AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                                                    // anchorElement.download = 'Attachment file';
-                                                                    // anchorElement.click();
-                                                                  }
-=======
                                                                   // if (kIsWeb) {
                                                                   //   AnchorElement anchorElement = AnchorElement(href: attachment.path);
                                                                   //   anchorElement.download = 'Attachment file';
                                                                   //   anchorElement.click();
                                                                   // }
->>>>>>> 634c2fbfa52e51e8cf049308e9070a4d91ef65db
                                                                 },
                                                               ),
                                                               GestureDetector(
-                                                                child: const Icon(
+                                                                child:
+                                                                    const Icon(
                                                                   Icons.cancel,
                                                                   size: 18,
                                                                 ),
                                                                 onTap: () {
-                                                                  showConfirmDeleteAttachment(context, () {
-                                                                    TodoDetails.deleteAttachment(itemId: data.todoId!, attachmentIdToDelete: attachment.id!);
+                                                                  showConfirmDeleteAttachment(
+                                                                      context,
+                                                                      () {
+                                                                    TodoDetails.deleteAttachment(
+                                                                        itemId: data
+                                                                            .todoId!,
+                                                                        attachmentIdToDelete:
+                                                                            attachment.id!);
                                                                   });
                                                                 },
                                                               ),
@@ -523,11 +649,17 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                   width: 100,
                                                   alignment: Alignment.center,
                                                   decoration: BoxDecoration(
-                                                    border: Border.all(color: Colors.grey.withOpacity(0.5)),
-                                                    borderRadius: BorderRadius.circular(10),
+                                                    border: Border.all(
+                                                        color: Colors.grey
+                                                            .withOpacity(0.5)),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
                                                   ),
                                                   child: const Column(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
                                                     children: [
                                                       Icon(
                                                         Icons.add,
@@ -536,7 +668,8 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                       CustomText(
                                                         title: 'Add more',
                                                         size: 8,
-                                                        fontWeight: FontWeight.w400,
+                                                        fontWeight:
+                                                            FontWeight.w400,
                                                       ),
                                                     ],
                                                   ),
@@ -566,7 +699,8 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                       ),
                       if (Responsive.isDesktop(context))
                         Container(
-                          margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 15),
                           width: 1,
                           color: Colors.grey.withOpacity(0.5),
                         ),
@@ -582,16 +716,23 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                   padding: const EdgeInsets.only(bottom: 8.0),
                                   child: Flexible(
                                     child: CustomText(
-                                      title: data.linkedWorkItem![0].workItemTitle!,
+                                      title: data
+                                          .linkedWorkItem![0].workItemTitle!,
                                       fontWeight: FontWeight.w600,
                                       size: 20,
                                     ),
                                   ),
                                 ),
                                 CustomButton(
-                                  text: data.linkedWorkItem![0].workItemId!.contains('LD') ? 'View Lead Details' : 'View Inventory Details',
+                                  text: data.linkedWorkItem![0].workItemId!
+                                          .contains('LD')
+                                      ? 'View Lead Details'
+                                      : 'View Inventory Details',
                                   onPressed: () {
-                                    navigateBasedOnId(context, data.linkedWorkItem![0].workItemId!, ref);
+                                    navigateBasedOnId(
+                                        context,
+                                        data.linkedWorkItem![0].workItemId!,
+                                        ref);
                                   },
                                   height: 40,
                                 ),
@@ -599,8 +740,12 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                   AssignmentWidget(
                                     assignto: data.assignedto!,
                                     id: data.todoId!,
-                                    imageUrlCreatedBy: data.createdBy == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
-                                    createdBy: '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
+                                    imageUrlCreatedBy: data.createdBy == null ||
+                                            data.assignedto![0].image!.isEmpty
+                                        ? noImg
+                                        : data.assignedto![0].image!,
+                                    createdBy:
+                                        '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
                                   ),
                               ],
                             ),

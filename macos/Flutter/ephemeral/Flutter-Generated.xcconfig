@@ -2,18 +2,11 @@
 FLUTTER_ROOT=/Users/saurabhmehra/flutterProject/fluttersdk/flutter
 FLUTTER_APPLICATION_PATH=/Users/saurabhmehra/flutterProject/broker_webappV1
 COCOAPODS_PARALLEL_CODE_SIGN=true
-<<<<<<< HEAD
-=======
 FLUTTER_TARGET=/Users/saurabhmehra/flutterProject/broker_webappV1/lib/main.dart
->>>>>>> 634c2fbfa52e51e8cf049308e9070a4d91ef65db
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=1.0.0
 FLUTTER_BUILD_NUMBER=1
 DART_OBFUSCATION=false
 TRACK_WIDGET_CREATION=true
 TREE_SHAKE_ICONS=false
-<<<<<<< HEAD
-PACKAGE_CONFIG=.dart_tool/package_config.json
-=======
 PACKAGE_CONFIG=/Users/saurabhmehra/flutterProject/broker_webappV1/.dart_tool/package_config.json
->>>>>>> 634c2fbfa52e51e8cf049308e9070a4d91ef65db
