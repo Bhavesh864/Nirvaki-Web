@@ -11,12 +11,14 @@ import 'package:yes_broker/customs/snackbar.dart';
 import 'package:yes_broker/customs/text_utility.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/screens/main_screens/chat_screen.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../widgets/chat/group/newgroup_user_list.dart';
 
 class CreateGroupScreen extends StatefulWidget {
   final List<User>? list;
-  const CreateGroupScreen({super.key, this.list});
+  final bool? createGroup;
+  const CreateGroupScreen({super.key, this.list, this.createGroup = true});
 
   @override
   State<CreateGroupScreen> createState() => _CreateGroupScreenState();
@@ -25,11 +27,11 @@ class CreateGroupScreen extends StatefulWidget {
 class _CreateGroupScreenState extends State<CreateGroupScreen> {
   bool isConfirm = false;
   final groupNameController = TextEditingController();
-  List<String> selectedUser = [];
+  List<User> selectedUser = [];
   File? groupIcon;
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
-  void toggleUser(String user) {
+  void toggleUser(User user) {
     setState(() {
       if (selectedUser.contains(user)) {
         selectedUser.remove(user);
@@ -72,7 +74,8 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
   }
 
   Future<void> selectImagee() async {
-    XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.camera);
+    XFile? pickedImage =
+        await ImagePicker().pickImage(source: ImageSource.camera);
     setState(() {
       groupIcon = File(pickedImage!.path);
     });
@@ -80,14 +83,13 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(selectedUser);
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.black,
         iconTheme: const IconThemeData(size: 20),
         centerTitle: false,
-        title: const AppText(
-          text: 'New Group',
+        title: AppText(
+          text: widget.createGroup! ? 'New Group' : 'New Chat',
           fontsize: 15,
           textColor: Colors.black,
           fontWeight: FontWeight.w600,
@@ -106,7 +108,8 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                   GestureDetector(
                     onTap: selectImagee,
                     child: CircleAvatar(
-                      backgroundImage: groupIcon != null ? FileImage(groupIcon!) : null,
+                      backgroundImage:
+                          groupIcon != null ? FileImage(groupIcon!) : null,
                       radius: 25,
                       child: groupIcon != null
                           ? null
@@ -137,7 +140,15 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                 users: widget.list!,
                 selectedUser: selectedUser,
                 toggleUser: (user) {
-                  toggleUser(user);
+                  if (widget.createGroup!) {
+                    toggleUser(user);
+                  } else {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) => ChatScreen(user: user),
+                      ),
+                    );
+                  }
                 },
               ),
               // child: SizedBox(),
@@ -145,33 +156,43 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (selectedUser.isEmpty) {
-            fadedCustomSnackBar(context: context, text: 'At least 1 user must be selected');
-            return;
-          }
-          if (!isConfirm) {
-            setState(() {
-              isConfirm = true;
-            });
-            return;
-          }
-          if (groupIcon == null) {
-            fadedCustomSnackBar(context: context, text: 'Select a group icon');
-            return;
-          }
-          if (groupNameController.text == '') {
-            fadedCustomSnackBar(context: context, text: 'Enter group name');
-            return;
-          }
-          fadedCustomSnackBar(context: context, text: '${groupNameController.text} Group Created');
-          createGroup();
-          Navigator.of(context).pop();
-        },
-        backgroundColor: AppColor.primary,
-        child: isConfirm ? const Icon(Icons.check) : const Icon(Icons.arrow_forward_outlined),
-      ),
+      floatingActionButton: widget.createGroup!
+          ? FloatingActionButton(
+              onPressed: () {
+                if (selectedUser.isEmpty) {
+                  fadedCustomSnackBar(
+                      context: context,
+                      text: 'At least 1 user must be selected');
+                  return;
+                }
+                if (!isConfirm) {
+                  setState(() {
+                    isConfirm = true;
+                  });
+                  return;
+                }
+                if (groupIcon == null) {
+                  fadedCustomSnackBar(
+                      context: context, text: 'Select a group icon');
+                  return;
+                }
+                if (groupNameController.text == '') {
+                  fadedCustomSnackBar(
+                      context: context, text: 'Enter group name');
+                  return;
+                }
+                fadedCustomSnackBar(
+                    context: context,
+                    text: '${groupNameController.text} Group Created');
+                createGroup();
+                Navigator.of(context).pop();
+              },
+              backgroundColor: AppColor.primary,
+              child: isConfirm
+                  ? const Icon(Icons.check)
+                  : const Icon(Icons.arrow_forward_outlined),
+            )
+          : null,
     );
   }
 }

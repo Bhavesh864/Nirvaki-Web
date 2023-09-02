@@ -205,28 +205,26 @@ class _HeaderChipsState extends State<HeaderChips> {
         if (!AppConst.getPublicView())
           CustomStatusDropDown(
             status: currentStatus ?? widget.status,
-            itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
+            itemBuilder: (context) => dropDownStatusDataList
+                .map((e) => popupMenuItem(e.toString()))
+                .toList(),
             onSelected: (value) {
               CardDetails.updateCardStatus(id: widget.id, newStatus: value);
               if (widget.id.contains(ItemCategory.isInventory)) {
-                InventoryDetails.updatecardStatus(id: widget.id, newStatus: value);
+                InventoryDetails.updatecardStatus(
+                    id: widget.id, newStatus: value);
               } else if (widget.id.contains(ItemCategory.isLead)) {
                 LeadDetails.updatecardStatus(id: widget.id, newStatus: value);
               }
               currentStatus = value;
               setState(() {});
               notifyToUser(
-<<<<<<< HEAD
-                  itemdetail: widget.inventoryDetails,
-                  content: "${widget.id} status change to $value",
-                  title:
-                      "${widget.id.contains(ItemCategory.isInventory) ? "Inventory" : "Lead"} status changed");
-=======
                   itemid: widget.id,
                   assignedto: widget.inventoryDetails.assignedto,
-                  content: "${currentUser["userfirstname"]} ${currentUser["userlastname"]} change status to $value",
-                  title: "${widget.id.contains(ItemCategory.isInventory) ? "Inventory" : "Lead"} status changed");
->>>>>>> 8a3ffc75a6ebf5661978268669fdd1b2c94d1db8
+                  content:
+                      "${currentUser["userfirstname"]} ${currentUser["userlastname"]} change status to $value",
+                  title:
+                      "${widget.id.contains(ItemCategory.isInventory) ? "Inventory" : "Lead"} status changed");
             },
           ),
       ],
