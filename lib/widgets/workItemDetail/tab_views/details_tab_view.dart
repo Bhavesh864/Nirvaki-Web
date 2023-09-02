@@ -1,9 +1,12 @@
+<<<<<<< HEAD
 // ignore_for_file: avoid_web_libraries_in_flutter
 
 // import 'dart:html' show AnchorElement;
+=======
+// import 'dart:html';
+>>>>>>> 634c2fbfa52e51e8cf049308e9070a4d91ef65db
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
@@ -252,11 +255,19 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                       size: 18,
                                     ),
                                     onTap: () {
+<<<<<<< HEAD
                                       if (kIsWeb) {
                                         // AnchorElement anchorElement = AnchorElement(href: attachment.path);
                                         // anchorElement.download = 'Attachment file';
                                         // anchorElement.click();
                                       }
+=======
+                                      // if (kIsWeb) {
+                                      //   AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                      //   anchorElement.download = 'Attachment file';
+                                      //   anchorElement.click();
+                                      // }
+>>>>>>> 634c2fbfa52e51e8cf049308e9070a4d91ef65db
                                     },
                                   ),
                                   GestureDetector(

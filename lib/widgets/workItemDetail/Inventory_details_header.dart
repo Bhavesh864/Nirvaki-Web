@@ -1,8 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
+<<<<<<< HEAD
 // import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+=======
+import 'package:beamer/beamer.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+>>>>>>> 634c2fbfa52e51e8cf049308e9070a4d91ef65db
 
 import 'package:yes_broker/Customs/responsive.dart';
 
@@ -17,6 +23,8 @@ import '../../constants/firebase/detailsModels/inventory_details.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
+import '../../pages/add_inventory.dart';
+import '../../routes/routes.dart';
 import '../app/nav_bar.dart';
 import '../app/app_bar.dart';
 
@@ -34,7 +42,7 @@ Future<void> shareUrl(BuildContext context, {String textToCombine = ''}) async {
   }
 }
 
-class InventoryDetailsHeader extends StatelessWidget {
+class InventoryDetailsHeader extends ConsumerWidget {
   final String title;
   final String category;
   final String id;
@@ -46,19 +54,18 @@ class InventoryDetailsHeader extends StatelessWidget {
   final Function setState;
   final dynamic inventoryDetails;
 
-  const InventoryDetailsHeader({
-    super.key,
-    required this.title,
-    required this.id,
-    this.inventoryDetails,
-    required this.category,
-    required this.propertyCategory,
-    required this.status,
-    required this.type,
-    required this.price,
-    required this.unit,
-    required this.setState,
-  });
+  const InventoryDetailsHeader(
+      {super.key,
+      required this.title,
+      required this.id,
+      this.inventoryDetails,
+      required this.category,
+      required this.propertyCategory,
+      required this.status,
+      required this.type,
+      required this.price,
+      required this.unit,
+      required this.setState});
 
   // Future<void> shareUrl(BuildContext context) async {
   //   try {
@@ -71,7 +78,7 @@ class InventoryDetailsHeader extends StatelessWidget {
   // }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -123,8 +130,11 @@ class InventoryDetailsHeader extends StatelessWidget {
                         if (e.contains('Public')) {
                           AppConst.setPublicView(!AppConst.getPublicView());
                           setState();
-                        } else {
-                          // AppConst.getOuterContext()!.beamToNamed(AppRoutes.addInventory);
+                        } else if (e.contains("Edit")) {
+                          ref.read(myArrayProvider.notifier).resetState();
+                          Future.delayed(const Duration(milliseconds: 500)).then(
+                            (value) => AppConst.getOuterContext()!.beamToNamed(AppRoutes.addInventory),
+                          );
                         }
                       }, showicon: true, icon: e['icon']),
                     )

@@ -29,7 +29,7 @@ class SmallScreen extends ConsumerWidget {
         } else if (selectedVal == "Logout") {
           userLogout(ref, context);
         }
-      }),
+      }, ref),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedItemColor: AppColor.primary,
