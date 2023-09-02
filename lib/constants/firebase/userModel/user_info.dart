@@ -144,7 +144,7 @@ class User extends HiveObject {
     }
   }
 
-  static Future<User?> getUser(String userId, WidgetRef ref) async {
+  static Future<User?> getUser(String userId, {WidgetRef? ref}) async {
     try {
       final hiveUserData = UserHiveMethods.getdata(userId);
       // print("userhiveform=====>$hiveUserData");

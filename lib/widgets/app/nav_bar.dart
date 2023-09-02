@@ -72,7 +72,7 @@ class LargeScreenNavBar extends ConsumerWidget {
         color: Colors.white,
       ),
       child: FutureBuilder(
-        future: User.getUser(token!, ref),
+        future: User.getUser(token!, ref: ref),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {

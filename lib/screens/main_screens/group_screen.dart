@@ -1,49 +1,49 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebaseAuth;
 import 'package:flutter/material.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 
 import 'package:yes_broker/constants/firebase/chat_services.dart';
-import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/widgets/chat/chat_input.dart';
-import 'package:yes_broker/widgets/chat/chat_screen_header.dart';
 import 'package:yes_broker/widgets/chat/message_box.dart';
 
-class ChatScreen extends StatelessWidget {
-  const ChatScreen({super.key, required this.user});
-  final User user;
+class GroupScreen extends StatelessWidget {
+  const GroupScreen({super.key, required this.user});
+  final dynamic user;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: ChatScreenBody(user: user),
+        child: GroupScreenBody(user: user),
       ),
     );
   }
 }
 
-class ChatScreenBody extends StatefulWidget {
-  const ChatScreenBody({super.key, required this.user});
-  final User user;
+class GroupScreenBody extends StatefulWidget {
+  const GroupScreenBody({super.key, required this.user});
+  final user;
 
   @override
-  State<ChatScreenBody> createState() => _ChatScreenBodyState();
+  State<GroupScreenBody> createState() => _GroupScreenBodyState();
 }
 
-class _ChatScreenBodyState extends State<ChatScreenBody> {
+class _GroupScreenBodyState extends State<GroupScreenBody> {
   var allMessages = [];
   final firebaseAuth.FirebaseAuth _firebaseAuth = firebaseAuth.FirebaseAuth.instance;
   final ChatService chatService = ChatService();
+  // User? userDetails = await User.getUser(AppConst.getAccessToken());
 
   void sendMessage(message) async {
-    await chatService.sendMessage(widget.user.userId, message);
+    await chatService.sendMessage(AppConst.getAccessToken(), message);
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: chatService.getMessages(widget.user.userId, _firebaseAuth.currentUser!.uid),
+      stream: chatService.getMessages(widget.user["admin"], _firebaseAuth.currentUser!.uid),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Text('Erron${snapshot.error}');
@@ -71,7 +71,7 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
                 if (Responsive.isMobile(context)) ...[
                   Container(
                     margin: const EdgeInsets.only(bottom: 5),
-                    child: ChatScreenHeader(user: widget.user),
+                    // child: chatscrn(user: widget.user),
                   ),
                   Divider(
                     height: 1,
