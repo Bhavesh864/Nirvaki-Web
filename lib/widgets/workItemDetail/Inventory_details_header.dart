@@ -214,7 +214,8 @@ class _HeaderChipsState extends State<HeaderChips> {
               notifyToUser(
                   itemdetail: widget.inventoryDetails,
                   content: "${widget.id} status change to $value",
-                  title: "${widget.id.contains(ItemCategory.isInventory) ? "Inventory" : "Lead"} status changed");
+                  title:
+                      "${widget.id.contains(ItemCategory.isInventory) ? "Inventory" : "Lead"} status changed");
             },
           ),
       ],
