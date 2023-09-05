@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebaseAuth;
 import 'package:flutter/material.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 
 import 'package:yes_broker/constants/firebase/chat_services.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
@@ -43,7 +44,7 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: chatService.getMessages(widget.user.userId, _firebaseAuth.currentUser!.uid),
+      stream: chatService.getMessages(AppConst.getAccessToken(), widget.user.userId),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Text('Erron${snapshot.error}');

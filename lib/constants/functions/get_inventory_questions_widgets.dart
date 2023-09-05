@@ -52,7 +52,7 @@ Widget buildInventoryQuestions(
   } else if (question.questionOptionType == 'smallchip') {
     String selectedOption = '';
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
-      selectedOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+      selectedOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
     return StatefulBuilder(builder: (context, setState) {
       return Column(
@@ -227,8 +227,13 @@ Widget buildInventoryQuestions(
       },
     );
   } else if (question.questionOptionType == 'dropdown') {
+    String? defaultValue;
+    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+      defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+    }
     return DropDownField(
       title: question.questionTitle,
+      defaultValues: defaultValue ?? "",
       optionsList: question.questionOption,
       onchanged: (Object e) {
         notify.add({"id": question.questionId, "item": e});

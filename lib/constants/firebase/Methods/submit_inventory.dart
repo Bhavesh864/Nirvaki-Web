@@ -5,8 +5,8 @@ import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' a
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
-final randomId = randomNumeric(5);
 Future<String> submitInventoryAndcardDetails(state) async {
+  final randomId = randomNumeric(5);
   var res = "pending";
   //  inventorycategory example =  rent ,sell
   //   propertycategory example = residental ,commerical,
@@ -115,7 +115,7 @@ Future<String> submitInventoryAndcardDetails(state) async {
       propertyarea: Propertyarea(unit: areaUnit, superarea: superArea, carpetarea: carpetArea),
       plotdetails: Plotdetails(boundarywall: boundaryWall, opensides: openSides),
       customerinfo: Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo ?? mobileNo),
-      roomconfig: Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom, balconies: balconies, bathroom: bathrooms),
+      roomconfig: Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom ?? [], balconies: balconies, bathroom: bathrooms),
       propertyfacing: propertyFacing,
       comments: comments,
       plotarea: Plotarea(area: carpetArea, unit: areaUnit),

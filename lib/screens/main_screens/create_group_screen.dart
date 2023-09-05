@@ -12,6 +12,7 @@ import 'package:yes_broker/customs/text_utility.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/screens/main_screens/chat_screen.dart';
+import '../../constants/firebase/userModel/message.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../widgets/chat/group/newgroup_user_list.dart';
 
@@ -48,25 +49,25 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
 
     await firebaseFirestore.collection('groups').doc().set({
       'id': groupId,
-      'members': [...selectedUser, AppConst.getAccessToken()],
+      'members': [AppConst.getAccessToken(), AppConst.getAccessToken()],
       'groupName': groupNameController.text,
       "groupIcon": "",
       // "groupIcon": File(groupIcon!.path),
       "admin": AppConst.getAccessToken(),
       "adminName": userDetails.userfirstname,
-      "createdAt": DateTime.now().toString(),
+      "createdAt": Timestamp.now(),
       "isGroup": true,
       "recentMessage": "",
       "recentMsgSenderId": "",
     });
 
-    // for (var i = 0; i < selectedUser.length; i++) {
-    //   String uid = selectedUser[i];
-    //   await firebaseFirestore.collection('users').doc(uid).collection('groups').doc().set({
-    //     'groupName': groupNameController.text,
-    //     'id': groupId,
-    //   });
-    // }
+    await firebaseFirestore
+        .collection('chat_rooms')
+        .doc(groupId)
+        .collection(
+          'messages',
+        )
+        .add({});
     setState(() {
       selectedUser = [];
       isConfirm = false;
@@ -74,8 +75,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
   }
 
   Future<void> selectImagee() async {
-    XFile? pickedImage =
-        await ImagePicker().pickImage(source: ImageSource.camera);
+    XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.camera);
     setState(() {
       groupIcon = File(pickedImage!.path);
     });
@@ -108,8 +108,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                   GestureDetector(
                     onTap: selectImagee,
                     child: CircleAvatar(
-                      backgroundImage:
-                          groupIcon != null ? FileImage(groupIcon!) : null,
+                      backgroundImage: groupIcon != null ? FileImage(groupIcon!) : null,
                       radius: 25,
                       child: groupIcon != null
                           ? null
@@ -160,9 +159,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
           ? FloatingActionButton(
               onPressed: () {
                 if (selectedUser.isEmpty) {
-                  fadedCustomSnackBar(
-                      context: context,
-                      text: 'At least 1 user must be selected');
+                  fadedCustomSnackBar(context: context, text: 'At least 1 user must be selected');
                   return;
                 }
                 if (!isConfirm) {
@@ -172,25 +169,19 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                   return;
                 }
                 if (groupIcon == null) {
-                  fadedCustomSnackBar(
-                      context: context, text: 'Select a group icon');
+                  fadedCustomSnackBar(context: context, text: 'Select a group icon');
                   return;
                 }
                 if (groupNameController.text == '') {
-                  fadedCustomSnackBar(
-                      context: context, text: 'Enter group name');
+                  fadedCustomSnackBar(context: context, text: 'Enter group name');
                   return;
                 }
-                fadedCustomSnackBar(
-                    context: context,
-                    text: '${groupNameController.text} Group Created');
+                fadedCustomSnackBar(context: context, text: '${groupNameController.text} Group Created');
                 createGroup();
                 Navigator.of(context).pop();
               },
               backgroundColor: AppColor.primary,
-              child: isConfirm
-                  ? const Icon(Icons.check)
-                  : const Icon(Icons.arrow_forward_outlined),
+              child: isConfirm ? const Icon(Icons.check) : const Icon(Icons.arrow_forward_outlined),
             )
           : null,
     );

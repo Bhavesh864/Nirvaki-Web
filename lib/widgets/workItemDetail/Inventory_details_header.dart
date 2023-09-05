@@ -16,7 +16,6 @@ import '../../constants/firebase/detailsModels/inventory_details.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
-import '../../pages/add_inventory.dart';
 import '../../routes/routes.dart';
 import '../app/nav_bar.dart';
 import '../app/app_bar.dart';
@@ -124,11 +123,8 @@ class InventoryDetailsHeader extends ConsumerWidget {
                           AppConst.setPublicView(!AppConst.getPublicView());
                           setState();
                         } else if (e.contains("Edit")) {
-                          ref.read(myArrayProvider.notifier).resetState();
-                          Future.delayed(const Duration(milliseconds: 500))
-                              .then(
-                            (value) => AppConst.getOuterContext()!
-                                .beamToNamed(AppRoutes.addInventory),
+                          Future.delayed(const Duration(milliseconds: 500)).then(
+                            (value) => AppConst.getOuterContext()!.beamToNamed(AppRoutes.addInventory, data: true),
                           );
                         }
                       }, showicon: true, icon: e['icon']),
@@ -210,14 +206,11 @@ class _HeaderChipsState extends State<HeaderChips> {
         if (!AppConst.getPublicView())
           CustomStatusDropDown(
             status: currentStatus ?? widget.status,
-            itemBuilder: (context) => dropDownStatusDataList
-                .map((e) => popupMenuItem(e.toString()))
-                .toList(),
+            itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
             onSelected: (value) {
               CardDetails.updateCardStatus(id: widget.id, newStatus: value);
               if (widget.id.contains(ItemCategory.isInventory)) {
-                InventoryDetails.updatecardStatus(
-                    id: widget.id, newStatus: value);
+                InventoryDetails.updatecardStatus(id: widget.id, newStatus: value);
               } else if (widget.id.contains(ItemCategory.isLead)) {
                 LeadDetails.updatecardStatus(id: widget.id, newStatus: value);
               }
@@ -226,10 +219,8 @@ class _HeaderChipsState extends State<HeaderChips> {
               notifyToUser(
                   itemid: widget.id,
                   assignedto: widget.inventoryDetails.assignedto,
-                  content:
-                      "${currentUser["userfirstname"]} ${currentUser["userlastname"]} change status to $value",
-                  title:
-                      "${widget.id.contains(ItemCategory.isInventory) ? "Inventory" : "Lead"} status changed");
+                  content: "${currentUser["userfirstname"]} ${currentUser["userlastname"]} change status to $value",
+                  title: "${widget.id.contains(ItemCategory.isInventory) ? "Inventory" : "Lead"} status changed");
             },
           ),
       ],
