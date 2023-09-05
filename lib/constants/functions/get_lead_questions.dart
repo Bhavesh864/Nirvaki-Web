@@ -34,16 +34,13 @@ Widget buildLeadQuestions(
             }
             return ChipButton(
               text: option,
-              bgColor: selectedValues.any((answer) =>
-                      answer["id"] == question.questionId &&
-                      answer["item"] == option)
+              bgColor: selectedValues.any((answer) => answer["id"] == question.questionId && answer["item"] == option)
                   ? AppColor.primary.withOpacity(0.2)
                   : AppColor.primary.withOpacity(0.05),
               onSelect: () {
                 if (currentScreenIndex < screensDataList.length - 1) {
                   notify.add({"id": question.questionId, "item": option});
-                  nextQuestion(
-                      screensDataList: screensDataList, option: option);
+                  nextQuestion(screensDataList: screensDataList, option: option);
                 } else {
                   // Handle reaching the last question
                 }
@@ -55,8 +52,7 @@ Widget buildLeadQuestions(
   } else if (question.questionOptionType == 'smallchip') {
     String selectedOption = '';
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
-      selectedOption = selectedValues
-          .firstWhere((answer) => answer["id"] == question.questionId)["item"];
+      selectedOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
     }
 
     return StatefulBuilder(builder: (context, setState) {
@@ -89,9 +85,7 @@ Widget buildLeadQuestions(
                         });
                         notify.add({"id": question.questionId, "item": option});
                       },
-                      labelColor: selectedOption == option
-                          ? Colors.white
-                          : Colors.black,
+                      labelColor: selectedOption == option ? Colors.white : Colors.black,
                     ),
                   ),
               ],
@@ -104,8 +98,7 @@ Widget buildLeadQuestions(
     List<String> selectedOptions = [];
     List items = question.questionOption;
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
-      selectedOptions = selectedValues
-          .firstWhere((answer) => answer["id"] == question.questionId)["item"];
+      selectedOptions = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
     }
     return StatefulBuilder(
       builder: (context, setState) {
@@ -125,8 +118,7 @@ Widget buildLeadQuestions(
                 children: [
                   for (var item in items)
                     Padding(
-                      padding:
-                          const EdgeInsets.only(right: 10, top: 5, bottom: 5),
+                      padding: const EdgeInsets.only(right: 10, top: 5, bottom: 5),
                       child: CustomChoiceChip(
                           label: item,
                           selected: selectedOptions.contains(item),
@@ -138,14 +130,9 @@ Widget buildLeadQuestions(
                                 selectedOptions.remove(item);
                               }
                             });
-                            notify.add({
-                              "id": question.questionId,
-                              "item": selectedOptions
-                            });
+                            notify.add({"id": question.questionId, "item": selectedOptions});
                           },
-                          labelColor: selectedOptions.contains(item)
-                              ? Colors.white
-                              : Colors.black),
+                          labelColor: selectedOptions.contains(item) ? Colors.white : Colors.black),
                     ),
                 ],
               ),
@@ -155,10 +142,8 @@ Widget buildLeadQuestions(
       },
     );
   } else if (question.questionOptionType == 'textfield') {
-    final value =
-        selectedValues.where((e) => e["id"] == question.questionId).toList();
-    TextEditingController controller =
-        TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
+    final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
+    TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
     // TextEditingController controller = TextEditingController();
     bool isChecked = true;
 
@@ -180,8 +165,7 @@ Widget buildLeadQuestions(
               if (!isChecked)
                 LabelTextInputField(
                   onChanged: (newvalue) {
-                    notify.add(
-                        {"id": question.questionId, "item": newvalue.trim()});
+                    notify.add({"id": question.questionId, "item": newvalue.trim()});
                   },
                   inputController: controller,
                   labelText: question.questionTitle,
@@ -246,6 +230,7 @@ Widget buildLeadQuestions(
   } else if (question.questionOptionType == 'dropdown') {
     return DropDownField(
       title: question.questionTitle,
+      defaultValues: "",
       optionsList: question.questionOption,
       onchanged: (Object e) {
         notify.add({"id": question.questionId, "item": e});
