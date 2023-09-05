@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/text_utility.dart';
-import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/chat/models/chat_contact.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/screens/main_screens/chat_user_profile.dart';
 
 class ChatScreenHeader extends StatelessWidget {
-  const ChatScreenHeader({super.key, required this.user});
-  final User user;
+  const ChatScreenHeader({super.key, required this.userData});
+  final ChatContact userData;
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +40,8 @@ class ChatScreenHeader extends StatelessWidget {
           child: Row(
             children: [
               Hero(
-                tag: user.userId,
-                child: CircleAvatar(radius: 24, backgroundImage: NetworkImage(user.image.isEmpty ? noImg : user.image)),
+                tag: userData.contactId,
+                child: CircleAvatar(radius: 24, backgroundImage: NetworkImage(userData.profilePic.isEmpty ? noImg : userData.profilePic)),
               ),
               const SizedBox(
                 width: 12,
@@ -51,7 +51,7 @@ class ChatScreenHeader extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AppText(
-                    text: "${user.userfirstname} ${user.userlastname}",
+                    text: userData.name,
                     textColor: const Color.fromRGBO(44, 44, 46, 1),
                     fontWeight: FontWeight.w500,
                     fontsize: 16,

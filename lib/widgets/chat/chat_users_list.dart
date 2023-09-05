@@ -5,7 +5,6 @@ import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/responsive.dart';
-import 'package:yes_broker/screens/main_screens/chat_screen.dart';
 
 class ChatUserList extends StatelessWidget {
   final Function(int) onPressed;
@@ -34,13 +33,13 @@ class ChatUserList extends StatelessWidget {
             dense: true,
             onTap: () {
               if (Responsive.isMobile(context)) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (ctx) => ChatScreen(
-                      user: users[index],
-                    ),
-                  ),
-                );
+                // Navigator.of(context).push(
+                //   MaterialPageRoute(
+                //     builder: (ctx) => ChatScreen(
+                //       data: users[index],
+                //     ),
+                //   ),
+                // );
               } else {
                 onPressed(index);
               }
