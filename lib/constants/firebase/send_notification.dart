@@ -17,7 +17,7 @@ Future<void> sendNotificationTouser({required String token, required String titl
         'notification_count': 23,
       },
     },
-    'data': {'id': itemid}
+    'data': {'id': itemid, "imageUrl": currentUser["image"]}
   };
   await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
       body: jsonEncode(data), headers: {'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'key=$serverKey'}).then((value) {
@@ -51,7 +51,12 @@ void notifyToUser({
     print("tokens$tokens");
     for (var token in tokens) {
       if (AppConst.getFcmToken() != token) {
-        await sendNotificationTouser(token: token, title: title, content: content, itemid: itemid);
+        await sendNotificationTouser(
+          token: token,
+          title: title,
+          content: content,
+          itemid: itemid,
+        );
       }
     }
   } catch (e) {

@@ -9,6 +9,7 @@ import 'package:yes_broker/Customs/custom_chip.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/userModel/notification_model.dart';
 import '../../constants/firebase/userModel/user_info.dart';
+import '../../constants/functions/navigation/navigation_functions.dart';
 import '../../constants/functions/time_formatter.dart';
 import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
@@ -71,13 +72,12 @@ class LargeScreenNavBar extends ConsumerWidget {
         color: Colors.white,
       ),
       child: FutureBuilder(
-        future: User.getUser(token!),
+        future: User.getUser(token!, ref: ref),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
-              ref.read(userProvider.future).then((value) {
-                print(value.managerName);
-              });
+              // Future.delayed(const Duration(seconds: 1)).then((value) => {ref.read(userDataProvider.notifier).storeUserData(snapshot.data!)});
+
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -230,14 +230,14 @@ Widget largeScreenView(String name, BuildContext context) {
   );
 }
 
-class NotificationDialogBox extends StatefulWidget {
+class NotificationDialogBox extends ConsumerStatefulWidget {
   const NotificationDialogBox({super.key});
 
   @override
-  State<NotificationDialogBox> createState() => _NotificationDialogBoxState();
+  NotificationDialogBoxState createState() => NotificationDialogBoxState();
 }
 
-class _NotificationDialogBoxState extends State<NotificationDialogBox> {
+class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
   FirebaseFirestore notificationcollection = FirebaseFirestore.instance;
   bool isChatOpen = false;
 
@@ -288,11 +288,16 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
                             itemBuilder: (context, index) {
                               final firestoreTimestamp = notification[index].receiveDate;
                               final formattedTime = TimeFormatter.formatFirestoreTimestamp(firestoreTimestamp);
+                              final notificationData = notification[index];
                               return SizedBox(
                                 child: ListTile(
+                                  onTap: () {
+                                    navigateBasedOnId(context, notificationData.linkedItemId!, ref);
+                                    Navigator.of(context).pop();
+                                  },
                                   titleAlignment: ListTileTitleAlignment.top,
-                                  leading: const CircleAvatar(
-                                    backgroundImage: NetworkImage(noImg),
+                                  leading: CircleAvatar(
+                                    backgroundImage: NetworkImage(notificationData.imageUrl!.isNotEmpty ? notificationData.imageUrl! : noImg),
                                   ),
                                   title: SizedBox(
                                     height: 80,
@@ -301,7 +306,7 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Text(
-                                          notification[index].notificationContent!,
+                                          notificationData.notificationContent!,
                                           maxLines: 3, // Adjust the maximum number of lines as needed
                                           overflow: TextOverflow.ellipsis, // Handle text overflow
                                         ),
@@ -317,7 +322,7 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
                                   trailing: CustomChip(
                                     paddingHorizontal: 0,
                                     label: CustomText(
-                                      title: notification[index].linkedItemId!,
+                                      title: notificationData.linkedItemId!,
                                       size: 10,
                                     ),
                                   ),

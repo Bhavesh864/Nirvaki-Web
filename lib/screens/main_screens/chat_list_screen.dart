@@ -11,6 +11,7 @@ import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/screens/main_screens/create_group_screen.dart';
 
 import '../../Customs/responsive.dart';
+import '../../constants/utils/colors.dart';
 import 'chat_screen.dart';
 
 class ChatListScreen extends ConsumerWidget {
@@ -262,6 +263,20 @@ class ChatListScreen extends ConsumerWidget {
                 },
               );
             }),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (ctx) => CreateGroupScreen(
+                list: list,
+                createGroup: false,
+              ),
+            ),
+          );
+        },
+        backgroundColor: AppColor.primary,
+        child: const Icon(Icons.chat),
       ),
     );
   }
