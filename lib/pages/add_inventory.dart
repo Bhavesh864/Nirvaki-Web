@@ -35,7 +35,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   late Future<List<InventoryQuestions>> getQuestions;
   List<Screen> currentScreenList = [];
   PageController? pageController;
-  int currentScreenIndex = 0;
+  int currentScreenIndex = 35;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
