@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:yes_broker/screens/main_screens/chat_screen.dart';
 
 import '../Customs/custom_text.dart';
 import '../constants/app_constant.dart';
@@ -142,9 +141,9 @@ class _ChatDialogBoxState extends State<ChatDialogBox> {
                             ],
                           ),
                           const Divider(),
-                          ChatScreenBody(
-                            user: filterUser[selectedIndex],
-                          ),
+                          // ChatScreen(
+                          //   user: filterUser[selectedIndex],
+                          // ),
                         ]
                       ],
                     ),

@@ -3,12 +3,10 @@ import 'package:yes_broker/constants/app_constant.dart';
 
 import 'package:yes_broker/constants/firebase/userModel/message.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 class ChatService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  FirebaseDatabase database = FirebaseDatabase.instance;
-  // DatabaseReference ref = FirebaseDatabase.instance.ref();
+  // FirebaseDatabase database = FirebaseDatabase.instance;
 
   Future<void> sendMessage(String receiverId, String message) async {
     final User? user = await User.getUser(AppConst.getAccessToken());
@@ -35,9 +33,6 @@ class ChatService {
         .add(
           newMessage.toMap(),
         );
-
-    // DatabaseReference messageRef = database.reference().child('chat_rooms/$chatRoomId/messages');
-    // messageRef.push().set(newMessage.toMap());
   }
 
   Stream<QuerySnapshot> getMessages(String userId, String otherUserId) {
@@ -56,9 +51,9 @@ class ChatService {
           descending: false,
         )
         .snapshots();
-
-    // DatabaseReference messageRef = database.reference().child('chat_rooms/$chatRoomId/messages');
-
-    // return messageRef.orderByChild('timestamp').onValue;
   }
+
+  // Stream<List> getChatContacts() {
+  //   return _firestore.collection('chat_rooms').doc(chatRoomId).collection('messages').snapshots().asyncMap((event) => null);
+  // }
 }
