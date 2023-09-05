@@ -27,7 +27,6 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
   List<Uint8List?> webImages = [];
   int numberOfColumns = 5;
   List<File?> images = [];
-  List<File?> propertyimages = [];
   List<String> itemTitles = [];
   bool isInitialized = false;
 
@@ -40,9 +39,16 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
   String imageUrl = '';
 
   List<String> selectedImagesUrlList = [];
+  List<dynamic> roomWidgets = [];
 
   @override
   void initState() {
+    for (var i = 0; i < widget.propertyphotos!.bedroom!.length; i++) {
+      var element = widget.propertyphotos!.bedroom![i];
+      roomWidgets.add({"title": "Bed Room (${i + 1})", "imageUrl": element});
+    }
+    print("roomWidgets --> $roomWidgets");
+
     final answersArr = ref.read(myArrayProvider.notifier).state;
     itemTitles = [
       'Front Elevation',
@@ -87,7 +93,6 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
 
     webImages = List.generate(itemTitles.length, (index) => null);
     images = List.generate(itemTitles.length, (index) => null);
-
     isInitialized = true;
     imageContainers = List.generate(itemTitles.length, (index) => getImageContainer(index));
 
@@ -218,7 +223,6 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
 
   @override
   Widget build(BuildContext context) {
-    print(itemTitles);
     return SingleChildScrollView(
       physics: Responsive.isMobile(context) ? const ScrollPhysics() : const NeverScrollableScrollPhysics(),
       child: Container(
@@ -257,6 +261,12 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
                             child: SizedBox(
                               width: constraints.maxWidth / crossAxisCount - 20,
                               height: constraints.maxWidth / crossAxisCount - 45,
+                              //roomWidgets[index]["imageUrl"] != null
+                              //     ? Image.network(
+                              //         roomWidgets[index]["imageUrl"],
+                              //         fit: BoxFit.cover,
+                              //       )
+                              //     :
                               child: kIsWeb
                                   ? webImages[index] == null
                                       ? const Icon(Icons.photo_rounded, size: 70, color: Colors.grey)
