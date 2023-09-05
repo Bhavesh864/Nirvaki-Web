@@ -406,12 +406,15 @@ class InventoryDetails {
     }
   }
 
-  static Future<void> updateInventoryDetails({required String id, required String item}) async {
+  static Future<void> updateInventoryDetails({required String id, required InventoryDetails inventoryDetails}) async {
     try {
-      await inventoryDetailsCollection.doc().update({"status": item});
-      // print('Inventory item updated successfully');
+      QuerySnapshot querySnapshot = await inventoryDetailsCollection.where("InventoryId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update(inventoryDetails.toJson());
+      }
+      print('Inventory item updated successfully');
     } catch (error) {
-      // print('Failed to update Inventory item: $error');
+      print('Failed to update Inventory item: $error');
     }
   }
 

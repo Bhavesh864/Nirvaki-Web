@@ -330,6 +330,8 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
         {"id": 51, "item": data.propertyrent?.securityunit},
         {"id": 52, "item": data.propertyrent?.lockinperiod},
         {"id": 53, "item": data.commercialphotos},
+        {"id": 100, "item": data.attachments},
+        {"id": 101, "item": data.inventoryId},
       ]);
     } catch (e) {
       print(e);
