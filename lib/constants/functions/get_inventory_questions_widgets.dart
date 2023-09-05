@@ -195,9 +195,12 @@ Widget buildInventoryQuestions(
       },
     );
   } else if (question.questionOptionType == 'textarea') {
+    final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
+    TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
     return TextFormField(
       keyboardType: TextInputType.multiline,
       maxLines: 5,
+      controller: controller,
       onChanged: (newvalue) {
         notify.add({"id": question.questionId, "item": newvalue.trim()});
       },
