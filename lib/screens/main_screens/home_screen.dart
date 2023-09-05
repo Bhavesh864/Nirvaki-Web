@@ -3,13 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
+import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/widgets/calendar_view.dart';
 import 'package:yes_broker/widgets/timeline_view.dart';
 import 'package:yes_broker/widgets/workitems/workitems_list.dart';
-
-import '../../constants/firebase/questionModels/inventory_question.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -30,8 +29,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void addquestion() {
-    List<InventoryQuestions> screensList = [
-      InventoryQuestions(
+    List<LeadQuestions> screensList = [
+      LeadQuestions(
         type: "Residential",
         screens: [
           Screen(
@@ -39,7 +38,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               Question(
                 questionId: 1,
                 questionOptionType: "chip",
-                questionTitle: "Which Property Category does this inventory Fall under ?",
+                questionTitle: "Which Property Category does this Lead Fall under ?",
                 questionOption: ["Residential", "Commercial"],
               ),
             ],
@@ -53,8 +52,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               Question(
                 questionId: 2,
                 questionOptionType: "chip",
-                questionTitle: "What Category does this inventory belong to?",
-                questionOption: ["Rent", "Sell"],
+                questionTitle: "What Category does this Lead belong to?",
+                questionOption: ["Rent", "Buy"],
               ),
             ],
             isActive: true,
@@ -67,8 +66,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               Question(
                 questionId: 4,
                 questionOptionType: "chip",
-                questionTitle: "From where did you source this inventory?",
-                questionOption: ["99Acers", "Magic Bricks", "Makaan", "Housing.com", "Social Media", "Data Calling", "Other", "Broker"],
+                questionTitle: "From where did you source this Lead?",
+                questionOption: ["99Acers", "Magic Bricks", "Makaan", "Housing.com", "Social Media", "Data Calling", "Other"],
               ),
             ],
             isActive: true,
@@ -300,76 +299,16 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
           Screen(
             questions: [
               Question(
-                questionId: 46,
-                questionOptionType: "textfield",
-                questionTitle: "Listing Price",
-                questionOption: "",
-              ),
-              Question(
-                questionId: 47,
-                questionOptionType: "smallchip",
-                questionTitle: "",
-                questionOption: ["Crore", "Lakh", "Thousands"],
-              ),
-            ],
-            isActive: true,
-            title: "Property Listing Price",
-            previousScreenId: "S14",
-            screenId: "S15",
-            nextScreenId: "S16",
-          ),
-          Screen(
-            questions: [
-              Question(
-                questionId: 48,
-                questionOptionType: "textfield",
-                questionTitle: "Rent",
-                questionOption: "",
-              ),
-              Question(
-                questionId: 49,
-                questionOptionType: "smallchip",
-                questionTitle: "",
-                questionOption: ["Crore", "Lakh", "Thousands"],
-              ),
-              Question(
-                questionId: 50,
-                questionOptionType: "textfield",
-                questionTitle: "Security Deposit",
-                questionOption: "",
-              ),
-              Question(
-                questionId: 51,
-                questionOptionType: "smallchip",
-                questionTitle: "",
-                questionOption: ["Lakh", "Thousands"],
-              ),
-              Question(
-                questionId: 52,
-                questionOptionType: "dropdown",
-                questionTitle: "Notice Period",
-                questionOption: ["0-12 Months", "1-5 Years"],
-              ),
-            ],
-            isActive: true,
-            title: "What is expected Rent for the property",
-            previousScreenId: "S15",
-            screenId: "S16",
-            nextScreenId: "S17",
-          ),
-          Screen(
-            questions: [
-              Question(
                 questionId: 26,
                 questionOptionType: "dropdown",
                 questionTitle: "State",
-                questionOption: [],
+                questionOption: ["Rajasthan"],
               ),
               Question(
                 questionId: 27,
                 questionOptionType: "dropdown",
                 questionTitle: "City",
-                questionOption: [],
+                questionOption: ["Bikaner", "Jaipur", "Ajmer"],
               ),
               Question(
                 questionId: 28,
@@ -390,11 +329,11 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                 questionOption: "",
               ),
             ],
-            title: "Property Address",
+            title: "Preferred Locality",
             isActive: true,
-            previousScreenId: "S16",
-            screenId: "S17",
-            nextScreenId: "S18",
+            previousScreenId: "S14",
+            screenId: "S15",
+            nextScreenId: "S16",
           ),
           Screen(
             questions: [
@@ -406,51 +345,44 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ],
             isActive: true,
-            previousScreenId: "S17",
-            screenId: "S18",
-            nextScreenId: "S19",
+            previousScreenId: "S15",
+            screenId: "S16",
+            nextScreenId: "S17",
           ),
           Screen(
             questions: [
               Question(
                 questionId: 32,
-                questionOptionType: "chip",
-                questionTitle: "Which Direction Does the property Face?",
-                questionOption: ["East", "West", "North", "South", "North East", "North West", "South East", "South West"],
-              ),
-            ],
-            isActive: true,
-            previousScreenId: "S18",
-            screenId: "S19",
-            nextScreenId: "S20",
-          ),
-          Screen(
-            questions: [
-              Question(
-                questionId: 33,
-                questionOptionType: "photo",
-                questionTitle: "Photos",
+                questionOptionType: "textfield",
+                questionTitle: "Budget range",
                 questionOption: "",
               ),
+              Question(
+                questionId: 33,
+                questionOptionType: "smallchip",
+                questionTitle: "",
+                questionOption: ["Crore", "Lakh", "Thousands"],
+              ),
             ],
             isActive: true,
-            previousScreenId: "S19",
-            screenId: "S20",
-            nextScreenId: "S21",
+            title: "What is the customers budget range?",
+            previousScreenId: "S16",
+            screenId: "S17",
+            nextScreenId: "S18",
           ),
           Screen(
             questions: [
               Question(
                 questionId: 34,
-                questionOptionType: "textfield",
-                questionTitle: "Video",
-                questionOption: "",
+                questionOptionType: "chip",
+                questionTitle: "Preferred Property Direction",
+                questionOption: ["East", "West", "North", "South", "North East", "North West", "South East", "South West"],
               ),
             ],
             isActive: true,
-            previousScreenId: "S20",
-            screenId: "S21",
-            nextScreenId: "S22",
+            previousScreenId: "S17",
+            screenId: "S18",
+            nextScreenId: "S19",
           ),
           Screen(
             questions: [
@@ -462,9 +394,9 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ],
             isActive: true,
-            previousScreenId: "S21",
-            screenId: "S22",
-            nextScreenId: "S23",
+            previousScreenId: "S18",
+            screenId: "S19",
+            nextScreenId: "S20",
           ),
           Screen(
             questions: [
@@ -477,15 +409,15 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             ],
             isActive: true,
             title: "Assign to",
-            previousScreenId: "S22",
-            screenId: "S23",
-            nextScreenId: "S24",
+            previousScreenId: "S19",
+            screenId: "S20",
+            nextScreenId: "S21",
           ),
         ],
       ),
     ];
 
-    // InventoryQuestions.addScreens(screensList);
+    // LeadQuestions.addScreens(screensList);
   }
 
   @override

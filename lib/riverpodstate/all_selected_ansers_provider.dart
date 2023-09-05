@@ -31,6 +31,10 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
     state = [];
   }
 
+  void addAllvalues(List<Map<String, dynamic>> selectedValue) {
+    state = selectedValue;
+  }
+
   Future<String> submitInventory() async {
     final String res = await submitInventoryAndcardDetails(state);
     return res;
