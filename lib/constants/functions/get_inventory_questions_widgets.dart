@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'package:flutter/material.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
@@ -258,7 +259,11 @@ Widget buildInventoryQuestions(
       address2: address2,
     );
   } else if (question.questionOptionType == 'photo') {
-    return PhotosViewForm(notify, question.questionId);
+    Propertyphotos? propertyphotos;
+    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+      propertyphotos = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+    }
+    return PhotosViewForm(notify: notify, id: question.questionId, propertyphotos: propertyphotos);
   }
 
   return const SizedBox.shrink();
