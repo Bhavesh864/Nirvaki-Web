@@ -7,8 +7,8 @@ import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' as cards;
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
-final randomId = randomNumeric(5);
 Future<String> submitTodoAndCardDetails(state) async {
+  final randomId = randomNumeric(5);
   var res = "pending";
   //  leadcategory example =  rent ,buy
   //   propertycategory example = residental ,commerical,

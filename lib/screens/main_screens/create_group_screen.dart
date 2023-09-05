@@ -11,12 +11,15 @@ import 'package:yes_broker/customs/snackbar.dart';
 import 'package:yes_broker/customs/text_utility.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/screens/main_screens/chat_screen.dart';
+import '../../constants/firebase/userModel/message.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../widgets/chat/group/newgroup_user_list.dart';
 
 class CreateGroupScreen extends StatefulWidget {
   final List<User>? list;
-  const CreateGroupScreen({super.key, this.list});
+  final bool? createGroup;
+  const CreateGroupScreen({super.key, this.list, this.createGroup = true});
 
   @override
   State<CreateGroupScreen> createState() => _CreateGroupScreenState();
@@ -25,11 +28,11 @@ class CreateGroupScreen extends StatefulWidget {
 class _CreateGroupScreenState extends State<CreateGroupScreen> {
   bool isConfirm = false;
   final groupNameController = TextEditingController();
-  List<String> selectedUser = [];
+  List<User> selectedUser = [];
   File? groupIcon;
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
-  void toggleUser(String user) {
+  void toggleUser(User user) {
     setState(() {
       if (selectedUser.contains(user)) {
         selectedUser.remove(user);
@@ -46,25 +49,25 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
 
     await firebaseFirestore.collection('groups').doc().set({
       'id': groupId,
-      'members': [...selectedUser, AppConst.getAccessToken()],
+      'members': [AppConst.getAccessToken(), AppConst.getAccessToken()],
       'groupName': groupNameController.text,
       "groupIcon": "",
       // "groupIcon": File(groupIcon!.path),
       "admin": AppConst.getAccessToken(),
       "adminName": userDetails.userfirstname,
-      "createdAt": DateTime.now().toString(),
+      "createdAt": Timestamp.now(),
       "isGroup": true,
       "recentMessage": "",
       "recentMsgSenderId": "",
     });
 
-    // for (var i = 0; i < selectedUser.length; i++) {
-    //   String uid = selectedUser[i];
-    //   await firebaseFirestore.collection('users').doc(uid).collection('groups').doc().set({
-    //     'groupName': groupNameController.text,
-    //     'id': groupId,
-    //   });
-    // }
+    await firebaseFirestore
+        .collection('chat_rooms')
+        .doc(groupId)
+        .collection(
+          'messages',
+        )
+        .add({});
     setState(() {
       selectedUser = [];
       isConfirm = false;
@@ -80,14 +83,13 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(selectedUser);
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.black,
         iconTheme: const IconThemeData(size: 20),
         centerTitle: false,
-        title: const AppText(
-          text: 'New Group',
+        title: AppText(
+          text: widget.createGroup! ? 'New Group' : 'New Chat',
           fontsize: 15,
           textColor: Colors.black,
           fontWeight: FontWeight.w600,
@@ -137,7 +139,15 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                 users: widget.list!,
                 selectedUser: selectedUser,
                 toggleUser: (user) {
-                  toggleUser(user);
+                  if (widget.createGroup!) {
+                    toggleUser(user);
+                  } else {
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (ctx) => ChatScreen(data: user),
+                    //   ),
+                    // );
+                  }
                 },
               ),
               // child: SizedBox(),
@@ -145,33 +155,35 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (selectedUser.isEmpty) {
-            fadedCustomSnackBar(context: context, text: 'At least 1 user must be selected');
-            return;
-          }
-          if (!isConfirm) {
-            setState(() {
-              isConfirm = true;
-            });
-            return;
-          }
-          if (groupIcon == null) {
-            fadedCustomSnackBar(context: context, text: 'Select a group icon');
-            return;
-          }
-          if (groupNameController.text == '') {
-            fadedCustomSnackBar(context: context, text: 'Enter group name');
-            return;
-          }
-          fadedCustomSnackBar(context: context, text: '${groupNameController.text} Group Created');
-          createGroup();
-          Navigator.of(context).pop();
-        },
-        backgroundColor: AppColor.primary,
-        child: isConfirm ? const Icon(Icons.check) : const Icon(Icons.arrow_forward_outlined),
-      ),
+      floatingActionButton: widget.createGroup!
+          ? FloatingActionButton(
+              onPressed: () {
+                if (selectedUser.isEmpty) {
+                  fadedCustomSnackBar(context: context, text: 'At least 1 user must be selected');
+                  return;
+                }
+                if (!isConfirm) {
+                  setState(() {
+                    isConfirm = true;
+                  });
+                  return;
+                }
+                if (groupIcon == null) {
+                  fadedCustomSnackBar(context: context, text: 'Select a group icon');
+                  return;
+                }
+                if (groupNameController.text == '') {
+                  fadedCustomSnackBar(context: context, text: 'Enter group name');
+                  return;
+                }
+                fadedCustomSnackBar(context: context, text: '${groupNameController.text} Group Created');
+                createGroup();
+                Navigator.of(context).pop();
+              },
+              backgroundColor: AppColor.primary,
+              child: isConfirm ? const Icon(Icons.check) : const Icon(Icons.arrow_forward_outlined),
+            )
+          : null,
     );
   }
 }

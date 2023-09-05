@@ -87,7 +87,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
         return data;
       }
     }
-    return snapshot.data?[0];
+    return null;
   }
 
   @override
@@ -169,19 +169,18 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                     notify,
                                                     nextQuestion,
                                                   ),
-                                                  if (i == screensDataList[index].questions.length - 1 &&
-                                                      screensDataList[index].questions[i].questionOptionType != 'chip')
+                                                  if (i == screensDataList[index].questions.length - 1 && screensDataList[index].questions[i].questionOptionType != 'chip')
                                                     Container(
                                                       margin: const EdgeInsets.only(top: 10),
                                                       alignment: Alignment.centerRight,
                                                       child: CustomButton(
                                                         text: 'Next',
                                                         onPressed: () {
-                                                          if (_formKey.currentState!.validate()) {
-                                                            nextQuestion(
-                                                              screensDataList: screensDataList,
-                                                            );
-                                                          }
+                                                          // if (_formKey.currentState!.validate()) {
+                                                          nextQuestion(
+                                                            screensDataList: screensDataList,
+                                                          );
+                                                          // }
                                                           if (screensDataList[index].title == "Assign to") {
                                                             addDataOnfirestore(notify);
                                                           }
