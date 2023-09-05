@@ -136,9 +136,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit) async {
       ? await cards.CardDetails.updateCardDetails(id: existingInventoryId, cardDetails: card).then((value) => {res = "success"})
       : await cards.CardDetails.addCardDetails(card).then((value) => {res = "success"});
   isEdit
-      ? await InventoryDetails.updateInventoryDetails(id: existingInventoryId, inventoryDetails: inventory).then(
-          (value) => {res = "success"},
-        )
+      ? await InventoryDetails.updateInventoryDetails(id: existingInventoryId, inventoryDetails: inventory).then((value) => {res = "success"})
       : await InventoryDetails.addInventoryDetails(inventory).then((value) => {res = "success"});
   return res;
 }
