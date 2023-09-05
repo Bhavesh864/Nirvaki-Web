@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ChatInput extends StatefulWidget {
-  const ChatInput({super.key, required this.onSendMessage});
+import '../../chat/controller/chat_controller.dart';
 
-  final void Function(String message) onSendMessage;
+class ChatInput extends ConsumerStatefulWidget {
+  final String revceiverId;
+  const ChatInput({
+    super.key,
+    required this.revceiverId,
+  });
 
   @override
-  State<ChatInput> createState() => _ChatInputState();
+  ConsumerState<ChatInput> createState() => _ChatInputState();
 }
 
-class _ChatInputState extends State<ChatInput> {
-  final TextEditingController message = TextEditingController();
+class _ChatInputState extends ConsumerState<ChatInput> {
+  final TextEditingController messageController = TextEditingController();
   bool isShowEmojiContainer = false;
   FocusNode focusNode = FocusNode();
 
@@ -41,12 +46,24 @@ class _ChatInputState extends State<ChatInput> {
     }
   }
 
-  void sendMessage() {
-    if (message.text.trim().isEmpty) {
+  // void sendMessage() {
+  //   if (messageController.text.trim().isEmpty) {
+  //     return;
+  //   }
+  //   widget.onSendMessage(messageController.text.trim());
+  //   messageController.clear();
+  // }
+
+  void sendTextMessage() {
+    if (messageController.text.trim().isEmpty) {
       return;
     }
-    widget.onSendMessage(message.text.trim());
-    message.clear();
+    ref.read(chatControllerProvider).sendTextMessage(
+          context,
+          messageController.text.trim(),
+          widget.revceiverId,
+        );
+    messageController.clear();
   }
 
   @override
@@ -71,7 +88,7 @@ class _ChatInputState extends State<ChatInput> {
               Expanded(
                 child: TextField(
                   focusNode: focusNode,
-                  controller: message,
+                  controller: messageController,
                   minLines: 1,
                   maxLines: 7,
                   textCapitalization: TextCapitalization.sentences,
@@ -102,7 +119,7 @@ class _ChatInputState extends State<ChatInput> {
                   ),
                 ),
                 onTap: () {
-                  sendMessage();
+                  sendTextMessage();
                 },
               ),
             ],
@@ -113,7 +130,7 @@ class _ChatInputState extends State<ChatInput> {
                 height: 310,
                 child: EmojiPicker(
                   onEmojiSelected: (category, emoji) {
-                    message.text = message.text + emoji.emoji;
+                    messageController.text = messageController.text + emoji.emoji;
                   },
                 ),
               )

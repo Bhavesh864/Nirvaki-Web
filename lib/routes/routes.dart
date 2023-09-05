@@ -196,7 +196,7 @@ final routerDelegate = BeamerDelegate(
     routes: {
       '/': (p0, p1, p2) => const LayoutView(),
       '/profile': (p0, p1, p2) => const LargeScreen(),
-      AppRoutes.addInventory: (p0, p1, p2) => const AddInventory(),
+      AppRoutes.addInventory: (p0, p1, data) => const AddInventory(),
       AppRoutes.addLead: (p0, p1, p2) => const AddLead(),
       AppRoutes.addTodo: (p0, p1, p2) => const AddTodo(),
       AppRoutes.editTodo: (p0, p1, data) {

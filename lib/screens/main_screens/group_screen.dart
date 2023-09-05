@@ -6,7 +6,6 @@ import 'package:yes_broker/constants/firebase/chat_services.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/widgets/chat/chat_input.dart';
-import 'package:yes_broker/widgets/chat/message_box.dart';
 
 class GroupScreen extends StatelessWidget {
   const GroupScreen({super.key, required this.user});
@@ -84,21 +83,20 @@ class _GroupScreenBodyState extends State<GroupScreenBody> {
                     reverse: true,
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (BuildContext context, int index) {
-                      final Map<String, dynamic> data = snapshot.data!.docs.reversed.toList()[index].data() as Map<String, dynamic>;
+                      // final Map<String, dynamic> data = snapshot.data!.docs.reversed.toList()[index].data() as Map<String, dynamic>;
 
-                      return MessageBox(
-                        message: data['message'],
-                        isSender: data['senderId'] == _firebaseAuth.currentUser!.uid,
-                        document: data,
-                      );
+                      return const SizedBox();
+                      // return MessageBox(
+                      //   message: data['message'],
+                      //   isSender: data['senderId'] == _firebaseAuth.currentUser!.uid,
+                      //   document: data,
+                      // );
                     },
                   ),
                 ),
                 const Divider(height: 1.0),
                 ChatInput(
-                  onSendMessage: (msg) {
-                    sendMessage(msg);
-                  },
+                  revceiverId: widget.user.userId,
                 ),
               ],
             ),

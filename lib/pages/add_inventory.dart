@@ -31,6 +31,7 @@ class AddInventory extends ConsumerStatefulWidget {
 class _AddInventoryState extends ConsumerState<AddInventory> {
   String? response;
   bool allQuestionFinishes = false;
+  bool isEdit = false;
   late Future<List<InventoryQuestions>> getQuestions;
   List<Screen> currentScreenList = [];
   PageController? pageController;
@@ -42,6 +43,17 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     super.initState();
     getQuestions = InventoryQuestions.getAllQuestionssFromFirestore();
     pageController = PageController(initialPage: currentScreenIndex);
+    final answers = ref.read(myArrayProvider);
+    answers.isNotEmpty ? isEdit = true : isEdit = false;
+    try {
+      if (isEdit) {
+        if (answers[0]["item"] == "Residential") {
+          ref.read(filterCommercialQuestion.notifier).toggleCommericalQuestionary(false);
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   addDataOnfirestore(AllChipSelectedAnwers notify) {
@@ -72,7 +84,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     if (currentScreenIndex > 0) {
       setState(() {
         currentScreenIndex--;
-        ref.read(myArrayProvider.notifier).remove(id);
+        !isEdit ? ref.read(myArrayProvider.notifier).remove(id) : null;
         pageController!.previousPage(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
@@ -116,6 +128,11 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
               if (!currentScreenList.contains(screensDataList[0])) {
                 currentScreenList = screensDataList;
               }
+              if (isEdit) {
+                final arr = ["S1"];
+                final filter = screensDataList.where((element) => !arr.contains(element.screenId)).toList();
+                screensDataList = filter;
+              }
               if (!isCommericalSelected) {
                 if (isRentSelected) {
                   final arr = ["S8", "S10", "S15", "S6"];
@@ -127,15 +144,17 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                   currentScreenList = filter;
                 }
                 if (isVillaSelected) {
+                  var index = isEdit ? 4 : 5;
                   final filter = screensDataList.firstWhere((element) => element.screenId == "S6");
-                  currentScreenList.insert(5, filter);
+                  currentScreenList.insert(index, filter);
                 }
                 if (isPlotSelected) {
+                  var index = isEdit ? 8 : 9;
                   final arr = ["S9", "S6"];
                   final filter = currentScreenList.where((element) => !arr.contains(element.screenId)).toList();
                   currentScreenList = filter;
                   final filter2 = screensDataList.firstWhere((element) => element.screenId == "S10");
-                  currentScreenList.insert(9, filter2);
+                  currentScreenList.insert(index, filter2);
                 }
               } else {
                 currentScreenList = screensDataList;
@@ -278,7 +297,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                 size: 24,
               ),
             ),
-            title: const Text('Add Inventory'),
+            title: Text(isEdit ? "Edit Inventory" : 'Add Inventory'),
           ),
         );
       },
