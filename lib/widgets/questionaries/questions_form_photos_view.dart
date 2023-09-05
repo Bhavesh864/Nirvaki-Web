@@ -35,24 +35,24 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
   final Map<String, int> containersCountByRoom = {};
 
   List<Widget> imageContainers = [];
+  List<Widget> roomWidgets = [];
 
   String imageUrl = '';
 
   List<String> selectedImagesUrlList = [];
-  List<dynamic> roomWidgets = [];
 
   @override
   void initState() {
-    for (var i = 0; i < widget.propertyphotos!.bedroom!.length; i++) {
-      var element = widget.propertyphotos!.bedroom![i];
-      roomWidgets.add({"title": "Bed Room (${i + 1})", "imageUrl": element});
-    }
-    print("roomWidgets --> $roomWidgets");
-
     final answersArr = ref.read(myArrayProvider.notifier).state;
     itemTitles = [
       'Front Elevation',
     ];
+
+    //  for (var i = 0; i < widget.propertyphotos!.bedroom!.length; i++) {
+    //   var element = widget.propertyphotos!.bedroom![i];
+    //   roomWidgets.add({"title": "Bed Room (${i + 1})", "imageUrl": element});
+    // }
+    // print("roomWidgets --> $roomWidgets");
 
     final selectedAnswerArr = answersArr.where((item) => item['id'] == 14 || item['id'] == 15 || item['id'] == 16).toList();
 
@@ -223,6 +223,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
 
   @override
   Widget build(BuildContext context) {
+    print(itemTitles);
     return SingleChildScrollView(
       physics: Responsive.isMobile(context) ? const ScrollPhysics() : const NeverScrollableScrollPhysics(),
       child: Container(
@@ -261,12 +262,6 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
                             child: SizedBox(
                               width: constraints.maxWidth / crossAxisCount - 20,
                               height: constraints.maxWidth / crossAxisCount - 45,
-                              //roomWidgets[index]["imageUrl"] != null
-                              //     ? Image.network(
-                              //         roomWidgets[index]["imageUrl"],
-                              //         fit: BoxFit.cover,
-                              //       )
-                              //     :
                               child: kIsWeb
                                   ? webImages[index] == null
                                       ? const Icon(Icons.photo_rounded, size: 70, color: Colors.grey)
