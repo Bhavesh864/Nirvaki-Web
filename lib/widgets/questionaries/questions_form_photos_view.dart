@@ -26,6 +26,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
   List<Uint8List?> webImages = [];
   int numberOfColumns = 5;
   List<File?> images = [];
+  List<File?> propertyimages = [];
   List<String> itemTitles = [];
   bool isInitialized = false;
 
@@ -46,10 +47,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
       'Front Elevation',
     ];
 
-    final selectedAnswerArr = answersArr
-        .where(
-            (item) => item['id'] == 14 || item['id'] == 15 || item['id'] == 16)
-        .toList();
+    final selectedAnswerArr = answersArr.where((item) => item['id'] == 14 || item['id'] == 15 || item['id'] == 16).toList();
 
     for (var item in selectedAnswerArr) {
       int itemId = item['id'];
@@ -57,23 +55,13 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
 
       if (roomItems is String) {
         for (int i = 1; i <= int.parse(roomItems); i++) {
-          itemTitles.add(getItemTitle(
-              itemId,
-              i,
-              containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1,
-              []));
+          itemTitles.add(getItemTitle(itemId, i, containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1, []));
 
           // Update the count of containers added for the room
-          containersCountByRoom[itemTitles[itemTitles.length - 1]] =
-              (containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1) +
-                  1;
+          containersCountByRoom[itemTitles[itemTitles.length - 1]] = (containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1) + 1;
 
           if (!roomsWithTwoImages.contains(itemTitles[itemTitles.length - 1])) {
-            itemTitles.add(getItemTitle(
-                itemId,
-                i,
-                containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1,
-                []));
+            itemTitles.add(getItemTitle(itemId, i, containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1, []));
 
             // Mark the room as having two images
             roomsWithTwoImages.add(itemTitles[itemTitles.length - 1]);
@@ -81,23 +69,13 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
         }
       } else if (roomItems is List<String>) {
         for (int i = 0; i < roomItems.length; i++) {
-          itemTitles.add(getItemTitle(
-              itemId,
-              i + 1,
-              containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1,
-              roomItems));
+          itemTitles.add(getItemTitle(itemId, i + 1, containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1, roomItems));
 
           // Update the count of containers added for the room
-          containersCountByRoom[itemTitles[itemTitles.length - 1]] =
-              (containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1) +
-                  1;
+          containersCountByRoom[itemTitles[itemTitles.length - 1]] = (containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1) + 1;
 
           if (!roomsWithTwoImages.contains(itemTitles[itemTitles.length - 1])) {
-            itemTitles.add(getItemTitle(
-                itemId,
-                i + 1,
-                containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1,
-                roomItems));
+            itemTitles.add(getItemTitle(itemId, i + 1, containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1, roomItems));
 
             // Mark the room as having two images
             roomsWithTwoImages.add(itemTitles[itemTitles.length - 1]);
@@ -108,15 +86,14 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
 
     webImages = List.generate(itemTitles.length, (index) => null);
     images = List.generate(itemTitles.length, (index) => null);
+
     isInitialized = true;
-    imageContainers =
-        List.generate(itemTitles.length, (index) => getImageContainer(index));
+    imageContainers = List.generate(itemTitles.length, (index) => getImageContainer(index));
 
     super.initState();
   }
 
-  String getItemTitle(
-      int itemId, int roomNumber, int containerIndex, List<String> roomList) {
+  String getItemTitle(int itemId, int roomNumber, int containerIndex, List<String> roomList) {
     if (itemId == 14) {
       return 'Bed Room$roomNumber ($containerIndex)';
     } else if (itemId == 16) {
@@ -157,8 +134,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
   }
 
   Future<void> selectImage(int index) async {
-    XFile? pickedImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (kIsWeb) {
       if (pickedImage != null) {
@@ -209,63 +185,21 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
       selectedImagesUrlList.add(imageUrl);
 
       if (itemTitles.length == selectedImagesUrlList.length) {
-        List<int> bedRoomIndices = itemTitles
-            .asMap()
-            .entries
-            .where((entry) => entry.value.contains('Bed Room'))
-            .map((entry) => entry.key)
-            .toList();
-        List<int> bathRoomIndices = itemTitles
-            .asMap()
-            .entries
-            .where((entry) => entry.value.contains('BathRoom'))
-            .map((entry) => entry.key)
-            .toList();
-        List<int> pujaRoomIndices = itemTitles
-            .asMap()
-            .entries
-            .where((entry) => entry.value.contains('Puja'))
-            .map((entry) => entry.key)
-            .toList();
-        List<int> servantRoomIndices = itemTitles
-            .asMap()
-            .entries
-            .where((entry) => entry.value.contains('Servant'))
-            .map((entry) => entry.key)
-            .toList();
-        List<int> studyRoomIndices = itemTitles
-            .asMap()
-            .entries
-            .where((entry) => entry.value.contains('Study'))
-            .map((entry) => entry.key)
-            .toList();
-        List<int> officeRoomIndices = itemTitles
-            .asMap()
-            .entries
-            .where((entry) => entry.value.contains('Office'))
-            .map((entry) => entry.key)
-            .toList();
+        List<int> bedRoomIndices = itemTitles.asMap().entries.where((entry) => entry.value.contains('Bed Room')).map((entry) => entry.key).toList();
+        List<int> bathRoomIndices = itemTitles.asMap().entries.where((entry) => entry.value.contains('BathRoom')).map((entry) => entry.key).toList();
+        List<int> pujaRoomIndices = itemTitles.asMap().entries.where((entry) => entry.value.contains('Puja')).map((entry) => entry.key).toList();
+        List<int> servantRoomIndices = itemTitles.asMap().entries.where((entry) => entry.value.contains('Servant')).map((entry) => entry.key).toList();
+        List<int> studyRoomIndices = itemTitles.asMap().entries.where((entry) => entry.value.contains('Study')).map((entry) => entry.key).toList();
+        List<int> officeRoomIndices = itemTitles.asMap().entries.where((entry) => entry.value.contains('Office')).map((entry) => entry.key).toList();
 
         Propertyphotos propertyphotos = Propertyphotos(
           frontelevation: [selectedImagesUrlList[0]],
-          bedroom: bedRoomIndices
-              .map((index) => selectedImagesUrlList[index])
-              .toList(),
-          bathroom: bathRoomIndices
-              .map((index) => selectedImagesUrlList[index])
-              .toList(),
-          pujaroom: pujaRoomIndices
-              .map((index) => selectedImagesUrlList[index])
-              .toList(),
-          servantroom: servantRoomIndices
-              .map((index) => selectedImagesUrlList[index])
-              .toList(),
-          studyroom: studyRoomIndices
-              .map((index) => selectedImagesUrlList[index])
-              .toList(),
-          officeroom: officeRoomIndices
-              .map((index) => selectedImagesUrlList[index])
-              .toList(),
+          bedroom: bedRoomIndices.map((index) => selectedImagesUrlList[index]).toList(),
+          bathroom: bathRoomIndices.map((index) => selectedImagesUrlList[index]).toList(),
+          pujaroom: pujaRoomIndices.map((index) => selectedImagesUrlList[index]).toList(),
+          servantroom: servantRoomIndices.map((index) => selectedImagesUrlList[index]).toList(),
+          studyroom: studyRoomIndices.map((index) => selectedImagesUrlList[index]).toList(),
+          officeroom: officeRoomIndices.map((index) => selectedImagesUrlList[index]).toList(),
           //   kitchen: ,
         );
 
@@ -283,12 +217,10 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
 
   @override
   Widget build(BuildContext context) {
-    print(itemTitles);
+    print("----> $itemTitles");
 
     return SingleChildScrollView(
-      physics: Responsive.isMobile(context)
-          ? const ScrollPhysics()
-          : const NeverScrollableScrollPhysics(),
+      physics: Responsive.isMobile(context) ? const ScrollPhysics() : const NeverScrollableScrollPhysics(),
       child: Container(
         constraints: BoxConstraints(
           minHeight: 0,
@@ -324,19 +256,16 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
                             shadowColor: Colors.grey[300],
                             child: SizedBox(
                               width: constraints.maxWidth / crossAxisCount - 20,
-                              height:
-                                  constraints.maxWidth / crossAxisCount - 45,
+                              height: constraints.maxWidth / crossAxisCount - 45,
                               child: kIsWeb
                                   ? webImages[index] == null
-                                      ? const Icon(Icons.photo_rounded,
-                                          size: 70, color: Colors.grey)
+                                      ? const Icon(Icons.photo_rounded, size: 70, color: Colors.grey)
                                       : Image.memory(
                                           webImages[index]!,
                                           fit: BoxFit.fill,
                                         )
                                   : images[index] == null
-                                      ? const Icon(Icons.photo_rounded,
-                                          size: 70, color: Colors.grey)
+                                      ? const Icon(Icons.photo_rounded, size: 70, color: Colors.grey)
                                       : Image.file(
                                           images[index]!,
                                           fit: BoxFit.fill,
