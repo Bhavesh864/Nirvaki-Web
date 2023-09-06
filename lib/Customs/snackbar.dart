@@ -3,6 +3,7 @@ import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 
 customSnackBar({required BuildContext context, required String text}) {
+  ScaffoldMessenger.of(context).clearSnackBars();
   return ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       backgroundColor: AppColor.primary,
@@ -23,6 +24,7 @@ customSnackBar({required BuildContext context, required String text}) {
 }
 
 fadedCustomSnackBar({required BuildContext context, required String text}) {
+  ScaffoldMessenger.of(context).clearSnackBars();
   return ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       backgroundColor: AppColor.primary,

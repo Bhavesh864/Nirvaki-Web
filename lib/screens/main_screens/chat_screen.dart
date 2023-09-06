@@ -15,13 +15,18 @@ class ChatScreen extends ConsumerStatefulWidget {
   final String contactId;
   final String profilePic;
   final String name;
+  final String? adminId;
   final bool isGroupChat;
+
+  final List<String>? members;
   const ChatScreen({
     super.key,
     required this.isGroupChat,
     required this.profilePic,
     required this.name,
     required this.contactId,
+    this.members,
+    this.adminId,
   });
 
   @override
@@ -76,10 +81,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       Container(
                         margin: const EdgeInsets.only(bottom: 5),
                         child: ChatScreenHeader(
-                          profilePic: widget.profilePic,
-                          name: widget.name,
-                          contactId: widget.contactId,
-                        ),
+                            profilePic: widget.profilePic,
+                            name: widget.name,
+                            contactId: widget.contactId,
+                            members: widget.members,
+                            isGroupChat: widget.isGroupChat,
+                            adminId: widget.adminId),
                       ),
                       Divider(
                         height: 1,

@@ -67,7 +67,6 @@ class ChatListScreen extends ConsumerWidget {
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
                       var chatContactData = snapshot.data![index];
-
                       return Column(
                         children: [
                           InkWell(
@@ -143,7 +142,6 @@ class ChatListScreen extends ConsumerWidget {
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
                       var chatContactData = snapshot.data![index];
-
                       return Column(
                         children: [
                           InkWell(
@@ -156,6 +154,8 @@ class ChatListScreen extends ConsumerWidget {
                                       name: chatContactData.name,
                                       contactId: chatContactData.groupId,
                                       isGroupChat: true,
+                                      members: chatContactData.membersUid,
+                                      adminId: chatContactData.senderId,
                                     ),
                                   ),
                                 );

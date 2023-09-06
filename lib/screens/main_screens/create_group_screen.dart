@@ -49,8 +49,8 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
       } else {
         selectedUser.add(user.userId);
       }
+      ref.read(selectedGroupUsers.notifier).update((state) => [...state, user]);
     });
-    ref.read(selectedGroupUsers.notifier).update((state) => [...state, user]);
   }
 
   void createGroup() async {

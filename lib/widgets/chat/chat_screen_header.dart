@@ -9,11 +9,18 @@ class ChatScreenHeader extends StatefulWidget {
   final String contactId;
   final String profilePic;
   final String name;
+  final String? adminId;
+  final List<String>? members;
+  final bool isGroupChat;
+
   const ChatScreenHeader({
     super.key,
     required this.contactId,
     required this.profilePic,
     required this.name,
+    this.members,
+    this.adminId,
+    required this.isGroupChat,
   });
 
   @override
@@ -62,6 +69,9 @@ class _ChatScreenHeaderState extends State<ChatScreenHeader> {
                   profilePic: widget.profilePic,
                   name: widget.name,
                   user: userInfo,
+                  members: widget.members,
+                  isGroupChat: widget.isGroupChat,
+                  adminId: widget.adminId,
                 ),
               ),
             );
