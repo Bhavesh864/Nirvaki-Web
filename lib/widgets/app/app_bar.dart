@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:responsive_builder/responsive_builder.dart';
 
 import 'package:yes_broker/constants/app_constant.dart';
@@ -7,7 +9,7 @@ import 'package:yes_broker/constants/utils/constants.dart';
 import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
 
-AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect) {
+AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect, WidgetRef ref) {
   return AppBar(
     foregroundColor: Colors.black,
     scrolledUnderElevation: 0.0,
@@ -38,9 +40,10 @@ AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect) 
           },
         ).toList(),
         child: FutureBuilder(
-            future: User.getUser(AppConst.getAccessToken().toString()),
+            future: User.getUser(AppConst.getAccessToken().toString(), ref: ref),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                // Future.delayed(const Duration(seconds: 1)).then((value) => {ref.read(userDataProvider.notifier).storeUserData(snapshot.data!)});
                 return Container(
                   height: 25,
                   width: 35,

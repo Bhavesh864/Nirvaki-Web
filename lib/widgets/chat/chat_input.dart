@@ -1,14 +1,17 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../chat/controller/chat_controller.dart';
 
 class ChatInput extends ConsumerStatefulWidget {
   final String revceiverId;
+  final bool isGroupChat;
   const ChatInput({
     super.key,
     required this.revceiverId,
+    required this.isGroupChat,
   });
 
   @override
@@ -46,23 +49,15 @@ class _ChatInputState extends ConsumerState<ChatInput> {
     }
   }
 
-  // void sendMessage() {
-  //   if (messageController.text.trim().isEmpty) {
-  //     return;
-  //   }
-  //   widget.onSendMessage(messageController.text.trim());
-  //   messageController.clear();
-  // }
-
   void sendTextMessage() {
-    if (messageController.text.trim().isEmpty) {
-      return;
+    if (messageController.text.isNotEmpty) {
+      ref.read(chatControllerProvider).sendTextMessage(
+            context,
+            messageController.text.trim(),
+            widget.revceiverId,
+            widget.isGroupChat,
+          );
     }
-    ref.read(chatControllerProvider).sendTextMessage(
-          context,
-          messageController.text.trim(),
-          widget.revceiverId,
-        );
     messageController.clear();
   }
 

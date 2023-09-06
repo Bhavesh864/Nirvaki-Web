@@ -5,7 +5,6 @@ class TimeFormatter {
     if (firestoreTimestamp == null) {
       return '';
     }
-
     final timestamp = firestoreTimestamp.toDate();
     final now = DateTime.now();
     final difference = now.difference(timestamp);

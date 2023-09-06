@@ -5,14 +5,14 @@ import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' a
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
-final randomId = randomNumeric(5);
 Future<String> submitInventoryAndcardDetails(state) async {
+  final randomId = randomNumeric(5);
   var res = "pending";
   //  inventorycategory example =  rent ,sell
   //   propertycategory example = residental ,commerical,
   final propertyCategory = getDataById(state, 1);
   final inventoryCategory = getDataById(state, 2);
-  final inventoryType = getDataById(state, 3);
+  // final inventoryType = getDataById(state, 3);
   final inventorySource = getDataById(state, 4);
   final firstName = getDataById(state, 5);
   final lastName = getDataById(state, 6);
@@ -72,15 +72,12 @@ Future<String> submitInventoryAndcardDetails(state) async {
       brokerid: currentUser["brokerid"],
       cardType: "IN",
       cardTitle: "$propertyCategory $propertyKind-$propertyCity",
-      cardDescription: "Want to $inventoryCategory her $bedrooms BHK for 70 L rupees",
-      customerinfo:
-          cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
+      cardDescription: "Want to $inventoryCategory her $bedrooms BHK for $price$priceunit} rupees",
+      customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
       cardStatus: "New",
-      assignedto: [
-        cards.Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)
-      ],
-      createdby: cards.Createdby(
-          userfirstname: currentUser["userfirstname"], userid: currentUser["userId"], userlastname: currentUser["userlastname"], userimage: currentUser["image"]),
+      assignedto: [cards.Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)],
+      createdby:
+          cards.Createdby(userfirstname: currentUser["userfirstname"], userid: currentUser["userId"], userlastname: currentUser["userlastname"], userimage: currentUser["image"]),
       createdate: Timestamp.now(),
       propertyarearange: cards.Propertyarearange(arearangestart: superArea, unit: areaUnit),
       roomconfig: cards.Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom),
@@ -88,7 +85,7 @@ Future<String> submitInventoryAndcardDetails(state) async {
 
   final InventoryDetails inventory = InventoryDetails(
       inventoryTitle: "$propertyCategory $propertyKind-$propertyCity",
-      inventoryDescription: "inventoryDescription",
+      inventoryDescription: "Want to $inventoryCategory her $bedrooms BHK for $price$priceunit} rupees",
       inventoryId: "IN$randomId",
       inventoryStatus: "New",
       typeofoffice: typeofoffice,
@@ -105,7 +102,7 @@ Future<String> submitInventoryAndcardDetails(state) async {
       brokerid: currentUser["brokerid"],
       inventorycategory: inventoryCategory,
       propertycategory: propertyCategory,
-      inventoryType: inventoryType,
+      inventoryType: inventorySource == "Broker" ? "Broker" : inventorySource,
       inventorysource: inventorySource,
       possessiondate: possession,
       amenities: amenities,
@@ -117,9 +114,8 @@ Future<String> submitInventoryAndcardDetails(state) async {
       reservedparking: Reservedparking(covered: coveredparking),
       propertyarea: Propertyarea(unit: areaUnit, superarea: superArea, carpetarea: carpetArea),
       plotdetails: Plotdetails(boundarywall: boundaryWall, opensides: openSides),
-      customerinfo:
-          Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo ?? mobileNo),
-      roomconfig: Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom, balconies: balconies, bathroom: bathrooms),
+      customerinfo: Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo ?? mobileNo),
+      roomconfig: Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom ?? [], balconies: balconies, bathroom: bathrooms),
       propertyfacing: propertyFacing,
       comments: comments,
       plotarea: Plotarea(area: carpetArea, unit: areaUnit),
@@ -129,8 +125,8 @@ Future<String> submitInventoryAndcardDetails(state) async {
       propertyphotos: photos,
       createdate: Timestamp.now(),
       assignedto: [Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)],
-      createdby: Createdby(
-          userfirstname: currentUser["userfirstname"], userid: currentUser["userId"], userlastname: currentUser["userlastname"], userimage: currentUser["image"]));
+      createdby:
+          Createdby(userfirstname: currentUser["userfirstname"], userid: currentUser["userId"], userlastname: currentUser["userlastname"], userimage: currentUser["image"]));
 
   await cards.CardDetails.addCardDetails(card).then((value) => {res = "success"});
   await InventoryDetails.addInventoryDetails(inventory).then((value) => {res = "success"});

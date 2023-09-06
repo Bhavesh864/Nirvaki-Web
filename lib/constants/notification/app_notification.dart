@@ -19,7 +19,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       notificationContent: message.notification?.body,
       receiveDate: Timestamp.now(),
       linkedItemId: message.data["id"],
-      imageUrl: "",
+      imageUrl: message.data["imageUrl"],
       userId: AppConst.getAccessToken(),
     );
     await NotificationModel.addNotification(notificationModel);
@@ -93,7 +93,7 @@ Future<void> setAllNotification() async {
         notificationContent: message.notification?.body,
         receiveDate: Timestamp.now(),
         linkedItemId: message.data["id"],
-        imageUrl: "",
+        imageUrl: message.data["imageUrl"],
         userId: AppConst.getAccessToken(),
       );
       await NotificationModel.addNotification(notificationModel);

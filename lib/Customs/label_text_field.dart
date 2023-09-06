@@ -12,6 +12,7 @@ class LabelTextInputField extends StatelessWidget {
   final TextEditingController inputController;
   final Function(String)? onChanged;
   final FormFieldValidator<String>? validator;
+  final String? initialvalue;
 
   const LabelTextInputField({
     Key? key,
@@ -23,6 +24,7 @@ class LabelTextInputField extends StatelessWidget {
     this.onChanged,
     this.validator,
     this.isMandatory = true,
+    this.initialvalue,
   }) : super(key: key);
 
   @override
@@ -69,6 +71,7 @@ class LabelTextInputField extends StatelessWidget {
           hintText: hintText,
           onChanged: onChanged,
           validator: validator,
+          initialvalue: initialvalue,
           indense: true,
           contentPadding: 0,
         ),

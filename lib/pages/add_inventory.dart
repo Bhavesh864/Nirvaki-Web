@@ -1,5 +1,3 @@
-// ignore_for_file: invalid_use_of_protected_member
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,13 +8,15 @@ import 'package:yes_broker/constants/firebase/questionModels/inventory_question.
 
 import 'package:yes_broker/constants/functions/get_inventory_questions_widgets.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+
+import 'package:yes_broker/riverpodstate/inventory_filter_question.dart';
+
 import 'package:yes_broker/widgets/questionaries/workitem_success.dart';
 import '../customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
 import '../riverpodstate/all_selected_ansers_provider.dart';
 
-final myArrayProvider =
-    StateNotifierProvider<AllChipSelectedAnwers, List<Map<String, dynamic>>>(
+final myArrayProvider = StateNotifierProvider<AllChipSelectedAnwers, List<Map<String, dynamic>>>(
   (ref) => AllChipSelectedAnwers(),
 );
 
@@ -31,7 +31,9 @@ class AddInventory extends ConsumerStatefulWidget {
 class _AddInventoryState extends ConsumerState<AddInventory> {
   String? response;
   bool allQuestionFinishes = false;
+  bool isEdit = false;
   late Future<List<InventoryQuestions>> getQuestions;
+  List<Screen> currentScreenList = [];
   PageController? pageController;
   int currentScreenIndex = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -41,6 +43,17 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     super.initState();
     getQuestions = InventoryQuestions.getAllQuestionssFromFirestore();
     pageController = PageController(initialPage: currentScreenIndex);
+    final answers = ref.read(myArrayProvider);
+    answers.isNotEmpty ? isEdit = true : isEdit = false;
+    try {
+      if (isEdit) {
+        if (answers[0]["item"] == "Residential") {
+          ref.read(filterCommercialQuestion.notifier).toggleCommericalQuestionary(false);
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   addDataOnfirestore(AllChipSelectedAnwers notify) {
@@ -52,7 +65,8 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
         });
   }
 
-  nextQuestion({List<Screen>? screensDataList, option}) {
+  nextQuestion({List<Screen>? screensDataList, String? option}) {
+    updateListInventory(ref, option);
     if (currentScreenIndex < screensDataList!.length - 1) {
       setState(() {
         currentScreenIndex++;
@@ -61,13 +75,6 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
           curve: Curves.easeInOut,
         );
       });
-      // if (option == "Broker") {
-      //   pageController?.animateToPage(
-      //     4,
-      //     duration: const Duration(milliseconds: 300),
-      //     curve: Curves.easeInOut, // You can choose a different curve for the animation
-      //   );
-      // }
     } else {
       setState(() {});
     }
@@ -77,7 +84,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     if (currentScreenIndex > 0) {
       setState(() {
         currentScreenIndex--;
-        ref.read(myArrayProvider.notifier).remove(id);
+        !isEdit ? ref.read(myArrayProvider.notifier).remove(id) : null;
         pageController!.previousPage(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
@@ -88,19 +95,24 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     }
   }
 
-  InventoryQuestions? getcurrentInventory(
-      AsyncSnapshot<List<InventoryQuestions>> snapshot, option) {
+  InventoryQuestions? getcurrentInventory(AsyncSnapshot<List<InventoryQuestions>> snapshot, option) {
     for (var data in snapshot.data!) {
       if (data.type == option) {
         return data;
       }
     }
-    return snapshot.data?[0];
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(myArrayProvider.notifier);
+    final List<Map<String, dynamic>> selectedValues = ref.read(myArrayProvider);
+    final isRentSelected = ref.read(filterRentQuestion);
+    final isVillaSelected = ref.read(filterVillaQuestion);
+    final isPlotSelected = ref.read(filterPlotQuestion);
+    final isCommericalSelected = ref.read(filterCommercialQuestion);
+
     return Scaffold(
       body: FutureBuilder<List<InventoryQuestions>>(
           future: getQuestions,
@@ -110,12 +122,43 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (snapshot.hasData) {
-              final res = notify.state.isNotEmpty
-                  ? notify.state[0]["item"]
-                  : "Residential";
-              InventoryQuestions? screenData =
-                  getcurrentInventory(snapshot, res);
+              final res = selectedValues.isNotEmpty ? selectedValues[0]["item"] : "Residential";
+              InventoryQuestions? screenData = getcurrentInventory(snapshot, res);
               List<Screen> screensDataList = screenData!.screens;
+              if (!currentScreenList.contains(screensDataList[0])) {
+                currentScreenList = screensDataList;
+              }
+              if (isEdit) {
+                final arr = ["S1"];
+                final filter = screensDataList.where((element) => !arr.contains(element.screenId)).toList();
+                screensDataList = filter;
+              }
+              if (!isCommericalSelected) {
+                if (isRentSelected) {
+                  final arr = ["S8", "S10", "S15", "S6"];
+                  final filter = screensDataList.where((element) => !arr.contains(element.screenId)).toList();
+                  currentScreenList = filter;
+                } else if (!isRentSelected) {
+                  final arr = ["S16", "S6", "S10"];
+                  final filter = screensDataList.where((element) => !arr.contains(element.screenId)).toList();
+                  currentScreenList = filter;
+                }
+                if (isVillaSelected) {
+                  var index = isEdit ? 4 : 5;
+                  final filter = screensDataList.firstWhere((element) => element.screenId == "S6");
+                  currentScreenList.insert(index, filter);
+                }
+                if (isPlotSelected) {
+                  var index = isEdit ? 8 : 9;
+                  final arr = ["S9", "S6"];
+                  final filter = currentScreenList.where((element) => !arr.contains(element.screenId)).toList();
+                  currentScreenList = filter;
+                  final filter2 = screensDataList.firstWhere((element) => element.screenId == "S10");
+                  currentScreenList.insert(index, filter2);
+                }
+              } else {
+                currentScreenList = screensDataList;
+              }
               return Stack(
                 children: [
                   Container(
@@ -136,124 +179,71 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                               physics: const NeverScrollableScrollPhysics(),
                               controller: pageController,
                               scrollDirection: Axis.horizontal,
-                              itemCount: screensDataList.length,
+                              itemCount: currentScreenList.length,
                               itemBuilder: (context, index) {
                                 return Center(
                                   child: Card(
                                     child: Container(
                                       constraints: BoxConstraints(
                                         minHeight: 0,
-                                        maxHeight: Responsive.isMobile(context)
-                                            ? height! * 0.8
-                                            : height! * 0.88,
+                                        maxHeight: Responsive.isMobile(context) ? height! * 0.8 : height! * 0.88,
                                       ),
-                                      width: Responsive.isMobile(context)
-                                          ? width! * 0.9
-                                          : 650,
+                                      width: Responsive.isMobile(context) ? width! * 0.9 : 650,
                                       padding: const EdgeInsets.all(25),
                                       child: ScrollConfiguration(
-                                        behavior:
-                                            ScrollConfiguration.of(context)
-                                                .copyWith(scrollbars: false),
+                                        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                                         child: SingleChildScrollView(
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              if (screensDataList[index]
-                                                      .title !=
-                                                  null)
+                                              if (currentScreenList[index].title != null)
                                                 CustomText(
                                                   softWrap: true,
                                                   textAlign: TextAlign.center,
                                                   size: 30,
-                                                  title: screensDataList[index]
-                                                      .title
-                                                      .toString(),
+                                                  title: currentScreenList[index].title.toString(),
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ListView.builder(
                                                 shrinkWrap: true,
-                                                physics:
-                                                    const NeverScrollableScrollPhysics(),
-                                                itemCount:
-                                                    screensDataList[index]
-                                                        .questions
-                                                        .length,
+                                                physics: const NeverScrollableScrollPhysics(),
+                                                itemCount: currentScreenList[index].questions.length,
                                                 itemBuilder: (context, i) {
-                                                  final question =
-                                                      screensDataList[index]
-                                                          .questions[i];
+                                                  final question = currentScreenList[index].questions[i];
                                                   return Column(
                                                     children: [
-                                                      if (screensDataList[index]
-                                                              .title ==
-                                                          null)
+                                                      if (currentScreenList[index].title == null)
                                                         CustomText(
                                                           softWrap: true,
-                                                          textAlign:
-                                                              TextAlign.center,
+                                                          textAlign: TextAlign.center,
                                                           size: 30,
-                                                          title: question
-                                                              .questionTitle,
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                                                          title: question.questionTitle,
+                                                          fontWeight: FontWeight.bold,
                                                         ),
                                                       buildInventoryQuestions(
                                                         question,
-                                                        screensDataList,
+                                                        currentScreenList,
                                                         currentScreenIndex,
                                                         notify,
                                                         nextQuestion,
+                                                        isRentSelected,
+                                                        selectedValues,
                                                       ),
-                                                      if (i ==
-                                                              screensDataList[
-                                                                          index]
-                                                                      .questions
-                                                                      .length -
-                                                                  1 &&
-                                                          question.questionOptionType !=
-                                                              'chip')
+                                                      if (i == currentScreenList[index].questions.length - 1 && question.questionOptionType != 'chip')
                                                         Container(
-                                                          margin:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  top: 10),
-                                                          alignment: Alignment
-                                                              .centerRight,
+                                                          margin: const EdgeInsets.only(top: 10),
+                                                          alignment: Alignment.centerRight,
                                                           child: CustomButton(
-                                                            text: screensDataList[
-                                                                            index]
-                                                                        .title ==
-                                                                    "Assign to"
-                                                                ? 'Submit'
-                                                                : 'Next',
+                                                            text: currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next',
                                                             onPressed: () {
-                                                              FocusScope.of(
-                                                                      context)
-                                                                  .unfocus();
-
-                                                              if (_formKey
-                                                                  .currentState!
-                                                                  .validate()) {
-                                                                nextQuestion(
-                                                                  screensDataList:
-                                                                      screensDataList,
-                                                                );
-                                                              }
-                                                              if (screensDataList[
-                                                                          index]
-                                                                      .title ==
-                                                                  "Assign to") {
-                                                                addDataOnfirestore(
-                                                                    notify);
+                                                              // if (_formKey.currentState!.validate()) {
+                                                              nextQuestion(screensDataList: screensDataList);
+                                                              // }
+                                                              if (currentScreenList[index].title == "Assign to") {
+                                                                addDataOnfirestore(notify);
                                                               }
                                                             },
-                                                            width: screensDataList[
-                                                                            index]
-                                                                        .title ==
-                                                                    "Assign to"
-                                                                ? 90
-                                                                : 70,
+                                                            width: currentScreenList[index].title == "Assign to" ? 90 : 70,
                                                             height: 39,
                                                           ),
                                                         ),
@@ -279,7 +269,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                 child: CircularProgressIndicator(),
                               ),
                   ),
-                  inventoryAppBar(screensDataList),
+                  inventoryAppBar(currentScreenList),
                 ],
               );
             }
@@ -298,10 +288,8 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
           child: AppBar(
             leading: IconButton(
               onPressed: () {
-                final currentScreenQuestions =
-                    screensDataList[currentScreenIndex].questions;
-                final ids =
-                    currentScreenQuestions.map((q) => q.questionId).toList();
+                final currentScreenQuestions = screensDataList[currentScreenIndex].questions;
+                final ids = currentScreenQuestions.map((q) => q.questionId).toList();
                 goBack(ids);
               },
               icon: const Icon(
@@ -309,10 +297,34 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                 size: 24,
               ),
             ),
-            title: const Text('Add Inventory '),
+            title: Text(isEdit ? "Edit Inventory" : 'Add Inventory'),
           ),
         );
       },
     );
+  }
+}
+
+void updateListInventory(WidgetRef ref, option) {
+  if (option == "Rent") {
+    ref.read(filterRentQuestion.notifier).toggleRentQuestionary(true);
+  } else if (option == "Sell") {
+    ref.read(filterRentQuestion.notifier).toggleRentQuestionary(false);
+  } else if (option == "Independent House/Villa") {
+    ref.read(filterVillaQuestion.notifier).toggleVillaQuestionary(true);
+  } else if (option == "Apartment" || option == "Builder Floor" || option == "Plot" || option == "Farm House") {
+    ref.read(filterVillaQuestion.notifier).toggleVillaQuestionary(false);
+  }
+  if (option == "Plot") {
+    ref.read(filterPlotQuestion.notifier).togglePlotQuestionary(true);
+  }
+  if (option == "Apartment" || option == "Builder Floor" || option == "Independent House/Villa" || option == "Farm House") {
+    ref.read(filterPlotQuestion.notifier).togglePlotQuestionary(false);
+  }
+  if (option == "Residential") {
+    ref.read(filterCommercialQuestion.notifier).toggleCommericalQuestionary(false);
+  }
+  if (option == "Commercial") {
+    ref.read(filterCommercialQuestion.notifier).toggleCommericalQuestionary(true);
   }
 }
