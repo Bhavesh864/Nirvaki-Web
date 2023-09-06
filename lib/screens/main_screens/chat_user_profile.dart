@@ -12,6 +12,7 @@ import '../../constants/firebase/userModel/user_info.dart';
 
 class ChatUserProfile extends StatefulWidget {
   final String profilePic;
+  final String contactId;
   final String name;
   final String? adminId;
   final bool isGroupChat;
@@ -23,6 +24,7 @@ class ChatUserProfile extends StatefulWidget {
     required this.profilePic,
     required this.name,
     required this.user,
+    required this.contactId,
     required this.isGroupChat,
     this.members,
     this.adminId,
@@ -231,7 +233,7 @@ class _ChatUserProfileState extends State<ChatUserProfile> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => AddGroupMembers(userInfo: widget.members!)));
+                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => AddGroupMembers(userInfo: widget.members!, contactId: widget.contactId)));
                             },
                             child: const Row(
                               children: [
@@ -254,7 +256,12 @@ class _ChatUserProfileState extends State<ChatUserProfile> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(12),
-                    child: GroupUserList(userInfo: userInfo!, adminId: widget.adminId),
+                    child: GroupUserList(
+                      userInfo: userInfo!,
+                      adminId: widget.adminId,
+                      contactId: widget.contactId,
+                      memberuids: widget.members!,
+                    ),
                   ),
                   const SizedBox(
                     height: 20,

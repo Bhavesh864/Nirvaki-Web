@@ -66,13 +66,13 @@ class _ChatScreenHeaderState extends State<ChatScreenHeader> {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (ctx) => ChatUserProfile(
-                  profilePic: widget.profilePic,
-                  name: widget.name,
-                  user: userInfo,
-                  members: widget.members,
-                  isGroupChat: widget.isGroupChat,
-                  adminId: widget.adminId,
-                ),
+                    profilePic: widget.profilePic,
+                    name: widget.name,
+                    user: userInfo,
+                    members: widget.members,
+                    isGroupChat: widget.isGroupChat,
+                    adminId: widget.adminId,
+                    contactId: widget.contactId),
               ),
             );
           },
