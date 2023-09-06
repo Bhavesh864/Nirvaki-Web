@@ -22,7 +22,6 @@ class AssignUser extends StatefulWidget {
 
 class _AssignUserState extends State<AssignUser> {
   List<User> assignUsers = [];
-
   @override
   Widget build(BuildContext context) {
     return Column(

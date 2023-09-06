@@ -15,41 +15,6 @@ import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/utils/constants.dart';
 
-// final userProvider = StateNotifierProvider<UserNotifier, User>((ref) {
-//   return UserNotifier();
-// });
-
-// class UserNotifier extends StateNotifier<User> {
-//   UserNotifier()
-//       : super(
-//           User(
-//               whatsAppNumber: "whatsAppNumber",
-//               brokerId: 'brokerId',
-//               status: 'status',
-//               userfirstname: 'userfirstname',
-//               userlastname: 'userlastname',
-//               userId: 'userId',
-//               mobile: "3434",
-//               email: 'email',
-//               role: 'role',
-//               image: 'image',
-//               fcmToken: "fcmToken"),
-//         );
-
-//   void addCurrentState(User currentUser) {
-//     state = currentUser;
-//   }
-// }
-
-final userProvider = FutureProvider<User>(
-  (ref) async {
-    final User? initialCardDetails = await User.getUser(AppConst.getAccessToken()!);
-    // final initialStatuses = initialCardDetails.map((card) => card.status).toList();
-
-    return initialCardDetails!;
-  },
-);
-
 class LargeScreenNavBar extends ConsumerWidget {
   final void Function(String) onOptionSelect;
   const LargeScreenNavBar(this.onOptionSelect, {super.key});

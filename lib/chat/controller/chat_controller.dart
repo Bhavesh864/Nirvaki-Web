@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yes_broker/chat/models/message.dart';
-import 'package:yes_broker/widgets/app/nav_bar.dart';
+import 'package:yes_broker/chat/models/chat_group.dart';
 
+import 'package:yes_broker/chat/models/message.dart';
+import 'package:yes_broker/constants/app_constant.dart';
+import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import '../models/chat_contact.dart';
 import '../repositories/chat_repositories.dart';
 
@@ -30,32 +32,30 @@ class ChatController {
     return chatRepository.getChatStream(recieverUserId);
   }
 
-  // Stream<List<Group>> chatGroups() {
-  //   return chatRepository.getChatGroups();
-  // }
+  Stream<List<ChatGroup>> chatGroups() {
+    return chatRepository.getChatGroups();
+  }
 
-  // Stream<List<Message>> groupChatStream(String groupId) {
-  //   return chatRepository.getGroupChatStream(groupId);
-  // }
+  Stream<List<ChatMessage>> groupChatStream(String groupId) {
+    return chatRepository.getGroupChatStream(groupId);
+  }
 
   void sendTextMessage(
     BuildContext context,
     String text,
     String receiverId,
-    // bool isGroupChat,
-  ) {
-    // final messageReply = ref.read(messageReplyProvider);
-
-    ref.read(userProvider).whenData(
-          (value) => chatRepository.sendTextMessage(
-            context: context,
-            message: text,
-            receiverId: receiverId,
-            senderUser: value,
-            // messageReply: messageReply,
-            // isGroupChat: isGroupChat,
-          ),
-        );
+    bool isGroupChat,
+  ) async {
+    final User? user = await User.getUser(AppConst.getAccessToken());
+    // ignore: use_build_context_synchronously
+    chatRepository.sendTextMessage(
+      context: context,
+      message: text,
+      receiverId: receiverId,
+      senderUser: user!,
+      // messageReply: messageReply,
+      isGroupChat: isGroupChat,
+    );
     // ref.read(messageReplyProvider.state).update((state) => null);
   }
 
