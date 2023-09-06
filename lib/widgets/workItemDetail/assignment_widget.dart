@@ -38,6 +38,8 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final User user = ref.read(userDataProvider);
+    print("${user.brokerId}");
     return Column(
       children: [
         if (!AppConst.getPublicView())
