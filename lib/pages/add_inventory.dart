@@ -227,6 +227,8 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                         notify,
                                                         nextQuestion,
                                                         isRentSelected,
+                                                        isPlotSelected,
+                                                        isEdit,
                                                         selectedValues,
                                                       ),
                                                       if (i == currentScreenList[index].questions.length - 1 && question.questionOptionType != 'chip')
