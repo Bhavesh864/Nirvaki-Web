@@ -16,50 +16,49 @@ import '../firebase/userModel/user_info.dart';
 
 List<User>? user;
 
-void submitAssignUser(String id, BuildContext context, dynamic assignto) async {
-  if (user != null) {
-    for (var i = 0; i < user!.length; i++) {
+void submitAssignUser(String id, BuildContext context, List<User> users) async {
+  if (users.isNotEmpty) {
+    for (var i = 0; i < users.length; i++) {
       if (id.contains(ItemCategory.isTodo)) {
         todo.Assignedto assign = todo.Assignedto(
-          firstname: user![i].userfirstname,
-          lastname: user![i].userlastname,
+          firstname: users[i].userfirstname,
+          lastname: users[i].userlastname,
           assignedby: AppConst.getAccessToken(),
-          userid: user![i].userId,
-          image: user![i].image,
+          userid: users[i].userId,
+          image: users[i].image,
         );
         todo.TodoDetails.updateAssignUser(itemid: id, assignedto: assign);
       } else if (id.contains(ItemCategory.isInventory)) {
         inventory.Assignedto assign = inventory.Assignedto(
-          firstname: user![i].userfirstname,
-          lastname: user![i].userlastname,
+          firstname: users[i].userfirstname,
+          lastname: users[i].userlastname,
           assignedby: AppConst.getAccessToken(),
-          userid: user![i].userId,
-          image: user![i].image,
+          userid: users[i].userId,
+          image: users[i].image,
         );
         inventory.InventoryDetails.updateAssignUser(itemid: id, assignedto: assign);
       } else if (id.contains(ItemCategory.isLead)) {
         lead.Assignedto assign = lead.Assignedto(
-          firstname: user![i].userfirstname,
-          lastname: user![i].userlastname,
+          firstname: users[i].userfirstname,
+          lastname: users[i].userlastname,
           assignedby: AppConst.getAccessToken(),
-          userid: user![i].userId,
-          image: user![i].image,
+          userid: users[i].userId,
+          image: users[i].image,
         );
         lead.LeadDetails.updateAssignUser(itemid: id, assignedto: assign);
       }
       Assignedto assigncard = Assignedto(
-        firstname: user![i].userfirstname,
-        lastname: user![i].userlastname,
+        firstname: users[i].userfirstname,
+        lastname: users[i].userlastname,
         assignedby: AppConst.getAccessToken(),
-        userid: user![i].userId,
-        image: user![i].image,
+        userid: users[i].userId,
+        image: users[i].image,
       );
       CardDetails.updateAssignUser(itemid: id, assignedto: assigncard);
-      notifyToUser(assignedto: user?[i].userId, title: "Assign new $id", content: "New $id Assign To You", assigntofield: true, itemid: id);
-      user = null;
+      notifyToUser(assignedto: users[i].userId, title: "Assign new $id", content: "New $id Assign To You", assigntofield: true, itemid: id);
     }
   } else {
-    customSnackBar(context: context, text: "please select user");
+    customSnackBar(context: context, text: "Please select user");
   }
 }
 
@@ -105,7 +104,7 @@ void assginUserToTodo(BuildContext context, Function assign, List<dynamic> assig
                   alignment: Alignment.bottomRight,
                   child: ElevatedButton(
                     onPressed: () {
-                      submitAssignUser(id, context, assignto);
+                      submitAssignUser(id, context, user!);
                       Navigator.of(context).pop();
                       if (Responsive.isMobile(context)) {
                         popBottomSheet();

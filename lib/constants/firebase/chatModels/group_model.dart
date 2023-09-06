@@ -72,7 +72,6 @@ class Group {
           return;
         }
       }
-
       print('Member not found in any group with groupId: $groupId');
     } catch (error) {
       print('Failed to delete member: $error');
