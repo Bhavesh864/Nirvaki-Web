@@ -1,7 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'package:flutter/material.dart';
-
+import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
@@ -194,9 +194,12 @@ Widget buildInventoryQuestions(
       },
     );
   } else if (question.questionOptionType == 'textarea') {
+    final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
+    TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
     return TextFormField(
       keyboardType: TextInputType.multiline,
       maxLines: 5,
+      controller: controller,
       onChanged: (newvalue) {
         notify.add({"id": question.questionId, "item": newvalue.trim()});
       },
@@ -258,7 +261,11 @@ Widget buildInventoryQuestions(
       address2: address2,
     );
   } else if (question.questionOptionType == 'photo') {
-    return PhotosViewForm(notify, question.questionId);
+    Propertyphotos? propertyphotos;
+    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+      propertyphotos = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+    }
+    return PhotosViewForm(notify: notify, id: question.questionId, propertyphotos: propertyphotos);
   }
 
   return const SizedBox.shrink();

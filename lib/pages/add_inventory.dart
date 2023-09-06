@@ -35,15 +35,15 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   late Future<List<InventoryQuestions>> getQuestions;
   List<Screen> currentScreenList = [];
   PageController? pageController;
-  int currentScreenIndex = 0;
+  int currentScreenIndex = 35;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
+    final answers = ref.read(myArrayProvider);
     getQuestions = InventoryQuestions.getAllQuestionssFromFirestore();
     pageController = PageController(initialPage: currentScreenIndex);
-    final answers = ref.read(myArrayProvider);
     answers.isNotEmpty ? isEdit = true : isEdit = false;
     try {
       if (isEdit) {
@@ -57,7 +57,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   }
 
   addDataOnfirestore(AllChipSelectedAnwers notify) {
-    notify.submitInventory().then((value) => {
+    notify.submitInventory(isEdit).then((value) => {
           setState(() {
             response = value;
             if (value == 'success') allQuestionFinishes = true;

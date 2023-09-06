@@ -44,7 +44,8 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
     tabviewController = TabController(length: 4, vsync: this);
     final workItemId = ref.read(selectedWorkItemId.notifier).state;
     // inventoryDetails = InventoryDetails.getInventoryDetails(workItemId == '' ? widget.inventoryId : workItemId);
-    inventoryDetails = FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId == '' ? widget.inventoryId : workItemId).snapshots();
+    inventoryDetails =
+        FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId == '' ? widget.inventoryId : workItemId).snapshots();
   }
 
   @override
@@ -164,7 +165,8 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                           AssignmentWidget(
                                             id: data.inventoryId!,
                                             assignto: data.assignedto!,
-                                            imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                            imageUrlCreatedBy:
+                                                data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                             createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                           ),
                                         );
@@ -330,6 +332,8 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
         {"id": 51, "item": data.propertyrent?.securityunit},
         {"id": 52, "item": data.propertyrent?.lockinperiod},
         {"id": 53, "item": data.commercialphotos},
+        {"id": 100, "item": data.attachments},
+        {"id": 101, "item": data.inventoryId},
       ]);
     } catch (e) {
       print(e);

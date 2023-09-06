@@ -5,7 +5,7 @@ import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
-class AssignUser extends StatelessWidget {
+class AssignUser extends StatefulWidget {
   final Function(User user) addUser;
   final bool status;
   final List<dynamic>? assignedUserIds;
@@ -16,6 +16,12 @@ class AssignUser extends StatelessWidget {
     this.status = false,
   });
 
+  @override
+  State<AssignUser> createState() => _AssignUserState();
+}
+
+class _AssignUserState extends State<AssignUser> {
+  List<User> assignUsers = [];
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -42,10 +48,10 @@ class AssignUser extends StatelessWidget {
                 return Autocomplete(
                   optionsBuilder: (TextEditingValue textEditingValue) {
                     final String searchText = textEditingValue.text.toLowerCase();
-                    if (status == true) {
+                    if (widget.status == true) {
                       return usersList.where((user) {
                         final String fullName = '${user.userfirstname} ${user.userlastname}'.toLowerCase();
-                        final bool isAssigned = assignedUserIds!.contains(user.userId);
+                        final bool isAssigned = widget.assignedUserIds!.contains(user.userId);
                         return !isAssigned && fullName.contains(searchText);
                       }).map((user) => '${user.userfirstname} ${user.userlastname}');
                     } else {
@@ -91,7 +97,9 @@ class AssignUser extends StatelessWidget {
                                   onTap: () {
                                     onSelected(option);
                                     User selectedUser = usersList.firstWhere((user) => '${user.userfirstname} ${user.userlastname}' == option);
-                                    addUser(selectedUser);
+                                    widget.addUser(selectedUser);
+                                    assignUsers.add(selectedUser);
+                                    // setState(() {});
                                   },
                                   child: ListTile(
                                     title: Text(option),
@@ -106,6 +114,22 @@ class AssignUser extends StatelessWidget {
                   },
                 );
               }),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          children: assignUsers.map((user) {
+            return Padding(
+              padding: const EdgeInsets.all(4),
+              child: Chip(
+                label: Text('${user.userfirstname} ${user.userlastname}'),
+                onDeleted: () {
+                  setState(() {
+                    assignUsers.remove(user);
+                  });
+                },
+              ),
+            );
+          }).toList(),
         ),
       ],
     );

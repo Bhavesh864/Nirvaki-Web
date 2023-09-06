@@ -70,7 +70,7 @@ class ChipButtonCard extends StatelessWidget {
                         return CustomButton(
                           text: 'Save',
                           onPressed: () {
-                            ref.watch(allChipSelectedAnwersProvider.notifier).submitInventory();
+                            // ref.watch(allChipSelectedAnwersProvider.notifier).submitInventory();
                           },
                           height: 40,
                         );

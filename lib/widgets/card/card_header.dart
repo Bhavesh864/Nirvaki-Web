@@ -101,7 +101,7 @@ class CardHeaderState extends ConsumerState<CardHeader> {
               checkNotNUllItem(cardData.roomconfig?.bedroom)
                   ? CustomChip(
                       label: CustomText(
-                        title: "${cardData.roomconfig?.bedroom}BHK+${cardData.roomconfig?.additionalroom?[0] ?? ""}",
+                        title: buildBedroomText(cardData.roomconfig),
                         size: 10,
                       ),
                     )

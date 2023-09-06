@@ -129,3 +129,20 @@ bool checkNotNUllItem(dynamic data) {
     return false;
   }
 }
+
+String buildBedroomText(roomconfig) {
+  final bedroom = roomconfig?.bedroom;
+  final additionalRooms = roomconfig?.additionalroom;
+
+  if (bedroom != null) {
+    String bedroomText = "$bedroom BHK";
+
+    if (additionalRooms != null && additionalRooms.isNotEmpty) {
+      bedroomText += "+${additionalRooms[0]}";
+    }
+
+    return bedroomText;
+  }
+
+  return "";
+}
