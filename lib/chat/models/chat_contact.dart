@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -9,12 +8,17 @@ class ChatContact {
   final String contactId;
   final Timestamp timeSent;
   final String lastMessage;
+  final bool lastMessageIsSeen;
+  final String lastMessageSenderId;
+
   ChatContact({
     required this.name,
     required this.profilePic,
     required this.contactId,
     required this.timeSent,
     required this.lastMessage,
+    required this.lastMessageIsSeen,
+    required this.lastMessageSenderId,
   });
 
   Map<String, dynamic> toMap() {
@@ -24,6 +28,8 @@ class ChatContact {
       'contactId': contactId,
       'timeSent': timeSent.millisecondsSinceEpoch,
       'lastMessage': lastMessage,
+      'lastMessageIsSeen': lastMessageIsSeen,
+      'lastMessageSenderId': lastMessageSenderId,
     };
   }
 
@@ -34,10 +40,8 @@ class ChatContact {
       contactId: map['contactId'] as String,
       timeSent: Timestamp.fromMillisecondsSinceEpoch(map['timeSent']),
       lastMessage: map['lastMessage'] as String,
+      lastMessageIsSeen: map['lastMessageIsSeen'] as bool,
+      lastMessageSenderId: map['lastMessageSenderId'] as String,
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory ChatContact.fromJson(String source) => ChatContact.fromMap(json.decode(source) as Map<String, dynamic>);
 }

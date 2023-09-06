@@ -1,9 +1,10 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:yes_broker/chat/controller/chat_controller.dart';
 import 'package:yes_broker/constants/app_constant.dart';
-
 import 'package:yes_broker/constants/firebase/chat_services.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/responsive.dart';
@@ -16,12 +17,15 @@ class ChatScreen extends ConsumerStatefulWidget {
   final String profilePic;
   final String name;
   final bool isGroupChat;
+  final Function? onOpenChat;
+
   const ChatScreen({
     super.key,
-    required this.isGroupChat,
+    required this.contactId,
     required this.profilePic,
     required this.name,
-    required this.contactId,
+    required this.isGroupChat,
+    this.onOpenChat,
   });
 
   @override
@@ -94,7 +98,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         itemBuilder: (BuildContext context, int index) {
                           final messageData = snapshot.data![index];
                           final isSender = messageData.senderId == AppConst.getAccessToken();
-
                           if (!isSender && !messageData.isSeen && !widget.isGroupChat) {
                             ref.read(chatControllerProvider).setChatMessageSeen(
                                   context,
@@ -103,6 +106,21 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                   isSender,
                                 );
                           }
+
+                          widget.onOpenChat!();
+
+                          // if (widget.chatItem != null) {
+                          // final isWhat = widget.chatItem!.lastMessageSenderId == AppConst.getAccessToken();
+                          // // print(!widget.chatItem!.lastMessageIsSeen);
+                          // if (!isWhat) {
+                          //   ref.read(chatControllerProvider).setLastMessageSeen(
+                          //         context,
+                          //         widget.chatItem!.id,
+                          //         widget.chatItem!.isGroupChat,
+                          //         widget.chatItem!.id,
+                          //       );
+                          //   // }
+                          // }
                           return MessageBox(
                             message: messageData.text,
                             isSender: isSender,

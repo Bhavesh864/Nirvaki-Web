@@ -32,7 +32,6 @@ class ChatRepository {
         try {
           List<ChatGroup> groups = [];
           for (var document in event.docs) {
-            print('group');
             var group = ChatGroup.fromMap(document.data());
             if (group.membersUid.contains(AppConst.getAccessToken().toString())) {
               groups.add(group);
@@ -82,11 +81,13 @@ class ChatRepository {
 
         contacts.add(
           ChatContact(
-            name: '${user.userfirstname}  ${user.userlastname}',
+            name: '${user.userfirstname} ${user.userlastname}',
             profilePic: user.image,
             contactId: chatContact.contactId,
             timeSent: chatContact.timeSent,
             lastMessage: chatContact.lastMessage,
+            lastMessageIsSeen: chatContact.lastMessageIsSeen,
+            lastMessageSenderId: chatContact.lastMessageSenderId,
           ),
         );
       }
@@ -126,7 +127,7 @@ class ChatRepository {
           .doc(recieverUserId)
           .collection('messages')
           .doc(messageId)
-          .update({'isSeen': true}).then((value) => {print("sender")});
+          .update({'isSeen': true});
 
       await firestore
           .collection('users')
@@ -135,7 +136,53 @@ class ChatRepository {
           .doc(AppConst.getAccessToken())
           .collection('messages')
           .doc(messageId)
-          .update({'isSeen': true}).then((value) => {print("reciver")});
+          .update({'isSeen': true});
+    } catch (e) {
+      customSnackBar(
+        context: context,
+        text: e.toString(),
+      );
+    }
+  }
+
+  void setLastMessageSeen(
+    BuildContext context,
+    String recieverUserId,
+    bool isGroupChat,
+    String? groupId,
+  ) async {
+    try {
+      if (isGroupChat) {
+        await firestore.collection('groups').doc(groupId).update(
+          {'lastMessageIsSeen': true},
+        );
+
+        await firestore.collection('groups').doc(recieverUserId).update(
+          {'lastMessageIsSeen': true},
+        );
+      } else {
+        await firestore
+            .collection('users')
+            .doc(AppConst.getAccessToken())
+            .collection('chats')
+            .doc(
+              recieverUserId,
+            )
+            .update(
+          {'lastMessageIsSeen': true},
+        );
+
+        await firestore
+            .collection('users')
+            .doc(recieverUserId)
+            .collection('chats')
+            .doc(
+              AppConst.getAccessToken(),
+            )
+            .update(
+          {'lastMessageIsSeen': true},
+        );
+      }
     } catch (e) {
       customSnackBar(
         context: context,
@@ -153,18 +200,23 @@ class ChatRepository {
     required String receiverId,
     required bool isGroupChat,
   }) async {
+    print(message);
     final ChatContact receiverChatContact = ChatContact(
-      name: '${senderUserData.userfirstname}  ${senderUserData.userlastname}',
+      name: '${senderUserData.userfirstname} ${senderUserData.userlastname}',
       profilePic: senderUserData.image,
       contactId: senderUserData.userId,
       timeSent: timestamp,
       lastMessage: message,
+      lastMessageIsSeen: false,
+      lastMessageSenderId: AppConst.getAccessToken().toString(),
     );
 
     if (isGroupChat) {
       await firestore.collection('groups').doc(receiverId).update({
         'lastMessage': message,
         'timeSent': DateTime.now().millisecondsSinceEpoch,
+        'lastMessageSenderId': AppConst.getAccessToken().toString(),
+        'lastMessageIsSeen': false,
       });
     } else {
       await firestore
@@ -179,11 +231,13 @@ class ChatRepository {
           );
 
       var senderChatContact = ChatContact(
-        name: '${receiverUserData!.userfirstname}  ${receiverUserData.userlastname}',
+        name: '${receiverUserData!.userfirstname} ${receiverUserData.userlastname}',
         profilePic: receiverUserData.image,
         contactId: receiverUserData.userId,
         timeSent: timestamp,
         lastMessage: message,
+        lastMessageIsSeen: false,
+        lastMessageSenderId: AppConst.getAccessToken().toString(),
       );
       await firestore
           .collection('users')
@@ -294,8 +348,8 @@ class ChatRepository {
         text: message,
         timeSent: timestamp,
         messageId: messageId,
-        revceiverUsername: '${receiverUserData?.userfirstname}  ${receiverUserData?.userlastname}',
-        username: '${senderUser.userfirstname}  ${senderUser.userlastname}',
+        revceiverUsername: '${receiverUserData?.userfirstname} ${receiverUserData?.userlastname}',
+        username: '${senderUser.userfirstname} ${senderUser.userlastname}',
         messageType: MessageEnum.text,
         isGroupChat: isGroupChat,
       );
