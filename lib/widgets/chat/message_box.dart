@@ -1,16 +1,58 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:yes_broker/chat/enums/message.enums.dart';
+import 'package:yes_broker/chat/models/message.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/image_constants.dart';
 
+String formatTimestamp(DateTime timestamp) {
+  final formattedTime = DateFormat.jm().format(timestamp); // Format to 'hh:mm a'
+  return formattedTime;
+}
+
 // ignore: must_be_immutable
 class MessageBox extends StatelessWidget {
-  MessageBox({super.key, required this.message, required this.isSender});
-  String message;
-  bool isSender;
+  const MessageBox({
+    super.key,
+    required this.isSender,
+    required this.message,
+    required this.data,
+    required this.isSeen,
+  });
+  final String message;
+  final bool isSender;
+  final ChatMessage data;
+  final bool isSeen;
+
+  // String formatTimestamp(DateTime timestamp) {
+  //   final formattedTime = DateFormat.jm().format(timestamp); // Format to 'hh:mm a'
+  //   return formattedTime;
+  // }
+
+  // String formatTimestamp(DateTime timestamp) {
+  //   final now = DateTime.now();
+  //   final difference = now.difference(timestamp);
+
+  //   if (difference.inDays == 0) {
+  //     if (difference.inHours == 0) {
+  //       if (difference.inMinutes < 5) {
+  //         return 'Just now';
+  //       }
+  //       return '${difference.inMinutes} minutes ago';
+  //     } else {
+  //       return '${difference.inHours} hours ago';
+  //     }
+  //   } else if (difference.inDays == 1) {
+  //     return 'Yesterday';
+  //   } else {
+  //     return DateFormat.yMMMd().format(timestamp);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    final double width = MediaQuery.of(context).size.width;
 
     return Stack(
       children: [
@@ -20,12 +62,6 @@ class MessageBox extends StatelessWidget {
             right: 0,
             child: Image.asset('assets/images/messageTip.png'),
           ),
-        // if (!isSender)
-        //   Positioned(
-        //     top: 8,
-        //     left: 37,
-        //     child: Image.asset('assets/images/receiveMsgTip.png'),
-        //   ),
         Container(
           padding: const EdgeInsets.all(8.0),
           alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
@@ -60,38 +96,39 @@ class MessageBox extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (!isSender)
-                      const Text(
-                        'John Smith',
-                        style: TextStyle(
+                      Text(
+                        data.senderName,
+                        style: const TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Colors.black,
                         ),
                       ),
                     Container(
                       margin: !isSender ? const EdgeInsets.only(left: 5) : null,
-                      child: Text(
-                        message,
-                        style: TextStyle(
-                          color: isSender ? Colors.white : Colors.black,
-                        ),
+                      child: DisplayMessage(
+                        message: message,
+                        type: data.type,
+                        isSender: isSender,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Row(
                       mainAxisSize: MainAxisSize.min,
-                      // mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          '11:20 PM',
+                          formatTimestamp(data.timeSent.toDate()),
                           textAlign: TextAlign.end,
-                          style: TextStyle(color: isSender ? Colors.white : AppColor.inActiveColor, fontSize: 12),
+                          style: TextStyle(
+                            color: isSender ? Colors.white : AppColor.inActiveColor,
+                            fontSize: 12,
+                          ),
                         ),
                         if (isSender)
-                          const Padding(
-                            padding: EdgeInsets.only(left: 5),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5),
                             child: Icon(
-                              Icons.done_all,
-                              color: Colors.white,
+                              isSeen ? Icons.done_all : Icons.done,
+                              color: isSeen ? Colors.blue : Colors.white,
                             ),
                           )
                       ],
@@ -104,5 +141,62 @@ class MessageBox extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class DisplayMessage extends StatelessWidget {
+  final String message;
+  final MessageEnum type;
+  final bool isSender;
+
+  const DisplayMessage({super.key, required this.message, required this.type, required this.isSender});
+
+  @override
+  Widget build(BuildContext context) {
+    return type == MessageEnum.text
+        ? Text(
+            message,
+            style: TextStyle(
+              color: isSender ? Colors.white : Colors.black,
+            ),
+          )
+        : CachedNetworkImage(
+            imageUrl: message,
+          );
+    // : type == MessageEnum.audio
+    //     ? StatefulBuilder(builder: (context, setState) {
+    //         return IconButton(
+    //           constraints: const BoxConstraints(
+    //             minWidth: 100,
+    //           ),
+    //           onPressed: () async {
+    //             // if (isPlaying) {
+    //             //   await audioPlayer.pause();
+    //             //   setState(() {
+    //             //     isPlaying = false;
+    //             //   });
+    //             // } else {
+    //             //   await audioPlayer.play(UrlSource(message));
+    //             //   setState(() {
+    //             //     isPlaying = true;
+    //             //   });
+    //             // }
+    //           },
+    //           icon: Icon(
+    //             isPlaying ? Icons.pause_circle : Icons.play_circle,
+    //           ),
+    //         );
+    //       })
+    // : type == MessageEnum.video
+    //     ? VideoPlayerItem(
+    //         videoUrl: message,
+    //       )
+    //     : type == MessageEnum.gif
+    //         ? CachedNetworkImage(
+    //             imageUrl: message,
+    //           )
+    //         : CachedNetworkImage(
+    //             imageUrl: message,
+    //           );
   }
 }

@@ -2,7 +2,6 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
-
 import '../../../routes/routes.dart';
 import '../../../screens/account_screens/common_screen.dart';
 import '../../app_constant.dart';
@@ -21,6 +20,7 @@ void userLogout(WidgetRef ref, BuildContext context) {
   ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null);
   final user = UserHiveMethods.getdata(AppConst.getAccessToken());
   print("user======>$user");
+
   AppConst.setAccessToken(null);
 }
 

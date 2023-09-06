@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppText extends StatelessWidget {
   final String text;
@@ -39,7 +40,7 @@ class AppText extends StatelessWidget {
         color: textColor,
         fontSize: fontsize,
         decoration: textdecoration,
-        fontFamily: fontfamily,
+        fontFamily: GoogleFonts.dmSans().fontFamily,
         wordSpacing: wordspacing,
         textBaseline: textBaseline,
         letterSpacing: letterspacing,

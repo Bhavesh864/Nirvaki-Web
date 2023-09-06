@@ -1,11 +1,23 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
-import 'package:yes_broker/constants/utils/image_constants.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
+
+import '../../constants/firebase/userModel/user_info.dart';
 
 class ChatUserProfile extends StatelessWidget {
-  const ChatUserProfile({super.key});
+  final String profilePic;
+  final String name;
+  final User? user;
+  const ChatUserProfile({
+    Key? key,
+    required this.profilePic,
+    required this.name,
+    required this.user,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +43,14 @@ class ChatUserProfile extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        const AppText(
-                          text: 'Mr. Jane Cooper',
+                        AppText(
+                          text: name,
                           fontsize: 20,
                           fontWeight: FontWeight.w600,
                         ),
-                        const CircleAvatar(
+                        CircleAvatar(
                           radius: 68,
-                          backgroundImage: AssetImage(authBgImage),
+                          backgroundImage: NetworkImage(profilePic.isEmpty ? noImg : profilePic),
                         ),
                         SizedBox(
                           height: 100,
@@ -50,8 +62,7 @@ class ChatUserProfile extends StatelessWidget {
                                 children: [
                                   Container(
                                     decoration: BoxDecoration(
-                                      color: const Color.fromRGBO(
-                                          32, 14, 50, 0.05),
+                                      color: const Color.fromRGBO(32, 14, 50, 0.05),
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     width: 40,
@@ -66,11 +77,11 @@ class ChatUserProfile extends StatelessWidget {
                                   const SizedBox(
                                     width: 12,
                                   ),
-                                  const AppText(
-                                    text: '+919876543210',
+                                  AppText(
+                                    text: user != null ? user!.mobile : '91293843854',
                                     fontsize: 14,
                                     fontWeight: FontWeight.w500,
-                                    textColor: Color(0xFFA8A8A8),
+                                    textColor: const Color(0xFFA8A8A8),
                                   ),
                                 ],
                               ),
@@ -83,8 +94,7 @@ class ChatUserProfile extends StatelessWidget {
                                       width: 40,
                                       height: 40,
                                       decoration: BoxDecoration(
-                                        color: const Color.fromRGBO(
-                                            32, 14, 50, 0.05),
+                                        color: const Color.fromRGBO(32, 14, 50, 0.05),
                                         borderRadius: BorderRadius.circular(4),
                                       ),
                                       child: const Center(
@@ -142,36 +152,34 @@ class ChatUserProfile extends StatelessWidget {
                       ),
                       child: const Padding(
                         padding: EdgeInsets.all(8),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                          Row(
                             children: [
-                              Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 3,
-                                    backgroundColor: AppColor.primary,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  AppText(
-                                    text: 'Follow Up',
-                                    fontsize: 12,
-                                    fontWeight: FontWeight.w400,
-                                    textColor: AppColor.primary,
-                                  )
-                                ],
+                              CircleAvatar(
+                                radius: 3,
+                                backgroundColor: AppColor.primary,
                               ),
                               SizedBox(
-                                height: 3,
+                                width: 5,
                               ),
                               AppText(
-                                text: 'Google meet 10:30-11:00 am',
-                                fontsize: 10,
-                                fontWeight: FontWeight.w300,
-                                textColor: Color.fromARGB(255, 63, 63, 63),
+                                text: 'Follow Up',
+                                fontsize: 12,
+                                fontWeight: FontWeight.w400,
+                                textColor: AppColor.primary,
                               )
-                            ]),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 3,
+                          ),
+                          AppText(
+                            text: 'Google meet 10:30-11:00 am',
+                            fontsize: 10,
+                            fontWeight: FontWeight.w300,
+                            textColor: Color.fromARGB(255, 63, 63, 63),
+                          )
+                        ]),
                       ),
                     ),
                   ),

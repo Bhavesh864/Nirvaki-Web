@@ -14,9 +14,10 @@ import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import 'package:yes_broker/pages/add_inventory.dart';
 
 class PhotosViewForm extends ConsumerStatefulWidget {
+  final Propertyphotos? propertyphotos;
   final AllChipSelectedAnwers? notify;
   final int id;
-  const PhotosViewForm(this.notify, this.id, {super.key});
+  const PhotosViewForm({this.notify, required this.id, this.propertyphotos, super.key});
 
   @override
   PhotosViewFormState createState() => PhotosViewFormState();
@@ -216,7 +217,6 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
   @override
   Widget build(BuildContext context) {
     print(itemTitles);
-
     return SingleChildScrollView(
       physics: Responsive.isMobile(context) ? const ScrollPhysics() : const NeverScrollableScrollPhysics(),
       child: Container(

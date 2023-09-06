@@ -1,7 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'package:flutter/material.dart';
-
+import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
@@ -15,18 +15,32 @@ import '../../customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
 import '../utils/colors.dart';
 
-Widget buildInventoryQuestions(Question question, List<Screen> screensDataList, int currentScreenIndex, AllChipSelectedAnwers notify, Function nextQuestion) {
+Widget buildInventoryQuestions(
+  Question question,
+  List<Screen> screensDataList,
+  int currentScreenIndex,
+  AllChipSelectedAnwers notify,
+  Function nextQuestion,
+  bool isRentSelected,
+  List<Map<String, dynamic>> selectedValues,
+) {
   if (question.questionOptionType == 'chip') {
     return Column(
       children: [
         for (var option in question.questionOption)
           StatefulBuilder(builder: (context, setState) {
+            if (isRentSelected && option == "Plot") {
+              return const SizedBox();
+            }
             return ChipButton(
               text: option,
+              bgColor: selectedValues.any((answer) => answer["id"] == question.questionId && answer["item"] == option)
+                  ? AppColor.primary.withOpacity(0.2)
+                  : AppColor.primary.withOpacity(0.05),
               onSelect: () {
+                nextQuestion(screensDataList: screensDataList, option: option);
                 if (currentScreenIndex < screensDataList.length - 1) {
                   notify.add({"id": question.questionId, "item": option});
-                  nextQuestion(screensDataList: screensDataList, option: option);
                 } else {
                   // Handle reaching the last question
                 }
@@ -37,7 +51,9 @@ Widget buildInventoryQuestions(Question question, List<Screen> screensDataList, 
     );
   } else if (question.questionOptionType == 'smallchip') {
     String selectedOption = '';
-
+    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+      selectedOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
+    }
     return StatefulBuilder(builder: (context, setState) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,6 +74,7 @@ Widget buildInventoryQuestions(Question question, List<Screen> screensDataList, 
                     child: CustomChoiceChip(
                       label: option,
                       selected: selectedOption == option,
+                      bgcolor: selectedOption == option ? AppColor.primary : AppColor.primary.withOpacity(0.05),
                       onSelected: (selectedItem) {
                         setState(() {
                           if (selectedOption == option) {
@@ -66,7 +83,7 @@ Widget buildInventoryQuestions(Question question, List<Screen> screensDataList, 
                             selectedOption = option;
                           }
                         });
-                        notify.add({"id": question.questionId, "item": option});
+                        notify.add({"id": question.questionId, "item": selectedOption});
                       },
                       labelColor: selectedOption == option ? Colors.white : Colors.black,
                     ),
@@ -79,7 +96,9 @@ Widget buildInventoryQuestions(Question question, List<Screen> screensDataList, 
     });
   } else if (question.questionOptionType == 'multichip') {
     List<String> selectedOptions = [];
-    List items = question.questionOption;
+    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+      selectedOptions = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+    }
     return StatefulBuilder(
       builder: (context, setState) {
         return Column(
@@ -96,23 +115,25 @@ Widget buildInventoryQuestions(Question question, List<Screen> screensDataList, 
               child: Wrap(
                 alignment: WrapAlignment.start,
                 children: [
-                  for (var item in items)
+                  for (var item in question.questionOption)
                     Padding(
                       padding: const EdgeInsets.only(right: 10, top: 5, bottom: 5),
                       child: CustomChoiceChip(
-                          label: item,
-                          selected: selectedOptions.contains(item),
-                          onSelected: (selectedItem) {
-                            setState(() {
-                              if (selectedItem) {
-                                selectedOptions.add(item);
-                              } else {
-                                selectedOptions.remove(item);
-                              }
-                            });
-                            notify.add({"id": question.questionId, "item": selectedOptions});
-                          },
-                          labelColor: selectedOptions.contains(item) ? Colors.white : Colors.black),
+                        label: item,
+                        selected: selectedOptions.contains(item),
+                        bgcolor: selectedOptions.contains(item) ? AppColor.primary : AppColor.primary.withOpacity(0.05),
+                        onSelected: (selectedItem) {
+                          setState(() {
+                            if (selectedOptions.contains(item)) {
+                              selectedOptions.remove(item);
+                            } else {
+                              selectedOptions.add(item);
+                            }
+                          });
+                          notify.add({"id": question.questionId, "item": selectedOptions});
+                        },
+                        labelColor: selectedOptions.contains(item) ? Colors.white : Colors.black,
+                      ),
                     ),
                 ],
               ),
@@ -122,9 +143,9 @@ Widget buildInventoryQuestions(Question question, List<Screen> screensDataList, 
       },
     );
   } else if (question.questionOptionType == 'textfield') {
-    TextEditingController controller = TextEditingController();
+    final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
+    TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
     bool isChecked = true;
-
     if (question.questionTitle == 'Whatsapp Number') {
       return StatefulBuilder(
         builder: (context, setState) {
@@ -173,9 +194,12 @@ Widget buildInventoryQuestions(Question question, List<Screen> screensDataList, 
       },
     );
   } else if (question.questionOptionType == 'textarea') {
+    final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
+    TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
     return TextFormField(
       keyboardType: TextInputType.multiline,
       maxLines: 5,
+      controller: controller,
       onChanged: (newvalue) {
         notify.add({"id": question.questionId, "item": newvalue.trim()});
       },
@@ -206,8 +230,13 @@ Widget buildInventoryQuestions(Question question, List<Screen> screensDataList, 
       },
     );
   } else if (question.questionOptionType == 'dropdown') {
+    String? defaultValue;
+    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+      defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+    }
     return DropDownField(
       title: question.questionTitle,
+      defaultValues: defaultValue ?? "",
       optionsList: question.questionOption,
       onchanged: (Object e) {
         notify.add({"id": question.questionId, "item": e});
@@ -232,7 +261,11 @@ Widget buildInventoryQuestions(Question question, List<Screen> screensDataList, 
       address2: address2,
     );
   } else if (question.questionOptionType == 'photo') {
-    return PhotosViewForm(notify, question.questionId);
+    Propertyphotos? propertyphotos;
+    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+      propertyphotos = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+    }
+    return PhotosViewForm(notify: notify, id: question.questionId, propertyphotos: propertyphotos);
   }
 
   return const SizedBox.shrink();

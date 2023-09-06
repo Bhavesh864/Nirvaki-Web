@@ -6,7 +6,8 @@ class DropDownField extends StatefulWidget {
   final String title;
   final List optionsList;
   final void Function(Object e) onchanged;
-  const DropDownField({super.key, required this.title, required this.optionsList, required this.onchanged});
+  final String? defaultValues;
+  const DropDownField({super.key, required this.title, required this.optionsList, required this.onchanged, this.defaultValues});
 
   @override
   State<DropDownField> createState() => _DropDownFieldState();
@@ -15,6 +16,12 @@ class DropDownField extends StatefulWidget {
 class _DropDownFieldState extends State<DropDownField> {
   String? errorText;
   String? selectedValues;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedValues = widget.defaultValues;
+  }
 
   void validateDropdown() {
     if (selectedValues == null) {
@@ -53,6 +60,7 @@ class _DropDownFieldState extends State<DropDownField> {
                 // isDense: true,
                 itemHeight: null,
                 focusColor: Colors.transparent,
+
                 hint: const CustomText(
                   title: '--Select--',
                   color: Colors.grey,
@@ -61,7 +69,8 @@ class _DropDownFieldState extends State<DropDownField> {
                 isExpanded: true,
                 borderRadius: BorderRadius.circular(10),
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3.5),
-                value: selectedValues,
+                value: selectedValues!.isEmpty ? null : selectedValues!,
+                // value: selectedValues,
                 onChanged: (e) {
                   widget.onchanged(e!);
                   setState(() {

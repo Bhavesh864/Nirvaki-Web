@@ -90,8 +90,7 @@ class CustomTextInputState extends State<CustomTextInput> {
             borderSide: const BorderSide(color: Colors.red, width: 1),
           ),
           label: widget.label,
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
           labelText: widget.labelText,
           hintText: widget.hintText,
           hintStyle: widget.hintstyle,
@@ -207,17 +206,13 @@ class _CustomButtonState extends State<CustomButton> {
           width: widget.width,
           padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
           decoration: BoxDecoration(
-            border: widget.isBorder!
-                ? Border.all(color: widget.borderColor!)
-                : null,
+            border: widget.isBorder! ? Border.all(color: widget.borderColor!) : null,
             color: widget.buttonColor,
             // color: widget.buttonColor.withOpacity(isPressed ? 0.8 : 1.0),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
-            mainAxisAlignment: widget.titleLeft
-                ? MainAxisAlignment.start
-                : MainAxisAlignment.center,
+            mainAxisAlignment: widget.titleLeft ? MainAxisAlignment.start : MainAxisAlignment.center,
             children: [
               if (widget.leftIcon != null)
                 Padding(

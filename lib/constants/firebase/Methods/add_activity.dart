@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hive/hive.dart';
+
 import 'package:yes_broker/constants/firebase/detailsModels/activity_details.dart';
 import 'package:yes_broker/constants/firebase/random_uid.dart';
 import '../../app_constant.dart';

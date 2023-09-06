@@ -364,28 +364,24 @@ class LeadDetails {
     }
   }
 
-  static Future<LeadDetails?> getLeadQuestion(itemid) async {
-    try {
-      final QuerySnapshot querySnapshot = await leadDetailsCollection.where("InventoryId", isEqualTo: itemid).get();
-      for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
-        if (documentSnapshot.exists) {
-          final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-          return LeadDetails.fromJson(data);
-        }
-      }
-      return null;
-    } catch (error) {
-      print('Failed to get users: $error');
-      return null;
-    }
-  }
-
   static Future<void> addLeadDetails(LeadDetails inventory) async {
     try {
       await leadDetailsCollection.doc().set(inventory.toJson());
       // print('Inventory item added successfully');
     } catch (error) {
       // print('Failed to add Inventory item: $error');
+    }
+  }
+
+  static Future<void> updateLeadDetails({required String id, required LeadDetails leadDetails}) async {
+    try {
+      QuerySnapshot querySnapshot = await leadDetailsCollection.where("leadId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update(leadDetails.toJson());
+      }
+      print('lead item updated successfully');
+    } catch (error) {
+      print('Failed to update lead item: $error');
     }
   }
 
