@@ -61,6 +61,8 @@ class GroupRepository {
         groupIcon: profileUrl,
         membersUid: [AppConst.getAccessToken().toString(), ...uids],
         timeSent: Timestamp.now(),
+        lastMessageIsSeen: false,
+        lastMessageSenderId: AppConst.getAccessToken().toString(),
       );
 
       await firestore.collection('groups').doc(groupId).set(group.toMap());

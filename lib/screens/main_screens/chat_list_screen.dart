@@ -1,11 +1,15 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/chat/controller/chat_controller.dart';
 import 'package:yes_broker/chat/models/chat_contact.dart';
 import 'package:yes_broker/chat/models/chat_group.dart';
+import 'package:yes_broker/constants/app_constant.dart';
+import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/screens/main_screens/create_group_screen.dart';
@@ -13,6 +17,33 @@ import 'package:yes_broker/screens/main_screens/create_group_screen.dart';
 import '../../Customs/responsive.dart';
 import '../../constants/utils/colors.dart';
 import 'chat_screen.dart';
+
+class ChatItem {
+  final String id;
+  final String name;
+  final String profilePic;
+  final String lastMessage;
+  final DateTime timeSent;
+  final bool isGroupChat;
+  final bool lastMessageIsSeen;
+  final String lastMessageSenderId;
+
+  ChatItem({
+    required this.id,
+    required this.name,
+    required this.profilePic,
+    required this.lastMessage,
+    required this.timeSent,
+    required this.isGroupChat,
+    required this.lastMessageIsSeen,
+    required this.lastMessageSenderId,
+  });
+}
+
+Future<User?> getUserDetails(String id) async {
+  final user = await User.getUser(id);
+  return user;
+}
 
 class ChatListScreen extends ConsumerWidget {
   const ChatListScreen({super.key});
@@ -53,164 +84,111 @@ class ChatListScreen extends ConsumerWidget {
         decoration: const BoxDecoration(
           color: Colors.white,
         ),
-        child: Column(
-          children: [
-            StreamBuilder<List<ChatContact>>(
-              stream: ref.watch(chatControllerProvider).chatContacts(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Loader();
-                }
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      var chatContactData = snapshot.data![index];
-
-                      return Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              if (Responsive.isMobile(context)) {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (ctx) => ChatScreen(
-                                      profilePic: chatContactData.profilePic,
-                                      name: chatContactData.name,
-                                      contactId: chatContactData.contactId,
-                                      isGroupChat: false,
+        child: StreamBuilder<List<ChatItem>>(
+          stream: _mergeChatContactsAndGroups(ref),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Loader();
+            }
+            if (snapshot.hasData) {
+              final chatItems = snapshot.data!;
+              return ListView.builder(
+                itemCount: chatItems.length,
+                itemBuilder: (context, index) {
+                  final chatItem = chatItems[index];
+                  final isSender = chatItem.lastMessageSenderId == AppConst.getAccessToken();
+                  return Column(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          if (Responsive.isMobile(context)) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (ctx) => ChatScreen(
+                                  profilePic: chatItem.profilePic,
+                                  name: chatItem.name,
+                                  contactId: chatItem.id,
+                                  isGroupChat: chatItem.isGroupChat,
+                                  onOpenChat: () {
+                                    if (!isSender && !chatItem.lastMessageIsSeen) {
+                                      ref.read(chatControllerProvider).setLastMessageSeen(
+                                            context,
+                                            chatItem.id,
+                                            chatItem.isGroupChat,
+                                            chatItem.id,
+                                          );
+                                    }
+                                  },
+                                ),
+                              ),
+                            );
+                          } else {
+                            // onPressed(index);
+                          }
+                        },
+                        child: Container(
+                          color: !isSender && !chatItem.lastMessageIsSeen ? AppColor.secondary : Colors.transparent,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: ListTile(
+                              title: Text(
+                                chatItem.name,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                              subtitle: Padding(
+                                padding: const EdgeInsets.only(top: 6.0),
+                                child: Text(
+                                  chatItem.lastMessage,
+                                  maxLines: 1, // Display only one line of text
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontSize: 15),
+                                ),
+                              ),
+                              leading: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                  chatItem.profilePic == '' ? noImg : chatItem.profilePic,
+                                ),
+                                radius: 30,
+                              ),
+                              trailing: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const SizedBox(),
+                                  if (!isSender && !chatItem.lastMessageIsSeen)
+                                    Container(
+                                      width: 10,
+                                      height: 10,
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: AppColor.primary,
+                                      ),
+                                    ),
+                                  Text(
+                                    DateFormat.Hm().format(chatItem.timeSent),
+                                    style: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 13,
                                     ),
                                   ),
-                                );
-                              } else {
-                                // onPressed(index);
-                              }
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: ListTile(
-                                title: Text(
-                                  chatContactData.name,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                subtitle: Padding(
-                                  padding: const EdgeInsets.only(top: 6.0),
-                                  child: Text(
-                                    chatContactData.lastMessage,
-                                    style: const TextStyle(fontSize: 15),
-                                  ),
-                                ),
-                                leading: CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                    chatContactData.profilePic == '' ? noImg : chatContactData.profilePic,
-                                  ),
-                                  radius: 30,
-                                ),
-                                trailing: Text(
-                                  DateFormat.Hm().format(chatContactData.timeSent.toDate()),
-                                  style: const TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 13,
-                                  ),
-                                ),
+                                ],
                               ),
                             ),
                           ),
-                          const Divider(
-                            indent: 85,
-                            height: 5,
-                          ),
-                        ],
-                      );
-                    },
+                        ),
+                      ),
+                      const Divider(
+                        indent: 85,
+                        height: 5,
+                      ),
+                    ],
                   );
-                }
-                return const SizedBox();
-              },
-            ),
-            StreamBuilder<List<ChatGroup>>(
-              stream: ref.watch(chatControllerProvider).chatGroups(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Loader();
-                }
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      var chatContactData = snapshot.data![index];
-
-                      return Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              if (Responsive.isMobile(context)) {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (ctx) => ChatScreen(
-                                      profilePic: chatContactData.groupIcon,
-                                      name: chatContactData.name,
-                                      contactId: chatContactData.groupId,
-                                      isGroupChat: true,
-                                    ),
-                                  ),
-                                );
-                              } else {
-                                // onPressed(index);
-                              }
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: ListTile(
-                                title: Text(
-                                  chatContactData.name,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                subtitle: Padding(
-                                  padding: const EdgeInsets.only(top: 6.0),
-                                  child: Text(
-                                    chatContactData.lastMessage,
-                                    style: const TextStyle(fontSize: 15),
-                                  ),
-                                ),
-                                leading: CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                    chatContactData.groupIcon == '' ? noImg : chatContactData.groupIcon,
-                                  ),
-                                  radius: 30,
-                                ),
-                                trailing: Text(
-                                  // '11:20',
-                                  DateFormat.Hm().format(chatContactData.timeSent.toDate()),
-                                  style: const TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const Divider(
-                            indent: 85,
-                            height: 5,
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                }
-                return const Center(
-                  child: SizedBox(),
-                );
-              },
-            ),
-          ],
+                },
+              );
+            }
+            return const SizedBox();
+          },
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -227,5 +205,50 @@ class ChatListScreen extends ConsumerWidget {
         child: const Icon(Icons.chat),
       ),
     );
+  }
+
+  Stream<List<ChatItem>> _mergeChatContactsAndGroups(WidgetRef ref) {
+    final chatContactsStream = ref.watch(chatControllerProvider).chatContacts();
+    final chatGroupsStream = ref.watch(chatControllerProvider).chatGroups();
+
+    final mergedStream = Rx.combineLatest2<List<ChatContact>, List<ChatGroup>, List<ChatItem>>(
+      chatContactsStream,
+      chatGroupsStream,
+      (chatContacts, chatGroups) {
+        final chatItems = <ChatItem>[];
+
+        chatItems.addAll(chatContacts.map((contact) => ChatItem(
+              id: contact.contactId,
+              name: contact.name,
+              profilePic: contact.profilePic,
+              lastMessage: contact.lastMessage,
+              timeSent: contact.timeSent.toDate(),
+              isGroupChat: false,
+              lastMessageIsSeen: contact.lastMessageIsSeen,
+              lastMessageSenderId: contact.lastMessageSenderId,
+            )));
+
+        chatItems.addAll(
+          chatGroups.map(
+            (group) => ChatItem(
+              id: group.groupId,
+              name: group.name,
+              profilePic: group.groupIcon,
+              lastMessage: group.lastMessage,
+              timeSent: group.timeSent.toDate(),
+              isGroupChat: true,
+              lastMessageIsSeen: group.lastMessageIsSeen,
+              lastMessageSenderId: group.lastMessageSenderId,
+            ),
+          ),
+        );
+
+        chatItems.sort((a, b) => b.timeSent.compareTo(a.timeSent));
+
+        return chatItems;
+      },
+    );
+
+    return mergedStream;
   }
 }

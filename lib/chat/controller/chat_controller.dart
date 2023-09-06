@@ -119,4 +119,18 @@ class ChatController {
       isSender,
     );
   }
+
+  void setLastMessageSeen(
+    BuildContext context,
+    String recieverUserId,
+    bool isGroupChat,
+    String? groupId,
+  ) {
+    chatRepository.setLastMessageSeen(
+      context,
+      recieverUserId,
+      isGroupChat,
+      groupId,
+    );
+  }
 }

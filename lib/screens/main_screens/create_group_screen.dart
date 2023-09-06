@@ -66,11 +66,54 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
     }
   }
 
-  Future<void> selectImagee() async {
-    XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.camera);
-    setState(() {
-      groupIcon = File(pickedImage!.path);
-    });
+  Future<void> _showImageSourceDialog() async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Select Image Source'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.camera),
+                title: const Text('Camera'),
+                onTap: () async {
+                  Navigator.pop(context); // Close the dialog
+                  XFile? image = await ImagePicker().pickImage(source: ImageSource.camera);
+                  if (image != null) {
+                    setState(() {
+                      groupIcon = File(image.path);
+                    });
+                  }
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.image),
+                title: const Text('Gallery'),
+                onTap: () async {
+                  Navigator.pop(context); // Close the dialog
+                  XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                  if (image != null) {
+                    setState(() {
+                      groupIcon = File(image.path);
+                    });
+                  }
+                },
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: const Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -106,7 +149,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         GestureDetector(
-                          onTap: selectImagee,
+                          onTap: _showImageSourceDialog,
                           child: CircleAvatar(
                             backgroundImage: groupIcon != null ? FileImage(groupIcon!) : null,
                             radius: 25,
