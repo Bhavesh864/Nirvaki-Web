@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../Customs/custom_text.dart';
+import '../constants/app_constant.dart';
+import '../constants/firebase/userModel/user_info.dart';
+import '../constants/utils/constants.dart';
+import 'chat/chat_users_list.dart';
 
 class ChatDialogBox extends StatefulWidget {
   const ChatDialogBox({super.key});
@@ -11,153 +16,143 @@ class ChatDialogBox extends StatefulWidget {
 
 class _ChatDialogBoxState extends State<ChatDialogBox> {
   bool isChatOpen = false;
+  List list = [];
+  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: Container(
-        padding: const EdgeInsets.only(bottom: 45, right: 80),
-        width: 450,
-        child: Card(
-          color: const Color(0xFFF5F9FE),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: isChatOpen ? 0 : 15, vertical: isChatOpen ? 0 : 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (!isChatOpen) ...[
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: currentUser["brokerId"]).snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator.adaptive(),
+            );
+          }
+          if (snapshot.hasData) {
+            final usersListSnapshot = snapshot.data!.docs;
+            List<User> usersList = usersListSnapshot.map((doc) => User.fromSnapshot(doc)).toList();
+            List<User> filterUser = usersList.where((element) => element.userId != AppConst.getAccessToken()).toList();
+            list = filterUser;
+            return Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                padding: const EdgeInsets.only(bottom: 45, right: 80),
+                width: 450,
+                child: Card(
+                  color: const Color(0xFFF5F9FE),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: isChatOpen ? 0 : 15, vertical: isChatOpen ? 0 : 20),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        const CustomText(
-                          title: 'Chat',
-                          fontWeight: FontWeight.w600,
-                        ),
-                        InkWell(
-                          child: const Icon(
-                            Icons.close,
-                            size: 20,
-                          ),
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 350,
-                    child: Card(
-                      elevation: 0,
-                      child: ListView.separated(
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            onTap: () {
-                              isChatOpen = true;
-                              setState(() {});
-                            },
-                            leading: const CircleAvatar(),
-                            title: const CustomText(title: 'Team Unicorns'),
-                            subtitle: const CustomText(
-                              title: 'Okay, I will check...',
-                              color: Color(0xFF9B9B9B),
-                            ),
-                            trailing: const CircleAvatar(
-                              radius: 10,
-                              child: CustomText(
-                                title: '1',
-                                color: Colors.white,
-                              ),
-                            ),
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return const Divider();
-                        },
-                        itemCount: 5,
-                      ),
-                    ),
-                  ),
-                ] else ...[
-                  Column(
-                    children: [
-                      ListTile(
-                        leading: SizedBox(
-                          width: 70,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              InkWell(
-                                child: const Icon(
-                                  Icons.arrow_back,
-                                  size: 20,
-                                  color: Colors.black,
+                        if (!isChatOpen) ...[
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const CustomText(
+                                  title: 'Chat',
+                                  fontWeight: FontWeight.w600,
                                 ),
-                                onTap: () {
-                                  isChatOpen = false;
-                                  setState(() {});
-                                },
+                                InkWell(
+                                  child: const Icon(
+                                    Icons.close,
+                                    size: 20,
+                                  ),
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                )
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 350,
+                            child: Card(
+                              elevation: 0,
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                      ),
+                                      child: ChatUserList(
+                                        onPressed: (index) {
+                                          setState(() {
+                                            isChatOpen = true;
+                                            selectedIndex = index;
+                                          });
+                                        },
+                                        users: filterUser,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const CircleAvatar(),
+                            ),
+                          ),
+                        ] else ...[
+                          Column(
+                            children: [
+                              ListTile(
+                                leading: SizedBox(
+                                  width: 70,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      InkWell(
+                                        child: const Icon(
+                                          Icons.arrow_back,
+                                          size: 20,
+                                          color: Colors.black,
+                                        ),
+                                        onTap: () {
+                                          isChatOpen = false;
+                                          setState(() {});
+                                        },
+                                      ),
+                                      CircleAvatar(
+                                        backgroundImage: NetworkImage(
+                                          filterUser[selectedIndex].image.isEmpty ? noImg : filterUser[selectedIndex].image,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                title: CustomText(title: '${filterUser[selectedIndex].userfirstname} ${filterUser[selectedIndex].userlastname}'),
+                                subtitle: const CustomText(
+                                  title: 'Abhi, John and 4 more',
+                                  color: Color(0xFF9B9B9B),
+                                ),
+                                trailing: InkWell(
+                                  child: const Icon(
+                                    Icons.close,
+                                    size: 20,
+                                    color: Colors.black,
+                                  ),
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ),
                             ],
                           ),
-                        ),
-                        title: const CustomText(title: 'Team Unicorns'),
-                        subtitle: const CustomText(
-                          title: 'Abhi, John and 4 more',
-                          color: Color(0xFF9B9B9B),
-                        ),
-                        trailing: InkWell(
-                          child: const Icon(
-                            Icons.close,
-                            size: 20,
-                            color: Colors.black,
-                          ),
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Divider(),
-                  Container(
-                    height: 400,
-                  ),
-                  const Divider(
-                    height: 2,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: Row(
-                      children: [
-                        const Expanded(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Type your message...',
-                              border: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.send),
-                          onPressed: () {
-                            // Implement the send message functionality here
-                          },
-                        ),
+                          const Divider(),
+                          // ChatScreen(
+                          //   user: filterUser[selectedIndex],
+                          // ),
+                        ]
                       ],
                     ),
                   ),
-                ]
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+                ),
+              ),
+            );
+          }
+          return const SizedBox();
+        });
   }
 }

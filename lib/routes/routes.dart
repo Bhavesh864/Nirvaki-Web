@@ -10,6 +10,7 @@ import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
 import 'package:yes_broker/pages/add_todo.dart';
 import 'package:yes_broker/pages/edit_todo.dart';
 import 'package:yes_broker/screens/main_screens/chat_list_screen.dart';
+import 'package:yes_broker/screens/main_screens/create_group_screen.dart';
 import 'package:yes_broker/screens/main_screens/inventory_details_screen.dart';
 import 'package:yes_broker/screens/main_screens/lead_details_screen.dart';
 import 'package:yes_broker/screens/main_screens/todo_details_screen.dart';
@@ -148,6 +149,7 @@ class AppRoutes {
   static const String addLead = '/add_lead_screen';
   static const String addWorkItem = '/add_workItem_screen';
   static const String addTodo = '/add_todoItem_screen';
+  static const String createGroup = '/createGroup';
 
   static Map<String, WidgetBuilder> routesTable = {
     homeScreen: (context) => Responsive.isMobile(context) ? const SmallScreen() : const LargeScreen(),
@@ -167,6 +169,7 @@ class AppRoutes {
     inventoryDetailsScreen: (context) => const InventoryDetailsScreen(),
     leadDetailsScreen: (context) => const LeadDetailsScreen(),
     todoDetailsScreen: (context) => const TodoDetailsScreen(),
+    createGroup: (context) => const CreateGroupScreen(),
   };
 
   static Route createAnimatedRoute(Widget destinationScreen) {
@@ -193,7 +196,7 @@ final routerDelegate = BeamerDelegate(
     routes: {
       '/': (p0, p1, p2) => const LayoutView(),
       '/profile': (p0, p1, p2) => const LargeScreen(),
-      AppRoutes.addInventory: (p0, p1, p2) => const AddInventory(),
+      AppRoutes.addInventory: (p0, p1, data) => const AddInventory(),
       AppRoutes.addLead: (p0, p1, p2) => const AddLead(),
       AppRoutes.addTodo: (p0, p1, p2) => const AddTodo(),
       AppRoutes.editTodo: (p0, p1, data) {

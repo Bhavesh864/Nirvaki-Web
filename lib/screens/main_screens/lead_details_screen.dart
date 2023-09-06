@@ -8,7 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
-import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import '../../customs/custom_text.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
@@ -163,8 +162,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                             AssignmentWidget(
                                               id: data.leadId!,
                                               assignto: data.assignedto!,
-                                              imageUrlCreatedBy:
-                                                  data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                              imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                               createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                             ),
                                           );

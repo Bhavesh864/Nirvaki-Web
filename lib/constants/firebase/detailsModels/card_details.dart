@@ -173,6 +173,18 @@ class CardDetails {
     }
   }
 
+  static Future<void> updateCardDetails({required String id, required CardDetails cardDetails}) async {
+    try {
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update(cardDetails.toJson());
+      }
+      print('card item updated successfully');
+    } catch (error) {
+      print('Failed to update card item: $error');
+    }
+  }
+
   static Future<List<CardDetails>> getCardDetails() async {
     try {
       final QuerySnapshot querySnapshot = await cardDetailsCollection.orderBy("createdate", descending: true).get();

@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
 
@@ -8,27 +10,31 @@ import 'package:yes_broker/constants/firebase/send_notification.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
-import '../../Customs/snackbar.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
+import '../../routes/routes.dart';
 import '../app/nav_bar.dart';
 import '../app/app_bar.dart';
 
 Future<void> shareUrl(BuildContext context, {String textToCombine = ''}) async {
   try {
+    // final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
+    // print(location);
+
     // final currentUrl = window.location.href;
-    // await Clipboard.setData(ClipboardData(text: currentUrl + textToCombine));
-    customSnackBar(context: context, text: 'URL copied to clipboard');
+    // Clipboard.setData(ClipboardData(text: currentUrl + textToCombine)).then((_) {
+    // customSnackBar(context: context, text: 'URL copied to clipboard');
+    // });
   } catch (e) {
     print('Error sharing URL: $e');
   }
 }
 
-class InventoryDetailsHeader extends StatelessWidget {
+class InventoryDetailsHeader extends ConsumerWidget {
   final String title;
   final String category;
   final String id;
@@ -40,19 +46,18 @@ class InventoryDetailsHeader extends StatelessWidget {
   final Function setState;
   final dynamic inventoryDetails;
 
-  const InventoryDetailsHeader({
-    super.key,
-    required this.title,
-    required this.id,
-    this.inventoryDetails,
-    required this.category,
-    required this.propertyCategory,
-    required this.status,
-    required this.type,
-    required this.price,
-    required this.unit,
-    required this.setState,
-  });
+  const InventoryDetailsHeader(
+      {super.key,
+      required this.title,
+      required this.id,
+      this.inventoryDetails,
+      required this.category,
+      required this.propertyCategory,
+      required this.status,
+      required this.type,
+      required this.price,
+      required this.unit,
+      required this.setState});
 
   // Future<void> shareUrl(BuildContext context) async {
   //   try {
@@ -65,7 +70,7 @@ class InventoryDetailsHeader extends StatelessWidget {
   // }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -117,8 +122,10 @@ class InventoryDetailsHeader extends StatelessWidget {
                         if (e.contains('Public')) {
                           AppConst.setPublicView(!AppConst.getPublicView());
                           setState();
-                        } else {
-                          // AppConst.getOuterContext()!.beamToNamed(AppRoutes.addInventory);
+                        } else if (e.contains("Edit")) {
+                          Future.delayed(const Duration(milliseconds: 500)).then(
+                            (value) => AppConst.getOuterContext()!.beamToNamed(AppRoutes.addInventory, data: true),
+                          );
                         }
                       }, showicon: true, icon: e['icon']),
                     )
@@ -130,13 +137,14 @@ class InventoryDetailsHeader extends StatelessWidget {
                   paddingHorizontal: 3,
                 ),
               ),
+            const Spacer(),
+            if (!Responsive.isMobile(context) && !AppConst.getPublicView())
+              CustomText(
+                title: price != null ? '$price$unit' : '50k/month',
+                color: AppColor.primary,
+              ),
           ],
         ),
-        if (!Responsive.isMobile(context))
-          CustomText(
-            title: price != null ? '$price$unit' : '50k/month',
-            color: AppColor.primary,
-          ),
       ],
     );
   }
@@ -198,20 +206,16 @@ class _HeaderChipsState extends State<HeaderChips> {
         if (!AppConst.getPublicView())
           CustomStatusDropDown(
             status: currentStatus ?? widget.status,
-            itemBuilder: (context) => dropDownStatusDataList
-                .map((e) => popupMenuItem(e.toString()))
-                .toList(),
+            itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
             onSelected: (value) {
               CardDetails.updateCardStatus(id: widget.id, newStatus: value);
               if (widget.id.contains(ItemCategory.isInventory)) {
-                InventoryDetails.updatecardStatus(
-                    id: widget.id, newStatus: value);
+                InventoryDetails.updatecardStatus(id: widget.id, newStatus: value);
               } else if (widget.id.contains(ItemCategory.isLead)) {
                 LeadDetails.updatecardStatus(id: widget.id, newStatus: value);
               }
               currentStatus = value;
               setState(() {});
-              print(widget.inventoryDetails?.assignedto?[0].userid);
               notifyToUser(
                   itemid: widget.id,
                   assignedto: widget.inventoryDetails.assignedto,

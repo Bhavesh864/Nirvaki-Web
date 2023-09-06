@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -20,7 +19,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       notificationContent: message.notification?.body,
       receiveDate: Timestamp.now(),
       linkedItemId: message.data["id"],
-      imageUrl: "",
+      imageUrl: message.data["imageUrl"],
       userId: AppConst.getAccessToken(),
     );
     await NotificationModel.addNotification(notificationModel);
@@ -94,7 +93,7 @@ Future<void> setAllNotification() async {
         notificationContent: message.notification?.body,
         receiveDate: Timestamp.now(),
         linkedItemId: message.data["id"],
-        imageUrl: "",
+        imageUrl: message.data["imageUrl"],
         userId: AppConst.getAccessToken(),
       );
       await NotificationModel.addNotification(notificationModel);

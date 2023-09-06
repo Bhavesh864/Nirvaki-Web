@@ -29,6 +29,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>FMDB.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Firebase.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -65,6 +70,11 @@
 			<false/>
 		</dict>
 		<key>FirebaseCoreInternal.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>FirebaseDatabase.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -159,6 +169,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>emoji_picker_flutter.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>file_picker.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -175,6 +190,11 @@
 			<false/>
 		</dict>
 		<key>firebase_core.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>firebase_database.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -240,6 +260,11 @@
 			<false/>
 		</dict>
 		<key>shared_preferences_foundation.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>sqflite.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
