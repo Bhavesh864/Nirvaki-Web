@@ -46,7 +46,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit) async {
   final photos = getDataById(state, 33);
   final video = getDataById(state, 34);
   final comments = getDataById(state, 35);
-  final User assignto = getDataById(state, 36);
+  final List<User> assignto = getDataById(state, 36);
   final availability = getDataById(state, 37);
   final commericialtype = getDataById(state, 38);
   final typeofoffice = getDataById(state, 39);
@@ -64,35 +64,54 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit) async {
   final securityunit = getDataById(state, 51);
   final lockinperiod = getDataById(state, 52);
   final commercialphotos = getDataById(state, 53);
-  final List<Attachments> attachments = getDataById(state, 100);
+  final attachments = getDataById(state, 100);
   final existingInventoryId = getDataById(state, 101);
+  final List<cards.Assignedto> assignedToList = assignto.map((user) {
+    return cards.Assignedto(
+      firstname: user.userfirstname,
+      lastname: user.userlastname,
+      assignedby: AppConst.getAccessToken(),
+      image: user.image,
+      userid: user.userId,
+    );
+  }).toList();
 
   final cards.CardDetails card = cards.CardDetails(
       workitemId: isEdit ? existingInventoryId : "IN$randomId",
       status: "New",
       cardCategory: inventoryCategory,
       linkedItemType: "IN",
-      brokerid: currentUser["brokerid"],
+      brokerid: currentUser["brokerId"],
+      managerid: currentUser["managerid"],
       cardType: "IN",
       cardTitle: "$propertyCategory $propertyKind-$propertyCity",
-      cardDescription: "Want to $inventoryCategory her $bedrooms BHK for $price$priceunit} rupees",
+      cardDescription: "Want to $inventoryCategory her $bedrooms BHK for $price$priceunit rupees",
       customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
       cardStatus: "New",
-      assignedto: [cards.Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)],
+      assignedto: assignedToList,
       createdby:
           cards.Createdby(userfirstname: currentUser["userfirstname"], userid: currentUser["userId"], userlastname: currentUser["userlastname"], userimage: currentUser["image"]),
       createdate: Timestamp.now(),
       propertyarearange: cards.Propertyarearange(arearangestart: superArea, unit: areaUnit),
       roomconfig: cards.Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom),
       propertypricerange: cards.Propertypricerange(arearangestart: price, unit: priceunit));
-
+  final List<Assignedto> assignedListInInventory = assignto.map((user) {
+    return Assignedto(
+      firstname: user.userfirstname,
+      lastname: user.userlastname,
+      assignedby: AppConst.getAccessToken(),
+      image: user.image,
+      userid: user.userId,
+    );
+  }).toList();
   final InventoryDetails inventory = InventoryDetails(
       inventoryTitle: "$propertyCategory $propertyKind-$propertyCity",
-      inventoryDescription: "Want to $inventoryCategory her $bedrooms BHK for $price$priceunit} rupees",
+      inventoryDescription: "Want to $inventoryCategory her $bedrooms BHK for $price$priceunit rupees",
       inventoryId: isEdit ? existingInventoryId : "IN$randomId",
       inventoryStatus: "New",
       typeofoffice: typeofoffice,
       approvedbeds: approvedbeds,
+      managerid: currentUser["managerid"],
       typeofhospitality: typeofhospitality,
       hospitalrooms: hospitalrooms,
       propertykind: propertyKind,
@@ -102,14 +121,14 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit) async {
       villatype: villaType,
       typeofschool: typeofschool,
       transactiontype: transactionType,
-      brokerid: currentUser["brokerid"],
+      brokerid: currentUser["brokerId"],
       inventorycategory: inventoryCategory,
       propertycategory: propertyCategory,
       inventoryType: inventorySource == "Broker" ? "Broker" : inventorySource,
       inventorysource: inventorySource,
       possessiondate: possession,
       amenities: amenities,
-      attachments: attachments.isNotEmpty ? attachments : [],
+      attachments: attachments ?? [],
       commercialphotos: commercialphotos,
       propertyrent: Propertyrent(rentamount: rentamount, rentunit: rentunit, securityamount: securityamount, securityunit: securityunit, lockinperiod: lockinperiod),
       availability: availability,
@@ -128,7 +147,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit) async {
       propertyphotos: photos,
       createdate: Timestamp.now(),
       updatedby: AppConst.getAccessToken(),
-      assignedto: [Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)],
+      assignedto: assignedListInInventory,
       createdby:
           Createdby(userfirstname: currentUser["userfirstname"], userid: currentUser["userId"], userlastname: currentUser["userlastname"], userimage: currentUser["image"]));
 

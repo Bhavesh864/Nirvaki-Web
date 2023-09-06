@@ -30,7 +30,7 @@ class AssignmentWidget extends ConsumerStatefulWidget {
 }
 
 class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
-  void assign(User assignedUser) {
+  void assign(List<User> assignedUser) {
     setState(() {
       user = assignedUser;
     });

@@ -6,22 +6,31 @@ import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
 class AssignUser extends StatefulWidget {
-  final Function(User user) addUser;
+  final Function(List<User> user) addUser;
   final bool status;
   final List<dynamic>? assignedUserIds;
-  const AssignUser({
-    super.key,
-    required this.addUser,
-    this.assignedUserIds,
-    this.status = false,
-  });
+  const AssignUser({super.key, required this.addUser, this.assignedUserIds, this.status = false});
 
   @override
   State<AssignUser> createState() => _AssignUserState();
 }
 
 class _AssignUserState extends State<AssignUser> {
+  TextEditingController _textEditingController = TextEditingController();
   List<User> assignUsers = [];
+  FocusNode _focusNode = FocusNode();
+  @override
+  void initState() {
+    super.initState();
+    setData();
+  }
+
+  setData() async {
+    final List<User> users = await User.getListOfUsersByIds(widget.assignedUserIds!);
+    assignUsers.addAll(users);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -52,8 +61,8 @@ class _AssignUserState extends State<AssignUser> {
                       return usersList.where((user) {
                         final String fullName = '${user.userfirstname} ${user.userlastname}'.toLowerCase();
                         final bool isAssigned = widget.assignedUserIds!.contains(user.userId);
-                        final bool alradyExist = assignUsers.any((ele) => ele.userId == user.userId);
-                        return !alradyExist && !isAssigned && fullName.contains(searchText);
+                        // final bool alradyExist = assignUsers.any((ele) => ele.userId == user.userId);
+                        return !isAssigned && fullName.contains(searchText);
                       }).map((user) => '${user.userfirstname} ${user.userlastname}');
                     } else {
                       return usersList.where((user) {
@@ -64,8 +73,10 @@ class _AssignUserState extends State<AssignUser> {
                     }
                   },
                   fieldViewBuilder: (context, textEditingController, focusNode, onFieldSubmitted) {
+                    _textEditingController = textEditingController;
+                    _focusNode = focusNode;
                     return TextField(
-                      controller: textEditingController,
+                      controller: _textEditingController,
                       focusNode: focusNode,
                       onTap: () {},
                       decoration: InputDecoration(
@@ -99,10 +110,12 @@ class _AssignUserState extends State<AssignUser> {
                                   onTap: () {
                                     onSelected(option);
                                     User selectedUser = usersList.firstWhere((user) => '${user.userfirstname} ${user.userlastname}' == option);
-                                    widget.addUser(selectedUser);
                                     setState(() {
                                       assignUsers.add(selectedUser);
                                     });
+                                    widget.addUser(assignUsers);
+                                    _textEditingController.clear();
+                                    _focusNode.unfocus();
                                   },
                                   child: ListTile(
                                     title: Text(option),
@@ -133,7 +146,7 @@ class _AssignUserState extends State<AssignUser> {
               ),
             );
           }).toList(),
-        ),
+        )
       ],
     );
   }
