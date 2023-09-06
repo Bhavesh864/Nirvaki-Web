@@ -2,14 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
+import 'package:yes_broker/constants/firebase/chatModels/group_model.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/screens/main_screens/chat_list_screen.dart';
 
 // ignore: must_be_immutable
 class AddGroupMembers extends StatefulWidget {
-  AddGroupMembers({super.key, required this.userInfo});
+  AddGroupMembers({super.key, required this.userInfo, required this.contactId});
   List<String> userInfo;
+  final String contactId;
 
   @override
   State<AddGroupMembers> createState() => _AddGroupMembersState();
@@ -33,7 +36,10 @@ class _AddGroupMembersState extends State<AddGroupMembers> {
       customSnackBar(context: context, text: 'Atleast one user has to be selected');
       return;
     }
+    Group.addMembersOnGroup(groupId: widget.contactId, userids: selectedUser);
     customSnackBar(context: context, text: 'Added successfully');
+    Navigator.of(context).pop();
+    // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (builder) => const ChatListScreen()));
   }
 
   @override

@@ -20,6 +20,19 @@ class Group {
     required this.timeSent,
   });
 
+  factory Group.fromSnapshot(DocumentSnapshot snapshot) {
+    final json = snapshot.data() as Map<String, dynamic>;
+    return Group(
+      senderId: json["senderId"],
+      name: json["name"],
+      groupId: json["groupId"],
+      groupPic: json["groupPic"],
+      lastMessage: json["lastMessage"],
+      membersUid: json["membersUid"],
+      timeSent: json["timeSent"],
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'senderId': senderId,
@@ -44,7 +57,7 @@ class Group {
     );
   }
 
-  static Future<void> addAttachmentToItems({required String groupId, required List<String> userids}) async {
+  static Future<void> addMembersOnGroup({required String groupId, required List<String> userids}) async {
     try {
       QuerySnapshot querySnapshot = await groupCollection.where("groupId", isEqualTo: groupId).get();
       for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {

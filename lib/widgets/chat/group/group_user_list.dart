@@ -1,25 +1,34 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/app_constant.dart';
+import 'package:yes_broker/constants/firebase/chatModels/group_model.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 
 // ignore: must_be_immutable
-class GroupUserList extends StatelessWidget {
+class GroupUserList extends StatefulWidget {
   List<User> userInfo;
   final String? adminId;
-  GroupUserList({super.key, required this.userInfo, this.adminId});
+  final String? contactId;
+  final List<String> memberuids;
+  GroupUserList({super.key, required this.userInfo, this.adminId, this.contactId, required this.memberuids});
 
+  @override
+  State<GroupUserList> createState() => _GroupUserListState();
+}
+
+class _GroupUserListState extends State<GroupUserList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
         physics: const PageScrollPhysics(),
         shrinkWrap: true,
-        itemCount: userInfo.length,
+        itemCount: widget.userInfo.length,
         itemBuilder: (ctx, index) {
-          final user = userInfo[index];
+          final user = widget.userInfo[index];
           return Container(
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white),
             margin: const EdgeInsets.all(5),
@@ -31,14 +40,15 @@ class GroupUserList extends StatelessWidget {
                 child: CircleAvatar(radius: 26, backgroundImage: NetworkImage(user.image.isEmpty ? noImg : user.image)),
               ),
               title: AppText(
-                text: user.userId == adminId ? '${user.userfirstname} ${user.userlastname} (Admin)' : '${user.userfirstname} ${user.userlastname}',
+                text: user.userId == widget.adminId ? '${user.userfirstname} ${user.userlastname} (Admin)' : '${user.userfirstname} ${user.userlastname}',
                 textColor: const Color.fromRGBO(44, 44, 46, 1),
                 fontWeight: FontWeight.w500,
                 fontsize: 16,
               ),
-              trailing: AppConst.getAccessToken() == adminId && user.userId != adminId
+              trailing: AppConst.getAccessToken() == widget.adminId && user.userId != widget.adminId
                   ? InkWell(
                       onTap: () {
+                        Group.deleteMember(groupId: widget.contactId!, memberIdToDelete: user.userId);
                         customSnackBar(context: context, text: '${user.userfirstname} ${user.userlastname} has been removed');
                       },
                       splashColor: Colors.grey[350],
