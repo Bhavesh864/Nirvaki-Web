@@ -15,14 +15,28 @@ import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
 import '../utils/colors.dart';
 
-Widget buildLeadQuestions(Question question, List<Screen> screensDataList, int currentScreenIndex, AllChipSelectedAnwers notify, Function nextQuestion) {
+Widget buildLeadQuestions(
+  Question question,
+  List<Screen> screensDataList,
+  int currentScreenIndex,
+  AllChipSelectedAnwers notify,
+  Function nextQuestion,
+  bool isRentSelected,
+  List<Map<String, dynamic>> selectedValues,
+) {
   if (question.questionOptionType == 'chip') {
     return Column(
       children: [
         for (var option in question.questionOption)
           StatefulBuilder(builder: (context, setState) {
+            if (isRentSelected && option == "Plot") {
+              return const SizedBox();
+            }
             return ChipButton(
               text: option,
+              bgColor: selectedValues.any((answer) => answer["id"] == question.questionId && answer["item"] == option)
+                  ? AppColor.primary.withOpacity(0.2)
+                  : AppColor.primary.withOpacity(0.05),
               onSelect: () {
                 if (currentScreenIndex < screensDataList.length - 1) {
                   notify.add({"id": question.questionId, "item": option});
@@ -37,6 +51,9 @@ Widget buildLeadQuestions(Question question, List<Screen> screensDataList, int c
     );
   } else if (question.questionOptionType == 'smallchip') {
     String selectedOption = '';
+    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+      selectedOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+    }
 
     return StatefulBuilder(builder: (context, setState) {
       return Column(
@@ -80,6 +97,9 @@ Widget buildLeadQuestions(Question question, List<Screen> screensDataList, int c
   } else if (question.questionOptionType == 'multichip') {
     List<String> selectedOptions = [];
     List items = question.questionOption;
+    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+      selectedOptions = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+    }
     return StatefulBuilder(
       builder: (context, setState) {
         return Column(
@@ -122,7 +142,9 @@ Widget buildLeadQuestions(Question question, List<Screen> screensDataList, int c
       },
     );
   } else if (question.questionOptionType == 'textfield') {
-    TextEditingController controller = TextEditingController();
+    final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
+    TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
+    // TextEditingController controller = TextEditingController();
     bool isChecked = true;
 
     if (question.questionTitle == 'Whatsapp Number') {
@@ -208,6 +230,7 @@ Widget buildLeadQuestions(Question question, List<Screen> screensDataList, int c
   } else if (question.questionOptionType == 'dropdown') {
     return DropDownField(
       title: question.questionTitle,
+      defaultValues: "",
       optionsList: question.questionOption,
       onchanged: (Object e) {
         notify.add({"id": question.questionId, "item": e});

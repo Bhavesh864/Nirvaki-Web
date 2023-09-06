@@ -232,7 +232,7 @@ Widget buildInventoryQuestions(
   } else if (question.questionOptionType == 'dropdown') {
     String? defaultValue;
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
-      defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+      defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
     return DropDownField(
       title: question.questionTitle,

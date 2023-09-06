@@ -52,12 +52,14 @@ class _AssignUserState extends State<AssignUser> {
                       return usersList.where((user) {
                         final String fullName = '${user.userfirstname} ${user.userlastname}'.toLowerCase();
                         final bool isAssigned = widget.assignedUserIds!.contains(user.userId);
-                        return !isAssigned && fullName.contains(searchText);
+                        final bool alradyExist = assignUsers.any((ele) => ele.userId == user.userId);
+                        return !alradyExist && !isAssigned && fullName.contains(searchText);
                       }).map((user) => '${user.userfirstname} ${user.userlastname}');
                     } else {
                       return usersList.where((user) {
                         final String fullName = '${user.userfirstname} ${user.userlastname}'.toLowerCase();
-                        return fullName.contains(searchText);
+                        final bool alradyExist = assignUsers.any((ele) => ele.userId == user.userId);
+                        return !alradyExist && fullName.contains(searchText);
                       }).map((user) => '${user.userfirstname} ${user.userlastname}');
                     }
                   },
@@ -75,7 +77,7 @@ class _AssignUserState extends State<AssignUser> {
                     );
                   },
                   optionsViewBuilder: (context, onSelected, options) {
-                    const itemHeight = 56.0; // Height of each option ListTile
+                    const itemHeight = 56.0;
                     final itemCount = options.length;
                     final dropdownHeight = itemHeight * itemCount;
                     return SingleChildScrollView(
@@ -98,8 +100,9 @@ class _AssignUserState extends State<AssignUser> {
                                     onSelected(option);
                                     User selectedUser = usersList.firstWhere((user) => '${user.userfirstname} ${user.userlastname}' == option);
                                     widget.addUser(selectedUser);
-                                    assignUsers.add(selectedUser);
-                                    // setState(() {});
+                                    setState(() {
+                                      assignUsers.add(selectedUser);
+                                    });
                                   },
                                   child: ListTile(
                                     title: Text(option),
