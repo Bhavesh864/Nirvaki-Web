@@ -124,7 +124,7 @@ class InventoryDetailsHeader extends ConsumerWidget {
                           setState();
                         } else if (e.contains("Edit")) {
                           Future.delayed(const Duration(milliseconds: 500)).then(
-                            (value) => AppConst.getOuterContext()!.beamToNamed(AppRoutes.addInventory, data: true),
+                            (value) => AppConst.getOuterContext()!.beamToNamed(id.contains("IN") ? AppRoutes.addInventory : AppRoutes.addLead, data: true),
                           );
                         }
                       }, showicon: true, icon: e['icon']),

@@ -16,12 +16,15 @@ class ChatScreen extends ConsumerStatefulWidget {
   final String contactId;
   final String profilePic;
   final String name;
+  final String? adminId;
   final bool isGroupChat;
   final Function? onOpenChat;
-
+  final List<String>? memberuid;
   const ChatScreen({
     super.key,
+    this.memberuid,
     required this.contactId,
+    this.adminId,
     required this.profilePic,
     required this.name,
     required this.isGroupChat,
@@ -33,6 +36,7 @@ class ChatScreen extends ConsumerStatefulWidget {
 }
 
 class _ChatScreenState extends ConsumerState<ChatScreen> {
+  final List<String> members = [];
   final ChatService chatService = ChatService();
   final ScrollController messageController = ScrollController();
 
@@ -80,10 +84,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       Container(
                         margin: const EdgeInsets.only(bottom: 5),
                         child: ChatScreenHeader(
-                          profilePic: widget.profilePic,
-                          name: widget.name,
-                          contactId: widget.contactId,
-                        ),
+                            profilePic: widget.profilePic,
+                            name: widget.name,
+                            contactId: widget.contactId,
+                            members: widget.memberuid,
+                            isGroupChat: widget.isGroupChat,
+                            adminId: widget.adminId),
                       ),
                       Divider(
                         height: 1,
