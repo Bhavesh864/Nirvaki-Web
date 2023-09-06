@@ -14,48 +14,50 @@ import 'package:yes_broker/widgets/questionaries/assign_user.dart';
 import '../app_constant.dart';
 import '../firebase/userModel/user_info.dart';
 
-User? user;
+List<User>? user;
 
 void submitAssignUser(String id, BuildContext context, dynamic assignto) async {
   if (user != null) {
-    if (id.contains(ItemCategory.isTodo)) {
-      todo.Assignedto assign = todo.Assignedto(
-        firstname: user!.userfirstname,
-        lastname: user!.userlastname,
+    for (var i = 0; i < user!.length; i++) {
+      if (id.contains(ItemCategory.isTodo)) {
+        todo.Assignedto assign = todo.Assignedto(
+          firstname: user![i].userfirstname,
+          lastname: user![i].userlastname,
+          assignedby: AppConst.getAccessToken(),
+          userid: user![i].userId,
+          image: user![i].image,
+        );
+        todo.TodoDetails.updateAssignUser(itemid: id, assignedto: assign);
+      } else if (id.contains(ItemCategory.isInventory)) {
+        inventory.Assignedto assign = inventory.Assignedto(
+          firstname: user![i].userfirstname,
+          lastname: user![i].userlastname,
+          assignedby: AppConst.getAccessToken(),
+          userid: user![i].userId,
+          image: user![i].image,
+        );
+        inventory.InventoryDetails.updateAssignUser(itemid: id, assignedto: assign);
+      } else if (id.contains(ItemCategory.isLead)) {
+        lead.Assignedto assign = lead.Assignedto(
+          firstname: user![i].userfirstname,
+          lastname: user![i].userlastname,
+          assignedby: AppConst.getAccessToken(),
+          userid: user![i].userId,
+          image: user![i].image,
+        );
+        lead.LeadDetails.updateAssignUser(itemid: id, assignedto: assign);
+      }
+      Assignedto assigncard = Assignedto(
+        firstname: user![i].userfirstname,
+        lastname: user![i].userlastname,
         assignedby: AppConst.getAccessToken(),
-        userid: user!.userId,
-        image: user!.image,
+        userid: user![i].userId,
+        image: user![i].image,
       );
-      todo.TodoDetails.updateAssignUser(itemid: id, assignedto: assign);
-    } else if (id.contains(ItemCategory.isInventory)) {
-      inventory.Assignedto assign = inventory.Assignedto(
-        firstname: user!.userfirstname,
-        lastname: user!.userlastname,
-        assignedby: AppConst.getAccessToken(),
-        userid: user!.userId,
-        image: user!.image,
-      );
-      inventory.InventoryDetails.updateAssignUser(itemid: id, assignedto: assign);
-    } else if (id.contains(ItemCategory.isLead)) {
-      lead.Assignedto assign = lead.Assignedto(
-        firstname: user!.userfirstname,
-        lastname: user!.userlastname,
-        assignedby: AppConst.getAccessToken(),
-        userid: user!.userId,
-        image: user!.image,
-      );
-      lead.LeadDetails.updateAssignUser(itemid: id, assignedto: assign);
+      CardDetails.updateAssignUser(itemid: id, assignedto: assigncard);
+      notifyToUser(assignedto: user?[i].userId, title: "Assign new $id", content: "New $id Assign To You", assigntofield: true, itemid: id);
+      user = null;
     }
-    Assignedto assigncard = Assignedto(
-      firstname: user!.userfirstname,
-      lastname: user!.userlastname,
-      assignedby: AppConst.getAccessToken(),
-      userid: user!.userId,
-      image: user!.image,
-    );
-    CardDetails.updateAssignUser(itemid: id, assignedto: assigncard);
-    notifyToUser(assignedto: user?.userId, title: "Assign new $id", content: "New $id Assign To You", assigntofield: true, itemid: id);
-    user = null;
   } else {
     customSnackBar(context: context, text: "please select user");
   }
@@ -82,7 +84,7 @@ void assginUserToTodo(BuildContext context, Function assign, List<dynamic> assig
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           child: Container(
             padding: const EdgeInsets.all(15),
-            height: 210,
+            height: 250,
             width: 500,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
