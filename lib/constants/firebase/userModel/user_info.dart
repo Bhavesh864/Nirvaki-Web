@@ -127,7 +127,6 @@ class User extends HiveObject {
   static Future<List<User>> getListOfUsersByIds(List<dynamic> userIds) async {
     try {
       final QuerySnapshot querySnapshot = await usersCollection.where("userId", whereIn: userIds).get();
-
       final List<User> users = [];
       for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
         if (documentSnapshot.exists) {

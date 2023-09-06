@@ -16,9 +16,11 @@ class ChatScreen extends ConsumerStatefulWidget {
   final String contactId;
   final String profilePic;
   final String name;
+  final String? adminId;
   final bool isGroupChat;
   final Function? onOpenChat;
 
+  final List<String>? members;
   const ChatScreen({
     super.key,
     required this.contactId,
@@ -26,6 +28,8 @@ class ChatScreen extends ConsumerStatefulWidget {
     required this.name,
     required this.isGroupChat,
     this.onOpenChat,
+    this.members,
+    this.adminId,
   });
 
   @override
@@ -80,10 +84,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       Container(
                         margin: const EdgeInsets.only(bottom: 5),
                         child: ChatScreenHeader(
-                          profilePic: widget.profilePic,
-                          name: widget.name,
-                          contactId: widget.contactId,
-                        ),
+                            profilePic: widget.profilePic,
+                            name: widget.name,
+                            contactId: widget.contactId,
+                            members: widget.members,
+                            isGroupChat: widget.isGroupChat,
+                            adminId: widget.adminId),
                       ),
                       Divider(
                         height: 1,

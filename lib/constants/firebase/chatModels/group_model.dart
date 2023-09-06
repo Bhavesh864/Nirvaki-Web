@@ -20,6 +20,19 @@ class Group {
     required this.timeSent,
   });
 
+  factory Group.fromSnapshot(DocumentSnapshot snapshot) {
+    final json = snapshot.data() as Map<String, dynamic>;
+    return Group(
+      senderId: json["senderId"],
+      name: json["name"],
+      groupId: json["groupId"],
+      groupPic: json["groupPic"],
+      lastMessage: json["lastMessage"],
+      membersUid: json["membersUid"],
+      timeSent: json["timeSent"],
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'senderId': senderId,
