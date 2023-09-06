@@ -287,9 +287,7 @@ class CardDetails {
 
         List<dynamic> existingassign = data['assignedto'] ?? [];
         existingassign.add(assignedto.toJson());
-
         await docSnapshot.reference.update({'assignedto': existingassign});
-
         print('assign new user to this ${docSnapshot.id}');
       }
     } catch (error) {
