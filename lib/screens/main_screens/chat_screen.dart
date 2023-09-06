@@ -56,7 +56,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             if (snapshot.hasError) {
               return Text('Error ${snapshot.error}');
             }
-
             if (snapshot.connectionState == ConnectionState.waiting) {
               return SizedBox(
                 height: Responsive.isMobile(context) ? height : 400,
