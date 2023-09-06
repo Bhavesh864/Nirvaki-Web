@@ -9,8 +9,7 @@ import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
 
 import '../../../riverpodstate/user_data.dart';
 
-final CollectionReference usersCollection =
-    FirebaseFirestore.instance.collection('users');
+final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
 Box box = Hive.box("users");
 final currentUser = box.get(AppConst.getAccessToken());
 final FirebaseAuth auth = FirebaseAuth.instance;
@@ -125,16 +124,34 @@ class User extends HiveObject {
     }
   }
 
-  static Future<List<User>> getAllUsers() async {
+  static Future<List<User>> getListOfUsersByIds(List<dynamic> userIds) async {
     try {
-      final QuerySnapshot querySnapshot = await usersCollection
-          .where("brokerId", isEqualTo: currentUser["brokerId"])
-          .get();
+      final QuerySnapshot querySnapshot = await usersCollection.where("userId", whereIn: userIds).get();
+
       final List<User> users = [];
       for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
         if (documentSnapshot.exists) {
-          final Map<String, dynamic> data =
-              documentSnapshot.data() as Map<String, dynamic>;
+          final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+          final User user = User.fromMap(data);
+          users.add(user);
+        }
+      }
+      return users;
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to get users by IDs: $error');
+      }
+      return [];
+    }
+  }
+
+  static Future<List<User>> getAllUsers() async {
+    try {
+      final QuerySnapshot querySnapshot = await usersCollection.where("brokerId", isEqualTo: currentUser["brokerId"]).get();
+      final List<User> users = [];
+      for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        if (documentSnapshot.exists) {
+          final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
           final User user = User.fromMap(data);
           users.add(user);
         }
@@ -157,11 +174,9 @@ class User extends HiveObject {
         final User user = User.fromMap(userDataMap);
         return user;
       } else {
-        final DocumentSnapshot documentSnapshot =
-            await usersCollection.doc(userId).get();
+        final DocumentSnapshot documentSnapshot = await usersCollection.doc(userId).get();
         if (documentSnapshot.exists) {
-          final Map<String, dynamic> data =
-              documentSnapshot.data() as Map<String, dynamic>;
+          final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
           final User user = User.fromMap(data);
           ref?.read(userDataProvider.notifier).storeUserData(user);
           UserHiveMethods.addData(key: userId, data: user.toMap());
@@ -181,17 +196,14 @@ class User extends HiveObject {
 
   static Future<void> updateUser(User updatedUser) async {
     try {
-      await usersCollection
-          .doc(updatedUser.brokerId)
-          .update(updatedUser.toMap());
+      await usersCollection.doc(updatedUser.brokerId).update(updatedUser.toMap());
       // print('User updated successfully');
     } catch (error) {
       // print('Failed to update user: $error');
     }
   }
 
-  static Future<void> updateFcmToken(
-      {required dynamic fcmtoken, required String userid}) async {
+  static Future<void> updateFcmToken({required dynamic fcmtoken, required String userid}) async {
     try {
       await usersCollection.doc(userid).update({"fcmToken": fcmtoken});
       print('User updated successfully');
