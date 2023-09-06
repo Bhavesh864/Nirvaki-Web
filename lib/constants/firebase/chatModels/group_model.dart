@@ -44,7 +44,7 @@ class Group {
     );
   }
 
-  static Future<void> addAttachmentToItems({required String groupId, required List<String> userids}) async {
+  static Future<void> addMembersOnGroup({required String groupId, required List<String> userids}) async {
     try {
       QuerySnapshot querySnapshot = await groupCollection.where("groupId", isEqualTo: groupId).get();
       for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
