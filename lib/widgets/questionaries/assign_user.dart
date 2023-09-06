@@ -22,7 +22,11 @@ class _AssignUserState extends State<AssignUser> {
   @override
   void initState() {
     super.initState();
-    setData();
+    if (widget.status) {
+      assignUsers = [];
+    } else {
+      setData();
+    }
   }
 
   setData() async {
@@ -61,8 +65,8 @@ class _AssignUserState extends State<AssignUser> {
                       return usersList.where((user) {
                         final String fullName = '${user.userfirstname} ${user.userlastname}'.toLowerCase();
                         final bool isAssigned = widget.assignedUserIds!.contains(user.userId);
-                        // final bool alradyExist = assignUsers.any((ele) => ele.userId == user.userId);
-                        return !isAssigned && fullName.contains(searchText);
+                        final bool alradyExist = assignUsers.any((ele) => ele.userId == user.userId);
+                        return !alradyExist && !isAssigned && fullName.contains(searchText);
                       }).map((user) => '${user.userfirstname} ${user.userlastname}');
                     } else {
                       return usersList.where((user) {
