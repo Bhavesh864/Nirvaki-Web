@@ -1,23 +1,14 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/Users/saurabhmehra/flutterProject/fluttersdk/flutter"
-export "FLUTTER_APPLICATION_PATH=/Users/saurabhmehra/flutterProject/broker_webappV1"
+export "FLUTTER_ROOT=/Users/saurabhmehra/Projects/flutterProjects/flutter"
+export "FLUTTER_APPLICATION_PATH=/Users/saurabhmehra/Projects/flutterProjects/broker_webappV1"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
-<<<<<<< HEAD
-=======
-export "FLUTTER_TARGET=/Users/saurabhmehra/flutterProject/broker_webappV1/lib/main.dart"
->>>>>>> 637a6553114d2396d9d1463eddd914b2550ca7f3
+export "FLUTTER_TARGET=/Users/saurabhmehra/Projects/flutterProjects/broker_webappV1/lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.0"
 export "FLUTTER_BUILD_NUMBER=1"
+export "DART_DEFINES=RkxVVFRFUl9XRUJfQVVUT19ERVRFQ1Q9dHJ1ZQ==,RkxVVFRFUl9XRUJfQ0FOVkFTS0lUX1VSTD1odHRwczovL3d3dy5nc3RhdGljLmNvbS9mbHV0dGVyLWNhbnZhc2tpdC9jZGJlZGE3ODhhMjkzZmEyOTY2NWRjM2ZhM2Q2ZTYzYmQyMjFjYjBkLw=="
 export "DART_OBFUSCATION=false"
 export "TRACK_WIDGET_CREATION=true"
 export "TREE_SHAKE_ICONS=false"
-<<<<<<< HEAD
-<<<<<<< HEAD
-export "PACKAGE_CONFIG=/Users/saurabhmehra/flutterProject/broker_webappV1/.dart_tool/package_config.json"
-=======
-export "PACKAGE_CONFIG=.dart_tool/package_config.json"
-=======
-export "PACKAGE_CONFIG=/Users/saurabhmehra/flutterProject/broker_webappV1/.dart_tool/package_config.json"
->>>>>>> 637a6553114d2396d9d1463eddd914b2550ca7f3
+export "PACKAGE_CONFIG=/Users/saurabhmehra/Projects/flutterProjects/broker_webappV1/.dart_tool/package_config.json"

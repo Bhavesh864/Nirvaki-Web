@@ -35,7 +35,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   late Future<List<InventoryQuestions>> getQuestions;
   List<Screen> currentScreenList = [];
   PageController? pageController;
-  int currentScreenIndex = 35;
+  int currentScreenIndex = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -227,6 +227,8 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                         notify,
                                                         nextQuestion,
                                                         isRentSelected,
+                                                        isPlotSelected,
+                                                        isEdit,
                                                         selectedValues,
                                                       ),
                                                       if (i == currentScreenList[index].questions.length - 1 && question.questionOptionType != 'chip')

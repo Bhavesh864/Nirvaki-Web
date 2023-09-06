@@ -155,8 +155,7 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
                                               AssignmentWidget(
                                                 id: data.leadId!,
                                                 assignto: data.assignedto!,
-                                                imageUrlCreatedBy:
-                                                    data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                 createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                               ),
                                             );
@@ -244,3 +243,7 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
     );
   }
 }
+
+
+// edit ke time data ke model different hai 
+// pr add krne ke wqt different 

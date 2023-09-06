@@ -12,11 +12,11 @@ import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/loader.dart';
+import 'package:yes_broker/screens/main_screens/chat_screen.dart';
 import 'package:yes_broker/screens/main_screens/create_group_screen.dart';
 
 import '../../Customs/responsive.dart';
 import '../../constants/utils/colors.dart';
-import 'chat_screen.dart';
 
 class ChatItem {
   final String id;
@@ -27,6 +27,7 @@ class ChatItem {
   final bool isGroupChat;
   final bool lastMessageIsSeen;
   final String lastMessageSenderId;
+  final List<String> membersUid;
 
   ChatItem({
     required this.id,
@@ -37,6 +38,7 @@ class ChatItem {
     required this.isGroupChat,
     required this.lastMessageIsSeen,
     required this.lastMessageSenderId,
+    required this.membersUid,
   });
 }
 
@@ -105,6 +107,8 @@ class ChatListScreen extends ConsumerWidget {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (ctx) => ChatScreen(
+                                  memberuid: chatItem.membersUid,
+                                  adminId: chatItem.id,
                                   profilePic: chatItem.profilePic,
                                   name: chatItem.name,
                                   contactId: chatItem.id,
@@ -226,6 +230,7 @@ class ChatListScreen extends ConsumerWidget {
               isGroupChat: false,
               lastMessageIsSeen: contact.lastMessageIsSeen,
               lastMessageSenderId: contact.lastMessageSenderId,
+              membersUid: [],
             )));
 
         chatItems.addAll(
@@ -239,6 +244,7 @@ class ChatListScreen extends ConsumerWidget {
               isGroupChat: true,
               lastMessageIsSeen: group.lastMessageIsSeen,
               lastMessageSenderId: group.lastMessageSenderId,
+              membersUid: group.membersUid,
             ),
           ),
         );

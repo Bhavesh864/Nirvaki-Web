@@ -35,6 +35,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
   final Map<String, int> containersCountByRoom = {};
 
   List<Widget> imageContainers = [];
+  List<Widget> roomWidgets = [];
 
   String imageUrl = '';
 
@@ -46,6 +47,12 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
     itemTitles = [
       'Front Elevation',
     ];
+
+    //  for (var i = 0; i < widget.propertyphotos!.bedroom!.length; i++) {
+    //   var element = widget.propertyphotos!.bedroom![i];
+    //   roomWidgets.add({"title": "Bed Room (${i + 1})", "imageUrl": element});
+    // }
+    // print("roomWidgets --> $roomWidgets");
 
     final selectedAnswerArr = answersArr.where((item) => item['id'] == 14 || item['id'] == 15 || item['id'] == 16).toList();
 

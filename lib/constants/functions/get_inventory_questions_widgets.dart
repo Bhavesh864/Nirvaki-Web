@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/constants/functions/assingment_methods.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/questionaries/questions_form_photos_view.dart';
 import 'package:yes_broker/widgets/questionaries/assign_user.dart';
@@ -22,6 +23,8 @@ Widget buildInventoryQuestions(
   AllChipSelectedAnwers notify,
   Function nextQuestion,
   bool isRentSelected,
+  bool isPlotSelected,
+  bool isEdit,
   List<Map<String, dynamic>> selectedValues,
 ) {
   if (question.questionOptionType == 'chip') {
@@ -146,6 +149,9 @@ Widget buildInventoryQuestions(
     final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
     TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
     bool isChecked = true;
+    if (isPlotSelected && question.questionId == 30) {
+      return const SizedBox();
+    }
     if (question.questionTitle == 'Whatsapp Number') {
       return StatefulBuilder(
         builder: (context, setState) {
@@ -224,15 +230,26 @@ Widget buildInventoryQuestions(
       },
     );
   } else if (question.questionOptionType == "Assign") {
+    List<Assignedto> assignedusers = [];
+    List<String> userids = [];
+    if (isEdit) {
+      if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+        assignedusers = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+      }
+      for (var user in assignedusers) {
+        userids.add(user.userid!);
+      }
+    }
     return AssignUser(
-      addUser: (user) {
-        notify.add({"id": question.questionId, "item": user});
+      addUser: (users) {
+        notify.add({"id": question.questionId, "item": users});
       },
+      assignedUserIds: userids,
     );
   } else if (question.questionOptionType == 'dropdown') {
     String? defaultValue;
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
-      defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+      defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
     return DropDownField(
       title: question.questionTitle,
@@ -247,7 +264,6 @@ Widget buildInventoryQuestions(
     final city = getDataById(notify.state, 27);
     final address1 = getDataById(notify.state, 28);
     final address2 = getDataById(notify.state, 29);
-
     return CustomGoogleMap(
       onLatLngSelected: (latLng) {
         notify.add({
