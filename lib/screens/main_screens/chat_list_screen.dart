@@ -147,7 +147,7 @@ class ChatListScreen extends ConsumerWidget {
                                 padding: const EdgeInsets.only(top: 6.0),
                                 child: Text(
                                   chatItem.lastMessage,
-                                  maxLines: 1, // Display only one line of text
+                                  maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(fontSize: 15),
                                 ),
