@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
@@ -21,9 +20,14 @@ class GroupUserList extends StatefulWidget {
 }
 
 class _GroupUserListState extends State<GroupUserList> {
+  List<User> userInstance = [];
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(widget.adminId);
     return ListView.builder(
         physics: const PageScrollPhysics(),
         shrinkWrap: true,
