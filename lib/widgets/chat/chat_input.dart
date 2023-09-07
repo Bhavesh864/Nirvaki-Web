@@ -8,8 +8,8 @@ import '../../chat/controller/chat_controller.dart';
 class ChatInput extends ConsumerStatefulWidget {
   final String revceiverId;
   final bool isGroupChat;
+
   const ChatInput({
-    super.key,
     required this.revceiverId,
     required this.isGroupChat,
   });
