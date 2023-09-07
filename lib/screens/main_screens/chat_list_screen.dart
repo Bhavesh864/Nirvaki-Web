@@ -20,6 +20,7 @@ import '../../constants/utils/colors.dart';
 
 class ChatItem {
   final String id;
+  final String adminId;
   final String name;
   final String profilePic;
   final String lastMessage;
@@ -31,6 +32,7 @@ class ChatItem {
 
   ChatItem({
     required this.id,
+    required this.adminId,
     required this.name,
     required this.profilePic,
     required this.lastMessage,
@@ -108,7 +110,7 @@ class ChatListScreen extends ConsumerWidget {
                               MaterialPageRoute(
                                 builder: (ctx) => ChatScreen(
                                   memberuid: chatItem.membersUid,
-                                  adminId: chatItem.id,
+                                  adminId: chatItem.adminId,
                                   profilePic: chatItem.profilePic,
                                   name: chatItem.name,
                                   contactId: chatItem.id,
@@ -231,6 +233,7 @@ class ChatListScreen extends ConsumerWidget {
               lastMessageIsSeen: contact.lastMessageIsSeen,
               lastMessageSenderId: contact.lastMessageSenderId,
               membersUid: [],
+              adminId: '',
             )));
 
         chatItems.addAll(
@@ -245,6 +248,7 @@ class ChatListScreen extends ConsumerWidget {
               lastMessageIsSeen: group.lastMessageIsSeen,
               lastMessageSenderId: group.lastMessageSenderId,
               membersUid: group.membersUid,
+              adminId: group.senderId,
             ),
           ),
         );

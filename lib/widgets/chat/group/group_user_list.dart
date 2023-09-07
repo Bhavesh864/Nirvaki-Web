@@ -23,6 +23,7 @@ class GroupUserList extends StatefulWidget {
 class _GroupUserListState extends State<GroupUserList> {
   @override
   Widget build(BuildContext context) {
+    print(widget.adminId);
     return ListView.builder(
         physics: const PageScrollPhysics(),
         shrinkWrap: true,
