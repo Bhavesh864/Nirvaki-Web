@@ -31,6 +31,8 @@ class AddLead extends ConsumerStatefulWidget {
 class _AddLeadState extends ConsumerState<AddLead> {
   String? response;
   bool allQuestionFinishes = false;
+  bool isEdit = false;
+
   late Future<List<LeadQuestions>> getQuestions;
   List<Screen> currentScreenList = [];
   PageController? pageController;
@@ -42,10 +44,21 @@ class _AddLeadState extends ConsumerState<AddLead> {
     super.initState();
     getQuestions = LeadQuestions.getAllQuestionssFromFirestore();
     pageController = PageController(initialPage: currentScreenIndex);
+    final answers = ref.read(myArrayProvider);
+    answers.isNotEmpty ? isEdit = true : isEdit = false;
+    try {
+      if (isEdit) {
+        if (answers[0]["item"] == "Residential") {
+          ref.read(leadFilterCommercialQuestion.notifier).toggleCommericalQuestionary(false);
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   addDataOnfirestore(AllChipSelectedAnwers notify) {
-    notify.submitLead().then((value) => {
+    notify.submitLead(isEdit).then((value) => {
           setState(() {
             response = value;
           })
@@ -73,7 +86,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
     if (currentScreenIndex > 0) {
       setState(() {
         currentScreenIndex--;
-        ref.read(myArrayProvider.notifier).remove(id);
+        !isEdit ? ref.read(myArrayProvider.notifier).remove(id) : null;
         pageController!.previousPage(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
@@ -101,6 +114,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
     final isVillaSelected = ref.read(leadFilterVillaQuestion);
     final isPlotSelected = ref.read(leadFilterPlotQuestion);
     final isCommericalSelected = ref.read(leadFilterCommercialQuestion);
+    print(notify.state);
 
     return Scaffold(
       body: FutureBuilder<List<LeadQuestions>>(
@@ -118,6 +132,11 @@ class _AddLeadState extends ConsumerState<AddLead> {
             if (!currentScreenList.contains(screensDataList[0])) {
               currentScreenList = screensDataList;
             }
+            if (isEdit) {
+              final arr = ["S1"];
+              final filter = screensDataList.where((element) => !arr.contains(element.screenId)).toList();
+              screensDataList = filter;
+            }
             if (!isCommericalSelected) {
               if (isRentSelected) {
                 final arr = ["S8", "S10", "S6"];
@@ -129,15 +148,17 @@ class _AddLeadState extends ConsumerState<AddLead> {
                 currentScreenList = filter;
               }
               if (isVillaSelected) {
+                var index = isEdit ? 4 : 5;
                 final filter = screensDataList.firstWhere((element) => element.screenId == "S6");
-                currentScreenList.insert(5, filter);
+                currentScreenList.insert(index, filter);
               }
               if (isPlotSelected) {
+                var index = isEdit ? 8 : 9;
                 final arr = ["S9", "S6"];
                 final filter = currentScreenList.where((element) => !arr.contains(element.screenId)).toList();
                 currentScreenList = filter;
                 final filter2 = screensDataList.firstWhere((element) => element.screenId == "S10");
-                currentScreenList.insert(9, filter2);
+                currentScreenList.insert(index, filter2);
               }
             } else {
               currentScreenList = screensDataList;
@@ -207,29 +228,36 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                     notify,
                                                     nextQuestion,
                                                     isRentSelected,
+                                                    isEdit,
+                                                    isPlotSelected,
                                                     selectedValues,
                                                   ),
                                                   if (i == currentScreenList[index].questions.length - 1 && currentScreenList[index].questions[i].questionOptionType != 'chip')
                                                     Container(
                                                       margin: const EdgeInsets.only(top: 10),
                                                       alignment: Alignment.centerRight,
-                                                      child: CustomButton(
-                                                        text: 'Next',
-                                                        onPressed: () {
-                                                          // if (_formKey
-                                                          //     .currentState!
-                                                          //     .validate()) {
-                                                          nextQuestion(
-                                                            screensDataList: screensDataList,
-                                                          );
-                                                          // }
-                                                          if (currentScreenList[index].title == "Assign to") {
-                                                            addDataOnfirestore(notify);
-                                                          }
-                                                        },
-                                                        width: 73,
-                                                        height: 39,
-                                                      ),
+                                                      child: allQuestionFinishes
+                                                          ? const Center(
+                                                              child: CircularProgressIndicator.adaptive(),
+                                                            )
+                                                          : CustomButton(
+                                                              text: currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next',
+                                                              onPressed: () {
+                                                                if (!allQuestionFinishes) {
+                                                                  if (currentScreenList[index].title != "Assign to") {
+                                                                    if (_formKey.currentState!.validate()) {
+                                                                      nextQuestion(screensDataList: screensDataList);
+                                                                    }
+                                                                  }
+                                                                  if (currentScreenList[index].title == "Assign to") {
+                                                                    allQuestionFinishes = true;
+                                                                    addDataOnfirestore(notify);
+                                                                  }
+                                                                }
+                                                              },
+                                                              width: currentScreenList[index].title == "Assign to" ? 90 : 70,
+                                                              height: 39,
+                                                            ),
                                                     ),
                                                 ],
                                               ),
@@ -242,13 +270,9 @@ class _AddLeadState extends ConsumerState<AddLead> {
                               },
                             ),
                           )
-                        : response == "success"
-                            ? const WorkItemSuccessWidget(
-                                isInventory: 'LD',
-                              )
-                            : const Center(
-                                child: CircularProgressIndicator.adaptive(),
-                              )),
+                        : const WorkItemSuccessWidget(
+                            isInventory: 'LD',
+                          )),
                 leadAppbar(currentScreenList),
               ],
             );
@@ -277,7 +301,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                 size: 24,
               ),
             ),
-            title: const Text('Add Lead'),
+            title: Text(isEdit ? "Edit Lead" : 'Add Lead'),
           ),
         );
       },

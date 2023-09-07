@@ -7,14 +7,14 @@ import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' as cards;
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
-Future<String> submitLeadAndCardDetails(state) async {
+Future<String> submitLeadAndCardDetails(state, bool isEdit) async {
   final randomId = randomNumeric(5);
   var res = "pending";
   //  leadcategory example =  rent ,buy
   //   propertycategory example = residental ,commerical,
   final propertyCategory = getDataById(state, 1);
   final leadCategory = getDataById(state, 2);
-  final leadType = getDataById(state, 3);
+  // final leadType = getDataById(state, 3);
   final leadSource = getDataById(state, 4);
   final firstName = getDataById(state, 5);
   final lastName = getDataById(state, 6);
@@ -35,7 +35,8 @@ Future<String> submitLeadAndCardDetails(state) async {
   final amenities = getDataById(state, 21);
   final coveredparking = getDataById(state, 22);
   final areaUnit = getDataById(state, 23);
-  final expectedArea = getDataById(state, 24);
+  final superArea = getDataById(state, 24);
+  final carpetArea = getDataById(state, 25);
   final propertyState = getDataById(state, 26);
   final propertyCity = getDataById(state, 27);
   final addressLine1 = getDataById(state, 28);
@@ -46,7 +47,7 @@ Future<String> submitLeadAndCardDetails(state) async {
   final budgetFigures = getDataById(state, 33);
   final preferredpropertyfacing = getDataById(state, 34);
   final comments = getDataById(state, 35);
-  final User assignto = getDataById(state, 36);
+  final List<User> assignto = getDataById(state, 36);
 
   // commerical
   final availability = getDataById(state, 37);
@@ -59,10 +60,20 @@ Future<String> submitLeadAndCardDetails(state) async {
   final typeofschool = getDataById(state, 44);
   final hospitalrooms = getDataById(state, 45);
   final widthofRoad = getDataById(state, 46);
-  Box box = Hive.box("users");
-  final currentUser = box.get(AppConst.getAccessToken());
+  final attachments = getDataById(state, 100);
+  final existingLeadId = getDataById(state, 101);
+
+  final List<cards.Assignedto> assignedToList = assignto.map((user) {
+    return cards.Assignedto(
+      firstname: user.userfirstname,
+      lastname: user.userlastname,
+      assignedby: AppConst.getAccessToken(),
+      image: user.image,
+      userid: user.userId,
+    );
+  }).toList();
   final cards.CardDetails card = cards.CardDetails(
-      workitemId: "LD$randomId",
+      workitemId: isEdit ? existingLeadId : "LD$randomId",
       status: "New",
       cardCategory: leadCategory,
       linkedItemType: "LD",
@@ -72,24 +83,34 @@ Future<String> submitLeadAndCardDetails(state) async {
       cardDescription: "Want to $leadCategory her $bedrooms BHK for $budgetPrice $budgetFigures rupees",
       customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
       cardStatus: "New",
-      assignedto: [cards.Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)],
+      assignedto: assignedToList,
       createdby:
           cards.Createdby(userfirstname: currentUser["userfirstname"], userid: currentUser["userId"], userlastname: currentUser["userlastname"], userimage: currentUser["image"]),
       createdate: Timestamp.now(),
-      propertyarearange: cards.Propertyarearange(arearangestart: expectedArea, unit: areaUnit),
+      managerid: currentUser["managerid"],
+      propertyarearange: cards.Propertyarearange(arearangestart: carpetArea, unit: areaUnit),
       roomconfig: cards.Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom),
       propertypricerange: cards.Propertypricerange(arearangestart: budgetPrice, unit: budgetFigures));
-
+  final List<Assignedto> assignedListInLead = assignto.map((user) {
+    return Assignedto(
+      firstname: user.userfirstname,
+      lastname: user.userlastname,
+      assignedby: AppConst.getAccessToken(),
+      image: user.image,
+      userid: user.userId,
+    );
+  }).toList();
   final LeadDetails lead = LeadDetails(
       leadTitle: "$propertyCategory $propertyKind-$propertyCity",
       leadDescription: "lead",
-      leadId: "LD$randomId",
+      leadId: isEdit ? existingLeadId : "LD$randomId",
       leadStatus: "New",
       typeofoffice: typeofoffice,
       approvedbeds: approvedbeds,
       typeofhospitality: typeofhospitality,
       hospitalrooms: hospitalrooms,
       propertykind: propertyKind,
+      managerid: currentUser["managerid"],
       commericialtype: commericialtype,
       availability: availability,
       typeofretail: typeofretail,
@@ -100,29 +121,39 @@ Future<String> submitLeadAndCardDetails(state) async {
       preferredlocation: latlng,
       typeofschool: typeofschool,
       transactiontype: transactionType,
-      attachments: [],
+      attachments: attachments ?? [],
       brokerid: currentUser["brokerId"],
       leadcategory: leadCategory,
       propertycategory: propertyCategory,
-      leadType: leadType,
+      leadType: leadSource == "Broker" ? "Broker" : leadSource,
       preferredpropertyfacing: preferredpropertyfacing,
       leadsource: leadSource,
       possessiondate: possession,
       plotdetails: Plotdetails(boundarywall: boundaryWall, opensides: openSides),
       amenities: amenities,
+      propertyarea: Propertyarea(carpetarea: carpetArea, superarea: superArea),
       preferredlocality: Preferredlocality(state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, prefferedfloornumber: floorNumber),
-      propertyarearange: Propertyarearange(unit: areaUnit, arearangestart: expectedArea),
+      // propertyarearange: Propertyarearange(unit: areaUnit, arearangestart: carpetArea),
       propertypricerange: Propertypricerange(unit: budgetFigures, arearangestart: budgetPrice),
       reservedparking: Reservedparking(covered: coveredparking),
       customerinfo: Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo ?? mobileNo),
-      roomconfig: Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom, balconies: balconies, bathroom: bathrooms),
+      roomconfig: Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom ?? [], balconies: balconies, bathroom: bathrooms),
       comments: comments,
+      updatedby: AppConst.getAccessToken(),
       createdate: Timestamp.now(),
-      assignedto: [Assignedto(firstname: assignto.userfirstname, lastname: assignto.userlastname, assignedby: "bhavesh", image: assignto.image, userid: assignto.userId)],
+      assignedto: assignedListInLead,
       createdby:
           Createdby(userfirstname: currentUser["userfirstname"], userid: currentUser["userId"], userlastname: currentUser["userlastname"], userimage: currentUser["image"]));
 
-  await cards.CardDetails.addCardDetails(card).then((value) => {res = "success"});
-  await LeadDetails.addLeadDetails(lead).then((value) => {res = "success"});
+  // await cards.CardDetails.addCardDetails(card).then((value) => {res = "success"});
+  isEdit
+      ? await cards.CardDetails.updateCardDetails(id: existingLeadId, cardDetails: card).then((value) => {res = "success"})
+      : await cards.CardDetails.addCardDetails(card).then((value) => {res = "success"});
+
+  // await LeadDetails.addLeadDetails(lead).then((value) => {res = "success"});
+  isEdit
+      ? await LeadDetails.updateLeadDetails(id: existingLeadId, leadDetails: lead).then((value) => {res = "success"})
+      : await LeadDetails.addLeadDetails(lead).then((value) => {res = "success"});
+
   return res;
 }
