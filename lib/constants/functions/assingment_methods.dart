@@ -15,7 +15,6 @@ import '../app_constant.dart';
 import '../firebase/userModel/user_info.dart';
 
 List<User>? user;
-
 void submitAssignUser(String id, BuildContext context, List<User> users) async {
   if (users.isNotEmpty) {
     for (var i = 0; i < users.length; i++) {

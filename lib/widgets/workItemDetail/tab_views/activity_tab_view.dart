@@ -55,7 +55,7 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
                   text: 'Add Note',
                   onPressed: () {
                     if (controller.text.isNotEmpty) {
-                      submitActivity(itemid: workItemId, activitytitle: controller.text);
+                      submitActivity(itemid: workItemId, activitytitle: controller.text.trim());
                       notifyToUser(assignedto: widget.details.assignedto, content: "$workItemId added new Activity", title: controller.text, itemid: workItemId);
                       controller.clear();
                     } else {

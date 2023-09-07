@@ -1,27 +1,21 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/screens/main_screens/chat_list_screen.dart';
 import 'package:yes_broker/screens/main_screens/chat_user_profile.dart';
 
 class ChatScreenHeader extends StatefulWidget {
-  final String contactId;
-  final String profilePic;
-  final String name;
-  final String? adminId;
-  final List<String>? members;
-  final bool isGroupChat;
+  final ChatItem? chatItem;
+  final User? user;
 
   const ChatScreenHeader({
-    super.key,
-    required this.contactId,
-    required this.profilePic,
-    required this.name,
-    this.members,
-    this.adminId,
-    required this.isGroupChat,
-  });
+    Key? key,
+    this.chatItem,
+    this.user,
+  }) : super(key: key);
 
   @override
   State<ChatScreenHeader> createState() => _ChatScreenHeaderState();
@@ -31,8 +25,13 @@ class _ChatScreenHeaderState extends State<ChatScreenHeader> {
   User? userInfo;
 
   void getUserDetails() async {
-    final user = await User.getUser(widget.contactId);
-    userInfo = user;
+    if (widget.user != null) {
+      final user = await User.getUser(widget.user!.userId);
+      setState(() {
+        userInfo = user;
+      });
+      userInfo = user;
+    }
   }
 
   @override
@@ -43,6 +42,13 @@ class _ChatScreenHeaderState extends State<ChatScreenHeader> {
 
   @override
   Widget build(BuildContext context) {
+    final String chatItemId = widget.chatItem?.id ?? widget.user?.brokerId ?? '';
+    final bool isGroupChat = widget.chatItem?.isGroupChat ?? false;
+    final String name = widget.chatItem?.name ?? '${widget.user?.userfirstname} ${widget.user?.userlastname}';
+    final String profilePic = widget.chatItem?.profilePic ?? widget.user?.image ?? '';
+    // final List<String> members = widget.chatItem?.membersUid ?? [];
+    final String adminId = widget.chatItem?.adminId ?? '';
+
     return Row(
       children: [
         InkWell(
@@ -66,24 +72,24 @@ class _ChatScreenHeaderState extends State<ChatScreenHeader> {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (ctx) => ChatUserProfile(
-                    profilePic: widget.profilePic,
-                    name: widget.name,
-                    user: userInfo,
-                    members: widget.members,
-                    isGroupChat: widget.isGroupChat,
-                    adminId: widget.adminId,
-                    contactId: widget.contactId),
+                  profilePic: profilePic,
+                  name: name,
+                  user: userInfo,
+                  isGroupChat: isGroupChat,
+                  adminId: adminId,
+                  contactId: chatItemId,
+                ),
               ),
             );
           },
           child: Row(
             children: [
               Hero(
-                tag: widget.contactId,
+                tag: chatItemId,
                 child: CircleAvatar(
                   radius: 24,
                   backgroundImage: NetworkImage(
-                    widget.profilePic.isEmpty ? noImg : widget.profilePic,
+                    profilePic.isEmpty ? noImg : profilePic,
                   ),
                 ),
               ),
@@ -95,7 +101,7 @@ class _ChatScreenHeaderState extends State<ChatScreenHeader> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AppText(
-                    text: widget.name,
+                    text: name,
                     textColor: const Color.fromRGBO(44, 44, 46, 1),
                     fontWeight: FontWeight.w500,
                     fontsize: 16,

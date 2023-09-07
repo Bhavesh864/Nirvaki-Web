@@ -40,8 +40,8 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
     return res;
   }
 
-  Future<String> submitLead() async {
-    final String res = await submitLeadAndCardDetails(state);
+  Future<String> submitLead(bool isEdit) async {
+    final String res = await submitLeadAndCardDetails(state, isEdit);
     return res;
   }
 
