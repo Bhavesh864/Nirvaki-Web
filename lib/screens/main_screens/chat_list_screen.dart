@@ -12,14 +12,15 @@ import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/loader.dart';
+import 'package:yes_broker/screens/main_screens/chat_screen.dart';
 import 'package:yes_broker/screens/main_screens/create_group_screen.dart';
 
 import '../../Customs/responsive.dart';
 import '../../constants/utils/colors.dart';
-import 'chat_screen.dart';
 
 class ChatItem {
   final String id;
+  final String adminId;
   final String name;
   final String profilePic;
   final String lastMessage;
@@ -27,9 +28,11 @@ class ChatItem {
   final bool isGroupChat;
   final bool lastMessageIsSeen;
   final String lastMessageSenderId;
+  final List<String> membersUid;
 
   ChatItem({
     required this.id,
+    required this.adminId,
     required this.name,
     required this.profilePic,
     required this.lastMessage,
@@ -37,6 +40,7 @@ class ChatItem {
     required this.isGroupChat,
     required this.lastMessageIsSeen,
     required this.lastMessageSenderId,
+    required this.membersUid,
   });
 }
 
@@ -105,6 +109,8 @@ class ChatListScreen extends ConsumerWidget {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (ctx) => ChatScreen(
+                                  memberuid: chatItem.membersUid,
+                                  adminId: chatItem.adminId,
                                   profilePic: chatItem.profilePic,
                                   name: chatItem.name,
                                   contactId: chatItem.id,
@@ -141,7 +147,7 @@ class ChatListScreen extends ConsumerWidget {
                                 padding: const EdgeInsets.only(top: 6.0),
                                 child: Text(
                                   chatItem.lastMessage,
-                                  maxLines: 1, // Display only one line of text
+                                  maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(fontSize: 15),
                                 ),
@@ -226,6 +232,8 @@ class ChatListScreen extends ConsumerWidget {
               isGroupChat: false,
               lastMessageIsSeen: contact.lastMessageIsSeen,
               lastMessageSenderId: contact.lastMessageSenderId,
+              membersUid: [],
+              adminId: '',
             )));
 
         chatItems.addAll(
@@ -239,6 +247,8 @@ class ChatListScreen extends ConsumerWidget {
               isGroupChat: true,
               lastMessageIsSeen: group.lastMessageIsSeen,
               lastMessageSenderId: group.lastMessageSenderId,
+              membersUid: group.membersUid,
+              adminId: group.senderId,
             ),
           ),
         );
