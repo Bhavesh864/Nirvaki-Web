@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
@@ -8,15 +10,15 @@ import 'package:yes_broker/screens/main_screens/add_group_member_screen.dart';
 import 'package:yes_broker/widgets/chat/group/group_user_list.dart';
 
 import '../../constants/firebase/userModel/user_info.dart';
+import 'chat_list_screen.dart';
 
-class ChatUserProfile extends StatefulWidget {
+class ChatUserProfile extends ConsumerStatefulWidget {
   final String profilePic;
   final String contactId;
   final String name;
   final String? adminId;
   final bool isGroupChat;
   final User? user;
-  final List<String>? members;
 
   const ChatUserProfile({
     Key? key,
@@ -25,16 +27,16 @@ class ChatUserProfile extends StatefulWidget {
     required this.user,
     required this.contactId,
     required this.isGroupChat,
-    this.members,
     this.adminId,
   }) : super(key: key);
 
   @override
-  State<ChatUserProfile> createState() => _ChatUserProfileState();
+  ConsumerState<ChatUserProfile> createState() => _ChatUserProfileState();
 }
 
-class _ChatUserProfileState extends State<ChatUserProfile> {
+class _ChatUserProfileState extends ConsumerState<ChatUserProfile> {
   List<User>? userInfo = [];
+
   @override
   void initState() {
     super.initState();
@@ -42,13 +44,19 @@ class _ChatUserProfileState extends State<ChatUserProfile> {
   }
 
   void getUserDetails() async {
-    final user = await User.getListOfUsersByIds(widget.members!);
+    final selectedUserIds = ref.read(selectedUserIdsProvider.notifier);
+
+    final user = await User.getListOfUsersByIds(selectedUserIds.state);
     userInfo!.addAll(user);
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    final selectedUserIds = ref.watch(selectedUserIdsProvider.notifier).state;
+
+    print('-----------bhavesh${selectedUserIds}');
+
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.black,
@@ -232,7 +240,13 @@ class _ChatUserProfileState extends State<ChatUserProfile> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => AddGroupMembers(userInfo: widget.members!, contactId: widget.contactId)));
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (ctx) => AddGroupMembers(
+                                    contactId: widget.contactId,
+                                  ),
+                                ),
+                              );
                             },
                             child: const Row(
                               children: [
@@ -259,7 +273,6 @@ class _ChatUserProfileState extends State<ChatUserProfile> {
                       userInfo: userInfo!,
                       adminId: widget.adminId,
                       contactId: widget.contactId,
-                      memberuids: widget.members!,
                     ),
                   ),
                   const SizedBox(
