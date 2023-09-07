@@ -120,6 +120,7 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                                 if (snapshot.hasData) {
                                   final List<String> userNames = snapshot.data!.map((user) => "${user.userfirstname} ${user.userlastname}").toList();
                                   return DropDownField(
+                                      defaultValues: "",
                                       title: "Manager",
                                       optionsList: userNames,
                                       onchanged: (e) {
@@ -129,10 +130,11 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                                         });
                                       });
                                 }
-                                return DropDownField(title: "Manager", optionsList: const [], onchanged: (e) {});
+                                return DropDownField(title: "Manager", defaultValues: "", optionsList: const [], onchanged: (e) {});
                               }),
                           DropDownField(
                               title: "Role",
+                              defaultValues: "",
                               optionsList: const ["Employee", "Manager"],
                               onchanged: (e) {
                                 setState(() {
