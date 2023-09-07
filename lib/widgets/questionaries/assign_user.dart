@@ -9,7 +9,8 @@ class AssignUser extends StatefulWidget {
   final Function(List<User> user) addUser;
   final bool status;
   final List<dynamic>? assignedUserIds;
-  const AssignUser({super.key, required this.addUser, this.assignedUserIds, this.status = false});
+  final User? userExistingForRemoveMethod;
+  const AssignUser({super.key, required this.addUser, this.assignedUserIds, this.status = false, this.userExistingForRemoveMethod});
 
   @override
   State<AssignUser> createState() => _AssignUserState();
@@ -32,6 +33,7 @@ class _AssignUserState extends State<AssignUser> {
   setData() async {
     final List<User> users = await User.getListOfUsersByIds(widget.assignedUserIds!);
     assignUsers.addAll(users);
+    widget.addUser(assignUsers);
     setState(() {});
   }
 
@@ -145,6 +147,7 @@ class _AssignUserState extends State<AssignUser> {
                 onDeleted: () {
                   setState(() {
                     assignUsers.remove(user);
+                    widget.addUser(assignUsers);
                   });
                 },
               ),

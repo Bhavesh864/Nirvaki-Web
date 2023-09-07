@@ -49,11 +49,14 @@ Future<User?> getUserDetails(String id) async {
   return user;
 }
 
+final selectedUserIdsProvider = StateProvider<List<String>>((ref) => []);
+
 class ChatListScreen extends ConsumerWidget {
   const ChatListScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final selectedUserIds = ref.read(selectedUserIdsProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -101,30 +104,27 @@ class ChatListScreen extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   final chatItem = chatItems[index];
                   final isSender = chatItem.lastMessageSenderId == AppConst.getAccessToken();
+
                   return Column(
                     children: [
                       InkWell(
                         onTap: () {
+                          selectedUserIds.update(
+                            (state) => chatItem.membersUid,
+                          );
                           if (Responsive.isMobile(context)) {
+                            if (!isSender && !chatItem.lastMessageIsSeen) {
+                              ref.read(chatControllerProvider).setLastMessageSeen(
+                                    context,
+                                    chatItem.id,
+                                    chatItem.isGroupChat,
+                                    chatItem.id,
+                                  );
+                            }
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (ctx) => ChatScreen(
-                                  memberuid: chatItem.membersUid,
-                                  adminId: chatItem.adminId,
-                                  profilePic: chatItem.profilePic,
-                                  name: chatItem.name,
-                                  contactId: chatItem.id,
-                                  isGroupChat: chatItem.isGroupChat,
-                                  onOpenChat: () {
-                                    if (!isSender && !chatItem.lastMessageIsSeen) {
-                                      ref.read(chatControllerProvider).setLastMessageSeen(
-                                            context,
-                                            chatItem.id,
-                                            chatItem.isGroupChat,
-                                            chatItem.id,
-                                          );
-                                    }
-                                  },
+                                  chatItem: chatItem,
                                 ),
                               ),
                             );

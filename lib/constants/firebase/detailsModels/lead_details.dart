@@ -426,6 +426,18 @@ class LeadDetails {
     }
   }
 
+  static Future<void> updateInventoryDetails({required String id, required LeadDetails leadDetails}) async {
+    try {
+      QuerySnapshot querySnapshot = await leadDetailsCollection.where("leadId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update(leadDetails.toJson());
+      }
+      print('lead item updated successfully');
+    } catch (error) {
+      print('Failed to update lead item: $error');
+    }
+  }
+
   static Future<void> updatecardStatus({required String id, required String newStatus}) async {
     try {
       QuerySnapshot querySnapshot = await leadDetailsCollection.where("leadId", isEqualTo: id).get();

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
-import 'package:yes_broker/constants/functions/assingment_methods.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/questionaries/questions_form_photos_view.dart';
 import 'package:yes_broker/widgets/questionaries/assign_user.dart';
@@ -230,22 +229,26 @@ Widget buildInventoryQuestions(
       },
     );
   } else if (question.questionOptionType == "Assign") {
-    List<Assignedto> assignedusers = [];
-    List<String> userids = [];
-    if (isEdit) {
-      if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
-        assignedusers = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+    try {
+      List<Assignedto> assignedusers = [];
+      List<String> userids = [];
+      if (isEdit) {
+        if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+          assignedusers = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+        }
+        for (var user in assignedusers) {
+          userids.add(user.userid!);
+        }
       }
-      for (var user in assignedusers) {
-        userids.add(user.userid!);
-      }
+      return AssignUser(
+        addUser: (users) {
+          notify.add({"id": question.questionId, "item": users});
+        },
+        assignedUserIds: userids,
+      );
+    } catch (e) {
+      print(e);
     }
-    return AssignUser(
-      addUser: (users) {
-        notify.add({"id": question.questionId, "item": users});
-      },
-      assignedUserIds: userids,
-    );
   } else if (question.questionOptionType == 'dropdown') {
     String? defaultValue;
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
