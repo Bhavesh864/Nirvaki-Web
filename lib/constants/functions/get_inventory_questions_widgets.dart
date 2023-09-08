@@ -229,22 +229,26 @@ Widget buildInventoryQuestions(
       },
     );
   } else if (question.questionOptionType == "Assign") {
-    List<Assignedto> assignedusers = [];
-    List<String> userids = [];
-    if (isEdit) {
-      if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
-        assignedusers = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+    try {
+      List<Assignedto> assignedusers = [];
+      List<String> userids = [];
+      if (isEdit) {
+        if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+          assignedusers = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+        }
+        for (var user in assignedusers) {
+          userids.add(user.userid!);
+        }
       }
-      for (var user in assignedusers) {
-        userids.add(user.userid!);
-      }
+      return AssignUser(
+        addUser: (users) {
+          notify.add({"id": question.questionId, "item": users});
+        },
+        assignedUserIds: userids,
+      );
+    } catch (e) {
+      print(e);
     }
-    return AssignUser(
-      addUser: (users) {
-        notify.add({"id": question.questionId, "item": users});
-      },
-      assignedUserIds: userids,
-    );
   } else if (question.questionOptionType == 'dropdown') {
     String? defaultValue;
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {

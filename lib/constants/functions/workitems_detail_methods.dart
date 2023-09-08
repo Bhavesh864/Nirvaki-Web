@@ -182,6 +182,7 @@ void showUploadDocumentModal(
                     ),
                     DropDownField(
                       title: 'Document Type',
+                      defaultValues: "",
                       optionsList: const ['Adhaar card', 'Agreement', 'Insurance', 'Other'],
                       onchanged: (value) {
                         docName = value.toString();

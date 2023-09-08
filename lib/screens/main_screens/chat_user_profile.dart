@@ -4,11 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:yes_broker/Customs/text_utility.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/screens/main_screens/add_group_member_screen.dart';
 import 'package:yes_broker/widgets/chat/group/group_user_list.dart';
 
+import '../../constants/firebase/chatModels/group_model.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import 'chat_list_screen.dart';
 
@@ -45,23 +47,158 @@ class _ChatUserProfileState extends ConsumerState<ChatUserProfile> {
 
   void getUserDetails() async {
     final selectedUserIds = ref.read(selectedUserIdsProvider.notifier);
-
     final user = await User.getListOfUsersByIds(selectedUserIds.state);
     userInfo!.addAll(user);
     setState(() {});
   }
 
+  void onLeaveGroup() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const AppText(
+            text: 'Leave Group',
+            fontsize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+          content: const AppText(
+            text: 'Are you sure you want to leave the group?',
+            fontWeight: FontWeight.w600,
+            fontsize: 16,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const AppText(
+                text: 'Cancel',
+                fontWeight: FontWeight.w500,
+                fontsize: 16,
+                textColor: AppColor.primary,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Group.deleteMember(groupId: widget.contactId, memberIdToDelete: AppConst.getAccessToken());
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+              child: const AppText(
+                text: 'Leave',
+                fontWeight: FontWeight.w500,
+                fontsize: 16,
+                textColor: AppColor.primary,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void onDeleteGroup() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const AppText(
+            text: 'Delete Group',
+            fontsize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+          content: const AppText(
+            text: 'Are you sure you want to delete the group?',
+            fontWeight: FontWeight.w600,
+            fontsize: 16,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const AppText(
+                text: 'Cancel',
+                fontWeight: FontWeight.w500,
+                fontsize: 16,
+                textColor: AppColor.primary,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const AppText(
+                text: 'Delete',
+                fontWeight: FontWeight.w500,
+                fontsize: 16,
+                textColor: AppColor.primary,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final selectedUserIds = ref.watch(selectedUserIdsProvider.notifier).state;
-
-    print('-----------bhavesh${selectedUserIds}');
-
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.black,
         backgroundColor: AppColor.secondary,
         iconTheme: const IconThemeData(size: 22),
+        actions: widget.isGroupChat
+            ? [
+                PopupMenuButton<String>(
+                  onSelected: (value) {
+                    if (value == 'leave_group') {
+                      onLeaveGroup();
+                    } else if (value == 'delete_group') {
+                      onDeleteGroup();
+                    }
+                  },
+                  itemBuilder: (BuildContext context) {
+                    return [
+                      const PopupMenuItem<String>(
+                        value: 'leave_group',
+                        child: Row(
+                          children: [
+                            Text('Leave Group'),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Icon(
+                              Icons.exit_to_app,
+                              size: 16,
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (AppConst.getAccessToken() == widget.adminId) ...[
+                        const PopupMenuItem<String>(
+                          value: 'delete_group',
+                          child: Row(
+                            children: [
+                              Text('Delete Group'),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Icon(
+                                Icons.delete_outline,
+                                size: 16,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ]
+                    ];
+                  },
+                ),
+              ]
+            : null,
       ),
       body: SafeArea(
         child: Container(
@@ -222,7 +359,7 @@ class _ChatUserProfileState extends ConsumerState<ChatUserProfile> {
                 ),
                 if (widget.isGroupChat) ...[
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                    padding: const EdgeInsets.only(left: 30, right: 30, top: 25),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -275,6 +412,35 @@ class _ChatUserProfileState extends ConsumerState<ChatUserProfile> {
                       contactId: widget.contactId,
                     ),
                   ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 20),
+                  //   child: ElevatedButton(
+                  //     onPressed: () {
+                  //        onLeaveGroup();
+                  //    },
+                  //     style: ElevatedButton.styleFrom(
+                  //       shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(10),
+                  //       ),
+                  //     ),
+                  //     child: const Row(
+                  //       mainAxisAlignment: MainAxisAlignment.center,
+                  //       children: [
+                  //         AppText(
+                  //           text: 'Leave Group',
+                  //           textColor: Colors.white,
+                  //           fontWeight: FontWeight.w500,
+                  //           fontsize: 17,
+                  //         ),
+                  //         SizedBox(width: 8.0),
+                  //         Icon(
+                  //           Icons.exit_to_app,
+                  //           size: 20,
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                   const SizedBox(
                     height: 20,
                   )

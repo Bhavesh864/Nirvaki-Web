@@ -13,6 +13,7 @@ import '../../Customs/custom_text.dart';
 import '../../Customs/dropdown_field.dart';
 import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
+import '../firebase/detailsModels/lead_details.dart';
 import '../utils/colors.dart';
 
 Widget buildLeadQuestions(
@@ -22,6 +23,8 @@ Widget buildLeadQuestions(
   AllChipSelectedAnwers notify,
   Function nextQuestion,
   bool isRentSelected,
+  bool isEdit,
+  bool isPlotSelected,
   List<Map<String, dynamic>> selectedValues,
 ) {
   if (question.questionOptionType == 'chip') {
@@ -52,9 +55,8 @@ Widget buildLeadQuestions(
   } else if (question.questionOptionType == 'smallchip') {
     String selectedOption = '';
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
-      selectedOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+      selectedOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
-
     return StatefulBuilder(builder: (context, setState) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,6 +77,7 @@ Widget buildLeadQuestions(
                     child: CustomChoiceChip(
                       label: option,
                       selected: selectedOption == option,
+                      bgcolor: selectedOption == option ? AppColor.primary : AppColor.primary.withOpacity(0.05),
                       onSelected: (selectedItem) {
                         setState(() {
                           if (selectedOption == option) {
@@ -83,7 +86,7 @@ Widget buildLeadQuestions(
                             selectedOption = option;
                           }
                         });
-                        notify.add({"id": question.questionId, "item": option});
+                        notify.add({"id": question.questionId, "item": selectedOption});
                       },
                       labelColor: selectedOption == option ? Colors.white : Colors.black,
                     ),
@@ -146,7 +149,9 @@ Widget buildLeadQuestions(
     TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
     // TextEditingController controller = TextEditingController();
     bool isChecked = true;
-
+    if (isPlotSelected && question.questionId == 30) {
+      return const SizedBox();
+    }
     if (question.questionTitle == 'Whatsapp Number') {
       return StatefulBuilder(
         builder: (context, setState) {
@@ -195,8 +200,11 @@ Widget buildLeadQuestions(
       },
     );
   } else if (question.questionOptionType == 'textarea') {
+    final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
+    TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
     return TextFormField(
       keyboardType: TextInputType.multiline,
+      controller: controller,
       maxLines: 5,
       onChanged: (newvalue) {
         notify.add({"id": question.questionId, "item": newvalue.trim()});
@@ -222,15 +230,35 @@ Widget buildLeadQuestions(
       },
     );
   } else if (question.questionOptionType == "Assign") {
-    return AssignUser(
-      addUser: (user) {
-        notify.add({"id": question.questionId, "item": user});
-      },
-    );
+    try {
+      List<Assignedto> assignedusers = [];
+      List<String> userids = [];
+      if (isEdit) {
+        if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+          assignedusers = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+        }
+        for (var user in assignedusers) {
+          userids.add(user.userid!);
+        }
+        print(userids);
+      }
+      return AssignUser(
+        addUser: (users) {
+          notify.add({"id": question.questionId, "item": users});
+        },
+        assignedUserIds: userids,
+      );
+    } catch (e) {
+      print(e);
+    }
   } else if (question.questionOptionType == 'dropdown') {
+    String? defaultValue;
+    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+      defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
+    }
     return DropDownField(
       title: question.questionTitle,
-      defaultValues: "",
+      defaultValues: defaultValue ?? "",
       optionsList: question.questionOption,
       onchanged: (Object e) {
         notify.add({"id": question.questionId, "item": e});

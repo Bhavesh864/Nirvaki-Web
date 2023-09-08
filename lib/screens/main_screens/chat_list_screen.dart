@@ -91,115 +91,113 @@ class ChatListScreen extends ConsumerWidget {
         decoration: const BoxDecoration(
           color: Colors.white,
         ),
-        child: StreamBuilder<List<ChatItem>>(
-          stream: _mergeChatContactsAndGroups(ref),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Loader();
-            }
-            if (snapshot.hasData) {
-              final chatItems = snapshot.data!;
-              return ScrollConfiguration(
-                behavior: const ScrollBehavior().copyWith(overscroll: false),
-                child: ListView.builder(
-                  physics: ClampingScrollPhysics(),
-                  itemCount: chatItems.length,
-                  itemBuilder: (context, index) {
-                    final chatItem = chatItems[index];
-                    final isSender = chatItem.lastMessageSenderId == AppConst.getAccessToken();
+        // child: StreamBuilder<List<ChatItem>>(
+        //   stream: _mergeChatContactsAndGroups(ref),
+        //   builder: (context, snapshot) {
+        //     if (snapshot.connectionState == ConnectionState.waiting) {
+        //       return const Loader();
+        //     }
+        //     if (snapshot.hasData) {
+        //       final chatItems = snapshot.data!;
+        //       return ListView.builder(
+        //         physics: const ClampingScrollPhysics(),
+        //         itemCount: chatItems.length,
+        //         itemBuilder: (context, index) {
+        //           final chatItem = chatItems[index];
+        //           final isSender = chatItem.lastMessageSenderId == AppConst.getAccessToken();
 
-                    return Column(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            selectedUserIds.update(
-                              (state) => chatItem.membersUid,
-                            );
-                            if (Responsive.isMobile(context)) {
-                              if (!isSender && !chatItem.lastMessageIsSeen) {
-                                ref.read(chatControllerProvider).setLastMessageSeen(
-                                      context,
-                                      chatItem.id,
-                                      chatItem.isGroupChat,
-                                      chatItem.id,
-                                    );
-                              }
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (ctx) => ChatScreen(
-                                    chatItem: chatItem,
-                                  ),
-                                ),
-                              );
-                            } else {
-                              // onPressed(index);
-                            }
-                          },
-                          child: Container(
-                            color: !isSender && !chatItem.lastMessageIsSeen ? AppColor.secondary : Colors.transparent,
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: ListTile(
-                                title: Text(
-                                  chatItem.name,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                subtitle: Padding(
-                                  padding: const EdgeInsets.only(top: 6.0),
-                                  child: Text(
-                                    chatItem.lastMessage,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(fontSize: 15),
-                                  ),
-                                ),
-                                leading: CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                    chatItem.profilePic == '' ? noImg : chatItem.profilePic,
-                                  ),
-                                  radius: 30,
-                                ),
-                                trailing: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const SizedBox(),
-                                    if (!isSender && !chatItem.lastMessageIsSeen)
-                                      Container(
-                                        width: 10,
-                                        height: 10,
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: AppColor.primary,
-                                        ),
-                                      ),
-                                    Text(
-                                      DateFormat.Hm().format(chatItem.timeSent),
-                                      style: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Divider(
-                          indent: 85,
-                          height: 5,
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              );
-            }
-            return const SizedBox();
-          },
-        ),
+        //           return Column(
+        //             children: [
+        //               InkWell(
+        //                 onTap: () {
+        //                   selectedUserIds.update(
+        //                     (state) => chatItem.membersUid,
+        //                   );
+        //                   if (Responsive.isMobile(context)) {
+        //                     if (!isSender && !chatItem.lastMessageIsSeen) {
+        //                       ref.read(chatControllerProvider).setLastMessageSeen(
+        //                             context,
+        //                             chatItem.id,
+        //                             chatItem.isGroupChat,
+        //                             chatItem.id,
+        //                           );
+        //                     }
+        //                     Navigator.of(context).push(
+        //                       MaterialPageRoute(
+        //                         builder: (ctx) => ChatScreen(
+        //                           chatItem: chatItem,
+        //                         ),
+        //                       ),
+        //                     );
+        //                   } else {
+        //                     // onPressed(index);
+        //                   }
+        //                 },
+        //                 child: Container(
+        //                   color: !isSender && !chatItem.lastMessageIsSeen ? AppColor.secondary : Colors.transparent,
+        //                   child: Padding(
+        //                     padding: const EdgeInsets.only(bottom: 8.0),
+        //                     child: ListTile(
+        //                       title: Text(
+        //                         chatItem.name,
+        //                         style: const TextStyle(
+        //                           fontSize: 18,
+        //                         ),
+        //                       ),
+        //                       subtitle: Padding(
+        //                         padding: const EdgeInsets.only(top: 6.0),
+        //                         child: Text(
+        //                           chatItem.lastMessage,
+        //                           maxLines: 1,
+        //                           overflow: TextOverflow.ellipsis,
+        //                           style: const TextStyle(fontSize: 15),
+        //                         ),
+        //                       ),
+        //                       leading: CircleAvatar(
+        //                         backgroundImage: NetworkImage(
+        //                           chatItem.profilePic == '' ? noImg : chatItem.profilePic,
+        //                         ),
+        //                         radius: 30,
+        //                       ),
+        //                       trailing: Column(
+        //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //                         children: [
+        //                           const SizedBox(),
+        //                           if (!isSender && !chatItem.lastMessageIsSeen)
+        //                             Container(
+        //                               width: 10,
+        //                               height: 10,
+        //                               decoration: const BoxDecoration(
+        //                                 shape: BoxShape.circle,
+        //                                 color: AppColor.primary,
+        //                               ),
+        //                             ),
+        //                           Text(
+        //                             DateFormat.Hm().format(chatItem.timeSent),
+        //                             style: const TextStyle(
+        //                               color: Colors.grey,
+        //                               fontSize: 13,
+        //                             ),
+        //                           ),
+        //                         ],
+        //                       ),
+        //                     ),
+        //                   ),
+        //                 ),
+        //               ),
+        //               const Divider(
+        //                 indent: 85,
+        //                 height: 5,
+        //               ),
+        //             ],
+        //           );
+        //         },
+        //       );
+        //     }
+        //     return const SizedBox();
+        //   },
+        // ),
+        child: TestList(selectedUserIds: selectedUserIds),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -216,53 +214,172 @@ class ChatListScreen extends ConsumerWidget {
       ),
     );
   }
+}
 
-  Stream<List<ChatItem>> _mergeChatContactsAndGroups(WidgetRef ref) {
-    final chatContactsStream = ref.watch(chatControllerProvider).chatContacts();
-    final chatGroupsStream = ref.watch(chatControllerProvider).chatGroups();
+Stream<List<ChatItem>> _mergeChatContactsAndGroups(WidgetRef ref) {
+  final chatContactsStream = ref.watch(chatControllerProvider).chatContacts();
+  final chatGroupsStream = ref.watch(chatControllerProvider).chatGroups();
 
-    final mergedStream = Rx.combineLatest2<List<ChatContact>, List<ChatGroup>, List<ChatItem>>(
-      chatContactsStream,
-      chatGroupsStream,
-      (chatContacts, chatGroups) {
-        final chatItems = <ChatItem>[];
+  final mergedStream = Rx.combineLatest2<List<ChatContact>, List<ChatGroup>, List<ChatItem>>(
+    chatContactsStream,
+    chatGroupsStream,
+    (chatContacts, chatGroups) {
+      final chatItems = <ChatItem>[];
 
-        chatItems.addAll(chatContacts.map((contact) => ChatItem(
-              id: contact.contactId,
-              name: contact.name,
-              profilePic: contact.profilePic,
-              lastMessage: contact.lastMessage,
-              timeSent: contact.timeSent.toDate(),
-              isGroupChat: false,
-              lastMessageIsSeen: contact.lastMessageIsSeen,
-              lastMessageSenderId: contact.lastMessageSenderId,
-              membersUid: [],
-              adminId: '',
-            )));
+      chatItems.addAll(chatContacts.map((contact) => ChatItem(
+            id: contact.contactId,
+            name: contact.name,
+            profilePic: contact.profilePic,
+            lastMessage: contact.lastMessage,
+            timeSent: contact.timeSent.toDate(),
+            isGroupChat: false,
+            lastMessageIsSeen: contact.lastMessageIsSeen,
+            lastMessageSenderId: contact.lastMessageSenderId,
+            membersUid: [],
+            adminId: '',
+          )));
 
-        chatItems.addAll(
-          chatGroups.map(
-            (group) => ChatItem(
-              id: group.groupId,
-              name: group.name,
-              profilePic: group.groupIcon,
-              lastMessage: group.lastMessage,
-              timeSent: group.timeSent.toDate(),
-              isGroupChat: true,
-              lastMessageIsSeen: group.lastMessageIsSeen,
-              lastMessageSenderId: group.lastMessageSenderId,
-              membersUid: group.membersUid,
-              adminId: group.senderId,
-            ),
+      chatItems.addAll(
+        chatGroups.map(
+          (group) => ChatItem(
+            id: group.groupId,
+            name: group.name,
+            profilePic: group.groupIcon,
+            lastMessage: group.lastMessage,
+            timeSent: group.timeSent.toDate(),
+            isGroupChat: true,
+            lastMessageIsSeen: group.lastMessageIsSeen,
+            lastMessageSenderId: group.lastMessageSenderId,
+            membersUid: group.membersUid,
+            adminId: group.senderId,
           ),
-        );
+        ),
+      );
 
-        chatItems.sort((a, b) => b.timeSent.compareTo(a.timeSent));
+      chatItems.sort((a, b) => b.timeSent.compareTo(a.timeSent));
 
-        return chatItems;
+      return chatItems;
+    },
+  );
+
+  return mergedStream;
+}
+
+class TestList extends ConsumerWidget {
+  final StateController<List<String>> selectedUserIds;
+
+  const TestList({
+    super.key,
+    required this.selectedUserIds,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return StreamBuilder<List<ChatItem>>(
+      stream: _mergeChatContactsAndGroups(ref),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Loader();
+        }
+        if (snapshot.hasData) {
+          final chatItems = snapshot.data!;
+          return ListView.builder(
+            physics: const ClampingScrollPhysics(),
+            itemCount: chatItems.length,
+            itemBuilder: (context, index) {
+              final chatItem = chatItems[index];
+              final isSender = chatItem.lastMessageSenderId == AppConst.getAccessToken();
+
+              return Column(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      selectedUserIds.update(
+                        (state) => chatItem.membersUid,
+                      );
+                      if (Responsive.isMobile(context)) {
+                        if (!isSender && !chatItem.lastMessageIsSeen) {
+                          ref.read(chatControllerProvider).setLastMessageSeen(
+                                context,
+                                chatItem.id,
+                                chatItem.isGroupChat,
+                                chatItem.id,
+                              );
+                        }
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (ctx) => ChatScreen(
+                              chatItem: chatItem,
+                            ),
+                          ),
+                        );
+                      } else {
+                        // onPressed(index);
+                      }
+                    },
+                    child: Container(
+                      color: !isSender && !chatItem.lastMessageIsSeen ? AppColor.secondary : Colors.transparent,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: ListTile(
+                          title: Text(
+                            chatItem.name,
+                            style: const TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                          subtitle: Padding(
+                            padding: const EdgeInsets.only(top: 6.0),
+                            child: Text(
+                              chatItem.lastMessage,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontSize: 15),
+                            ),
+                          ),
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage(
+                              chatItem.profilePic == '' ? noImg : chatItem.profilePic,
+                            ),
+                            radius: 30,
+                          ),
+                          trailing: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const SizedBox(),
+                              if (!isSender && !chatItem.lastMessageIsSeen)
+                                Container(
+                                  width: 10,
+                                  height: 10,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: AppColor.primary,
+                                  ),
+                                ),
+                              Text(
+                                DateFormat.Hm().format(chatItem.timeSent),
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const Divider(
+                    indent: 85,
+                    height: 5,
+                  ),
+                ],
+              );
+            },
+          );
+        }
+        return const SizedBox();
       },
     );
-
-    return mergedStream;
   }
 }
