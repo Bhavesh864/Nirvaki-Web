@@ -14,12 +14,7 @@ class WorkItemsList extends ConsumerStatefulWidget {
   final bool headerShow;
   final String title;
   final List<CardDetails> getCardDetails;
-  const WorkItemsList(
-      {super.key,
-      this.headerShow = true,
-      required this.title,
-      required this.getCardDetails,
-      this.isScrollable = true});
+  const WorkItemsList({super.key, this.headerShow = true, required this.title, required this.getCardDetails, this.isScrollable = true});
 
   @override
   WorkItemsListState createState() => WorkItemsListState();
@@ -50,8 +45,7 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
               children: [
                 widget.headerShow
                     ? Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 0),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                         height: 50,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -73,9 +67,7 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                   child: ListView(
                     shrinkWrap: true,
                     addRepaintBoundaries: false,
-                    physics: widget.isScrollable
-                        ? const ScrollPhysics()
-                        : const NeverScrollableScrollPhysics(),
+                    physics: widget.isScrollable ? const ScrollPhysics() : const NeverScrollableScrollPhysics(),
                     children: List.generate(
                       widget.getCardDetails.length,
                       (index) {
@@ -84,8 +76,7 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                             final id = widget.getCardDetails[index].workitemId;
                             navigateBasedOnId(context, id!, ref);
                           },
-                          child: CustomCard(
-                              index: index, cardDetails: widget.getCardDetails),
+                          child: CustomCard(index: index, cardDetails: widget.getCardDetails),
                         );
                       },
                     ),
