@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -99,98 +99,102 @@ class ChatListScreen extends ConsumerWidget {
             }
             if (snapshot.hasData) {
               final chatItems = snapshot.data!;
-              return ListView.builder(
-                itemCount: chatItems.length,
-                itemBuilder: (context, index) {
-                  final chatItem = chatItems[index];
-                  final isSender = chatItem.lastMessageSenderId == AppConst.getAccessToken();
+              return ScrollConfiguration(
+                behavior: const ScrollBehavior().copyWith(overscroll: false),
+                child: ListView.builder(
+                  physics: ClampingScrollPhysics(),
+                  itemCount: chatItems.length,
+                  itemBuilder: (context, index) {
+                    final chatItem = chatItems[index];
+                    final isSender = chatItem.lastMessageSenderId == AppConst.getAccessToken();
 
-                  return Column(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          selectedUserIds.update(
-                            (state) => chatItem.membersUid,
-                          );
-                          if (Responsive.isMobile(context)) {
-                            if (!isSender && !chatItem.lastMessageIsSeen) {
-                              ref.read(chatControllerProvider).setLastMessageSeen(
-                                    context,
-                                    chatItem.id,
-                                    chatItem.isGroupChat,
-                                    chatItem.id,
-                                  );
-                            }
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (ctx) => ChatScreen(
-                                  chatItem: chatItem,
-                                ),
-                              ),
+                    return Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            selectedUserIds.update(
+                              (state) => chatItem.membersUid,
                             );
-                          } else {
-                            // onPressed(index);
-                          }
-                        },
-                        child: Container(
-                          color: !isSender && !chatItem.lastMessageIsSeen ? AppColor.secondary : Colors.transparent,
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: ListTile(
-                              title: Text(
-                                chatItem.name,
-                                style: const TextStyle(
-                                  fontSize: 18,
+                            if (Responsive.isMobile(context)) {
+                              if (!isSender && !chatItem.lastMessageIsSeen) {
+                                ref.read(chatControllerProvider).setLastMessageSeen(
+                                      context,
+                                      chatItem.id,
+                                      chatItem.isGroupChat,
+                                      chatItem.id,
+                                    );
+                              }
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (ctx) => ChatScreen(
+                                    chatItem: chatItem,
+                                  ),
                                 ),
-                              ),
-                              subtitle: Padding(
-                                padding: const EdgeInsets.only(top: 6.0),
-                                child: Text(
-                                  chatItem.lastMessage,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontSize: 15),
+                              );
+                            } else {
+                              // onPressed(index);
+                            }
+                          },
+                          child: Container(
+                            color: !isSender && !chatItem.lastMessageIsSeen ? AppColor.secondary : Colors.transparent,
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: ListTile(
+                                title: Text(
+                                  chatItem.name,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                  ),
                                 ),
-                              ),
-                              leading: CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                  chatItem.profilePic == '' ? noImg : chatItem.profilePic,
+                                subtitle: Padding(
+                                  padding: const EdgeInsets.only(top: 6.0),
+                                  child: Text(
+                                    chatItem.lastMessage,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 15),
+                                  ),
                                 ),
-                                radius: 30,
-                              ),
-                              trailing: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const SizedBox(),
-                                  if (!isSender && !chatItem.lastMessageIsSeen)
-                                    Container(
-                                      width: 10,
-                                      height: 10,
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: AppColor.primary,
+                                leading: CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                    chatItem.profilePic == '' ? noImg : chatItem.profilePic,
+                                  ),
+                                  radius: 30,
+                                ),
+                                trailing: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const SizedBox(),
+                                    if (!isSender && !chatItem.lastMessageIsSeen)
+                                      Container(
+                                        width: 10,
+                                        height: 10,
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: AppColor.primary,
+                                        ),
+                                      ),
+                                    Text(
+                                      DateFormat.Hm().format(chatItem.timeSent),
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 13,
                                       ),
                                     ),
-                                  Text(
-                                    DateFormat.Hm().format(chatItem.timeSent),
-                                    style: const TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      const Divider(
-                        indent: 85,
-                        height: 5,
-                      ),
-                    ],
-                  );
-                },
+                        const Divider(
+                          indent: 85,
+                          height: 5,
+                        ),
+                      ],
+                    );
+                  },
+                ),
               );
             }
             return const SizedBox();
