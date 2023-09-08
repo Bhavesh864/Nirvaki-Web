@@ -225,6 +225,7 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
                                     city: data.preferredlocality!.city!,
                                     addressline1: data.preferredlocality!.addressline1!,
                                     addressline2: data.preferredlocality?.addressline2,
+                                  
                                   ),
                               ],
                             ),

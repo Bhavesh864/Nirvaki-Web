@@ -109,6 +109,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                 price: data.propertyprice?.price,
                                 unit: data.propertyprice?.unit,
                                 inventoryDetails: data,
+                                propertyRent: data.propertyrent,
                               ),
                               if (Responsive.isMobile(context))
                                 Padding(
