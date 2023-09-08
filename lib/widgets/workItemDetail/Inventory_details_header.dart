@@ -45,10 +45,12 @@ class InventoryDetailsHeader extends ConsumerWidget {
   final String? unit;
   final Function setState;
   final dynamic inventoryDetails;
+  final Propertyrent? propertyRent;
 
   const InventoryDetailsHeader(
       {super.key,
       required this.title,
+      this.propertyRent,
       required this.id,
       this.inventoryDetails,
       required this.category,
@@ -140,7 +142,11 @@ class InventoryDetailsHeader extends ConsumerWidget {
             const Spacer(),
             if (!Responsive.isMobile(context) && !AppConst.getPublicView())
               CustomText(
-                title: price != null ? '$price$unit' : '50k/month',
+                title: price != null
+                    ? category == "Rent" && id.contains("IN")
+                        ? "${propertyRent?.rentamount} ${propertyRent?.rentunit}"
+                        : "$price $unit"
+                    : "",
                 color: AppColor.primary,
               ),
           ],

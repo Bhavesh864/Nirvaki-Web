@@ -426,6 +426,18 @@ class LeadDetails {
     }
   }
 
+  static Future<void> updateInventoryDetails({required String id, required LeadDetails leadDetails}) async {
+    try {
+      QuerySnapshot querySnapshot = await leadDetailsCollection.where("leadId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update(leadDetails.toJson());
+      }
+      print('lead item updated successfully');
+    } catch (error) {
+      print('Failed to update lead item: $error');
+    }
+  }
+
   static Future<void> updatecardStatus({required String id, required String newStatus}) async {
     try {
       QuerySnapshot querySnapshot = await leadDetailsCollection.where("leadId", isEqualTo: id).get();
@@ -438,19 +450,23 @@ class LeadDetails {
     }
   }
 
-  static Future<void> updateAssignUser({required String itemid, required Assignedto assignedto}) async {
+  static Future<void> updateAssignUser({required String itemid, required List<Assignedto> assignedtoList}) async {
     try {
       QuerySnapshot querySnapshot = await leadDetailsCollection.where("leadId", isEqualTo: itemid).get();
       for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
         Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
-        List<dynamic> existingassign = data['assignedto'] ?? [];
-        existingassign.add(assignedto.toJson());
-        await docSnapshot.reference.update({'assignedto': existingassign});
 
-        print('assign new user to this ${docSnapshot.id}');
+        List<Map<String, dynamic>> existingAssignToData = List<Map<String, dynamic>>.from(data['assignedto'] ?? []);
+
+        List<Map<String, dynamic>> newAssignToData = assignedtoList.map((assignedto) => assignedto.toJson()).toList();
+
+        existingAssignToData.addAll(newAssignToData);
+
+        await docSnapshot.reference.update({'assignedto': existingAssignToData});
+        print('Updated the list of assigned users for ${docSnapshot.id}');
       }
     } catch (error) {
-      print('Failed to assign user : $error');
+      print('Failed to update assigned users: $error');
     }
   }
 

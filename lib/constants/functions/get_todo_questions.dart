@@ -147,6 +147,7 @@ Widget buildTodoQuestions(Question question, List<Screen> screensDataList, int c
             }
           }
           return DropDownField(
+            defaultValues: "",
             title: question.questionTitle,
             optionsList: options,
             onchanged: (Object e) {

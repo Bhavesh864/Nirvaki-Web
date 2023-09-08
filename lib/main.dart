@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'firebase_options.dart';
-
 import 'package:yes_broker/constants/firebase/Hive/timestamp.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/routes/routes.dart';
@@ -21,7 +20,7 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(TimestampAdapter());
   await Hive.openBox("users");
-  await Hive.openBox<CardDetails>("carddetails");
+  // await Hive.openBox<CardDetails>("carddetails");/
   runApp(
     const ProviderScope(
       child: MyApp(),
