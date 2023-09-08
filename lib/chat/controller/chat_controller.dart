@@ -53,8 +53,9 @@ class ChatController {
       message: text,
       receiverId: receiverId,
       senderUser: user!,
-      // messageReply: messageReply,
       isGroupChat: isGroupChat,
+      profilePic: user.image,
+      // messageReply: messageReply,
     );
     // ref.read(messageReplyProvider.state).update((state) => null);
   }

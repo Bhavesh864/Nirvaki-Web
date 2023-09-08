@@ -1,4 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:yes_broker/chat/enums/message.enums.dart';
 
 class ChatMessage {
@@ -10,37 +12,34 @@ class ChatMessage {
   final Timestamp timeSent;
   final String messageId;
   final bool isSeen;
+  final String profilePic;
   // final String repliedMessage;
   // final String repliedTo;
   // final MessageEnum repliedMessageType;
 
   ChatMessage({
     required this.senderId,
-    required this.senderName,
     required this.recieverid,
     required this.text,
+    required this.senderName,
     required this.type,
     required this.timeSent,
     required this.messageId,
     required this.isSeen,
-    // required this.repliedMessage,
-    // required this.repliedTo,
-    // required this.repliedMessageType,
+    required this.profilePic,
   });
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'senderId': senderId,
       'recieverid': recieverid,
       'text': text,
+      'senderName': senderName,
       'type': type.type,
       'timeSent': timeSent.millisecondsSinceEpoch,
       'messageId': messageId,
       'isSeen': isSeen,
-      'senderName': senderName,
-      // 'repliedMessage': repliedMessage,
-      // 'repliedTo': repliedTo,
-      // 'repliedMessageType': repliedMessageType.type,
+      'profilePic': profilePic,
     };
   }
 
@@ -57,6 +56,7 @@ class ChatMessage {
       // repliedMessage: map['repliedMessage'] ?? '',
       // repliedTo: map['repliedTo'] ?? '',
       // repliedMessageType: (map['repliedMessageType'] as String).toEnum(),
+      profilePic: map['profilePic'] as String,
     );
   }
 }

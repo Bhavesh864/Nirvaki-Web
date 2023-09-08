@@ -8,7 +8,6 @@ import 'package:yes_broker/constants/firebase/chatModels/group_model.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
-import 'package:yes_broker/customs/loader.dart';
 
 import '../../../screens/main_screens/chat_list_screen.dart';
 
@@ -105,7 +104,7 @@ class _GroupUserListState extends ConsumerState<GroupUserList> {
                   );
                 });
           }
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         });
   }
 }
