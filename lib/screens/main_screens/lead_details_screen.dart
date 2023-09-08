@@ -45,6 +45,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
   @override
   void initState() {
     super.initState();
+
     tabviewController = TabController(length: 4, vsync: this);
     final workItemId = ref.read(selectedWorkItemId.notifier).state;
     leadDetails = FirebaseFirestore.instance.collection('leadDetails').where('leadId', isEqualTo: workItemId == '' ? widget.leadId : workItemId).snapshots();
@@ -319,7 +320,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
         {"id": 30, "item": data.preferredlocality?.prefferedfloornumber},
         {"id": 31, "item": data.propertylocation},
         {"id": 32, "item": data.propertypricerange?.arearangestart},
-        {"id": 33, "item": data.propertyarearange?.unit},
+        {"id": 33, "item": data.propertypricerange?.unit},
         {"id": 34, "item": data.preferredpropertyfacing},
         {"id": 35, "item": data.comments},
         {"id": 36, "item": data.assignedto},

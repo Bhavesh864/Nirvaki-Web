@@ -17,44 +17,56 @@ import '../firebase/userModel/user_info.dart';
 List<User>? user;
 void submitAssignUser(String id, BuildContext context, List<User> users) async {
   if (users.isNotEmpty) {
-    for (var i = 0; i < users.length; i++) {
-      if (id.contains(ItemCategory.isTodo)) {
-        todo.Assignedto assign = todo.Assignedto(
-          firstname: users[i].userfirstname,
-          lastname: users[i].userlastname,
-          assignedby: AppConst.getAccessToken(),
-          userid: users[i].userId,
-          image: users[i].image,
-        );
-        todo.TodoDetails.updateAssignUser(itemid: id, assignedto: assign);
-      } else if (id.contains(ItemCategory.isInventory)) {
-        inventory.Assignedto assign = inventory.Assignedto(
-          firstname: users[i].userfirstname,
-          lastname: users[i].userlastname,
-          assignedby: AppConst.getAccessToken(),
-          userid: users[i].userId,
-          image: users[i].image,
-        );
-        inventory.InventoryDetails.updateAssignUser(itemid: id, assignedto: assign);
-      } else if (id.contains(ItemCategory.isLead)) {
-        lead.Assignedto assign = lead.Assignedto(
-          firstname: users[i].userfirstname,
-          lastname: users[i].userlastname,
-          assignedby: AppConst.getAccessToken(),
-          userid: users[i].userId,
-          image: users[i].image,
-        );
-        lead.LeadDetails.updateAssignUser(itemid: id, assignedto: assign);
-      }
-      Assignedto assigncard = Assignedto(
-        firstname: users[i].userfirstname,
-        lastname: users[i].userlastname,
+    final List<Assignedto> assigncard = users.map((user) {
+      return Assignedto(
+        firstname: user.userfirstname,
+        lastname: user.userlastname,
         assignedby: AppConst.getAccessToken(),
-        userid: users[i].userId,
-        image: users[i].image,
+        image: user.image,
+        userid: user.userId,
       );
-      CardDetails.updateAssignUser(itemid: id, assignedto: assigncard);
-      notifyToUser(assignedto: users[i].userId, title: "Assign new $id", content: "New $id Assign To You", assigntofield: true, itemid: id);
+    }).toList();
+
+    if (id.contains(ItemCategory.isTodo)) {
+      final List<todo.Assignedto> assign = users.map((user) {
+        return todo.Assignedto(
+          firstname: user.userfirstname,
+          lastname: user.userlastname,
+          assignedby: AppConst.getAccessToken(),
+          image: user.image,
+          userid: user.userId,
+        );
+      }).toList();
+      todo.TodoDetails.updateAssignUser(itemid: id, assignedtoList: assign);
+    }
+    if (id.contains(ItemCategory.isInventory)) {
+      final List<inventory.Assignedto> assign = users.map((user) {
+        return inventory.Assignedto(
+          firstname: user.userfirstname,
+          lastname: user.userlastname,
+          assignedby: AppConst.getAccessToken(),
+          image: user.image,
+          userid: user.userId,
+        );
+      }).toList();
+      inventory.InventoryDetails.updateAssignUser(itemid: id, assignedtoList: assign);
+    }
+
+    if (id.contains(ItemCategory.isLead)) {
+      final List<lead.Assignedto> assign = users.map((user) {
+        return lead.Assignedto(
+          firstname: user.userfirstname,
+          lastname: user.userlastname,
+          assignedby: AppConst.getAccessToken(),
+          image: user.image,
+          userid: user.userId,
+        );
+      }).toList();
+      lead.LeadDetails.updateAssignUser(itemid: id, assignedtoList: assign);
+    }
+    CardDetails.updateAssignUser(itemid: id, assignedtoList: assigncard);
+    for (var user in users) {
+      notifyToUser(assignedto: user.userId, title: "Assign new $id", content: "New $id Assign To You", assigntofield: true, itemid: id);
     }
   } else {
     customSnackBar(context: context, text: "Please select user");

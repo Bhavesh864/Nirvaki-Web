@@ -4,12 +4,13 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/pages/add_inventory.dart';
+import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
+
 import '../../Customs/custom_text.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/utils/colors.dart';
@@ -23,7 +24,6 @@ import '../../widgets/workItemDetail/tab_bar_widget.dart';
 import '../../widgets/workItemDetail/tab_views/activity_tab_view.dart';
 import '../../widgets/workItemDetail/tab_views/details_tab_view.dart';
 import '../../widgets/workItemDetail/tab_views/todo_tab_view.dart';
-import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 
 class InventoryDetailsScreen extends ConsumerStatefulWidget {
   final String inventoryId;
@@ -109,6 +109,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                 price: data.propertyprice?.price,
                                 unit: data.propertyprice?.unit,
                                 inventoryDetails: data,
+                                propertyRent: data.propertyrent,
                               ),
                               if (Responsive.isMobile(context))
                                 Padding(
