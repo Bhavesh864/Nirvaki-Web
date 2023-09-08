@@ -263,20 +263,22 @@ class ChatRepository {
     required String revceiverUsername,
     required MessageEnum messageType,
     required bool isGroupChat,
+    required String profilePic,
   }) async {
     final message = ChatMessage(
-        senderId: AppConst.getAccessToken(),
-        recieverid: receiverId,
-        text: text,
-        type: MessageEnum.text,
-        timeSent: timeSent,
-        messageId: messageId,
-        isSeen: false,
-        senderName: username
-        // repliedMessage: repliedMessage,
-        // repliedTo: repliedTo,
-        // repliedMessageType: repliedMessageType,
-        );
+      senderId: AppConst.getAccessToken(),
+      recieverid: receiverId,
+      text: text,
+      type: MessageEnum.text,
+      timeSent: timeSent,
+      messageId: messageId,
+      isSeen: false,
+      senderName: username,
+      profilePic: profilePic,
+      // repliedMessage: repliedMessage,
+      // repliedTo: repliedTo,
+      // repliedMessageType: repliedMessageType,
+    );
 
     if (isGroupChat) {
       // groups -> group id -> chat -> message
@@ -322,6 +324,7 @@ class ChatRepository {
     required String receiverId,
     required User senderUser,
     required bool isGroupChat,
+    required String profilePic,
   }) async {
     try {
       final Timestamp timestamp = Timestamp.now();
@@ -352,6 +355,7 @@ class ChatRepository {
         username: '${senderUser.userfirstname} ${senderUser.userlastname}',
         messageType: MessageEnum.text,
         isGroupChat: isGroupChat,
+        profilePic: profilePic,
       );
     } catch (e) {
       customSnackBar(
