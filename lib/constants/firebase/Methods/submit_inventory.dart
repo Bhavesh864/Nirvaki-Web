@@ -94,7 +94,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit) async {
       createdate: Timestamp.now(),
       propertyarearange: cards.Propertyarearange(arearangestart: superArea, unit: areaUnit),
       roomconfig: cards.Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom),
-      propertypricerange: cards.Propertypricerange(arearangestart: price, unit: priceunit));
+      propertypricerange: cards.Propertypricerange(arearangestart: inventoryCategory == "Rent" ? rentamount : price, unit: inventoryCategory == "Rent" ? rentunit : priceunit));
   final List<Assignedto> assignedListInInventory = assignto.map((user) {
     return Assignedto(
       firstname: user.userfirstname,

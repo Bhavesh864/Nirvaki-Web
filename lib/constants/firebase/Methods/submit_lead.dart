@@ -131,7 +131,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit) async {
       possessiondate: possession,
       plotdetails: Plotdetails(boundarywall: boundaryWall, opensides: openSides),
       amenities: amenities,
-      propertyarea: Propertyarea(carpetarea: carpetArea, superarea: superArea),
+      propertyarea: Propertyarea(carpetarea: carpetArea, superarea: superArea, unit: areaUnit),
       preferredlocality: Preferredlocality(state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, prefferedfloornumber: floorNumber),
       // propertyarearange: Propertyarearange(unit: areaUnit, arearangestart: carpetArea),
       propertypricerange: Propertypricerange(unit: budgetFigures, arearangestart: budgetPrice),

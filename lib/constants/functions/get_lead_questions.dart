@@ -57,7 +57,6 @@ Widget buildLeadQuestions(
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       selectedOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
-
     return StatefulBuilder(builder: (context, setState) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,8 +76,8 @@ Widget buildLeadQuestions(
                     padding: const EdgeInsets.only(right: 10, bottom: 10),
                     child: CustomChoiceChip(
                       label: option,
-                      bgcolor: selectedOption == option ? AppColor.primary : AppColor.primary.withOpacity(0.05),
                       selected: selectedOption == option,
+                      bgcolor: selectedOption == option ? AppColor.primary : AppColor.primary.withOpacity(0.05),
                       onSelected: (selectedItem) {
                         setState(() {
                           if (selectedOption == option) {
