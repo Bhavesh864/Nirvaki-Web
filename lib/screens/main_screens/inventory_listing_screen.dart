@@ -74,6 +74,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
           status = filteredInventoryList;
 
           final tableRowList = filteredInventoryList.map((e) {
+            print(filteredInventoryList.indexOf(e));
             return buildWorkItemRowTile(e, filteredInventoryList.indexOf(e), status);
           });
 
