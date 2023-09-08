@@ -9,6 +9,7 @@ import 'package:yes_broker/constants/firebase/chat_services.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/responsive.dart';
+import 'package:yes_broker/customs/text_utility.dart';
 import 'package:yes_broker/screens/main_screens/chat_list_screen.dart';
 import 'package:yes_broker/widgets/chat/chat_input.dart';
 import 'package:yes_broker/widgets/chat/chat_screen_header.dart';
@@ -39,8 +40,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     final String chatItemId = chatItem?.id ?? user?.userId ?? '';
     final bool isGroupChat = chatItem?.isGroupChat ?? false;
+    final ids = ref.read(selectedUserIdsProvider);
 
-    // print(user?.brokerId);
+    print("ids--> $ids");
 
     return Scaffold(
       body: SafeArea(
@@ -130,6 +132,23 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       revceiverId: chatItemId,
                       isGroupChat: isGroupChat,
                     ),
+                    //   if (!ids.contains(AppConst.getAccessToken())) ...[
+                    //     Container(
+                    //       width: double.infinity,
+                    //       padding: const EdgeInsets.symmetric(vertical: 15),
+                    //       color: Colors.white,
+                    //       child: const Column(
+                    //         children: [
+                    //           AppText(text: 'You\' no longer a participant in this group.'),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ] else ...[
+                    //     ChatInput(
+                    //       revceiverId: chatItemId,
+                    //       isGroupChat: isGroupChat,
+                    //     ),
+                    //   ]
                   ],
                 ),
               ),

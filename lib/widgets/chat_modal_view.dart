@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/screens/main_screens/chat_list_screen.dart';
 
 import '../Customs/custom_text.dart';
 import '../constants/app_constant.dart';
@@ -7,20 +9,23 @@ import '../constants/firebase/userModel/user_info.dart';
 import '../constants/utils/constants.dart';
 import 'chat/chat_users_list.dart';
 
-class ChatDialogBox extends StatefulWidget {
+class ChatDialogBox extends ConsumerStatefulWidget {
   const ChatDialogBox({super.key});
 
   @override
-  State<ChatDialogBox> createState() => _ChatDialogBoxState();
+  ConsumerState<ChatDialogBox> createState() => _ChatDialogBoxState();
 }
 
-class _ChatDialogBoxState extends State<ChatDialogBox> {
+class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
   bool isChatOpen = false;
   List list = [];
   int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    // return ChatListScreen();
+    final selectedUserIds = ref.read(selectedUserIdsProvider.notifier);
+
     return StreamBuilder(
         stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: currentUser["brokerId"]).snapshots(),
         builder: (context, snapshot) {
@@ -76,19 +81,10 @@ class _ChatDialogBoxState extends State<ChatDialogBox> {
                                 children: [
                                   Expanded(
                                     child: Container(
-                                      decoration: const BoxDecoration(
-                                        color: Colors.white,
-                                      ),
-                                      child: ChatUserList(
-                                        onPressed: (index) {
-                                          setState(() {
-                                            isChatOpen = true;
-                                            selectedIndex = index;
-                                          });
-                                        },
-                                        users: filterUser,
-                                      ),
-                                    ),
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                        ),
+                                        child: TestList(selectedUserIds: selectedUserIds)),
                                   ),
                                 ],
                               ),

@@ -10,6 +10,7 @@ class ChatInput extends ConsumerStatefulWidget {
   final bool isGroupChat;
 
   const ChatInput({
+    super.key,
     required this.revceiverId,
     required this.isGroupChat,
   });
