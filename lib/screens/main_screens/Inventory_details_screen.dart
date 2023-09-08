@@ -1,7 +1,7 @@
-// ignore_for_file: invalid_use_of_protected_member, file_names
+// ignore: file_names
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/custom_fields.dart';
@@ -10,7 +10,6 @@ import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/pages/add_inventory.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
-
 import '../../Customs/custom_text.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/utils/colors.dart';
@@ -335,7 +334,9 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
         {"id": 101, "item": data.inventoryId},
       ]);
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 }
