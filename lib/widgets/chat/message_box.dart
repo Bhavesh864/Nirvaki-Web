@@ -70,9 +70,9 @@ class MessageBox extends StatelessWidget {
             mainAxisAlignment: isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
             children: [
               if (!isSender) ...[
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 15,
-                  backgroundImage: AssetImage(profileImage),
+                  backgroundImage: NetworkImage(data.profilePic),
                 ),
                 const SizedBox(width: 2),
                 // Image.asset('assets/images/receiveMsgTip.png'),
