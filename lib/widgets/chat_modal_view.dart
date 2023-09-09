@@ -228,6 +228,7 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                                         isSender: isSender,
                                         data: messageData,
                                         isSeen: messageData.isSeen,
+                                        messageType: messageData.type,
                                       );
                                     },
                                   ),

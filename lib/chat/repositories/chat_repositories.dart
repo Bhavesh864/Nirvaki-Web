@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +9,7 @@ import 'package:yes_broker/chat/models/chat_group.dart';
 import '../../Customs/snackbar.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/userModel/user_info.dart';
+import '../../riverpodstate/upload_file_to_firebase.dart';
 import '../models/chat_contact.dart';
 import '../enums/message.enums.dart';
 import '../models/message.dart';
@@ -200,7 +203,6 @@ class ChatRepository {
     required String receiverId,
     required bool isGroupChat,
   }) async {
-    print(message);
     final ChatContact receiverChatContact = ChatContact(
       name: '${senderUserData.userfirstname} ${senderUserData.userlastname}',
       profilePic: senderUserData.image,
@@ -269,7 +271,7 @@ class ChatRepository {
       senderId: AppConst.getAccessToken(),
       recieverid: receiverId,
       text: text,
-      type: MessageEnum.text,
+      type: messageType,
       timeSent: timeSent,
       messageId: messageId,
       isSeen: false,
@@ -362,6 +364,73 @@ class ChatRepository {
         context: context,
         text: e.toString(),
       );
+    }
+  }
+
+  void sendFileMessage({
+    required BuildContext context,
+    required File file,
+    required String recieverUserId,
+    required User senderUserData,
+    required ProviderRef ref,
+    required MessageEnum messageEnum,
+    required bool isGroupChat,
+  }) async {
+    try {
+      var timeSent = Timestamp.now();
+      var messageId = const Uuid().v1();
+
+      String imageUrl = await ref.read(commonFirebaseStorageRepositoryProvider).storeFileToFirebase(
+            'chat/${messageEnum.type}/${senderUserData.userId}/$recieverUserId/$messageId',
+            file,
+          );
+
+      User? recieverUserData;
+      if (!isGroupChat) {
+        var userDataMap = await firestore.collection('users').doc(recieverUserId).get();
+        recieverUserData = User.fromMap(userDataMap.data()!);
+      }
+
+      String contactMsg;
+
+      switch (messageEnum) {
+        case MessageEnum.image:
+          contactMsg = '📷 Photo';
+          break;
+        case MessageEnum.video:
+          contactMsg = '📸 Video';
+          break;
+        case MessageEnum.audio:
+          contactMsg = '🎵 Audio';
+          break;
+        case MessageEnum.gif:
+          contactMsg = 'GIF';
+          break;
+        default:
+          contactMsg = 'GIF';
+      }
+      _saveDataToContactsSubCollection(
+        senderUserData: senderUserData,
+        receiverUserData: recieverUserData,
+        message: contactMsg,
+        timestamp: timeSent,
+        receiverId: recieverUserId,
+        isGroupChat: isGroupChat,
+      );
+
+      _saveMessageToMessagesSubCollection(
+        receiverId: recieverUserId,
+        text: imageUrl,
+        timeSent: timeSent,
+        messageId: messageId,
+        username: '${senderUserData.userfirstname} ${senderUserData.userlastname}',
+        messageType: messageEnum,
+        revceiverUsername: '${recieverUserData?.userfirstname} ${recieverUserData?.userlastname}',
+        isGroupChat: isGroupChat,
+        profilePic: senderUserData.image,
+      );
+    } catch (e) {
+      customSnackBar(context: context, text: e.toString());
     }
   }
 }
