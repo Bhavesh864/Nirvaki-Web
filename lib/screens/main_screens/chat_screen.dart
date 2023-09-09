@@ -39,9 +39,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     final String chatItemId = chatItem?.id ?? user?.userId ?? '';
     final bool isGroupChat = chatItem?.isGroupChat ?? false;
-    final ids = ref.read(selectedUserIdsProvider);
-
-    print("ids--> $ids");
 
     return Scaffold(
       body: SafeArea(
@@ -121,6 +118,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                               isSender: isSender,
                               data: messageData,
                               isSeen: messageData.isSeen,
+                              messageType: messageData.type,
                             );
                           },
                         ),

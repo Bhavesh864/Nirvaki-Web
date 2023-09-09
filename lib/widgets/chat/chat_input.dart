@@ -1,16 +1,19 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../chat/controller/chat_controller.dart';
+import '../../chat/enums/message.enums.dart';
+import '../../chat/pick_methods.dart';
 
 class ChatInput extends ConsumerStatefulWidget {
   final String revceiverId;
   final bool isGroupChat;
 
   const ChatInput({
-    super.key,
     required this.revceiverId,
     required this.isGroupChat,
   });
@@ -62,6 +65,33 @@ class _ChatInputState extends ConsumerState<ChatInput> {
     messageController.clear();
   }
 
+  void sendFileMessage(
+    File file,
+    MessageEnum messageEnum,
+  ) {
+    ref.read(chatControllerProvider).sendFileMessage(
+          context,
+          file,
+          widget.revceiverId,
+          messageEnum,
+          widget.isGroupChat,
+        );
+  }
+
+  void selectImage() async {
+    File? image = await pickImageFromGallery(context);
+    if (image != null) {
+      sendFileMessage(image, MessageEnum.image);
+    }
+  }
+
+  void selectVideo() async {
+    File? video = await pickVideoFromGallery(context);
+    if (video != null) {
+      sendFileMessage(video, MessageEnum.video);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -97,21 +127,20 @@ class _ChatInputState extends ConsumerState<ChatInput> {
                 ),
               ),
               InkWell(
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5.0),
-                  child: Icon(
-                    Icons.alternate_email,
-                    size: 18,
-                  ),
-                ),
                 onTap: () {
                   showModalBottomSheet(
-                    // barrierColor: Colors.transparent,
                     backgroundColor: Colors.transparent,
                     context: context,
                     builder: (builder) => bottomSheet(context),
                   );
                 },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5.0),
+                  child: Icon(
+                    Icons.attach_file_rounded,
+                    size: 18,
+                  ),
+                ),
               ),
               InkWell(
                 child: const Padding(
@@ -141,83 +170,88 @@ class _ChatInputState extends ConsumerState<ChatInput> {
       ],
     );
   }
-}
 
-Widget bottomSheet(context) {
-  return SizedBox(
-    height: 280,
-    width: MediaQuery.of(context).size.width,
-    child: Card(
-      margin: const EdgeInsets.all(18.0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                iconCreation(Icons.insert_drive_file, Colors.indigo, "Document"),
-                const SizedBox(
-                  width: 40,
-                ),
-                iconCreation(Icons.camera_alt, Colors.pink, "Camera"),
-                const SizedBox(
-                  width: 40,
-                ),
-                iconCreation(Icons.insert_photo, Colors.purple, "Gallery"),
-              ],
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                iconCreation(Icons.headset, Colors.orange, "Audio"),
-                const SizedBox(
-                  width: 40,
-                ),
-                iconCreation(Icons.location_pin, Colors.teal, "Location"),
-                const SizedBox(
-                  width: 40,
-                ),
-                iconCreation(Icons.person, Colors.blue, "Contact"),
-              ],
-            ),
-          ],
+  Widget bottomSheet(context) {
+    return SizedBox(
+      height: 280,
+      width: MediaQuery.of(context).size.width,
+      child: Card(
+        margin: const EdgeInsets.all(18.0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  iconCreation(Icons.insert_drive_file, Colors.indigo, "Document", context),
+                  const SizedBox(
+                    width: 40,
+                  ),
+                  iconCreation(Icons.camera_alt, Colors.pink, "Camera", context),
+                  const SizedBox(
+                    width: 40,
+                  ),
+                  iconCreation(Icons.insert_photo, Colors.purple, "Gallery", context),
+                ],
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  iconCreation(Icons.headset, Colors.orange, "Audio", context),
+                  const SizedBox(
+                    width: 40,
+                  ),
+                  iconCreation(Icons.location_pin, Colors.teal, "Location", context),
+                  const SizedBox(
+                    width: 40,
+                  ),
+                  iconCreation(Icons.person, Colors.blue, "Contact", context),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
-Widget iconCreation(IconData icons, Color color, String text) {
-  return InkWell(
-    onTap: () {},
-    child: Column(
-      children: [
-        CircleAvatar(
-          radius: 30,
-          backgroundColor: color,
-          child: Icon(
-            icons,
-            // semanticLabel: "Help",
-            size: 29,
-            color: Colors.white,
+  Widget iconCreation(IconData icons, Color color, String text, BuildContext context) {
+    return InkWell(
+      onTap: () async {
+        if (text == 'Gallery') {
+          final image = await pickImageFromGallery(context);
+          sendFileMessage(image!, MessageEnum.image);
+        }
+      },
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 30,
+            backgroundColor: color,
+            child: Icon(
+              icons,
+              // semanticLabel: "Help",
+              size: 29,
+              color: Colors.white,
+            ),
           ),
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        Text(
-          text,
-          style: const TextStyle(
-            fontSize: 12,
-            // fontWeight: FontWeight.w100,
+          const SizedBox(
+            height: 5,
           ),
-        )
-      ],
-    ),
-  );
+          Text(
+            text,
+            style: const TextStyle(
+              fontSize: 12,
+              // fontWeight: FontWeight.w100,
+            ),
+          )
+        ],
+      ),
+    );
+  }
 }
