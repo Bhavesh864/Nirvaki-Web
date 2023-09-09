@@ -13,7 +13,15 @@ import '../../widgets/card/questions card/chip_button.dart';
 import '../firebase/questionModels/todo_question.dart';
 import '../utils/colors.dart';
 
-Widget buildTodoQuestions(Question question, List<Screen> screensDataList, int currentScreenIndex, AllChipSelectedAnwers notify, Function nextQuestion, BuildContext context) {
+Widget buildTodoQuestions(
+  Question question,
+  List<Screen> screensDataList,
+  int currentScreenIndex,
+  AllChipSelectedAnwers notify,
+  Function nextQuestion,
+  BuildContext context,
+  List<Map<String, dynamic>> selectedValues,
+) {
   if (question.questionOptionType == 'chip') {
     return Column(
       children: [
@@ -21,6 +29,9 @@ Widget buildTodoQuestions(Question question, List<Screen> screensDataList, int c
           StatefulBuilder(builder: (context, setState) {
             return ChipButton(
               text: option,
+              bgColor: selectedValues.any((answer) => answer["id"] == question.questionId && answer["item"] == option)
+                  ? AppColor.primary.withOpacity(0.2)
+                  : AppColor.primary.withOpacity(0.05),
               onSelect: () {
                 if (currentScreenIndex < screensDataList.length - 1) {
                   notify.add({"id": question.questionId, "item": option});
@@ -34,7 +45,8 @@ Widget buildTodoQuestions(Question question, List<Screen> screensDataList, int c
       ],
     );
   } else if (question.questionOptionType == 'textfield') {
-    TextEditingController controller = TextEditingController();
+    final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
+    TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
 
     if (question.questionTitle == 'Due date') {
       return GestureDetector(
@@ -87,6 +99,8 @@ Widget buildTodoQuestions(Question question, List<Screen> screensDataList, int c
       },
     );
   } else if (question.questionOptionType == 'textarea') {
+    final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
+    TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -101,6 +115,7 @@ Widget buildTodoQuestions(Question question, List<Screen> screensDataList, int c
         TextFormField(
           keyboardType: TextInputType.multiline,
           maxLines: 5,
+          controller: controller,
           onChanged: (newvalue) {
             notify.add({"id": question.questionId, "item": newvalue.trim()});
           },
@@ -133,6 +148,10 @@ Widget buildTodoQuestions(Question question, List<Screen> screensDataList, int c
       },
     );
   } else if (question.questionOptionType == 'dropdown') {
+    // String? defaultValue;
+    // if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+    //   defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
+    // }
     return FutureBuilder(
         future: CardDetails.getCardDetails(),
         builder: (context, snapshot) {

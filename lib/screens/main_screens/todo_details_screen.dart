@@ -157,6 +157,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                         child: ScrollConfiguration(
                           behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                           child: SingleChildScrollView(
+                            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                             child: Container(
                               padding: const EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 10),
                               child: Column(
@@ -425,6 +426,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                               SizedBox(
                                                 height: 100,
                                                 child: ListView.builder(
+                                                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                                                   shrinkWrap: true,
                                                   scrollDirection: Axis.horizontal,
                                                   itemCount: attachments!.length,
@@ -573,12 +575,10 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 8.0),
-                                  child: Flexible(
-                                    child: CustomText(
-                                      title: data.linkedWorkItem![0].workItemTitle!,
-                                      fontWeight: FontWeight.w600,
-                                      size: 20,
-                                    ),
+                                  child: CustomText(
+                                    title: data.linkedWorkItem![0].workItemTitle!,
+                                    fontWeight: FontWeight.w600,
+                                    size: 20,
                                   ),
                                 ),
                                 CustomButton(

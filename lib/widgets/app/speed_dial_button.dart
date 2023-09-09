@@ -7,7 +7,8 @@ import 'package:yes_broker/routes/routes.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/utils/colors.dart';
 import '../../pages/add_inventory.dart' as inventory;
-import '../../pages/add_lead.dart';
+import '../../pages/add_lead.dart' as lead;
+import '../../pages/add_todo.dart';
 
 class CustomSpeedDialButton extends ConsumerStatefulWidget {
   const CustomSpeedDialButton({super.key});
@@ -51,7 +52,7 @@ class CustomSpeedDialButtonState extends ConsumerState<CustomSpeedDialButton> {
         SpeedDialChild(
           onTap: () {
             context.beamToNamed(AppRoutes.addLead);
-            ref.read(myArrayProvider.notifier).resetState();
+            ref.read(lead.myArrayProvider.notifier).resetState();
           },
           labelShadow: [
             const BoxShadow(
@@ -71,6 +72,7 @@ class CustomSpeedDialButtonState extends ConsumerState<CustomSpeedDialButton> {
         SpeedDialChild(
           onTap: () {
             context.beamToNamed(AppRoutes.addTodo);
+            ref.read(myArrayProvider.notifier).resetState();
           },
           labelShadow: [
             const BoxShadow(
