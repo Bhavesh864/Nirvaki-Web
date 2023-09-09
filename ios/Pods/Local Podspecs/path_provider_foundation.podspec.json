@@ -35,7 +35,7 @@
   },
   "platforms": {
     "ios": "11.0",
-    "osx": "10.14"
+    "osx": "10.11"
   },
   "swift_versions": "5.0",
   "swift_version": "5.0"
