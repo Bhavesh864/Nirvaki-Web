@@ -92,7 +92,7 @@ class ChatListScreen extends ConsumerWidget {
           color: Colors.white,
         ),
         // child: StreamBuilder<List<ChatItem>>(
-        //   stream: _mergeChatContactsAndGroups(ref),
+        //   stream: mergeChatContactsAndGroups(ref),
         //   builder: (context, snapshot) {
         //     if (snapshot.connectionState == ConnectionState.waiting) {
         //       return const Loader();
@@ -216,7 +216,7 @@ class ChatListScreen extends ConsumerWidget {
   }
 }
 
-Stream<List<ChatItem>> _mergeChatContactsAndGroups(WidgetRef ref) {
+Stream<List<ChatItem>> mergeChatContactsAndGroups(WidgetRef ref) {
   final chatContactsStream = ref.watch(chatControllerProvider).chatContacts();
   final chatGroupsStream = ref.watch(chatControllerProvider).chatGroups();
 
@@ -267,16 +267,17 @@ Stream<List<ChatItem>> _mergeChatContactsAndGroups(WidgetRef ref) {
 
 class TestList extends ConsumerWidget {
   final StateController<List<String>> selectedUserIds;
+  final Function(ChatItem)? onPressed;
 
   const TestList({
-    super.key,
     required this.selectedUserIds,
+    this.onPressed,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return StreamBuilder<List<ChatItem>>(
-      stream: _mergeChatContactsAndGroups(ref),
+      stream: mergeChatContactsAndGroups(ref),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Loader();
@@ -297,15 +298,15 @@ class TestList extends ConsumerWidget {
                       selectedUserIds.update(
                         (state) => chatItem.membersUid,
                       );
+                      if (!isSender && !chatItem.lastMessageIsSeen) {
+                        ref.read(chatControllerProvider).setLastMessageSeen(
+                              context,
+                              chatItem.id,
+                              chatItem.isGroupChat,
+                              chatItem.id,
+                            );
+                      }
                       if (Responsive.isMobile(context)) {
-                        if (!isSender && !chatItem.lastMessageIsSeen) {
-                          ref.read(chatControllerProvider).setLastMessageSeen(
-                                context,
-                                chatItem.id,
-                                chatItem.isGroupChat,
-                                chatItem.id,
-                              );
-                        }
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (ctx) => ChatScreen(
@@ -314,7 +315,7 @@ class TestList extends ConsumerWidget {
                           ),
                         );
                       } else {
-                        // onPressed(index);
+                        onPressed!(chatItem);
                       }
                     },
                     child: Container(
