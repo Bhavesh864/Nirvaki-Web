@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
+import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
@@ -10,11 +11,15 @@ import 'package:yes_broker/screens/main_screens/chat_user_profile.dart';
 class ChatScreenHeader extends StatefulWidget {
   final ChatItem? chatItem;
   final User? user;
+  final Function? showProfileScreen;
+  final Function? goToChatList;
 
   const ChatScreenHeader({
     Key? key,
     this.chatItem,
     this.user,
+    this.showProfileScreen,
+    this.goToChatList,
   }) : super(key: key);
 
   @override
@@ -46,14 +51,17 @@ class _ChatScreenHeaderState extends State<ChatScreenHeader> {
     final bool isGroupChat = widget.chatItem?.isGroupChat ?? false;
     final String name = widget.chatItem?.name ?? '${widget.user?.userfirstname} ${widget.user?.userlastname}';
     final String profilePic = widget.chatItem?.profilePic ?? widget.user?.image ?? '';
-    // final List<String> members = widget.chatItem?.membersUid ?? [];
     final String adminId = widget.chatItem?.adminId ?? '';
 
     return Row(
       children: [
         InkWell(
           onTap: () {
-            Navigator.of(context).pop();
+            if (Responsive.isMobile(context)) {
+              Navigator.of(context).pop();
+            } else {
+              widget.goToChatList!();
+            }
           },
           child: const Padding(
             padding: EdgeInsets.all(12),
@@ -69,18 +77,22 @@ class _ChatScreenHeaderState extends State<ChatScreenHeader> {
         ),
         InkWell(
           onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (ctx) => ChatUserProfile(
-                  profilePic: profilePic,
-                  name: name,
-                  user: userInfo,
-                  isGroupChat: isGroupChat,
-                  adminId: adminId,
-                  contactId: chatItemId,
+            if (Responsive.isMobile(context)) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) => ChatUserProfile(
+                    profilePic: profilePic,
+                    name: name,
+                    user: userInfo,
+                    isGroupChat: isGroupChat,
+                    adminId: adminId,
+                    contactId: chatItemId,
+                  ),
                 ),
-              ),
-            );
+              );
+            } else {
+              widget.showProfileScreen!(userInfo);
+            }
           },
           child: Row(
             children: [

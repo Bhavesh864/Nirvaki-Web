@@ -5,7 +5,6 @@ import 'package:yes_broker/chat/enums/message.enums.dart';
 import 'package:yes_broker/chat/models/message.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
-import 'package:yes_broker/constants/utils/image_constants.dart';
 
 String formatTimestamp(DateTime timestamp) {
   final formattedTime = DateFormat.jm().format(timestamp); // Format to 'hh:mm a'
