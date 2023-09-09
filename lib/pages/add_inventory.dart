@@ -246,7 +246,9 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                                           }
                                                                         }
                                                                         if (currentScreenList[index].title == "Assign to") {
-                                                                          allQuestionFinishes = true;
+                                                                          setState(() {
+                                                                            allQuestionFinishes = true;
+                                                                          });
                                                                           addDataOnfirestore(notify);
                                                                         }
                                                                       }
@@ -272,7 +274,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                           : const WorkItemSuccessWidget(
                               isInventory: "IN",
                             )),
-                  inventoryAppBar(currentScreenList),
+                  !allQuestionFinishes ? inventoryAppBar(screensDataList) : const SizedBox(),
                 ],
               );
             }

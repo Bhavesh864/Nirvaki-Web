@@ -66,6 +66,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit) async {
   final commercialphotos = getDataById(state, 53);
   final attachments = getDataById(state, 100);
   final existingInventoryId = getDataById(state, 101);
+
   final List<cards.Assignedto> assignedToList = assignto.map((user) {
     return cards.Assignedto(
       firstname: user.userfirstname,

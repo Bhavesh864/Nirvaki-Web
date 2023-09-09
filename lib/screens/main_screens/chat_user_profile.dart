@@ -129,6 +129,9 @@ class _ChatUserProfileState extends ConsumerState<ChatUserProfile> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                Group.deleteGroup(widget.contactId);
               },
               child: const AppText(
                 text: 'Delete',

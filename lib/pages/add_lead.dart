@@ -75,11 +75,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
           curve: Curves.easeInOut,
         );
       });
-    } else {
-      setState(() {
-        allQuestionFinishes = true;
-      });
-    }
+    } else {}
   }
 
   goBack(List<int> id) {
@@ -250,7 +246,9 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                                     }
                                                                   }
                                                                   if (currentScreenList[index].title == "Assign to") {
-                                                                    allQuestionFinishes = true;
+                                                                    setState(() {
+                                                                      allQuestionFinishes = true;
+                                                                    });
                                                                     addDataOnfirestore(notify);
                                                                   }
                                                                 }
@@ -273,7 +271,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                         : const WorkItemSuccessWidget(
                             isInventory: 'LD',
                           )),
-                leadAppbar(currentScreenList),
+                !allQuestionFinishes ? leadAppbar(screensDataList) : const SizedBox(),
               ],
             );
           }

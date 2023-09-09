@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:yes_broker/chat/enums/message.enums.dart';
 import 'package:yes_broker/chat/models/message.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/constants/utils/image_constants.dart';
 
 String formatTimestamp(DateTime timestamp) {
@@ -72,7 +73,7 @@ class MessageBox extends StatelessWidget {
               if (!isSender) ...[
                 CircleAvatar(
                   radius: 15,
-                  backgroundImage: NetworkImage(data.profilePic),
+                  backgroundImage: NetworkImage(data.profilePic == '' ? noImg : data.profilePic),
                 ),
                 const SizedBox(width: 2),
                 // Image.asset('assets/images/receiveMsgTip.png'),

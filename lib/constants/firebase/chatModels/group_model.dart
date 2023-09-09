@@ -57,37 +57,83 @@ class Group {
     );
   }
 
+  // static Future<void> addMembersOnGroup({required String groupId, required List<String> userids}) async {
+  //   try {
+  //     QuerySnapshot querySnapshot = await groupCollection.where("groupId", isEqualTo: groupId).get();
+  //     for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+  //       Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+  //       List<dynamic> memberids = data['membersUid'] ?? [];
+  //       memberids.addAll(userids);
+  //       await docSnapshot.reference.update({'membersUid': memberids});
+  //       print('membersUid added successfully to item ${docSnapshot.id}');
+  //     }
+  //   } catch (error) {
+  //     print('Failed to add membersUid to items: $error');
+  //   }
+  // }
+
+  // static Future<void> deleteMember({required String groupId, required String memberIdToDelete}) async {
+  //   try {
+  //     QuerySnapshot querySnapshot = await groupCollection.where("groupId", isEqualTo: groupId).get();
+  //     for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+  //       Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+  //       List<dynamic> memberids = data['membersUid'] ?? [];
+  //       if (memberids.contains(memberIdToDelete)) {
+  //         memberids.remove(memberIdToDelete);
+  //         await docSnapshot.reference.update({'membersUid': memberids});
+  //         print('Member deleted successfully from group ${docSnapshot.id}');
+  //         return;
+  //       }
+  //     }
+  //     print('Member not found in any group with groupId: $groupId');
+  //   } catch (error) {
+  //     print('Failed to delete member: $error');
+  //   }
+  // }
   static Future<void> addMembersOnGroup({required String groupId, required List<String> userids}) async {
     try {
-      QuerySnapshot querySnapshot = await groupCollection.where("groupId", isEqualTo: groupId).get();
-      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+      DocumentSnapshot docSnapshot = await groupCollection.doc(groupId).get();
+      if (docSnapshot.exists) {
         Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
         List<dynamic> memberids = data['membersUid'] ?? [];
         memberids.addAll(userids);
         await docSnapshot.reference.update({'membersUid': memberids});
-        print('membersUid added successfully to item ${docSnapshot.id}');
+        print('membersUid added successfully to item with docId: $groupId');
+      } else {
+        print('Document not found with docId: $groupId');
       }
     } catch (error) {
-      print('Failed to add membersUid to items: $error');
+      print('Failed to add membersUid to item with docId: $groupId, error: $error');
     }
   }
 
   static Future<void> deleteMember({required String groupId, required String memberIdToDelete}) async {
     try {
-      QuerySnapshot querySnapshot = await groupCollection.where("groupId", isEqualTo: groupId).get();
-      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+      DocumentSnapshot docSnapshot = await groupCollection.doc(groupId).get();
+      if (docSnapshot.exists) {
         Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
         List<dynamic> memberids = data['membersUid'] ?? [];
         if (memberids.contains(memberIdToDelete)) {
           memberids.remove(memberIdToDelete);
           await docSnapshot.reference.update({'membersUid': memberids});
-          print('Member deleted successfully from group ${docSnapshot.id}');
-          return;
+          print('Member deleted successfully from group with groupId: $groupId');
+        } else {
+          print('Member not found in group with groupId: $groupId');
         }
+      } else {
+        print('Document not found with groupId: $groupId');
       }
-      print('Member not found in any group with groupId: $groupId');
     } catch (error) {
-      print('Failed to delete member: $error');
+      print('Failed to delete member from group with docId: $groupId, error: $error');
+    }
+  }
+
+  static Future<void> deleteGroup(String groupId) async {
+    try {
+      await groupCollection.doc(groupId).delete();
+      print('group deleted successfully');
+    } catch (error) {
+      print('Failed to delete group: $error');
     }
   }
 }
