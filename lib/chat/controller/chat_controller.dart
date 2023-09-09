@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/chat/models/chat_group.dart';
@@ -5,6 +7,7 @@ import 'package:yes_broker/chat/models/chat_group.dart';
 import 'package:yes_broker/chat/models/message.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import '../enums/message.enums.dart';
 import '../models/chat_contact.dart';
 import '../repositories/chat_repositories.dart';
 
@@ -60,28 +63,27 @@ class ChatController {
     // ref.read(messageReplyProvider.state).update((state) => null);
   }
 
-  // void sendFileMessage(
-  //   BuildContext context,
-  //   File file,
-  //   String recieverUserId,
-  //   MessageEnum messageEnum,
-  //   bool isGroupChat,
-  // ) {
-  //   final messageReply = ref.read(messageReplyProvider);
-  //   ref.read(userDataAuthProvider).whenData(
-  //         (value) => chatRepository.sendFileMessage(
-  //           context: context,
-  //           file: file,
-  //           recieverUserId: recieverUserId,
-  //           senderUserData: value!,
-  //           messageEnum: messageEnum,
-  //           ref: ref,
-  //           messageReply: messageReply,
-  //           isGroupChat: isGroupChat,
-  //         ),
-  //       );
-  //   ref.read(messageReplyProvider.state).update((state) => null);
-  // }
+  void sendFileMessage(
+    BuildContext context,
+    File file,
+    String recieverUserId,
+    MessageEnum messageEnum,
+    bool isGroupChat,
+  ) async {
+    // ref.read(userDataAuthProvider).whenData(
+    final User? user = await User.getUser(AppConst.getAccessToken());
+
+    // ignore: use_build_context_synchronously
+    chatRepository.sendFileMessage(
+      context: context,
+      file: file,
+      recieverUserId: recieverUserId,
+      senderUserData: user!,
+      messageEnum: messageEnum,
+      ref: ref,
+      isGroupChat: isGroupChat,
+    );
+  }
 
   // void sendGIFMessage(
   //   BuildContext context,
