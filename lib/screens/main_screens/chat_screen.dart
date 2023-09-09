@@ -9,7 +9,6 @@ import 'package:yes_broker/constants/firebase/chat_services.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/responsive.dart';
-import 'package:yes_broker/customs/text_utility.dart';
 import 'package:yes_broker/screens/main_screens/chat_list_screen.dart';
 import 'package:yes_broker/widgets/chat/chat_input.dart';
 import 'package:yes_broker/widgets/chat/chat_screen_header.dart';
