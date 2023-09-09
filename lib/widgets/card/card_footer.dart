@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import '../../Customs/custom_chip.dart';
+import '../../constants/functions/make_call_function.dart';
 import '../../constants/functions/navigation/navigation_functions.dart';
 import '../../constants/utils/constants.dart';
 import '../workItemDetail/Inventory_details_header.dart';
@@ -43,14 +44,16 @@ class CardFooter extends StatelessWidget {
                   ),
                 ),
               ),
-              const CustomChip(
-                label: Icon(
+              CustomChip(
+                onPressed: () => makePhoneCall(cardData.customerinfo!.mobile!),
+                label: const Icon(
                   Icons.call_outlined,
                 ),
                 paddingHorizontal: 3,
               ),
-              const CustomChip(
-                label: FaIcon(
+              CustomChip(
+                onPressed: () => launchWhatsapp(cardData.customerinfo!.whatsapp, context),
+                label: const FaIcon(
                   FontAwesomeIcons.whatsapp,
                 ),
                 paddingHorizontal: 3,
