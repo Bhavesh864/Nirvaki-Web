@@ -75,7 +75,7 @@ class _ChatScreenHeaderState extends State<ChatScreenHeader> {
         const SizedBox(
           width: 8,
         ),
-        InkWell(
+        GestureDetector(
           onTap: () {
             if (Responsive.isMobile(context)) {
               Navigator.of(context).push(
@@ -96,13 +96,10 @@ class _ChatScreenHeaderState extends State<ChatScreenHeader> {
           },
           child: Row(
             children: [
-              Hero(
-                tag: chatItemId,
-                child: CircleAvatar(
-                  radius: 24,
-                  backgroundImage: NetworkImage(
-                    profilePic.isEmpty ? noImg : profilePic,
-                  ),
+              CircleAvatar(
+                radius: 24,
+                backgroundImage: NetworkImage(
+                  profilePic.isEmpty ? noImg : profilePic,
                 ),
               ),
               const SizedBox(
