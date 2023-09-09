@@ -63,11 +63,18 @@
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="brokr-in" 
         />       
-    <!-- <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
-        <intent-filter>
-            <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
-        </intent-filter>
-    </receiver> -->
     </application>
+    <!-- Provide required visibility configuration for API level 30 and above -->
+   <queries>
+  <!-- If your app checks for SMS support -->
+   <intent>
+    <action android:name="android.intent.action.VIEW" />
+    <data android:scheme="sms" />
+  </intent>
+  <!-- If your app checks for call support -->
+  <intent>
+    <action android:name="android.intent.action.VIEW" />
+    <data android:scheme="tel" />
+  </intent>
+</queries>
 </manifest>
