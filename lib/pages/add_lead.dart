@@ -110,7 +110,6 @@ class _AddLeadState extends ConsumerState<AddLead> {
     final isVillaSelected = ref.read(leadFilterVillaQuestion);
     final isPlotSelected = ref.read(leadFilterPlotQuestion);
     final isCommericalSelected = ref.read(leadFilterCommercialQuestion);
-    print(notify.state);
 
     return Scaffold(
       body: FutureBuilder<List<LeadQuestions>>(
@@ -228,7 +227,8 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                     isPlotSelected,
                                                     selectedValues,
                                                   ),
-                                                  if (i == currentScreenList[index].questions.length - 1 && currentScreenList[index].questions[i].questionOptionType != 'chip')
+                                                  if (i == currentScreenList[index].questions.length - 1 &&
+                                                      currentScreenList[index].questions[i].questionOptionType != 'chip')
                                                     Container(
                                                       margin: const EdgeInsets.only(top: 10),
                                                       alignment: Alignment.centerRight,

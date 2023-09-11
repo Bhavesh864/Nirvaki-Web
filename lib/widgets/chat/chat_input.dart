@@ -14,6 +14,7 @@ class ChatInput extends ConsumerStatefulWidget {
   final bool isGroupChat;
 
   const ChatInput({
+    super.key,
     required this.revceiverId,
     required this.isGroupChat,
   });
@@ -54,7 +55,7 @@ class _ChatInputState extends ConsumerState<ChatInput> {
   }
 
   void sendTextMessage() {
-    if (messageController.text.isNotEmpty) {
+    if (messageController.text.trim().isNotEmpty) {
       ref.read(chatControllerProvider).sendTextMessage(
             context,
             messageController.text.trim(),
@@ -113,6 +114,8 @@ class _ChatInputState extends ConsumerState<ChatInput> {
               ),
               Expanded(
                 child: TextField(
+                  // keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.send,
                   focusNode: focusNode,
                   controller: messageController,
                   minLines: 1,
@@ -124,6 +127,9 @@ class _ChatInputState extends ConsumerState<ChatInput> {
                     focusedBorder: InputBorder.none,
                     hintText: 'Start typing...',
                   ),
+                  onSubmitted: (_) {
+                    sendTextMessage();
+                  },
                 ),
               ),
               InkWell(

@@ -74,8 +74,11 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
           status = filteredInventoryList;
 
           final tableRowList = filteredInventoryList.map((e) {
-            print(filteredInventoryList.indexOf(e));
-            return buildWorkItemRowTile(e, filteredInventoryList.indexOf(e), status);
+            return buildWorkItemRowTile(
+              e,
+              filteredInventoryList.indexOf(e),
+              status,
+            );
           });
 
           return Row(
@@ -125,27 +128,29 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                                     flex: 5,
                                     child: Container(
                                       margin: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: LayoutBuilder(builder: (context, constraints) {
-                                        final availableWidth = constraints.maxWidth;
-                                        return Table(
-                                          columnWidths: {
-                                            0: FixedColumnWidth(availableWidth * 0.25),
-                                            1: FixedColumnWidth(availableWidth * 0.18),
-                                            2: FixedColumnWidth(availableWidth * 0.15),
-                                            3: FixedColumnWidth(availableWidth * 0.15),
-                                            4: FixedColumnWidth(availableWidth * 0.1),
-                                            5: FixedColumnWidth(availableWidth * 0.1),
-                                          },
-                                          border: TableBorder(
-                                            bottom: BorderSide(color: Colors.grey.withOpacity(.5), width: 1.5),
-                                            horizontalInside: BorderSide(color: Colors.grey.withOpacity(.5), width: 1.5),
-                                          ),
-                                          children: [
-                                            buildTableHeader(),
-                                            ...tableRowList,
-                                          ],
-                                        );
-                                      }),
+                                      child: LayoutBuilder(
+                                        builder: (context, constraints) {
+                                          final availableWidth = constraints.maxWidth;
+                                          return Table(
+                                            columnWidths: {
+                                              0: FixedColumnWidth(availableWidth * 0.25),
+                                              1: FixedColumnWidth(availableWidth * 0.18),
+                                              2: FixedColumnWidth(availableWidth * 0.15),
+                                              3: FixedColumnWidth(availableWidth * 0.15),
+                                              4: FixedColumnWidth(availableWidth * 0.1),
+                                              5: FixedColumnWidth(availableWidth * 0.1),
+                                            },
+                                            border: TableBorder(
+                                              bottom: BorderSide(color: Colors.grey.withOpacity(.5), width: 1.5),
+                                              horizontalInside: BorderSide(color: Colors.grey.withOpacity(.5), width: 1.5),
+                                            ),
+                                            children: [
+                                              buildTableHeader(),
+                                              ...tableRowList,
+                                            ],
+                                          );
+                                        },
+                                      ),
                                     ),
                                   )
                                 : SizedBox(
@@ -188,7 +193,10 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                                             onTap: () {
                                               navigateBasedOnId(context, id, ref);
                                             },
-                                            child: CustomCard(index: index, cardDetails: filteredInventoryList),
+                                            child: CustomCard(
+                                              index: index,
+                                              cardDetails: filteredInventoryList,
+                                            ),
                                           );
                                         },
                                       )

@@ -121,7 +121,6 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
 
               // final bool isRateInRange = itemRateStart >= rateRange.start && itemRateEnd <= rateRange.end;
 
-              print('${item.roomconfig!.bedroom!}BHK');
               return isBedRoomMatch;
             }).toList();
 
