@@ -1,8 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, prefer_const_constructors
+// ignore: depend_on_referenced_packages
+import "package:rxdart/rxdart.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:rxdart/rxdart.dart';
 
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/chat/controller/chat_controller.dart';
@@ -71,7 +72,9 @@ class ChatListScreen extends ConsumerWidget {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (ctx) => const CreateGroupScreen(),
+                  builder: (ctx) => const CreateGroupScreen(
+                    createGroup: true,
+                  ),
                 ),
               );
             },
@@ -91,112 +94,6 @@ class ChatListScreen extends ConsumerWidget {
         decoration: const BoxDecoration(
           color: Colors.white,
         ),
-        // child: StreamBuilder<List<ChatItem>>(
-        //   stream: mergeChatContactsAndGroups(ref),
-        //   builder: (context, snapshot) {
-        //     if (snapshot.connectionState == ConnectionState.waiting) {
-        //       return const Loader();
-        //     }
-        //     if (snapshot.hasData) {
-        //       final chatItems = snapshot.data!;
-        //       return ListView.builder(
-        //         physics: const ClampingScrollPhysics(),
-        //         itemCount: chatItems.length,
-        //         itemBuilder: (context, index) {
-        //           final chatItem = chatItems[index];
-        //           final isSender = chatItem.lastMessageSenderId == AppConst.getAccessToken();
-
-        //           return Column(
-        //             children: [
-        //               InkWell(
-        //                 onTap: () {
-        //                   selectedUserIds.update(
-        //                     (state) => chatItem.membersUid,
-        //                   );
-        //                   if (Responsive.isMobile(context)) {
-        //                     if (!isSender && !chatItem.lastMessageIsSeen) {
-        //                       ref.read(chatControllerProvider).setLastMessageSeen(
-        //                             context,
-        //                             chatItem.id,
-        //                             chatItem.isGroupChat,
-        //                             chatItem.id,
-        //                           );
-        //                     }
-        //                     Navigator.of(context).push(
-        //                       MaterialPageRoute(
-        //                         builder: (ctx) => ChatScreen(
-        //                           chatItem: chatItem,
-        //                         ),
-        //                       ),
-        //                     );
-        //                   } else {
-        //                     // onPressed(index);
-        //                   }
-        //                 },
-        //                 child: Container(
-        //                   color: !isSender && !chatItem.lastMessageIsSeen ? AppColor.secondary : Colors.transparent,
-        //                   child: Padding(
-        //                     padding: const EdgeInsets.only(bottom: 8.0),
-        //                     child: ListTile(
-        //                       title: Text(
-        //                         chatItem.name,
-        //                         style: const TextStyle(
-        //                           fontSize: 18,
-        //                         ),
-        //                       ),
-        //                       subtitle: Padding(
-        //                         padding: const EdgeInsets.only(top: 6.0),
-        //                         child: Text(
-        //                           chatItem.lastMessage,
-        //                           maxLines: 1,
-        //                           overflow: TextOverflow.ellipsis,
-        //                           style: const TextStyle(fontSize: 15),
-        //                         ),
-        //                       ),
-        //                       leading: CircleAvatar(
-        //                         backgroundImage: NetworkImage(
-        //                           chatItem.profilePic == '' ? noImg : chatItem.profilePic,
-        //                         ),
-        //                         radius: 30,
-        //                       ),
-        //                       trailing: Column(
-        //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //                         children: [
-        //                           const SizedBox(),
-        //                           if (!isSender && !chatItem.lastMessageIsSeen)
-        //                             Container(
-        //                               width: 10,
-        //                               height: 10,
-        //                               decoration: const BoxDecoration(
-        //                                 shape: BoxShape.circle,
-        //                                 color: AppColor.primary,
-        //                               ),
-        //                             ),
-        //                           Text(
-        //                             DateFormat.Hm().format(chatItem.timeSent),
-        //                             style: const TextStyle(
-        //                               color: Colors.grey,
-        //                               fontSize: 13,
-        //                             ),
-        //                           ),
-        //                         ],
-        //                       ),
-        //                     ),
-        //                   ),
-        //                 ),
-        //               ),
-        //               const Divider(
-        //                 indent: 85,
-        //                 height: 5,
-        //               ),
-        //             ],
-        //           );
-        //         },
-        //       );
-        //     }
-        //     return const SizedBox();
-        //   },
-        // ),
         child: TestList(selectedUserIds: selectedUserIds),
       ),
       floatingActionButton: FloatingActionButton(
@@ -270,6 +167,7 @@ class TestList extends ConsumerWidget {
   final Function(ChatItem)? onPressed;
 
   const TestList({
+    super.key,
     required this.selectedUserIds,
     this.onPressed,
   });
@@ -326,7 +224,7 @@ class TestList extends ConsumerWidget {
                           title: Text(
                             chatItem.name,
                             style: const TextStyle(
-                              fontSize: 18,
+                              fontSize: 15,
                             ),
                           ),
                           subtitle: Padding(
@@ -335,14 +233,14 @@ class TestList extends ConsumerWidget {
                               chatItem.lastMessage,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 15),
+                              style: const TextStyle(fontSize: 12),
                             ),
                           ),
                           leading: CircleAvatar(
                             backgroundImage: NetworkImage(
                               chatItem.profilePic == '' ? noImg : chatItem.profilePic,
                             ),
-                            radius: 30,
+                            radius: 25,
                           ),
                           trailing: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -361,7 +259,7 @@ class TestList extends ConsumerWidget {
                                 DateFormat.Hm().format(chatItem.timeSent),
                                 style: const TextStyle(
                                   color: Colors.grey,
-                                  fontSize: 13,
+                                  fontSize: 10,
                                 ),
                               ),
                             ],

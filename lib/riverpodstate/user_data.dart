@@ -12,6 +12,7 @@ class UserDataState extends StateNotifier<User> {
           User(
             brokerId: "brokerId",
             status: "status",
+            isOnline: false,
             userfirstname: "userfirstname",
             userlastname: "userlastname",
             userId: "userId",
@@ -34,6 +35,7 @@ class UserDataState extends StateNotifier<User> {
 
   void resetState() {
     state = User(
+      isOnline: false,
       brokerId: "",
       status: "",
       userfirstname: "",
