@@ -57,7 +57,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   }
 
   addDataOnfirestore(AllChipSelectedAnwers notify) {
-    notify.submitInventory(isEdit).then((value) => {
+    notify.submitInventory(isEdit, ref).then((value) => {
           setState(() {
             response = value;
           })

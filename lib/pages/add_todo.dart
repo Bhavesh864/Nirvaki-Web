@@ -40,7 +40,7 @@ class _AddTodoState extends ConsumerState<AddTodo> {
   }
 
   addDataOnfirestore(AllChipSelectedAnwers notify) {
-    notify.submitTodo();
+    notify.submitTodo(ref);
   }
 
   nextQuestion({List<Screen>? screensDataList, option}) {

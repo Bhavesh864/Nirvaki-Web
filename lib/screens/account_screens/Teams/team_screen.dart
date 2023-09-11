@@ -12,6 +12,7 @@ import 'package:yes_broker/widgets/accounts/Teams/title_cards.dart';
 
 import '../../../constants/firebase/userModel/user_info.dart';
 import '../../../riverpodstate/add_member_state.dart';
+import '../../../riverpodstate/user_data.dart';
 
 final addMemberScreenStateProvider = StateNotifierProvider<AddMemberScreenStateNotifier, bool>((ref) {
   return AddMemberScreenStateNotifier();
@@ -31,6 +32,8 @@ class TeamScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isAddMemberScreen = ref.watch(addMemberScreenStateProvider);
+    final User currentUserdata = ref.read(userDataProvider);
+
     if (!Responsive.isMobile(context)) {
       if (isAddMemberScreen) {
         return const AddMemberScreen();
@@ -116,7 +119,7 @@ class TeamScreen extends ConsumerWidget {
               const SizedBox(height: 20),
               const AppText(text: "Team", fontWeight: FontWeight.w700, fontsize: 16),
               StreamBuilder(
-                  stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: currentUser["brokerId"]).snapshots(),
+                  stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: currentUserdata.brokerId).snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(

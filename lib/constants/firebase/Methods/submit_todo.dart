@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:random_string/random_string.dart';
 import 'package:yes_broker/constants/app_constant.dart';
@@ -6,8 +8,10 @@ import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
 
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' as cards;
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/riverpodstate/user_data.dart';
 
-Future<String> submitTodoAndCardDetails(state) async {
+Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
+  final User currentUserdata = ref.read(userDataProvider);
   final randomId = randomNumeric(5);
   var res = "pending";
   final todotype = getDataById(state, 1);
@@ -16,8 +20,6 @@ Future<String> submitTodoAndCardDetails(state) async {
   final dueDate = getDataById(state, 4);
   final cards.CardDetails cardDetail = getDataById(state, 6);
   final List<User> assignto = getDataById(state, 12);
-  Box box = Hive.box("users");
-  final currentUser = box.get(AppConst.getAccessToken());
 
   final List<cards.Assignedto> assignedToList = assignto.map((user) {
     return cards.Assignedto(
@@ -31,10 +33,10 @@ Future<String> submitTodoAndCardDetails(state) async {
   final cards.CardDetails card = cards.CardDetails(
     workitemId: "TD$randomId",
     status: "New",
-    brokerid: currentUser["brokerId"],
+    brokerid: currentUserdata.brokerId,
     cardType: todotype,
     duedate: dueDate,
-    managerid: currentUser["managerid"],
+    managerid: currentUserdata.managerid,
     cardTitle: todoTitle,
     cardDescription: todoDescription,
     linkedItemType: cardDetail.cardType,
@@ -48,8 +50,8 @@ Future<String> submitTodoAndCardDetails(state) async {
     cardStatus: "New",
     linkedItemId: cardDetail.workitemId,
     assignedto: assignedToList,
-    createdby:
-        cards.Createdby(userfirstname: currentUser["userfirstname"], userid: currentUser["userId"], userlastname: currentUser["userlastname"], userimage: currentUser["image"]),
+    createdby: cards.Createdby(
+        userfirstname: currentUserdata.userfirstname, userid: currentUserdata.userId, userlastname: currentUserdata.userlastname, userimage: currentUserdata.image),
     createdate: Timestamp.now(),
   );
   final List<Assignedto> assignedListTodo = assignto.map((user) {
@@ -63,9 +65,9 @@ Future<String> submitTodoAndCardDetails(state) async {
   }).toList();
   final TodoDetails todo = TodoDetails(
     todoId: "TD$randomId",
-    managerId: currentUser["managerid"],
+    managerId: currentUserdata.managerid,
     todoType: todotype,
-    brokerId: currentUser["brokerId"],
+    brokerId: currentUserdata.brokerId,
     dueDate: dueDate,
     todoName: todoTitle,
     todoDescription: todoDescription,
