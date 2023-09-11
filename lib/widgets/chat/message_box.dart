@@ -76,17 +76,16 @@ class MessageBox extends StatelessWidget {
             children: [
               if (!isSender) ...[
                 CircleAvatar(
-                  radius: 15,
+                  radius: 14,
                   backgroundImage: NetworkImage(data.profilePic == '' ? noImg : data.profilePic),
                 ),
-                const SizedBox(width: 2),
-                // Image.asset('assets/images/receiveMsgTip.png'),
+                Image.asset('assets/images/receiveMsgTip.png'),
               ],
               Container(
                 constraints: BoxConstraints(
                   maxWidth: width * 3 / 4,
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: isSender ? AppColor.primary : AppColor.secondary,
                   borderRadius: BorderRadius.only(
@@ -109,8 +108,8 @@ class MessageBox extends StatelessWidget {
                         ),
                       ),
                     Container(
-                      margin: !isSender ? const EdgeInsets.only(left: 5) : null,
-                      padding: const EdgeInsets.all(4),
+                      // margin: !isSender ? const EdgeInsets.only(left: 5) : null,
+                      padding: const EdgeInsets.symmetric(vertical: 4),
                       child: DisplayMessage(
                         message: message,
                         type: data.type,
@@ -126,7 +125,7 @@ class MessageBox extends StatelessWidget {
                           textAlign: TextAlign.end,
                           style: TextStyle(
                             color: isSender ? Colors.white : AppColor.inActiveColor,
-                            fontSize: 12,
+                            fontSize: 10,
                           ),
                         ),
                         if (isSender)

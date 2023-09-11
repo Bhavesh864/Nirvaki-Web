@@ -67,7 +67,7 @@ class _ChatScreenHeaderState extends State<ChatScreenHeader> {
             padding: EdgeInsets.all(12),
             child: Icon(
               Icons.arrow_back,
-              size: 20,
+              size: 18,
               color: Colors.black,
             ),
           ),
@@ -97,7 +97,7 @@ class _ChatScreenHeaderState extends State<ChatScreenHeader> {
           child: Row(
             children: [
               CircleAvatar(
-                radius: 24,
+                radius: 20,
                 backgroundImage: NetworkImage(
                   profilePic.isEmpty ? noImg : profilePic,
                 ),
@@ -113,13 +113,13 @@ class _ChatScreenHeaderState extends State<ChatScreenHeader> {
                     text: name,
                     textColor: const Color.fromRGBO(44, 44, 46, 1),
                     fontWeight: FontWeight.w500,
-                    fontsize: 16,
+                    fontsize: 15,
                   ),
                   const AppText(
-                    text: "11:20",
+                    text: "Online",
                     textColor: Color.fromRGBO(155, 155, 155, 1),
                     fontWeight: FontWeight.w400,
-                    fontsize: 15,
+                    fontsize: 12,
                     maxLines: 1,
                   ),
                 ],

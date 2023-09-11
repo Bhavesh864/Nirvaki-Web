@@ -151,11 +151,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
           images[index] = null;
         });
 
-        print('for Web   ${pickedImage.path}');
-
         uploadImageToFirebase(index, f);
-
-        // String base64String = base64Encode(f);
       }
     } else {
       if (pickedImage != null) {
@@ -165,7 +161,6 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
           images[index] = selected;
           webImages[index] = null;
         });
-        // print('for mobile  ${pickedImage.path}');
 
         uploadImageToFirebase(index, selected);
       }
@@ -223,7 +218,6 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
 
   @override
   Widget build(BuildContext context) {
-    print(itemTitles);
     return SingleChildScrollView(
       physics: Responsive.isMobile(context) ? const ScrollPhysics() : const NeverScrollableScrollPhysics(),
       child: Container(

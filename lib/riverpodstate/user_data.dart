@@ -11,6 +11,7 @@ class UserDataState extends StateNotifier<User> {
           User(
             brokerId: "brokerId",
             status: "status",
+            isOnline: false,
             userfirstname: "userfirstname",
             userlastname: "userlastname",
             userId: "userId",

@@ -94,7 +94,6 @@ class _EditTodoState extends State<EditTodo> {
 }
 
 Widget getwidgetBytitle(title) {
-  print(title);
   if (title == "Task Name and Description") {
     return CustomTextInput(
       controller: TextEditingController(),
