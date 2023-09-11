@@ -10,8 +10,10 @@ import 'package:yes_broker/constants/firebase/Methods/add_activity.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 
+import '../../../constants/firebase/userModel/user_info.dart';
 import '../../../customs/responsive.dart';
 import '../../../constants/firebase/send_notification.dart';
+import '../../../riverpodstate/user_data.dart';
 import '../../timeline_view.dart';
 
 class ActivityTabView extends ConsumerStatefulWidget {
@@ -26,7 +28,9 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
   final TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final workItemId = ref.read(selectedWorkItemId.notifier).state;
+    final workItemId = ref.read(selectedWorkItemId);
+    final User user = ref.read(userDataProvider);
+
     return Column(
       children: [
         Wrap(
@@ -55,8 +59,9 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
                   text: 'Add Note',
                   onPressed: () {
                     if (controller.text.isNotEmpty) {
-                      submitActivity(itemid: workItemId, activitytitle: controller.text.trim());
-                      notifyToUser(assignedto: widget.details.assignedto, content: "$workItemId added new Activity", title: controller.text, itemid: workItemId);
+                      submitActivity(itemid: workItemId, activitytitle: controller.text.trim(), user: user);
+                      notifyToUser(
+                          currentuserdata: user, assignedto: widget.details.assignedto, content: "$workItemId added new Activity", title: controller.text, itemid: workItemId);
                       controller.clear();
                     } else {
                       customSnackBar(context: context, text: 'Please enter note to submit');

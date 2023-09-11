@@ -12,6 +12,7 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
 
 import '../../../../constants/utils/constants.dart';
+import '../../../../riverpodstate/user_data.dart';
 import '../team_screen.dart';
 
 class AddMemberScreen extends ConsumerStatefulWidget {
@@ -74,6 +75,8 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final User currentUserData = ref.read(userDataProvider);
+
     return Card(
       elevation: 5,
       margin: const EdgeInsets.all(20),
@@ -115,7 +118,7 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                             validator: (value) => validateEmail(value),
                           ),
                           FutureBuilder(
-                              future: User.getAllUsers(),
+                              future: User.getAllUsers(currentUserData),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   final List<String> userNames = snapshot.data!.map((user) => "${user.userfirstname} ${user.userlastname}").toList();

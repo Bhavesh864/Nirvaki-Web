@@ -39,7 +39,6 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
   @override
   Widget build(BuildContext context) {
     final User user = ref.read(userDataProvider);
-    print("${user.brokerId}");
     return Column(
       children: [
         if (!AppConst.getPublicView())
@@ -128,7 +127,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                               ),
                               const SizedBox(width: 3),
                               if (widget.assignto.length > 1)
-                                currentUser["role"] != "Employee"
+                                user.role != "Employee"
                                     ? GestureDetector(
                                         onTap: () {
                                           deleteassignUser(item.userid, widget.id);
@@ -144,18 +143,12 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                         );
                       }).toList(),
                     ),
-                    currentUser["role"] != "Employee"
+                    user.role != "Employee"
                         ? GestureDetector(
                             onTap: () {
-                              assginUserToTodo(
-                                context,
-                                assign,
-                                widget.assignto,
-                                widget.id,
-                                () {
-                                  Navigator.of(context).pop();
-                                },
-                              );
+                              assginUserToTodo(context, assign, widget.assignto, widget.id, () {
+                                Navigator.of(context).pop();
+                              }, user);
                             },
                             child: const Padding(
                               padding: EdgeInsets.only(top: 14),

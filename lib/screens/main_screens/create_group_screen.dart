@@ -33,7 +33,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
   @override
   void initState() {
     super.initState();
-    _usersFuture = fetchUsers();
+    _usersFuture = fetchUsers(ref);
   }
 
   // bool isConfirm = false;

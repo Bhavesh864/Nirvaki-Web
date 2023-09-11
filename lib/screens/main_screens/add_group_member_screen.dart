@@ -8,6 +8,7 @@ import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 
+import '../../riverpodstate/user_data.dart';
 import 'chat_list_screen.dart';
 
 // ignore: must_be_immutable
@@ -57,6 +58,7 @@ class _AddGroupMembersState extends ConsumerState<AddGroupMembers> {
   @override
   Widget build(BuildContext context) {
     final selectedUserIds = ref.read(selectedUserIdsProvider.notifier).state;
+    final User user = ref.read(userDataProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -78,7 +80,7 @@ class _AddGroupMembersState extends ConsumerState<AddGroupMembers> {
                 .collection("users")
                 .where(
                   "brokerId",
-                  isEqualTo: currentUser["brokerId"],
+                  isEqualTo: user.brokerId,
                 )
                 .snapshots(),
             builder: (context, snapshot) {

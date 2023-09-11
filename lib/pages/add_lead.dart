@@ -58,7 +58,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
   }
 
   addDataOnfirestore(AllChipSelectedAnwers notify) {
-    notify.submitLead(isEdit).then((value) => {
+    notify.submitLead(isEdit, ref).then((value) => {
           setState(() {
             response = value;
           })

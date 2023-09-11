@@ -8,7 +8,7 @@ import '../app_constant.dart';
 
 const serverKey = "AAAAyk5ZDg8:APA91bF9gOEKgpPLOmPskYJ5kTuxuTOxX7eRPh0XSmzPJYINEE6DjhmHQAHlU4TntXJgo92oArPrIfhSsFAEyVQEDsL7YgY0YyXBFoYgX5_i1pxoOVkQwvtSdguxzDI1n9bskHdQ-30Q";
 
-Future<void> sendNotificationTouser({required String token, required String title, required String content, required String itemid}) async {
+Future<void> sendNotificationTouser({required String token, required String title, required String content, required String itemid, required User currentuserdata}) async {
   var data = {
     'to': token,
     'notification': {'title': title, 'body': content},
@@ -17,7 +17,7 @@ Future<void> sendNotificationTouser({required String token, required String titl
         'notification_count': 23,
       },
     },
-    'data': {'id': itemid, "imageUrl": currentUser["image"] ?? ""}
+    'data': {'id': itemid, "imageUrl": currentuserdata.image}
   };
   await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
       body: jsonEncode(data), headers: {'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'key=$serverKey'}).then((value) {
@@ -37,6 +37,7 @@ void notifyToUser({
   required String content,
   bool assigntofield = false,
   required String itemid,
+  required User currentuserdata,
 }) async {
   try {
     List<String> userids = [];
@@ -51,12 +52,7 @@ void notifyToUser({
     print("tokens$tokens");
     for (var token in tokens) {
       if (AppConst.getFcmToken() != token) {
-        await sendNotificationTouser(
-          token: token,
-          title: title,
-          content: content,
-          itemid: itemid,
-        );
+        await sendNotificationTouser(token: token, title: title, content: content, itemid: itemid, currentuserdata: currentuserdata);
       }
     }
   } catch (e) {
