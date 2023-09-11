@@ -78,7 +78,9 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
       elevation: 5,
       margin: const EdgeInsets.all(20),
       child: loading
-          ? const Center(child: CircularProgressIndicator.adaptive())
+          ? const Center(
+              child: CircularProgressIndicator.adaptive(),
+            )
           : Container(
               padding: const EdgeInsets.all(16),
               child: Padding(

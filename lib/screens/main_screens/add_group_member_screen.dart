@@ -125,18 +125,21 @@ class _AddGroupMembersState extends ConsumerState<AddGroupMembers> {
                           splashColor: Colors.grey[350],
                           leading: Hero(
                             tag: user.userId,
-                            child: CircleAvatar(radius: 26, backgroundImage: NetworkImage(user.image.isEmpty ? noImg : user.image)),
+                            child: CircleAvatar(
+                              radius: 22,
+                              backgroundImage: NetworkImage(user.image.isEmpty ? noImg : user.image),
+                            ),
                           ),
                           title: AppText(
                             text: '${user.userfirstname} ${user.userlastname}',
                             textColor: const Color.fromRGBO(44, 44, 46, 1),
                             fontWeight: FontWeight.w500,
-                            fontsize: 16,
+                            fontsize: 14,
                           ),
                           trailing: selectedUser.isNotEmpty && selectedUser.contains(user.userId)
                               ? const Icon(
                                   Icons.check_circle,
-                                  size: 20,
+                                  size: 18,
                                   color: AppColor.primary,
                                 )
                               : null,

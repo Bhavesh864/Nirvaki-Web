@@ -22,10 +22,21 @@ class LayoutView extends StatefulWidget {
   State<LayoutView> createState() => _LayoutViewState();
 }
 
-class _LayoutViewState extends State<LayoutView> {
+class _LayoutViewState extends State<LayoutView> with WidgetsBindingObserver {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   Stream<User?>? authState;
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   super.didChangeAppLifecycleState(state);
+
+  //   switch (state) {
+  //     case AppLifecycleState.resumed:
+  //       break;
+  //     default:
+  //   }
+  // }
 
   @override
   void initState() {
@@ -98,8 +109,7 @@ class _LayoutViewState extends State<LayoutView> {
 
         return Scaffold(
           body: ScreenTypeLayout.builder(
-            breakpoints:
-                const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
+            breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
             mobile: (p0) => _buildMobileLayout(snapshot.hasData),
             tablet: (p0) => _buildTabletLayout(snapshot.hasData),
             desktop: (p0) => _buildDesktopLayout(snapshot.hasData),
@@ -121,11 +131,7 @@ class _LayoutViewState extends State<LayoutView> {
     if (isAuthenticated) {
       return const LargeScreen();
     } else {
-      final location = Beamer.of(context)
-          .currentBeamLocation
-          .state
-          .routeInformation
-          .location!;
+      final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
 
       if (location.isNotEmpty && location.contains('inventory-details')) {
         return PublicViewInventoryDetails(
@@ -144,11 +150,7 @@ class _LayoutViewState extends State<LayoutView> {
     if (isAuthenticated) {
       return const LargeScreen();
     } else {
-      final location = Beamer.of(context)
-          .currentBeamLocation
-          .state
-          .routeInformation
-          .location!;
+      final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
 
       if (location.isNotEmpty && location.contains('inventory-details')) {
         AppConst.setPublicView(true);
@@ -170,9 +172,7 @@ class _LayoutViewState extends State<LayoutView> {
 String? extractItemIdFromPath(String path, String itemType) {
   List<String> segments = Uri.parse(path).pathSegments;
 
-  if (segments.length >= 3 &&
-      segments[0] == itemType &&
-      segments[1] == '$itemType-details') {
+  if (segments.length >= 3 && segments[0] == itemType && segments[1] == '$itemType-details') {
     String itemId = segments[2];
     return itemId;
   } else {

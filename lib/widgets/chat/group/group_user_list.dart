@@ -49,6 +49,16 @@ class _GroupUserListState extends ConsumerState<GroupUserList> {
 
             getUserData(userSnapshot?[0]["membersUid"]);
 
+            if (userlist.isNotEmpty) {
+              final adminUser = userlist.firstWhere((user) => user.userId == widget.adminId);
+              userlist.removeWhere((user) => user.userId == widget.adminId);
+
+              // Add the admin user to the beginning of the userlist
+              if (adminUser != null) {
+                userlist.insert(0, adminUser);
+              }
+            }
+
             return ListView.builder(
                 physics: const PageScrollPhysics(),
                 shrinkWrap: true,
@@ -62,15 +72,17 @@ class _GroupUserListState extends ConsumerState<GroupUserList> {
                     child: ListTile(
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                      leading: Hero(
-                        tag: user.userId,
-                        child: CircleAvatar(radius: 26, backgroundImage: NetworkImage(user.image.isEmpty ? noImg : user.image)),
+                      leading: CircleAvatar(
+                        radius: 23,
+                        backgroundImage: NetworkImage(
+                          user.image.isEmpty ? noImg : user.image,
+                        ),
                       ),
                       title: AppText(
                         text: user.userId == widget.adminId ? '${user.userfirstname} ${user.userlastname} (Admin)' : '${user.userfirstname} ${user.userlastname}',
                         textColor: const Color.fromRGBO(44, 44, 46, 1),
                         fontWeight: FontWeight.w500,
-                        fontsize: 16,
+                        fontsize: 15,
                       ),
                       trailing: AppConst.getAccessToken() == widget.adminId && user.userId != widget.adminId
                           ? InkWell(
@@ -86,7 +98,10 @@ class _GroupUserListState extends ConsumerState<GroupUserList> {
                                   userSnapshot?[0]["membersUid"],
                                 );
                                 setState(() {});
-                                customSnackBar(context: context, text: '${user.userfirstname} ${user.userlastname} has been removed');
+                                customSnackBar(
+                                  context: context,
+                                  text: '${user.userfirstname} ${user.userlastname} has been removed',
+                                );
                               },
                               splashColor: Colors.grey[350],
                               child: const Padding(

@@ -1,9 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
+
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
 
@@ -42,20 +45,24 @@ class User extends HiveObject {
   String? managerName;
   @HiveField(12)
   String? fcmToken;
-  User(
-      {required this.brokerId,
-      required this.status,
-      required this.userfirstname,
-      required this.userlastname,
-      required this.userId,
-      required this.mobile,
-      required this.fcmToken,
-      this.managerName,
-      this.managerid,
-      required this.email,
-      required this.role,
-      required this.whatsAppNumber,
-      required this.image});
+  @HiveField(13)
+  bool isOnline;
+  User({
+    required this.brokerId,
+    required this.status,
+    required this.userfirstname,
+    required this.userlastname,
+    required this.userId,
+    required this.mobile,
+    required this.fcmToken,
+    this.managerName,
+    this.managerid,
+    required this.isOnline,
+    required this.email,
+    required this.role,
+    required this.whatsAppNumber,
+    required this.image,
+  });
 
   // Convert User object to a map
 
@@ -75,43 +82,47 @@ class User extends HiveObject {
         email: json["email"],
         image: json["image"],
         role: json["role"],
+        isOnline: json["isOnline"],
         whatsAppNumber: json["whatsAppNumber"]);
   }
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'brokerId': brokerId,
+      'userId': userId,
       'userfirstname': userfirstname,
       'userlastname': userlastname,
       'mobile': mobile,
-      "whatsAppNumber": whatsAppNumber,
       'email': email,
       'role': role,
-      "managerid": managerid,
-      "managerName": managerName,
-      'userId': userId,
-      "status": status,
+      'status': status,
       'image': image,
-      "fcmToken": fcmToken,
+      'whatsAppNumber': whatsAppNumber,
+      'managerid': managerid,
+      'managerName': managerName,
+      'fcmToken': fcmToken,
+      'isOnline': isOnline,
     };
   }
 
   // Create User object from a map
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-        brokerId: map['brokerId'],
-        userfirstname: map['userfirstname'],
-        userlastname: map['userlastname'],
-        mobile: map['mobile'],
-        email: map["email"],
-        whatsAppNumber: map["whatsAppNumber"],
-        role: map['role'],
-        userId: map['userId'],
-        status: map['status'],
-        fcmToken: map["fcmToken"],
-        managerName: map["managerName"],
-        managerid: map["managerid"],
-        image: map['image']);
+      brokerId: map['brokerId'] as String,
+      userId: map['userId'] as String,
+      userfirstname: map['userfirstname'] as String,
+      userlastname: map['userlastname'] as String,
+      mobile: map['mobile'] as String,
+      email: map['email'] as String,
+      role: map['role'] as String,
+      status: map['status'] as String,
+      image: map['image'] as String,
+      whatsAppNumber: map['whatsAppNumber'] as String,
+      managerid: map['managerid'] != null ? map['managerid'] as String : null,
+      managerName: map['managerName'] != null ? map['managerName'] as String : null,
+      fcmToken: map['fcmToken'] != null ? map['fcmToken'] as String : null,
+      isOnline: map['isOnline'] as bool,
+    );
   }
 //  -----------------------------Methods------------------------------------------------------------------->
 
@@ -238,6 +249,10 @@ class User extends HiveObject {
     print("usertokens=======$userTokens");
     return userTokens;
   }
+
+  String toJson() => json.encode(toMap());
+
+  factory User.fromJson(String source) => User.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
 // void main() async {
