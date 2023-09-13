@@ -19,6 +19,7 @@ Future<String> submitActivity({required itemid, required activitytitle, required
     ),
     createdate: Timestamp.now(),
     itemid: itemid,
+    userImageUrl: user.image,
     activitybody: Activitybody(
       activitytitle: activitytitle,
     ),

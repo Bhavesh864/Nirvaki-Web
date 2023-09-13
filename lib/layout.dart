@@ -27,17 +27,6 @@ class _LayoutViewState extends State<LayoutView> with WidgetsBindingObserver {
   Stream<User?>? authState;
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   super.didChangeAppLifecycleState(state);
-
-  //   switch (state) {
-  //     case AppLifecycleState.resumed:
-  //       break;
-  //     default:
-  //   }
-  // }
-
   @override
   void initState() {
     final token = UserHiveMethods.getdata("token");
@@ -48,54 +37,6 @@ class _LayoutViewState extends State<LayoutView> with WidgetsBindingObserver {
     setAllNotification();
     super.initState();
   }
-
-  // void showNotification() async {
-  //   AndroidNotificationDetails androidDetails = const AndroidNotificationDetails('brokr', 'Chat app', priority: Priority.max, importance: Importance.high);
-  //   NotificationDetails notifyDetails = NotificationDetails(android: androidDetails);
-  //   print("Before showNotification");
-  //   await notificationsPlugin.show(0, 'Chat App Title', 'This is body', notifyDetails);
-  //   print("After showNotification");
-  // }
-
-  // setupnotification() async {
-  //   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  //   const AndroidInitializationSettings androidInitializationSettings = AndroidInitializationSettings("@mipmap/ic_launcher");
-  //   const DarwinInitializationSettings darwinInitializationSettings = DarwinInitializationSettings();
-  //   const InitializationSettings initializationSettings = InitializationSettings(android: androidInitializationSettings, iOS: darwinInitializationSettings);
-  //   const AndroidNotificationChannel channel = AndroidNotificationChannel(
-  //     'high_importance_channel', // id
-  //     'High Importance Notifications', // title
-  //     description: 'This channel is used for important notifications.', // description
-  //     importance: Importance.max,
-  //   );
-  //   createChannel(channel);
-
-  //   flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
-  //   FirebaseMessaging.onMessage.listen((event) async {
-  //     final notication = event.notification;
-  //     final android = event.notification?.android;
-  //     if (notication != null && android != null) {
-  //       flutterLocalNotificationsPlugin.show(
-  //         notication.hashCode,
-  //         notication.title,
-  //         notication.body,
-  //         NotificationDetails(
-  //           android: AndroidNotificationDetails(
-  //             channel.id,
-  //             channel.name,
-  //             channelDescription: channel.description,
-  //           ),
-  //         ),
-  //       );
-  //     }
-  //   });
-  // }
-
-  // void createChannel(AndroidNotificationChannel channel) async {
-  //   final FlutterLocalNotificationsPlugin plugin = FlutterLocalNotificationsPlugin();
-  //   await plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
-  // }
 
   @override
   Widget build(BuildContext context) {
