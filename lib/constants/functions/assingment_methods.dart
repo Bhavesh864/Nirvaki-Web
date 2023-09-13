@@ -105,7 +105,7 @@ void assginUserToTodo(BuildContext context, Function assign, List<dynamic> assig
                 AssignUser(
                   status: true,
                   addUser: (user) {
-                    assign(user);
+                    assign();
                     FocusScope.of(context).unfocus();
                   },
                   assignedUserIds: assignto.map((item) => item.userid).toList(),
