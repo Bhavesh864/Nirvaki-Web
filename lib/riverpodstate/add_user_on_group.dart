@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddMemberScreenStateNotifier
-    extends StateNotifier<List<Map<String, dynamic>>> {
+class AddMemberScreenStateNotifier extends StateNotifier<List<Map<String, dynamic>>> {
   AddMemberScreenStateNotifier() : super([]);
+
   void addUser(user) {
     final userIsFavorite = state.contains(user);
     if (userIsFavorite) {
@@ -17,7 +17,6 @@ class AddMemberScreenStateNotifier
   }
 }
 
-final chatUserProvider = StateNotifierProvider<AddMemberScreenStateNotifier,
-    List<Map<String, dynamic>>>((ref) {
+final chatUserProvider = StateNotifierProvider<AddMemberScreenStateNotifier, List<Map<String, dynamic>>>((ref) {
   return AddMemberScreenStateNotifier();
 });

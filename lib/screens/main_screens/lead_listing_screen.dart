@@ -127,7 +127,14 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
             status = filteredleadList;
 
             final tableRowList = filteredleadList.map((e) {
-              return buildWorkItemRowTile(e, filteredleadList.indexOf(e), status);
+              return buildWorkItemRowTile(
+                e,
+                filteredleadList.indexOf(e),
+                status,
+                id: e.workitemId,
+                ref: ref,
+                context: context,
+              );
             });
 
             return Row(

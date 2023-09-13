@@ -6,9 +6,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 
 import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
-
 import '../../../riverpodstate/user_data.dart';
 
 final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
@@ -133,6 +133,12 @@ class User extends HiveObject {
     }
   }
 
+  static void setUserOnlineStatus(bool isOnline) async {
+    await usersCollection.doc(AppConst.getAccessToken()).update({
+      'isOnline': isOnline,
+    });
+  }
+
   static Future<List<User>> getListOfUsersByIds(List<dynamic> userIds) async {
     try {
       final QuerySnapshot querySnapshot = await usersCollection.where("userId", whereIn: userIds).get();
@@ -176,11 +182,16 @@ class User extends HiveObject {
   static Future<User?> getUser(String userId, {WidgetRef? ref}) async {
     try {
       final hiveUserData = UserHiveMethods.getdata(userId);
-      // print("userhiveform=====>$hiveUserData");
+
       if (hiveUserData != null) {
         final Map<String, dynamic> userDataMap = Map.from(hiveUserData);
         final User user = User.fromMap(userDataMap);
-        Future.delayed(const Duration(milliseconds: 500)).then((value) => {ref?.read(userDataProvider.notifier).storeUserData(user)});
+
+        Future.delayed(const Duration(milliseconds: 500)).then(
+          (value) => {
+            ref?.read(userDataProvider.notifier).storeUserData(user),
+          },
+        );
         return user;
       } else {
         final DocumentSnapshot documentSnapshot = await usersCollection.doc(userId).get();

@@ -78,6 +78,9 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
               e,
               filteredInventoryList.indexOf(e),
               status,
+              id: e.workitemId,
+              ref: ref,
+              context: context,
             );
           });
 

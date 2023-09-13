@@ -2,7 +2,10 @@ import 'package:beamer/beamer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:yes_broker/chat/controller/chat_controller.dart';
+
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
@@ -15,31 +18,38 @@ import 'package:yes_broker/screens/main_screens/public_view_screen/public_lead_d
 
 import 'constants/notification/app_notification.dart';
 
-class LayoutView extends StatefulWidget {
+class LayoutView extends ConsumerStatefulWidget {
   const LayoutView({super.key});
 
   @override
-  State<LayoutView> createState() => _LayoutViewState();
+  ConsumerState<LayoutView> createState() => _LayoutViewState();
 }
 
-class _LayoutViewState extends State<LayoutView> with WidgetsBindingObserver {
+class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObserver {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   Stream<User?>? authState;
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   super.didChangeAppLifecycleState(state);
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
 
-  //   switch (state) {
-  //     case AppLifecycleState.resumed:
-  //       break;
-  //     default:
-  //   }
-  // }
+    switch (state) {
+      case AppLifecycleState.resumed:
+        ref.read(chatControllerProvider).setUserState(true);
+        break;
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.paused:
+        ref.read(chatControllerProvider).setUserState(false);
+        break;
+    }
+  }
 
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
+
     final token = UserHiveMethods.getdata("token");
     authState = authentication.authStateChanges();
     if (token != null) {
@@ -47,6 +57,12 @@ class _LayoutViewState extends State<LayoutView> with WidgetsBindingObserver {
     }
     setAllNotification();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   // void showNotification() async {

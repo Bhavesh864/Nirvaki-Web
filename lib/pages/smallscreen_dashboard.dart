@@ -13,11 +13,44 @@ final currentIndexProvider = StateProvider<int>((ref) {
   return 0;
 });
 
-class SmallScreen extends ConsumerWidget {
+class SmallScreen extends ConsumerStatefulWidget {
   const SmallScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SmallScreen> createState() => _SmallScreenState();
+}
+
+class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingObserver {
+  // @override
+  // void initState() {
+  //   WidgetsBinding.instance.addObserver(this);
+
+  //   super.initState();
+  // }
+
+  // @override
+  // void dispose() {
+  //   WidgetsBinding.instance.removeObserver(this);
+  //   super.dispose();
+  // }
+
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   switch (state) {
+  //     case AppLifecycleState.resumed:
+  //       ref.read(chatControllerProvider).setUserState(true);
+  //       break;
+  //     case AppLifecycleState.inactive:
+  //     case AppLifecycleState.detached:
+  //     case AppLifecycleState.paused:
+  //       ref.read(chatControllerProvider).setUserState(false);
+  //       break;
+  //   }
+  //   super.didChangeAppLifecycleState(state);
+  // }
+
+  @override
+  Widget build(BuildContext context) {
     final currentIndex = ref.watch(currentIndexProvider);
     final selectedItem = ref.watch(selectedProfileItemProvider);
 
