@@ -2,8 +2,10 @@
 import 'dart:io';
 
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../chat/controller/chat_controller.dart';
 import '../../chat/enums/message.enums.dart';
@@ -67,8 +69,9 @@ class _ChatInputState extends ConsumerState<ChatInput> {
   }
 
   void sendFileMessage(
-    File file,
+    File? file,
     MessageEnum messageEnum,
+    Uint8List? webImage,
   ) {
     ref.read(chatControllerProvider).sendFileMessage(
           context,
@@ -76,22 +79,23 @@ class _ChatInputState extends ConsumerState<ChatInput> {
           widget.revceiverId,
           messageEnum,
           widget.isGroupChat,
+          webImage,
         );
   }
 
-  void selectImage() async {
-    File? image = await pickImageFromGallery(context);
-    if (image != null) {
-      sendFileMessage(image, MessageEnum.image);
-    }
-  }
+  // void selectImage() async {
+  //   File? image = await pickImageFromGallery(context);
+  //   if (image != null) {
+  //     sendFileMessage(image, MessageEnum.image);
+  //   }
+  // }
 
-  void selectVideo() async {
-    File? video = await pickVideoFromGallery(context);
-    if (video != null) {
-      sendFileMessage(video, MessageEnum.video);
-    }
-  }
+  // void selectVideo() async {
+  //   File? video = await pickVideoFromGallery(context);
+  //   if (video != null) {
+  //     sendFileMessage(video, MessageEnum.video);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -139,8 +143,18 @@ class _ChatInputState extends ConsumerState<ChatInput> {
                   //   context: context,
                   //   builder: (builder) => bottomSheet(context),
                   // );
-                  final image = await pickImageFromGallery(context);
-                  sendFileMessage(image!, MessageEnum.image);
+                  if (kIsWeb) {
+                    XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                    if (image != null) {
+                      var f = await image.readAsBytes();
+
+                      sendFileMessage(null, MessageEnum.image, f);
+                    }
+                  } else {
+                    final image = await pickImageFromGallery(context);
+
+                    sendFileMessage(image!, MessageEnum.image, null);
+                  }
                 },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5.0),

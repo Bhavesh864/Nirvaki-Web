@@ -23,11 +23,9 @@ final chatRepositoryProvider = Provider(
 
 class ChatRepository {
   final FirebaseFirestore firestore;
-  // final FirebaseAuth auth;
 
   ChatRepository({
     required this.firestore,
-    // required this.auth,
   });
 
   Stream<List<ChatGroup>> getChatGroups() {
@@ -370,7 +368,7 @@ class ChatRepository {
 
   void sendFileMessage({
     required BuildContext context,
-    required File file,
+    required File? file,
     Uint8List? webImage,
     required String recieverUserId,
     required User senderUserData,

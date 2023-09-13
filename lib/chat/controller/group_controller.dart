@@ -24,6 +24,12 @@ class GroupController {
   });
 
   void createGroup(BuildContext context, String name, File? profilePic, List<User> selectedUsers, Uint8List? webImageIcon) {
-    groupRepository.createGroup(context, name, profilePic, selectedUsers, webImageIcon);
+    groupRepository.createGroup(
+      context,
+      name,
+      profilePic,
+      selectedUsers,
+      webImageIcon,
+    );
   }
 }

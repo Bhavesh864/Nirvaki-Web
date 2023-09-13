@@ -33,7 +33,7 @@ class _ChatScreenHeaderState extends State<ChatScreenHeader> {
   User? userInfo;
 
   void getUserDetails() async {
-    final user = await User.getUser(widget.chatItem!.id);
+    final user = await User.getUser(widget.chatItem?.id ?? widget.user!.userId);
     setState(() {
       userInfo = user;
     });
@@ -47,7 +47,7 @@ class _ChatScreenHeaderState extends State<ChatScreenHeader> {
 
   @override
   Widget build(BuildContext context) {
-    final String chatItemId = widget.chatItem?.id ?? widget.user?.brokerId ?? '';
+    final String chatItemId = widget.chatItem?.id ?? widget.user?.userId ?? '';
     final bool isGroupChat = widget.chatItem?.isGroupChat ?? false;
     final String name = widget.chatItem?.name ?? '${widget.user?.userfirstname} ${widget.user?.userlastname}';
     final String profilePic = widget.chatItem?.profilePic ?? widget.user?.image ?? '';

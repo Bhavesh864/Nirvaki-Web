@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'package:yes_broker/customs/custom_text.dart';
 
-import '../../../screens/main_screens/create_group_screen.dart';
-
 class NewChatNewGroupPopupButton extends StatelessWidget {
   final Function openNewChat;
   final Function createNewGroup;
@@ -18,7 +16,10 @@ class NewChatNewGroupPopupButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
-      child: const Icon(Icons.more_vert),
+      child: const Icon(
+        Icons.more_vert,
+        size: 22,
+      ),
       onSelected: (value) {
         if (value == 'new_chat') {
           openNewChat();

@@ -97,6 +97,24 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                           color: Colors.grey.shade400,
                         ),
                       ],
+                      if (isGroupChat)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10, bottom: 10),
+                          child: Chip(
+                            shape: const StadiumBorder(),
+                            backgroundColor: Colors.grey.shade200,
+                            label: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+                              child: Text(
+                                chatItem!.groupCreatedBy!,
+                                style: const TextStyle(
+                                  color: Colors.black45,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       Expanded(
                         child: ScrollConfiguration(
                           behavior: const ScrollBehavior().copyWith(overscroll: false),
@@ -112,6 +130,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                               }
                               final messageData = snapshot.data![index];
                               final isSender = messageData.senderId == AppConst.getAccessToken();
+
                               if (!isSender && !messageData.isSeen && !isGroupChat) {
                                 ref.read(chatControllerProvider).setChatMessageSeen(
                                       context,
@@ -127,21 +146,22 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                     snapshot.data![index - 1].timeSent.toDate(),
                                   );
 
+                              final bool isNewWeek = index == 0 || messageData.timeSent.toDate().difference(messageData.timeSent.toDate()).inDays >= 7;
+                              final String messageDay = getMessageDay(messageData.timeSent.toDate(), isNewWeek);
+
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   if (isFirstMessageOfNewDay) ...[
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 20.0, bottom: 10),
+                                      padding: const EdgeInsets.only(top: 10.0, bottom: 10),
                                       child: Chip(
                                         shape: const StadiumBorder(),
                                         backgroundColor: Colors.grey.shade200,
                                         label: Padding(
                                           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
                                           child: Text(
-                                            formatMessageDate(
-                                              messageData.timeSent.toDate(),
-                                            ),
+                                            messageDay,
                                             style: const TextStyle(
                                               color: Colors.black45,
                                               fontSize: 12,
