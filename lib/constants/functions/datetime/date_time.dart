@@ -9,6 +9,23 @@ String formatMessageDate(DateTime date) {
   return formatter.format(date);
 }
 
+String getMessageDay(DateTime messageTime, bool isNewWeek) {
+  final DateTime now = DateTime.now();
+  final DateTime yesterday = DateTime(now.year, now.month, now.day - 1);
+
+  if (isSameDay(messageTime, now)) {
+    return 'Today';
+  } else if (isSameDay(messageTime, yesterday)) {
+    return 'Yesterday';
+  } else if (!isNewWeek) {
+    // Show the day name if it's a new week
+    return DateFormat('EEEE').format(messageTime); // Requires intl package
+  } else {
+    // Show the date if it's not a new week
+    return DateFormat('dd MMMM yyyy').format(messageTime); // Requires intl package
+  }
+}
+
 String formatTimestamp(DateTime timestamp) {
   final formattedTime = DateFormat.jm().format(timestamp);
   return formattedTime;

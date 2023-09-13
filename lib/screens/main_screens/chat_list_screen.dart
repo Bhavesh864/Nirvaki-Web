@@ -30,6 +30,7 @@ class ChatItem {
   final bool lastMessageIsSeen;
   final String lastMessageSenderId;
   final List<String> membersUid;
+  final String? groupCreatedBy;
 
   ChatItem({
     required this.id,
@@ -42,6 +43,7 @@ class ChatItem {
     required this.lastMessageIsSeen,
     required this.lastMessageSenderId,
     required this.membersUid,
+    this.groupCreatedBy,
   });
 }
 
@@ -149,6 +151,7 @@ Stream<List<ChatItem>> mergeChatContactsAndGroups(WidgetRef ref) {
             lastMessageSenderId: group.lastMessageSenderId,
             membersUid: group.membersUid,
             adminId: group.senderId,
+            groupCreatedBy: group.groupCreatedBy,
           ),
         ),
       );

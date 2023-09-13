@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/screens/main_screens/add_group_member_screen.dart';
@@ -78,6 +79,7 @@ class UserProfileBody extends ConsumerStatefulWidget {
   final User? user;
   final Function? onGoBack;
   final Function? onPressAddMember;
+  final Function? goToCreateGroup;
 
   const UserProfileBody({
     Key? key,
@@ -86,9 +88,10 @@ class UserProfileBody extends ConsumerStatefulWidget {
     required this.name,
     this.adminId,
     required this.isGroupChat,
-    required this.user,
+    this.user,
     this.onGoBack,
     this.onPressAddMember,
+    this.goToCreateGroup,
   }) : super(key: key);
 
   @override
@@ -123,8 +126,8 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
               Navigator.of(context).pop();
             },
             child: SizedBox(
-              width: width, // Adjust the width as needed
-              height: 300, // Adjust the height as needed
+              width: width,
+              height: 300,
               child: Image.network(
                 widget.profilePic.isEmpty ? noImg : widget.profilePic,
                 fit: BoxFit.cover,
@@ -307,46 +310,50 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
                         fontWeight: FontWeight.w700,
                         fontsize: 15,
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Colors.white,
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            if (Responsive.isMobile(context)) {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (ctx) => AddGroupMembers(
-                                    contactId: widget.contactId,
+                      if (widget.adminId == AppConst.getAccessToken())
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.white,
+                          ),
+                          child: InkWell(
+                            onTap: () {
+                              if (Responsive.isMobile(context)) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (ctx) => AddGroupMembers(
+                                      contactId: widget.contactId,
+                                    ),
                                   ),
+                                );
+                              } else {
+                                widget.onPressAddMember!();
+                              }
+                            },
+                            child: const Row(
+                              children: [
+                                Icon(
+                                  Icons.add_circle_outlined,
+                                  size: 20,
+                                  color: AppColor.primary,
                                 ),
-                              );
-                            } else {
-                              widget.onPressAddMember!();
-                            }
-                          },
-                          child: const Row(
-                            children: [
-                              Icon(Icons.add_circle_outlined, size: 20, color: AppColor.primary),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              AppText(
-                                text: 'Add Members',
-                                textColor: Color.fromARGB(255, 57, 57, 57),
-                                fontWeight: FontWeight.w700,
-                                fontsize: 12,
-                              ),
-                            ],
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                AppText(
+                                  text: 'Add Members',
+                                  textColor: Color.fromARGB(255, 57, 57, 57),
+                                  fontWeight: FontWeight.w700,
+                                  fontsize: 12,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.all(12),
                   child: GroupUserList(
@@ -355,35 +362,6 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
                     contactId: widget.contactId,
                   ),
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 20),
-                //   child: ElevatedButton(
-                //     onPressed: () {
-                //        onLeaveGroup();
-                //    },
-                //     style: ElevatedButton.styleFrom(
-                //       shape: RoundedRectangleBorder(
-                //         borderRadius: BorderRadius.circular(10),
-                //       ),
-                //     ),
-                //     child: const Row(
-                //       mainAxisAlignment: MainAxisAlignment.center,
-                //       children: [
-                //         AppText(
-                //           text: 'Leave Group',
-                //           textColor: Colors.white,
-                //           fontWeight: FontWeight.w500,
-                //           fontsize: 17,
-                //         ),
-                //         SizedBox(width: 8.0),
-                //         Icon(
-                //           Icons.exit_to_app,
-                //           size: 20,
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
                 const SizedBox(
                   height: 10,
                 )
@@ -393,14 +371,18 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (ctx) => CreateGroupScreen(
-                          alreadySelectedUser: widget.contactId,
-                          createGroup: true,
+                    if (Responsive.isMobile(context)) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (ctx) => CreateGroupScreen(
+                            alreadySelectedUser: widget.contactId,
+                            createGroup: true,
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    } else {
+                      widget.goToCreateGroup!();
+                    }
                   },
                   child: Row(
                     children: [

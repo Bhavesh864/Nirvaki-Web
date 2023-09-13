@@ -9,6 +9,7 @@ import 'package:uuid/uuid.dart';
 import 'package:yes_broker/chat/models/chat_group.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/customs/snackbar.dart';
+import 'package:yes_broker/riverpodstate/user_data.dart';
 
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../riverpodstate/upload_file_to_firebase.dart';
@@ -36,7 +37,9 @@ class GroupRepository {
     Uint8List? webImage,
   ) async {
     try {
+      final User currentUser = ref.read(userDataProvider);
       List<String> uids = [];
+
       for (int i = 0; i < selectedUsers.length; i++) {
         var userCollection = await firestore
             .collection('users')
@@ -53,6 +56,7 @@ class GroupRepository {
           uids.add(userCollection.docs[0].data()['userId']);
         }
       }
+
       var groupId = const Uuid().v1();
 
       String profileUrl = await ref.read(commonFirebaseStorageRepositoryProvider).storeFileToFirebase(
@@ -62,15 +66,16 @@ class GroupRepository {
           );
 
       ChatGroup group = ChatGroup(
-        senderId: auth.currentUser!.uid,
+        senderId: AppConst.getAccessToken(),
         name: name,
         groupId: groupId,
-        lastMessage: '',
+        lastMessage: '${currentUser.userfirstname} ${currentUser.userlastname} has created the group',
         groupIcon: profileUrl,
         membersUid: [AppConst.getAccessToken().toString(), ...uids],
         timeSent: Timestamp.now(),
         lastMessageIsSeen: false,
         lastMessageSenderId: AppConst.getAccessToken().toString(),
+        groupCreatedBy: '${currentUser.userfirstname} ${currentUser.userlastname} created group "$name"',
       );
 
       await firestore.collection('groups').doc(groupId).set(group.toMap());

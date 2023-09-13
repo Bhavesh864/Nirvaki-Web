@@ -7,8 +7,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:yes_broker/Customs/responsive.dart';
 
+import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/chat/controller/group_controller.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
@@ -27,11 +27,15 @@ final selectedGroupUsers = StateProvider<List<User>>((ref) => []);
 class CreateGroupScreen extends ConsumerStatefulWidget {
   final bool? createGroup;
   final String? alreadySelectedUser;
+  final Function? goToChatList;
+  final Function? goToChatScreen;
 
   const CreateGroupScreen({
     super.key,
     this.createGroup,
     this.alreadySelectedUser,
+    this.goToChatList,
+    this.goToChatScreen,
   });
 
   @override
@@ -78,7 +82,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
       ref.read(groupControllerProvider).createGroup(
             context,
             groupNameController.text.trim(),
-            null,
+            groupIcon,
             ref.read(selectedGroupUsers),
             groupIconWeb,
           );
@@ -254,6 +258,35 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
           } else {
             return Column(
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        widget.goToChatList!();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        size: 22,
+                      ),
+                    ),
+                    AppText(
+                      text: widget.createGroup! ? 'New Group' : 'New Chat',
+                      fontsize: 15,
+                      textColor: Colors.black,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(
+                        Icons.close,
+                        size: 22,
+                      ),
+                    ),
+                  ],
+                ),
                 if (widget.createGroup!) ...[
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -308,13 +341,17 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                           if (widget.createGroup!) {
                             toggleUser(user);
                           } else {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (ctx) => ChatScreen(
-                                  user: user,
+                            if (Responsive.isMobile(context)) {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (ctx) => ChatScreen(
+                                    user: user,
+                                  ),
                                 ),
-                              ),
-                            );
+                              );
+                            } else {
+                              widget.goToChatScreen!(user);
+                            }
                           }
                         },
                       ),

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -65,10 +66,11 @@ class ChatController {
 
   void sendFileMessage(
     BuildContext context,
-    File file,
+    File? file,
     String recieverUserId,
     MessageEnum messageEnum,
     bool isGroupChat,
+    Uint8List? webImages,
   ) async {
     // ref.read(userDataAuthProvider).whenData(
     final User? user = await User.getUser(AppConst.getAccessToken());
@@ -82,6 +84,7 @@ class ChatController {
       messageEnum: messageEnum,
       ref: ref,
       isGroupChat: isGroupChat,
+      webImage: webImages,
     );
   }
 
