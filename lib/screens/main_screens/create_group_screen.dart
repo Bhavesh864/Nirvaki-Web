@@ -1,10 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:yes_broker/Customs/responsive.dart';
 
 import 'package:yes_broker/chat/controller/group_controller.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
@@ -42,12 +45,15 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
   void initState() {
     super.initState();
     _usersFuture = fetchUsers(ref);
+    if (widget.alreadySelectedUser != null) {
+      selectedUsers.add(widget.alreadySelectedUser!);
+    }
   }
 
-  // bool isConfirm = false;
   final groupNameController = TextEditingController();
   List<String> selectedUsers = [];
   File? groupIcon;
+  Uint8List? groupIconWeb;
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   void toggleUser(User user) {
@@ -68,12 +74,13 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
   }
 
   void createGroup() async {
-    if (groupNameController.text.trim().isNotEmpty && groupIcon != null) {
+    if (groupNameController.text.trim().isNotEmpty) {
       ref.read(groupControllerProvider).createGroup(
             context,
             groupNameController.text.trim(),
-            groupIcon!,
+            null,
             ref.read(selectedGroupUsers),
+            groupIconWeb,
           );
       Navigator.of(context).pop();
       ref.read(selectedGroupUsers.notifier).update((state) => []);
@@ -130,17 +137,35 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
     );
   }
 
+  void onPressCreateGroupButton() {
+    if (selectedUsers.isEmpty) {
+      fadedCustomSnackBar(context: context, text: 'At least 1 user must be selected');
+      return;
+    }
+    if (groupIcon == null && groupIconWeb == null) {
+      fadedCustomSnackBar(context: context, text: 'Select a group icon');
+      return;
+    }
+    if (groupNameController.text == '') {
+      fadedCustomSnackBar(context: context, text: 'Enter group name');
+      return;
+    }
+    createGroup();
+    fadedCustomSnackBar(context: context, text: '${groupNameController.text} Group Created');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder(
-        future: _usersFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Loader();
-          }
-          if (snapshot.hasData) {
-            final filterUser = snapshot.data!;
+    return FutureBuilder(
+      future: _usersFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Loader();
+        }
+        if (snapshot.hasData) {
+          final filterUser = snapshot.data!;
+
+          if (Responsive.isMobile(context)) {
             return Scaffold(
               appBar: AppBar(
                 foregroundColor: Colors.black,
@@ -219,30 +244,118 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
               floatingActionButton: widget.createGroup!
                   ? FloatingActionButton(
                       onPressed: () {
-                        if (selectedUsers.isEmpty) {
-                          fadedCustomSnackBar(context: context, text: 'At least 1 user must be selected');
-                          return;
-                        }
-                        if (groupIcon == null) {
-                          fadedCustomSnackBar(context: context, text: 'Select a group icon');
-                          return;
-                        }
-                        if (groupNameController.text == '') {
-                          fadedCustomSnackBar(context: context, text: 'Enter group name');
-                          return;
-                        }
-                        fadedCustomSnackBar(context: context, text: '${groupNameController.text} Group Created');
-                        createGroup();
+                        onPressCreateGroupButton();
                       },
                       backgroundColor: AppColor.primary,
                       child: const Icon(Icons.check),
                     )
                   : null,
             );
+          } else {
+            return Column(
+              children: [
+                if (widget.createGroup!) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () async {
+                            XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                            if (image != null) {
+                              var f = await image.readAsBytes();
+
+                              setState(() {
+                                groupIconWeb = f;
+                              });
+                            }
+                          },
+                          child: CircleAvatar(
+                            backgroundImage: groupIconWeb != null ? MemoryImage(groupIconWeb!) : null,
+                            radius: 25,
+                            child: groupIconWeb != null
+                                ? null
+                                : const Icon(
+                                    Icons.camera_alt_outlined,
+                                    size: 22,
+                                  ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 250,
+                          child: CustomTextInput(
+                            controller: groupNameController,
+                            labelText: 'Group Name',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                StatefulBuilder(builder: (context, setstate) {
+                  return Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 5),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                      ),
+                      child: NewGroupUserList(
+                        users: filterUser,
+                        selectedUser: selectedUsers,
+                        toggleUser: (user) {
+                          if (widget.createGroup!) {
+                            toggleUser(user);
+                          } else {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (ctx) => ChatScreen(
+                                  user: user,
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  );
+                }),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      onPressCreateGroupButton();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AppText(
+                          text: 'Create Group',
+                          textColor: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontsize: 17,
+                        ),
+                        SizedBox(width: 8.0),
+                        Icon(
+                          Icons.group_add_outlined,
+                          size: 20,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
           }
-          return const SizedBox();
-        },
-      ),
+        }
+        return const SizedBox();
+      },
     );
   }
 }

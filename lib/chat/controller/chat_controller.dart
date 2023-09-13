@@ -136,4 +136,9 @@ class ChatController {
       groupId,
     );
   }
+
+  void setUserState(bool isOnline) {
+    // print(isOnline);
+    User.setUserOnlineStatus(isOnline);
+  }
 }

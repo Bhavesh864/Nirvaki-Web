@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,7 +28,13 @@ class GroupRepository {
     required this.ref,
   });
 
-  void createGroup(BuildContext context, String name, File profilePic, List<User> selectedUsers) async {
+  void createGroup(
+    BuildContext context,
+    String name,
+    File? profilePic,
+    List<User> selectedUsers,
+    Uint8List? webImage,
+  ) async {
     try {
       List<String> uids = [];
       for (int i = 0; i < selectedUsers.length; i++) {
@@ -51,6 +58,7 @@ class GroupRepository {
       String profileUrl = await ref.read(commonFirebaseStorageRepositoryProvider).storeFileToFirebase(
             'group/$groupId',
             profilePic,
+            webImage,
           );
 
       ChatGroup group = ChatGroup(

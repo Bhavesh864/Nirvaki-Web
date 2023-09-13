@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../Customs/custom_chip.dart';
@@ -8,6 +9,7 @@ import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
 import '../../constants/firebase/detailsModels/lead_details.dart';
 import '../../constants/firebase/detailsModels/todo_details.dart';
+import '../../constants/functions/navigation/navigation_functions.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
 import '../app/dropdown_menu.dart';
@@ -67,15 +69,21 @@ TableRow buildTableHeader() {
 TableRow buildWorkItemRowTile(
   CardDetails cardItem,
   int index,
-  List<CardDetails>? status,
-) {
+  List<CardDetails>? status, {
+  WidgetRef? ref,
+  BuildContext? context,
+  String? id,
+}) {
   return TableRow(
-    key: ValueKey(cardItem.workitemId),
+    // key: ValueKey(cardItem.workitemId),
     children: [
       buildWorkItemTableItem(
         Text(
           cardItem.cardTitle!,
         ),
+        id: id,
+        context: context,
+        ref: ref,
       ),
       buildWorkItemTableItem(
         ListView(
@@ -134,6 +142,9 @@ TableRow buildWorkItemRowTile(
                 : const SizedBox(),
           ],
         ),
+        id: id,
+        context: context,
+        ref: ref,
       ),
       buildWorkItemTableItem(
         StatefulBuilder(builder: (context, setstate) {
@@ -156,6 +167,9 @@ TableRow buildWorkItemRowTile(
             },
           );
         }),
+        id: id,
+        context: context,
+        ref: ref,
       ),
       buildWorkItemTableItem(
         ListView(
@@ -188,6 +202,9 @@ TableRow buildWorkItemRowTile(
             ),
           ],
         ),
+        id: id,
+        context: context,
+        ref: ref,
       ),
       buildWorkItemTableItem(
         align: Alignment.center,
@@ -244,7 +261,11 @@ TableRow buildWorkItemRowTile(
             );
           }).toList(),
         ),
+        id: id,
+        context: context,
+        ref: ref,
       ),
+
       // buildWorkItemTableItem(
       //   Container(),
       //   align: Alignment.center,
@@ -253,14 +274,28 @@ TableRow buildWorkItemRowTile(
   );
 }
 
-TableCell buildWorkItemTableItem(Widget child, {Alignment align = Alignment.centerLeft}) {
+TableCell buildWorkItemTableItem(
+  Widget child, {
+  Alignment align = Alignment.centerLeft,
+  String? id = '',
+  BuildContext? context,
+  WidgetRef? ref,
+}) {
   return TableCell(
     verticalAlignment: TableCellVerticalAlignment.middle,
-    child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 0),
-      alignment: align,
-      height: 70,
-      child: child,
+    child: GestureDetector(
+      onTap: () {
+        if (context != null && ref != null && id != '') {
+          navigateBasedOnId(context, id!, ref);
+        }
+      },
+      child: Container(
+        color: Colors.transparent,
+        padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 0),
+        alignment: align,
+        height: 70,
+        child: child,
+      ),
     ),
   );
 }

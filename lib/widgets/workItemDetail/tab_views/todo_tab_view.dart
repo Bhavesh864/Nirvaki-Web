@@ -115,7 +115,14 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
 
                 if (showTableView) {
                   final tableRowList = filteredList.map((e) {
-                    return buildWorkItemRowTile(e, filteredList.indexOf(e), filteredList);
+                    return buildWorkItemRowTile(
+                      e,
+                      filteredList.indexOf(e),
+                      filteredList,
+                      id: e.workitemId,
+                      ref: ref,
+                      context: context,
+                    );
                   });
                   return filteredList.isNotEmpty
                       ? Container(

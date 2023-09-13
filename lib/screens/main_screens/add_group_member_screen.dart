@@ -1,6 +1,8 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/chatModels/group_model.dart';
@@ -14,6 +16,7 @@ import 'chat_list_screen.dart';
 // ignore: must_be_immutable
 class AddGroupMembers extends ConsumerStatefulWidget {
   final String contactId;
+
   const AddGroupMembers({
     super.key,
     required this.contactId,
@@ -24,20 +27,68 @@ class AddGroupMembers extends ConsumerStatefulWidget {
 }
 
 class _AddGroupMembersState extends ConsumerState<AddGroupMembers> {
+  VoidCallback? submitFn;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        foregroundColor: Colors.black,
+        // backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(size: 22),
+        title: const AppText(
+          text: 'Add Members',
+          textColor: Color.fromARGB(255, 57, 57, 57),
+          fontWeight: FontWeight.w600,
+          fontsize: 16,
+        ),
+        centerTitle: false,
+      ),
+      body: SafeArea(
+        child: AddGroupMembersScreenBody(
+          contactId: widget.contactId,
+          onSubmitCallback: (submit) {
+            submitFn = submit;
+          },
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          submitFn!();
+        },
+        backgroundColor: AppColor.primary,
+        child: const Icon(Icons.check),
+      ),
+    );
+  }
+}
+
+class AddGroupMembersScreenBody extends ConsumerStatefulWidget {
+  final String contactId;
+  final Function(VoidCallback)? onSubmitCallback;
+
+  const AddGroupMembersScreenBody({
+    Key? key,
+    required this.contactId,
+    this.onSubmitCallback,
+  }) : super(key: key);
+
+  @override
+  ConsumerState<AddGroupMembersScreenBody> createState() => _AddGroupMembersScreenBodyState();
+}
+
+class _AddGroupMembersScreenBodyState extends ConsumerState<AddGroupMembersScreenBody> {
   List<String> selectedUser = [];
 
-  void toggleUser(User user) {
-    // setState(() {
+  @override
+  void initState() {
+    super.initState();
 
-    if (selectedUser.contains(user.userId)) {
-      selectedUser.remove(user.userId);
-    } else {
-      selectedUser.add(user.userId);
-    }
-    // });
+    widget.onSubmitCallback!(onSubmit);
   }
 
-  onSubmit() {
+  void onSubmit() {
     if (selectedUser.isEmpty) {
       customSnackBar(context: context, text: 'Please select a user to add!');
       return;
@@ -55,65 +106,61 @@ class _AddGroupMembersState extends ConsumerState<AddGroupMembers> {
     // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (builder) => const ChatListScreen()));
   }
 
+  void toggleUser(User user) {
+    if (selectedUser.contains(user.userId)) {
+      selectedUser.remove(user.userId);
+    } else {
+      selectedUser.add(user.userId);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final selectedUserIds = ref.read(selectedUserIdsProvider.notifier).state;
     final User user = ref.read(userDataProvider);
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        foregroundColor: Colors.black,
-        // backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(size: 22),
-        title: const AppText(
-          text: 'Add Members',
-          textColor: Color.fromARGB(255, 57, 57, 57),
-          fontWeight: FontWeight.w600,
-          fontsize: 16,
-        ),
-        centerTitle: false,
-      ),
-      body: SafeArea(
-        child: StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection("users")
-                .where(
-                  "brokerId",
-                  isEqualTo: user.brokerId,
-                )
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
+    return Column(
+      children: [
+        StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection("users")
+              .where(
+                "brokerId",
+                isEqualTo: user.brokerId,
+              )
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator.adaptive(),
+              );
+            }
+            if (snapshot.hasData) {
+              final usersListSnapshot = snapshot.data!.docs;
+              List<User> usersList = usersListSnapshot.map((doc) => User.fromSnapshot(doc)).toList();
+              List<User> filterUser = usersList
+                  .where(
+                    (element) => !selectedUserIds.contains(element.userId),
+                  )
+                  .toList();
+
+              if (filterUser.isEmpty) {
                 return const Center(
-                  child: CircularProgressIndicator.adaptive(),
+                  child: AppText(
+                    text: 'Empty User List',
+                    textColor: Color.fromRGBO(44, 44, 46, 1),
+                    fontWeight: FontWeight.w500,
+                    fontsize: 16,
+                  ),
                 );
               }
-              if (snapshot.hasData) {
-                final usersListSnapshot = snapshot.data!.docs;
-                List<User> usersList = usersListSnapshot.map((doc) => User.fromSnapshot(doc)).toList();
-                List<User> filterUser = usersList
-                    .where(
-                      (element) => !selectedUserIds.contains(element.userId),
-                    )
-                    .toList();
+              return ListView.builder(
+                itemCount: filterUser.length,
+                itemBuilder: (ctx, index) {
+                  final user = filterUser[index];
 
-                if (filterUser.isEmpty) {
-                  return const Center(
-                    child: AppText(
-                      text: 'Empty User List',
-                      textColor: Color.fromRGBO(44, 44, 46, 1),
-                      fontWeight: FontWeight.w500,
-                      fontsize: 16,
-                    ),
-                  );
-                }
-                return ListView.builder(
-                  itemCount: filterUser.length,
-                  itemBuilder: (ctx, index) {
-                    final user = filterUser[index];
-
-                    return StatefulBuilder(builder: (context, setstate) {
+                  return StatefulBuilder(
+                    builder: (context, setstate) {
                       return Container(
                         color: selectedUser.isNotEmpty && selectedUser.contains(user.userId) ? AppColor.secondary : Colors.white,
                         child: ListTile(
@@ -147,18 +194,44 @@ class _AddGroupMembersState extends ConsumerState<AddGroupMembers> {
                               : null,
                         ),
                       );
-                    });
-                  },
-                );
-              }
-              return const SizedBox();
-            }),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: onSubmit,
-        backgroundColor: AppColor.primary,
-        child: const Icon(Icons.check),
-      ),
+                    },
+                  );
+                },
+              );
+            }
+            return const SizedBox();
+          },
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: ElevatedButton(
+            onPressed: () {
+              onSubmit();
+            },
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AppText(
+                  text: 'Add',
+                  textColor: Colors.white,
+                  fontWeight: FontWeight.w500,
+                  fontsize: 17,
+                ),
+                SizedBox(width: 8.0),
+                Icon(
+                  Icons.person_add,
+                  size: 20,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
