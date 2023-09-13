@@ -12,19 +12,31 @@ class ActivityDetails {
   String? userid;
   Createdby? createdby;
   Timestamp? createdate;
+  String? userImageUrl;
   Activitybody? activitybody;
 
   ActivityDetails(
-      {this.activityId, this.activityStatus, this.itemtype, this.itemid, this.brokerid, this.managerid, this.userid, this.createdby, this.createdate, this.activitybody});
+      {this.activityId,
+      this.userImageUrl,
+      this.activityStatus,
+      this.itemtype,
+      this.itemid,
+      this.brokerid,
+      this.managerid,
+      this.userid,
+      this.createdby,
+      this.createdate,
+      this.activitybody});
 
   factory ActivityDetails.fromSnapshot(DocumentSnapshot snapshot) {
     final json = snapshot.data() as Map<String, dynamic>;
 
     return ActivityDetails(
       activityId: json["activityId"],
+      userImageUrl: json["userImageUrl"],
       activityStatus: json["activityStatus"],
       itemid: json["itemid"],
-      itemtype: json[""],
+      itemtype: json["itemtype"],
       userid: json["userid"],
       activitybody: Activitybody.fromJson(json["activitybody"]),
       brokerid: json["brokerid"],
@@ -37,6 +49,9 @@ class ActivityDetails {
   ActivityDetails.fromJson(Map<String, dynamic> json) {
     if (json["ActivityID"] is String) {
       activityId = json["ActivityID"];
+    }
+    if (json["userImageUrl"] is String) {
+      userImageUrl = json["userImageUrl"];
     }
     if (json["ActivityStatus"] is String) {
       activityStatus = json["ActivityStatus"];
@@ -76,6 +91,7 @@ class ActivityDetails {
     data["brokerid"] = brokerid;
     data["managerid"] = managerid;
     data["userid"] = userid;
+    data["userImageUrl"] = userImageUrl;
     if (createdby != null) {
       data["createdby"] = createdby?.toJson();
     }
