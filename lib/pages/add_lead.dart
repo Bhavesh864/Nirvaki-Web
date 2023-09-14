@@ -10,8 +10,10 @@ import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart'
 
 import 'package:yes_broker/constants/functions/get_lead_questions.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/riverpodstate/filterQuestions/lead_all_question.dart';
 import 'package:yes_broker/riverpodstate/lead_filter_question.dart';
 import 'package:yes_broker/widgets/questionaries/workitem_success.dart';
+import '../constants/functions/filterQuestions/filter_lead_question.dart';
 import '../customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
 import '../riverpodstate/all_selected_ansers_provider.dart';
@@ -66,7 +68,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
   }
 
   nextQuestion({List<Screen>? screensDataList, option}) {
-    updateLeadListInventory(ref, option);
+    updateLeadListInventory(ref, option, screensDataList);
     if (currentScreenIndex < screensDataList!.length - 1) {
       setState(() {
         currentScreenIndex++;
@@ -107,9 +109,11 @@ class _AddLeadState extends ConsumerState<AddLead> {
     final notify = ref.read(myArrayProvider.notifier);
     final List<Map<String, dynamic>> selectedValues = ref.read(myArrayProvider);
     final isRentSelected = ref.read(leadFilterRentQuestion);
-    final isVillaSelected = ref.read(leadFilterVillaQuestion);
     final isPlotSelected = ref.read(leadFilterPlotQuestion);
-    final isCommericalSelected = ref.read(leadFilterCommercialQuestion);
+    final allLeadQuestionsNotifier = ref.read(allLeadQuestion.notifier);
+    final allLeadQuestions = ref.read(allLeadQuestion);
+    // final isVillaSelected = ref.read(leadFilterVillaQuestion);
+    // final isCommericalSelected = ref.read(leadFilterCommercialQuestion);
 
     return Scaffold(
       body: FutureBuilder<List<LeadQuestions>>(
@@ -123,42 +127,27 @@ class _AddLeadState extends ConsumerState<AddLead> {
             final String res = selectedValues.isNotEmpty ? selectedValues[0]["item"] : "Residential";
             LeadQuestions? screenData = getCurrentLead(snapshot, res);
             List<Screen> screensDataList = screenData!.screens;
-
-            if (!currentScreenList.contains(screensDataList[0])) {
-              currentScreenList = screensDataList;
+            if (allLeadQuestions.isEmpty) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                allLeadQuestionsNotifier.addAllQuestion(screensDataList);
+              });
             }
+            if (selectedValues.isNotEmpty && selectedValues[0]["item"] == "Residential") {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                allLeadQuestionsNotifier.addAllQuestion(screensDataList);
+              });
+            } else if (selectedValues.isNotEmpty && selectedValues[0]["item"] == "Commercial") {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                allLeadQuestionsNotifier.addAllQuestion(screensDataList);
+              });
+            }
+            currentScreenList = allLeadQuestions.isEmpty ? screensDataList : allLeadQuestions.where((screen) => screen.isActive == true).toList();
+
             if (isEdit) {
               final arr = ["S1"];
-              final filter = screensDataList.where((element) => !arr.contains(element.screenId)).toList();
-              screensDataList = filter;
+              final filter = currentScreenList.where((element) => !arr.contains(element.screenId)).toList();
+              currentScreenList = filter;
             }
-            if (!isCommericalSelected) {
-              if (isRentSelected) {
-                final arr = ["S8", "S10", "S6"];
-                final filter = screensDataList.where((element) => !arr.contains(element.screenId)).toList();
-                currentScreenList = filter;
-              } else if (!isRentSelected) {
-                final arr = ["S6", "S10"];
-                final filter = screensDataList.where((element) => !arr.contains(element.screenId)).toList();
-                currentScreenList = filter;
-              }
-              if (isVillaSelected) {
-                var index = isEdit ? 4 : 5;
-                final filter = screensDataList.firstWhere((element) => element.screenId == "S6");
-                currentScreenList.insert(index, filter);
-              }
-              if (isPlotSelected) {
-                var index = isEdit ? 8 : 9;
-                final arr = ["S9", "S6"];
-                final filter = currentScreenList.where((element) => !arr.contains(element.screenId)).toList();
-                currentScreenList = filter;
-                final filter2 = screensDataList.firstWhere((element) => element.screenId == "S10");
-                currentScreenList.insert(index, filter2);
-              }
-            } else {
-              currentScreenList = screensDataList;
-            }
-
             return Stack(
               children: [
                 Container(
@@ -227,8 +216,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                     isPlotSelected,
                                                     selectedValues,
                                                   ),
-                                                  if (i == currentScreenList[index].questions.length - 1 &&
-                                                      currentScreenList[index].questions[i].questionOptionType != 'chip')
+                                                  if (i == currentScreenList[index].questions.length - 1 && currentScreenList[index].questions[i].questionOptionType != 'chip')
                                                     Container(
                                                       margin: const EdgeInsets.only(top: 10),
                                                       alignment: Alignment.centerRight,
@@ -241,9 +229,9 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                               onPressed: () {
                                                                 if (!allQuestionFinishes) {
                                                                   if (currentScreenList[index].title != "Assign to") {
-                                                                    if (_formKey.currentState!.validate()) {
-                                                                      nextQuestion(screensDataList: screensDataList);
-                                                                    }
+                                                                    // if (_formKey.currentState!.validate()) {
+                                                                    nextQuestion(screensDataList: screensDataList);
+                                                                    // }
                                                                   }
                                                                   if (currentScreenList[index].title == "Assign to") {
                                                                     setState(() {
@@ -304,29 +292,5 @@ class _AddLeadState extends ConsumerState<AddLead> {
         );
       },
     );
-  }
-}
-
-void updateLeadListInventory(WidgetRef ref, option) {
-  if (option == "Rent") {
-    ref.read(leadFilterRentQuestion.notifier).toggleRentQuestionary(true);
-  } else if (option == "Sell") {
-    ref.read(leadFilterRentQuestion.notifier).toggleRentQuestionary(false);
-  } else if (option == "Independent House/Villa") {
-    ref.read(leadFilterVillaQuestion.notifier).toggleVillaQuestionary(true);
-  } else if (option == "Apartment" || option == "Builder Floor" || option == "Plot" || option == "Farm House") {
-    ref.read(leadFilterVillaQuestion.notifier).toggleVillaQuestionary(false);
-  }
-  if (option == "Plot") {
-    ref.read(leadFilterPlotQuestion.notifier).togglePlotQuestionary(true);
-  }
-  if (option == "Apartment" || option == "Builder Floor" || option == "Independent House/Villa" || option == "Farm House") {
-    ref.read(leadFilterPlotQuestion.notifier).togglePlotQuestionary(false);
-  }
-  if (option == "Residential") {
-    ref.read(leadFilterCommercialQuestion.notifier).toggleCommericalQuestionary(false);
-  }
-  if (option == "Commercial") {
-    ref.read(leadFilterCommercialQuestion.notifier).toggleCommericalQuestionary(true);
   }
 }
