@@ -1,17 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final filterComRentQuestion = StateNotifierProvider<FilterComRentQuestionary, bool>(
-  (ref) => FilterComRentQuestionary(),
-);
-
-class FilterComRentQuestionary extends StateNotifier<bool> {
-  FilterComRentQuestionary() : super(false);
-
-  void toggleComRentQuestionary(bool selectedValue) {
-    state = selectedValue;
-  }
-}
-
 final filterLandQuestion = StateNotifierProvider<FilterLandQuestionary, bool>(
   (ref) => FilterLandQuestionary(),
 );
@@ -44,6 +32,42 @@ class FilterUnderConstructionPropertyQuestionary extends StateNotifier<bool> {
   FilterUnderConstructionPropertyQuestionary() : super(false);
 
   void toggleUnderContructionPropertyQuestionary(bool selectedValue) {
+    state = selectedValue;
+  }
+}
+
+final filterOfficeQuestion = StateNotifierProvider<FilterOfficeQuestionary, bool>(
+  (ref) => FilterOfficeQuestionary(),
+);
+
+class FilterOfficeQuestionary extends StateNotifier<bool> {
+  FilterOfficeQuestionary() : super(false);
+
+  void toggleFilterOfficeQuestionary(bool selectedValue) {
+    state = selectedValue;
+  }
+}
+
+final filterRetailQuestion = StateNotifierProvider<FilterRetailQuestionary, bool>(
+  (ref) => FilterRetailQuestionary(),
+);
+
+class FilterRetailQuestionary extends StateNotifier<bool> {
+  FilterRetailQuestionary() : super(false);
+
+  void toggleFilterRetailQuestionary(bool selectedValue) {
+    state = selectedValue;
+  }
+}
+
+final filterIndustrialQuestion = StateNotifierProvider<FilterIndustrialQuestionary, bool>(
+  (ref) => FilterIndustrialQuestionary(),
+);
+
+class FilterIndustrialQuestionary extends StateNotifier<bool> {
+  FilterIndustrialQuestionary() : super(false);
+
+  void toggleFilterIndustrialQuestionary(bool selectedValue) {
     state = selectedValue;
   }
 }

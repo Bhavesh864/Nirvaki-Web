@@ -5,13 +5,10 @@ import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/customs/responsive.dart';
 
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
-
 import 'package:yes_broker/constants/functions/get_inventory_questions_widgets.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
-import 'package:yes_broker/riverpodstate/inventory_com_filter_question.dart';
-
+import 'package:yes_broker/riverpodstate/inventory_all_question.dart';
 import 'package:yes_broker/riverpodstate/inventory_res_filter_question.dart';
-
 import 'package:yes_broker/widgets/questionaries/workitem_success.dart';
 import '../customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
@@ -66,7 +63,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   }
 
   nextQuestion({List<Screen>? screensDataList, String? option}) {
-    updateListInventory(ref, option);
+    updateListInventory(ref, option, screensDataList);
     if (currentScreenIndex < screensDataList!.length - 1 && !allQuestionFinishes) {
       setState(() {
         currentScreenIndex++;
@@ -79,7 +76,6 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   }
 
   goBack(List<int> id) {
-    print(id);
     if (currentScreenIndex > 0) {
       setState(() {
         currentScreenIndex--;
@@ -108,12 +104,16 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     final notify = ref.read(myArrayProvider.notifier);
     final List<Map<String, dynamic>> selectedValues = ref.read(myArrayProvider);
     final isRentSelected = ref.read(filterRentQuestion);
-    final isVillaSelected = ref.read(filterVillaQuestion);
     final isPlotSelected = ref.read(filterPlotQuestion);
-    final isCommericalSelected = ref.read(filterCommercialQuestion);
-    final isLandSelected = ref.read(filterLandQuestion);
-    final isContructionPropertySelected = ref.read(filterConstructedPropertyQuestion);
-    final isUnderContructionPropertySelected = ref.read(filterUnderConstructionPropertyQuestion);
+    final allInventoryQuestionsNotifier = ref.read(allInventoryQuestion.notifier);
+    final allInventoryQuestions = ref.read(allInventoryQuestion);
+    // final isCommericalSelected = ref.read(filterCommercialQuestion);
+    // final isLandSelected = ref.read(filterLandQuestion);
+    // final isContructionPropertySelected = ref.read(filterConstructedPropertyQuestion);
+    // final isUnderContructionPropertySelected = ref.read(filterUnderConstructionPropertyQuestion);
+    // final isOfficeSelected = ref.read(filterOfficeQuestion);
+    // final isRetailSelected = ref.read(filterRetailQuestion);
+    // final isIndustrialelected = ref.read(filterIndustrialQuestion);
     return Scaffold(
       body: FutureBuilder<List<InventoryQuestions>>(
           future: getQuestions,
@@ -126,63 +126,28 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
               final res = selectedValues.isNotEmpty ? selectedValues[0]["item"] : "Residential";
               InventoryQuestions? screenData = getcurrentInventory(snapshot, res);
               List<Screen> screensDataList = screenData!.screens;
-              if (!currentScreenList.contains(screensDataList[0])) {
-                currentScreenList = screensDataList;
+
+              if (allInventoryQuestions.isEmpty) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  allInventoryQuestionsNotifier.addAllQuestion(screensDataList);
+                });
               }
+              if (selectedValues.isNotEmpty && selectedValues[0]["item"] == "Residential") {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  allInventoryQuestionsNotifier.addAllQuestion(screensDataList);
+                });
+              } else if (selectedValues.isNotEmpty && selectedValues[0]["item"] == "Commercial") {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  allInventoryQuestionsNotifier.addAllQuestion(screensDataList);
+                });
+              }
+              currentScreenList = allInventoryQuestions.isEmpty ? screensDataList : allInventoryQuestions.where((screen) => screen.isActive == true).toList();
               if (isEdit) {
                 final arr = ["S1"];
-                final filter = screensDataList.where((element) => !arr.contains(element.screenId)).toList();
-                screensDataList = filter;
+                final filter = currentScreenList.where((element) => !arr.contains(element.screenId)).toList();
+                currentScreenList = filter;
               }
-              if (!isCommericalSelected) {
-                if (isRentSelected) {
-                  final arr = ["S8", "S10", "S15", "S6"];
-                  final filter = screensDataList.where((element) => !arr.contains(element.screenId)).toList();
-                  currentScreenList = filter;
-                } else if (!isRentSelected) {
-                  final arr = ["S16", "S6", "S10"];
-                  final filter = screensDataList.where((element) => !arr.contains(element.screenId)).toList();
-                  currentScreenList = filter;
-                }
-                if (isVillaSelected) {
-                  var index = isEdit ? 4 : 5;
-                  final filter = screensDataList.firstWhere((element) => element.screenId == "S6");
-                  currentScreenList.insert(index, filter);
-                }
-                if (isPlotSelected) {
-                  var index = isEdit ? 8 : 9;
-                  final arr = ["S9", "S6"];
-                  final filter = currentScreenList.where((element) => !arr.contains(element.screenId)).toList();
-                  currentScreenList = filter;
-                  final filter2 = screensDataList.firstWhere((element) => element.screenId == "S10");
-                  currentScreenList.insert(index, filter2);
-                }
-              } else {
-                if (isRentSelected) {
-                  final arr = ["S19", "S17"];
-                  final filter = screensDataList.where((element) => !arr.contains(element.screenId)).toList();
-                  currentScreenList = filter;
-                } else if (!isRentSelected) {
-                  final arr = ["S20"];
-                  final filter = screensDataList.where((element) => !arr.contains(element.screenId)).toList();
-                  currentScreenList = filter;
-                }
-                if (isLandSelected) {
-                  final arr = ["S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S17"];
-                  final filter = currentScreenList.where((element) => !arr.contains(element.screenId)).toList();
-                  currentScreenList = filter;
-                }
-                if (isContructionPropertySelected) {
-                  final arr = ["S6", "S16", "S17"];
-                  final filter = currentScreenList.where((element) => !arr.contains(element.screenId)).toList();
-                  currentScreenList = filter;
-                }
-                if (isUnderContructionPropertySelected) {
-                  final arr = ["S6", "S16"];
-                  final filter = currentScreenList.where((element) => !arr.contains(element.screenId)).toList();
-                  currentScreenList = filter;
-                }
-              }
+
               return Stack(
                 children: [
                   Container(
@@ -269,7 +234,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                                       if (!allQuestionFinishes) {
                                                                         if (currentScreenList[index].title != "Assign to") {
                                                                           // if (_formKey.currentState!.validate()) {
-                                                                          nextQuestion(screensDataList: screensDataList);
+                                                                          nextQuestion(screensDataList: currentScreenList);
                                                                           // }
                                                                         }
                                                                         if (currentScreenList[index].title == "Assign to") {
@@ -337,41 +302,126 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   }
 }
 
-void updateListInventory(WidgetRef ref, option) {
-  if (option == "Rent") {
-    ref.read(filterRentQuestion.notifier).toggleRentQuestionary(true);
-  } else if (option == "Sell") {
-    ref.read(filterRentQuestion.notifier).toggleRentQuestionary(false);
+void updateListInventory(WidgetRef ref, option, screenList) {
+  final questionNotifier = ref.read(allInventoryQuestion.notifier);
+  final plotNotifier = ref.read(filterPlotQuestion.notifier);
+  final isCommercial = ref.read(filterCommercialQuestion);
+  final isCommercialNotifier = ref.read(filterCommercialQuestion.notifier);
+  final isRentNotifier = ref.read(filterRentQuestion.notifier);
+  // residental flow --------->
+
+  if (option == "Rent" && !isCommercial) {
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S16"], setFalseInScreens: ["S8", "S10", "S15"]);
+    isRentNotifier.toggleRentQuestionary(true);
+  } else if (option == "Sell" && !isCommercial) {
+    isRentNotifier.toggleRentQuestionary(false);
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S8", "S10", "S15"], setFalseInScreens: ["S16"]);
   } else if (option == "Independent House/Villa") {
-    ref.read(filterVillaQuestion.notifier).toggleVillaQuestionary(true);
-  } else if (option == "Apartment" || option == "Builder Floor" || option == "Plot" || option == "Farm House") {
-    ref.read(filterVillaQuestion.notifier).toggleVillaQuestionary(false);
+    plotNotifier.togglePlotQuestionary(false);
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S6", "S9"], setFalseInScreens: ["S10"]);
+  } else if (option == "Apartment" || option == "Builder Floor" || option == "Farm House") {
+    plotNotifier.togglePlotQuestionary(false);
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S9"], setFalseInScreens: ["S6", "S10"]);
   }
   if (option == "Plot") {
-    ref.read(filterPlotQuestion.notifier).togglePlotQuestionary(true);
+    plotNotifier.togglePlotQuestionary(true);
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S10"], setFalseInScreens: ["S6", "S9"]);
   }
-  if (option == "Apartment" || option == "Builder Floor" || option == "Independent House/Villa" || option == "Farm House") {
-    ref.read(filterPlotQuestion.notifier).togglePlotQuestionary(false);
-  }
+  // common flow
   if (option == "Residential") {
-    ref.read(filterCommercialQuestion.notifier).toggleCommericalQuestionary(false);
+    isCommercialNotifier.toggleCommericalQuestionary(false);
   }
   if (option == "Commercial") {
-    ref.read(filterCommercialQuestion.notifier).toggleCommericalQuestionary(true);
+    isCommercialNotifier.toggleCommericalQuestionary(true);
+  }
+
+  // Commercial flow--------->
+  if (option == "Rent" && isCommercial) {
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S20"], setFalseInScreens: ["S19"]);
+    isRentNotifier.toggleRentQuestionary(true);
+  } else if (option == "Sell" && isCommercial) {
+    isRentNotifier.toggleRentQuestionary(false);
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S19"], setFalseInScreens: ["S20"]);
   }
   if (option == "Land") {
-    ref.read(filterLandQuestion.notifier).toggleLandQuestionary(true);
-    ref.read(filterConstructedPropertyQuestion.notifier).toggleContructedPropertyQuestionary(false);
-    ref.read(filterUnderConstructionPropertyQuestion.notifier).toggleUnderContructionPropertyQuestionary(false);
+    List<String> setTofalse = ["S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S17"];
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S16", "S6"], setFalseInScreens: setTofalse);
   }
   if (option == "Constructed Property") {
-    ref.read(filterLandQuestion.notifier).toggleLandQuestionary(false);
-    ref.read(filterConstructedPropertyQuestion.notifier).toggleContructedPropertyQuestionary(true);
-    ref.read(filterUnderConstructionPropertyQuestion.notifier).toggleUnderContructionPropertyQuestionary(false);
+    List<String> setTofalse = ["S6", "S16", "S17"];
+    // List<String> setToTrue = ["S7"];
+    List<String> setToTrue = ["S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S17"];
+    questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
   }
   if (option == "Under Construction") {
-    ref.read(filterLandQuestion.notifier).toggleLandQuestionary(false);
-    ref.read(filterConstructedPropertyQuestion.notifier).toggleContructedPropertyQuestionary(false);
-    ref.read(filterUnderConstructionPropertyQuestion.notifier).toggleUnderContructionPropertyQuestionary(true);
+    List<String> setTofalse = ["S6", "S16"];
+    // List<String> setToTrue = ["S7"];
+    List<String> setToTrue = ["S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S17"];
+    questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
+  }
+  if (option == "Office") {
+    List<String> setTofalse = ["S9", "S10", "S11", "S12", "S13", "S14"];
+    List<String> setToTrue = ["S8"];
+    questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
+  }
+  if (option == "Retail") {
+    List<String> setTofalse = ["S8", "S10", "S11", "S12", "S13", "S14"];
+    List<String> setToTrue = ["S9"];
+    questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
+  }
+  if (option == "Industrial") {
+    List<String> setTofalse = ["S8", "S9", "S10", "S11", "S12", "S13", "S14"];
+    List<String> setToTrue = [];
+    questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
+  }
+  if (option == "Hospitality") {
+    List<String> setTofalse = ["S8", "S9", "S11", "S12", "S13"];
+    List<String> setToTrue = ["S10", "S14"];
+    questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
+  }
+  if (option == "Healthcare") {
+    List<String> setTofalse = ["S8", "S9", "S10", "S12", "S13", "S14"];
+    List<String> setToTrue = ["S11"];
+    questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
+  }
+  if (option == "Institutional") {
+    List<String> setTofalse = ["S8", "S9", "S10", "S11", "S12", "S13", "S14"];
+    List<String> setToTrue = [];
+    questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
+  }
+  if (option == "School") {
+    List<String> setTofalse = ["S8", "S9", "S10", "S11", "S12", "S14"];
+    List<String> setToTrue = ["S13"];
+    questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
+  }
+  if (option == "Warehouse") {
+    List<String> setTofalse = ["S8", "S9", "S10", "S11", "S12", "S13", "S14"];
+    List<String> setToTrue = [];
+    questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
+  }
+  if (option == "Mall") {
+    List<String> setTofalse = ["S8", "S9", "S10", "S11", "S12", "S13", "S14"];
+    List<String> setToTrue = [];
+    questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
+  }
+  if (option == "Shopping Complex") {
+    List<String> setTofalse = ["S8", "S9", "S10", "S11", "S12", "S13", "S14"];
+    List<String> setToTrue = [];
+    questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
+  }
+  if (option == "Shop Cum Office") {
+    List<String> setTofalse = ["S8", "S9", "S10", "S11", "S12", "S13", "S14"];
+    List<String> setToTrue = [];
+    questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
+  }
+  if (option == "Hospital") {
+    List<String> setTofalse = [];
+    List<String> setToTrue = ["S12"];
+    questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
+  }
+  if (option == "Clinic") {
+    List<String> setTofalse = ["S12"];
+    List<String> setToTrue = [];
+    questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
   }
 }
