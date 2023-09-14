@@ -281,15 +281,17 @@ Widget buildInventoryQuestions(
     );
   } else if (question.questionOptionType == 'photo') {
     Propertyphotos? propertyphotos;
-
-    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
-      propertyphotos = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+    if (isEdit) {
+      if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+        propertyphotos = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+      }
     }
-    print(propertyphotos!.toJson());
+
     return PhotosViewForm(
       notify: notify,
       id: question.questionId,
       propertyphotos: propertyphotos,
+      isEdit: isEdit,
     );
   }
 
