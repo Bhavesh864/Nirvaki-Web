@@ -39,7 +39,7 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
     super.initState();
     // AppConst.setPublicView(true);
     tabviewController = TabController(length: 4, vsync: this);
-    final workItemId = ref.read(selectedWorkItemId.notifier).state;
+    final workItemId = ref.read(selectedWorkItemId);
     leadDetails = LeadDetails.getLeadDetails(workItemId == '' ? widget.leadId : workItemId);
   }
 
@@ -225,7 +225,6 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
                                     city: data.preferredlocality!.city!,
                                     addressline1: data.preferredlocality!.addressline1!,
                                     addressline2: data.preferredlocality?.addressline2,
-                                  
                                   ),
                               ],
                             ),

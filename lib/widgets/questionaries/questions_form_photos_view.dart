@@ -1,5 +1,3 @@
-// ignore_for_file: invalid_use_of_protected_member
-
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
+import 'package:yes_broker/constants/utils/progress_image.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import 'package:yes_broker/pages/add_inventory.dart';
 
@@ -17,7 +16,8 @@ class PhotosViewForm extends ConsumerStatefulWidget {
   final Propertyphotos? propertyphotos;
   final AllChipSelectedAnwers? notify;
   final int id;
-  const PhotosViewForm({this.notify, required this.id, this.propertyphotos, super.key});
+  final bool isEdit;
+  const PhotosViewForm({this.notify, required this.id, this.propertyphotos, required this.isEdit, super.key});
 
   @override
   PhotosViewFormState createState() => PhotosViewFormState();
@@ -35,7 +35,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
   final Map<String, int> containersCountByRoom = {};
 
   List<Widget> imageContainers = [];
-  List<Widget> roomWidgets = [];
+  List roomWidgets = [];
 
   String imageUrl = '';
 
@@ -43,16 +43,10 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
 
   @override
   void initState() {
-    final answersArr = ref.read(myArrayProvider.notifier).state;
+    final answersArr = ref.read(myArrayProvider);
     itemTitles = [
       'Front Elevation',
     ];
-
-    //  for (var i = 0; i < widget.propertyphotos!.bedroom!.length; i++) {
-    //   var element = widget.propertyphotos!.bedroom![i];
-    //   roomWidgets.add({"title": "Bed Room (${i + 1})", "imageUrl": element});
-    // }
-    // print("roomWidgets --> $roomWidgets");
 
     final selectedAnswerArr = answersArr.where((item) => item['id'] == 14 || item['id'] == 15 || item['id'] == 16).toList();
 
@@ -63,14 +57,10 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
       if (roomItems is String) {
         for (int i = 1; i <= int.parse(roomItems); i++) {
           itemTitles.add(getItemTitle(itemId, i, containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1, []));
-
-          // Update the count of containers added for the room
           containersCountByRoom[itemTitles[itemTitles.length - 1]] = (containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1) + 1;
 
           if (!roomsWithTwoImages.contains(itemTitles[itemTitles.length - 1])) {
             itemTitles.add(getItemTitle(itemId, i, containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1, []));
-
-            // Mark the room as having two images
             roomsWithTwoImages.add(itemTitles[itemTitles.length - 1]);
           }
         }
@@ -78,15 +68,23 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
         for (int i = 0; i < roomItems.length; i++) {
           itemTitles.add(getItemTitle(itemId, i + 1, containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1, roomItems));
 
-          // Update the count of containers added for the room
           containersCountByRoom[itemTitles[itemTitles.length - 1]] = (containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1) + 1;
 
           if (!roomsWithTwoImages.contains(itemTitles[itemTitles.length - 1])) {
             itemTitles.add(getItemTitle(itemId, i + 1, containersCountByRoom[itemTitles[itemTitles.length - 1]] ?? 1, roomItems));
 
-            // Mark the room as having two images
             roomsWithTwoImages.add(itemTitles[itemTitles.length - 1]);
           }
+        }
+      }
+    }
+    if (widget.isEdit == true) {
+      roomWidgets = mergeLists(widget.propertyphotos, itemTitles);
+      for (var i = 0; i < roomWidgets.length; i++) {
+        if (roomWidgets[i]["imageUrl"] != null) {
+          selectedImagesUrlList.add(roomWidgets[i]["imageUrl"]);
+        } else {
+          selectedImagesUrlList.add('null');
         }
       }
     }
@@ -140,16 +138,17 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
   }
 
   Future<void> selectImage(int index) async {
-    XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+    XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 60);
 
     if (kIsWeb) {
       if (pickedImage != null) {
         var f = await pickedImage.readAsBytes();
-
         setState(() {
           webImages[index] = f;
           images[index] = null;
         });
+
+        print('for Web   ${pickedImage.path}');
 
         uploadImageToFirebase(index, f);
       }
@@ -183,7 +182,19 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
         await referenceImagesToUpload.putFile(dataToPut);
       }
       imageUrl = await referenceImagesToUpload.getDownloadURL();
-      selectedImagesUrlList.add(imageUrl);
+      if (widget.isEdit) {
+        setState(() {
+          roomWidgets[index]["imageUrl"] = imageUrl;
+          selectedImagesUrlList[index] = imageUrl;
+          // if (index > selectedImagesUrlList.length - 1) {
+          //   selectedImagesUrlList.add(imageUrl);
+          // } else {
+          // }
+          selectedImagesUrlList[index] = imageUrl;
+        });
+      } else {
+        selectedImagesUrlList.add(imageUrl);
+      }
 
       if (itemTitles.length == selectedImagesUrlList.length) {
         List<int> bedRoomIndices = itemTitles.asMap().entries.where((entry) => entry.value.contains('Bed Room')).map((entry) => entry.key).toList();
@@ -229,7 +240,6 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
         child: LayoutBuilder(builder: (context, constraints) {
           int crossAxisCount = (constraints.maxWidth / 120).floor();
           return GridView.builder(
-            // scrollDirection: Axis.vertical,
             shrinkWrap: true,
             padding: EdgeInsets.zero,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -238,7 +248,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
               mainAxisSpacing: 10,
               mainAxisExtent: 145,
             ),
-            itemCount: itemTitles.length,
+            itemCount: widget.isEdit ? roomWidgets.length : itemTitles.length,
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
@@ -256,24 +266,40 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
                             child: SizedBox(
                               width: constraints.maxWidth / crossAxisCount - 20,
                               height: constraints.maxWidth / crossAxisCount - 45,
-                              child: kIsWeb
-                                  ? webImages[index] == null
-                                      ? const Icon(Icons.photo_rounded, size: 70, color: Colors.grey)
-                                      : Image.memory(
-                                          webImages[index]!,
-                                          fit: BoxFit.fill,
-                                        )
-                                  : images[index] == null
-                                      ? const Icon(Icons.photo_rounded, size: 70, color: Colors.grey)
-                                      : Image.file(
-                                          images[index]!,
-                                          fit: BoxFit.fill,
-                                        ),
+                              child: widget.isEdit
+                                  ? roomWidgets[index]["imageUrl"] != null
+                                      ? ProgressImage(url: roomWidgets[index]["imageUrl"])
+                                      : kIsWeb
+                                          ? webImages[index] == null
+                                              ? const Icon(Icons.photo_rounded, size: 70, color: Colors.grey)
+                                              : Image.memory(
+                                                  webImages[index]!,
+                                                  fit: BoxFit.fill,
+                                                )
+                                          : images[index] == null
+                                              ? const Icon(Icons.photo_rounded, size: 70, color: Colors.grey)
+                                              : Image.file(
+                                                  images[index]!,
+                                                  fit: BoxFit.fill,
+                                                )
+                                  : kIsWeb
+                                      ? webImages[index] == null
+                                          ? const Icon(Icons.photo_rounded, size: 70, color: Colors.grey)
+                                          : Image.memory(
+                                              webImages[index]!,
+                                              fit: BoxFit.fill,
+                                            )
+                                      : images[index] == null
+                                          ? const Icon(Icons.photo_rounded, size: 70, color: Colors.grey)
+                                          : Image.file(
+                                              images[index]!,
+                                              fit: BoxFit.fill,
+                                            ),
                             ),
                           ),
                           const SizedBox(height: 4),
                           CustomText(
-                            title: itemTitles[index],
+                            title: widget.isEdit ? roomWidgets[index]["title"] : itemTitles[index],
                             size: 14,
                           ),
                         ],
@@ -286,4 +312,69 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
       ),
     );
   }
+}
+
+mergeLists(details, namesArr2) {
+  final mergedList = [];
+
+  int bedroomNo = 0;
+  int bathroomNo = 0;
+  int poojaNo = 0;
+  int servantRoomNo = 0;
+  int studyRoomNo = 0;
+  int officeRoomNo = 0;
+
+  mergedList.add({"title": "Front Elevation", "imageUrl": details.frontelevation[0]});
+  for (var i = 0; i < namesArr2.length; i++) {
+    var namesArr = namesArr2[i];
+    if (details.bedroom != null && namesArr.contains("Bed")) {
+      if (bedroomNo < details.bedroom.length) {
+        mergedList.add({"title": "Bed Room${bedroomNo + 1} (${bedroomNo + 1})", "imageUrl": details.bedroom[bedroomNo]});
+      } else {
+        mergedList.add({"title": "Bed Room${bedroomNo + 1} (${bedroomNo + 1})", "imageUrl": null});
+      }
+      bedroomNo++;
+    }
+    if (details.bathroom != null && namesArr.contains("Bath")) {
+      if (bathroomNo < details.bathroom.length) {
+        mergedList.add({"title": "Bath Room${bathroomNo + 1} (${bathroomNo + 1})", "imageUrl": details.bathroom[bathroomNo]});
+      } else {
+        mergedList.add({"title": "Bath Room${bathroomNo + 1} (${bathroomNo + 1})", "imageUrl": null});
+      }
+      bathroomNo++;
+    }
+    if (details.pujaroom != null && namesArr.contains("Puja")) {
+      if (details.pujaroom.length == 0) {
+        mergedList.add({"title": "Pooja (${poojaNo + 1})", "imageUrl": null});
+      } else {
+        mergedList.add({"title": "Pooja (${poojaNo + 1})", "imageUrl": details.pujaroom[poojaNo]});
+      }
+      poojaNo++;
+    }
+    if (details.servantroom != null && namesArr.contains("Servant")) {
+      if (details.servantroom.length == 0) {
+        mergedList.add({"title": "Servant Room (${servantRoomNo + 1})", "imageUrl": null});
+      } else {
+        mergedList.add({"title": "Servant Room (${servantRoomNo + 1})", "imageUrl": details.servantroom[servantRoomNo]});
+      }
+      servantRoomNo++;
+    }
+    if (details.studyroom != null && namesArr.contains("Study")) {
+      if (details.studyroom.length == 0) {
+        mergedList.add({"title": "Study Room (${studyRoomNo + 1})", "imageUrl": null});
+      } else {
+        mergedList.add({"title": "Study Room (${studyRoomNo + 1})", "imageUrl": details.studyroom[studyRoomNo]});
+      }
+      studyRoomNo++;
+    }
+    if (details.officeroom != null && namesArr.contains("Office")) {
+      if (details.officeroom.length == 0) {
+        mergedList.add({"title": "Office Room (${officeRoomNo + 1})", "imageUrl": null});
+      } else {
+        mergedList.add({"title": "Office Room (${officeRoomNo + 1})", "imageUrl": details.officeroom[officeRoomNo]});
+      }
+      officeRoomNo++;
+    }
+  }
+  return mergedList;
 }

@@ -263,10 +263,10 @@ Widget buildInventoryQuestions(
       },
     );
   } else if (question.questionOptionType == 'map') {
-    final state = getDataById(notify.state, 26);
-    final city = getDataById(notify.state, 27);
-    final address1 = getDataById(notify.state, 28);
-    final address2 = getDataById(notify.state, 29);
+    final state = getDataById(selectedValues, 26);
+    final city = getDataById(selectedValues, 27);
+    final address1 = getDataById(selectedValues, 28);
+    final address2 = getDataById(selectedValues, 29);
     return CustomGoogleMap(
       onLatLngSelected: (latLng) {
         notify.add({
@@ -281,10 +281,18 @@ Widget buildInventoryQuestions(
     );
   } else if (question.questionOptionType == 'photo') {
     Propertyphotos? propertyphotos;
-    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
-      propertyphotos = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+    if (isEdit) {
+      if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+        propertyphotos = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+      }
     }
-    return PhotosViewForm(notify: notify, id: question.questionId, propertyphotos: propertyphotos);
+
+    return PhotosViewForm(
+      notify: notify,
+      id: question.questionId,
+      propertyphotos: propertyphotos,
+      isEdit: isEdit,
+    );
   }
 
   return const SizedBox.shrink();

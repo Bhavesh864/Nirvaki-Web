@@ -48,7 +48,7 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
     // AppConst.setPublicView(true);
     tabviewController = TabController(length: 4, vsync: this);
 
-    final workItemId = ref.read(selectedWorkItemId.notifier).state;
+    final workItemId = ref.read(selectedWorkItemId);
 
     inventoryDetails = InventoryDetails.getInventoryDetails(workItemId == '' ? widget.inventoryId : workItemId);
   }
@@ -169,8 +169,7 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                               AssignmentWidget(
                                                 id: data.inventoryId!,
                                                 assignto: data.assignedto!,
-                                                imageUrlCreatedBy:
-                                                    data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                 createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                               ),
                                             );

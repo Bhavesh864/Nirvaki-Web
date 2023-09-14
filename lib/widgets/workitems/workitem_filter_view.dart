@@ -36,12 +36,13 @@ class WorkItemFilterView extends ConsumerStatefulWidget {
 
 class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
   late FilterOptions filterOptions = FilterOptions();
-  List<String> datalist = ['Studio', '1RK', '1BHK', '2BHK', '3BHK', '4BHK', '5BHK', '5BHK +'];
+  List<String> datalist = ['Studio', '1BHK', '2BHK', '3BHK', '4BHK', '5BHK', '5BHK +'];
   RangeValues values = const RangeValues(0, 100);
 
   @override
   Widget build(BuildContext context) {
-    final selectedInventoryFiltersProvider = ref.read(selectedFilterInventory.notifier);
+    var selectedInventoryFilters = ref.read(selectedFilterInventory);
+    var selectedInventoryFiltersProvider = ref.read(selectedFilterInventory.notifier);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -79,7 +80,7 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
                         onPressed: () {
                           widget.closeFilterView();
                           widget.setFilters([], values);
-                          selectedInventoryFiltersProvider.state = [];
+                          selectedInventoryFilters = [];
                         },
                         icon: const Icon(
                           Icons.close,
@@ -169,7 +170,7 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
                 CustomButton(
                   text: 'Apply Filters',
                   onPressed: () {
-                    widget.setFilters(selectedInventoryFiltersProvider.state, values);
+                    widget.setFilters(selectedInventoryFilters, values);
                   },
                 ),
               ],
