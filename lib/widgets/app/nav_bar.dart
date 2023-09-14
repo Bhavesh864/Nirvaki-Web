@@ -264,7 +264,7 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
         width: 500,
         child: Card(
           child: StreamBuilder(
-              stream: notificationCollection.where("userId", whereIn: [AppConst.getAccessToken()]).snapshots(),
+              stream: notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Loader();
