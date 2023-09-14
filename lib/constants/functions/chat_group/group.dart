@@ -99,6 +99,48 @@ void onDeleteGroup(BuildContext context, String contactId) {
   );
 }
 
+void customConfirmationAlertDialog(BuildContext context, void Function() onConfirmPress, String title, String content) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: AppText(
+          text: title,
+          fontsize: 20,
+          fontWeight: FontWeight.w500,
+        ),
+        content: AppText(
+          text: content,
+          fontWeight: FontWeight.w600,
+          fontsize: 16,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const AppText(
+              text: 'Cancel',
+              fontWeight: FontWeight.w500,
+              fontsize: 16,
+              textColor: AppColor.primary,
+            ),
+          ),
+          TextButton(
+            onPressed: onConfirmPress,
+            child: const AppText(
+              text: 'Logout',
+              fontWeight: FontWeight.w500,
+              fontsize: 16,
+              textColor: AppColor.primary,
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 
   // const Padding(
               //   padding: EdgeInsets.only(left: 30, top: 20, bottom: 10),
