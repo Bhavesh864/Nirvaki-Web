@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/screens/main_screens/add_group_member_screen.dart';
 
 import 'package:yes_broker/screens/main_screens/chat_list_screen.dart';
@@ -34,6 +35,28 @@ class ChatDialogBox extends ConsumerStatefulWidget {
 }
 
 class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
+  late ScrollController messageController;
+
+  @override
+  void initState() {
+    messageController = ScrollController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    messageController.dispose();
+    super.dispose();
+  }
+
+  void scrollToEnd() {
+    messageController.animateTo(
+      messageController.position.maxScrollExtent,
+      duration: const Duration(seconds: 2),
+      curve: Curves.easeOut,
+    );
+  }
+
   ChatModalScreenType currentScreen = ChatModalScreenType.chatList;
   ChatItem? chatItem;
   User? user;
@@ -42,7 +65,6 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
   @override
   Widget build(BuildContext context) {
     final selectedUserIds = ref.read(selectedUserIdsProvider.notifier);
-    final ScrollController messageController = ScrollController();
 
     final String chatItemId = chatItem?.id ?? user?.userId ?? '';
     final bool isGroupChat = chatItem?.isGroupChat ?? false;
@@ -147,16 +169,18 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                       }
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return SizedBox(
-                          height: 400,
+                          height: 470,
                           width: width,
-                          child: const Center(
-                            child: CircularProgressIndicator.adaptive(),
-                          ),
+                          child: const Loader(),
                         );
                       }
 
                       SchedulerBinding.instance.addPostFrameCallback((_) {
-                        messageController.jumpTo(messageController.position.maxScrollExtent);
+                        messageController.animateTo(
+                          messageController.position.maxScrollExtent,
+                          duration: const Duration(milliseconds: 50),
+                          curve: Curves.ease,
+                        );
                       });
 
                       return GestureDetector(
@@ -180,7 +204,6 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                                   },
                                   goToChatList: () {
                                     currentScreen = ChatModalScreenType.chatList;
-
                                     setState(() {});
                                   },
                                 ),
@@ -190,7 +213,7 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                                 thickness: 0.5,
                                 color: Colors.grey.shade400,
                               ),
-                              if (isGroupChat)
+                              if (isGroupChat && snapshot.data!.isEmpty)
                                 Padding(
                                   padding: const EdgeInsets.only(top: 10, bottom: 10),
                                   child: Chip(
@@ -242,6 +265,24 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
 
                                       return Column(
                                         children: [
+                                          if (isGroupChat && index == 0)
+                                            Padding(
+                                              padding: const EdgeInsets.only(top: 10, bottom: 10),
+                                              child: Chip(
+                                                shape: const StadiumBorder(),
+                                                backgroundColor: Colors.grey.shade200,
+                                                label: Padding(
+                                                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+                                                  child: Text(
+                                                    chatItem!.groupCreatedBy!,
+                                                    style: const TextStyle(
+                                                      color: Colors.black45,
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
                                           if (isFirstMessageOfNewDay) ...[
                                             Padding(
                                               padding: const EdgeInsets.only(top: 10.0, bottom: 10),

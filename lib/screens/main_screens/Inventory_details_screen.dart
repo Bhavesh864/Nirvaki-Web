@@ -45,7 +45,6 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
     super.initState();
     tabviewController = TabController(length: 4, vsync: this);
     final workItemId = ref.read(selectedWorkItemId.notifier).state;
-    // inventoryDetails = InventoryDetails.getInventoryDetails(workItemId == '' ? widget.inventoryId : workItemId);
     inventoryDetails =
         FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId == '' ? widget.inventoryId : workItemId).snapshots();
   }
@@ -53,7 +52,6 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(myArrayProvider.notifier);
-    // final workItemId = ref.read(selectedWorkItemId.notifier).state;
     return Scaffold(
       appBar: Responsive.isMobile(context)
           ? AppBar(

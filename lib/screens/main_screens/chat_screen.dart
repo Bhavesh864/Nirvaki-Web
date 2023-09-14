@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -31,8 +32,21 @@ class ChatScreen extends ConsumerStatefulWidget {
 }
 
 class _ChatScreenState extends ConsumerState<ChatScreen> {
+  late ScrollController messageController;
+
+  @override
+  void initState() {
+    messageController = ScrollController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    messageController.dispose();
+    super.dispose();
+  }
+
   final ChatService chatService = ChatService();
-  final ScrollController messageController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -65,14 +79,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 ),
               );
             }
+            if (snapshot.data!.length > 3) {
+              SchedulerBinding.instance.addPostFrameCallback((_) {
+                messageController.animateTo(
+                  messageController.position.maxScrollExtent,
+                  duration: const Duration(milliseconds: 50),
+                  curve: Curves.ease,
+                );
+              });
+            }
 
-            SchedulerBinding.instance.addPostFrameCallback((_) {
-              messageController.animateTo(
-                messageController.position.maxScrollExtent,
-                duration: const Duration(milliseconds: 100),
-                curve: Curves.easeInOut,
-              );
-            });
             if (snapshot.hasData) {
               return GestureDetector(
                 onTap: () {
@@ -97,7 +113,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                           color: Colors.grey.shade400,
                         ),
                       ],
-                      if (isGroupChat)
+                      if (isGroupChat && snapshot.data!.isEmpty)
                         Padding(
                           padding: const EdgeInsets.only(top: 10, bottom: 10),
                           child: Chip(
@@ -152,6 +168,24 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
+                                  if (isGroupChat && index == 0)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 10, bottom: 10),
+                                      child: Chip(
+                                        shape: const StadiumBorder(),
+                                        backgroundColor: Colors.grey.shade200,
+                                        label: Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+                                          child: Text(
+                                            chatItem!.groupCreatedBy!,
+                                            style: const TextStyle(
+                                              color: Colors.black45,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   if (isFirstMessageOfNewDay) ...[
                                     Padding(
                                       padding: const EdgeInsets.only(top: 10.0, bottom: 10),
