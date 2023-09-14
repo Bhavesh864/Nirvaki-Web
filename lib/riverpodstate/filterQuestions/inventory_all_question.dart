@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../constants/firebase/questionModels/inventory_question.dart';
+import '../../constants/firebase/questionModels/inventory_question.dart';
 
 final allInventoryQuestion = StateNotifierProvider<AllInventoryQuestion, List<Screen>>((ref) {
   return AllInventoryQuestion();
