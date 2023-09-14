@@ -7,6 +7,7 @@ import 'package:yes_broker/Customs/responsive.dart';
 
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/constants/firebase/send_notification.dart';
+import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
@@ -156,7 +157,7 @@ class InventoryDetailsHeader extends ConsumerWidget {
   }
 }
 
-class HeaderChips extends StatefulWidget {
+class HeaderChips extends ConsumerStatefulWidget {
   final String category;
   final String type;
   final String propertyCategory;
@@ -175,14 +176,15 @@ class HeaderChips extends StatefulWidget {
   });
 
   @override
-  State<HeaderChips> createState() => _HeaderChipsState();
+  ConsumerState<HeaderChips> createState() => _HeaderChipsState();
 }
 
-class _HeaderChipsState extends State<HeaderChips> {
+class _HeaderChipsState extends ConsumerState<HeaderChips> {
   String? currentStatus;
 
   @override
   Widget build(BuildContext context) {
+    final User user = ref.read(userDataProvider);
     return Wrap(
       children: [
         CustomChip(
@@ -223,9 +225,10 @@ class _HeaderChipsState extends State<HeaderChips> {
               currentStatus = value;
               setState(() {});
               notifyToUser(
+                  currentuserdata: user,
                   itemid: widget.id,
                   assignedto: widget.inventoryDetails.assignedto,
-                  content: "${currentUser["userfirstname"]} ${currentUser["userlastname"]} change status to $value",
+                  content: "${user.userfirstname} ${user.userlastname} change status to $value",
                   title: "${widget.id.contains(ItemCategory.isInventory) ? "Inventory" : "Lead"} status changed");
             },
           ),

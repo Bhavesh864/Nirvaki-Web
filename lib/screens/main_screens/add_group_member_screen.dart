@@ -8,6 +8,7 @@ import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 
+import '../../riverpodstate/user_data.dart';
 import 'chat_list_screen.dart';
 
 // ignore: must_be_immutable
@@ -57,6 +58,7 @@ class _AddGroupMembersState extends ConsumerState<AddGroupMembers> {
   @override
   Widget build(BuildContext context) {
     final selectedUserIds = ref.read(selectedUserIdsProvider.notifier).state;
+    final User user = ref.read(userDataProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -78,7 +80,7 @@ class _AddGroupMembersState extends ConsumerState<AddGroupMembers> {
                 .collection("users")
                 .where(
                   "brokerId",
-                  isEqualTo: currentUser["brokerId"],
+                  isEqualTo: user.brokerId,
                 )
                 .snapshots(),
             builder: (context, snapshot) {
@@ -125,18 +127,21 @@ class _AddGroupMembersState extends ConsumerState<AddGroupMembers> {
                           splashColor: Colors.grey[350],
                           leading: Hero(
                             tag: user.userId,
-                            child: CircleAvatar(radius: 26, backgroundImage: NetworkImage(user.image.isEmpty ? noImg : user.image)),
+                            child: CircleAvatar(
+                              radius: 22,
+                              backgroundImage: NetworkImage(user.image.isEmpty ? noImg : user.image),
+                            ),
                           ),
                           title: AppText(
                             text: '${user.userfirstname} ${user.userlastname}',
                             textColor: const Color.fromRGBO(44, 44, 46, 1),
                             fontWeight: FontWeight.w500,
-                            fontsize: 16,
+                            fontsize: 14,
                           ),
                           trailing: selectedUser.isNotEmpty && selectedUser.contains(user.userId)
                               ? const Icon(
                                   Icons.check_circle,
-                                  size: 20,
+                                  size: 18,
                                   color: AppColor.primary,
                                 )
                               : null,

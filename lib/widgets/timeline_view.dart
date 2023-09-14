@@ -13,6 +13,8 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/timeline_item.dart';
 
+import '../riverpodstate/user_data.dart';
+
 class CustomTimeLineView extends ConsumerWidget {
   final bool fromHome;
   final bool isScrollable;
@@ -25,6 +27,7 @@ class CustomTimeLineView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final workitemId = ref.read(selectedWorkItemId.notifier).state;
+    final User user = ref.read(userDataProvider);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10),
@@ -64,7 +67,7 @@ class CustomTimeLineView extends ConsumerWidget {
           ),
           StreamBuilder(
             stream: fromHome
-                ? FirebaseFirestore.instance.collection('activityDetails').where("brokerid", isEqualTo: currentUser["brokerId"]).snapshots()
+                ? FirebaseFirestore.instance.collection('activityDetails').where("brokerid", isEqualTo: user.brokerId).snapshots()
                 : FirebaseFirestore.instance.collection('activityDetails').where('itemid', isEqualTo: workitemId).snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {

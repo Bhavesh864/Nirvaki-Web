@@ -37,6 +37,7 @@ Future<String> sendInvitationEmail({
         userfirstname: firstname,
         whatsAppNumber: mobile,
         userlastname: lastname,
+        isOnline: false,
         userId: authResult.user!.uid,
         managerName: managerName,
         managerid: managerid,

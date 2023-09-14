@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
+import 'package:yes_broker/constants/functions/make_call_function.dart';
 
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
@@ -41,6 +42,7 @@ class ContactInformation extends StatelessWidget {
           ),
         ),
         ListTile(
+          onTap: () => makePhoneCall(customerinfo.mobile!),
           contentPadding: const EdgeInsets.all(0),
           dense: true,
           visualDensity: const VisualDensity(vertical: -2),
@@ -59,6 +61,7 @@ class ContactInformation extends StatelessWidget {
           minLeadingWidth: 0,
         ),
         ListTile(
+          onTap: () => launchWhatsapp(customerinfo.whatsapp, context),
           contentPadding: const EdgeInsets.all(0),
           dense: true,
           visualDensity: const VisualDensity(vertical: -2),

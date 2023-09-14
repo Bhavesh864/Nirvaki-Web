@@ -4,12 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/small_custom_profile_image.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
-import 'package:yes_broker/riverpodstate/user_data.dart';
 
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/assingment_methods.dart';
 import '../../constants/utils/colors.dart';
+import '../../riverpodstate/user_data.dart';
 
 class AssignmentWidget extends ConsumerStatefulWidget {
   final List<dynamic> assignto;
@@ -39,7 +39,6 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
   @override
   Widget build(BuildContext context) {
     final User user = ref.read(userDataProvider);
-    print("${user.brokerId}");
     return Column(
       children: [
         if (!AppConst.getPublicView())
@@ -128,7 +127,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                               ),
                               const SizedBox(width: 3),
                               if (widget.assignto.length > 1)
-                                currentUser["role"] != "Employee"
+                                user.role != "Employee"
                                     ? GestureDetector(
                                         onTap: () {
                                           deleteassignUser(item.userid, widget.id);
@@ -144,18 +143,12 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                         );
                       }).toList(),
                     ),
-                    currentUser["role"] != "Employee"
+                    user.role != "Employee"
                         ? GestureDetector(
                             onTap: () {
-                              assginUserToTodo(
-                                context,
-                                assign,
-                                widget.assignto,
-                                widget.id,
-                                () {
-                                  Navigator.of(context).pop();
-                                },
-                              );
+                              assginUserToTodo(context, assign, widget.assignto, widget.id, () {
+                                Navigator.of(context).pop();
+                              }, user);
                             },
                             child: const Padding(
                               padding: EdgeInsets.only(top: 14),

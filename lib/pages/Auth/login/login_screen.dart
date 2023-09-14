@@ -1,7 +1,5 @@
 import 'package:beamer/beamer.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/customs/snackbar.dart';

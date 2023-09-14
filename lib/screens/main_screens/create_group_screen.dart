@@ -1,17 +1,19 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:yes_broker/chat/controller/group_controller.dart';
 
+import 'package:yes_broker/chat/controller/group_controller.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/customs/snackbar.dart';
 import 'package:yes_broker/customs/text_utility.dart';
-import 'package:yes_broker/constants/utils/colors.dart';
-import 'package:yes_broker/constants/utils/constants.dart';
+
 import '../../constants/firebase/Methods/fetch_user.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../widgets/chat/group/newgroup_user_list.dart';
@@ -21,7 +23,13 @@ final selectedGroupUsers = StateProvider<List<User>>((ref) => []);
 
 class CreateGroupScreen extends ConsumerStatefulWidget {
   final bool? createGroup;
-  const CreateGroupScreen({super.key, this.createGroup = true});
+  final String? alreadySelectedUser;
+
+  const CreateGroupScreen({
+    super.key,
+    this.createGroup,
+    this.alreadySelectedUser,
+  });
 
   @override
   ConsumerState<CreateGroupScreen> createState() => _CreateGroupScreenState();
@@ -33,27 +41,27 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
   @override
   void initState() {
     super.initState();
-    _usersFuture = fetchUsers();
+    _usersFuture = fetchUsers(ref);
   }
 
   // bool isConfirm = false;
   final groupNameController = TextEditingController();
-  List<String> selectedUser = [];
+  List<String> selectedUsers = [];
   File? groupIcon;
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   void toggleUser(User user) {
-    final selectedUsersState = ref.read(selectedGroupUsers.notifier);
+    final selectedUserssState = ref.read(selectedGroupUsers.notifier);
 
     setState(() {
-      if (selectedUser.contains(user.userId)) {
-        selectedUser.remove(user.userId);
-        selectedUsersState.update((state) {
+      if (selectedUsers.contains(user.userId)) {
+        selectedUsers.remove(user.userId);
+        selectedUserssState.update((state) {
           state.remove(user);
           return state;
         });
       } else {
-        selectedUser.add(user.userId);
+        selectedUsers.add(user.userId);
         ref.read(selectedGroupUsers.notifier).update((state) => [...state, user]);
       }
     });
@@ -188,7 +196,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                         ),
                         child: NewGroupUserList(
                           users: filterUser,
-                          selectedUser: selectedUser,
+                          selectedUser: selectedUsers,
                           toggleUser: (user) {
                             if (widget.createGroup!) {
                               toggleUser(user);
@@ -211,7 +219,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
               floatingActionButton: widget.createGroup!
                   ? FloatingActionButton(
                       onPressed: () {
-                        if (selectedUser.isEmpty) {
+                        if (selectedUsers.isEmpty) {
                           fadedCustomSnackBar(context: context, text: 'At least 1 user must be selected');
                           return;
                         }

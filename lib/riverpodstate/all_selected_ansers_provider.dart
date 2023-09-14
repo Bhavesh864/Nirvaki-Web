@@ -35,18 +35,18 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
     state = selectedValue;
   }
 
-  Future<String> submitInventory(bool isEdit) async {
-    final String res = await submitInventoryAndcardDetails(state, isEdit);
+  Future<String> submitInventory(bool isEdit, WidgetRef ref) async {
+    final String res = await submitInventoryAndcardDetails(state, isEdit, ref);
     return res;
   }
 
-  Future<String> submitLead(bool isEdit) async {
-    final String res = await submitLeadAndCardDetails(state, isEdit);
+  Future<String> submitLead(bool isEdit, WidgetRef ref) async {
+    final String res = await submitLeadAndCardDetails(state, isEdit, ref);
     return res;
   }
 
-  Future<String> submitTodo() async {
-    final String res = await submitTodoAndCardDetails(state);
+  Future<String> submitTodo(WidgetRef ref) async {
+    final String res = await submitTodoAndCardDetails(state, ref);
     return res;
   }
 }

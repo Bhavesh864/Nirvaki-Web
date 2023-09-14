@@ -1,23 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/riverpodstate/user_data.dart';
 
 import '../../../constants/firebase/userModel/user_info.dart';
 
-class BottomCardMain extends StatefulWidget {
+class BottomCardMain extends ConsumerStatefulWidget {
   const BottomCardMain({super.key});
 
   @override
-  State<BottomCardMain> createState() => _BottomCardMainState();
+  ConsumerState<BottomCardMain> createState() => _BottomCardMainState();
 }
 
-class _BottomCardMainState extends State<BottomCardMain> {
+class _BottomCardMainState extends ConsumerState<BottomCardMain> {
   @override
   Widget build(BuildContext context) {
+    final User user = ref.read(userDataProvider);
     return Container(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -33,7 +36,7 @@ class _BottomCardMainState extends State<BottomCardMain> {
             ],
           ),
           StreamBuilder(
-              stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: currentUser["brokerId"]).snapshots(),
+              stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: user.brokerId).snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(

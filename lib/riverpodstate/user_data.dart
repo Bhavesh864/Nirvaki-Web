@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
@@ -11,6 +12,7 @@ class UserDataState extends StateNotifier<User> {
           User(
             brokerId: "brokerId",
             status: "status",
+            isOnline: false,
             userfirstname: "userfirstname",
             userlastname: "userlastname",
             userId: "userId",
@@ -25,5 +27,26 @@ class UserDataState extends StateNotifier<User> {
 
   void storeUserData(User userData) {
     state = userData;
+  }
+
+  User getUser() {
+    return state;
+  }
+
+  void resetState() {
+    state = User(
+      isOnline: false,
+      brokerId: "",
+      status: "",
+      userfirstname: "",
+      userlastname: "",
+      userId: "",
+      mobile: "",
+      fcmToken: "",
+      email: "",
+      role: "",
+      whatsAppNumber: "",
+      image: "",
+    );
   }
 }

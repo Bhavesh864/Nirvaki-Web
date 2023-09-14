@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/riverpodstate/user_data.dart';
 
-class AssignUser extends StatefulWidget {
+class AssignUser extends ConsumerStatefulWidget {
   final Function(List<User> user) addUser;
   final bool status;
   final List<dynamic>? assignedUserIds;
@@ -13,10 +15,10 @@ class AssignUser extends StatefulWidget {
   const AssignUser({super.key, required this.addUser, this.assignedUserIds, this.status = false, this.userExistingForRemoveMethod});
 
   @override
-  State<AssignUser> createState() => _AssignUserState();
+  ConsumerState<AssignUser> createState() => _AssignUserState();
 }
 
-class _AssignUserState extends State<AssignUser> {
+class _AssignUserState extends ConsumerState<AssignUser> {
   TextEditingController _textEditingController = TextEditingController();
   List<User> assignUsers = [];
   FocusNode _focusNode = FocusNode();
@@ -39,6 +41,7 @@ class _AssignUserState extends State<AssignUser> {
 
   @override
   Widget build(BuildContext context) {
+    final User user = ref.read(userDataProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -53,7 +56,7 @@ class _AssignUserState extends State<AssignUser> {
         SizedBox(
           height: 45,
           child: StreamBuilder(
-              stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: currentUser["brokerId"]).snapshots(),
+              stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: user.brokerId).snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data == null) {
                   return const CircularProgressIndicator.adaptive();

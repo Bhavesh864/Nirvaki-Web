@@ -15,7 +15,7 @@ import '../app_constant.dart';
 import '../firebase/userModel/user_info.dart';
 
 List<User>? user;
-void submitAssignUser(String id, BuildContext context, List<User> users) async {
+void submitAssignUser(String id, BuildContext context, List<User> users, User currentuserdata) async {
   if (users.isNotEmpty) {
     final List<Assignedto> assigncard = users.map((user) {
       return Assignedto(
@@ -66,7 +66,7 @@ void submitAssignUser(String id, BuildContext context, List<User> users) async {
     }
     CardDetails.updateAssignUser(itemid: id, assignedtoList: assigncard);
     for (var user in users) {
-      notifyToUser(assignedto: user.userId, title: "Assign new $id", content: "New $id Assign To You", assigntofield: true, itemid: id);
+      notifyToUser(assignedto: user.userId, title: "Assign new $id", content: "New $id Assign To You", assigntofield: true, itemid: id, currentuserdata: currentuserdata);
     }
   } else {
     customSnackBar(context: context, text: "Please select user");
@@ -84,7 +84,7 @@ void deleteassignUser(userid, String id) {
   CardDetails.deleteCardAssignUser(itemId: id, userid: userid);
 }
 
-void assginUserToTodo(BuildContext context, Function assign, List<dynamic> assignto, String id, Function popBottomSheet) {
+void assginUserToTodo(BuildContext context, Function assign, List<dynamic> assignto, String id, Function popBottomSheet, User currentuserdata) {
   showDialog(
     context: context,
     builder: (context) {
@@ -105,7 +105,7 @@ void assginUserToTodo(BuildContext context, Function assign, List<dynamic> assig
                 AssignUser(
                   status: true,
                   addUser: (user) {
-                    assign(user);
+                    assign();
                     FocusScope.of(context).unfocus();
                   },
                   assignedUserIds: assignto.map((item) => item.userid).toList(),
@@ -115,7 +115,7 @@ void assginUserToTodo(BuildContext context, Function assign, List<dynamic> assig
                   alignment: Alignment.bottomRight,
                   child: ElevatedButton(
                     onPressed: () {
-                      submitAssignUser(id, context, user!);
+                      submitAssignUser(id, context, user!, currentuserdata);
                       Navigator.of(context).pop();
                       if (Responsive.isMobile(context)) {
                         popBottomSheet();
