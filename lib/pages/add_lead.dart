@@ -58,7 +58,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
   }
 
   addDataOnfirestore(AllChipSelectedAnwers notify) {
-    notify.submitLead(isEdit).then((value) => {
+    notify.submitLead(isEdit, ref).then((value) => {
           setState(() {
             response = value;
           })
@@ -75,11 +75,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
           curve: Curves.easeInOut,
         );
       });
-    } else {
-      setState(() {
-        allQuestionFinishes = true;
-      });
-    }
+    } else {}
   }
 
   goBack(List<int> id) {
@@ -114,7 +110,6 @@ class _AddLeadState extends ConsumerState<AddLead> {
     final isVillaSelected = ref.read(leadFilterVillaQuestion);
     final isPlotSelected = ref.read(leadFilterPlotQuestion);
     final isCommericalSelected = ref.read(leadFilterCommercialQuestion);
-    print(notify.state);
 
     return Scaffold(
       body: FutureBuilder<List<LeadQuestions>>(
@@ -232,7 +227,8 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                     isPlotSelected,
                                                     selectedValues,
                                                   ),
-                                                  if (i == currentScreenList[index].questions.length - 1 && currentScreenList[index].questions[i].questionOptionType != 'chip')
+                                                  if (i == currentScreenList[index].questions.length - 1 &&
+                                                      currentScreenList[index].questions[i].questionOptionType != 'chip')
                                                     Container(
                                                       margin: const EdgeInsets.only(top: 10),
                                                       alignment: Alignment.centerRight,
@@ -250,7 +246,9 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                                     }
                                                                   }
                                                                   if (currentScreenList[index].title == "Assign to") {
-                                                                    allQuestionFinishes = true;
+                                                                    setState(() {
+                                                                      allQuestionFinishes = true;
+                                                                    });
                                                                     addDataOnfirestore(notify);
                                                                   }
                                                                 }
@@ -273,7 +271,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                         : const WorkItemSuccessWidget(
                             isInventory: 'LD',
                           )),
-                leadAppbar(currentScreenList),
+                !allQuestionFinishes ? leadAppbar(screensDataList) : const SizedBox(),
               ],
             );
           }

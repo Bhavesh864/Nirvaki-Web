@@ -15,6 +15,7 @@ import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
 import 'package:yes_broker/constants/firebase/send_notification.dart';
 import 'package:yes_broker/constants/functions/navigation/navigation_functions.dart';
+import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
@@ -106,6 +107,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
 
   @override
   Widget build(BuildContext context) {
+    final User user = ref.read(userDataProvider);
     return Scaffold(
       appBar: Responsive.isMobile(context)
           ? AppBar(
@@ -157,6 +159,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                         child: ScrollConfiguration(
                           behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                           child: SingleChildScrollView(
+                            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                             child: Container(
                               padding: const EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 10),
                               child: Column(
@@ -221,9 +224,10 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                           currentStatus = value;
                                           setState(() {});
                                           notifyToUser(
+                                              currentuserdata: user,
                                               itemid: data.todoId!,
                                               assignedto: data.assignedto,
-                                              content: "${currentUser["userfirstname"]} ${currentUser["userlastname"]} change status to $value",
+                                              content: "${user.userfirstname} ${user.userlastname} change status to $value",
                                               title: "${data.todoName} status changed");
                                         },
                                       ),
@@ -425,6 +429,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                               SizedBox(
                                                 height: 100,
                                                 child: ListView.builder(
+                                                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                                                   shrinkWrap: true,
                                                   scrollDirection: Axis.horizontal,
                                                   itemCount: attachments!.length,
@@ -573,12 +578,10 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 8.0),
-                                  child: Flexible(
-                                    child: CustomText(
-                                      title: data.linkedWorkItem![0].workItemTitle!,
-                                      fontWeight: FontWeight.w600,
-                                      size: 20,
-                                    ),
+                                  child: CustomText(
+                                    title: data.linkedWorkItem![0].workItemTitle!,
+                                    fontWeight: FontWeight.w600,
+                                    size: 20,
                                   ),
                                 ),
                                 CustomButton(

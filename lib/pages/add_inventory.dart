@@ -8,8 +8,9 @@ import 'package:yes_broker/constants/firebase/questionModels/inventory_question.
 
 import 'package:yes_broker/constants/functions/get_inventory_questions_widgets.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/riverpodstate/inventory_com_filter_question.dart';
 
-import 'package:yes_broker/riverpodstate/inventory_filter_question.dart';
+import 'package:yes_broker/riverpodstate/inventory_res_filter_question.dart';
 
 import 'package:yes_broker/widgets/questionaries/workitem_success.dart';
 import '../customs/custom_fields.dart';
@@ -57,7 +58,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   }
 
   addDataOnfirestore(AllChipSelectedAnwers notify) {
-    notify.submitInventory(isEdit).then((value) => {
+    notify.submitInventory(isEdit, ref).then((value) => {
           setState(() {
             response = value;
           })
@@ -78,6 +79,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   }
 
   goBack(List<int> id) {
+    print(id);
     if (currentScreenIndex > 0) {
       setState(() {
         currentScreenIndex--;
@@ -109,7 +111,9 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     final isVillaSelected = ref.read(filterVillaQuestion);
     final isPlotSelected = ref.read(filterPlotQuestion);
     final isCommericalSelected = ref.read(filterCommercialQuestion);
-
+    final isLandSelected = ref.read(filterLandQuestion);
+    final isContructionPropertySelected = ref.read(filterConstructedPropertyQuestion);
+    final isUnderContructionPropertySelected = ref.read(filterUnderConstructionPropertyQuestion);
     return Scaffold(
       body: FutureBuilder<List<InventoryQuestions>>(
           future: getQuestions,
@@ -154,7 +158,30 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                   currentScreenList.insert(index, filter2);
                 }
               } else {
-                currentScreenList = screensDataList;
+                if (isRentSelected) {
+                  final arr = ["S19", "S17"];
+                  final filter = screensDataList.where((element) => !arr.contains(element.screenId)).toList();
+                  currentScreenList = filter;
+                } else if (!isRentSelected) {
+                  final arr = ["S20"];
+                  final filter = screensDataList.where((element) => !arr.contains(element.screenId)).toList();
+                  currentScreenList = filter;
+                }
+                if (isLandSelected) {
+                  final arr = ["S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S17"];
+                  final filter = currentScreenList.where((element) => !arr.contains(element.screenId)).toList();
+                  currentScreenList = filter;
+                }
+                if (isContructionPropertySelected) {
+                  final arr = ["S6", "S16", "S17"];
+                  final filter = currentScreenList.where((element) => !arr.contains(element.screenId)).toList();
+                  currentScreenList = filter;
+                }
+                if (isUnderContructionPropertySelected) {
+                  final arr = ["S6", "S16"];
+                  final filter = currentScreenList.where((element) => !arr.contains(element.screenId)).toList();
+                  currentScreenList = filter;
+                }
               }
               return Stack(
                 children: [
@@ -241,12 +268,14 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                                     onPressed: () {
                                                                       if (!allQuestionFinishes) {
                                                                         if (currentScreenList[index].title != "Assign to") {
-                                                                          if (_formKey.currentState!.validate()) {
-                                                                            nextQuestion(screensDataList: screensDataList);
-                                                                          }
+                                                                          // if (_formKey.currentState!.validate()) {
+                                                                          nextQuestion(screensDataList: screensDataList);
+                                                                          // }
                                                                         }
                                                                         if (currentScreenList[index].title == "Assign to") {
-                                                                          allQuestionFinishes = true;
+                                                                          setState(() {
+                                                                            allQuestionFinishes = true;
+                                                                          });
                                                                           addDataOnfirestore(notify);
                                                                         }
                                                                       }
@@ -272,7 +301,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                           : const WorkItemSuccessWidget(
                               isInventory: "IN",
                             )),
-                  inventoryAppBar(currentScreenList),
+                  !allQuestionFinishes ? inventoryAppBar(currentScreenList) : const SizedBox(),
                 ],
               );
             }
@@ -329,5 +358,20 @@ void updateListInventory(WidgetRef ref, option) {
   }
   if (option == "Commercial") {
     ref.read(filterCommercialQuestion.notifier).toggleCommericalQuestionary(true);
+  }
+  if (option == "Land") {
+    ref.read(filterLandQuestion.notifier).toggleLandQuestionary(true);
+    ref.read(filterConstructedPropertyQuestion.notifier).toggleContructedPropertyQuestionary(false);
+    ref.read(filterUnderConstructionPropertyQuestion.notifier).toggleUnderContructionPropertyQuestionary(false);
+  }
+  if (option == "Constructed Property") {
+    ref.read(filterLandQuestion.notifier).toggleLandQuestionary(false);
+    ref.read(filterConstructedPropertyQuestion.notifier).toggleContructedPropertyQuestionary(true);
+    ref.read(filterUnderConstructionPropertyQuestion.notifier).toggleUnderContructionPropertyQuestionary(false);
+  }
+  if (option == "Under Construction") {
+    ref.read(filterLandQuestion.notifier).toggleLandQuestionary(false);
+    ref.read(filterConstructedPropertyQuestion.notifier).toggleContructedPropertyQuestionary(false);
+    ref.read(filterUnderConstructionPropertyQuestion.notifier).toggleUnderContructionPropertyQuestionary(true);
   }
 }

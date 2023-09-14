@@ -1,14 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hive/hive.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:random_string/random_string.dart';
 
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' as cards;
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/riverpodstate/user_data.dart';
 
-Future<String> submitLeadAndCardDetails(state, bool isEdit) async {
+Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async {
   final randomId = randomNumeric(5);
+  final User currentUserdata = ref.read(userDataProvider);
   var res = "pending";
   //  leadcategory example =  rent ,buy
   //   propertycategory example = residental ,commerical,
@@ -77,17 +80,17 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit) async {
       status: "New",
       cardCategory: leadCategory,
       linkedItemType: "LD",
-      brokerid: currentUser["brokerId"],
+      brokerid: currentUserdata.brokerId,
       cardType: "LD",
       cardTitle: "$propertyCategory $propertyKind-$propertyCity",
       cardDescription: "Want to $leadCategory her $bedrooms BHK for $budgetPrice $budgetFigures rupees",
       customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
       cardStatus: "New",
       assignedto: assignedToList,
-      createdby:
-          cards.Createdby(userfirstname: currentUser["userfirstname"], userid: currentUser["userId"], userlastname: currentUser["userlastname"], userimage: currentUser["image"]),
+      createdby: cards.Createdby(
+          userfirstname: currentUserdata.userfirstname, userid: currentUserdata.userId, userlastname: currentUserdata.userlastname, userimage: currentUserdata.image),
       createdate: Timestamp.now(),
-      managerid: currentUser["managerid"],
+      managerid: currentUserdata.managerid,
       propertyarearange: cards.Propertyarearange(arearangestart: carpetArea, unit: areaUnit),
       roomconfig: cards.Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom),
       propertypricerange: cards.Propertypricerange(arearangestart: budgetPrice, unit: budgetFigures));
@@ -110,7 +113,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit) async {
       typeofhospitality: typeofhospitality,
       hospitalrooms: hospitalrooms,
       propertykind: propertyKind,
-      managerid: currentUser["managerid"],
+      managerid: currentUserdata.managerid,
       commericialtype: commericialtype,
       availability: availability,
       typeofretail: typeofretail,
@@ -122,7 +125,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit) async {
       typeofschool: typeofschool,
       transactiontype: transactionType,
       attachments: attachments ?? [],
-      brokerid: currentUser["brokerId"],
+      brokerid: currentUserdata.brokerId,
       leadcategory: leadCategory,
       propertycategory: propertyCategory,
       leadType: leadSource == "Broker" ? "Broker" : leadSource,
@@ -143,7 +146,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit) async {
       createdate: Timestamp.now(),
       assignedto: assignedListInLead,
       createdby:
-          Createdby(userfirstname: currentUser["userfirstname"], userid: currentUser["userId"], userlastname: currentUser["userlastname"], userimage: currentUser["image"]));
+          Createdby(userfirstname: currentUserdata.userfirstname, userid: currentUserdata.userId, userlastname: currentUserdata.userlastname, userimage: currentUserdata.image));
 
   // await cards.CardDetails.addCardDetails(card).then((value) => {res = "success"});
   isEdit

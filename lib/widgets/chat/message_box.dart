@@ -1,29 +1,34 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'package:yes_broker/chat/enums/message.enums.dart';
 import 'package:yes_broker/chat/models/message.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
-import 'package:yes_broker/constants/utils/image_constants.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 
 String formatTimestamp(DateTime timestamp) {
-  final formattedTime = DateFormat.jm().format(timestamp); // Format to 'hh:mm a'
+  final formattedTime = DateFormat.jm().format(timestamp);
   return formattedTime;
 }
 
 // ignore: must_be_immutable
 class MessageBox extends StatelessWidget {
-  const MessageBox({
-    super.key,
-    required this.isSender,
-    required this.message,
-    required this.data,
-    required this.isSeen,
-  });
   final String message;
   final bool isSender;
   final ChatMessage data;
   final bool isSeen;
+  final MessageEnum messageType;
+
+  const MessageBox({
+    Key? key,
+    required this.message,
+    required this.isSender,
+    required this.data,
+    required this.isSeen,
+    required this.messageType,
+  }) : super(key: key);
 
   // String formatTimestamp(DateTime timestamp) {
   //   final formattedTime = DateFormat.jm().format(timestamp); // Format to 'hh:mm a'
@@ -71,17 +76,16 @@ class MessageBox extends StatelessWidget {
             children: [
               if (!isSender) ...[
                 CircleAvatar(
-                  radius: 15,
-                  backgroundImage: NetworkImage(data.profilePic),
+                  radius: 14,
+                  backgroundImage: NetworkImage(data.profilePic == '' ? noImg : data.profilePic),
                 ),
-                const SizedBox(width: 2),
-                // Image.asset('assets/images/receiveMsgTip.png'),
+                Image.asset('assets/images/receiveMsgTip.png'),
               ],
               Container(
                 constraints: BoxConstraints(
                   maxWidth: width * 3 / 4,
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: isSender ? AppColor.primary : AppColor.secondary,
                   borderRadius: BorderRadius.only(
@@ -104,7 +108,8 @@ class MessageBox extends StatelessWidget {
                         ),
                       ),
                     Container(
-                      margin: !isSender ? const EdgeInsets.only(left: 5) : null,
+                      // margin: !isSender ? const EdgeInsets.only(left: 5) : null,
+                      padding: const EdgeInsets.symmetric(vertical: 4),
                       child: DisplayMessage(
                         message: message,
                         type: data.type,
@@ -120,7 +125,7 @@ class MessageBox extends StatelessWidget {
                           textAlign: TextAlign.end,
                           style: TextStyle(
                             color: isSender ? Colors.white : AppColor.inActiveColor,
-                            fontSize: 12,
+                            fontSize: 10,
                           ),
                         ),
                         if (isSender)
@@ -149,7 +154,12 @@ class DisplayMessage extends StatelessWidget {
   final MessageEnum type;
   final bool isSender;
 
-  const DisplayMessage({super.key, required this.message, required this.type, required this.isSender});
+  const DisplayMessage({
+    super.key,
+    required this.message,
+    required this.type,
+    required this.isSender,
+  });
 
   @override
   Widget build(BuildContext context) {

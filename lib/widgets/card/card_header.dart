@@ -9,6 +9,7 @@ import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
 import 'package:yes_broker/constants/firebase/send_notification.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/userModel/user_info.dart';
@@ -38,9 +39,8 @@ class CardHeaderState extends ConsumerState<CardHeader> {
   @override
   Widget build(BuildContext context) {
     final cardData = widget.cardDetails[widget.index];
-
     status = widget.cardDetails;
-
+    final User user = ref.read(userDataProvider);
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -91,9 +91,10 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                   }
                   setState(() {});
                   notifyToUser(
+                    currentuserdata: user,
                     itemid: cardData.workitemId!,
                     assignedto: cardData.assignedto,
-                    content: "${currentUser["userfirstname"]} ${currentUser["userlastname"]} change status to $value",
+                    content: "${user.userfirstname} ${user.userlastname} change status to $value",
                     title: "${cardData.workitemId} status changed",
                   );
                 },

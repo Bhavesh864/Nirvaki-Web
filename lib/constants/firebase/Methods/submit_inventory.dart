@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:random_string/random_string.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 
@@ -6,7 +7,10 @@ import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' a
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
-Future<String> submitInventoryAndcardDetails(state, bool isEdit) async {
+import '../../../riverpodstate/user_data.dart';
+
+Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) async {
+  final User currentUserdata = ref.read(userDataProvider);
   final randomId = randomNumeric(5);
   var res = "pending";
   //  inventorycategory example =  rent ,sell
@@ -66,6 +70,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit) async {
   final commercialphotos = getDataById(state, 53);
   final attachments = getDataById(state, 100);
   final existingInventoryId = getDataById(state, 101);
+
   final List<cards.Assignedto> assignedToList = assignto.map((user) {
     return cards.Assignedto(
       firstname: user.userfirstname,
@@ -81,16 +86,16 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit) async {
       status: "New",
       cardCategory: inventoryCategory,
       linkedItemType: "IN",
-      brokerid: currentUser["brokerId"],
-      managerid: currentUser["managerid"],
+      brokerid: currentUserdata.brokerId,
+      managerid: currentUserdata.managerid,
       cardType: "IN",
       cardTitle: "$propertyCategory $propertyKind-$propertyCity",
       cardDescription: "Want to $inventoryCategory her $bedrooms BHK for $price$priceunit rupees",
       customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
       cardStatus: "New",
       assignedto: assignedToList,
-      createdby:
-          cards.Createdby(userfirstname: currentUser["userfirstname"], userid: currentUser["userId"], userlastname: currentUser["userlastname"], userimage: currentUser["image"]),
+      createdby: cards.Createdby(
+          userfirstname: currentUserdata.userfirstname, userid: currentUserdata.userId, userlastname: currentUserdata.userlastname, userimage: currentUserdata.image),
       createdate: Timestamp.now(),
       propertyarearange: cards.Propertyarearange(arearangestart: superArea, unit: areaUnit),
       roomconfig: cards.Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom),
@@ -111,7 +116,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit) async {
       inventoryStatus: "New",
       typeofoffice: typeofoffice,
       approvedbeds: approvedbeds,
-      managerid: currentUser["managerid"],
+      managerid: currentUserdata.managerid,
       typeofhospitality: typeofhospitality,
       hospitalrooms: hospitalrooms,
       propertykind: propertyKind,
@@ -121,7 +126,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit) async {
       villatype: villaType,
       typeofschool: typeofschool,
       transactiontype: transactionType,
-      brokerid: currentUser["brokerId"],
+      brokerid: currentUserdata.brokerId,
       inventorycategory: inventoryCategory,
       propertycategory: propertyCategory,
       inventoryType: inventorySource == "Broker" ? "Broker" : inventorySource,
@@ -149,7 +154,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit) async {
       updatedby: AppConst.getAccessToken(),
       assignedto: assignedListInInventory,
       createdby:
-          Createdby(userfirstname: currentUser["userfirstname"], userid: currentUser["userId"], userlastname: currentUser["userlastname"], userimage: currentUser["image"]));
+          Createdby(userfirstname: currentUserdata.userfirstname, userid: currentUserdata.userId, userlastname: currentUserdata.userlastname, userimage: currentUserdata.image));
 
   isEdit
       ? await cards.CardDetails.updateCardDetails(id: existingInventoryId, cardDetails: card).then((value) => {res = "success"})

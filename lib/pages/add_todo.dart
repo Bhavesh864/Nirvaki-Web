@@ -26,7 +26,6 @@ class AddTodo extends ConsumerStatefulWidget {
 }
 
 class _AddTodoState extends ConsumerState<AddTodo> {
-  String? response;
   bool allQuestionFinishes = false;
   late Future<List<TodoQuestion>> getQuestions;
   PageController? pageController;
@@ -41,14 +40,7 @@ class _AddTodoState extends ConsumerState<AddTodo> {
   }
 
   addDataOnfirestore(AllChipSelectedAnwers notify) {
-    notify.submitTodo().then((value) => {
-          setState(() {
-            response = value;
-          })
-        });
-    setState(() {
-      response = 'success';
-    });
+    notify.submitTodo(ref);
   }
 
   nextQuestion({List<Screen>? screensDataList, option}) {
@@ -60,11 +52,7 @@ class _AddTodoState extends ConsumerState<AddTodo> {
           curve: Curves.easeInOut,
         );
       });
-    } else {
-      setState(() {
-        allQuestionFinishes = true;
-      });
-    }
+    } else {}
   }
 
   goBack(List<int> id) {
@@ -94,6 +82,8 @@ class _AddTodoState extends ConsumerState<AddTodo> {
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(myArrayProvider.notifier);
+    final List<Map<String, dynamic>> selectedValues = ref.read(myArrayProvider);
+
     return Scaffold(
       body: FutureBuilder<List<TodoQuestion>>(
         future: getQuestions,
@@ -170,27 +160,36 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                                                     notify,
                                                     nextQuestion,
                                                     context,
+                                                    selectedValues,
                                                   ),
-                                                  if (i == screensDataList[index].questions.length - 1 &&
-                                                      screensDataList[index].questions[i].questionOptionType != 'chip')
+                                                  if (i == screensDataList[index].questions.length - 1 && screensDataList[index].questions[i].questionOptionType != 'chip')
                                                     Container(
                                                       margin: const EdgeInsets.only(top: 10),
                                                       alignment: Alignment.centerRight,
-                                                      child: CustomButton(
-                                                        text: 'Next',
-                                                        onPressed: () {
-                                                          if (_formKey.currentState!.validate()) {
-                                                            nextQuestion(
-                                                              screensDataList: screensDataList,
-                                                            );
-                                                          }
-                                                          if (screensDataList[index].title == "Assign to") {
-                                                            addDataOnfirestore(notify);
-                                                          }
-                                                        },
-                                                        width: 73,
-                                                        height: 39,
-                                                      ),
+                                                      child: allQuestionFinishes
+                                                          ? const Center(
+                                                              child: CircularProgressIndicator.adaptive(),
+                                                            )
+                                                          : CustomButton(
+                                                              text: screensDataList[index].title == "Assign to" ? 'Submit' : 'Next',
+                                                              onPressed: () {
+                                                                if (!allQuestionFinishes) {
+                                                                  if (screensDataList[index].title != "Assign to") {
+                                                                    if (_formKey.currentState!.validate()) {
+                                                                      nextQuestion(screensDataList: screensDataList);
+                                                                    }
+                                                                  }
+                                                                  if (screensDataList[index].title == "Assign to") {
+                                                                    setState(() {
+                                                                      allQuestionFinishes = true;
+                                                                    });
+                                                                    addDataOnfirestore(notify);
+                                                                  }
+                                                                }
+                                                              },
+                                                              width: screensDataList[index].title == "Assign to" ? 90 : 70,
+                                                              height: 39,
+                                                            ),
                                                     ),
                                                 ],
                                               ),
@@ -203,14 +202,10 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                               },
                             ),
                           )
-                        : response == "success"
-                            ? const WorkItemSuccessWidget(
-                                isInventory: 'Todo',
-                              )
-                            : const Center(
-                                child: CircularProgressIndicator.adaptive(),
-                              )),
-                leadAppbar(screensDataList),
+                        : const WorkItemSuccessWidget(
+                            isInventory: 'Todo',
+                          )),
+                !allQuestionFinishes ? leadAppbar(screensDataList) : const SizedBox(),
               ],
             );
           }
