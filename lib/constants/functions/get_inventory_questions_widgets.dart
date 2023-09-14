@@ -281,10 +281,16 @@ Widget buildInventoryQuestions(
     );
   } else if (question.questionOptionType == 'photo') {
     Propertyphotos? propertyphotos;
+
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       propertyphotos = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
     }
-    return PhotosViewForm(notify: notify, id: question.questionId, propertyphotos: propertyphotos);
+    print(propertyphotos!.toJson());
+    return PhotosViewForm(
+      notify: notify,
+      id: question.questionId,
+      propertyphotos: propertyphotos,
+    );
   }
 
   return const SizedBox.shrink();
