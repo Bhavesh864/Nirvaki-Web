@@ -30,31 +30,29 @@ void showImageSliderCarousel(List<String> imageUrls, int initialIndex, BuildCont
         backgroundColor: Colors.transparent,
         child: Stack(
           children: [
-            Expanded(
-              child: CarouselSlider(
-                options: CarouselOptions(
-                  height: Responsive.isMobile(context) ? null : 550,
-                  initialPage: initialIndex,
-                  enlargeCenterPage: true,
-                  viewportFraction: Responsive.isMobile(context) ? 0.7 : 0.55,
-                  enableInfiniteScroll: false,
-                ),
-                items: imageUrls.map(
-                  (url) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(40),
-                          child: Image.network(
-                            url,
-                            fit: BoxFit.cover,
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ).toList(),
+            CarouselSlider(
+              options: CarouselOptions(
+                height: Responsive.isMobile(context) ? null : 550,
+                initialPage: initialIndex,
+                enlargeCenterPage: true,
+                viewportFraction: Responsive.isMobile(context) ? 0.7 : 0.55,
+                enableInfiniteScroll: false,
               ),
+              items: imageUrls.map(
+                (url) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(40),
+                        child: Image.network(
+                          url,
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                    },
+                  );
+                },
+              ).toList(),
             ),
             Positioned(
               top: -5,

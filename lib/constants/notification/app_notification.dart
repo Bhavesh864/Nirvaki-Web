@@ -14,19 +14,19 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // await showFlutterNotification(message);
   // // If you're going to use other Firebase services in the background, such as Firestore,
   // // make sure you call `initializeApp` before using other Firebase services.
-  if (message.notification != null) {
-    NotificationModel notificationModel = NotificationModel(
-      title: message.notification?.title,
-      notificationContent: message.notification?.body,
-      receiveDate: Timestamp.now(),
-      linkedItemId: message.data["id"],
-      imageUrl: message.data["imageUrl"],
-      userId: AppConst.getAccessToken(),
-      isRead: false,
-      id: generateUid(),
-    );
-    await NotificationModel.addNotification(notificationModel);
-  }
+  // if (message.notification != null) {
+  //   NotificationModel notificationModel = NotificationModel(
+  //     title: message.notification?.title,
+  //     notificationContent: message.notification?.body,
+  //     receiveDate: Timestamp.now(),
+  //     linkedItemId: message.data["id"],
+  //     imageUrl: message.data["imageUrl"],
+  //     userId: AppConst.getAccessToken(),
+  //     isRead: false,
+  //     id: generateUid(),
+  //   );
+  //   await NotificationModel.addNotification(notificationModel);
+  // }
   if (kDebugMode) {
     print('Handling a background message ${message.notification}');
   }
@@ -90,19 +90,7 @@ FirebaseMessaging messaging = FirebaseMessaging.instance;
 Future<void> setAllNotification() async {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     await showFlutterNotification(message);
-    if (message.notification != null) {
-      NotificationModel notificationModel = NotificationModel(
-        title: message.notification?.title,
-        notificationContent: message.notification?.body,
-        receiveDate: Timestamp.now(),
-        linkedItemId: message.data["id"],
-        imageUrl: message.data["imageUrl"],
-        userId: AppConst.getAccessToken(),
-        isRead: false,
-        id: generateUid(),
-      );
-      await NotificationModel.addNotification(notificationModel);
-    }
+    if (message.notification != null) {}
     if (kDebugMode) {
       print('handling a foreground app $message');
     }

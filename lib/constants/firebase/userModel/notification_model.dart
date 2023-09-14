@@ -10,7 +10,7 @@ class NotificationModel {
   Timestamp? receiveDate;
   String? linkedItemId;
   String? imageUrl;
-  String? userId;
+  List<String>? userId;
   bool? isRead;
 
   NotificationModel({
@@ -33,7 +33,7 @@ class NotificationModel {
       receiveDate: json["receiveDate"],
       linkedItemId: json["linkedItemId"],
       imageUrl: json["imageUrl"],
-      userId: json["userId"],
+      userId: json["userId"] == null ? null : List<String>.from(json["userId"]),
       isRead: json['isRead'],
       id: json['id'],
     );
@@ -52,8 +52,8 @@ class NotificationModel {
     if (json["imageUrl"] is String) {
       imageUrl = json["imageUrl"];
     }
-    if (json["userId"] is String) {
-      userId = json["userId"];
+    if (json["userId"] is List) {
+      userId = json["userId"] == null ? null : List<String>.from(json["userId"]);
     }
     if (json["title"] is String) {
       title = json["title"];
@@ -76,15 +76,18 @@ class NotificationModel {
     data["title"] = title;
     data["isRead"] = isRead;
     data["id"] = id;
+    if (userId != null) {
+      data["userId"] = userId;
+    }
     return data;
   }
 
   static Future<void> addNotification(NotificationModel notification) async {
     try {
       await notificationCollection.doc(notification.id).set(notification.toJson());
-      // print('User added successfully');
+      print('User added successfully');
     } catch (error) {
-      // print('Failed to add user: $error');
+      print('Failed to add user: $error');
     }
   }
 

@@ -143,11 +143,7 @@ class InventoryDetailsHeader extends ConsumerWidget {
             const Spacer(),
             if (!Responsive.isMobile(context) && !AppConst.getPublicView())
               CustomText(
-                title: price != null
-                    ? category == "Rent" && id.contains("IN")
-                        ? "${propertyRent?.rentamount} ${propertyRent?.rentunit}"
-                        : "$price $unit"
-                    : "",
+                title: category == "Rent" && id.contains("IN") ? "${propertyRent?.rentamount} ${propertyRent?.rentunit}" : "$price $unit",
                 color: AppColor.primary,
               ),
           ],
