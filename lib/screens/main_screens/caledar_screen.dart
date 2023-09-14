@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:yes_broker/constants/functions/workitems_detail_methods.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/customs/custom_fields.dart';
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
@@ -36,20 +38,28 @@ class _CalendarScreenState extends State<CalendarScreen> {
     return Row(
       children: [
         Expanded(
-          flex: 3,
-          child: Container(
-            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-            child: Center(
-              child: SfCalendar(
-                headerHeight: 0,
-                view: CalendarView.week,
-                timeSlotViewSettings: const TimeSlotViewSettings(startHour: 9, endHour: 18),
-                showTodayButton: true,
-                showNavigationArrow: true,
-                backgroundColor: Colors.white,
-              ),
+          flex: 4,
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: SfCalendar(
+              // headerHeight: 0,
+              view: CalendarView.day,
+              allowedViews: const [
+                CalendarView.day,
+                CalendarView.week,
+              ],
+              showDatePickerButton: true,
+              timeSlotViewSettings: const TimeSlotViewSettings(startHour: 8, endHour: 24),
+              showTodayButton: true,
+              showNavigationArrow: true,
+              backgroundColor: Colors.white,
             ),
           ),
+        ),
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+          width: 1,
+          color: Colors.grey.withOpacity(0.5),
         ),
         Expanded(
           flex: 1,
@@ -78,17 +88,28 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   ),
                 ],
               ),
-              Container(
-                decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+              SizedBox(
+                width: 240,
                 child: Center(
                   child: SfCalendar(
                     headerHeight: 0,
+                    cellBorderColor: Colors.transparent,
                     view: CalendarView.month,
                     controller: CalendarController(),
                     backgroundColor: Colors.white,
                   ),
                 ),
               ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Divider(),
+              ),
+              CustomButton(
+                text: 'Create new',
+                onPressed: () {
+                  showAddCalendarModal(context);
+                },
+              )
             ],
           ),
         ),
