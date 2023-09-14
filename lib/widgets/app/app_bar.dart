@@ -49,7 +49,12 @@ AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect, 
                   width: 35,
                   margin: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(snapshot.data!.image.isEmpty ? noImg : snapshot.data!.image.toString())),
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                        snapshot.data!.image.isEmpty ? noImg : snapshot.data!.image.toString(),
+                      ),
+                    ),
                     borderRadius: BorderRadius.circular(12),
                   ),
                 );

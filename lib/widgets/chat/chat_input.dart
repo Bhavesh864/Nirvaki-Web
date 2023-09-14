@@ -2,8 +2,10 @@
 import 'dart:io';
 
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../chat/controller/chat_controller.dart';
 import '../../chat/enums/message.enums.dart';
@@ -67,8 +69,9 @@ class _ChatInputState extends ConsumerState<ChatInput> {
   }
 
   void sendFileMessage(
-    File file,
+    File? file,
     MessageEnum messageEnum,
+    Uint8List? webImage,
   ) {
     ref.read(chatControllerProvider).sendFileMessage(
           context,
@@ -76,22 +79,23 @@ class _ChatInputState extends ConsumerState<ChatInput> {
           widget.revceiverId,
           messageEnum,
           widget.isGroupChat,
+          webImage,
         );
   }
 
-  void selectImage() async {
-    File? image = await pickImageFromGallery(context);
-    if (image != null) {
-      sendFileMessage(image, MessageEnum.image);
-    }
-  }
+  // void selectImage() async {
+  //   File? image = await pickImageFromGallery(context);
+  //   if (image != null) {
+  //     sendFileMessage(image, MessageEnum.image);
+  //   }
+  // }
 
-  void selectVideo() async {
-    File? video = await pickVideoFromGallery(context);
-    if (video != null) {
-      sendFileMessage(video, MessageEnum.video);
-    }
-  }
+  // void selectVideo() async {
+  //   File? video = await pickVideoFromGallery(context);
+  //   if (video != null) {
+  //     sendFileMessage(video, MessageEnum.video);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +103,7 @@ class _ChatInputState extends ConsumerState<ChatInput> {
       children: [
         Container(
           color: Colors.white,
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 6),
           child: Row(
             children: [
               InkWell(
@@ -108,13 +112,12 @@ class _ChatInputState extends ConsumerState<ChatInput> {
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Icon(
                     !isShowEmojiContainer ? Icons.mood : Icons.keyboard_outlined,
-                    size: 18,
+                    size: 16,
                   ),
                 ),
               ),
               Expanded(
                 child: TextField(
-                  // keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.send,
                   focusNode: focusNode,
                   controller: messageController,
@@ -126,6 +129,7 @@ class _ChatInputState extends ConsumerState<ChatInput> {
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,
                     hintText: 'Start typing...',
+                    hintStyle: TextStyle(fontSize: 12),
                   ),
                   onSubmitted: (_) {
                     sendTextMessage();
@@ -133,18 +137,30 @@ class _ChatInputState extends ConsumerState<ChatInput> {
                 ),
               ),
               InkWell(
-                onTap: () {
-                  showModalBottomSheet(
-                    backgroundColor: Colors.transparent,
-                    context: context,
-                    builder: (builder) => bottomSheet(context),
-                  );
+                onTap: () async {
+                  // showModalBottomSheet(
+                  //   backgroundColor: Colors.transparent,
+                  //   context: context,
+                  //   builder: (builder) => bottomSheet(context),
+                  // );
+                  if (kIsWeb) {
+                    XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                    if (image != null) {
+                      var f = await image.readAsBytes();
+
+                      sendFileMessage(null, MessageEnum.image, f);
+                    }
+                  } else {
+                    final image = await pickImageFromGallery(context);
+
+                    sendFileMessage(image!, MessageEnum.image, null);
+                  }
                 },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5.0),
                   child: Icon(
                     Icons.attach_file_rounded,
-                    size: 18,
+                    size: 16,
                   ),
                 ),
               ),
@@ -153,7 +169,7 @@ class _ChatInputState extends ConsumerState<ChatInput> {
                   padding: EdgeInsets.symmetric(horizontal: 12),
                   child: Icon(
                     Icons.send,
-                    size: 18,
+                    size: 16,
                   ),
                 ),
                 onTap: () {
@@ -165,7 +181,7 @@ class _ChatInputState extends ConsumerState<ChatInput> {
         ),
         isShowEmojiContainer
             ? SizedBox(
-                height: 310,
+                height: 255,
                 child: EmojiPicker(
                   onEmojiSelected: (category, emoji) {
                     messageController.text = messageController.text + emoji.emoji;
@@ -177,87 +193,87 @@ class _ChatInputState extends ConsumerState<ChatInput> {
     );
   }
 
-  Widget bottomSheet(context) {
-    return SizedBox(
-      height: 280,
-      width: MediaQuery.of(context).size.width,
-      child: Card(
-        margin: const EdgeInsets.all(18.0),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  iconCreation(Icons.insert_drive_file, Colors.indigo, "Document", context),
-                  const SizedBox(
-                    width: 40,
-                  ),
-                  iconCreation(Icons.camera_alt, Colors.pink, "Camera", context),
-                  const SizedBox(
-                    width: 40,
-                  ),
-                  iconCreation(Icons.insert_photo, Colors.purple, "Gallery", context),
-                ],
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  iconCreation(Icons.headset, Colors.orange, "Audio", context),
-                  const SizedBox(
-                    width: 40,
-                  ),
-                  iconCreation(Icons.location_pin, Colors.teal, "Location", context),
-                  const SizedBox(
-                    width: 40,
-                  ),
-                  iconCreation(Icons.person, Colors.blue, "Contact", context),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget bottomSheet(context) {
+  //   return SizedBox(
+  //     height: 180,
+  //     width: MediaQuery.of(context).size.width,
+  //     child: Card(
+  //       margin: const EdgeInsets.all(18.0),
+  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+  //       child: Padding(
+  //         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+  //         child: Column(
+  //           children: [
+  //             Row(
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               children: [
+  //                 iconCreation(Icons.insert_drive_file, Colors.indigo, "Document", context),
+  //                 const SizedBox(
+  //                   width: 40,
+  //                 ),
+  //                 iconCreation(Icons.camera_alt, Colors.pink, "Camera", context),
+  //                 const SizedBox(
+  //                   width: 40,
+  //                 ),
+  //                 iconCreation(Icons.insert_photo, Colors.purple, "Gallery", context),
+  //               ],
+  //             ),
+  //             const SizedBox(
+  //               height: 30,
+  //             ),
+  //             // Row(
+  //             //   mainAxisAlignment: MainAxisAlignment.center,
+  //             //   children: [
+  //             //     iconCreation(Icons.headset, Colors.orange, "Audio", context),
+  //             //     const SizedBox(
+  //             //       width: 40,
+  //             //     ),
+  //             //     iconCreation(Icons.location_pin, Colors.teal, "Location", context),
+  //             //     const SizedBox(
+  //             //       width: 40,
+  //             //     ),
+  //             //     iconCreation(Icons.person, Colors.blue, "Contact", context),
+  //             //   ],
+  //             // ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Widget iconCreation(IconData icons, Color color, String text, BuildContext context) {
-    return InkWell(
-      onTap: () async {
-        if (text == 'Gallery') {
-          final image = await pickImageFromGallery(context);
-          sendFileMessage(image!, MessageEnum.image);
-        }
-      },
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: color,
-            child: Icon(
-              icons,
-              // semanticLabel: "Help",
-              size: 29,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Text(
-            text,
-            style: const TextStyle(
-              fontSize: 12,
-              // fontWeight: FontWeight.w100,
-            ),
-          )
-        ],
-      ),
-    );
-  }
+  // Widget iconCreation(IconData icons, Color color, String text, BuildContext context) {
+  //   return InkWell(
+  //     onTap: () async {
+  //       if (text == 'Gallery') {
+  //         final image = await pickImageFromGallery(context);
+  //         sendFileMessage(image!, MessageEnum.image);
+  //       }
+  //     },
+  //     child: Column(
+  //       children: [
+  //         CircleAvatar(
+  //           radius: 25,
+  //           backgroundColor: color,
+  //           child: Icon(
+  //             icons,
+  //             // semanticLabel: "Help",
+  //             size: 25,
+  //             color: Colors.white,
+  //           ),
+  //         ),
+  //         const SizedBox(
+  //           height: 5,
+  //         ),
+  //         Text(
+  //           text,
+  //           style: const TextStyle(
+  //             fontSize: 12,
+  //             // fontWeight: FontWeight.w100,
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 }
