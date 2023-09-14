@@ -76,7 +76,8 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
       alignment: Alignment.bottomRight,
       child: Container(
         padding: const EdgeInsets.only(bottom: 45, right: 80),
-        width: 450,
+        width: 650,
+        height: 600,
         child: Card(
           color: const Color(0xFFF5F9FE),
           child: Padding(
@@ -129,7 +130,7 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                     ),
                   ),
                   SizedBox(
-                    height: 350,
+                    height: 470,
                     child: Card(
                       elevation: 0,
                       child: Column(

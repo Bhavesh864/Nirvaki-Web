@@ -38,7 +38,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         Expanded(
           flex: 3,
           child: Container(
-            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+            // decoration: BoxDecoration(border: Border.all(color: Colors.black)),
             child: Center(
               child: SfCalendar(
                 headerHeight: 0,
@@ -79,7 +79,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 ],
               ),
               Container(
-                decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+                // decoration: BoxDecoration(border: Border.all(color: Colors.black)),
                 child: Center(
                   child: SfCalendar(
                     headerHeight: 0,
