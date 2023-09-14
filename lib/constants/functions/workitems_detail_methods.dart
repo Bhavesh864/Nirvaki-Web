@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:yes_broker/customs/custom_text.dart';
+import 'package:yes_broker/customs/label_text_field.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart' as inventory;
@@ -343,6 +344,115 @@ void showOwnerDetailsAndAssignToBottomSheet(BuildContext context, String title, 
             innerContent,
           ],
         ),
+      );
+    },
+  );
+}
+
+void showAddCalendarModal(
+  BuildContext context,
+) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (context, innerSetState) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Dialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              child: Container(
+                padding: const EdgeInsets.all(15),
+                height: 500,
+                width: Responsive.isMobile(context) ? width : 650,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const CustomText(
+                      softWrap: true,
+                      textAlign: TextAlign.center,
+                      size: 30,
+                      title: 'Add Calendar Item',
+                      fontWeight: FontWeight.bold,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ChipButton(
+                            text: 'Meeting',
+                            bgColor: AppColor.primary.withOpacity(0.05),
+                            onSelect: () {},
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: ChipButton(
+                            text: 'Follow Up',
+                            bgColor: AppColor.primary.withOpacity(0.05),
+                            onSelect: () {},
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: ChipButton(
+                            text: 'Reminder',
+                            bgColor: AppColor.primary.withOpacity(0.05),
+                            onSelect: () {},
+                          ),
+                        ),
+                      ],
+                    ),
+                    LabelTextInputField(
+                      labelText: 'Task Name',
+                      inputController: TextEditingController(),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: LabelTextInputField(
+                            labelText: 'Due Date',
+                            inputController: TextEditingController(),
+                            isDatePicker: true,
+                            // initialvalue: '08/05/2023',
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Expanded(
+                          child: LabelTextInputField(
+                            labelText: 'Time',
+                            inputController: TextEditingController(),
+                          ),
+                        ),
+                      ],
+                    ),
+                    LabelTextAreaField(
+                      labelText: 'Task Description',
+                      inputController: TextEditingController(),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: CustomButton(
+                        text: 'Save',
+                        onPressed: () {},
+                        width: 70,
+                        height: 39,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       );
     },
   );
