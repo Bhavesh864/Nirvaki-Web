@@ -55,7 +55,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
   void initState() {
     super.initState();
     tabviewController = TabController(length: 4, vsync: this);
-    final workItemId = ref.read(selectedWorkItemId.notifier).state;
+    final workItemId = ref.read(selectedWorkItemId);
     todoDetails = FirebaseFirestore.instance.collection('todoDetails').where('todoId', isEqualTo: workItemId == '' ? widget.todoId : workItemId).snapshots();
   }
 

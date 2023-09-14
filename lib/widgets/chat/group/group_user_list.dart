@@ -54,9 +54,7 @@ class _GroupUserListState extends ConsumerState<GroupUserList> {
               userlist.removeWhere((user) => user.userId == widget.adminId);
 
               // Add the admin user to the beginning of the userlist
-              if (adminUser != null) {
-                userlist.insert(0, adminUser);
-              }
+              userlist.insert(0, adminUser);
             }
 
             return ListView.builder(

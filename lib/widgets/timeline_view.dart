@@ -26,7 +26,7 @@ class CustomTimeLineView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final workitemId = ref.read(selectedWorkItemId.notifier).state;
+    final workitemId = ref.read(selectedWorkItemId);
     final User user = ref.read(userDataProvider);
 
     return Container(
