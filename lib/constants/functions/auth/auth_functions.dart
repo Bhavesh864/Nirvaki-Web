@@ -24,6 +24,7 @@ void userLogout(WidgetRef ref, BuildContext context) {
 }
 
 
+
 // void logoutaction(WidgetRef ref, BuildContext context) {
 //   authentication.signOut().then((value) {
 //     // Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen);

@@ -1,16 +1,29 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 final CollectionReference notificationCollection = FirebaseFirestore.instance.collection('notification');
 
 class NotificationModel {
+  String? id;
   String? title;
   String? notificationContent;
   Timestamp? receiveDate;
   String? linkedItemId;
   String? imageUrl;
   String? userId;
+  bool? isRead;
 
-  NotificationModel({this.notificationContent, this.receiveDate, this.linkedItemId, this.imageUrl, this.userId, this.title});
+  NotificationModel({
+    this.id,
+    this.title,
+    this.notificationContent,
+    this.receiveDate,
+    this.linkedItemId,
+    this.imageUrl,
+    this.userId,
+    this.isRead,
+  });
+
   factory NotificationModel.fromSnapshot(DocumentSnapshot snapshot) {
     final json = snapshot.data() as Map<String, dynamic>;
 
@@ -21,6 +34,8 @@ class NotificationModel {
       linkedItemId: json["linkedItemId"],
       imageUrl: json["imageUrl"],
       userId: json["userId"],
+      isRead: json['isRead'],
+      id: json['id'],
     );
   }
 
@@ -38,10 +53,16 @@ class NotificationModel {
       imageUrl = json["imageUrl"];
     }
     if (json["userId"] is String) {
-      imageUrl = json["userId"];
+      userId = json["userId"];
     }
     if (json["title"] is String) {
-      imageUrl = json["title"];
+      title = json["title"];
+    }
+    if (json["isRead"] is bool) {
+      isRead = json["isRead"];
+    }
+    if (json["id"] is bool) {
+      isRead = json["id"];
     }
   }
 
@@ -53,12 +74,14 @@ class NotificationModel {
     data["imageUrl"] = imageUrl;
     data["userId"] = userId;
     data["title"] = title;
+    data["isRead"] = isRead;
+    data["id"] = id;
     return data;
   }
 
   static Future<void> addNotification(NotificationModel notification) async {
     try {
-      await notificationCollection.doc().set(notification.toJson());
+      await notificationCollection.doc(notification.id).set(notification.toJson());
       // print('User added successfully');
     } catch (error) {
       // print('Failed to add user: $error');

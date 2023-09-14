@@ -72,7 +72,14 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
             status = filterTodoList;
 
             final tableRowList = filterTodoList.map((e) {
-              return buildWorkItemRowTile(e, filterTodoList.indexOf(e), status);
+              return buildWorkItemRowTile(
+                e,
+                filterTodoList.indexOf(e),
+                status,
+                id: e.workitemId,
+                ref: ref,
+                context: context,
+              );
             });
 
             return Row(

@@ -1,17 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'package:yes_broker/chat/enums/message.enums.dart';
 import 'package:yes_broker/chat/models/message.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 
-String formatTimestamp(DateTime timestamp) {
-  final formattedTime = DateFormat.jm().format(timestamp);
-  return formattedTime;
-}
+import '../../constants/functions/datetime/date_time.dart';
 
 // ignore: must_be_immutable
 class MessageBox extends StatelessWidget {
@@ -29,31 +25,6 @@ class MessageBox extends StatelessWidget {
     required this.isSeen,
     required this.messageType,
   }) : super(key: key);
-
-  // String formatTimestamp(DateTime timestamp) {
-  //   final formattedTime = DateFormat.jm().format(timestamp); // Format to 'hh:mm a'
-  //   return formattedTime;
-  // }
-
-  // String formatTimestamp(DateTime timestamp) {
-  //   final now = DateTime.now();
-  //   final difference = now.difference(timestamp);
-
-  //   if (difference.inDays == 0) {
-  //     if (difference.inHours == 0) {
-  //       if (difference.inMinutes < 5) {
-  //         return 'Just now';
-  //       }
-  //       return '${difference.inMinutes} minutes ago';
-  //     } else {
-  //       return '${difference.inHours} hours ago';
-  //     }
-  //   } else if (difference.inDays == 1) {
-  //     return 'Yesterday';
-  //   } else {
-  //     return DateFormat.yMMMd().format(timestamp);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +67,6 @@ class MessageBox extends StatelessWidget {
                   ),
                 ),
                 child: Column(
-                  // mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (!isSender)
@@ -108,7 +78,6 @@ class MessageBox extends StatelessWidget {
                         ),
                       ),
                     Container(
-                      // margin: !isSender ? const EdgeInsets.only(left: 5) : null,
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       child: DisplayMessage(
                         message: message,
@@ -171,6 +140,9 @@ class DisplayMessage extends StatelessWidget {
             ),
           )
         : CachedNetworkImage(
+            fit: BoxFit.cover,
+            height: 300,
+            width: 250,
             imageUrl: message,
           );
     // : type == MessageEnum.audio

@@ -2,16 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/customs/loader.dart';
+import 'package:yes_broker/screens/main_screens/add_group_member_screen.dart';
 
 import 'package:yes_broker/screens/main_screens/chat_list_screen.dart';
 import 'package:yes_broker/screens/main_screens/chat_user_profile.dart';
+import 'package:yes_broker/screens/main_screens/create_group_screen.dart';
+import 'package:yes_broker/widgets/chat/group/newchat_newgroup_popup.dart';
 import '../Customs/custom_text.dart';
 import '../chat/controller/chat_controller.dart';
 import '../constants/app_constant.dart';
+import '../constants/functions/datetime/date_time.dart';
 import '../constants/utils/constants.dart';
 import 'chat/chat_input.dart';
 import 'chat/chat_screen_header.dart';
 import 'chat/message_box.dart';
+
+enum ChatModalScreenType {
+  chatList,
+  chatScreen,
+  userProfile,
+  newChat,
+  createNewGroup,
+  addNewMember,
+}
 
 class ChatDialogBox extends ConsumerStatefulWidget {
   const ChatDialogBox({super.key});
@@ -21,15 +35,42 @@ class ChatDialogBox extends ConsumerStatefulWidget {
 }
 
 class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
-  bool isChatOpen = false;
-  bool showProfileScreen = false;
+  late ScrollController messageController;
+
+  @override
+  void initState() {
+    messageController = ScrollController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    messageController.dispose();
+    super.dispose();
+  }
+
+  void scrollToEnd() {
+    messageController.animateTo(
+      messageController.position.maxScrollExtent,
+      duration: const Duration(seconds: 2),
+      curve: Curves.easeOut,
+    );
+  }
+
+  ChatModalScreenType currentScreen = ChatModalScreenType.chatList;
   ChatItem? chatItem;
   User? user;
+  bool alreadySelectedUser = false;
 
   @override
   Widget build(BuildContext context) {
     final selectedUserIds = ref.read(selectedUserIdsProvider.notifier);
-    final ScrollController messageController = ScrollController();
+
+    final String chatItemId = chatItem?.id ?? user?.userId ?? '';
+    final bool isGroupChat = chatItem?.isGroupChat ?? false;
+    final String name = chatItem?.name ?? '${user?.userfirstname} ${user?.userlastname}';
+    final String profilePic = chatItem?.profilePic ?? user?.image ?? '';
+    final String adminId = chatItem?.adminId ?? '';
 
     return Align(
       alignment: Alignment.bottomRight,
@@ -39,11 +80,14 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
         child: Card(
           color: const Color(0xFFF5F9FE),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: isChatOpen ? 0 : 15, vertical: isChatOpen ? 0 : 20),
+            padding: EdgeInsets.symmetric(
+              horizontal: currentScreen == ChatModalScreenType.chatList ? 15 : 0,
+              vertical: currentScreen == ChatModalScreenType.chatList ? 20 : 0,
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (!isChatOpen) ...[
+                if (currentScreen == ChatModalScreenType.chatList) ...[
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
                     child: Row(
@@ -53,14 +97,33 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                           title: 'Chat',
                           fontWeight: FontWeight.w600,
                         ),
-                        InkWell(
-                          child: const Icon(
-                            Icons.close,
-                            size: 20,
-                          ),
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
+                        Row(
+                          children: [
+                            NewChatNewGroupPopupButton(
+                              openNewChat: () {
+                                currentScreen = ChatModalScreenType.newChat;
+                                alreadySelectedUser = false;
+                                setState(() {});
+                              },
+                              createNewGroup: () {
+                                currentScreen = ChatModalScreenType.createNewGroup;
+                                alreadySelectedUser = false;
+                                setState(() {});
+                              },
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            InkWell(
+                              child: const Icon(
+                                Icons.close,
+                                size: 20,
+                              ),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
                         )
                       ],
                     ),
@@ -79,7 +142,7 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                               child: TestList(
                                 selectedUserIds: selectedUserIds,
                                 onPressed: (c) {
-                                  isChatOpen = true;
+                                  currentScreen = ChatModalScreenType.chatScreen;
                                   chatItem = c;
                                   setState(() {});
                                 },
@@ -90,27 +153,15 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                       ),
                     ),
                   ),
-                ] else if (showProfileScreen) ...[
-                  UserProfileBody(
-                    profilePic: chatItem!.profilePic,
-                    name: chatItem!.name,
-                    user: user,
-                    contactId: chatItem!.id,
-                    isGroupChat: chatItem!.isGroupChat,
-                    adminId: chatItem!.adminId,
-                    onGoBack: () {
-                      showProfileScreen = false;
-                      setState(() {});
-                    },
-                  )
-                ] else ...[
+                ],
+                if (currentScreen == ChatModalScreenType.chatScreen)
                   StreamBuilder(
-                    stream: chatItem!.isGroupChat
+                    stream: isGroupChat
                         ? ref.read(chatControllerProvider).groupChatStream(
-                              chatItem!.id,
+                              chatItemId,
                             )
                         : ref.read(chatControllerProvider).chatStream(
-                              chatItem!.id,
+                              chatItemId,
                             ),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
@@ -118,16 +169,18 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                       }
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return SizedBox(
-                          height: 400,
+                          height: 470,
                           width: width,
-                          child: const Center(
-                            child: CircularProgressIndicator.adaptive(),
-                          ),
+                          child: const Loader(),
                         );
                       }
 
                       SchedulerBinding.instance.addPostFrameCallback((_) {
-                        messageController.jumpTo(messageController.position.maxScrollExtent);
+                        messageController.animateTo(
+                          messageController.position.maxScrollExtent,
+                          duration: const Duration(milliseconds: 50),
+                          curve: Curves.ease,
+                        );
                       });
 
                       return GestureDetector(
@@ -139,59 +192,18 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                           margin: const EdgeInsets.only(top: 10),
                           child: Column(
                             children: [
-                              // ListTile(
-                              //   leading: SizedBox(
-                              //     width: 70,
-                              //     child: Row(
-                              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              //       children: [
-                              //         InkWell(
-                              //           child: const Icon(
-                              //             Icons.arrow_back,
-                              //             size: 20,
-                              //             color: Colors.black,
-                              //           ),
-                              //           onTap: () {
-                              //             isChatOpen = false;
-                              //             setState(() {});
-                              //           },
-                              //         ),
-                              //         CircleAvatar(
-                              //           backgroundImage: NetworkImage(
-                              //             // filterUser[selectedIndex].image.isEmpty ? noImg : filterUser[selectedIndex].image,
-                              //             chatItem!.profilePic.isEmpty ? noImg : chatItem!.profilePic,
-                              //           ),
-                              //         ),
-                              //       ],
-                              //     ),
-                              //   ),
-                              //   title: CustomText(title: chatItem!.name),
-                              //   subtitle: const CustomText(
-                              //     title: 'Abhi, John and 4 more',
-                              //     color: Color(0xFF9B9B9B),
-                              //   ),
-                              //   trailing: InkWell(
-                              //     child: const Icon(
-                              //       Icons.close,
-                              //       size: 20,
-                              //       color: Colors.black,
-                              //     ),
-                              //     onTap: () {
-                              //       Navigator.of(context).pop();
-                              //     },
-                              //   ),
-                              // ),
                               Container(
                                 margin: const EdgeInsets.only(bottom: 5),
                                 child: ChatScreenHeader(
                                   chatItem: chatItem,
+                                  user: user,
                                   showProfileScreen: (u) {
-                                    showProfileScreen = true;
+                                    currentScreen = ChatModalScreenType.userProfile;
                                     user = u;
                                     setState(() {});
                                   },
                                   goToChatList: () {
-                                    isChatOpen = false;
+                                    currentScreen = ChatModalScreenType.chatList;
                                     setState(() {});
                                   },
                                 ),
@@ -201,6 +213,24 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                                 thickness: 0.5,
                                 color: Colors.grey.shade400,
                               ),
+                              if (isGroupChat && snapshot.data!.isEmpty)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                                  child: Chip(
+                                    shape: const StadiumBorder(),
+                                    backgroundColor: Colors.grey.shade200,
+                                    label: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+                                      child: Text(
+                                        chatItem!.groupCreatedBy!,
+                                        style: const TextStyle(
+                                          color: Colors.black45,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               Expanded(
                                 child: ScrollConfiguration(
                                   behavior: const ScrollBehavior().copyWith(overscroll: false),
@@ -214,21 +244,72 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                                       }
                                       final messageData = snapshot.data![index];
                                       final isSender = messageData.senderId == AppConst.getAccessToken();
-                                      if (!isSender && !messageData.isSeen && !chatItem!.isGroupChat) {
+
+                                      final bool isFirstMessageOfNewDay = index == 0 ||
+                                          !isSameDay(
+                                            messageData.timeSent.toDate(),
+                                            snapshot.data![index - 1].timeSent.toDate(),
+                                          );
+
+                                      final bool isNewWeek = index == 0 || messageData.timeSent.toDate().difference(messageData.timeSent.toDate()).inDays >= 7;
+                                      final String messageDay = getMessageDay(messageData.timeSent.toDate(), isNewWeek);
+
+                                      if (!isSender && !messageData.isSeen && !isGroupChat) {
                                         ref.read(chatControllerProvider).setChatMessageSeen(
                                               context,
-                                              chatItem!.id,
+                                              chatItemId,
                                               messageData.messageId,
                                               isSender,
                                             );
                                       }
 
-                                      return MessageBox(
-                                        message: messageData.text,
-                                        isSender: isSender,
-                                        data: messageData,
-                                        isSeen: messageData.isSeen,
-                                        messageType: messageData.type,
+                                      return Column(
+                                        children: [
+                                          if (isGroupChat && index == 0)
+                                            Padding(
+                                              padding: const EdgeInsets.only(top: 10, bottom: 10),
+                                              child: Chip(
+                                                shape: const StadiumBorder(),
+                                                backgroundColor: Colors.grey.shade200,
+                                                label: Padding(
+                                                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+                                                  child: Text(
+                                                    chatItem!.groupCreatedBy!,
+                                                    style: const TextStyle(
+                                                      color: Colors.black45,
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          if (isFirstMessageOfNewDay) ...[
+                                            Padding(
+                                              padding: const EdgeInsets.only(top: 10.0, bottom: 10),
+                                              child: Chip(
+                                                shape: const StadiumBorder(),
+                                                backgroundColor: Colors.grey.shade200,
+                                                label: Padding(
+                                                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+                                                  child: Text(
+                                                    messageDay,
+                                                    style: const TextStyle(
+                                                      color: Colors.black45,
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                          MessageBox(
+                                            message: messageData.text,
+                                            isSender: isSender,
+                                            data: messageData,
+                                            isSeen: messageData.isSeen,
+                                            messageType: messageData.type,
+                                          ),
+                                        ],
                                       );
                                     },
                                   ),
@@ -236,33 +317,85 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                               ),
                               const Divider(height: 1.0),
                               ChatInput(
-                                revceiverId: chatItem!.id,
-                                isGroupChat: chatItem!.isGroupChat,
+                                revceiverId: chatItemId,
+                                isGroupChat: isGroupChat,
                               ),
-                              //   if (!ids.contains(AppConst.getAccessToken())) ...[
-                              //     Container(
-                              //       width: double.infinity,
-                              //       padding: const EdgeInsets.symmetric(vertical: 15),
-                              //       color: Colors.white,
-                              //       child: const Column(
-                              //         children: [
-                              //           AppText(text: 'You\' no longer a participant in this group.'),
-                              //         ],
-                              //       ),
-                              //     ),
-                              //   ] else ...[
-                              //     ChatInput(
-                              //       revceiverId: chatItemId,
-                              //       isGroupChat: isGroupChat,
-                              //     ),
-                              //   ]
                             ],
                           ),
                         ),
                       );
                     },
                   ),
-                ]
+                if (currentScreen == ChatModalScreenType.userProfile)
+                  UserProfileBody(
+                    profilePic: profilePic,
+                    name: name,
+                    user: user,
+                    contactId: chatItemId,
+                    isGroupChat: isGroupChat,
+                    adminId: adminId,
+                    goToCreateGroup: () {
+                      alreadySelectedUser = true;
+                      currentScreen = ChatModalScreenType.createNewGroup;
+                      setState(() {});
+                    },
+                    onGoBack: () {
+                      currentScreen = ChatModalScreenType.chatScreen;
+                      setState(() {});
+                    },
+                    onPressAddMember: () {
+                      currentScreen = ChatModalScreenType.addNewMember;
+                      setState(() {});
+                    },
+                  ),
+                if (currentScreen == ChatModalScreenType.newChat)
+                  SizedBox(
+                    height: 500,
+                    child: CreateGroupScreen(
+                      createGroup: false,
+                      alreadySelectedUser: alreadySelectedUser ? chatItemId : null,
+                      goToChatScreen: (u) {
+                        currentScreen = ChatModalScreenType.chatScreen;
+                        user = u;
+                        chatItem = null;
+                        setState(() {});
+                      },
+                      goToChatList: () {
+                        currentScreen = ChatModalScreenType.chatList;
+                        setState(() {});
+                      },
+                    ),
+                  ),
+                if (currentScreen == ChatModalScreenType.createNewGroup)
+                  SizedBox(
+                    height: 500,
+                    child: CreateGroupScreen(
+                      createGroup: true,
+                      alreadySelectedUser: alreadySelectedUser ? chatItemId : null,
+                      goToChatScreen: (u) {
+                        currentScreen = ChatModalScreenType.chatScreen;
+                        user = u;
+                        chatItem = null;
+                        setState(() {});
+                      },
+                      goToChatList: () {
+                        currentScreen = ChatModalScreenType.chatList;
+                        setState(() {});
+                      },
+                    ),
+                  ),
+                if (currentScreen == ChatModalScreenType.addNewMember)
+                  SizedBox(
+                    height: 500,
+                    child: AddGroupMembersScreenBody(
+                      contactId: chatItem!.id,
+                      onSubmitCallback: (s) {},
+                      goToUserProfile: () {
+                        currentScreen = ChatModalScreenType.userProfile;
+                        setState(() {});
+                      },
+                    ),
+                  )
               ],
             ),
           ),

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -22,11 +23,9 @@ final chatRepositoryProvider = Provider(
 
 class ChatRepository {
   final FirebaseFirestore firestore;
-  // final FirebaseAuth auth;
 
   ChatRepository({
     required this.firestore,
-    // required this.auth,
   });
 
   Stream<List<ChatGroup>> getChatGroups() {
@@ -369,7 +368,8 @@ class ChatRepository {
 
   void sendFileMessage({
     required BuildContext context,
-    required File file,
+    required File? file,
+    Uint8List? webImage,
     required String recieverUserId,
     required User senderUserData,
     required ProviderRef ref,
@@ -383,6 +383,7 @@ class ChatRepository {
       String imageUrl = await ref.read(commonFirebaseStorageRepositoryProvider).storeFileToFirebase(
             'chat/${messageEnum.type}/${senderUserData.userId}/$recieverUserId/$messageId',
             file,
+            webImage,
           );
 
       User? recieverUserData;
@@ -398,7 +399,7 @@ class ChatRepository {
           contactMsg = '📷 Photo';
           break;
         case MessageEnum.video:
-          contactMsg = '📸 Video';
+          contactMsg = '🎬 Video';
           break;
         case MessageEnum.audio:
           contactMsg = '🎵 Audio';

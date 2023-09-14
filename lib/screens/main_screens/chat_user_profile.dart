@@ -10,8 +10,8 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/screens/main_screens/add_group_member_screen.dart';
 import 'package:yes_broker/widgets/chat/group/group_user_list.dart';
+import 'package:yes_broker/widgets/chat/group/leave_delete_group_button.dart';
 
-import '../../constants/firebase/chatModels/group_model.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import 'chat_list_screen.dart';
 import 'create_group_screen.dart';
@@ -39,115 +39,6 @@ class ChatUserProfile extends ConsumerStatefulWidget {
 }
 
 class _ChatUserProfileState extends ConsumerState<ChatUserProfile> {
-  List<User>? userInfo = [];
-
-  @override
-  void initState() {
-    super.initState();
-    getUserDetails();
-  }
-
-  void getUserDetails() async {
-    final selectedUserIds = ref.read(selectedUserIdsProvider.notifier);
-    final user = await User.getListOfUsersByIds(selectedUserIds.state);
-    userInfo!.addAll(user);
-    setState(() {});
-  }
-
-  void onLeaveGroup() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const AppText(
-            text: 'Leave Group',
-            fontsize: 20,
-            fontWeight: FontWeight.w500,
-          ),
-          content: const AppText(
-            text: 'Are you sure you want to leave the group?',
-            fontWeight: FontWeight.w600,
-            fontsize: 16,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const AppText(
-                text: 'Cancel',
-                fontWeight: FontWeight.w500,
-                fontsize: 16,
-                textColor: AppColor.primary,
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                Group.deleteMember(groupId: widget.contactId, memberIdToDelete: AppConst.getAccessToken());
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-              child: const AppText(
-                text: 'Leave',
-                fontWeight: FontWeight.w500,
-                fontsize: 16,
-                textColor: AppColor.primary,
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void onDeleteGroup() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const AppText(
-            text: 'Delete Group',
-            fontsize: 20,
-            fontWeight: FontWeight.w500,
-          ),
-          content: const AppText(
-            text: 'Are you sure you want to delete the group?',
-            fontWeight: FontWeight.w600,
-            fontsize: 16,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const AppText(
-                text: 'Cancel',
-                fontWeight: FontWeight.w500,
-                fontsize: 16,
-                textColor: AppColor.primary,
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-                Group.deleteGroup(widget.contactId);
-              },
-              child: const AppText(
-                text: 'Delete',
-                fontWeight: FontWeight.w500,
-                fontsize: 16,
-                textColor: AppColor.primary,
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -158,50 +49,9 @@ class _ChatUserProfileState extends ConsumerState<ChatUserProfile> {
         iconTheme: const IconThemeData(size: 22),
         actions: widget.isGroupChat
             ? [
-                PopupMenuButton<String>(
-                  onSelected: (value) {
-                    if (value == 'leave_group') {
-                      onLeaveGroup();
-                    } else if (value == 'delete_group') {
-                      onDeleteGroup();
-                    }
-                  },
-                  itemBuilder: (BuildContext context) {
-                    return [
-                      const PopupMenuItem<String>(
-                        value: 'leave_group',
-                        child: Row(
-                          children: [
-                            Text('Leave Group'),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Icon(
-                              Icons.exit_to_app,
-                              size: 16,
-                            ),
-                          ],
-                        ),
-                      ),
-                      if (AppConst.getAccessToken() == widget.adminId) ...[
-                        const PopupMenuItem<String>(
-                          value: 'delete_group',
-                          child: Row(
-                            children: [
-                              Text('Delete Group'),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Icon(
-                                Icons.delete_outline,
-                                size: 16,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ]
-                    ];
-                  },
+                LeaveDeleteGroupPopupButton(
+                  contactId: widget.contactId,
+                  adminId: widget.adminId!,
                 ),
               ]
             : null,
@@ -228,6 +78,8 @@ class UserProfileBody extends ConsumerStatefulWidget {
   final bool isGroupChat;
   final User? user;
   final Function? onGoBack;
+  final Function? onPressAddMember;
+  final Function? goToCreateGroup;
 
   const UserProfileBody({
     Key? key,
@@ -236,8 +88,10 @@ class UserProfileBody extends ConsumerStatefulWidget {
     required this.name,
     this.adminId,
     required this.isGroupChat,
-    required this.user,
+    this.user,
     this.onGoBack,
+    this.onPressAddMember,
+    this.goToCreateGroup,
   }) : super(key: key);
 
   @override
@@ -250,7 +104,9 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
   @override
   void initState() {
     super.initState();
-    getUserDetails();
+    if (widget.isGroupChat) {
+      getUserDetails();
+    }
   }
 
   void getUserDetails() async {
@@ -258,6 +114,29 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
     final user = await User.getListOfUsersByIds(selectedUserIds.state);
     userInfo!.addAll(user);
     setState(() {});
+  }
+
+  void showEnlargedImage(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: SizedBox(
+              width: width,
+              height: 300,
+              child: Image.network(
+                widget.profilePic.isEmpty ? noImg : widget.profilePic,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -288,7 +167,9 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
                           if (!Responsive.isMobile(context))
                             IconButton(
                               onPressed: () {
-                                widget.onGoBack!();
+                                if (!Responsive.isMobile(context)) {
+                                  widget.onGoBack!();
+                                }
                               },
                               icon: const Icon(
                                 Icons.arrow_back,
@@ -315,19 +196,34 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
                       const SizedBox(
                         height: 15,
                       ),
-                      CircleAvatar(
-                        radius: 60,
-                        backgroundImage: NetworkImage(widget.profilePic.isEmpty ? noImg : widget.profilePic),
+                      GestureDetector(
+                        onTap: () {
+                          if (Responsive.isMobile(context)) {
+                            showEnlargedImage(context);
+                          }
+                        },
+                        child: CircleAvatar(
+                          radius: 60,
+                          backgroundImage: NetworkImage(
+                            widget.profilePic.isEmpty ? noImg : widget.profilePic,
+                          ),
+                        ),
                       ),
                       const SizedBox(
                         height: 15,
                       ),
                       if (widget.isGroupChat)
-                        AppText(
-                          text: '(${userInfo!.length} Participants)',
-                          textColor: Colors.grey,
-                          fontWeight: FontWeight.w700,
-                          fontsize: 12,
+                        Consumer(
+                          builder: (context, ref, child) {
+                            final selectedUserIds = ref.watch(selectedUserIdsProvider);
+
+                            return AppText(
+                              text: '(${selectedUserIds.length} Participants)',
+                              textColor: Colors.grey,
+                              fontWeight: FontWeight.w700,
+                              fontsize: 12,
+                            );
+                          },
                         ),
                       if (!widget.isGroupChat)
                         SizedBox(
@@ -356,7 +252,7 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
                                     width: 12,
                                   ),
                                   AppText(
-                                    text: widget.user != null ? widget.user!.mobile : '91293843854',
+                                    text: widget.user!.mobile,
                                     fontsize: 13,
                                     fontWeight: FontWeight.w500,
                                     textColor: const Color(0xFFA8A8A8),
@@ -402,67 +298,6 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
               const SizedBox(
                 height: 20,
               ),
-
-              // const Padding(
-              //   padding: EdgeInsets.only(left: 30, top: 20, bottom: 10),
-              //   child: AppText(
-              //     text: 'Upcoming Acitivity',
-              //     textColor: Color(0xFF181818),
-              //     fontWeight: FontWeight.w700,
-              //     fontsize: 18,
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 20),
-              //   child: Container(
-              //     width: double.infinity,
-              //     height: 90,
-              //     padding: const EdgeInsets.all(20.0),
-              //     decoration: BoxDecoration(
-              //       color: Colors.white,
-              //       borderRadius: BorderRadius.circular(20.0),
-              //     ),
-              //     child: Container(
-              //       width: double.infinity,
-              //       height: double.infinity,
-              //       decoration: BoxDecoration(
-              //         color: AppColor.secondary,
-              //         borderRadius: BorderRadius.circular(6.0),
-              //       ),
-              //       child: const Padding(
-              //         padding: EdgeInsets.all(8),
-              //         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              //           Row(
-              //             children: [
-              //               CircleAvatar(
-              //                 radius: 3,
-              //                 backgroundColor: AppColor.primary,
-              //               ),
-              //               SizedBox(
-              //                 width: 5,
-              //               ),
-              //               AppText(
-              //                 text: 'Follow Up',
-              //                 fontsize: 12,
-              //                 fontWeight: FontWeight.w400,
-              //                 textColor: AppColor.primary,
-              //               )
-              //             ],
-              //           ),
-              //           SizedBox(
-              //             height: 3,
-              //           ),
-              //           AppText(
-              //             text: 'Google meet 10:30-11:00 am',
-              //             fontsize: 10,
-              //             fontWeight: FontWeight.w300,
-              //             textColor: Color.fromARGB(255, 63, 63, 63),
-              //           )
-              //         ]),
-              //       ),
-              //     ),
-              //   ),
-              // ),
               if (widget.isGroupChat) ...[
                 Padding(
                   padding: const EdgeInsets.only(left: 30, right: 30, top: 25),
@@ -475,38 +310,47 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
                         fontWeight: FontWeight.w700,
                         fontsize: 15,
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Colors.white,
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (ctx) => AddGroupMembers(
-                                  contactId: widget.contactId,
+                      if (widget.adminId == AppConst.getAccessToken())
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.white,
+                          ),
+                          child: InkWell(
+                            onTap: () {
+                              if (Responsive.isMobile(context)) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (ctx) => AddGroupMembers(
+                                      contactId: widget.contactId,
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                widget.onPressAddMember!();
+                              }
+                            },
+                            child: const Row(
+                              children: [
+                                Icon(
+                                  Icons.add_circle_outlined,
+                                  size: 20,
+                                  color: AppColor.primary,
                                 ),
-                              ),
-                            );
-                          },
-                          child: const Row(
-                            children: [
-                              Icon(Icons.add_circle_outlined, size: 20, color: AppColor.primary),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              AppText(
-                                text: 'Add Members',
-                                textColor: Color.fromARGB(255, 57, 57, 57),
-                                fontWeight: FontWeight.w700,
-                                fontsize: 12,
-                              ),
-                            ],
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                AppText(
+                                  text: 'Add Members',
+                                  textColor: Color.fromARGB(255, 57, 57, 57),
+                                  fontWeight: FontWeight.w700,
+                                  fontsize: 12,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ),
@@ -518,35 +362,6 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
                     contactId: widget.contactId,
                   ),
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 20),
-                //   child: ElevatedButton(
-                //     onPressed: () {
-                //        onLeaveGroup();
-                //    },
-                //     style: ElevatedButton.styleFrom(
-                //       shape: RoundedRectangleBorder(
-                //         borderRadius: BorderRadius.circular(10),
-                //       ),
-                //     ),
-                //     child: const Row(
-                //       mainAxisAlignment: MainAxisAlignment.center,
-                //       children: [
-                //         AppText(
-                //           text: 'Leave Group',
-                //           textColor: Colors.white,
-                //           fontWeight: FontWeight.w500,
-                //           fontsize: 17,
-                //         ),
-                //         SizedBox(width: 8.0),
-                //         Icon(
-                //           Icons.exit_to_app,
-                //           size: 20,
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
                 const SizedBox(
                   height: 10,
                 )
@@ -556,14 +371,18 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (ctx) => CreateGroupScreen(
-                          alreadySelectedUser: widget.contactId,
-                          createGroup: true,
+                    if (Responsive.isMobile(context)) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (ctx) => CreateGroupScreen(
+                            alreadySelectedUser: widget.contactId,
+                            createGroup: true,
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    } else {
+                      widget.goToCreateGroup!();
+                    }
                   },
                   child: Row(
                     children: [

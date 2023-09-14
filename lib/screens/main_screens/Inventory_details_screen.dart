@@ -52,7 +52,6 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(myArrayProvider.notifier);
-    // final workItemId = ref.read(selectedWorkItemId.notifier).state;
     return Scaffold(
       appBar: Responsive.isMobile(context)
           ? AppBar(
