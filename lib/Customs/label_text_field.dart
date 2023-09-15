@@ -11,6 +11,7 @@ class LabelTextInputField extends StatelessWidget {
   final bool isDatePicker;
   final bool isMandatory;
   final int? maxLines;
+  final TextInputType keyboardType;
   final TextEditingController inputController;
   final Function(String)? onChanged;
   final FormFieldValidator<String>? validator;
@@ -28,6 +29,7 @@ class LabelTextInputField extends StatelessWidget {
     this.onChanged,
     this.validator,
     this.initialvalue,
+    this.keyboardType = TextInputType.none,
   }) : super(key: key);
 
   @override
@@ -48,7 +50,7 @@ class LabelTextInputField extends StatelessWidget {
               ),
               if (isMandatory)
                 const TextSpan(
-                  text: ' *',
+                  text: '*',
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
@@ -73,6 +75,7 @@ class LabelTextInputField extends StatelessWidget {
           controller: inputController,
           hintText: hintText,
           onChanged: onChanged,
+          keyboardType: keyboardType,
           validator: validator,
           maxLines: maxLines,
           initialvalue: initialvalue,
