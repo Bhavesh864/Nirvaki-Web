@@ -12,11 +12,11 @@ void updateLeadListInventory(WidgetRef ref, option, screenList) {
   // residental flow --------->
 
   if (option == "Rent" && !isCommercial) {
-    questionNotifier.updateScreenIsActive(setTrueInScreens: [], setFalseInScreens: ["S10", "S8"]);
+    questionNotifier.updateScreenIsActive(setTrueInScreens: [], setFalseInScreens: ["S10", "S8", "S7"]);
     isRentNotifier.toggleRentQuestionary(true);
   } else if (option == "Buy" && !isCommercial) {
     isRentNotifier.toggleRentQuestionary(false);
-    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S8", "S10"], setFalseInScreens: []);
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S8", "S10", "S7"], setFalseInScreens: []);
   } else if (option == "Independent House/Villa") {
     plotNotifier.togglePlotQuestionary(false);
     questionNotifier.updateScreenIsActive(setTrueInScreens: ["S6", "S9", "S8"], setFalseInScreens: ["S10"]);
@@ -37,13 +37,13 @@ void updateLeadListInventory(WidgetRef ref, option, screenList) {
   }
 
   // Commercial flow--------->
-  // if (option == "Rent" && isCommercial) {
-  //   questionNotifier.updateScreenIsActive(setTrueInScreens: [], setFalseInScreens: []);
-  //   isRentNotifier.toggleRentQuestionary(true);
-  // } else if (option == "Buy" && isCommercial) {
-  //   isRentNotifier.toggleRentQuestionary(false);
-  //   questionNotifier.updateScreenIsActive(setTrueInScreens: [], setFalseInScreens: []);
-  // }
+  if (option == "Rent" && isCommercial) {
+    questionNotifier.updateScreenIsActive(setTrueInScreens: [], setFalseInScreens: ["S15"]);
+    isRentNotifier.toggleRentQuestionary(true);
+  } else if (option == "Buy" && isCommercial) {
+    isRentNotifier.toggleRentQuestionary(false);
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S15"], setFalseInScreens: []);
+  }
   if (option == "Land") {
     List<String> setTofalse = ["S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S17"];
     questionNotifier.updateScreenIsActive(setTrueInScreens: ["S16", "S6"], setFalseInScreens: setTofalse);

@@ -39,7 +39,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
   final coveredparking = getDataById(state, 22);
   final areaUnit = getDataById(state, 23);
   final superArea = getDataById(state, 24);
-  final carpetArea = getDataById(state, 25);
+  // final carpetArea = getDataById(state, 25);
   final propertyState = getDataById(state, 26);
   final propertyCity = getDataById(state, 27);
   final addressLine1 = getDataById(state, 28);
@@ -61,13 +61,14 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
   final typeofschool = getDataById(state, 44);
   final hospitalrooms = getDataById(state, 45);
   final price = getDataById(state, 46);
-  final priceunit = getDataById(state, 47);
+  // final priceunit = getDataById(state, 47);
   final rentamount = getDataById(state, 48);
-  final rentunit = getDataById(state, 49);
+  // final rentunit = getDataById(state, 49);
   final securityamount = getDataById(state, 50);
   final securityunit = getDataById(state, 51);
   final lockinperiod = getDataById(state, 52);
   final commercialphotos = getDataById(state, 53);
+  final locality = getDataById(state, 54);
   final attachments = getDataById(state, 100);
   final existingInventoryId = getDataById(state, 101);
 
@@ -90,7 +91,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       managerid: currentUserdata.managerid,
       cardType: "IN",
       cardTitle: "$propertyCategory $propertyKind-$propertyCity",
-      cardDescription: "Want to $inventoryCategory her $bedrooms BHK for $price$priceunit rupees",
+      cardDescription: "Want to $inventoryCategory her $bedrooms BHK for $price rupees",
       customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
       cardStatus: "New",
       assignedto: assignedToList,
@@ -99,7 +100,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       createdate: Timestamp.now(),
       propertyarearange: cards.Propertyarearange(arearangestart: superArea, unit: areaUnit),
       roomconfig: cards.Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom),
-      propertypricerange: cards.Propertypricerange(arearangestart: inventoryCategory == "Rent" ? rentamount : price, unit: inventoryCategory == "Rent" ? rentunit : priceunit));
+      propertypricerange: cards.Propertypricerange(arearangestart: inventoryCategory == "Rent" ? rentamount : price));
   final List<Assignedto> assignedListInInventory = assignto.map((user) {
     return Assignedto(
       firstname: user.userfirstname,
@@ -111,7 +112,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
   }).toList();
   final InventoryDetails inventory = InventoryDetails(
       inventoryTitle: "$propertyCategory $propertyKind-$propertyCity",
-      inventoryDescription: "Want to $inventoryCategory her $bedrooms BHK for $price$priceunit rupees",
+      inventoryDescription: "Want to $inventoryCategory her $bedrooms BHK for $price rupees",
       inventoryId: isEdit ? existingInventoryId : "IN$randomId",
       inventoryStatus: "New",
       typeofoffice: typeofoffice,
@@ -135,17 +136,17 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       amenities: amenities,
       attachments: attachments ?? [],
       commercialphotos: commercialphotos,
-      propertyrent: Propertyrent(rentamount: rentamount, rentunit: rentunit, securityamount: securityamount, securityunit: securityunit, lockinperiod: lockinperiod),
+      propertyrent: Propertyrent(rentamount: rentamount, securityamount: securityamount, securityunit: securityunit, lockinperiod: lockinperiod),
       availability: availability,
-      propertyprice: Propertyprice(price: price, unit: priceunit),
+      propertyprice: Propertyprice(price: price),
       reservedparking: Reservedparking(covered: coveredparking),
-      propertyarea: Propertyarea(unit: areaUnit, superarea: superArea, carpetarea: carpetArea),
+      propertyarea: Propertyarea(unit: areaUnit, superarea: superArea),
       plotdetails: Plotdetails(boundarywall: boundaryWall, opensides: openSides),
       customerinfo: Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo ?? mobileNo),
       roomconfig: Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom ?? [], balconies: balconies, bathroom: bathrooms),
       propertyfacing: propertyFacing,
       comments: comments,
-      plotarea: Plotarea(area: carpetArea, unit: areaUnit),
+      plotarea: Plotarea(area: superArea, unit: areaUnit),
       propertyaddress: Propertyaddress(state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, floornumber: floorNumber),
       propertylocation: latlng,
       propertyvideo: video,

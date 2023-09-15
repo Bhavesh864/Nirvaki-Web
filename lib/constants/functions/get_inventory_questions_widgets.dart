@@ -1,9 +1,12 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'package:flutter/material.dart';
+import 'package:number_to_words/number_to_words.dart';
+import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/questionaries/questions_form_photos_view.dart';
 import 'package:yes_broker/widgets/questionaries/assign_user.dart';
@@ -145,6 +148,7 @@ Widget buildInventoryQuestions(
       },
     );
   } else if (question.questionOptionType == 'textfield') {
+    String textResult = '';
     final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
     TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
     bool isChecked = true;
@@ -167,35 +171,69 @@ Widget buildInventoryQuestions(
                   },
                 ),
               if (!isChecked)
-                LabelTextInputField(
-                  onChanged: (newvalue) {
-                    notify.add({"id": question.questionId, "item": newvalue.trim()});
-                  },
-                  inputController: controller,
-                  labelText: question.questionTitle,
-                  validator: (value) {
-                    if (isChecked && value!.isEmpty) {
-                      return "Please enter ${question.questionTitle}";
-                    }
-                    return null;
-                  },
+                Column(
+                  children: [
+                    LabelTextInputField(
+                      onChanged: (newvalue) {
+                        notify.add({"id": question.questionId, "item": newvalue.trim()});
+                      },
+                      inputController: controller,
+                      labelText: question.questionTitle,
+                      validator: (value) {
+                        if (isChecked && value!.isEmpty) {
+                          return "Please enter ${question.questionTitle}";
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
                 ),
             ],
           );
         },
       );
     }
-    return LabelTextInputField(
-      inputController: controller,
-      labelText: question.questionTitle,
-      onChanged: (newvalue) {
-        notify.add({"id": question.questionId, "item": newvalue.trim()});
-      },
-      validator: (value) {
-        if (value!.isEmpty) {
-          return "Please enter ${question.questionTitle}";
-        }
-        return null;
+    return StatefulBuilder(
+      builder: (context, setState) {
+        final isPriceField = question.questionId == 46 || question.questionId == 48 || question.questionId == 50;
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            LabelTextInputField(
+              keyboardType: isPriceField ? TextInputType.number : TextInputType.name,
+              inputController: controller,
+              labelText: question.questionTitle,
+              onChanged: (newvalue) {
+                try {
+                  int number = int.parse(newvalue);
+                  String words = NumberToWord().convert("en-in", number);
+                  setState(() {
+                    textResult = words;
+                  });
+                } catch (e) {
+                  setState(() {
+                    textResult = '';
+                  });
+                }
+                notify.add({"id": question.questionId, "item": newvalue.trim()});
+              },
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return "Please enter ${question.questionTitle}";
+                }
+                return null;
+              },
+            ),
+            isPriceField
+                ? AppText(
+                    text: textResult,
+                    fontsize: 13,
+                    fontWeight: FontWeight.bold,
+                  )
+                : const SizedBox.shrink(),
+          ],
+        );
       },
     );
   } else if (question.questionOptionType == 'textarea') {
