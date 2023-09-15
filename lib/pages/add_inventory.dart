@@ -76,11 +76,15 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     } else {}
   }
 
-  goBack(List<int> id) {
+  goBack(List<int> id, type) {
     if (currentScreenIndex > 0) {
       setState(() {
         currentScreenIndex--;
-        !isEdit ? ref.read(myArrayProvider.notifier).remove(id) : null;
+        !isEdit
+            ? type
+                ? null
+                : ref.read(myArrayProvider.notifier).remove(id)
+            : null;
         pageController!.previousPage(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
@@ -288,7 +292,9 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
               onPressed: () {
                 final currentScreenQuestions = screensDataList[currentScreenIndex].questions;
                 final ids = currentScreenQuestions.map((q) => q.questionId).toList();
-                goBack(ids);
+                final allquestion = currentScreenQuestions.map((q) => q.questionOptionType).toList();
+                final questiontype = allquestion.any((element) => element == "textfield");
+                goBack(ids, questiontype);
               },
               icon: const Icon(
                 Icons.arrow_back,
