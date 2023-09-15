@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -117,23 +118,31 @@ class _ChatInputState extends ConsumerState<ChatInput> {
                 ),
               ),
               Expanded(
-                child: TextField(
-                  textInputAction: TextInputAction.send,
-                  focusNode: focusNode,
-                  controller: messageController,
-                  minLines: 1,
-                  maxLines: 7,
-                  textCapitalization: TextCapitalization.sentences,
-                  autocorrect: true,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    hintText: 'Start typing...',
-                    hintStyle: TextStyle(fontSize: 12),
-                  ),
-                  onSubmitted: (_) {
-                    sendTextMessage();
+                child: RawKeyboardListener(
+                  focusNode: FocusNode(),
+                  onKey: (RawKeyEvent event) {
+                    if (event is RawKeyDownEvent && event.logicalKey == LogicalKeyboardKey.enter) {
+                      sendTextMessage();
+                    }
                   },
+                  child: TextField(
+                    textInputAction: TextInputAction.send,
+                    focusNode: focusNode,
+                    controller: messageController,
+                    minLines: 1,
+                    maxLines: 7,
+                    textCapitalization: TextCapitalization.sentences,
+                    autocorrect: true,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      hintText: 'Start typing...',
+                      hintStyle: TextStyle(fontSize: 12),
+                    ),
+                    onSubmitted: (_) {
+                      sendTextMessage();
+                    },
+                  ),
                 ),
               ),
               InkWell(

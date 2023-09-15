@@ -868,7 +868,14 @@ class Attachments {
   String? createdby;
   Timestamp? createddate;
 
-  Attachments({this.title, this.type, this.path, this.createdby, this.createddate, this.id});
+  Attachments({
+    this.title,
+    this.type,
+    this.path,
+    this.createdby,
+    this.createddate,
+    this.id,
+  });
 
   Attachments.fromJson(Map<String, dynamic> json) {
     if (json["title"] is String) {
