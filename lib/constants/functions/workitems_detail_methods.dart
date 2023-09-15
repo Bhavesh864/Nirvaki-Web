@@ -7,7 +7,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/label_text_field.dart';
-import 'package:yes_broker/customs/custom_text.dart';
 
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
@@ -16,6 +15,7 @@ import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart' a
 import 'package:yes_broker/constants/firebase/random_uid.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 
+import '../../Customs/custom_text.dart';
 import '../../customs/custom_fields.dart';
 import '../../customs/dropdown_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
@@ -381,63 +381,41 @@ void showAddCalendarModal(
                     ),
                     Row(
                       children: [
-                        Expanded(
+                        SizedBox(
+                          width: 200,
                           child: ChipButton(
                             text: 'Meeting',
                             bgColor: AppColor.primary.withOpacity(0.05),
                             onSelect: () {},
                           ),
                         ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: ChipButton(
-                            text: 'Follow Up',
-                            bgColor: AppColor.primary.withOpacity(0.05),
-                            onSelect: () {},
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: ChipButton(
-                            text: 'Reminder',
-                            bgColor: AppColor.primary.withOpacity(0.05),
-                            onSelect: () {},
-                          ),
-                        ),
                       ],
                     ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     LabelTextInputField(
-                      labelText: 'Task Name',
+                      labelText: 'Title',
                       inputController: TextEditingController(),
                     ),
                     Row(
                       children: [
                         Expanded(
                           child: LabelTextInputField(
-                            labelText: 'Due Date',
+                            labelText: 'Date & Time',
                             inputController: TextEditingController(),
                             isDatePicker: true,
                             // initialvalue: '08/05/2023',
                           ),
                         ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Expanded(
-                          child: LabelTextInputField(
-                            labelText: 'Time',
-                            inputController: TextEditingController(),
-                          ),
-                        ),
                       ],
                     ),
                     LabelTextAreaField(
-                      labelText: 'Task Description',
+                      labelText: 'Information',
                       inputController: TextEditingController(),
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     Align(
                       alignment: Alignment.centerRight,
