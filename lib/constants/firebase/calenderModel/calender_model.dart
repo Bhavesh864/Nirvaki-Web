@@ -81,4 +81,13 @@ class CalenderModel {
       return [];
     }
   }
+
+  static Future<void> deleteCalenderModel(String id) async {
+    try {
+      await calenderModelCollection.doc(id).delete();
+      print("deleted successfully");
+    } catch (error) {
+      print('Failed to delete Inventory item: $error');
+    }
+  }
 }
