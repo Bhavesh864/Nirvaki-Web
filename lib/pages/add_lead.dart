@@ -10,6 +10,7 @@ import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart'
 
 import 'package:yes_broker/constants/functions/get_lead_questions.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/pages/add_inventory.dart';
 import 'package:yes_broker/riverpodstate/filterQuestions/lead_all_question.dart';
 import 'package:yes_broker/riverpodstate/lead_filter_question.dart';
 import 'package:yes_broker/widgets/questionaries/workitem_success.dart';
@@ -124,7 +125,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
-            final String res = selectedValues.isNotEmpty ? selectedValues[0]["item"] : "Residential";
+            final res = selectedValues.isNotEmpty ? getWhichItemIsSelectedBYId(selectedValues, 1) : "Residential";
             LeadQuestions? screenData = getCurrentLead(snapshot, res);
             List<Screen> screensDataList = screenData!.screens;
             if (allLeadQuestions.isEmpty) {

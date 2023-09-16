@@ -1,4 +1,4 @@
-// List<LeadQuestions> screensList = [
+//  List<LeadQuestions> screensList = [
 //       LeadQuestions(
 //         type: "Commercial",
 //         screens: [
@@ -98,7 +98,7 @@
 //                 questionOption: [
 //                   "Land",
 //                   "Constructed Property",
-//                   "Under Construction ",
+//                   "Under Construction",
 //                 ],
 //               ),
 //             ],
@@ -307,7 +307,7 @@
 //                 questionId: 20,
 //                 questionOptionType: "chip",
 //                 questionTitle: "Expected time possession ?",
-//                 questionOption: ["Within 3 months", "Within 3 months", "Within 1 Year", "Within 2 Year", "Within 3 Year"],
+//                 questionOption: ["Within 3 months", "Within 6 months", "Within 1 Year", "Within 2 Year", "Within 3 Year"],
 //               ),
 //             ],
 //             isActive: true,
@@ -326,13 +326,7 @@
 //               Question(
 //                 questionId: 24,
 //                 questionOptionType: "textfield",
-//                 questionTitle: "Super Area",
-//                 questionOption: "",
-//               ),
-//               Question(
-//                 questionId: 25,
-//                 questionOptionType: "textfield",
-//                 questionTitle: "Carpet Area",
+//                 questionTitle: "Property Area",
 //                 questionOption: "",
 //               ),
 //             ],
@@ -349,12 +343,6 @@
 //                 questionTitle: "Budget range",
 //                 questionOption: "",
 //               ),
-//               Question(
-//                 questionId: 33,
-//                 questionOptionType: "smallchip",
-//                 questionTitle: "",
-//                 questionOption: ["Crore", "Lakh", "Thousands"],
-//               ),
 //             ],
 //             isActive: true,
 //             title: "What is the customers budget range?",
@@ -368,13 +356,19 @@
 //                 questionId: 26,
 //                 questionOptionType: "dropdown",
 //                 questionTitle: "State",
-//                 questionOption: [],
+//                 questionOption: ["Rajasthan"],
 //               ),
 //               Question(
 //                 questionId: 27,
 //                 questionOptionType: "dropdown",
 //                 questionTitle: "City",
-//                 questionOption: [],
+//                 questionOption: ["Bikaner"],
+//               ),
+//               Question(
+//                 questionId: 54,
+//                 questionOptionType: "dropdown",
+//                 questionTitle: "Locality",
+//                 questionOption: ["Pawan-puri", "vallabh garden"],
 //               ),
 //               Question(
 //                 questionId: 28,
@@ -390,9 +384,9 @@
 //               ),
 //               Question(
 //                 questionId: 30,
-//                 questionOptionType: "textfield",
-//                 questionTitle: "Floor Number",
-//                 questionOption: "",
+//                 questionOptionType: "dropdown",
+//                 questionTitle: "Preferred Floor",
+//                 questionOption: ["Lower floor", "Middle floor", "Higher floor", "No preference"],
 //               ),
 //             ],
 //             title: "Property Address",
