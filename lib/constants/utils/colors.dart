@@ -4,6 +4,8 @@ class AppColor {
   static const primary = Color(0xFF4460EF);
   static const secondary = Color(0x0D4460EF);
 
+  static const inputFieldBorderColor = Color(0xFFADB5BD);
+
   static const cardColor = Color(0xFFFFFFFF);
   static const chipGreyColor = Color(0x0D200E32);
 

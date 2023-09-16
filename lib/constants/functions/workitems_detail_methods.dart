@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:yes_broker/Customs/label_text_field.dart';
 
 import 'package:yes_broker/customs/responsive.dart';
@@ -14,6 +15,7 @@ import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.da
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart' as lead;
 import 'package:yes_broker/constants/firebase/random_uid.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/customs/snackbar.dart';
 
 import '../../Customs/custom_text.dart';
 import '../../customs/custom_fields.dart';
@@ -21,6 +23,7 @@ import '../../customs/dropdown_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
 import '../firebase/detailsModels/todo_details.dart';
 import '../utils/colors.dart';
+import '../validation/basic_validation.dart';
 
 void showImageSliderCarousel(List<String> imageUrls, int initialIndex, BuildContext context) {
   showDialog(
@@ -350,25 +353,87 @@ void showOwnerDetailsAndAssignToBottomSheet(BuildContext context, String title, 
   );
 }
 
+String toDate(DateTime dateTime) {
+  final date = DateFormat.yMMMEd().format(dateTime);
+
+  return date;
+}
+
+String toTime(DateTime dateTime) {
+  final date = DateFormat('hh:mm a').format(dateTime);
+
+  return date;
+}
+
 void showAddCalendarModal(
   BuildContext context,
+  TextEditingController titleController,
+  TextEditingController dateController,
+  TextEditingController timeController,
+  TextEditingController descriptionController,
+  Function onSubmit,
 ) {
+  final formkey = GlobalKey<FormState>();
+  DateTime pickedDate = DateTime.now();
+
+  Future<DateTime?> pickDateTime(DateTime initialDate, {required bool pickDate, DateTime? firstDate}) async {
+    if (pickDate) {
+      final date = await showDatePicker(
+        context: context,
+        initialDate: initialDate,
+        firstDate: firstDate ?? DateTime(2015, 8),
+        lastDate: DateTime(2101),
+      );
+
+      if (date == null) return null;
+
+      final time = Duration(hours: initialDate.hour, minutes: initialDate.minute);
+
+      return date.add(time);
+    } else {
+      final timeOfDay = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(initialDate),
+      );
+
+      if (timeOfDay == null) return null;
+
+      final date = DateTime(initialDate.year, initialDate.month, initialDate.day);
+      final time = Duration(hours: timeOfDay.hour, minutes: timeOfDay.minute);
+
+      return date.add(time);
+    }
+  }
+
+  Future pickFromDateTime({required bool pickDate}) async {
+    final date = await pickDateTime(pickedDate, pickDate: pickDate);
+
+    if (pickDate) {
+      pickedDate = date!;
+      dateController.text = toDate(date);
+    } else {
+      // pickedTime = date!;
+      timeController.text = toTime(date!);
+    }
+  }
+
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return StatefulBuilder(
-        builder: (context, innerSetState) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Dialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              child: Container(
-                padding: const EdgeInsets.all(15),
-                height: 500,
-                width: Responsive.isMobile(context) ? width : 650,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                ),
+      return StatefulBuilder(builder: (context, innerSetState) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Container(
+              padding: const EdgeInsets.all(15),
+              height: 550,
+              width: Responsive.isMobile(context) ? width : 650,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Form(
+                key: formkey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -391,37 +456,89 @@ void showAddCalendarModal(
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     LabelTextInputField(
                       labelText: 'Title',
-                      inputController: TextEditingController(),
+                      inputController: titleController,
+                      validator: (value) => validateForNormalFeild(props: "Title", value: value),
                     ),
                     Row(
                       children: [
                         Expanded(
-                          child: LabelTextInputField(
-                            labelText: 'Date & Time',
-                            inputController: TextEditingController(),
-                            isDatePicker: true,
-                            // initialvalue: '08/05/2023',
+                          flex: 2,
+                          child: GestureDetector(
+                            onTap: () {
+                              pickFromDateTime(pickDate: true);
+
+                              // showDatePicker(
+                              //   context: context,
+                              //   initialDate: DateTime.now(),
+                              //   firstDate: DateTime.now(),
+                              //   lastDate: DateTime(DateTime.now().year + 1),
+                              // ).then(
+                              //   (pickedDate) {
+                              //     if (pickedDate == null) {
+                              //       return;
+                              //     }
+                              //     dateController.text = DateFormat.yMMMEd().format(pickedDate);
+                              //   },
+                              // );
+                            },
+                            child: LabelTextInputField(
+                              onChanged: (p0) {},
+                              labelText: 'Date ',
+                              inputController: dateController,
+                              isDatePicker: true,
+                              validator: (value) => validateForNormalFeild(props: "Title", value: value),
+                              hintText: 'DD/MM/YYYY',
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              pickFromDateTime(pickDate: false);
+                            },
+                            child: LabelTextInputField(
+                              labelText: 'Time',
+                              isDatePicker: true,
+                              inputController: timeController,
+                              rightIcon: Icons.schedule,
+                              validator: (value) => validateForNormalFeild(props: "Title", value: value),
+                              hintText: 'Select Time',
+                            ),
                           ),
                         ),
                       ],
                     ),
                     LabelTextAreaField(
-                      labelText: 'Information',
-                      inputController: TextEditingController(),
+                      labelText: 'Details',
+                      inputController: descriptionController,
+                      validator: (value) => validateForNormalFeild(props: "Details", value: value),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Align(
                       alignment: Alignment.centerRight,
                       child: CustomButton(
                         text: 'Save',
-                        onPressed: () {},
+                        onPressed: () {
+                          if (formkey.currentState!.validate()) {
+                            onSubmit();
+                            titleController.clear();
+                            descriptionController.clear();
+                            dateController.clear();
+                            timeController.clear();
+                            Navigator.of(context).pop();
+                            customSnackBar(context: context, text: 'Item added successfully!');
+                          } else {}
+                        },
                         width: 70,
                         height: 39,
                       ),
@@ -430,9 +547,9 @@ void showAddCalendarModal(
                 ),
               ),
             ),
-          );
-        },
-      );
+          ),
+        );
+      });
     },
   );
 }
