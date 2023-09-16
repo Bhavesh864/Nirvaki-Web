@@ -69,6 +69,7 @@ dependencies:
   emoji_picker_flutter: ^1.6.1
   cached_network_image: ^3.2.3
   url_launcher: ^6.1.14
+  flutter_file_downloader: ^1.1.2
   number_to_words: ^1.0.0
 
 dev_dependencies:

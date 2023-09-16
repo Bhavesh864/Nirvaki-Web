@@ -1,5 +1,4 @@
-// import 'dart:html';
-
+// import "dart:html" show AnchorElement;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -15,16 +14,69 @@ import '../../../constants/functions/workitems_detail_methods.dart';
 import '../../../constants/utils/constants.dart';
 import '../mapview_widget.dart';
 
+class AttachmentPreviewDialog extends StatelessWidget {
+  final String attachmentPath;
+
+  const AttachmentPreviewDialog({super.key, required this.attachmentPath});
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.8,
+        child: Image.network(attachmentPath),
+      ),
+    );
+  }
+}
+
 // class CustomAttachment {
 //   Platform selectedFileName;
 //   List<PlatformFile> pickedFilesLists = [];
-//   List<String> selectedDocNameList = [];
+//   List<inving> selectedDocNameList = [];
 
 //   CustomAttachment({
 //     required this.selectedFileName,
 //     required this.pickedFilesLists,
 //     required this.selectedDocNameList,
 //   });
+// }
+
+// Future<String> downloadFile(String url, String fileName, String dir) async {
+//   HttpClient httpClient = HttpClient();
+//   File file;
+//   String filePath = '';
+//   String myUrl = '';
+
+//   try {
+//     myUrl = '$url';
+//     var request = await httpClient.getUrl(Uri.parse(myUrl));
+//     var response = await request.close();
+//     if (response.statusCode == 200) {
+//       var bytes = await consolidateHttpClientResponseBytes(response);
+//       filePath = '$dir/$fileName';
+//       file = File(filePath);
+//       await file.writeAsBytes(bytes);
+//     } else {
+//       filePath = 'Error code: ${response.statusCode}';
+//     }
+//   } catch (ex) {
+//     filePath = 'Can not fetch url';
+//     print(ex);
+//   }
+
+//   return filePath;
+// }
+
+// static var httpClient = new HttpClient();
+// Future<File> _downloadFile(String url, String filename) async {
+//   var request = await httpClient.getUrl(Uri.parse(url));
+//   var response = await request.close();
+//   var bytes = await consolidateHttpClientResponseBytes(response);
+//   String dir = (await getApplicationDocumentsDirectory()).path;
+//   File file = new File('$dir/$filename');
+//   await file.writeAsBytes(bytes);
+//   return file;
 // }
 
 // ignore: must_be_immutable
@@ -213,28 +265,38 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                         final attachment = attachments[index];
                         return Stack(
                           children: [
-                            Container(
-                              height: 99,
-                              margin: const EdgeInsets.only(right: 15),
-                              width: 108,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey.withOpacity(0.5)),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(
-                                    Icons.image_outlined,
-                                    size: 40,
-                                  ),
-                                  CustomText(
-                                    title: widget.data.attachments[index].title,
-                                    size: 13,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ],
+                            GestureDetector(
+                              onTap: () async {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AttachmentPreviewDialog(attachmentPath: attachment.path);
+                                  },
+                                );
+                              },
+                              child: Container(
+                                height: 110,
+                                margin: const EdgeInsets.only(right: 15),
+                                width: 108,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey.withOpacity(0.5)),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.image_outlined,
+                                      size: 40,
+                                    ),
+                                    CustomText(
+                                      title: widget.data.attachments[index].title,
+                                      size: 13,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             Positioned(
@@ -247,11 +309,23 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                       Icons.download_for_offline,
                                       size: 18,
                                     ),
-                                    onTap: () {
+                                    onTap: () async {
+                                      // FileDownloader.downloadFile(
+                                      //   url: attachment.path.trim(),
+                                      //   onDownloadError: (errorMessage) {
+                                      //     print('errorMessage');
+                                      //   },
+                                      //   onDownloadCompleted: (path) {
+                                      //     print(path);
+                                      //   },
+                                      // );
+
+                                      // final res = await downloadFile(attachment.path, 'fileName', 'download');
+
                                       // if (kIsWeb) {
-                                      //   AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                      //   anchorElement.download = 'Attachment file';
-                                      //   anchorElement.click();
+                                      // AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                      // anchorElement.download = 'Attachment file';
+                                      // anchorElement.click();
                                       // }
                                     },
                                   ),

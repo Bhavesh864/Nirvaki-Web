@@ -13,7 +13,6 @@ import '../Customs/custom_text.dart';
 import '../chat/controller/chat_controller.dart';
 import '../constants/app_constant.dart';
 import '../constants/functions/datetime/date_time.dart';
-import '../constants/utils/constants.dart';
 import 'chat/chat_input.dart';
 import 'chat/chat_screen_header.dart';
 import 'chat/message_box.dart';
@@ -87,7 +86,7 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
               vertical: currentScreen == ChatModalScreenType.chatList ? 20 : 0,
             ),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
+              // mainAxisSize: MainAxisSize.min,
               children: [
                 if (currentScreen == ChatModalScreenType.chatList) ...[
                   Padding(
@@ -130,8 +129,8 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: 470,
+                  Expanded(
+                    // height: 470,
                     child: Card(
                       elevation: 0,
                       child: Column(
@@ -170,11 +169,7 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                         return Text('Error ${snapshot.error}');
                       }
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return SizedBox(
-                          height: 470,
-                          width: width,
-                          child: const Loader(),
-                        );
+                        return const Loader();
                       }
 
                       SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -190,9 +185,10 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                           FocusScope.of(context).unfocus();
                         },
                         child: Container(
-                          height: 532,
+                          height: 530,
                           margin: const EdgeInsets.only(top: 10),
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Container(
                                 margin: const EdgeInsets.only(bottom: 5),
@@ -351,8 +347,8 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                     },
                   ),
                 if (currentScreen == ChatModalScreenType.newChat)
-                  SizedBox(
-                    height: 500,
+                  Expanded(
+                    // height: 500,
                     child: CreateGroupScreen(
                       createGroup: false,
                       alreadySelectedUser: alreadySelectedUser ? chatItemId : null,
@@ -369,8 +365,8 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                     ),
                   ),
                 if (currentScreen == ChatModalScreenType.createNewGroup)
-                  SizedBox(
-                    height: 500,
+                  Expanded(
+                    // height: 500,
                     child: CreateGroupScreen(
                       createGroup: true,
                       alreadySelectedUser: alreadySelectedUser ? chatItemId : null,
@@ -387,8 +383,8 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                     ),
                   ),
                 if (currentScreen == ChatModalScreenType.addNewMember)
-                  SizedBox(
-                    height: 500,
+                  Expanded(
+                    // height: 500,
                     child: AddGroupMembersScreenBody(
                       contactId: chatItem!.id,
                       onSubmitCallback: (s) {},
