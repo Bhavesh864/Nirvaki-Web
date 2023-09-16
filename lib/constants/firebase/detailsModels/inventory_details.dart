@@ -516,70 +516,96 @@ class InventoryDetails {
   }
 }
 
-class Propertyphotos {
-  List<String>? bedroom;
-  List<String>? bathroom;
-  List<String>? kitchen;
-  List<String>? pujaroom;
-  List<String>? servantroom;
-  List<String>? studyroom;
-  List<String>? officeroom;
-  List<String>? frontelevation;
+// class Propertyphotos {
+//   List<String>? bedroom;
+//   List<String>? bathroom;
+//   List<String>? kitchen;
+//   List<String>? pujaroom;
+//   List<String>? servantroom;
+//   List<String>? studyroom;
+//   List<String>? officeroom;
+//   List<String>? frontelevation;
 
-  Propertyphotos({this.bedroom, this.bathroom, this.kitchen, this.pujaroom, this.servantroom, this.studyroom, this.officeroom, this.frontelevation});
+//   Propertyphotos({this.bedroom, this.bathroom, this.kitchen, this.pujaroom, this.servantroom, this.studyroom, this.officeroom, this.frontelevation});
+
+//   Propertyphotos.fromJson(Map<String, dynamic> json) {
+//     if (json["bedroom"] is List) {
+//       bedroom = json["bedroom"] == null ? null : List<String>.from(json["bedroom"]);
+//     }
+//     if (json["bathroom"] is List) {
+//       bathroom = json["bathroom"] == null ? null : List<String>.from(json["bathroom"]);
+//     }
+//     if (json["kitchen"] is List) {
+//       kitchen = json["kitchen"] == null ? null : List<String>.from(json["kitchen"]);
+//     }
+//     if (json["pujaroom"] is List) {
+//       pujaroom = json["pujaroom"] == null ? null : List<String>.from(json["pujaroom"]);
+//     }
+//     if (json["servantroom"] is List) {
+//       servantroom = json["servantroom"] == null ? null : List<String>.from(json["servantroom"]);
+//     }
+//     if (json["studyroom"] is List) {
+//       studyroom = json["studyroom"] == null ? null : List<String>.from(json["studyroom"]);
+//     }
+//     if (json["officeroom"] is List) {
+//       officeroom = json["officeroom"] == null ? null : List<String>.from(json["officeroom"]);
+//     }
+//     if (json["frontelevation"] is List) {
+//       frontelevation = json["frontelevation"] == null ? null : List<String>.from(json["frontelevation"]);
+//     }
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = <String, dynamic>{};
+//     if (bedroom != null) {
+//       data["bedroom"] = bedroom;
+//     }
+//     if (bathroom != null) {
+//       data["bathroom"] = bathroom;
+//     }
+//     if (kitchen != null) {
+//       data["kitchen"] = kitchen;
+//     }
+//     if (pujaroom != null) {
+//       data["pujaroom"] = pujaroom;
+//     }
+//     if (servantroom != null) {
+//       data["servantroom"] = servantroom;
+//     }
+//     if (studyroom != null) {
+//       data["studyroom"] = studyroom;
+//     }
+//     if (officeroom != null) {
+//       data["officeroom"] = officeroom;
+//     }
+//     if (frontelevation != null) {
+//       data["frontelevation"] = frontelevation;
+//     }
+//     return data;
+//   }
+// }
+class Propertyphotos {
+  List<String>? imageUrl;
+  List<String>? imageTitle;
+
+  Propertyphotos({this.imageUrl, this.imageTitle});
 
   Propertyphotos.fromJson(Map<String, dynamic> json) {
-    if (json["bedroom"] is List) {
-      bedroom = json["bedroom"] == null ? null : List<String>.from(json["bedroom"]);
+    if (json["imageUrl"] is List) {
+      imageUrl = json["imageUrl"] == null ? null : List<String>.from(json["imageUrl"]);
     }
-    if (json["bathroom"] is List) {
-      bathroom = json["bathroom"] == null ? null : List<String>.from(json["bathroom"]);
-    }
-    if (json["kitchen"] is List) {
-      kitchen = json["kitchen"] == null ? null : List<String>.from(json["kitchen"]);
-    }
-    if (json["pujaroom"] is List) {
-      pujaroom = json["pujaroom"] == null ? null : List<String>.from(json["pujaroom"]);
-    }
-    if (json["servantroom"] is List) {
-      servantroom = json["servantroom"] == null ? null : List<String>.from(json["servantroom"]);
-    }
-    if (json["studyroom"] is List) {
-      studyroom = json["studyroom"] == null ? null : List<String>.from(json["studyroom"]);
-    }
-    if (json["officeroom"] is List) {
-      officeroom = json["officeroom"] == null ? null : List<String>.from(json["officeroom"]);
-    }
-    if (json["frontelevation"] is List) {
-      frontelevation = json["frontelevation"] == null ? null : List<String>.from(json["frontelevation"]);
+    if (json["imageTitle"] is List) {
+      imageTitle = json["imageTitle"] == null ? null : List<String>.from(json["imageTitle"]);
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (bedroom != null) {
-      data["bedroom"] = bedroom;
+    if (imageUrl != null) {
+      data["imageUrl"] = imageUrl;
     }
-    if (bathroom != null) {
-      data["bathroom"] = bathroom;
-    }
-    if (kitchen != null) {
-      data["kitchen"] = kitchen;
-    }
-    if (pujaroom != null) {
-      data["pujaroom"] = pujaroom;
-    }
-    if (servantroom != null) {
-      data["servantroom"] = servantroom;
-    }
-    if (studyroom != null) {
-      data["studyroom"] = studyroom;
-    }
-    if (officeroom != null) {
-      data["officeroom"] = officeroom;
-    }
-    if (frontelevation != null) {
-      data["frontelevation"] = frontelevation;
+    if (imageTitle != null) {
+      data["imageTitle"] = imageTitle;
     }
     return data;
   }
