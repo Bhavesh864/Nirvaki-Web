@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 
 class AssignUser extends ConsumerStatefulWidget {
@@ -146,7 +148,12 @@ class _AssignUserState extends ConsumerState<AssignUser> {
             return Padding(
               padding: const EdgeInsets.all(4),
               child: Chip(
-                label: Text('${user.userfirstname} ${user.userlastname}'),
+                backgroundColor: AppColor.secondary,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                label: AppText(
+                  text: '${user.userfirstname} ${user.userlastname}',
+                  fontsize: 14,
+                ),
                 onDeleted: () {
                   setState(() {
                     assignUsers.remove(user);
