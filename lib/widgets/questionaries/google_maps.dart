@@ -7,6 +7,7 @@ class CustomGoogleMap extends StatefulWidget {
   final String cityName;
   final String address1;
   final String address2;
+  final String locality;
   final bool isReadOnly;
   final void Function(LatLng) onLatLngSelected;
 
@@ -18,6 +19,7 @@ class CustomGoogleMap extends StatefulWidget {
     required this.address1,
     required this.address2,
     this.isReadOnly = false,
+    required this.locality,
   }) : super(key: key);
 
   @override
@@ -37,7 +39,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   }
 
   Future<void> _loadMap() async {
-    final placeName = '${widget.stateName} ${widget.cityName} ${widget.address1} ${widget.address2}';
+    final placeName = '${widget.stateName} ${widget.cityName} ${widget.locality} ${widget.address1} ${widget.address2}';
     location = await getLatLng(placeName);
     if (location != null && mapController != null) {
       mapController!.animateCamera(CameraUpdate.newLatLng(location!));

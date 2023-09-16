@@ -12,7 +12,8 @@ class MapViewWidget extends StatelessWidget {
   final String city;
   final String addressline1;
   final String? addressline2;
-  const MapViewWidget({super.key, required this.state, required this.city, required this.addressline1, required this.addressline2});
+  final String? locality;
+  const MapViewWidget({super.key, required this.state, required this.city, required this.addressline1, required this.addressline2, this.locality});
 
   String getGoogleMapsLink(LatLng latLng) {
     String link = 'https://www.google.com/maps/search/?api=1&query=${latLng.latitude},${latLng.longitude}';
@@ -61,6 +62,7 @@ class MapViewWidget extends StatelessWidget {
             cityName: city,
             address1: addressline1,
             address2: addressline2 ?? 'wtp',
+            locality: locality!,
           ),
         ),
       ],
