@@ -76,11 +76,15 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     } else {}
   }
 
-  goBack(List<int> id) {
+  goBack(List<int> id, type) {
     if (currentScreenIndex > 0) {
       setState(() {
         currentScreenIndex--;
-        !isEdit ? ref.read(myArrayProvider.notifier).remove(id) : null;
+        !isEdit
+            ? type
+                ? null
+                : ref.read(myArrayProvider.notifier).remove(id)
+            : null;
         pageController!.previousPage(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
@@ -108,13 +112,6 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     final isPlotSelected = ref.read(filterPlotQuestion);
     final allInventoryQuestionsNotifier = ref.read(allInventoryQuestion.notifier);
     final allInventoryQuestions = ref.read(allInventoryQuestion);
-    // final isCommericalSelected = ref.read(filterCommercialQuestion);
-    // final isLandSelected = ref.read(filterLandQuestion);
-    // final isContructionPropertySelected = ref.read(filterConstructedPropertyQuestion);
-    // final isUnderContructionPropertySelected = ref.read(filterUnderConstructionPropertyQuestion);
-    // final isOfficeSelected = ref.read(filterOfficeQuestion);
-    // final isRetailSelected = ref.read(filterRetailQuestion);
-    // final isIndustrialelected = ref.read(filterIndustrialQuestion);
     return Scaffold(
       body: FutureBuilder<List<InventoryQuestions>>(
           future: getQuestions,
@@ -124,7 +121,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (snapshot.hasData) {
-              final res = selectedValues.isNotEmpty ? selectedValues[0]["item"] : "Residential";
+              final res = selectedValues.isNotEmpty ? getWhichItemIsSelectedBYId(selectedValues, 1) : "Residential";
               InventoryQuestions? screenData = getcurrentInventory(snapshot, res);
               List<Screen> screensDataList = screenData!.screens;
 
@@ -288,7 +285,9 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
               onPressed: () {
                 final currentScreenQuestions = screensDataList[currentScreenIndex].questions;
                 final ids = currentScreenQuestions.map((q) => q.questionId).toList();
-                goBack(ids);
+                final allquestion = currentScreenQuestions.map((q) => q.questionOptionType).toList();
+                final questiontype = allquestion.any((element) => element == "textfield" || element == "photo");
+                goBack(ids, questiontype);
               },
               icon: const Icon(
                 Icons.arrow_back,
@@ -301,4 +300,11 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
       },
     );
   }
+}
+
+String? getWhichItemIsSelectedBYId(List<Map<String, dynamic>> list, int id) {
+  final item = list.firstWhere(
+    (item) => item['id'] == id,
+  );
+  return item['item'];
 }

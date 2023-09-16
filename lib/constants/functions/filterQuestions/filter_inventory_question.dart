@@ -11,11 +11,11 @@ void updateListInventory(WidgetRef ref, option, screenList) {
   // residental flow --------->
 
   if (option == "Rent" && !isCommercial) {
-    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S16"], setFalseInScreens: ["S8", "S10", "S15"]);
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S16"], setFalseInScreens: ["S8", "S10", "S15", "S7"]);
     isRentNotifier.toggleRentQuestionary(true);
   } else if (option == "Sell" && !isCommercial) {
     isRentNotifier.toggleRentQuestionary(false);
-    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S8", "S10", "S15"], setFalseInScreens: ["S16"]);
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S8", "S10", "S15", "S7"], setFalseInScreens: ["S16"]);
   } else if (option == "Independent House/Villa") {
     plotNotifier.togglePlotQuestionary(false);
     questionNotifier.updateScreenIsActive(setTrueInScreens: ["S6", "S9"], setFalseInScreens: ["S10"]);
@@ -37,11 +37,11 @@ void updateListInventory(WidgetRef ref, option, screenList) {
 
   // Commercial flow--------->
   if (option == "Rent" && isCommercial) {
-    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S20"], setFalseInScreens: ["S19"]);
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S20"], setFalseInScreens: ["S19", "S15"]);
     isRentNotifier.toggleRentQuestionary(true);
   } else if (option == "Sell" && isCommercial) {
     isRentNotifier.toggleRentQuestionary(false);
-    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S19"], setFalseInScreens: ["S20"]);
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S19", "S15"], setFalseInScreens: ["S20"]);
   }
   if (option == "Land") {
     List<String> setTofalse = ["S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S17"];
