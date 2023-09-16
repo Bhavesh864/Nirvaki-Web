@@ -59,7 +59,7 @@ class _AddTodoState extends ConsumerState<AddTodo> {
     if (currentScreenIndex > 0) {
       setState(() {
         currentScreenIndex--;
-        ref.read(myArrayProvider.notifier).remove(id);
+        // ref.read(myArrayProvider.notifier).remove(id);
         pageController!.previousPage(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
