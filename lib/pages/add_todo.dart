@@ -27,6 +27,7 @@ class AddTodo extends ConsumerStatefulWidget {
 
 class _AddTodoState extends ConsumerState<AddTodo> {
   bool allQuestionFinishes = false;
+  bool isLinkItem = false;
   late Future<List<TodoQuestion>> getQuestions;
   PageController? pageController;
   int currentScreenIndex = 0;
@@ -70,6 +71,12 @@ class _AddTodoState extends ConsumerState<AddTodo> {
     }
   }
 
+  linkState(bool value) {
+    setState(() {
+      isLinkItem = value;
+    });
+  }
+
   TodoQuestion? getCurrentLead(AsyncSnapshot<List<TodoQuestion>> snapshot, option) {
     for (var data in snapshot.data!) {
       if (data.type == option) {
@@ -93,9 +100,11 @@ class _AddTodoState extends ConsumerState<AddTodo> {
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
-            // final String res = notify.state.isNotEmpty ? notify.state[0]["item"] : "Residential";
             List<TodoQuestion>? screenData = snapshot.data;
             List<Screen> screensDataList = screenData![0].screens;
+            if (!isLinkItem) {
+              screensDataList = screensDataList.where((element) => element.screenId != "S5").toList();
+            }
             return Stack(
               children: [
                 Container(
@@ -153,15 +162,8 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                                                         size: 30,
                                                         title: screensDataList[index].questions[i].questionTitle,
                                                         fontWeight: FontWeight.bold),
-                                                  buildTodoQuestions(
-                                                    screensDataList[index].questions[i],
-                                                    screensDataList,
-                                                    currentScreenIndex,
-                                                    notify,
-                                                    nextQuestion,
-                                                    context,
-                                                    selectedValues,
-                                                  ),
+                                                  buildTodoQuestions(screensDataList[index].questions[i], screensDataList, currentScreenIndex, notify, nextQuestion, context,
+                                                      selectedValues, linkState),
                                                   if (i == screensDataList[index].questions.length - 1 && screensDataList[index].questions[i].questionOptionType != 'chip')
                                                     Container(
                                                       margin: const EdgeInsets.only(top: 10),

@@ -21,6 +21,7 @@ Widget buildTodoQuestions(
   Function nextQuestion,
   BuildContext context,
   List<Map<String, dynamic>> selectedValues,
+  Function(bool value) linkState,
 ) {
   if (question.questionOptionType == 'chip') {
     return Column(
@@ -33,6 +34,11 @@ Widget buildTodoQuestions(
                   ? AppColor.primary.withOpacity(0.2)
                   : AppColor.primary.withOpacity(0.05),
               onSelect: () {
+                if (option == 'Yes') {
+                  linkState(true);
+                } else {
+                  linkState(false);
+                }
                 if (currentScreenIndex < screensDataList.length - 1) {
                   notify.add({"id": question.questionId, "item": option});
                   nextQuestion(screensDataList: screensDataList, option: option);
