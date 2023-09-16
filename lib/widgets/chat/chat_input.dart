@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:yes_broker/Customs/responsive.dart';
 
 import '../../chat/controller/chat_controller.dart';
 import '../../chat/enums/message.enums.dart';
@@ -102,7 +103,7 @@ class _ChatInputState extends ConsumerState<ChatInput> {
     return Column(
       children: [
         Container(
-          color: Colors.white,
+          decoration: BoxDecoration(borderRadius: Responsive.isMobile(context) ? BorderRadius.circular(0) : BorderRadius.circular(20), color: Colors.white),
           padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 6),
           child: Row(
             children: [

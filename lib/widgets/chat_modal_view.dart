@@ -71,12 +71,13 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
     final String name = chatItem?.name ?? '${user?.userfirstname} ${user?.userlastname}';
     final String profilePic = chatItem?.profilePic ?? user?.image ?? '';
     final String adminId = chatItem?.adminId ?? '';
-
+    final wid = MediaQuery.of(context).size.width;
     return Align(
       alignment: Alignment.bottomRight,
       child: Container(
         padding: const EdgeInsets.only(bottom: 45, right: 80),
-        width: 650,
+        // width: wid > 800 ? wid / 2.4 : wid / 2,
+        width: 600,
         height: 600,
         child: Card(
           color: const Color(0xFFF5F9FE),
@@ -189,7 +190,7 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                           FocusScope.of(context).unfocus();
                         },
                         child: Container(
-                          height: 500,
+                          height: 532,
                           margin: const EdgeInsets.only(top: 10),
                           child: Column(
                             children: [

@@ -61,26 +61,25 @@ class _DetailsTabViewState extends State<DetailsTabView> {
     if (!widget.isLeadView) {
       final inventoryData = widget.data as InventoryDetails;
       if (inventoryData.propertyphotos != null) {
-        final Map<String, List<String>> propertyPhotos = {
-          'frontelevation': [...inventoryData.propertyphotos!.frontelevation!],
-          'bedroom': [...inventoryData.propertyphotos!.bedroom!],
-          'bathroom': [...inventoryData.propertyphotos!.bathroom!],
-          'pujaroom': [...inventoryData.propertyphotos!.pujaroom!],
-          'servantroom': [...inventoryData.propertyphotos!.servantroom!],
-          'studyroom': [...inventoryData.propertyphotos!.studyroom!],
-          'officeroom': [...inventoryData.propertyphotos!.officeroom!],
-        };
-
-        propertyPhotos.forEach((key, value) {
-          if (value.isNotEmpty) {
-            allImages.addAll(value);
-
-            // ignore: unused_local_variable
-            for (var i in value) {
-              allTitles.add(capitalizeFirstLetter(key));
-            }
-          }
-        });
+        // final Map<String, List<String>> propertyPhotos = {
+        //   'title': [...inventoryData.propertyphotos!.imageTitle!],
+        //   'imageUrl': [...inventoryData.propertyphotos!.imageUrl!],
+        //   // 'bathroom': [...inventoryData.propertyphotos!.bathroom!],
+        //   // 'pujaroom': [...inventoryData.propertyphotos!.pujaroom!],
+        //   // 'servantroom': [...inventoryData.propertyphotos!.servantroom!],
+        //   // 'studyroom': [...inventoryData.propertyphotos!.studyroom!],
+        //   // 'officeroom': [...inventoryData.propertyphotos!.officeroom!],
+        // };
+        allImages.addAll(inventoryData.propertyphotos!.imageUrl!);
+        allTitles.addAll(inventoryData.propertyphotos!.imageTitle!);
+        // propertyPhotos.forEach((key, value) {
+        //   if (value.isNotEmpty) {
+        //     // ignore: unused_local_variable
+        //     for (var i in value) {
+        //       allTitles.add(capitalizeFirstLetter(key));
+        //     }
+        //   }
+        // });
 
         if (AppConst.getPublicView()) {
           allImages.removeAt(0);
