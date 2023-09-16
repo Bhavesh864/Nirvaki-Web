@@ -84,6 +84,11 @@ class CustomTextInputState extends State<CustomTextInput> {
         ),
         controller: widget.controller,
         decoration: InputDecoration(
+          disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                color: AppColor.inputFieldBorderColor,
+              )),
           errorStyle: const TextStyle(height: 0),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
@@ -108,8 +113,10 @@ class CustomTextInputState extends State<CustomTextInput> {
                 )
               : null,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                color: AppColor.inputFieldBorderColor,
+              )),
           // isDense: true,
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
