@@ -406,6 +406,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
               city: widget.data.preferredlocality!.city!,
               addressline1: widget.data.preferredlocality!.addressline1!,
               addressline2: widget.data.preferredlocality?.addressline2,
+              locality: widget.data.preferredlocality!.locality!,
             ),
           ] else ...[
             MapViewWidget(
@@ -413,6 +414,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
               city: widget.data.propertyaddress!.city!,
               addressline1: widget.data.propertyaddress!.addressline1!,
               addressline2: widget.data.propertyaddress?.addressline2,
+              locality: widget.data.propertyaddress!.locality!,
             ),
           ]
         ],

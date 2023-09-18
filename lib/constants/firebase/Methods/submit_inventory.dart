@@ -147,7 +147,8 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       propertyfacing: propertyFacing,
       comments: comments,
       plotarea: Plotarea(area: superArea, unit: areaUnit),
-      propertyaddress: Propertyaddress(state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, floornumber: floorNumber),
+      propertyaddress:
+          Propertyaddress(state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, floornumber: floorNumber, locality: locality),
       propertylocation: latlng,
       propertyvideo: video,
       propertyphotos: photos,
