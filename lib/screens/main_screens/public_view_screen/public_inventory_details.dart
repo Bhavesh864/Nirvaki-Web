@@ -236,6 +236,7 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                     city: data.propertyaddress!.city!,
                                     addressline1: data.propertyaddress!.addressline1!,
                                     addressline2: data.propertyaddress?.addressline2,
+                                    locality: data.propertyaddress!.locality!,
                                   ),
                               ],
                             ),

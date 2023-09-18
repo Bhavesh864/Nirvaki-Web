@@ -142,7 +142,7 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: Responsive.isMobile(context) ? height : 500,
+      height: Responsive.isMobile(context) ? height : 540,
       color: AppColor.secondary,
       child: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),

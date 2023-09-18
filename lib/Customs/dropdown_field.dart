@@ -70,6 +70,7 @@ class _DropDownFieldState extends State<DropDownField> {
                 borderRadius: BorderRadius.circular(10),
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3.5),
                 value: selectedValues!.isEmpty ? null : selectedValues!,
+
                 // value: selectedValues,
                 onChanged: (e) {
                   widget.onchanged(e!);

@@ -268,6 +268,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                     city: data.preferredlocality!.city!,
                                     addressline1: data.preferredlocality!.addressline1!,
                                     addressline2: data.preferredlocality?.addressline2,
+                                    locality: data.preferredlocality!.locality!,
                                   ),
                               ],
                             ),
