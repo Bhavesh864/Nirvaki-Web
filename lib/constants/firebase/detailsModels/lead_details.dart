@@ -550,8 +550,8 @@ class Preferredlocality {
 
   Preferredlocality({this.addressline1, this.addressline2, this.prefferedfloornumber, this.city, this.state, this.locality});
   Preferredlocality.fromJson(Map<String, dynamic> json) {
-    if (json["Addressline1"] is String) {
-      addressline1 = json["Addressline1"];
+    if (json["addressline1"] is String) {
+      addressline1 = json["addressline1"];
     }
     if (json["addressline2"] is String) {
       addressline2 = json["addressline2"];
@@ -566,13 +566,13 @@ class Preferredlocality {
       state = json["state"];
     }
     if (json["locality"] is String) {
-      state = json["locality"];
+      locality = json["locality"];
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data["Addressline1"] = addressline1;
+    data["addressline1"] = addressline1;
     data["addressline2"] = addressline2;
     data["prefferedfloornumber"] = prefferedfloornumber;
     data["city"] = city;
