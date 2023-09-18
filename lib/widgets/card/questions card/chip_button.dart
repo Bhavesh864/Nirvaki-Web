@@ -10,6 +10,7 @@ class ChipButton extends StatelessWidget {
   final VoidCallback onSelect;
   final TextAlign? textAlign;
   final Color bgColor;
+  final Color color;
 
   const ChipButton({
     super.key,
@@ -19,6 +20,7 @@ class ChipButton extends StatelessWidget {
     required this.onSelect,
     this.width = double.infinity,
     this.bgColor = AppColor.secondary,
+    this.color = Colors.black,
   });
 
   @override
@@ -43,6 +45,7 @@ class ChipButton extends StatelessWidget {
           child: CustomText(
             textAlign: textAlign,
             title: text,
+            color: color,
           ),
         ),
       ),
