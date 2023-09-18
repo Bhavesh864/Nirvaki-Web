@@ -13,7 +13,32 @@ class CalenderModel {
   String? dueDate;
   String? time;
 
-  CalenderModel({this.id, this.calenderTitle, this.calenderDescription, this.calenderType, this.userId, this.brokerId, this.managerId, this.dueDate, this.time});
+  CalenderModel({
+    this.id,
+    this.calenderTitle,
+    this.calenderDescription,
+    this.calenderType,
+    this.userId,
+    this.brokerId,
+    this.managerId,
+    this.dueDate,
+    this.time,
+  });
+
+  factory CalenderModel.fromSnapshot(DocumentSnapshot snapshot) {
+    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+    return CalenderModel(
+      id: snapshot.id,
+      calenderTitle: data['calenderTitle'],
+      calenderDescription: data['calenderDescription'],
+      calenderType: data['calenderType'],
+      userId: data['userId'],
+      brokerId: data['brokerId'],
+      managerId: data['managerId'],
+      dueDate: data['DueDate'],
+      time: data['time'],
+    );
+  }
 
   CalenderModel.fromJson(Map<String, dynamic> json) {
     if (json["id"] is String) {
@@ -61,7 +86,7 @@ class CalenderModel {
 
   static Future<void> addCalenderModel(CalenderModel calenderModel) async {
     try {
-      await calenderModelCollection.doc().set(calenderModel.toJson());
+      await calenderModelCollection.doc(calenderModel.id).set(calenderModel.toJson());
       print('calender item added successfully');
     } catch (error) {
       print('Failed to add calender item: $error');

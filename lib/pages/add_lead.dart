@@ -289,6 +289,18 @@ class _AddLeadState extends ConsumerState<AddLead> {
               ),
             ),
             title: Text(isEdit ? "Edit Lead" : 'Add Lead'),
+            actions: [
+              CustomButton(
+                text: Responsive.isMobile(context) ? "" : "Back to home",
+                fontsize: 20,
+                buttonColor: Colors.transparent,
+                borderColor: Colors.transparent,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                leftIcon: Icons.home_outlined,
+              )
+            ],
           ),
         );
       },

@@ -99,6 +99,22 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                   );
                 },
               ),
+              checkNotNUllItem(cardData.cardCategory)
+                  ? CustomChip(
+                      label: CustomText(
+                        title: cardData.cardCategory!,
+                        size: 10,
+                      ),
+                    )
+                  : const SizedBox(),
+              checkNotNUllItem(cardData.propertypricerange?.arearangestart)
+                  ? CustomChip(
+                      label: CustomText(
+                        title: "${cardData.propertypricerange?.arearangestart} ${cardData.propertypricerange?.unit}",
+                        size: 10,
+                      ),
+                    )
+                  : const SizedBox(),
               checkNotNUllItem(cardData.roomconfig?.bedroom)
                   ? CustomChip(
                       label: CustomText(
@@ -121,22 +137,6 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                   ? CustomChip(
                       label: CustomText(
                         title: "${cardData.propertyarearange?.arearangestart} ${cardData.propertyarearange?.unit}",
-                        size: 10,
-                      ),
-                    )
-                  : const SizedBox(),
-              checkNotNUllItem(cardData.propertypricerange?.arearangestart)
-                  ? CustomChip(
-                      label: CustomText(
-                        title: "${cardData.propertypricerange?.arearangestart} ${cardData.propertypricerange?.unit}",
-                        size: 10,
-                      ),
-                    )
-                  : const SizedBox(),
-              checkNotNUllItem(cardData.cardCategory)
-                  ? CustomChip(
-                      label: CustomText(
-                        title: cardData.cardCategory!,
                         size: 10,
                       ),
                     )

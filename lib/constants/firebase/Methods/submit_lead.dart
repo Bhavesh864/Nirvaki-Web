@@ -51,6 +51,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
   final preferredpropertyfacing = getDataById(state, 34);
   final comments = getDataById(state, 35);
   final List<User> assignto = getDataById(state, 36);
+  final locality = getDataById(state, 54);
 
   // commerical
   final availability = getDataById(state, 37);
@@ -135,7 +136,8 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       plotdetails: Plotdetails(boundarywall: boundaryWall, opensides: openSides),
       amenities: amenities,
       propertyarea: Propertyarea(carpetarea: carpetArea, superarea: superArea, unit: areaUnit),
-      preferredlocality: Preferredlocality(state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, prefferedfloornumber: floorNumber),
+      preferredlocality: Preferredlocality(
+          state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, prefferedfloornumber: floorNumber, locality: locality),
       // propertyarearange: Propertyarearange(unit: areaUnit, arearangestart: carpetArea),
       propertypricerange: Propertypricerange(unit: budgetFigures, arearangestart: budgetPrice),
       reservedparking: Reservedparking(covered: coveredparking),

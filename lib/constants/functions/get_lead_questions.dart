@@ -269,18 +269,19 @@ Widget buildLeadQuestions(
     final city = getDataById(selectedValues, 27);
     final address1 = getDataById(selectedValues, 28);
     final address2 = getDataById(selectedValues, 29);
+    final locality = getDataById(selectedValues, 54);
     return CustomGoogleMap(
-      onLatLngSelected: (latLng) {
-        notify.add({
-          "id": question.questionId,
-          "item": [latLng.latitude, latLng.longitude]
-        });
-      },
-      cityName: city,
-      stateName: state,
-      address1: address1,
-      address2: address2,
-    );
+        onLatLngSelected: (latLng) {
+          notify.add({
+            "id": question.questionId,
+            "item": [latLng.latitude, latLng.longitude]
+          });
+        },
+        cityName: city,
+        stateName: state,
+        address1: address1,
+        address2: address2,
+        locality: locality);
   } else if (question.questionOptionType == 'photo') {
     return PhotosViewForm(
       notify: notify,

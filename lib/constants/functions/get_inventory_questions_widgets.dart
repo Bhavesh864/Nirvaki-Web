@@ -6,7 +6,7 @@ import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
-import 'package:yes_broker/constants/functions/convert_number_to_string.dart';
+
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/questionaries/questions_form_photos_view.dart';
 import 'package:yes_broker/widgets/questionaries/assign_user.dart';
@@ -196,6 +196,8 @@ Widget buildInventoryQuestions(
     return StatefulBuilder(
       builder: (context, setState) {
         final isPriceField = question.questionId == 46 || question.questionId == 48 || question.questionId == 50;
+        final isvalidationtrue =
+            question.questionTitle.contains('First') || question.questionTitle.contains('Mobile') || question.questionTitle == 'Rent' || question.questionTitle == 'Listing Price';
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -218,12 +220,14 @@ Widget buildInventoryQuestions(
                 }
                 notify.add({"id": question.questionId, "item": newvalue.trim()});
               },
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return "Please enter ${question.questionTitle}";
-                }
-                return null;
-              },
+              validator: isvalidationtrue
+                  ? (value) {
+                      if (value!.isEmpty) {
+                        return "Please enter ${question.questionTitle}";
+                      }
+                      return null;
+                    }
+                  : null,
             ),
             isPriceField
                 ? AppText(
@@ -305,6 +309,7 @@ Widget buildInventoryQuestions(
     final city = getDataById(selectedValues, 27);
     final address1 = getDataById(selectedValues, 28);
     final address2 = getDataById(selectedValues, 29);
+    final locality = getDataById(selectedValues, 54);
     return CustomGoogleMap(
       onLatLngSelected: (latLng) {
         notify.add({
@@ -316,6 +321,7 @@ Widget buildInventoryQuestions(
       stateName: state,
       address1: address1,
       address2: address2,
+      locality: locality,
     );
   } else if (question.questionOptionType == 'photo') {
     Propertyphotos? propertyphotos;

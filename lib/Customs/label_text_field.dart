@@ -8,6 +8,7 @@ class LabelTextInputField extends StatelessWidget {
   final String labelText;
   final String hintText;
   final bool isDropDown;
+  final IconData rightIcon;
   final bool isDatePicker;
   final bool isMandatory;
   final int? maxLines;
@@ -22,14 +23,15 @@ class LabelTextInputField extends StatelessWidget {
     required this.labelText,
     this.hintText = 'Type here..',
     this.isDropDown = false,
+    this.rightIcon = Icons.calendar_month,
     this.isDatePicker = false,
     this.isMandatory = true,
     this.maxLines,
+    this.keyboardType = TextInputType.none,
     required this.inputController,
     this.onChanged,
     this.validator,
     this.initialvalue,
-    this.keyboardType = TextInputType.none,
   }) : super(key: key);
 
   @override
@@ -70,7 +72,7 @@ class LabelTextInputField extends StatelessWidget {
           rightIcon: isDropDown
               ? Icons.arrow_drop_down_sharp
               : isDatePicker
-                  ? Icons.calendar_month
+                  ? rightIcon
                   : null,
           controller: inputController,
           hintText: hintText,
@@ -142,14 +144,25 @@ class LabelTextAreaField extends StatelessWidget {
           ),
         ),
         TextFormField(
+          textCapitalization: TextCapitalization.characters,
+          validator: validator,
           keyboardType: TextInputType.multiline,
           maxLines: 5,
-          controller: TextEditingController(),
+          controller: inputController,
+          style: const TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w400,
+          ),
           decoration: InputDecoration(
             hintText: 'Type here...',
+            hintStyle: const TextStyle(
+              color: Colors.grey,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Colors.grey),
+              borderSide: const BorderSide(
+                color: AppColor.inputFieldBorderColor,
+              ),
             ),
             // isDense: true,
             focusedBorder: OutlineInputBorder(
