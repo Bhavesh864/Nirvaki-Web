@@ -49,15 +49,12 @@ class InventoryDetailsHeader extends ConsumerWidget {
   final String status;
   final String type;
   final String? price;
-  final String? unit;
   final Function setState;
   final dynamic inventoryDetails;
-  final Propertyrent? propertyRent;
 
   const InventoryDetailsHeader(
       {super.key,
       required this.title,
-      this.propertyRent,
       required this.id,
       this.inventoryDetails,
       required this.category,
@@ -65,7 +62,6 @@ class InventoryDetailsHeader extends ConsumerWidget {
       required this.status,
       required this.type,
       required this.price,
-      required this.unit,
       required this.setState});
 
   Future<void> shareUrl(BuildContext context) async {
@@ -149,7 +145,7 @@ class InventoryDetailsHeader extends ConsumerWidget {
             const Spacer(),
             if (!Responsive.isMobile(context) && !AppConst.getPublicView())
               CustomText(
-                title: category == "Rent" && id.contains("IN") ? "${propertyRent?.rentamount} ${propertyRent?.rentunit}" : "$price $unit",
+                title: price!,
                 color: AppColor.primary,
               ),
           ],

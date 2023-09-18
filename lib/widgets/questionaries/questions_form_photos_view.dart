@@ -27,6 +27,7 @@ class PhotosViewForm extends ConsumerStatefulWidget {
 class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
   String imageUrl = '';
   List roomImages = [];
+  int roomImagesLength = 0;
   List<String> selectedImagesUrlList = [];
   List<String> selectedImagesTitleList = [];
   int photosNo = 1;
@@ -86,7 +87,6 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
           'id': widget.id,
           'item': propertyphotos,
         });
-        print(propertyphotos.toJson());
       });
     }
   }
@@ -135,6 +135,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
       }
       setState(() {
         roomImages = [...list];
+        roomImagesLength = list.length;
       });
     }
   }
@@ -175,7 +176,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
                             child: SizedBox(
                               width: constraints.maxWidth / crossAxisCount - 20,
                               height: constraints.maxWidth / crossAxisCount - 45,
-                              child: widget.isEdit
+                              child: widget.isEdit && roomImages[index]["webImageUrl"].contains("https")
                                   ? Image.network(
                                       roomImages[index]["webImageUrl"]!,
                                       fit: BoxFit.fill,
@@ -245,6 +246,9 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
                               roomImages.remove(roomImages[index]);
                               selectedImagesTitleList.remove(selectedImagesTitleList[index]);
                               selectedImagesUrlList.remove(selectedImagesUrlList[index]);
+                              if (roomImages.length < roomImagesLength) {
+                                roomImagesLength = roomImages.length;
+                              }
                             });
                             Future.delayed(const Duration(milliseconds: 1000), () {
                               Propertyphotos propertyphotos = Propertyphotos(imageTitle: selectedImagesTitleList, imageUrl: selectedImagesUrlList);

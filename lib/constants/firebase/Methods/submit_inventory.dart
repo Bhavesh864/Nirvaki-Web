@@ -8,6 +8,8 @@ import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.da
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
 import '../../../riverpodstate/user_data.dart';
+import '../../functions/convertStringTorange/convert_number_to_string.dart';
+import '../../functions/convertStringTorange/convert_range_string.dart';
 
 Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) async {
   final User currentUserdata = ref.read(userDataProvider);
@@ -91,7 +93,8 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       managerid: currentUserdata.managerid,
       cardType: "IN",
       cardTitle: "$propertyCategory $propertyKind-$propertyCity",
-      cardDescription: "Want to $inventoryCategory her $bedrooms BHK for $price rupees",
+      cardDescription:
+          "Want to $inventoryCategory her $bedrooms BHK for ${inventoryCategory == "Rent" ? convertToCroresAndLakhs(rentamount) : convertToCroresAndLakhs(price)} rupees",
       customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
       cardStatus: "New",
       assignedto: assignedToList,
@@ -100,7 +103,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       createdate: Timestamp.now(),
       propertyarearange: cards.Propertyarearange(arearangestart: superArea, unit: areaUnit),
       roomconfig: cards.Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom),
-      propertypricerange: cards.Propertypricerange(arearangestart: inventoryCategory == "Rent" ? rentamount : price));
+      propertypricerange: cards.Propertypricerange(arearangestart: inventoryCategory == "Rent" ? convertToCroresAndLakhs(rentamount) : convertToCroresAndLakhs(price)));
   final List<Assignedto> assignedListInInventory = assignto.map((user) {
     return Assignedto(
       firstname: user.userfirstname,

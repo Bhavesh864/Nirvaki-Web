@@ -113,7 +113,6 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                     propertyCategory: data.propertycategory!,
                                     status: data.inventoryStatus!,
                                     price: data.propertyprice?.price,
-                                    unit: data.propertyprice?.unit,
                                   ),
                                   if (Responsive.isMobile(context))
                                     Padding(

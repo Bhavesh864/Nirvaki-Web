@@ -15,6 +15,7 @@ import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
 import '../firebase/detailsModels/lead_details.dart';
 import '../utils/colors.dart';
+import 'convertStringTorange/convert_range_string.dart';
 
 Widget buildLeadQuestions(
   Question question,
@@ -288,6 +289,76 @@ Widget buildLeadQuestions(
       id: question.questionId,
       isEdit: isEdit,
     );
+  } else if (question.questionOptionType == "rangeSlider") {
+    RangeValues? stateValue;
+    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+      stateValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
+    }
+    RangeValues buyRangeValues = const RangeValues(0, 100000000);
+    RangeValues rentRangeValues = const RangeValues(0, 1000000);
+    RangeValues defaultBuyRangeValues = stateValue ?? buyRangeValues;
+    RangeValues defaultRentRangeValues = stateValue ?? rentRangeValues;
+    if (isRentSelected) {
+      double divisionValue = 5000;
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return Column(
+            children: [
+              CustomText(
+                title: 'Rent: ${formatValue(defaultRentRangeValues.start)} - ${formatValue(defaultRentRangeValues.end)}',
+                size: 14,
+              ),
+              RangeSlider(
+                values: defaultRentRangeValues,
+                min: 0,
+                max: 1000000,
+                labels: RangeLabels(
+                  formatValue(defaultRentRangeValues.start),
+                  formatValue(defaultRentRangeValues.end),
+                ),
+                divisions: (100000000 - 1000) ~/ divisionValue,
+                onChanged: (RangeValues newVal) {
+                  setState(() {
+                    defaultRentRangeValues = newVal;
+                  });
+                  notify.add({"id": question.questionId, "item": defaultRentRangeValues});
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      double divisionValue = 50000;
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return Column(
+            children: [
+              CustomText(
+                title: 'Buy: ${formatValue(defaultBuyRangeValues.start)} - ${formatValue(defaultBuyRangeValues.end)}',
+                size: 14,
+              ),
+              RangeSlider(
+                values: defaultBuyRangeValues,
+                min: 0,
+                max: 1000000000,
+                labels: RangeLabels(
+                  formatValue(defaultBuyRangeValues.start),
+                  formatValue(defaultBuyRangeValues.end),
+                ),
+                divisions: (100000000 - 100000) ~/ divisionValue,
+                onChanged: (RangeValues newVal) {
+                  setState(() {
+                    defaultBuyRangeValues = newVal;
+                  });
+                  notify.add({"id": question.questionId, "item": defaultBuyRangeValues});
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   return const SizedBox.shrink();
