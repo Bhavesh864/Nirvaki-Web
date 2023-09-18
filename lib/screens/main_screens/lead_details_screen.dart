@@ -125,23 +125,23 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                       inventoryDetails: data,
                                     ),
                                   ),
-                                ListTile(
-                                  contentPadding: const EdgeInsets.all(0),
-                                  leading: const Icon(
-                                    Icons.location_on_outlined,
-                                    size: 20,
-                                    color: Colors.black,
-                                  ),
-                                  minLeadingWidth: 2,
-                                  horizontalTitleGap: 8,
-                                  titleAlignment: ListTileTitleAlignment.center,
-                                  title: CustomText(
-                                    title: '${data.preferredlocality!.state},${data.preferredlocality!.city},${data.preferredlocality!.addressline1}',
-                                    size: 12,
-                                    fontWeight: FontWeight.w400,
-                                    color: const Color(0xFFA8A8A8),
-                                  ),
-                                ),
+                                // ListTile(
+                                //   contentPadding: const EdgeInsets.all(0),
+                                //   leading: const Icon(
+                                //     Icons.location_on_outlined,
+                                //     size: 20,
+                                //     color: Colors.black,
+                                //   ),
+                                //   minLeadingWidth: 2,
+                                //   horizontalTitleGap: 8,
+                                //   titleAlignment: ListTileTitleAlignment.center,
+                                //   title: CustomText(
+                                //     title: '${data.preferredlocality!.state},${data.preferredlocality!.city},${data.preferredlocality!.addressline1}',
+                                //     size: 12,
+                                //     fontWeight: FontWeight.w400,
+                                //     color: const Color(0xFFA8A8A8),
+                                //   ),
+                                // ),
                                 if (Responsive.isMobile(context))
                                   Row(
                                     children: [
@@ -337,6 +337,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
         {"id": 46, "item": data.preferredroadwidth},
         {"id": 100, "item": data.attachments},
         {"id": 101, "item": data.leadId},
+        {"id": 54, "item": data.preferredlocality?.locality},
       ]);
     } catch (e) {
       print(e);
