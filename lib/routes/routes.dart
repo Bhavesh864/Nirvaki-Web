@@ -150,6 +150,7 @@ class AppRoutes {
   static const String addWorkItem = '/add_workItem_screen';
   static const String addTodo = '/add_todoItem_screen';
   static const String createGroup = '/createGroup';
+  static const String calendarScreen = '/calendarScreen';
 
   static Map<String, WidgetBuilder> routesTable = {
     homeScreen: (context) => Responsive.isMobile(context) ? const SmallScreen() : const LargeScreen(),
@@ -170,6 +171,7 @@ class AppRoutes {
     leadDetailsScreen: (context) => const LeadDetailsScreen(),
     todoDetailsScreen: (context) => const TodoDetailsScreen(),
     createGroup: (context) => const CreateGroupScreen(),
+    calendarScreen: (context) => const CalendarScreen(),
   };
 
   static Route createAnimatedRoute(Widget destinationScreen) {

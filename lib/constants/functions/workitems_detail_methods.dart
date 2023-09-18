@@ -6,8 +6,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/label_text_field.dart';
+import 'package:yes_broker/constants/firebase/calenderModel/calender_model.dart';
 
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
@@ -15,7 +16,6 @@ import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.da
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart' as lead;
 import 'package:yes_broker/constants/firebase/random_uid.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
-import 'package:yes_broker/customs/snackbar.dart';
 
 import '../../Customs/custom_text.dart';
 import '../../customs/custom_fields.dart';
@@ -24,6 +24,7 @@ import '../../widgets/card/questions card/chip_button.dart';
 import '../firebase/detailsModels/todo_details.dart';
 import '../utils/colors.dart';
 import '../validation/basic_validation.dart';
+import 'calendar/calendar_functions.dart';
 
 void showImageSliderCarousel(List<String> imageUrls, int initialIndex, BuildContext context) {
   showDialog(
@@ -353,69 +354,19 @@ void showOwnerDetailsAndAssignToBottomSheet(BuildContext context, String title, 
   );
 }
 
-String toDate(DateTime dateTime) {
-  final date = DateFormat.yMMMEd().format(dateTime);
-
-  return date;
-}
-
-String toTime(DateTime dateTime) {
-  final date = DateFormat('hh:mm a').format(dateTime);
-
-  return date;
-}
-
-void showAddCalendarModal(
-  BuildContext context,
-  TextEditingController titleController,
-  TextEditingController dateController,
-  TextEditingController timeController,
-  TextEditingController descriptionController,
-  Function onSubmit,
-) {
+void showAddCalendarModal({
+  required BuildContext context,
+  required bool isEdit,
+  required WidgetRef ref,
+  CalendarModel? calendarModel,
+}) {
   final formkey = GlobalKey<FormState>();
   DateTime pickedDate = DateTime.now();
 
-  Future<DateTime?> pickDateTime(DateTime initialDate, {required bool pickDate, DateTime? firstDate}) async {
-    if (pickDate) {
-      final date = await showDatePicker(
-        context: context,
-        initialDate: initialDate,
-        firstDate: firstDate ?? DateTime(2015, 8),
-        lastDate: DateTime(2101),
-      );
-
-      if (date == null) return null;
-
-      final time = Duration(hours: initialDate.hour, minutes: initialDate.minute);
-
-      return date.add(time);
-    } else {
-      final timeOfDay = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.fromDateTime(initialDate),
-      );
-
-      if (timeOfDay == null) return null;
-
-      final date = DateTime(initialDate.year, initialDate.month, initialDate.day);
-      final time = Duration(hours: timeOfDay.hour, minutes: timeOfDay.minute);
-
-      return date.add(time);
-    }
-  }
-
-  Future pickFromDateTime({required bool pickDate}) async {
-    final date = await pickDateTime(pickedDate, pickDate: pickDate);
-
-    if (pickDate) {
-      pickedDate = date!;
-      dateController.text = toDate(date);
-    } else {
-      // pickedTime = date!;
-      timeController.text = toTime(date!);
-    }
-  }
+  TextEditingController descriptionController = TextEditingController(text: isEdit ? calendarModel?.calenderDescription : '');
+  TextEditingController titleController = TextEditingController(text: isEdit ? calendarModel?.calenderTitle : '');
+  TextEditingController dateController = TextEditingController(text: isEdit ? calendarModel?.dueDate : '');
+  TextEditingController timeController = TextEditingController(text: isEdit ? calendarModel?.time : '');
 
   showDialog(
     context: context,
@@ -437,21 +388,23 @@ void showAddCalendarModal(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const CustomText(
-                      softWrap: true,
-                      textAlign: TextAlign.center,
-                      size: 30,
-                      title: 'Add Calendar Item',
-                      fontWeight: FontWeight.bold,
-                    ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(
-                          width: 200,
-                          child: ChipButton(
-                            text: 'Meeting',
-                            bgColor: AppColor.primary.withOpacity(0.05),
-                            onSelect: () {},
+                        CustomText(
+                          softWrap: true,
+                          textAlign: TextAlign.center,
+                          size: Responsive.isMobile(context) ? 20 : 30,
+                          title: 'Add Calendar Item',
+                          fontWeight: FontWeight.bold,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Icon(
+                            Icons.close,
+                            size: 25,
                           ),
                         ),
                       ],
@@ -461,6 +414,9 @@ void showAddCalendarModal(
                     ),
                     LabelTextInputField(
                       labelText: 'Title',
+                      onChanged: (p0) {
+                        // titleController.text = p0;
+                      },
                       inputController: titleController,
                       validator: (value) => validateForNormalFeild(props: "Title", value: value),
                     ),
@@ -470,24 +426,18 @@ void showAddCalendarModal(
                           flex: 2,
                           child: GestureDetector(
                             onTap: () {
-                              pickFromDateTime(pickDate: true);
-
-                              // showDatePicker(
-                              //   context: context,
-                              //   initialDate: DateTime.now(),
-                              //   firstDate: DateTime.now(),
-                              //   lastDate: DateTime(DateTime.now().year + 1),
-                              // ).then(
-                              //   (pickedDate) {
-                              //     if (pickedDate == null) {
-                              //       return;
-                              //     }
-                              //     dateController.text = DateFormat.yMMMEd().format(pickedDate);
-                              //   },
-                              // );
+                              pickFromDateTime(
+                                pickDate: true,
+                                pickedDate: pickedDate,
+                                context: context,
+                                dateController: dateController,
+                                timeController: timeController,
+                              );
                             },
                             child: LabelTextInputField(
-                              onChanged: (p0) {},
+                              onChanged: (p0) {
+                                // dateController.text = p0;
+                              },
                               labelText: 'Date ',
                               inputController: dateController,
                               isDatePicker: true,
@@ -502,9 +452,18 @@ void showAddCalendarModal(
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              pickFromDateTime(pickDate: false);
+                              pickFromDateTime(
+                                pickDate: false,
+                                pickedDate: pickedDate,
+                                context: context,
+                                dateController: dateController,
+                                timeController: timeController,
+                              );
                             },
                             child: LabelTextInputField(
+                              onChanged: (p0) {
+                                // timeController.text = p0;
+                              },
                               labelText: 'Time',
                               isDatePicker: true,
                               inputController: timeController,
@@ -518,30 +477,95 @@ void showAddCalendarModal(
                     ),
                     LabelTextAreaField(
                       labelText: 'Details',
+                      onChanged: (p0) {
+                        // descriptionController.itext = p0;
+                      },
                       inputController: descriptionController,
                       validator: (value) => validateForNormalFeild(props: "Details", value: value),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: CustomButton(
-                        text: 'Save',
-                        onPressed: () {
-                          if (formkey.currentState!.validate()) {
-                            onSubmit();
-                            titleController.clear();
-                            descriptionController.clear();
-                            dateController.clear();
-                            timeController.clear();
-                            Navigator.of(context).pop();
-                            customSnackBar(context: context, text: 'Item added successfully!');
-                          } else {}
-                        },
-                        width: 70,
-                        height: 39,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        if (isEdit)
+                          if (Responsive.isMobile(context)) ...[
+                            GestureDetector(
+                              onTap: () {
+                                onDeleteTask(
+                                  context: context,
+                                  dateController: dateController,
+                                  timeController: timeController,
+                                  titleController: titleController,
+                                  descriptionController: descriptionController,
+                                  calendarModel: calendarModel!,
+                                );
+                                Navigator.of(context).pop();
+                              },
+                              child: const Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                                size: 25,
+                              ),
+                            ),
+                          ] else ...[
+                            CustomButton(
+                              buttonColor: Colors.red,
+                              text: 'Delete',
+                              onPressed: () {
+                                onDeleteTask(
+                                  context: context,
+                                  dateController: dateController,
+                                  timeController: timeController,
+                                  titleController: titleController,
+                                  descriptionController: descriptionController,
+                                  calendarModel: calendarModel!,
+                                );
+                                Navigator.of(context).pop();
+                              },
+                              width: 80,
+                              height: 39,
+                            ),
+                          ],
+                        const SizedBox(),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: CustomButton(
+                            buttonColor: AppColor.primary,
+                            text: isEdit ? 'Update' : 'Save',
+                            onPressed: () {
+                              if (isEdit) {
+                                if (formkey.currentState!.validate()) {
+                                  onUpdateTask(
+                                    context: context,
+                                    dateController: dateController,
+                                    timeController: timeController,
+                                    titleController: titleController,
+                                    descriptionController: descriptionController,
+                                    calendarModel: calendarModel!,
+                                  );
+                                  Navigator.of(context).pop();
+                                }
+                              } else {
+                                if (formkey.currentState!.validate()) {
+                                  onAddTask(
+                                    ref: ref,
+                                    context: context,
+                                    dateController: dateController,
+                                    timeController: timeController,
+                                    titleController: titleController,
+                                    descriptionController: descriptionController,
+                                  );
+                                  Navigator.of(context).pop();
+                                }
+                              }
+                            },
+                            width: 85,
+                            height: 39,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
