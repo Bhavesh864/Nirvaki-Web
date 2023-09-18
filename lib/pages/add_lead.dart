@@ -68,7 +68,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
         });
   }
 
-  nextQuestion({List<Screen>? screensDataList, option}) {
+  nextQuestion({List<Screen>? screensDataList, required String option}) {
     updateLeadListInventory(ref, option, screensDataList);
     if (currentScreenIndex < screensDataList!.length - 1) {
       setState(() {
@@ -231,7 +231,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                                 if (!allQuestionFinishes) {
                                                                   if (currentScreenList[index].title != "Assign to") {
                                                                     // if (_formKey.currentState!.validate()) {
-                                                                    nextQuestion(screensDataList: screensDataList);
+                                                                    nextQuestion(screensDataList: screensDataList, option: "");
                                                                     // }
                                                                   }
                                                                   if (currentScreenList[index].title == "Assign to") {
