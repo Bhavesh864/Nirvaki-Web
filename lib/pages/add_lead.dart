@@ -68,7 +68,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
         });
   }
 
-  nextQuestion({List<Screen>? screensDataList, option}) {
+  nextQuestion({List<Screen>? screensDataList, required String option}) {
     updateLeadListInventory(ref, option, screensDataList);
     if (currentScreenIndex < screensDataList!.length - 1) {
       setState(() {
@@ -217,35 +217,56 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                     isPlotSelected,
                                                     selectedValues,
                                                   ),
-                                                  if (i == currentScreenList[index].questions.length - 1 && currentScreenList[index].questions[i].questionOptionType != 'chip')
-                                                    Container(
-                                                      margin: const EdgeInsets.only(top: 10),
-                                                      alignment: Alignment.centerRight,
-                                                      child: allQuestionFinishes
-                                                          ? const Center(
-                                                              child: CircularProgressIndicator.adaptive(),
-                                                            )
-                                                          : CustomButton(
-                                                              text: currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next',
-                                                              onPressed: () {
-                                                                if (!allQuestionFinishes) {
-                                                                  if (currentScreenList[index].title != "Assign to") {
-                                                                    // if (_formKey.currentState!.validate()) {
-                                                                    nextQuestion(screensDataList: screensDataList);
-                                                                    // }
+                                                  SizedBox(height: currentScreenList[index].questions[i].questionOptionType != 'textfield' ? 10 : 0),
+                                                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                                    if (i == currentScreenList[index].questions.length - 1 && isEdit && currentScreenList[index].title != "Assign to") ...[
+                                                      CustomButton(
+                                                        height: 39,
+                                                        text: "Jump To Submit",
+                                                        onPressed: () {
+                                                          // setState(() {
+                                                          // currentScreenIndex = currentScreenList.length - 1;
+                                                          pageController?.jumpToPage(currentScreenList.length - 1);
+                                                          // });
+                                                        },
+                                                      ),
+                                                    ] else ...[
+                                                      const SizedBox()
+                                                    ],
+                                                    if (i == currentScreenList[index].questions.length - 1 &&
+                                                        currentScreenList[index].questions[i].questionOptionType != 'chip') ...[
+                                                      Container(
+                                                        margin: const EdgeInsets.only(top: 10),
+                                                        alignment: Alignment.centerRight,
+                                                        child: allQuestionFinishes
+                                                            ? const Center(
+                                                                child: CircularProgressIndicator.adaptive(),
+                                                              )
+                                                            : CustomButton(
+                                                                text: currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next',
+                                                                onPressed: () {
+                                                                  if (!allQuestionFinishes) {
+                                                                    if (currentScreenList[index].title != "Assign to") {
+                                                                      if (_formKey.currentState!.validate()) {
+                                                                        nextQuestion(screensDataList: screensDataList, option: "");
+                                                                      }
+                                                                    }
+                                                                    if (currentScreenList[index].title == "Assign to") {
+                                                                      setState(() {
+                                                                        allQuestionFinishes = true;
+                                                                      });
+                                                                      addDataOnfirestore(notify);
+                                                                    }
                                                                   }
-                                                                  if (currentScreenList[index].title == "Assign to") {
-                                                                    setState(() {
-                                                                      allQuestionFinishes = true;
-                                                                    });
-                                                                    addDataOnfirestore(notify);
-                                                                  }
-                                                                }
-                                                              },
-                                                              width: currentScreenList[index].title == "Assign to" ? 90 : 70,
-                                                              height: 39,
-                                                            ),
-                                                    ),
+                                                                },
+                                                                width: currentScreenList[index].title == "Assign to" ? 90 : 70,
+                                                                height: 39,
+                                                              ),
+                                                      ),
+                                                    ] else ...[
+                                                      const SizedBox()
+                                                    ]
+                                                  ]),
                                                 ],
                                               ),
                                           ],

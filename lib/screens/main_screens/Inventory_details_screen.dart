@@ -11,9 +11,11 @@ import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
+import 'package:yes_broker/constants/functions/convertStringTorange/convert_range_string.dart';
 import 'package:yes_broker/pages/add_inventory.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import '../../Customs/custom_text.dart';
+import '../../constants/functions/convertStringTorange/convert_number_to_string.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
@@ -107,10 +109,10 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                 type: data.inventoryType!,
                                 propertyCategory: data.propertycategory!,
                                 status: data.inventoryStatus!,
-                                price: data.propertyprice?.price,
-                                unit: data.propertyprice?.unit,
+                                price: data.inventorycategory == "Rent"
+                                    ? convertToCroresAndLakhs(data.propertyrent!.rentamount!)
+                                    : convertToCroresAndLakhs(data.propertyprice!.price!),
                                 inventoryDetails: data,
-                                propertyRent: data.propertyrent,
                               ),
                               if (Responsive.isMobile(context))
                                 Padding(
@@ -333,6 +335,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
         {"id": 51, "item": data.propertyrent?.securityunit},
         {"id": 52, "item": data.propertyrent?.lockinperiod},
         {"id": 53, "item": data.commercialphotos},
+        {"id": 54, "item": data.propertyaddress?.locality},
         {"id": 100, "item": data.attachments},
         {"id": 101, "item": data.inventoryId},
       ]);

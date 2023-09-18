@@ -110,7 +110,7 @@ class CardHeaderState extends ConsumerState<CardHeader> {
               checkNotNUllItem(cardData.propertypricerange?.arearangestart)
                   ? CustomChip(
                       label: CustomText(
-                        title: "${cardData.propertypricerange?.arearangestart} ${cardData.propertypricerange?.unit}",
+                        title: "${cardData.propertypricerange?.arearangestart}",
                         size: 10,
                       ),
                     )
