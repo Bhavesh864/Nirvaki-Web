@@ -64,7 +64,7 @@ class _BottomCardMainState extends ConsumerState<BottomCardMain> {
                               Row(
                                 children: [
                                   IconButton(onPressed: () {}, icon: const Icon(Icons.abc)),
-                                  AppText(text: user.managerName!, fontsize: 12, fontWeight: FontWeight.w400),
+                                  user.managerName != null ? AppText(text: user.managerName!, fontsize: 12, fontWeight: FontWeight.w400) : const SizedBox(),
                                 ],
                               ),
                               Container(

@@ -16,6 +16,7 @@ class SelectedSignupItems extends StateNotifier<List<Map<String, dynamic>>> {
 
   Future<String?> signup() async {
     final res = await signUpMethod(state: state);
+
     return res;
   }
 
