@@ -5,8 +5,8 @@ import 'package:yes_broker/constants/functions/lat_lng_get.dart';
 class CustomGoogleMap extends StatefulWidget {
   final String stateName;
   final String cityName;
-  final String address1;
-  final String address2;
+  final String? address1;
+  final String? address2;
   final String locality;
   final bool isReadOnly;
   final void Function(LatLng) onLatLngSelected;
@@ -16,8 +16,8 @@ class CustomGoogleMap extends StatefulWidget {
     Key? key,
     required this.stateName,
     required this.cityName,
-    required this.address1,
-    required this.address2,
+    this.address1,
+    this.address2,
     this.isReadOnly = false,
     required this.locality,
   }) : super(key: key);

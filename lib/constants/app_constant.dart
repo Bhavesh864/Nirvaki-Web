@@ -119,7 +119,7 @@ Color checkChipColorByCategory(CardDetails carddata) {
   } else if (carddata.linkedItemType!.contains(ItemCategory.isInventory)) {
     return AppColor.inventoryChipColor;
   }
-  return AppColor.inventoryIconColor;
+  return AppColor.inventoryChipColor;
 }
 
 bool checkNotNUllItem(dynamic data) {

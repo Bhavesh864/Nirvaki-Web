@@ -25,56 +25,54 @@ class _DropDownFieldState extends State<DropDownField> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomText(
-            fontWeight: FontWeight.w500,
-            size: 16,
-            title: widget.title,
-          ),
-          DropdownButtonHideUnderline(
-            child: InputDecorator(
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                isDense: true,
-              ),
-              child: DropdownButton(
-                // isDense: true,
-                itemHeight: null,
-                focusColor: Colors.transparent,
-
-                hint: const CustomText(
-                  title: '--Select--',
-                  color: Colors.grey,
-                ),
-                icon: const Icon(Icons.expand_more),
-                isExpanded: true,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomText(
+          fontWeight: FontWeight.w500,
+          size: 16,
+          title: widget.title,
+        ),
+        const SizedBox(height: 4),
+        DropdownButtonHideUnderline(
+          child: InputDecorator(
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.all(0),
+              border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3.5),
-                value: selectedValues!.isEmpty ? null : selectedValues!,
-                onChanged: (e) {
-                  widget.onchanged(e!);
-                  setState(() {
-                    selectedValues = e;
-                  });
-                },
-                items: widget.optionsList.map((value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
               ),
+              isDense: true,
+            ),
+            child: DropdownButton(
+              // isDense: true,
+              itemHeight: null,
+              focusColor: Colors.transparent,
+
+              hint: const CustomText(
+                title: '--Select--',
+                color: Colors.grey,
+              ),
+              icon: const Icon(Icons.expand_more),
+              isExpanded: true,
+              borderRadius: BorderRadius.circular(10),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3.5),
+              value: selectedValues!.isEmpty ? null : selectedValues!,
+              onChanged: (e) {
+                widget.onchanged(e!);
+                setState(() {
+                  selectedValues = e;
+                });
+              },
+              items: widget.optionsList.map((value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

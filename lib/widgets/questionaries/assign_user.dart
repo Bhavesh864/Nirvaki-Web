@@ -13,8 +13,7 @@ class AssignUser extends ConsumerStatefulWidget {
   final Function(List<User> user) addUser;
   final bool status;
   final List<dynamic>? assignedUserIds;
-  final User? userExistingForRemoveMethod;
-  const AssignUser({super.key, required this.addUser, this.assignedUserIds, this.status = false, this.userExistingForRemoveMethod});
+  const AssignUser({super.key, required this.addUser, this.assignedUserIds, this.status = false});
 
   @override
   ConsumerState<AssignUser> createState() => _AssignUserState();
@@ -44,6 +43,7 @@ class _AssignUserState extends ConsumerState<AssignUser> {
   @override
   Widget build(BuildContext context) {
     final User user = ref.read(userDataProvider);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
