@@ -7,6 +7,7 @@ import 'package:yes_broker/Customs/custom_text.dart';
 
 import 'package:yes_broker/widgets/calendar_view.dart';
 import 'package:yes_broker/widgets/timeline_view.dart';
+import 'package:yes_broker/widgets/workitems/empty_work_item_list.dart';
 import 'package:yes_broker/widgets/workitems/workitems_list.dart';
 
 import '../../constants/firebase/questionModels/inventory_question.dart';
@@ -573,33 +574,38 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           );
         }
+
         if (snapshot.hasData) {
           List<CardDetails> workItems = snapshot.data!.where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
           List<CardDetails> todoItems = snapshot.data!.where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
           return Row(
             children: [
-              Expanded(
-                flex: size.width > 1340 ? 3 : 5,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8, left: 0),
-                  child: WorkItemsList(
-                    title: "To do",
-                    getCardDetails: todoItems,
+              if (workItems.isEmpty && todoItems.isEmpty) ...[
+                Expanded(flex: size.width > 1340 ? 5 : 6, child: const EmptyWorkItemList()),
+              ] else ...[
+                Expanded(
+                  flex: size.width > 1340 ? 3 : 5,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8, left: 0),
+                    child: WorkItemsList(
+                      title: "To do",
+                      getCardDetails: todoItems,
+                    ),
                   ),
                 ),
-              ),
-              size.width > 1200
-                  ? Expanded(
-                      flex: size.width > 1340 ? 3 : 5,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: WorkItemsList(
-                          title: "Work Items",
-                          getCardDetails: workItems,
+                size.width > 1200
+                    ? Expanded(
+                        flex: size.width > 1340 ? 3 : 5,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: WorkItemsList(
+                            title: "Work Items",
+                            getCardDetails: workItems,
+                          ),
                         ),
-                      ),
-                    )
-                  : Container(),
+                      )
+                    : Container(),
+              ],
               size.width >= 850
                   ? Expanded(
                       flex: size.width > 1340 ? 4 : 6,
@@ -646,6 +652,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
           );
         }
         return const SizedBox();
+        // return const Center(child: EmptyWorkItemList());
       },
     );
   }

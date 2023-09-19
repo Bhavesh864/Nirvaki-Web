@@ -205,7 +205,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                 ],
               );
             }
-            return const SizedBox.shrink();
+            return const Loader();
           },
         ),
       ),

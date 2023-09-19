@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:beamer/beamer.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -47,8 +51,8 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                 //   }
                 // else
                 //   {
-                context.beamToReplacementNamed(AppRoutes.loginScreen),
                 // }
+                context.beamToReplacementNamed(AppRoutes.loginScreen),
               }
             else
               {
@@ -61,12 +65,18 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
     }
   }
 
-  Future<XFile?> selectImagee() async {
+  // Future<XFile?> selectImagee() async {
+  selectImagee() async {
     XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
     setState(() {
       uploadLogocontroller.text = pickedImage!.name;
     });
-    return pickedImage;
+    var webUrl = await pickedImage!.readAsBytes();
+    var imageUrl = File(pickedImage.path);
+    if (kIsWeb) {
+      return webUrl;
+    }
+    return imageUrl;
   }
 
   final List<String> dropdownitem = ["Broker", "Builder"];
@@ -79,9 +89,32 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
   final TextEditingController citycontroller = TextEditingController();
   final TextEditingController uploadLogocontroller = TextEditingController();
 
+  void uploadImageToFirebase(imageUrl) async {
+    final uniqueKey = DateTime.now().microsecondsSinceEpoch.toString();
+    Reference referenceRoot = FirebaseStorage.instance.ref();
+    Reference referenceDirImages = referenceRoot.child('images');
+    Reference referenceImagesToUpload = referenceDirImages.child(uniqueKey);
+
+    try {
+      if (kIsWeb) {
+        final metaData = SettableMetadata(contentType: 'image/jpeg');
+        await referenceImagesToUpload.putData(imageUrl, metaData);
+      } else {
+        await referenceImagesToUpload.putFile(imageUrl);
+      }
+      imageUrl = await referenceImagesToUpload.getDownloadURL();
+      print("imageUrl--> $imageUrl");
+      final notify = ref.read(selectedItemForsignup.notifier);
+      notify.add({"id": 14, "item": imageUrl});
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(selectedItemForsignup.notifier);
+    print("notify---> $notify");
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -183,9 +216,8 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                               labelText: "Upload Logo",
                               ontap: () {
                                 selectImagee().then((value) => {
-                                      getImageUrl(value!).then((img) => {
-                                            notify.add({"id": 14, "item": img})
-                                          })
+                                      uploadImageToFirebase(value)
+                                      // getImageUrl(value!).then((img) => {uploadImageToFirebase(img)})
                                     });
                               },
                               rightIcon: Icons.publish,

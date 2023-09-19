@@ -1,3 +1,5 @@
+import '../../app_constant.dart';
+import '../Hive/hive_methods.dart';
 import '../userModel/broker_info.dart';
 import '../userModel/user_info.dart';
 
@@ -19,7 +21,7 @@ Future<String> signUpMethod({required state}) async {
   final companyLogo = getDataById(state, 14);
 
   try {
-    await auth.createUserWithEmailAndPassword(email: email, password: password);
+    final authResult = await auth.createUserWithEmailAndPassword(email: email, password: password);
     final BrokerInfo item = BrokerInfo(
       brokerid: authentication.currentUser?.uid,
       role: registerAs,
@@ -42,10 +44,13 @@ Future<String> signUpMethod({required state}) async {
       email: email,
       role: registerAs,
       fcmToken: null,
-      image: "",
+      image: companyLogo,
     );
     await User.addUser(items);
     await BrokerInfo.addBrokerInfo(item);
+    final uid = authResult.user!.uid;
+    UserHiveMethods.addData(key: "token", data: uid);
+    AppConst.setAccessToken(uid);
     res = "success";
     return res;
   } catch (er) {
