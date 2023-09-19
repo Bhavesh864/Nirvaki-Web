@@ -1,6 +1,6 @@
 // import "dart:html" show AnchorElement;
 
-import 'dart:html';
+// import 'dart:html';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -323,11 +323,11 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                       //   },
                                       // );
                                       // final res = await downloadFile(attachment.path, 'fileName', 'download');
-                                      if (kIsWeb) {
-                                        AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                        anchorElement.download = 'Attachment file';
-                                        anchorElement.click();
-                                      }
+                                      // if (kIsWeb) {
+                                      //   AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                      //   anchorElement.download = 'Attachment file';
+                                      //   anchorElement.click();
+                                      // }
                                     },
                                   ),
                                   GestureDetector(
