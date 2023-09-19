@@ -129,6 +129,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                               height: 10,
                             ),
                             CustomTextInput(
+                              margin: const EdgeInsets.all(7),
                               labelText: 'Company Name',
                               controller: companynamecontroller,
                               validator: (value) => validateForNormalFeild(value: value, props: "Company Name"),
@@ -137,6 +138,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                               },
                             ),
                             CustomTextInput(
+                              margin: const EdgeInsets.all(7),
                               labelText: 'Mobile',
                               controller: mobilenumbercontroller,
                               validator: (value) => validateForMobileNumberFeild(value: value, props: "Mobile Number"),
@@ -158,6 +160,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                             ),
                             if (!isChecked)
                               CustomTextInput(
+                                margin: const EdgeInsets.all(7),
                                 labelText: 'Whatsapp Number',
                                 controller: whatsupnumbercontroller,
                                 validator: !isChecked ? (value) => validateForMobileNumberFeild(value: value, props: "Whatsapp Number") : null,
@@ -167,48 +170,54 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                               ),
                             CustomTextInput(
                               labelText: 'Address',
+                              margin: const EdgeInsets.all(7),
                               controller: address1controller,
                               validator: (value) => validateForNormalFeild(value: value, props: "Address"),
                               onChanged: (value) {
                                 notify.add({"id": 10, "item": value.trim()});
                               },
                             ),
-                            TextFormField(
+                            CustomTextInput(
                               controller: uploadLogocontroller,
-                              readOnly: true,
-                              onTap: () async {
+                              readonly: true,
+                              labelText: "Upload Logo",
+                              ontap: () {
                                 selectImagee().then((value) => {
                                       getImageUrl(value!).then((img) => {
                                             notify.add({"id": 14, "item": img})
                                           })
                                     });
                               },
-                              validator: (value) => validateForNormalFeild(value: value, props: "Logo"),
-                              decoration: const InputDecoration(
-                                labelText: 'Upload Logo',
-                                hintText: 'Select an image',
-                                border: OutlineInputBorder(),
-                                suffixIcon: Icon(Icons.publish),
+                              rightIcon: Icons.publish,
+                            ),
+                            Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 6),
+                              child: Column(
+                                children: [
+                                  DropDownField(
+                                      title: "State",
+                                      defaultValues: "",
+                                      optionsList: const ["Rajasthan"],
+                                      onchanged: (value) {
+                                        notify.add({"id": 11, "item": value});
+                                      }),
+                                  DropDownField(
+                                      title: "City",
+                                      defaultValues: "",
+                                      optionsList: const ["Jaipur", "Bikaner"],
+                                      onchanged: (value) {
+                                        notify.add({"id": 12, "item": value});
+                                      }),
+                                  DropDownField(
+                                      title: "Register As",
+                                      defaultValues: "",
+                                      optionsList: dropdownitem,
+                                      onchanged: (value) {
+                                        notify.add({"id": 13, "item": value});
+                                      }),
+                                ],
                               ),
                             ),
-                            DropDownField(
-                                title: "State",
-                                optionsList: const ["Rajasthan"],
-                                onchanged: (value) {
-                                  notify.add({"id": 11, "item": value});
-                                }),
-                            DropDownField(
-                                title: "City",
-                                optionsList: const ["Jaipur", "Bikaner"],
-                                onchanged: (value) {
-                                  notify.add({"id": 12, "item": value});
-                                }),
-                            DropDownField(
-                                title: "Register As",
-                                optionsList: dropdownitem,
-                                onchanged: (value) {
-                                  notify.add({"id": 13, "item": value});
-                                }),
                             Container(
                               margin: const EdgeInsets.only(top: 10, bottom: 10),
                               alignment: Alignment.centerRight,

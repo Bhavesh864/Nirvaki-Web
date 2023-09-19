@@ -27,6 +27,7 @@ class CustomTextInput extends StatefulWidget {
   final TextStyle? hintstyle;
   final FormFieldValidator<String>? validator;
   final Function(String)? onChanged;
+  final EdgeInsetsGeometry? margin;
 
   const CustomTextInput(
       {Key? key,
@@ -52,7 +53,8 @@ class CustomTextInput extends StatefulWidget {
       this.enabled = true,
       this.autofocus = false,
       this.contentPadding = 0,
-      this.onFieldSubmitted})
+      this.onFieldSubmitted,
+      this.margin = const EdgeInsets.all(5)})
       : super(key: key);
 
   @override
@@ -70,8 +72,8 @@ class CustomTextInputState extends State<CustomTextInput> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 65,
+    return Container(
+      margin: widget.margin,
       child: TextFormField(
         autofocus: widget.autofocus!,
         focusNode: widget.focusnode,

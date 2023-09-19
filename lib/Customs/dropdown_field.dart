@@ -23,18 +23,6 @@ class _DropDownFieldState extends State<DropDownField> {
     selectedValues = widget.defaultValues;
   }
 
-  void validateDropdown() {
-    if (selectedValues == null) {
-      setState(() {
-        errorText = 'Please select an option';
-      });
-    } else {
-      setState(() {
-        errorText = null;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -70,8 +58,6 @@ class _DropDownFieldState extends State<DropDownField> {
                 borderRadius: BorderRadius.circular(10),
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3.5),
                 value: selectedValues!.isEmpty ? null : selectedValues!,
-
-                // value: selectedValues,
                 onChanged: (e) {
                   widget.onchanged(e!);
                   setState(() {
@@ -87,14 +73,6 @@ class _DropDownFieldState extends State<DropDownField> {
               ),
             ),
           ),
-          if (errorText != null)
-            Text(
-              errorText!,
-              style: const TextStyle(
-                color: Colors.red,
-                fontSize: 12,
-              ),
-            ),
         ],
       ),
     );

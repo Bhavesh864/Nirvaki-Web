@@ -1,13 +1,9 @@
 // ignore_for_file: invalid_use_of_protected_member
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/customs/responsive.dart';
-
 import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
-
 import 'package:yes_broker/constants/functions/get_lead_questions.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/pages/add_inventory.dart';
