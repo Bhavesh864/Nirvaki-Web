@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 final CollectionReference calendarModelCollection = FirebaseFirestore.instance.collection('calenderDetails');
 
@@ -101,20 +102,26 @@ class CalendarModel {
   static Future<void> addCalendarModel(CalendarModel calendarModel) async {
     try {
       await calendarModelCollection.doc(calendarModel.id).set(calendarModel.toJson());
-      print('calender item added successfully');
+      if (kDebugMode) {
+        print('calender item added successfully');
+      }
     } catch (error) {
-      print('Failed to add calender item: $error');
+      if (kDebugMode) {
+        print('Failed to add calender item: $error');
+      }
     }
   }
 
   static Future<void> updateCalendarModel(CalendarModel calendarModel) async {
-    print(calendarModel.calenderTitle);
-
     try {
       await calendarModelCollection.doc(calendarModel.id).update(calendarModel.toJson());
-      print('calender item updated successfully');
+      if (kDebugMode) {
+        print('calender item updated successfully');
+      }
     } catch (error) {
-      print('Failed to add calender item: $error');
+      if (kDebugMode) {
+        print('Failed to add calender item: $error');
+      }
     }
   }
 
@@ -127,7 +134,9 @@ class CalendarModel {
       }).toList();
       return items;
     } catch (error) {
-      print('Failed to get Inventory items: $error');
+      if (kDebugMode) {
+        print('Failed to get Inventory items: $error');
+      }
       return [];
     }
   }
@@ -135,9 +144,13 @@ class CalendarModel {
   static Future<void> deleteCalendarModel(String id) async {
     try {
       await calendarModelCollection.doc(id).delete();
-      print("deleted successfully");
+      if (kDebugMode) {
+        print("deleted successfully");
+      }
     } catch (error) {
-      print('Failed to delete Inventory item: $error');
+      if (kDebugMode) {
+        print('Failed to delete Inventory item: $error');
+      }
     }
   }
 }

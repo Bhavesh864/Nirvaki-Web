@@ -9,7 +9,6 @@ import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
 import '../../../riverpodstate/user_data.dart';
 import '../../functions/convertStringTorange/convert_number_to_string.dart';
-import '../../functions/convertStringTorange/convert_range_string.dart';
 
 Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) async {
   final User currentUserdata = ref.read(userDataProvider);

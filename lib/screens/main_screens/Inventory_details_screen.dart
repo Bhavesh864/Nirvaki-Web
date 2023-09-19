@@ -11,7 +11,6 @@ import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
-import 'package:yes_broker/constants/functions/convertStringTorange/convert_range_string.dart';
 import 'package:yes_broker/pages/add_inventory.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import '../../Customs/custom_text.dart';

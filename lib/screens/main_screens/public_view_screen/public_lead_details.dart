@@ -10,7 +10,7 @@ import 'package:yes_broker/Customs/small_custom_profile_image.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import '../../../Customs/custom_text.dart';
 import '../../../constants/firebase/userModel/broker_info.dart';
-import '../../../constants/functions/get_lead_questions.dart';
+
 import '../../../constants/functions/workitems_detail_methods.dart';
 import '../../../constants/utils/colors.dart';
 import '../../../constants/utils/constants.dart';

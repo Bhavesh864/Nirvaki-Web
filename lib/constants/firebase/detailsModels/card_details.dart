@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 
@@ -179,9 +180,13 @@ class CardDetails {
       for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
         await docSnapshot.reference.update(cardDetails.toJson());
       }
-      print('card item updated successfully');
+      if (kDebugMode) {
+        print('card item updated successfully');
+      }
     } catch (error) {
-      print('Failed to update card item: $error');
+      if (kDebugMode) {
+        print('Failed to update card item: $error');
+      }
     }
   }
 
@@ -197,7 +202,9 @@ class CardDetails {
       }).toList();
       return item;
     } catch (error) {
-      print('Failed to get Inventory items: $error');
+      if (kDebugMode) {
+        print('Failed to get Inventory items: $error');
+      }
       return [];
     }
   }
@@ -214,7 +221,9 @@ class CardDetails {
       }).toList();
       return item;
     } catch (error) {
-      print('Failed to get Inventory items: $error');
+      if (kDebugMode) {
+        print('Failed to get Inventory items: $error');
+      }
       return [];
     }
   }
@@ -227,9 +236,13 @@ class CardDetails {
         await docSnapshot.reference.update({'Status': newStatus});
       }
 
-      print('Card status updated successfully for documents matching criteria.');
+      if (kDebugMode) {
+        print('Card status updated successfully for documents matching criteria.');
+      }
     } catch (error) {
-      print('Failed to update card status: $error');
+      if (kDebugMode) {
+        print('Failed to update card status: $error');
+      }
     }
   }
 
@@ -237,9 +250,13 @@ class CardDetails {
   static Future<void> deleteCardDetails(String id) async {
     try {
       await cardDetailsCollection.doc(id).delete();
-      print("deleted successfully");
+      if (kDebugMode) {
+        print("deleted successfully");
+      }
     } catch (error) {
-      print('Failed to delete Inventory item: $error');
+      if (kDebugMode) {
+        print('Failed to delete Inventory item: $error');
+      }
     }
   }
 
@@ -249,9 +266,13 @@ class CardDetails {
       for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
         await docSnapshot.reference.update({'cardTitle': cardTitle});
       }
-      print('cardTitle update');
+      if (kDebugMode) {
+        print('cardTitle update');
+      }
     } catch (error) {
-      print('Failed to update card status: $error');
+      if (kDebugMode) {
+        print('Failed to update card status: $error');
+      }
     }
   }
 
