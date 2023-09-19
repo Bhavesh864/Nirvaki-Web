@@ -226,10 +226,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                                 height: 39,
                                                                 text: "Jump To Submit",
                                                                 onPressed: () {
-                                                                  // setState(() {
-                                                                  // currentScreenIndex = currentScreenList.length - 1;
                                                                   pageController?.jumpToPage(currentScreenList.length - 1);
-                                                                  // });
                                                                 },
                                                               ),
                                                             ] else ...[

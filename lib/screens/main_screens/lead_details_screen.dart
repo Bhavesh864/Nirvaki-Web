@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,6 +13,7 @@ import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/pages/add_lead.dart';
 
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
+import '../../constants/functions/convertStringTorange/convert_string_to_range.dart';
 import '../../customs/custom_text.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/utils/colors.dart';
@@ -110,8 +112,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                   type: data.leadType!,
                                   propertyCategory: data.propertycategory!,
                                   status: data.leadStatus!,
-                                  price: data.propertypricerange?.arearangestart,
-                                  unit: data.propertypricerange?.unit,
+                                  price: "${data.propertypricerange?.arearangestart}-${data.propertypricerange?.arearangeend}",
                                 ),
                                 if (Responsive.isMobile(context))
                                   Padding(
@@ -205,7 +206,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                     padding: const EdgeInsets.only(top: 12.0),
                                     child: CustomText(
                                       title: data.propertypricerange?.arearangestart != null
-                                          ? '${data.propertypricerange!.arearangestart}${data.propertypricerange!.unit}'
+                                          ? '${data.propertypricerange?.arearangestart} ${data.propertypricerange?.arearangeend}'
                                           : '50k/month',
                                       color: AppColor.primary,
                                     ),
@@ -268,7 +269,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                     city: data.preferredlocality!.city!,
                                     addressline1: data.preferredlocality!.addressline1!,
                                     addressline2: data.preferredlocality?.addressline2,
-                                    locality: data.preferredlocality!.locality!,
+                                    locality: data.preferredlocality?.locality,
                                   ),
                               ],
                             ),
@@ -320,7 +321,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
         {"id": 29, "item": data.preferredlocality?.addressline2},
         {"id": 30, "item": data.preferredlocality?.prefferedfloornumber},
         {"id": 31, "item": data.propertylocation},
-        {"id": 32, "item": data.propertypricerange?.arearangestart},
+        {"id": 32, "item": convertStringRangeToRangeValues(startValue: data.propertypricerange!.arearangestart!, endValue: data.propertypricerange!.arearangeend!)},
         {"id": 33, "item": data.propertypricerange?.unit},
         {"id": 34, "item": data.preferredpropertyfacing},
         {"id": 35, "item": data.comments},
@@ -340,7 +341,9 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
         {"id": 54, "item": data.preferredlocality?.locality},
       ]);
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 }

@@ -174,7 +174,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
                             child: SizedBox(
                               width: constraints.maxWidth / crossAxisCount - 20,
                               height: constraints.maxWidth / crossAxisCount - 45,
-                              child: widget.isEdit && roomImages[index]["webImageUrl"].contains('https')
+                              child: widget.isEdit && roomImages[index]["webImageUrl"].contains("https")
                                   ? Image.network(
                                       roomImages[index]["webImageUrl"]!,
                                       fit: BoxFit.fill,

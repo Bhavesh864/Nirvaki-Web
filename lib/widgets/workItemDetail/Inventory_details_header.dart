@@ -1,11 +1,7 @@
-// ignore_for_file: use_build_context_synchronously
-
-import '''
-dart:html''' show window;
+// ignore: file_names
 
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
@@ -16,7 +12,6 @@ import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
-import '../../Customs/snackbar.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
@@ -32,10 +27,10 @@ Future<void> shareUrl(BuildContext context, {String textToCombine = ''}) async {
     final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
     print(location);
 
-    final currentUrl = window.location.href;
-    Clipboard.setData(ClipboardData(text: currentUrl + textToCombine)).then((_) {
-      customSnackBar(context: context, text: 'URL copied to clipboard');
-    });
+    // final currentUrl = window.location.href;
+    // Clipboard.setData(ClipboardData(text: currentUrl + textToCombine)).then((_) {
+    //   customSnackBar(context: context, text: 'URL copied to clipboard');
+    // });
   } catch (e) {
     print('Error sharing URL: $e');
   }
@@ -49,15 +44,12 @@ class InventoryDetailsHeader extends ConsumerWidget {
   final String status;
   final String type;
   final String? price;
-  final String? unit;
   final Function setState;
   final dynamic inventoryDetails;
-  final Propertyrent? propertyRent;
 
   const InventoryDetailsHeader(
       {super.key,
       required this.title,
-      this.propertyRent,
       required this.id,
       this.inventoryDetails,
       required this.category,
@@ -65,14 +57,13 @@ class InventoryDetailsHeader extends ConsumerWidget {
       required this.status,
       required this.type,
       required this.price,
-      required this.unit,
       required this.setState});
 
   Future<void> shareUrl(BuildContext context) async {
     try {
-      final currentUrl = window.location.href;
-      await Clipboard.setData(ClipboardData(text: currentUrl));
-      customSnackBar(context: context, text: 'URL copied to clipboard');
+      // final currentUrl = window.location.href;
+      // await Clipboard.setData(ClipboardData(text: currentUrl));
+      // customSnackBar(context: context, text: 'URL copied to clipboard');
     } catch (e) {
       print('Error sharing URL: $e');
     }
@@ -149,7 +140,7 @@ class InventoryDetailsHeader extends ConsumerWidget {
             const Spacer(),
             if (!Responsive.isMobile(context) && !AppConst.getPublicView())
               CustomText(
-                title: category == "Rent" && id.contains("IN") ? "${propertyRent?.rentamount} ${propertyRent?.rentunit}" : "$price $unit",
+                title: price!,
                 color: AppColor.primary,
               ),
           ],

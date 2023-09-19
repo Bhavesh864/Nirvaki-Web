@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
@@ -41,7 +41,9 @@ class ChatRepository {
           }
           return groups;
         } catch (e) {
-          print(e.toString());
+          if (kDebugMode) {
+            print(e.toString());
+          }
           return [];
         }
       },
@@ -122,23 +124,9 @@ class ChatRepository {
     bool isSender,
   ) async {
     try {
-      await firestore
-          .collection('users')
-          .doc(AppConst.getAccessToken())
-          .collection('chats')
-          .doc(recieverUserId)
-          .collection('messages')
-          .doc(messageId)
-          .update({'isSeen': true});
+      await firestore.collection('users').doc(AppConst.getAccessToken()).collection('chats').doc(recieverUserId).collection('messages').doc(messageId).update({'isSeen': true});
 
-      await firestore
-          .collection('users')
-          .doc(recieverUserId)
-          .collection('chats')
-          .doc(AppConst.getAccessToken())
-          .collection('messages')
-          .doc(messageId)
-          .update({'isSeen': true});
+      await firestore.collection('users').doc(recieverUserId).collection('chats').doc(AppConst.getAccessToken()).collection('messages').doc(messageId).update({'isSeen': true});
     } catch (e) {
       customSnackBar(
         context: context,
@@ -190,7 +178,6 @@ class ChatRepository {
         context: context,
         text: e.toString(),
       );
-      print(e.toString());
     }
   }
 
