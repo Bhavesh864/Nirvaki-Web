@@ -70,7 +70,7 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
     final String name = chatItem?.name ?? '${user?.userfirstname} ${user?.userlastname}';
     final String profilePic = chatItem?.profilePic ?? user?.image ?? '';
     final String adminId = chatItem?.adminId ?? '';
-    final wid = MediaQuery.of(context).size.width;
+
     return Align(
       alignment: Alignment.bottomRight,
       child: Container(

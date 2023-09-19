@@ -1,5 +1,6 @@
 // ignore_for_file: invalid_use_of_protected_member
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:number_to_words/number_to_words.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
@@ -229,13 +230,7 @@ Widget buildInventoryQuestions(
                     }
                   : null,
             ),
-            isPriceField
-                ? AppText(
-                    text: textResult,
-                    fontsize: 13,
-                    fontWeight: FontWeight.bold,
-                  )
-                : const SizedBox.shrink(),
+            isPriceField ? Text(textResult) : const SizedBox.shrink(),
           ],
         );
       },
@@ -289,12 +284,17 @@ Widget buildInventoryQuestions(
         assignedUserIds: userids,
       );
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   } else if (question.questionOptionType == 'dropdown') {
     String? defaultValue;
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
+    }
+    if (!isEdit && question.questionTitle.contains("Bedroom")) {
+      defaultValue = "1";
     }
     return DropDownField(
       title: question.questionTitle,

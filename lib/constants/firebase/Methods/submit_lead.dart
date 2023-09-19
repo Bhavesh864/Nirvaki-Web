@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:random_string/random_string.dart';
@@ -9,7 +10,10 @@ import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' a
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 
+import '../../functions/convertStringTorange/convert_range_string.dart';
+
 Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async {
+  print(isEdit);
   final randomId = randomNumeric(5);
   final User currentUserdata = ref.read(userDataProvider);
   var res = "pending";
@@ -46,8 +50,8 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
   final addressLine2 = getDataById(state, 29);
   final floorNumber = getDataById(state, 30);
   final latlng = getDataById(state, 31);
-  final budgetPrice = getDataById(state, 32);
-  final budgetFigures = getDataById(state, 33);
+  final RangeValues? budgetPrice = getDataById(state, 32);
+
   final preferredpropertyfacing = getDataById(state, 34);
   final comments = getDataById(state, 35);
   final List<User> assignto = getDataById(state, 36);
@@ -84,7 +88,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       brokerid: currentUserdata.brokerId,
       cardType: "LD",
       cardTitle: "$propertyCategory $propertyKind-$propertyCity",
-      cardDescription: "Want to $leadCategory her $bedrooms BHK for $budgetPrice $budgetFigures rupees",
+      cardDescription: "Want to $leadCategory her $bedrooms BHK for ${formatValue(budgetPrice!.start)}-${formatValue(budgetPrice.end)} rupees",
       customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
       cardStatus: "New",
       assignedto: assignedToList,
@@ -94,7 +98,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       managerid: currentUserdata.managerid,
       propertyarearange: cards.Propertyarearange(arearangestart: carpetArea, unit: areaUnit),
       roomconfig: cards.Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom),
-      propertypricerange: cards.Propertypricerange(arearangestart: budgetPrice, unit: budgetFigures));
+      propertypricerange: cards.Propertypricerange(arearangestart: "${formatValue(budgetPrice.start)}-${formatValue(budgetPrice.end)}"));
   final List<Assignedto> assignedListInLead = assignto.map((user) {
     return Assignedto(
       firstname: user.userfirstname,
@@ -138,8 +142,8 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       propertyarea: Propertyarea(carpetarea: carpetArea, superarea: superArea, unit: areaUnit),
       preferredlocality: Preferredlocality(
           state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, prefferedfloornumber: floorNumber, locality: locality),
-      // propertyarearange: Propertyarearange(unit: areaUnit, arearangestart: carpetArea),
-      propertypricerange: Propertypricerange(unit: budgetFigures, arearangestart: budgetPrice),
+      propertyarearange: Propertyarearange(unit: areaUnit, arearangestart: carpetArea),
+      propertypricerange: Propertypricerange(arearangestart: formatValue(budgetPrice.start), arearangeend: formatValue(budgetPrice.end)),
       reservedparking: Reservedparking(covered: coveredparking),
       customerinfo: Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo ?? mobileNo),
       roomconfig: Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom ?? [], balconies: balconies, bathroom: bathrooms),
@@ -150,15 +154,12 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       createdby:
           Createdby(userfirstname: currentUserdata.userfirstname, userid: currentUserdata.userId, userlastname: currentUserdata.userlastname, userimage: currentUserdata.image));
 
-  // await cards.CardDetails.addCardDetails(card).then((value) => {res = "success"});
   isEdit
       ? await cards.CardDetails.updateCardDetails(id: existingLeadId, cardDetails: card).then((value) => {res = "success"})
       : await cards.CardDetails.addCardDetails(card).then((value) => {res = "success"});
 
-  // await LeadDetails.addLeadDetails(lead).then((value) => {res = "success"});
   isEdit
       ? await LeadDetails.updateLeadDetails(id: existingLeadId, leadDetails: lead).then((value) => {res = "success"})
       : await LeadDetails.addLeadDetails(lead).then((value) => {res = "success"});
-
   return res;
 }

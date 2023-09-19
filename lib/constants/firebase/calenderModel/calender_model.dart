@@ -1,8 +1,10 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
-final CollectionReference calenderModelCollection = FirebaseFirestore.instance.collection('calenderDetails');
+final CollectionReference calendarModelCollection = FirebaseFirestore.instance.collection('calenderDetails');
 
-class CalenderModel {
+class CalendarModel {
   String? id;
   String? calenderTitle;
   String? calenderDescription;
@@ -13,7 +15,7 @@ class CalenderModel {
   String? dueDate;
   String? time;
 
-  CalenderModel({
+  CalendarModel({
     this.id,
     this.calenderTitle,
     this.calenderDescription,
@@ -25,9 +27,9 @@ class CalenderModel {
     this.time,
   });
 
-  factory CalenderModel.fromSnapshot(DocumentSnapshot snapshot) {
+  factory CalendarModel.fromSnapshot(DocumentSnapshot snapshot) {
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-    return CalenderModel(
+    return CalendarModel(
       id: snapshot.id,
       calenderTitle: data['calenderTitle'],
       calenderDescription: data['calenderDescription'],
@@ -35,12 +37,12 @@ class CalenderModel {
       userId: data['userId'],
       brokerId: data['brokerId'],
       managerId: data['managerId'],
-      dueDate: data['DueDate'],
+      dueDate: data['dueDate'],
       time: data['time'],
     );
   }
 
-  CalenderModel.fromJson(Map<String, dynamic> json) {
+  CalendarModel.fromJson(Map<String, dynamic> json) {
     if (json["id"] is String) {
       id = json["id"];
     }
@@ -62,12 +64,25 @@ class CalenderModel {
     if (json["managerId"] is String) {
       managerId = json["managerId"];
     }
-    if (json["DueDate"] is String) {
-      dueDate = json["DueDate"];
+    if (json["dueDate"] is String) {
+      dueDate = json["dueDate"];
     }
     if (json["time"] is String) {
       time = json["time"];
     }
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'calenderTitle': calenderTitle,
+      'calenderDescription': calenderDescription,
+      'calenderType': calenderType,
+      'brokerId': brokerId,
+      'managerId': managerId,
+      'dueDate': dueDate,
+      "time": time,
+    };
   }
 
   Map<String, dynamic> toJson() {
@@ -79,40 +94,63 @@ class CalenderModel {
     data["userId"] = userId;
     data["brokerId"] = brokerId;
     data["managerId"] = managerId;
-    data["DueDate"] = dueDate;
+    data["dueDate"] = dueDate;
     data["time"] = time;
     return data;
   }
 
-  static Future<void> addCalenderModel(CalenderModel calenderModel) async {
+  static Future<void> addCalendarModel(CalendarModel calendarModel) async {
     try {
-      await calenderModelCollection.doc(calenderModel.id).set(calenderModel.toJson());
-      print('calender item added successfully');
+      await calendarModelCollection.doc(calendarModel.id).set(calendarModel.toJson());
+      if (kDebugMode) {
+        print('calender item added successfully');
+      }
     } catch (error) {
-      print('Failed to add calender item: $error');
+      if (kDebugMode) {
+        print('Failed to add calender item: $error');
+      }
     }
   }
 
-  static Future<List<CalenderModel>> getCalenderModel() async {
+  static Future<void> updateCalendarModel(CalendarModel calendarModel) async {
     try {
-      final QuerySnapshot querySnapshot = await calenderModelCollection.get();
-      final List<CalenderModel> items = querySnapshot.docs.map((doc) {
+      await calendarModelCollection.doc(calendarModel.id).update(calendarModel.toJson());
+      if (kDebugMode) {
+        print('calender item updated successfully');
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to add calender item: $error');
+      }
+    }
+  }
+
+  static Future<List<CalendarModel>> getCalendarModel() async {
+    try {
+      final QuerySnapshot querySnapshot = await calendarModelCollection.get();
+      final List<CalendarModel> items = querySnapshot.docs.map((doc) {
         final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        return CalenderModel.fromJson(data);
+        return CalendarModel.fromJson(data);
       }).toList();
       return items;
     } catch (error) {
-      print('Failed to get Inventory items: $error');
+      if (kDebugMode) {
+        print('Failed to get Inventory items: $error');
+      }
       return [];
     }
   }
 
-  static Future<void> deleteCalenderModel(String id) async {
+  static Future<void> deleteCalendarModel(String id) async {
     try {
-      await calenderModelCollection.doc(id).delete();
-      print("deleted successfully");
+      await calendarModelCollection.doc(id).delete();
+      if (kDebugMode) {
+        print("deleted successfully");
+      }
     } catch (error) {
-      print('Failed to delete Inventory item: $error');
+      if (kDebugMode) {
+        print('Failed to delete Inventory item: $error');
+      }
     }
   }
 }

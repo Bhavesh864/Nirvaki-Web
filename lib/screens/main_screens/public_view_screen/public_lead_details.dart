@@ -10,6 +10,7 @@ import 'package:yes_broker/Customs/small_custom_profile_image.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import '../../../Customs/custom_text.dart';
 import '../../../constants/firebase/userModel/broker_info.dart';
+
 import '../../../constants/functions/workitems_detail_methods.dart';
 import '../../../constants/utils/colors.dart';
 import '../../../constants/utils/constants.dart';
@@ -71,6 +72,7 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
             }
             if (snapshot.hasData) {
               final data = snapshot.data;
+
               return Column(
                 children: [
                   largeScreenView('Public View', context),
@@ -99,7 +101,6 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
                                     propertyCategory: data.propertycategory!,
                                     status: data.leadStatus!,
                                     price: data.propertypricerange?.arearangestart,
-                                    unit: data.propertypricerange?.unit,
                                   ),
                                   if (Responsive.isMobile(context))
                                     Padding(

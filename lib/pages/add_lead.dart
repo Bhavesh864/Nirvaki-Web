@@ -1,13 +1,9 @@
 // ignore_for_file: invalid_use_of_protected_member
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/customs/responsive.dart';
-
 import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
-
 import 'package:yes_broker/constants/functions/get_lead_questions.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/pages/add_inventory.dart';
@@ -217,35 +213,56 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                     isPlotSelected,
                                                     selectedValues,
                                                   ),
-                                                  if (i == currentScreenList[index].questions.length - 1 && currentScreenList[index].questions[i].questionOptionType != 'chip')
-                                                    Container(
-                                                      margin: const EdgeInsets.only(top: 10),
-                                                      alignment: Alignment.centerRight,
-                                                      child: allQuestionFinishes
-                                                          ? const Center(
-                                                              child: CircularProgressIndicator.adaptive(),
-                                                            )
-                                                          : CustomButton(
-                                                              text: currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next',
-                                                              onPressed: () {
-                                                                if (!allQuestionFinishes) {
-                                                                  if (currentScreenList[index].title != "Assign to") {
-                                                                    // if (_formKey.currentState!.validate()) {
-                                                                    nextQuestion(screensDataList: screensDataList, option: "");
-                                                                    // }
+                                                  SizedBox(height: currentScreenList[index].questions[i].questionOptionType != 'textfield' ? 10 : 0),
+                                                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                                    if (i == currentScreenList[index].questions.length - 1 && isEdit && currentScreenList[index].title != "Assign to") ...[
+                                                      CustomButton(
+                                                        height: 39,
+                                                        text: "Jump To Submit",
+                                                        onPressed: () {
+                                                          // setState(() {
+                                                          // currentScreenIndex = currentScreenList.length - 1;
+                                                          pageController?.jumpToPage(currentScreenList.length - 1);
+                                                          // });
+                                                        },
+                                                      ),
+                                                    ] else ...[
+                                                      const SizedBox()
+                                                    ],
+                                                    if (i == currentScreenList[index].questions.length - 1 &&
+                                                        currentScreenList[index].questions[i].questionOptionType != 'chip') ...[
+                                                      Container(
+                                                        margin: const EdgeInsets.only(top: 10),
+                                                        alignment: Alignment.centerRight,
+                                                        child: allQuestionFinishes
+                                                            ? const Center(
+                                                                child: CircularProgressIndicator.adaptive(),
+                                                              )
+                                                            : CustomButton(
+                                                                text: currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next',
+                                                                onPressed: () {
+                                                                  if (!allQuestionFinishes) {
+                                                                    if (currentScreenList[index].title != "Assign to") {
+                                                                      if (_formKey.currentState!.validate()) {
+                                                                        nextQuestion(screensDataList: screensDataList, option: "");
+                                                                      }
+                                                                    }
+                                                                    if (currentScreenList[index].title == "Assign to") {
+                                                                      setState(() {
+                                                                        allQuestionFinishes = true;
+                                                                      });
+                                                                      addDataOnfirestore(notify);
+                                                                    }
                                                                   }
-                                                                  if (currentScreenList[index].title == "Assign to") {
-                                                                    setState(() {
-                                                                      allQuestionFinishes = true;
-                                                                    });
-                                                                    addDataOnfirestore(notify);
-                                                                  }
-                                                                }
-                                                              },
-                                                              width: currentScreenList[index].title == "Assign to" ? 90 : 70,
-                                                              height: 39,
-                                                            ),
-                                                    ),
+                                                                },
+                                                                width: currentScreenList[index].title == "Assign to" ? 90 : 70,
+                                                                height: 39,
+                                                              ),
+                                                      ),
+                                                    ] else ...[
+                                                      const SizedBox()
+                                                    ]
+                                                  ]),
                                                 ],
                                               ),
                                           ],
