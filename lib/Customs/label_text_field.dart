@@ -39,27 +39,30 @@ class LabelTextInputField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: labelText,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              if (isMandatory)
-                const TextSpan(
-                  text: '*',
-                  style: TextStyle(
-                    fontSize: 12,
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 7),
+          child: RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: labelText,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: Colors.red,
                   ),
                 ),
-            ],
+                if (isMandatory)
+                  const TextSpan(
+                    text: '*',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.red,
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
         CustomTextInput(
