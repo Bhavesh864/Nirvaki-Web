@@ -18,6 +18,7 @@ import 'package:yes_broker/screens/main_screens/create_group_screen.dart';
 
 import '../../Customs/responsive.dart';
 import '../../constants/utils/colors.dart';
+import '../../widgets/app/nav_bar.dart';
 
 class ChatItem {
   final String id;
@@ -225,7 +226,7 @@ class TestList extends ConsumerWidget {
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: ListTile(
                           title: Text(
-                            chatItem.name,
+                            capitalizeFirstLetter(chatItem.name),
                             style: const TextStyle(
                               fontSize: 15,
                             ),

@@ -275,7 +275,7 @@ void showConfirmDeleteAttachment(BuildContext context, Function onPressYes) {
                 children: [
                   Flexible(
                     child: Text(
-                      'Do you want to remove insurance document?',
+                      'Are you sure you want to delete it',
                       style: TextStyle(fontSize: Responsive.isMobile(context) ? 22 : 26, fontWeight: FontWeight.bold),
                     ),
                   ),

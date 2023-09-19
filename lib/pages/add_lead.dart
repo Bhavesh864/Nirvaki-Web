@@ -77,11 +77,15 @@ class _AddLeadState extends ConsumerState<AddLead> {
     } else {}
   }
 
-  goBack(List<int> id) {
+  goBack(List<int> id, type) {
     if (currentScreenIndex > 0) {
       setState(() {
         currentScreenIndex--;
-        !isEdit ? ref.read(myArrayProvider.notifier).remove(id) : null;
+        !isEdit
+            ? type
+                ? null
+                : ref.read(myArrayProvider.notifier).remove(id)
+            : null;
         pageController!.previousPage(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
@@ -216,16 +220,18 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                   SizedBox(height: currentScreenList[index].questions[i].questionOptionType != 'textfield' ? 10 : 0),
                                                   Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                                                     if (i == currentScreenList[index].questions.length - 1 && isEdit && currentScreenList[index].title != "Assign to") ...[
-                                                      CustomButton(
-                                                        height: 39,
-                                                        text: "Jump To Submit",
-                                                        onPressed: () {
-                                                          // setState(() {
-                                                          // currentScreenIndex = currentScreenList.length - 1;
-                                                          pageController?.jumpToPage(currentScreenList.length - 1);
-                                                          // });
-                                                        },
-                                                      ),
+                                                      // CustomButton(
+                                                      //   height: 39,
+                                                      //   text: "Jump To Submit",
+                                                      //   onPressed: () {
+                                                      //     // setState(() {
+                                                      //     // currentScreenIndex = currentScreenList.length - 1;
+                                                      //     pageController?.jumpToPage(currentScreenList.length - 1);
+                                                      //     // });
+                                                      //   },
+                                                      // ),
+
+                                                      const SizedBox()
                                                     ] else ...[
                                                       const SizedBox()
                                                     ],
@@ -298,7 +304,9 @@ class _AddLeadState extends ConsumerState<AddLead> {
               onPressed: () {
                 final currentScreenQuestions = screensDataList[currentScreenIndex].questions;
                 final ids = currentScreenQuestions.map((q) => q.questionId).toList();
-                goBack(ids);
+                final allquestion = currentScreenQuestions.map((q) => q.questionOptionType).toList();
+                final questiontype = allquestion.any((element) => element == "textfield" || element == "photo");
+                goBack(ids, questiontype);
               },
               icon: const Icon(
                 Icons.arrow_back,
