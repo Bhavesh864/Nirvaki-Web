@@ -193,17 +193,20 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                             ),
                             DropDownField(
                                 title: "State",
+                                defaultValues: "",
                                 optionsList: const ["Rajasthan"],
                                 onchanged: (value) {
                                   notify.add({"id": 11, "item": value});
                                 }),
                             DropDownField(
+                                defaultValues: "",
                                 title: "City",
                                 optionsList: const ["Jaipur", "Bikaner"],
                                 onchanged: (value) {
                                   notify.add({"id": 12, "item": value});
                                 }),
                             DropDownField(
+                                defaultValues: "",
                                 title: "Register As",
                                 optionsList: dropdownitem,
                                 onchanged: (value) {
