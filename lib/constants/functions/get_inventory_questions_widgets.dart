@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/number_symbols_data.dart';
 import 'package:number_to_words/number_to_words.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
@@ -297,11 +298,46 @@ Widget buildInventoryQuestions(
     }
   } else if (question.questionOptionType == 'dropdown') {
     String? defaultValue;
+    final isState = question.questionTitle.contains("State");
+    final isCity = question.questionTitle.contains("City");
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
     if (!isEdit && question.questionTitle.contains("Bedroom")) {
       defaultValue = "1";
+    }
+    if (isState || isCity) {
+      int stateIndex = 0;
+      List<String?> cities = [];
+      return StatefulBuilder(builder: (context, setState) {
+        print('------------$stateIndex');
+        final List<String?> states = stateList.map((e) => e.state).toList();
+        // print(states);
+        // states.sort((a, b) => a!.compareTo(b.toString()));
+        if (stateList.isNotEmpty && stateIndex >= 0 && stateIndex < stateList.length && stateList[stateIndex].districts != null) {
+          cities = stateList[stateIndex].districts!;
+          print(cities);
+        }
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 7),
+          child: DropDownField(
+            title: question.questionTitle,
+            defaultValues: defaultValue ?? "",
+            optionsList: isState ? states : cities,
+            onchanged: (Object e) {
+              notify.add({"id": question.questionId, "item": e});
+              if (isState) {
+                final selectedState = e as String?;
+                final index = states.indexOf(selectedState);
+                setState(() {
+                  stateIndex = index;
+                });
+                print(stateIndex);
+              }
+            },
+          ),
+        );
+      });
     }
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 7),

@@ -169,7 +169,8 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                             AssignmentWidget(
                                               id: data.leadId!,
                                               assignto: data.assignedto!,
-                                              imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                              imageUrlCreatedBy:
+                                                  data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                               createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                             ),
                                           );
@@ -339,6 +340,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
         {"id": 100, "item": data.attachments},
         {"id": 101, "item": data.leadId},
         {"id": 54, "item": data.preferredlocality?.locality},
+        {"id": 55, "item": data.furnishedStatus},
       ]);
     } catch (e) {
       if (kDebugMode) {

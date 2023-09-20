@@ -267,6 +267,7 @@ Widget buildLeadQuestions(
     if (!isEdit && question.questionTitle.contains("Bedroom")) {
       defaultValue = "1";
     }
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 7),
       child: DropDownField(

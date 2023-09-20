@@ -70,6 +70,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
   final lockinperiod = getDataById(state, 52);
   final commercialphotos = getDataById(state, 53);
   final locality = getDataById(state, 54);
+  final furnishedStatus = getDataById(state, 55);
   final attachments = getDataById(state, 100);
   final existingInventoryId = getDataById(state, 101);
 
@@ -94,7 +95,8 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       cardTitle: "$propertyCategory $propertyKind-$propertyCity",
       cardDescription:
           "Want to $inventoryCategory her $bedrooms BHK for ${inventoryCategory == "Rent" ? convertToCroresAndLakhs(rentamount) : convertToCroresAndLakhs(price)} rupees",
-      customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
+      customerinfo:
+          cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
       cardStatus: "New",
       assignedto: assignedToList,
       createdby: cards.Createdby(
@@ -144,10 +146,12 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       reservedparking: Reservedparking(covered: coveredparking),
       propertyarea: Propertyarea(unit: areaUnit, superarea: superArea),
       plotdetails: Plotdetails(boundarywall: boundaryWall, opensides: openSides),
-      customerinfo: Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo ?? mobileNo),
+      customerinfo:
+          Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo ?? mobileNo),
       roomconfig: Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom ?? [], balconies: balconies, bathroom: bathrooms),
       propertyfacing: propertyFacing,
       comments: comments,
+      furnishedStatus: furnishedStatus,
       plotarea: Plotarea(area: superArea, unit: areaUnit),
       propertyaddress:
           Propertyaddress(state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, floornumber: floorNumber, locality: locality),
@@ -157,8 +161,8 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       createdate: Timestamp.now(),
       updatedby: AppConst.getAccessToken(),
       assignedto: assignedListInInventory,
-      createdby:
-          Createdby(userfirstname: currentUserdata.userfirstname, userid: currentUserdata.userId, userlastname: currentUserdata.userlastname, userimage: currentUserdata.image));
+      createdby: Createdby(
+          userfirstname: currentUserdata.userfirstname, userid: currentUserdata.userId, userlastname: currentUserdata.userlastname, userimage: currentUserdata.image));
 
   isEdit
       ? await cards.CardDetails.updateCardDetails(id: existingInventoryId, cardDetails: card).then((value) => {res = "success"})

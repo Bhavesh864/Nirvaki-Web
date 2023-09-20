@@ -9,7 +9,6 @@ import 'package:yes_broker/Customs/custom_chip.dart';
 
 import '../constants/functions/navigation/navigation_functions.dart';
 import '../constants/functions/time_formatter.dart';
-import '../constants/utils/image_constants.dart';
 
 class TimeLineItem extends ConsumerStatefulWidget {
   final int index;
@@ -42,7 +41,7 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               if (!timeLine.itemid!.contains('TD'))
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     navigateBasedOnId(context, timeLine.itemid!, ref);
                   },
