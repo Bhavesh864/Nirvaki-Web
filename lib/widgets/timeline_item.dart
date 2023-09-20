@@ -41,7 +41,7 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               if (!timeLine.itemid!.contains('TD'))
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     navigateBasedOnId(context, timeLine.itemid!, ref);
                   },

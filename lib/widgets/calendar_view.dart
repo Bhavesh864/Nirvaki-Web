@@ -5,6 +5,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/screens/main_screens/caledar_screen.dart';
 import '../constants/firebase/calenderModel/calender_model.dart';
 import '../constants/firebase/userModel/user_info.dart';
@@ -48,14 +49,16 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return const CalendarScreen();
-                          },
-                        ),
-                      );
+                      if (Responsive.isMobile(context)) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const CalendarScreen();
+                            },
+                          ),
+                        );
+                      }
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -108,7 +111,7 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                           height: calendarAppointmentDetails.bounds.height,
                           width: 500,
                           decoration: BoxDecoration(
-                            color: getColorForTaskType('Meeting').withOpacity(0.1),
+                            color: getColorForTaskType('').withOpacity(0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Padding(

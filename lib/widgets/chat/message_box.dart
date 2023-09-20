@@ -6,6 +6,7 @@ import 'package:yes_broker/chat/enums/message.enums.dart';
 import 'package:yes_broker/chat/models/message.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/customs/responsive.dart';
 
 import '../../constants/functions/datetime/date_time.dart';
 
@@ -78,6 +79,7 @@ class MessageBox extends StatelessWidget {
                         ),
                       ),
                     Container(
+                      constraints: Responsive.isMobile(context) ? null : const BoxConstraints(maxWidth: 210),
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       child: DisplayMessage(
                         message: message,

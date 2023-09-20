@@ -144,6 +144,7 @@ void showUploadDocumentModal(
   List<PlatformFile> pickedDocuments,
   Function onPressed,
   String id,
+  Function(bool) setIsUploading,
 ) {
   String docName = '';
 
@@ -236,10 +237,12 @@ void showUploadDocumentModal(
                       onPressed: () {
                         if (docName != '' && selectedFile != null) {
                           selectedDocName.add(docName);
+                          setIsUploading(true);
                           uploadAttachmentsToFirebaseStorage(selectedFile!, id, docName, updateState, titleController.text);
                           onPressed();
                           selectedFile = null;
                           Navigator.of(context).pop();
+                          setIsUploading(false);
                         }
                       },
                     ),
