@@ -47,6 +47,7 @@ class LeadDetails {
   String? typeofschool;
   String? hospitalrooms;
   String? preferredroadwidth;
+  String? furnishedStatus;
 
   LeadDetails(
       {this.leadStatus,
@@ -67,6 +68,7 @@ class LeadDetails {
       this.leadcategory,
       this.leadType,
       this.leadsource,
+      this.furnishedStatus,
       this.propertycategory,
       this.propertykind,
       this.transactiontype,
@@ -99,6 +101,7 @@ class LeadDetails {
       leadTitle: json["leadTitle"],
       leadDescription: json["leadDescription"],
       leadId: json["leadId"],
+      furnishedStatus: json["furnishedStatus"],
       leadStatus: json["leadStatus"],
       brokerid: json["brokerid"],
       assignedto: (json["assignedto"] as List<dynamic>?)?.map((e) => Assignedto.fromJson(e)).toList(),
@@ -151,6 +154,9 @@ class LeadDetails {
     }
     if (json["leadId"] is String) {
       leadId = json["leadId"];
+    }
+    if (json["furnishedStatus"] is String) {
+      leadId = json["furnishedStatus"];
     }
     if (json["leadTitle"] is String) {
       leadTitle = json["leadTitle"];
@@ -302,6 +308,7 @@ class LeadDetails {
     }
     data["comments"] = comments;
     data["leadcategory"] = leadcategory;
+    data["furnishedStatus"] = furnishedStatus;
     data["leadType"] = leadType;
     data["leadsource"] = leadsource;
     data["propertycategory"] = propertycategory;

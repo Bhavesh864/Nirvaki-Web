@@ -48,14 +48,6 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
     super.dispose();
   }
 
-  void scrollToEnd() {
-    messageController.animateTo(
-      messageController.position.maxScrollExtent,
-      duration: const Duration(seconds: 2),
-      curve: Curves.easeOut,
-    );
-  }
-
   ChatModalScreenType currentScreen = ChatModalScreenType.chatList;
   ChatItem? chatItem;
   User? user;
