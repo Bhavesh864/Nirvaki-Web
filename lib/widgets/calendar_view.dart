@@ -1,15 +1,11 @@
-import 'package:beamer/beamer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/screens/main_screens/caledar_screen.dart';
-
 import '../constants/firebase/calenderModel/calender_model.dart';
 import '../constants/firebase/userModel/user_info.dart';
 import '../constants/functions/calendar/calendar_functions.dart';
@@ -30,116 +26,117 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
   Widget build(BuildContext context) {
     final User user = ref.read(userDataProvider);
     return StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('calenderDetails').where('brokerId', isEqualTo: user.brokerId).snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Loader();
-          }
-          if (snapshot.hasData) {
-            final dataList = snapshot.data!.docs;
-            List<CalendarModel> calenderList = dataList.map((doc) => CalendarModel.fromSnapshot(doc)).toList();
+      stream: FirebaseFirestore.instance.collection('calenderDetails').where('brokerId', isEqualTo: user.brokerId).snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Loader();
+        }
+        if (snapshot.hasData) {
+          final dataList = snapshot.data!.docs;
+          List<CalendarModel> calenderList = dataList.map((doc) => CalendarModel.fromSnapshot(doc)).toList();
 
-            return SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColor.secondary,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return const CalendarScreen();
-                            },
+          return SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColor.secondary,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return const CalendarScreen();
+                          },
+                        ),
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const CustomText(
+                          title: 'Calendar',
+                          fontWeight: FontWeight.w600,
+                        ),
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                showAddCalendarModal(
+                                  context: context,
+                                  isEdit: false,
+                                  ref: ref,
+                                );
+                              },
+                              child: const Icon(
+                                Icons.add,
+                                size: 24,
+                              ),
+                            ),
+                            const Icon(
+                              Icons.more_horiz,
+                              size: 24,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    height: 175,
+                    child: SfCalendar(
+                      headerHeight: 0,
+                      dataSource: EventDataSource(calenderList),
+                      view: CalendarView.timelineWeek,
+                      timeSlotViewSettings: const TimeSlotViewSettings(startHour: 9, endHour: 24),
+                      showTodayButton: true,
+                      showNavigationArrow: true,
+                      backgroundColor: Colors.white,
+                      allowAppointmentResize: true,
+                      appointmentBuilder: (context, calendarAppointmentDetails) {
+                        final event = calendarAppointmentDetails.appointments.first;
+
+                        return Container(
+                          margin: const EdgeInsets.symmetric(vertical: 4),
+                          height: calendarAppointmentDetails.bounds.height,
+                          width: 500,
+                          decoration: BoxDecoration(
+                            color: getColorForTaskType('Meeting').withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            child: Center(
+                              child: Text(
+                                event.calenderTitle,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
                           ),
                         );
                       },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const CustomText(
-                            title: 'Calendar',
-                            fontWeight: FontWeight.w600,
-                          ),
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  showAddCalendarModal(
-                                    context: context,
-                                    isEdit: false,
-                                    ref: ref,
-                                  );
-                                },
-                                child: const Icon(
-                                  Icons.add,
-                                  size: 24,
-                                ),
-                              ),
-                              const Icon(
-                                Icons.more_horiz,
-                                size: 24,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
                     ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 10),
-                      height: 175,
-                      child: SfCalendar(
-                        headerHeight: 0,
-                        dataSource: EventDataSource(calenderList),
-                        view: CalendarView.timelineWeek,
-                        timeSlotViewSettings: const TimeSlotViewSettings(startHour: 9, endHour: 24),
-                        showTodayButton: true,
-                        showNavigationArrow: true,
-                        backgroundColor: Colors.white,
-                        allowAppointmentResize: true,
-                        appointmentBuilder: (context, calendarAppointmentDetails) {
-                          final event = calendarAppointmentDetails.appointments.first;
-
-                          return Container(
-                            margin: const EdgeInsets.symmetric(vertical: 4),
-                            height: calendarAppointmentDetails.bounds.height,
-                            width: 500,
-                            decoration: BoxDecoration(
-                              color: getColorForTaskType('Meeting').withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
-                              child: Center(
-                                child: Text(
-                                  event.calenderTitle,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            );
-          }
-          return const SizedBox();
-        });
+            ),
+          );
+        }
+        return const SizedBox();
+      },
+    );
   }
 }
 
