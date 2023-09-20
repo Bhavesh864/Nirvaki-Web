@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 final CollectionReference activityDetailsCollection = FirebaseFirestore.instance.collection('activityDetails');
 
@@ -120,9 +121,13 @@ class ActivityDetails {
   static Future<void> addactivity(ActivityDetails activityDetails) async {
     try {
       await activityDetailsCollection.doc().set(activityDetails.toJson());
-      print('Inventory item added successfully');
+      if (kDebugMode) {
+        print('Inventory item added successfully');
+      }
     } catch (error) {
-      print('Failed to add Inventory item: $error');
+      if (kDebugMode) {
+        print('Failed to add Inventory item: $error');
+      }
     }
   }
 

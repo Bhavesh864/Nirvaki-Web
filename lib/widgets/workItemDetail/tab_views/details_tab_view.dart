@@ -1,5 +1,9 @@
 // import "dart:html" show AnchorElement;
+
+// import 'dart:html';
+
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
@@ -318,13 +322,11 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                       //     print(path);
                                       //   },
                                       // );
-
                                       // final res = await downloadFile(attachment.path, 'fileName', 'download');
-
                                       // if (kIsWeb) {
-                                      // AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                      // anchorElement.download = 'Attachment file';
-                                      // anchorElement.click();
+                                      //   AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                      //   anchorElement.download = 'Attachment file';
+                                      //   anchorElement.click();
                                       // }
                                     },
                                   ),
@@ -421,3 +423,20 @@ class _DetailsTabViewState extends State<DetailsTabView> {
     );
   }
 }
+
+// Future<void> downloadAndSavePhoto(String url) async {
+//   final response = await http.get(Uri.parse(url));
+//   if (response.statusCode == 200) {
+//     if (kIsWeb) {
+//       // Set web-specific directory
+//     } else {
+//       final directory = await getApplicationDocumentsDirectory();
+//       final filePath = '${directory.path}/photo.jpg';
+//       final file = File(filePath);
+//       await file.writeAsBytes(response.bodyBytes);
+//       print('Photo downloaded and saved to $filePath');
+//     }
+//   } else {
+//     throw Exception('Failed to download photo');
+//   }
+// }

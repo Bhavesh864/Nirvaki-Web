@@ -1,4 +1,4 @@
-//  List<InventoryQuestions> screensList = [
+// List<InventoryQuestions> screensList = [
 //       InventoryQuestions(
 //         type: "Commercial",
 //         screens: [
@@ -326,13 +326,7 @@
 //               Question(
 //                 questionId: 24,
 //                 questionOptionType: "textfield",
-//                 questionTitle: "Super Area",
-//                 questionOption: "",
-//               ),
-//               Question(
-//                 questionId: 25,
-//                 questionOptionType: "textfield",
-//                 questionTitle: "Carpet Area",
+//                 questionTitle: "Property Area",
 //                 questionOption: "",
 //               ),
 //             ],
@@ -348,12 +342,6 @@
 //                 questionOptionType: "textfield",
 //                 questionTitle: "Listing Price",
 //                 questionOption: "",
-//               ),
-//               Question(
-//                 questionId: 47,
-//                 questionOptionType: "smallchip",
-//                 questionTitle: "",
-//                 questionOption: ["Crore", "Lakh", "Thousands"],
 //               ),
 //             ],
 //             isActive: true,
@@ -371,28 +359,10 @@
 //                 questionOption: "",
 //               ),
 //               Question(
-//                 questionId: 49,
-//                 questionOptionType: "smallchip",
-//                 questionTitle: "",
-//                 questionOption: ["Crore", "Lakh", "Thousands"],
-//               ),
-//               Question(
 //                 questionId: 50,
 //                 questionOptionType: "textfield",
 //                 questionTitle: "Security Deposit",
 //                 questionOption: "",
-//               ),
-//               Question(
-//                 questionId: 51,
-//                 questionOptionType: "smallchip",
-//                 questionTitle: "",
-//                 questionOption: ["Lakh", "Thousands"],
-//               ),
-//               Question(
-//                 questionId: 52,
-//                 questionOptionType: "dropdown",
-//                 questionTitle: "Notice Period",
-//                 questionOption: ["0-12 Months", "1-5 Years"],
 //               ),
 //             ],
 //             isActive: true,
@@ -407,13 +377,19 @@
 //                 questionId: 26,
 //                 questionOptionType: "dropdown",
 //                 questionTitle: "State",
-//                 questionOption: [],
+//                 questionOption: ["Rajasthan"],
 //               ),
 //               Question(
 //                 questionId: 27,
 //                 questionOptionType: "dropdown",
 //                 questionTitle: "City",
-//                 questionOption: [],
+//                 questionOption: ['Bikaner'],
+//               ),
+//               Question(
+//                 questionId: 54,
+//                 questionOptionType: "dropdown",
+//                 questionTitle: "Locality",
+//                 questionOption: ["pawan-puri"],
 //               ),
 //               Question(
 //                 questionId: 28,

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 final CollectionReference leadDetailsCollection = FirebaseFirestore.instance.collection('leadDetails');
 
@@ -359,7 +360,6 @@ class LeadDetails {
       }
       return null;
     } catch (error) {
-      print('Failed to get users: $error');
       return null;
     }
   }
@@ -379,9 +379,13 @@ class LeadDetails {
       for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
         await docSnapshot.reference.update(leadDetails.toJson());
       }
-      print('lead item updated successfully');
+      if (kDebugMode) {
+        print('lead item updated successfully');
+      }
     } catch (error) {
-      print('Failed to update lead item: $error');
+      if (kDebugMode) {
+        print('Failed to update lead item: $error');
+      }
     }
   }
 
@@ -396,10 +400,14 @@ class LeadDetails {
 
         await docSnapshot.reference.update({'attachments': existingAttachments});
 
-        print('Attachment added successfully to item ${docSnapshot.id}');
+        if (kDebugMode) {
+          print('Attachment added successfully to item ${docSnapshot.id}');
+        }
       }
     } catch (error) {
-      print('Failed to add attachment to items: $error');
+      if (kDebugMode) {
+        print('Failed to add attachment to items: $error');
+      }
     }
   }
 
@@ -417,12 +425,18 @@ class LeadDetails {
           }
         }
         await docSnapshot.reference.update({'attachments': updatedAttachments});
-        print('Attachment deleted successfully from item $itemId');
+        if (kDebugMode) {
+          print('Attachment deleted successfully from item $itemId');
+        }
       } else {
-        print('Item not found with InventoryId: $itemId');
+        if (kDebugMode) {
+          print('Item not found with InventoryId: $itemId');
+        }
       }
     } catch (error) {
-      print('Failed to delete attachment: $error');
+      if (kDebugMode) {
+        print('Failed to delete attachment: $error');
+      }
     }
   }
 
@@ -432,9 +446,13 @@ class LeadDetails {
       for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
         await docSnapshot.reference.update(leadDetails.toJson());
       }
-      print('lead item updated successfully');
+      if (kDebugMode) {
+        print('lead item updated successfully');
+      }
     } catch (error) {
-      print('Failed to update lead item: $error');
+      if (kDebugMode) {
+        print('Failed to update lead item: $error');
+      }
     }
   }
 
@@ -444,9 +462,13 @@ class LeadDetails {
       for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
         await docSnapshot.reference.update({'leadStatus': newStatus});
       }
-      print('lead status update');
+      if (kDebugMode) {
+        print('lead status update');
+      }
     } catch (error) {
-      print('Failed to update card status: $error');
+      if (kDebugMode) {
+        print('Failed to update card status: $error');
+      }
     }
   }
 
@@ -463,10 +485,14 @@ class LeadDetails {
         existingAssignToData.addAll(newAssignToData);
 
         await docSnapshot.reference.update({'assignedto': existingAssignToData});
-        print('Updated the list of assigned users for ${docSnapshot.id}');
+        if (kDebugMode) {
+          print('Updated the list of assigned users for ${docSnapshot.id}');
+        }
       }
     } catch (error) {
-      print('Failed to update assigned users: $error');
+      if (kDebugMode) {
+        print('Failed to update assigned users: $error');
+      }
     }
   }
 
@@ -484,12 +510,18 @@ class LeadDetails {
           }
         }
         await docSnapshot.reference.update({'assignedto': updateduser});
-        print('updated user from this inventory$itemId');
+        if (kDebugMode) {
+          print('updated user from this inventory$itemId');
+        }
       } else {
-        print('Item not found with InventoryId: $itemId');
+        if (kDebugMode) {
+          print('Item not found with InventoryId: $itemId');
+        }
       }
     } catch (error) {
-      print('Failed to delete user: $error');
+      if (kDebugMode) {
+        print('Failed to delete user: $error');
+      }
     }
   }
 }

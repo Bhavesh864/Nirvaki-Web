@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 final CollectionReference groupCollection = FirebaseFirestore.instance.collection('groups');
 
@@ -98,12 +99,18 @@ class Group {
         List<dynamic> memberids = data['membersUid'] ?? [];
         memberids.addAll(userids);
         await docSnapshot.reference.update({'membersUid': memberids});
-        print('membersUid added successfully to item with docId: $groupId');
+        if (kDebugMode) {
+          print('membersUid added successfully to item with docId: $groupId');
+        }
       } else {
-        print('Document not found with docId: $groupId');
+        if (kDebugMode) {
+          print('Document not found with docId: $groupId');
+        }
       }
     } catch (error) {
-      print('Failed to add membersUid to item with docId: $groupId, error: $error');
+      if (kDebugMode) {
+        print('Failed to add membersUid to item with docId: $groupId, error: $error');
+      }
     }
   }
 
@@ -116,24 +123,36 @@ class Group {
         if (memberids.contains(memberIdToDelete)) {
           memberids.remove(memberIdToDelete);
           await docSnapshot.reference.update({'membersUid': memberids});
-          print('Member deleted successfully from group with groupId: $groupId');
+          if (kDebugMode) {
+            print('Member deleted successfully from group with groupId: $groupId');
+          }
         } else {
-          print('Member not found in group with groupId: $groupId');
+          if (kDebugMode) {
+            print('Member not found in group with groupId: $groupId');
+          }
         }
       } else {
-        print('Document not found with groupId: $groupId');
+        if (kDebugMode) {
+          print('Document not found with groupId: $groupId');
+        }
       }
     } catch (error) {
-      print('Failed to delete member from group with docId: $groupId, error: $error');
+      if (kDebugMode) {
+        print('Failed to delete member from group with docId: $groupId, error: $error');
+      }
     }
   }
 
   static Future<void> deleteGroup(String groupId) async {
     try {
       await groupCollection.doc(groupId).delete();
-      print('group deleted successfully');
+      if (kDebugMode) {
+        print('group deleted successfully');
+      }
     } catch (error) {
-      print('Failed to delete group: $error');
+      if (kDebugMode) {
+        print('Failed to delete group: $error');
+      }
     }
   }
 }

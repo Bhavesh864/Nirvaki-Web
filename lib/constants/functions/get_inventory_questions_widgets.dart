@@ -1,8 +1,8 @@
 // ignore_for_file: invalid_use_of_protected_member
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:number_to_words/number_to_words.dart';
-import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
@@ -16,6 +16,7 @@ import '../../customs/custom_text.dart';
 import '../../customs/dropdown_field.dart';
 import '../../customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
+import '../firebase/statesModel/state_c_ity_model.dart';
 import '../utils/colors.dart';
 
 Widget buildInventoryQuestions(
@@ -28,6 +29,7 @@ Widget buildInventoryQuestions(
   bool isPlotSelected,
   bool isEdit,
   List<Map<String, dynamic>> selectedValues,
+  List<States> stateList,
 ) {
   if (question.questionOptionType == 'chip') {
     return Column(
@@ -60,55 +62,10 @@ Widget buildInventoryQuestions(
       selectedOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
     return StatefulBuilder(builder: (context, setState) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomText(
-            fontWeight: FontWeight.w500,
-            size: 16,
-            title: question.questionTitle,
-          ),
-          SizedBox(
-            width: double.infinity,
-            child: Wrap(
-              alignment: WrapAlignment.start,
-              children: [
-                for (var option in question.questionOption)
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10, bottom: 10),
-                    child: CustomChoiceChip(
-                      label: option,
-                      selected: selectedOption == option,
-                      bgcolor: selectedOption == option ? AppColor.primary : AppColor.primary.withOpacity(0.05),
-                      onSelected: (selectedItem) {
-                        setState(() {
-                          if (selectedOption == option) {
-                            selectedOption = '';
-                          } else {
-                            selectedOption = option;
-                          }
-                        });
-                        notify.add({"id": question.questionId, "item": selectedOption});
-                      },
-                      labelColor: selectedOption == option ? Colors.white : Colors.black,
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ],
-      );
-    });
-  } else if (question.questionOptionType == 'multichip') {
-    List<String> selectedOptions = [];
-    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
-      selectedOptions = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
-    }
-    return StatefulBuilder(
-      builder: (context, setState) {
-        return Column(
+      return Container(
+        margin: const EdgeInsets.symmetric(horizontal: 7),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CustomText(
               fontWeight: FontWeight.w500,
@@ -120,30 +77,81 @@ Widget buildInventoryQuestions(
               child: Wrap(
                 alignment: WrapAlignment.start,
                 children: [
-                  for (var item in question.questionOption)
+                  for (var option in question.questionOption)
                     Padding(
-                      padding: const EdgeInsets.only(right: 10, top: 5, bottom: 5),
+                      padding: const EdgeInsets.only(right: 10, bottom: 10),
                       child: CustomChoiceChip(
-                        label: item,
-                        selected: selectedOptions.contains(item),
-                        bgcolor: selectedOptions.contains(item) ? AppColor.primary : AppColor.primary.withOpacity(0.05),
+                        label: option,
+                        selected: selectedOption == option,
+                        bgcolor: selectedOption == option ? AppColor.primary : AppColor.primary.withOpacity(0.05),
                         onSelected: (selectedItem) {
                           setState(() {
-                            if (selectedOptions.contains(item)) {
-                              selectedOptions.remove(item);
+                            if (selectedOption == option) {
+                              selectedOption = '';
                             } else {
-                              selectedOptions.add(item);
+                              selectedOption = option;
                             }
                           });
-                          notify.add({"id": question.questionId, "item": selectedOptions});
+                          notify.add({"id": question.questionId, "item": selectedOption});
                         },
-                        labelColor: selectedOptions.contains(item) ? Colors.white : Colors.black,
+                        labelColor: selectedOption == option ? Colors.white : Colors.black,
                       ),
                     ),
                 ],
               ),
             ),
           ],
+        ),
+      );
+    });
+  } else if (question.questionOptionType == 'multichip') {
+    List<String> selectedOptions = [];
+    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+      selectedOptions = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+    }
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 7),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CustomText(
+                fontWeight: FontWeight.w500,
+                size: 16,
+                title: question.questionTitle,
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: Wrap(
+                  alignment: WrapAlignment.start,
+                  children: [
+                    for (var item in question.questionOption)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10, top: 5, bottom: 5),
+                        child: CustomChoiceChip(
+                          label: item,
+                          selected: selectedOptions.contains(item),
+                          bgcolor: selectedOptions.contains(item) ? AppColor.primary : AppColor.primary.withOpacity(0.05),
+                          onSelected: (selectedItem) {
+                            setState(() {
+                              if (selectedOptions.contains(item)) {
+                                selectedOptions.remove(item);
+                              } else {
+                                selectedOptions.add(item);
+                              }
+                            });
+                            notify.add({"id": question.questionId, "item": selectedOptions});
+                          },
+                          labelColor: selectedOptions.contains(item) ? Colors.white : Colors.black,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -196,8 +204,10 @@ Widget buildInventoryQuestions(
     return StatefulBuilder(
       builder: (context, setState) {
         final isPriceField = question.questionId == 46 || question.questionId == 48 || question.questionId == 50;
-        final isvalidationtrue =
-            question.questionTitle.contains('First') || question.questionTitle.contains('Mobile') || question.questionTitle == 'Rent' || question.questionTitle == 'Listing Price';
+        final isvalidationtrue = question.questionTitle.contains('First') ||
+            question.questionTitle.contains('Mobile') ||
+            question.questionTitle == 'Rent' ||
+            question.questionTitle == 'Listing Price';
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,13 +239,7 @@ Widget buildInventoryQuestions(
                     }
                   : null,
             ),
-            isPriceField
-                ? AppText(
-                    text: textResult,
-                    fontsize: 13,
-                    fontWeight: FontWeight.bold,
-                  )
-                : const SizedBox.shrink(),
+            isPriceField ? Text(textResult) : const SizedBox.shrink(),
           ],
         );
       },
@@ -289,20 +293,28 @@ Widget buildInventoryQuestions(
         assignedUserIds: userids,
       );
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   } else if (question.questionOptionType == 'dropdown') {
     String? defaultValue;
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
-    return DropDownField(
-      title: question.questionTitle,
-      defaultValues: defaultValue ?? "",
-      optionsList: question.questionOption,
-      onchanged: (Object e) {
-        notify.add({"id": question.questionId, "item": e});
-      },
+    if (!isEdit && question.questionTitle.contains("Bedroom")) {
+      defaultValue = "1";
+    }
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 7),
+      child: DropDownField(
+        title: question.questionTitle,
+        defaultValues: defaultValue ?? "",
+        optionsList: question.questionOption,
+        onchanged: (Object e) {
+          notify.add({"id": question.questionId, "item": e});
+        },
+      ),
     );
   } else if (question.questionOptionType == 'map') {
     final state = getDataById(selectedValues, 26);

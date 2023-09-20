@@ -49,7 +49,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                 const Icon(Icons.add),
                 const Padding(
                     padding: EdgeInsets.only(left: 4, top: 1, bottom: 1),
-                    child: Text("Added by ",
+                    child: Text("Added by",
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
                         style: TextStyle(
