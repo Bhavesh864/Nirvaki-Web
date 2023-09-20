@@ -70,6 +70,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
   final lockinperiod = getDataById(state, 52);
   final commercialphotos = getDataById(state, 53);
   final locality = getDataById(state, 54);
+  final furnishedStatus = getDataById(state, 55);
   final attachments = getDataById(state, 100);
   final existingInventoryId = getDataById(state, 101);
 
@@ -148,6 +149,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       roomconfig: Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom ?? [], balconies: balconies, bathroom: bathrooms),
       propertyfacing: propertyFacing,
       comments: comments,
+      furnishedStatus: furnishedStatus,
       plotarea: Plotarea(area: superArea, unit: areaUnit),
       propertyaddress:
           Propertyaddress(state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, floornumber: floorNumber, locality: locality),

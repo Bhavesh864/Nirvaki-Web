@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -9,14 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/label_text_field.dart';
 import 'package:yes_broker/constants/firebase/calenderModel/calender_model.dart';
-
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart' as inventory;
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart' as lead;
 import 'package:yes_broker/constants/firebase/random_uid.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
-
 import '../../Customs/custom_text.dart';
 import '../../customs/custom_fields.dart';
 import '../../customs/dropdown_field.dart';
@@ -262,7 +259,7 @@ void showConfirmDeleteAttachment(BuildContext context, Function onPressYes) {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Container(
           padding: const EdgeInsets.all(20),
-          height: 240,
+          height: 200,
           width: 500,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
@@ -270,7 +267,7 @@ void showConfirmDeleteAttachment(BuildContext context, Function onPressYes) {
           child: Column(
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Flexible(

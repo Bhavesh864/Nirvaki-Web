@@ -105,13 +105,12 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                         allowAppointmentResize: true,
                         appointmentBuilder: (context, calendarAppointmentDetails) {
                           final event = calendarAppointmentDetails.appointments.first;
-
                           return Container(
                             margin: const EdgeInsets.symmetric(vertical: 4),
                             height: calendarAppointmentDetails.bounds.height,
                             width: 500,
                             decoration: BoxDecoration(
-                              color: getColorForTaskType('Meeting').withOpacity(0.1),
+                              color: getColorForTaskType(event.calenderType).withOpacity(0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Padding(

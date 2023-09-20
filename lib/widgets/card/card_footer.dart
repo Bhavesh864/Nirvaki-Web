@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import '../../Customs/custom_chip.dart';
+import '../../constants/app_constant.dart';
 import '../../constants/functions/make_call_function.dart';
 import '../../constants/functions/navigation/navigation_functions.dart';
 import '../../constants/utils/constants.dart';
@@ -35,7 +36,7 @@ class CardFooter extends StatelessWidget {
                 child: Container(
                   margin: const EdgeInsets.only(right: 3),
                   child: Text(
-                    "${cardData.customerinfo!.firstname!} ${cardData.customerinfo!.lastname!}",
+                    "${cardData.customerinfo!.firstname!} ${checkNotNUllItem(cardData.customerinfo!.lastname!) ? cardData.customerinfo!.lastname! : ""}",
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.black,
