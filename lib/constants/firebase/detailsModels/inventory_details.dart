@@ -48,54 +48,55 @@ class InventoryDetails {
   String? approvedbeds;
   String? typeofschool;
   String? hospitalrooms;
+  String? furnishedStatus;
 
-  InventoryDetails({
-    required this.inventoryTitle,
-    required this.inventoryDescription,
-    required this.inventoryId,
-    required this.inventoryStatus,
-    required this.brokerid,
-    this.assignedto,
-    this.managerid,
-    required this.createdby,
-    this.createdate,
-    this.updatedby,
-    this.updatedate,
-    this.attachments,
-    this.customerinfo,
-    this.comments,
-    this.inventorycategory,
-    this.inventoryType,
-    this.inventorysource,
-    this.propertycategory,
-    this.propertykind,
-    this.transactiontype,
-    this.availability,
-    this.villatype,
-    this.roomconfig,
-    this.plotdetails,
-    this.possessiondate,
-    this.amenities,
-    this.reservedparking,
-    this.propertyarea,
-    this.plotarea,
-    this.propertyprice,
-    this.propertyrent,
-    this.propertyaddress,
-    this.propertylocation,
-    this.propertyfacing,
-    this.propertyphotos,
-    this.commercialphotos,
-    this.propertyvideo,
-    this.commericialtype,
-    this.typeofoffice,
-    this.typeofretail,
-    this.typeofhospitality,
-    this.typeofhealthcare,
-    this.approvedbeds,
-    this.typeofschool,
-    this.hospitalrooms,
-  });
+  InventoryDetails(
+      {required this.inventoryTitle,
+      required this.inventoryDescription,
+      required this.inventoryId,
+      required this.inventoryStatus,
+      required this.brokerid,
+      this.assignedto,
+      this.managerid,
+      required this.createdby,
+      this.createdate,
+      this.updatedby,
+      this.updatedate,
+      this.attachments,
+      this.customerinfo,
+      this.comments,
+      this.inventorycategory,
+      this.inventoryType,
+      this.inventorysource,
+      this.propertycategory,
+      this.propertykind,
+      this.transactiontype,
+      this.availability,
+      this.villatype,
+      this.roomconfig,
+      this.plotdetails,
+      this.possessiondate,
+      this.amenities,
+      this.reservedparking,
+      this.propertyarea,
+      this.plotarea,
+      this.propertyprice,
+      this.propertyrent,
+      this.propertyaddress,
+      this.propertylocation,
+      this.propertyfacing,
+      this.propertyphotos,
+      this.commercialphotos,
+      this.propertyvideo,
+      this.commericialtype,
+      this.typeofoffice,
+      this.typeofretail,
+      this.typeofhospitality,
+      this.typeofhealthcare,
+      this.approvedbeds,
+      this.typeofschool,
+      this.hospitalrooms,
+      this.furnishedStatus});
 
   factory InventoryDetails.fromSnapshot(DocumentSnapshot snapshot) {
     final json = snapshot.data() as Map<String, dynamic>;
@@ -111,6 +112,7 @@ class InventoryDetails {
       createdate: json["createdate"],
       updatedby: json["updatedby"],
       updatedate: json["updatedate"],
+      furnishedStatus: json["furnishedStatus"],
       attachments: (json["attachments"] as List<dynamic>?)?.map((e) => Attachments.fromJson(e)).toList(),
       customerinfo: Customerinfo.fromJson(json["customerinfo"]),
       comments: json["comments"],
@@ -157,6 +159,9 @@ class InventoryDetails {
     }
     if (json["InventoryId"] is String) {
       inventoryId = json["InventoryId"];
+    }
+    if (json["furnishedStatus"] is String) {
+      inventoryId = json["furnishedStatus"];
     }
     if (json["InventoryStatus"] is String) {
       inventoryStatus = json["InventoryStatus"];
@@ -292,6 +297,7 @@ class InventoryDetails {
     data["inventoryDescription"] = inventoryDescription;
     data["InventoryId"] = inventoryId;
     data["InventoryStatus"] = inventoryStatus;
+    data["furnishedStatus"] = furnishedStatus;
     data["brokerid"] = brokerid;
     if (assignedto != null) {
       data["assignedto"] = assignedto?.map((e) => e.toJson()).toList();
