@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
+import 'package:yes_broker/customs/loader.dart';
 
 import '../../../Customs/custom_chip.dart';
 import '../../../Customs/custom_text.dart';
@@ -53,6 +54,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
   PlatformFile? selectedFile;
   List<PlatformFile> pickedFilesList = [];
   List<String> selectedDocsNameList = [];
+  bool isUploading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -289,16 +291,19 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                         return GestureDetector(
                           onTap: () async {
                             showUploadDocumentModal(
-                              context,
-                              widget.updateData,
-                              selectedDocsNameList,
-                              selectedFile,
-                              pickedFilesList,
-                              () {
-                                setState(() {});
-                              },
-                              widget.id,
-                            );
+                                context,
+                                widget.updateData,
+                                selectedDocsNameList,
+                                selectedFile,
+                                pickedFilesList,
+                                () {
+                                  setState(() {});
+                                },
+                                widget.id,
+                                (k) {
+                                  isUploading = k;
+                                  setState(() {});
+                                });
                           },
                           child: Container(
                             height: 100,
@@ -308,18 +313,22 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                               border: Border.all(color: Colors.grey.withOpacity(0.5)),
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: const Column(
+                            child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(
-                                  Icons.add,
-                                  size: 40,
-                                ),
-                                CustomText(
-                                  title: 'Add more',
-                                  size: 8,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                                if (isUploading) ...[
+                                  const Loader(),
+                                ] else ...[
+                                  const Icon(
+                                    Icons.add,
+                                    size: 40,
+                                  ),
+                                  const CustomText(
+                                    title: 'Add more',
+                                    size: 8,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ]
                               ],
                             ),
                           ),
