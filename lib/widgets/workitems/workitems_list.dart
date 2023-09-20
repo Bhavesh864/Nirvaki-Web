@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';

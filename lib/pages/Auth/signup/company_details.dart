@@ -12,7 +12,6 @@ import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/riverpodstate/sign_up_state.dart';
 import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
-import 'package:yes_broker/pages/Auth/signup/upload_logo.dart';
 
 import 'package:yes_broker/constants/validation/basic_validation.dart';
 

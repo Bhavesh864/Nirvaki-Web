@@ -62,7 +62,7 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
                   largeScreenView("${snapshot.data?.userfirstname} ${snapshot.data?.userlastname}", context),
                   const Spacer(),
                   StreamBuilder(
-                      stream: notificationCollection.where("userId", isEqualTo: AppConst.getAccessToken()).where('isRead', isEqualTo: false).snapshots(),
+                      stream: notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).where('isRead', isEqualTo: false).snapshots(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           final notificationCount = snapshot.data!.docs.length;
@@ -130,7 +130,10 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
                       width: 30,
                       margin: const EdgeInsets.only(right: 10),
                       decoration: BoxDecoration(
-                        image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(snapshot.data!.image.isEmpty ? noImg : snapshot.data!.image)),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(snapshot.data!.image.trim().isEmpty ? noImg : snapshot.data!.image),
+                        ),
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
@@ -321,7 +324,8 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                                   },
                                   titleAlignment: ListTileTitleAlignment.top,
                                   leading: CircleAvatar(
-                                    backgroundImage: NetworkImage(notificationData.imageUrl!.isNotEmpty || notificationData.imageUrl != null ? notificationData.imageUrl! : noImg),
+                                    backgroundImage:
+                                        NetworkImage(notificationData.imageUrl!.isNotEmpty || notificationData.imageUrl != null ? notificationData.imageUrl! : noImg),
                                   ),
                                   title: SizedBox(
                                     height: 80,
