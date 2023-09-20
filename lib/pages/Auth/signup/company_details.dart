@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:beamer/beamer.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -8,7 +12,6 @@ import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/riverpodstate/sign_up_state.dart';
 import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
-import 'package:yes_broker/pages/Auth/signup/upload_logo.dart';
 
 import 'package:yes_broker/constants/validation/basic_validation.dart';
 
@@ -47,8 +50,8 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                 //   }
                 // else
                 //   {
-                context.beamToReplacementNamed(AppRoutes.loginScreen),
                 // }
+                context.beamToReplacementNamed(AppRoutes.loginScreen),
               }
             else
               {
@@ -61,12 +64,18 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
     }
   }
 
-  Future<XFile?> selectImagee() async {
+  // Future<XFile?> selectImagee() async {
+  selectImagee() async {
     XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
     setState(() {
       uploadLogocontroller.text = pickedImage!.name;
     });
-    return pickedImage;
+    var webUrl = await pickedImage!.readAsBytes();
+    var imageUrl = File(pickedImage.path);
+    if (kIsWeb) {
+      return webUrl;
+    }
+    return imageUrl;
   }
 
   final List<String> dropdownitem = ["Broker", "Builder"];
@@ -79,9 +88,32 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
   final TextEditingController citycontroller = TextEditingController();
   final TextEditingController uploadLogocontroller = TextEditingController();
 
+  void uploadImageToFirebase(imageUrl) async {
+    final uniqueKey = DateTime.now().microsecondsSinceEpoch.toString();
+    Reference referenceRoot = FirebaseStorage.instance.ref();
+    Reference referenceDirImages = referenceRoot.child('images');
+    Reference referenceImagesToUpload = referenceDirImages.child(uniqueKey);
+
+    try {
+      if (kIsWeb) {
+        final metaData = SettableMetadata(contentType: 'image/jpeg');
+        await referenceImagesToUpload.putData(imageUrl, metaData);
+      } else {
+        await referenceImagesToUpload.putFile(imageUrl);
+      }
+      imageUrl = await referenceImagesToUpload.getDownloadURL();
+      print("imageUrl--> $imageUrl");
+      final notify = ref.read(selectedItemForsignup.notifier);
+      notify.add({"id": 14, "item": imageUrl});
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(selectedItemForsignup.notifier);
+    print("notify---> $notify");
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -129,6 +161,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                               height: 10,
                             ),
                             CustomTextInput(
+                              margin: const EdgeInsets.all(7),
                               labelText: 'Company Name',
                               controller: companynamecontroller,
                               validator: (value) => validateForNormalFeild(value: value, props: "Company Name"),
@@ -137,6 +170,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                               },
                             ),
                             CustomTextInput(
+                              margin: const EdgeInsets.all(7),
                               labelText: 'Mobile',
                               controller: mobilenumbercontroller,
                               validator: (value) => validateForMobileNumberFeild(value: value, props: "Mobile Number"),
@@ -158,6 +192,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                             ),
                             if (!isChecked)
                               CustomTextInput(
+                                margin: const EdgeInsets.all(7),
                                 labelText: 'Whatsapp Number',
                                 controller: whatsupnumbercontroller,
                                 validator: !isChecked ? (value) => validateForMobileNumberFeild(value: value, props: "Whatsapp Number") : null,
@@ -167,48 +202,53 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                               ),
                             CustomTextInput(
                               labelText: 'Address',
+                              margin: const EdgeInsets.all(7),
                               controller: address1controller,
                               validator: (value) => validateForNormalFeild(value: value, props: "Address"),
                               onChanged: (value) {
                                 notify.add({"id": 10, "item": value.trim()});
                               },
                             ),
-                            TextFormField(
+                            CustomTextInput(
                               controller: uploadLogocontroller,
-                              readOnly: true,
-                              onTap: () async {
+                              readonly: true,
+                              labelText: "Upload Logo",
+                              ontap: () {
                                 selectImagee().then((value) => {
-                                      getImageUrl(value!).then((img) => {
-                                            notify.add({"id": 14, "item": img})
-                                          })
+                                      uploadImageToFirebase(value)
+                                      // getImageUrl(value!).then((img) => {uploadImageToFirebase(img)})
                                     });
                               },
-                              validator: (value) => validateForNormalFeild(value: value, props: "Logo"),
-                              decoration: const InputDecoration(
-                                labelText: 'Upload Logo',
-                                hintText: 'Select an image',
-                                border: OutlineInputBorder(),
-                                suffixIcon: Icon(Icons.publish),
+                              rightIcon: Icons.publish,
+                            ),
+                            Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 6),
+                              child: Column(
+                                children: [
+                                  DropDownField(
+                                      title: "State",
+                                      defaultValues: "",
+                                      optionsList: const ["Rajasthan"],
+                                      onchanged: (value) {
+                                        notify.add({"id": 11, "item": value});
+                                      }),
+                                  DropDownField(
+                                      title: "City",
+                                      defaultValues: "",
+                                      optionsList: const ["Jaipur", "Bikaner"],
+                                      onchanged: (value) {
+                                        notify.add({"id": 12, "item": value});
+                                      }),
+                                  DropDownField(
+                                      title: "Register As",
+                                      defaultValues: "",
+                                      optionsList: dropdownitem,
+                                      onchanged: (value) {
+                                        notify.add({"id": 13, "item": value});
+                                      }),
+                                ],
                               ),
                             ),
-                            DropDownField(
-                                title: "State",
-                                optionsList: const ["Rajasthan"],
-                                onchanged: (value) {
-                                  notify.add({"id": 11, "item": value});
-                                }),
-                            DropDownField(
-                                title: "City",
-                                optionsList: const ["Jaipur", "Bikaner"],
-                                onchanged: (value) {
-                                  notify.add({"id": 12, "item": value});
-                                }),
-                            DropDownField(
-                                title: "Register As",
-                                optionsList: dropdownitem,
-                                onchanged: (value) {
-                                  notify.add({"id": 13, "item": value});
-                                }),
                             Container(
                               margin: const EdgeInsets.only(top: 10, bottom: 10),
                               alignment: Alignment.centerRight,

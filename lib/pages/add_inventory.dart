@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/constants/firebase/statesModel/state_c_ity_model.dart';
 import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/customs/responsive.dart';
 
@@ -35,7 +36,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   PageController? pageController;
   int currentScreenIndex = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  List<States> stateList = [];
   @override
   void initState() {
     super.initState();
@@ -43,6 +44,11 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     getQuestions = InventoryQuestions.getAllQuestionssFromFirestore();
     pageController = PageController(initialPage: currentScreenIndex);
     answers.isNotEmpty ? isEdit = true : isEdit = false;
+    StateCItyModel.getAllStates().then((value) => {
+          setState(() {
+            stateList = value;
+          })
+        });
     try {
       if (isEdit) {
         if (answers[0]["item"] == "Residential") {
@@ -216,22 +222,22 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                           isPlotSelected,
                                                           isEdit,
                                                           selectedValues,
+                                                          stateList,
                                                         ),
                                                         SizedBox(height: question.questionOptionType != 'textfield' ? 10 : 0),
                                                         Row(
                                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                           children: [
                                                             if (i == currentScreenList[index].questions.length - 1 && isEdit && currentScreenList[index].title != "Assign to") ...[
-                                                              CustomButton(
-                                                                height: 39,
-                                                                text: "Jump To Submit",
-                                                                onPressed: () {
-                                                                  // setState(() {
-                                                                  // currentScreenIndex = currentScreenList.length - 1;
-                                                                  pageController?.jumpToPage(currentScreenList.length - 1);
-                                                                  // });
-                                                                },
-                                                              ),
+                                                              // CustomButton(
+                                                              //   height: 39,
+                                                              //   text: "Jump To Submit",
+                                                              //   onPressed: () {
+                                                              //  currentScreenIndex = currentScreenList.length - 1;
+                                                              //     pageController?.jumpToPage(currentScreenList.length - 1);
+                                                              //   },
+                                                              // ),
+                                                              const SizedBox()
                                                             ] else ...[
                                                               const SizedBox()
                                                             ],
