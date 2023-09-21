@@ -200,27 +200,20 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                                                         : Responsive.isTablet(context) || isFilterOpen
                                                             ? 2
                                                             : 3,
-                                                    // mainAxisSpacing: 5.0,
                                                     crossAxisSpacing: 10.0,
-                                                    mainAxisExtent: Responsive.isMobile(context) ? 197 : 170),
+                                                    mainAxisExtent: Responsive.isMobile(context) ? 197 : 150),
                                                 itemCount: filterTodoList.length,
                                                 itemBuilder: (context, index) => GestureDetector(
                                                   onTap: () {
                                                     final id = filterTodoList[index].workitemId;
                                                     navigateBasedOnId(context, id!, ref);
-                                                    // if (Responsive.isMobile(context)) {
-                                                    //   Navigator.of(context).pushNamed(AppRoutes.todoDetailsScreen, arguments: id);
-                                                    // } else {
-                                                    //   ref.read(selectedWorkItemId.notifier).addItemId(id!);
-                                                    //   context.beamToNamed('/todo/todo-details/$id');
-                                                    // }
                                                   },
                                                   child: CustomCard(index: index, cardDetails: filterTodoList),
                                                 ),
                                               )
                                             : const Center(
                                                 child: Text(
-                                                  "No results found.", // Customize the message
+                                                  "No results found.",
                                                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                                 ),
                                               ),

@@ -251,7 +251,6 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
                                 'id': widget.id,
                                 'item': propertyphotos,
                               });
-                              print(propertyphotos.toJson());
                             });
                           },
                           child: Container(
