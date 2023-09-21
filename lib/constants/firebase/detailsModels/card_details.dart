@@ -126,6 +126,44 @@ class CardDetails {
     }
   }
 
+  factory CardDetails.fromSnapshot(DocumentSnapshot snapshot) {
+    final json = snapshot.data() as Map<String, dynamic>;
+
+    // final createdby = json["createdby"] as Map<String, dynamic>;
+    // final propertyarearange = json["propertyarearange"] as Map<String, dynamic>;
+    // final propertypricerange = json["propertypricerange"] as Map<String, dynamic>;
+    // final customerinfo = json["customerinfo"] as Map<String, dynamic>;
+
+    // final List<dynamic>? assignedtoList = json["assignedto"] as List<dynamic>?;
+    // List<Assignedto>? assignedtoList;
+
+    // if (assignedtoList != null) {
+    //   assignedtoList = assignedtoList.map((e) => Assignedto.fromJson(e)).toList();
+    // }
+
+    return CardDetails(
+      cardType: json["cardType"] as String?,
+      workitemId: json["workitemId"] as String,
+      status: json["Status"] as String,
+      cardCategory: json["cardCategory"] as String?,
+      brokerid: json["brokerid"] as String,
+      assignedto: (json["assignedto"] as List<dynamic>?)?.map((e) => Assignedto.fromJson(e)).toList(),
+      managerid: json["managerid"] as String?,
+      createdby: Createdby.fromJson(json["createdby"]),
+      createdate: json["createdate"] as Timestamp,
+      linkedItemId: json["linkedItemId"] as String?,
+      linkedItemType: json["linkedItemType"] as String?,
+      cardDescription: json["cardDescription"] as String?,
+      cardStatus: json["cardStatus"] as String?,
+      cardTitle: json["cardTitle"] as String?,
+      roomconfig: json["roomconfig"] == null ? null : Roomconfig.fromJson(json["roomconfig"]),
+      propertyarearange: json["propertyarearange"] == null ? null : Propertyarearange.fromJson(json['propertyarearange']),
+      propertypricerange: json["propertypricerange"] == null ? null : Propertypricerange.fromJson(json["propertypricerange"]),
+      duedate: json["duedate"] as String?,
+      customerinfo: json["customerinfo"] == null ? null : Customerinfo.fromJson(json["customerinfo"]),
+    );
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data["cardType"] = cardType;
@@ -162,6 +200,26 @@ class CardDetails {
     }
     return data;
   }
+
+  // factory CardDetails.fromSnapshot(DocumentSnapshot snapshot) {
+  //   final json = snapshot.data() as Map<String, dynamic>;
+  //   return CardDetails(
+  //     cardType: json["cardType"],
+  //     workitemId: json["workitemId"],
+  //     status: json["status"],
+  //     cardCategory: json["cardCategory"],
+  //     brokerid: json["brokerid"],
+  //     assignedto: (json["assignedto"] as List<dynamic>?)?.map((e) => Assignedto.fromJson(e)).toList(),
+  //     managerid: json["managerid"],
+  //     createdby: Createdby.fromJson(json["createdby"]),
+  //     createdate: json["createdate"],
+  //     linkedItemId: json["linkedItemId"],
+  //     linkedItemType: json["linkedItemType"],
+  //     cardDescription: json["cardDescription"],
+  //     cardStatus: json["cardStatus"],
+  //     cardTitle: json["cardTitle"],
+  //   );
+  // }
 
   // -----------------------------Methods------------------------------------------------------------------->
 

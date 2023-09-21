@@ -1,7 +1,6 @@
 // import "dart:html" show AnchorElement;
 
 // import 'dart:html';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -32,55 +31,6 @@ class AttachmentPreviewDialog extends StatelessWidget {
     );
   }
 }
-
-// class CustomAttachment {
-//   Platform selectedFileName;
-//   List<PlatformFile> pickedFilesLists = [];
-//   List<inving> selectedDocNameList = [];
-
-//   CustomAttachment({
-//     required this.selectedFileName,
-//     required this.pickedFilesLists,
-//     required this.selectedDocNameList,
-//   });
-// }
-
-// Future<String> downloadFile(String url, String fileName, String dir) async {
-//   HttpClient httpClient = HttpClient();
-//   File file;
-//   String filePath = '';
-//   String myUrl = '';
-
-//   try {
-//     myUrl = '$url';
-//     var request = await httpClient.getUrl(Uri.parse(myUrl));
-//     var response = await request.close();
-//     if (response.statusCode == 200) {
-//       var bytes = await consolidateHttpClientResponseBytes(response);
-//       filePath = '$dir/$fileName';
-//       file = File(filePath);
-//       await file.writeAsBytes(bytes);
-//     } else {
-//       filePath = 'Error code: ${response.statusCode}';
-//     }
-//   } catch (ex) {
-//     filePath = 'Can not fetch url';
-//     print(ex);
-//   }
-
-//   return filePath;
-// }
-
-// static var httpClient = new HttpClient();
-// Future<File> _downloadFile(String url, String filename) async {
-//   var request = await httpClient.getUrl(Uri.parse(url));
-//   var response = await request.close();
-//   var bytes = await consolidateHttpClientResponseBytes(response);
-//   String dir = (await getApplicationDocumentsDirectory()).path;
-//   File file = new File('$dir/$filename');
-//   await file.writeAsBytes(bytes);
-//   return file;
-// }
 
 // ignore: must_be_immutable
 class DetailsTabView extends StatefulWidget {
@@ -117,25 +67,8 @@ class _DetailsTabViewState extends State<DetailsTabView> {
     if (!widget.isLeadView) {
       final inventoryData = widget.data as InventoryDetails;
       if (inventoryData.propertyphotos != null) {
-        // final Map<String, List<String>> propertyPhotos = {
-        //   'title': [...inventoryData.propertyphotos!.imageTitle!],
-        //   'imageUrl': [...inventoryData.propertyphotos!.imageUrl!],
-        //   // 'bathroom': [...inventoryData.propertyphotos!.bathroom!],
-        //   // 'pujaroom': [...inventoryData.propertyphotos!.pujaroom!],
-        //   // 'servantroom': [...inventoryData.propertyphotos!.servantroom!],
-        //   // 'studyroom': [...inventoryData.propertyphotos!.studyroom!],
-        //   // 'officeroom': [...inventoryData.propertyphotos!.officeroom!],
-        // };
         allImages.addAll(inventoryData.propertyphotos!.imageUrl!);
         allTitles.addAll(inventoryData.propertyphotos!.imageTitle!);
-        // propertyPhotos.forEach((key, value) {
-        //   if (value.isNotEmpty) {
-        //     // ignore: unused_local_variable
-        //     for (var i in value) {
-        //       allTitles.add(capitalizeFirstLetter(key));
-        //     }
-        //   }
-        // });
 
         if (AppConst.getPublicView()) {
           allImages.removeAt(0);
@@ -175,7 +108,6 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                         height: 130,
                         width: 150,
                         decoration: BoxDecoration(
-                          // border: Border.all(color: Colors.grey),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: ClipRRect(
@@ -360,7 +292,8 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                       } else {
                         return GestureDetector(
                           onTap: () async {
-                            showUploadDocumentModal(
+                            if (!isUploading) {
+                              showUploadDocumentModal(
                                 context,
                                 widget.updateData,
                                 selectedDocsNameList,
@@ -373,7 +306,9 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                 (k) {
                                   isUploading = k;
                                   setState(() {});
-                                });
+                                },
+                              );
+                            }
                           },
                           child: Container(
                             height: 100,
