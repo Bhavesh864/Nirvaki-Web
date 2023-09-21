@@ -262,7 +262,7 @@ class TestList extends ConsumerWidget {
                               Text(
                                 DateFormat.Hm().format(chatItem.timeSent),
                                 style: const TextStyle(
-                                  color: Colors.grey,
+                                  color: Color.fromARGB(255, 60, 115, 15),
                                   fontSize: 10,
                                 ),
                               ),

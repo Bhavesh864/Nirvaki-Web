@@ -35,59 +35,61 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
     int currentIndex = 0;
     final beamerKey = GlobalKey<BeamerState>();
 
-    final path = (context.currentBeamLocation.state as BeamState).uri.path;
-
-    if (path.contains('/ ')) {
-      currentIndex = 0;
-    } else if (path.contains('/todo')) {
-      currentIndex = 1;
-    } else if (path.contains('/inventory')) {
-      currentIndex = 2;
-    } else if (path.contains('/lead')) {
-      currentIndex = 3;
-    } else if (path.contains('/calendar')) {
-      currentIndex = 4;
-    }
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SingleChildScrollView(
-            child: Container(
-              color: Colors.white,
-              height: 600,
-              padding: EdgeInsets.only(top: height! * 0.2),
-              child: NavigationRail(
-                backgroundColor: Colors.white,
-                labelType: NavigationRailLabelType.all,
-                minWidth: 60,
-                useIndicator: false,
-                onDestinationSelected: (index) {
-                  setState(() {
-                    beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[index].nav);
-                  });
-                },
-                destinations: sideBarItems
-                    .sublist(0, 5)
-                    .map(
-                      (e) => NavigationRailDestination(
-                        icon: Icon(e.iconData),
-                        selectedIcon: Icon(e.iconData, color: AppColor.primary),
-                        label: Text(
-                          e.label,
-                          style: const TextStyle(
-                            fontSize: 10,
+          StatefulBuilder(builder: (context, setstate) {
+            final path = (context.currentBeamLocation.state as BeamState).uri.path;
+
+            if (path.contains('/ ')) {
+              currentIndex = 0;
+            } else if (path.contains('/todo')) {
+              currentIndex = 1;
+            } else if (path.contains('/inventory')) {
+              currentIndex = 2;
+            } else if (path.contains('/lead')) {
+              currentIndex = 3;
+            } else if (path.contains('/calendar')) {
+              currentIndex = 4;
+            }
+
+            return SingleChildScrollView(
+              child: Container(
+                color: Colors.white,
+                height: 600,
+                padding: EdgeInsets.only(top: height! * 0.2),
+                child: NavigationRail(
+                  backgroundColor: Colors.white,
+                  labelType: NavigationRailLabelType.all,
+                  minWidth: 60,
+                  useIndicator: false,
+                  selectedIndex: currentIndex > 4 ? 0 : currentIndex,
+                  onDestinationSelected: (index) {
+                    setstate(() {
+                      beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[index].nav);
+                    });
+                  },
+                  destinations: sideBarItems
+                      .sublist(0, 5)
+                      .map(
+                        (e) => NavigationRailDestination(
+                          icon: Icon(e.iconData),
+                          selectedIcon: Icon(e.iconData, color: AppColor.primary),
+                          label: Text(
+                            e.label,
+                            style: const TextStyle(
+                              fontSize: 10,
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                    .toList(),
-                selectedIndex: currentIndex > 4 ? 0 : currentIndex,
+                      )
+                      .toList(),
+                ),
               ),
-            ),
-          ),
+            );
+          }),
           Expanded(
             flex: 20,
             child: Column(

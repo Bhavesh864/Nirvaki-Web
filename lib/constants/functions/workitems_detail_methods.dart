@@ -81,7 +81,14 @@ void showImageSliderCarousel(List<String> imageUrls, int initialIndex, BuildCont
   );
 }
 
-void uploadAttachmentsToFirebaseStorage(PlatformFile fileToUpload, String id, String docname, Function updateState, String titleName) async {
+void uploadAttachmentsToFirebaseStorage(
+  PlatformFile fileToUpload,
+  String id,
+  String docname,
+  Function updateState,
+  String titleName,
+  Function(bool) setIsUploading,
+) async {
   final uniqueKey = DateTime.now().microsecondsSinceEpoch.toString();
 
   Reference referenceRoot = FirebaseStorage.instance.ref();
@@ -97,6 +104,8 @@ void uploadAttachmentsToFirebaseStorage(PlatformFile fileToUpload, String id, St
     }
     final downloadUrl = await referenceImagesToUpload.getDownloadURL();
     print('downloadurl.-------$downloadUrl');
+    setIsUploading(false);
+    print('false kr do -----');
 
     if (id.contains(ItemCategory.isInventory)) {
       inventory.Attachments attachments = inventory.Attachments(
@@ -238,11 +247,19 @@ void showUploadDocumentModal(
                         if (docName != '' && selectedFile != null) {
                           selectedDocName.add(docName);
                           setIsUploading(true);
-                          uploadAttachmentsToFirebaseStorage(selectedFile!, id, docName, updateState, titleController.text);
+                          print('true kr do -----');
+
+                          uploadAttachmentsToFirebaseStorage(
+                            selectedFile!,
+                            id,
+                            docName,
+                            updateState,
+                            titleController.text,
+                            setIsUploading,
+                          );
                           onPressed();
                           selectedFile = null;
                           Navigator.of(context).pop();
-                          setIsUploading(false);
                         }
                       },
                     ),
@@ -394,6 +411,7 @@ void showAddCalendarModal({
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        const SizedBox(),
                         CustomText(
                           softWrap: true,
                           textAlign: TextAlign.center,
