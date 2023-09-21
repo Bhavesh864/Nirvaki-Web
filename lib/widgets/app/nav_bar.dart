@@ -325,7 +325,7 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                                   titleAlignment: ListTileTitleAlignment.top,
                                   leading: CircleAvatar(
                                     backgroundImage:
-                                        NetworkImage(notificationData.imageUrl!.isNotEmpty || notificationData.imageUrl != null ? notificationData.imageUrl! : noImg),
+                                        NetworkImage(notificationData.imageUrl!.isNotEmpty && notificationData.imageUrl != null ? notificationData.imageUrl! : noImg),
                                   ),
                                   title: SizedBox(
                                     height: 80,

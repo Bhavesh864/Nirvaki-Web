@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 
@@ -47,6 +48,7 @@ class CustomTextInput extends StatefulWidget {
       this.maxLength,
       this.validator,
       this.initialvalue,
+      this.textInputAction,
       this.maxLines = 1,
       this.minLines = 1,
       this.readonly = false,
@@ -78,6 +80,7 @@ class CustomTextInputState extends State<CustomTextInput> {
       margin: widget.margin,
       child: TextFormField(
         autofocus: widget.autofocus!,
+        textInputAction: widget.textInputAction ?? TextInputAction.done,
         focusNode: widget.focusnode,
         autofillHints: widget.autofillHints,
         enabled: widget.enabled,
