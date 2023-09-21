@@ -25,7 +25,6 @@ class _DropDownFieldState extends State<DropDownField> {
 
   @override
   Widget build(BuildContext context) {
-    print(selectedValues);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -59,6 +58,7 @@ class _DropDownFieldState extends State<DropDownField> {
               value: selectedValues!.isEmpty ? null : selectedValues!,
               onChanged: (e) {
                 widget.onchanged(e!);
+                print(e);
                 setState(() {
                   selectedValues = e;
                 });

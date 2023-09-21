@@ -32,37 +32,45 @@ class CardFooter extends StatelessWidget {
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: [
-              Center(
-                child: Container(
-                  margin: const EdgeInsets.only(right: 3),
-                  child: Text(
-                    "${cardData.customerinfo!.firstname!} ${checkNotNUllItem(cardData.customerinfo!.lastname!) ? cardData.customerinfo!.lastname! : ""}",
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
+              if (cardData.customerinfo != null) ...[
+                Center(
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 3),
+                    child: Text(
+                      "${checkNotNUllItem(cardData.customerinfo?.firstname) ? cardData.customerinfo!.firstname! : ""} ${checkNotNUllItem(cardData.customerinfo?.lastname) ? cardData.customerinfo!.lastname! : ""}",
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              CustomChip(
-                onPressed: () => makePhoneCall(cardData.customerinfo!.mobile!),
-                label: const Icon(
-                  Icons.call_outlined,
-                ),
-                paddingHorizontal: 3,
-              ),
-              CustomChip(
-                onPressed: () => launchWhatsapp(cardData.customerinfo!.whatsapp, context),
-                label: const FaIcon(
-                  FontAwesomeIcons.whatsapp,
-                ),
-                paddingHorizontal: 3,
-              ),
+                checkNotNUllItem(cardData.customerinfo?.mobile)
+                    ? CustomChip(
+                        onPressed: () => makePhoneCall(cardData.customerinfo!.mobile!),
+                        label: const Icon(
+                          Icons.call_outlined,
+                        ),
+                        paddingHorizontal: 3,
+                      )
+                    : const SizedBox(),
+                checkNotNUllItem(cardData.customerinfo?.whatsapp)
+                    ? CustomChip(
+                        onPressed: () => launchWhatsapp(cardData.customerinfo?.whatsapp, context),
+                        label: const FaIcon(
+                          FontAwesomeIcons.whatsapp,
+                        ),
+                        paddingHorizontal: 3,
+                      )
+                    : const SizedBox(),
+              ] else ...[
+                const SizedBox()
+              ],
               // GestureDetector(
               //   onTap: () {
               //     if (cardData.workitemId!.contains("TD")) {
-              //       // Navigator.of(context).pushNamed(AppRoutes.editTodo);
+              //       // Navigator .of(context).pushNamed(AppRoutes.editTodo);
               //       context.beamToNamed(AppRoutes.editTodo, data: cardData);
               //     }
               //   },
