@@ -56,6 +56,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
   final comments = getDataById(state, 35);
   final List<User> assignto = getDataById(state, 36);
   final locality = getDataById(state, 54);
+  final furnishedStatus = getDataById(state, 55);
 
   // commerical
   final availability = getDataById(state, 37);
@@ -148,6 +149,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       customerinfo: Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo ?? mobileNo),
       roomconfig: Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom ?? [], balconies: balconies, bathroom: bathrooms),
       comments: comments,
+      furnishedStatus: furnishedStatus,
       updatedby: AppConst.getAccessToken(),
       createdate: Timestamp.now(),
       assignedto: assignedListInLead,

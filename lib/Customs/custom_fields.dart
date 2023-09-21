@@ -29,6 +29,7 @@ class CustomTextInput extends StatefulWidget {
   final FormFieldValidator<String>? validator;
   final Function(String)? onChanged;
   final EdgeInsetsGeometry? margin;
+  final Iterable<String>? autofillHints;
   final TextInputAction? textInputAction;
 
   const CustomTextInput(
@@ -57,6 +58,7 @@ class CustomTextInput extends StatefulWidget {
       this.autofocus = false,
       this.contentPadding = 0,
       this.onFieldSubmitted,
+      this.autofillHints,
       this.margin = const EdgeInsets.all(5)})
       : super(key: key);
 
@@ -81,6 +83,7 @@ class CustomTextInputState extends State<CustomTextInput> {
         autofocus: widget.autofocus!,
         textInputAction: widget.textInputAction ?? TextInputAction.done,
         focusNode: widget.focusnode,
+        autofillHints: widget.autofillHints,
         enabled: widget.enabled,
         onTap: widget.ontap,
         onFieldSubmitted: widget.onFieldSubmitted,

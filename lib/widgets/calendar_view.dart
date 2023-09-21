@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/customs/responsive.dart';
@@ -105,7 +104,6 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                       allowAppointmentResize: true,
                       appointmentBuilder: (context, calendarAppointmentDetails) {
                         final event = calendarAppointmentDetails.appointments.first;
-
                         return Container(
                           margin: const EdgeInsets.symmetric(vertical: 4),
                           height: calendarAppointmentDetails.bounds.height,
