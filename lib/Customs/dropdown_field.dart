@@ -25,6 +25,7 @@ class _DropDownFieldState extends State<DropDownField> {
 
   @override
   Widget build(BuildContext context) {
+    print(selectedValues);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -47,7 +48,6 @@ class _DropDownFieldState extends State<DropDownField> {
               // isDense: true,
               itemHeight: null,
               focusColor: Colors.transparent,
-
               hint: const CustomText(
                 title: '--Select--',
                 color: Colors.grey,
