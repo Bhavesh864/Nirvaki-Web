@@ -30,6 +30,7 @@ class CustomTextInput extends StatefulWidget {
   final Function(String)? onChanged;
   final EdgeInsetsGeometry? margin;
   final Iterable<String>? autofillHints;
+  final TextInputAction? textInputAction;
 
   const CustomTextInput(
       {Key? key,
