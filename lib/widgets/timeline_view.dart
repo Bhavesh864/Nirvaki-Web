@@ -31,10 +31,12 @@ class CustomTimeLineView extends ConsumerWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-      ),
+      decoration: !fromHome
+          ? null
+          : BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+            ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -78,10 +80,43 @@ class CustomTimeLineView extends ConsumerWidget {
                 List<ActivityDetails> activities = dataList.map((e) => ActivityDetails.fromSnapshot(e)).toList();
                 activities.sort((a, b) => b.createdate!.compareTo(a.createdate!));
                 if (activities.isNotEmpty) {
-                  return ScrollConfiguration(
-                    behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                    child: Expanded(
+                  if (fromHome) {
+                    return Expanded(
+                      child: ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: activities.length,
+                          itemBuilder: (context, index) {
+                            return TimelineTile(
+                              isFirst: index == 0 ? true : false,
+                              indicatorStyle: const IndicatorStyle(
+                                color: AppColor.primary,
+                                height: 8,
+                                width: 8,
+                                padding: EdgeInsets.only(
+                                  left: 15,
+                                ),
+                              ),
+                              beforeLineStyle: const LineStyle(
+                                color: AppColor.primary,
+                                thickness: 2,
+                              ),
+                              alignment: TimelineAlign.start,
+                              endChild: TimeLineItem(
+                                index: index,
+                                activitiesList: activities,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    );
+                  } else {
+                    return ScrollConfiguration(
+                      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                       child: ListView.builder(
+                        shrinkWrap: true,
                         itemCount: activities.length,
                         itemBuilder: (context, index) {
                           return TimelineTile(
@@ -106,8 +141,8 @@ class CustomTimeLineView extends ConsumerWidget {
                           );
                         },
                       ),
-                    ),
-                  );
+                    );
+                  }
                 } else {
                   return const Padding(
                     padding: EdgeInsets.only(top: 40.0),

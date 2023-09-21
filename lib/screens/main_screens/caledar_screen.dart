@@ -38,12 +38,14 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   void _previousMonth() {
     setState(() {
       _displayedMonth = DateTime(_displayedMonth.year, _displayedMonth.month - 1, 1);
+      selectedDate = DateTime(_displayedMonth.year, _displayedMonth.month - 1, 1);
     });
   }
 
   void _nextMonth() {
     setState(() {
       _displayedMonth = DateTime(_displayedMonth.year, _displayedMonth.month + 1, 1);
+      selectedDate = DateTime(_displayedMonth.year, _displayedMonth.month + 1, 1);
     });
   }
 
@@ -151,7 +153,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                                 onPressed: _previousMonth,
                               ),
                               Text(
-                                DateFormat.yMMMM().format(_displayedMonth),
+                                DateFormat.yMMMM().format(selectedDate),
                                 style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                               ),
                               IconButton(
