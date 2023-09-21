@@ -25,10 +25,12 @@ class WorkItemsList extends ConsumerStatefulWidget {
 class WorkItemsListState extends ConsumerState<WorkItemsList> {
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
     return ScrollConfiguration(
       behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
       child: SingleChildScrollView(
         child: Container(
+          constraints: BoxConstraints(minHeight: height),
           margin: const EdgeInsets.only(left: 8, right: 3),
           child: SafeArea(
             right: false,

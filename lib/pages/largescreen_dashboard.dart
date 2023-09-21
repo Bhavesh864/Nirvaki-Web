@@ -53,6 +53,8 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
               currentIndex = 3;
             } else if (path.contains('/calendar')) {
               currentIndex = 4;
+            } else {
+              currentIndex = 0;
             }
 
             return SingleChildScrollView(
