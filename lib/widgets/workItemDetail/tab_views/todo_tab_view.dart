@@ -168,7 +168,7 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
                             color: AppColor.secondary,
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                           child: GridView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),

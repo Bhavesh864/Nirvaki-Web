@@ -30,6 +30,7 @@ class AttachmentPreviewDialog extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class DetailsTabView extends StatefulWidget {
   final dynamic data;
   final Function updateData;
@@ -105,7 +106,6 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                         height: 130,
                         width: 150,
                         decoration: BoxDecoration(
-                          // border: Border.all(color: Colors.grey),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: ClipRRect(
@@ -290,7 +290,8 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                       } else {
                         return GestureDetector(
                           onTap: () async {
-                            showUploadDocumentModal(
+                            if (!isUploading) {
+                              showUploadDocumentModal(
                                 context,
                                 widget.updateData,
                                 selectedDocsNameList,
@@ -303,7 +304,9 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                 (k) {
                                   isUploading = k;
                                   setState(() {});
-                                });
+                                },
+                              );
+                            }
                           },
                           child: Container(
                             height: 100,

@@ -4,11 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/customs/loader.dart';
 
 import 'package:yes_broker/widgets/calendar_view.dart';
 import 'package:yes_broker/widgets/timeline_view.dart';
 import 'package:yes_broker/widgets/workitems/empty_work_item_list.dart';
 import 'package:yes_broker/widgets/workitems/workitems_list.dart';
+
+import '../../constants/app_constant.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -24,26 +27,27 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   void initState() {
     super.initState();
     getCardDetails = CardDetails.getCardDetails();
-    // setdata();
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return FutureBuilder(
-      future: getCardDetails,
+    return StreamBuilder(
+      // future: getCardDetails,
+      stream: cardDetailsCollection.orderBy("createdate", descending: true).snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const SizedBox(
-            child: Center(
-              child: CircularProgressIndicator.adaptive(),
-            ),
-          );
+          return const Loader();
         }
 
         if (snapshot.hasData) {
-          List<CardDetails> workItems = snapshot.data!.where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
-          List<CardDetails> todoItems = snapshot.data!.where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
+          final filterItem = snapshot.data?.docs.where((item) => item["assignedto"].any((user) => user["userid"] == AppConst.getAccessToken()));
+          final List<CardDetails> todoItems =
+              filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
+
+          final List<CardDetails> workItems =
+              filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
+
           return Row(
             children: [
               if (workItems.isEmpty && todoItems.isEmpty) ...[
@@ -52,7 +56,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                 Expanded(
                   flex: size.width > 1340 ? 3 : 5,
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 8, left: 0),
+                    padding: const EdgeInsets.only(top: 10),
                     child: WorkItemsList(
                       title: "To do",
                       getCardDetails: todoItems,
@@ -87,7 +91,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                               margin: const EdgeInsets.all(5),
                               decoration: BoxDecoration(
                                 color: AppColor.secondary,
-                                borderRadius: BorderRadius.circular(5),
+                                borderRadius: BorderRadius.circular(10),
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,11 +103,14 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  Container(
-                                    height: 360,
-                                    margin: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: const CustomTimeLineView(
-                                      fromHome: true,
+                                  Expanded(
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(horizontal: 10),
+
+                                      // height: 360,
+                                      child: const CustomTimeLineView(
+                                        fromHome: true,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -118,7 +125,6 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
           );
         }
         return const SizedBox();
-        // return const Center(child: EmptyWorkItemList());
       },
     );
   }

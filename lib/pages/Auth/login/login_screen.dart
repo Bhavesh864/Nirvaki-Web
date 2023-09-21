@@ -20,6 +20,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final key = GlobalKey<FormState>();
   var isloading = false;
+  final FocusNode emailFocusNode = FocusNode();
+  final FocusNode passwordFocusNode = FocusNode();
 
   final TextEditingController emailcontroller = TextEditingController();
   final TextEditingController passwordcontroller = TextEditingController();
@@ -80,15 +82,14 @@ class _LoginScreenState extends State<LoginScreen> {
               child: SingleChildScrollView(
                 child: Container(
                   width: Responsive.isMobile(context) ? w * 0.9 : 500,
-                  height: 430,
-                  padding: const EdgeInsets.all(25),
+                  padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 30),
                   child: Form(
                     key: key,
                     child: Column(
                       children: [
                         const CustomAppLogo(),
                         const Padding(
-                          padding: EdgeInsets.only(top: 10),
+                          padding: EdgeInsets.only(top: 5),
                           child: Text(
                             "Log In",
                             style: TextStyle(
@@ -97,7 +98,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 10),
                         // SizedBox(
                         //   width: w,
                         //   child: CustomButton(
@@ -134,24 +134,27 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(
                           height: 10,
                         ),
-                        AutofillGroup(
-                          child: Container(
-                            margin: const EdgeInsets.only(bottom: 5),
-                            child: CustomTextInput(
-                              controller: emailcontroller,
-                              labelText: 'Email address',
-                              validator: validateEmail,
-                              keyboardType: TextInputType.emailAddress,
-                              autofillHints: const [AutofillHints.email],
-                            ),
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 5),
+                          child: CustomTextInput(
+                            focusnode: emailFocusNode,
+                            controller: emailcontroller,
+                            labelText: 'Email address',
+                            validator: validateEmail,
+                            textInputAction: TextInputAction.next,
+                            onFieldSubmitted: (_) {
+                              FocusScope.of(context).requestFocus(passwordFocusNode);
+                            },
                           ),
                         ),
                         CustomTextInput(
+                          focusnode: passwordFocusNode,
                           controller: passwordcontroller,
                           labelText: 'Password',
                           obscureText: true,
                           rightIcon: Icons.remove_red_eye,
                           validator: validatePassword,
+                          onFieldSubmitted: (_) => loginwithemailpassword(context),
                         ),
                         const SizedBox(height: 10),
                         isloading
