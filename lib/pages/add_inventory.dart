@@ -46,7 +46,6 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     StateCItyModel.getAllStates().then((value) => {
           setState(() {
             stateList = value;
-            print(stateList);
           })
         });
     try {
