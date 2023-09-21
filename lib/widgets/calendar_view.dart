@@ -69,7 +69,7 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                         ),
                         Row(
                           children: [
-                            GestureDetector(
+                            InkWell(
                               onTap: () {
                                 showAddCalendarModal(
                                   context: context,
@@ -82,10 +82,10 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                                 size: 24,
                               ),
                             ),
-                            const Icon(
-                              Icons.more_horiz,
-                              size: 24,
-                            ),
+                            // const Icon(
+                            //   Icons.more_horiz,
+                            //   size: 24,
+                            // ),
                           ],
                         ),
                       ],

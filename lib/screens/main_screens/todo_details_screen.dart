@@ -514,6 +514,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                       setState(() {});
                                                     },
                                                     data.todoId!,
+                                                    (b) {},
                                                   );
                                                 },
                                                 child: Container(
