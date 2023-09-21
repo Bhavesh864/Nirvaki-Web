@@ -20,7 +20,7 @@ class CustomStatusDropDown extends StatelessWidget {
   PopupMenuButton build(BuildContext context) {
     return PopupMenuButton(
       initialValue: status,
-      splashRadius: 0,
+      tooltip: '',
       padding: EdgeInsets.zero,
       color: Colors.white.withOpacity(1),
       offset: const Offset(10, 40),

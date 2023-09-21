@@ -61,7 +61,11 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
                     if (controller.text.isNotEmpty) {
                       submitActivity(itemid: workItemId, activitytitle: controller.text.trim(), user: user);
                       notifyToUser(
-                          currentuserdata: user, assignedto: widget.details.assignedto, content: "$workItemId added new Activity", title: controller.text, itemid: workItemId);
+                          currentuserdata: user,
+                          assignedto: widget.details.assignedto,
+                          content: "$workItemId added new Activity",
+                          title: controller.text,
+                          itemid: workItemId);
                       controller.clear();
                     } else {
                       customSnackBar(context: context, text: 'Please enter note to submit');
@@ -75,11 +79,8 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
         ),
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 8.0),
-          child: SizedBox(
-            height: 470,
-            child: CustomTimeLineView(
-              isScrollable: false,
-            ),
+          child: CustomTimeLineView(
+            isScrollable: false,
           ),
         ),
       ],

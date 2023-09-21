@@ -298,43 +298,60 @@ Widget buildInventoryQuestions(
     }
   } else if (question.questionOptionType == 'dropdown') {
     String? defaultValue;
+    String? selectedState;
+    String? selectedCity;
     final isState = question.questionTitle.contains("State");
-    final isCity = question.questionTitle.contains("City");
+    // final isCity = question.questionTitle.contains("City");
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
     if (!isEdit && question.questionTitle.contains("Bedroom")) {
       defaultValue = "1";
     }
-    if (isState || isCity) {
-      int stateIndex = 0;
+    if (isState) {
       List<String?> cities = [];
+      final List<String?> states = stateList.map((e) => e.state).toList();
       return StatefulBuilder(builder: (context, setState) {
-        print('------------$stateIndex');
-        final List<String?> states = stateList.map((e) => e.state).toList();
-        // print(states);
-        // states.sort((a, b) => a!.compareTo(b.toString()));
-        if (stateList.isNotEmpty && stateIndex >= 0 && stateIndex < stateList.length && stateList[stateIndex].districts != null) {
-          cities = stateList[stateIndex].districts!;
-          print(cities);
+        void updateCitiesList(String? selectedState) {
+          final index = states.indexOf(selectedState);
+          if (index >= 0 && index < stateList.length && stateList[index].districts != null) {
+            setState(() {
+              cities = stateList[index].districts!;
+              selectedState = selectedState; // Update the selected state
+              selectedCity = null; // Reset the selected city
+            });
+          } else {
+            setState(() {
+              cities = []; // Clear the cities list when no districts are available
+              selectedState = null; // Clear the selected state
+              selectedCity = null; // Reset the selected city
+            });
+          }
         }
+
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 7),
-          child: DropDownField(
-            title: question.questionTitle,
-            defaultValues: defaultValue ?? "",
-            optionsList: isState ? states : cities,
-            onchanged: (Object e) {
-              notify.add({"id": question.questionId, "item": e});
-              if (isState) {
-                final selectedState = e as String?;
-                final index = states.indexOf(selectedState);
-                setState(() {
-                  stateIndex = index;
-                });
-                print(stateIndex);
-              }
-            },
+          child: Column(
+            children: [
+              DropDownField(
+                title: question.questionTitle,
+                defaultValues: defaultValue ?? "",
+                optionsList: states,
+                onchanged: (Object e) {
+                  final selectedState = e as String?;
+                  updateCitiesList(selectedState);
+                  notify.add({"id": question.questionId, "item": e});
+                },
+              ),
+              DropDownField(
+                title: "City",
+                defaultValues: selectedCity ?? "",
+                optionsList: cities,
+                onchanged: (Object e) {
+                  notify.add({"id": 27, "item": e});
+                },
+              ),
+            ],
           ),
         );
       });
