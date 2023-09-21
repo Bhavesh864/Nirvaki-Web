@@ -141,6 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             controller: emailcontroller,
                             labelText: 'Email address',
                             validator: validateEmail,
+                            autofillHints: const [AutofillHints.email],
                             textInputAction: TextInputAction.next,
                             onFieldSubmitted: (_) {
                               FocusScope.of(context).requestFocus(passwordFocusNode);

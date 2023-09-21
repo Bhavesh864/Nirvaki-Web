@@ -47,7 +47,6 @@ class _DropDownFieldState extends State<DropDownField> {
               // isDense: true,
               itemHeight: null,
               focusColor: Colors.transparent,
-
               hint: const CustomText(
                 title: '--Select--',
                 color: Colors.grey,
@@ -59,6 +58,7 @@ class _DropDownFieldState extends State<DropDownField> {
               value: selectedValues!.isEmpty ? null : selectedValues!,
               onChanged: (e) {
                 widget.onchanged(e!);
+                print(e);
                 setState(() {
                   selectedValues = e;
                 });

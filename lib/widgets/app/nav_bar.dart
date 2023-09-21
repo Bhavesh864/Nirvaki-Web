@@ -66,7 +66,6 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           final notificationCount = snapshot.data!.docs.length;
-
                           return Stack(
                             children: <Widget>[
                               InkWell(

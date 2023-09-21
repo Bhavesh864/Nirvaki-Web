@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -37,6 +37,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   @override
   void initState() {
     messageController = ScrollController();
+
     super.initState();
   }
 
@@ -52,7 +53,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   Widget build(BuildContext context) {
     final ChatItem? chatItem = widget.chatItem;
     final User? user = widget.user;
-
     final String chatItemId = chatItem?.id ?? user?.userId ?? '';
     final bool isGroupChat = chatItem?.isGroupChat ?? false;
 
@@ -60,9 +60,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       body: SafeArea(
         child: StreamBuilder(
           stream: isGroupChat
-              ? ref.read(chatControllerProvider).groupChatStream(
-                    chatItemId,
-                  )
+              ? ref.read(chatControllerProvider).groupChatStream(chatItemId)
               : ref.read(chatControllerProvider).chatStream(
                     chatItemId,
                   ),
