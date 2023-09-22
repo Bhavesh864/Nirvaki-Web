@@ -33,7 +33,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   late Future<List<InventoryQuestions>> getQuestions;
   List<Screen> currentScreenList = [];
   PageController? pageController;
-  int currentScreenIndex = 16;
+  int currentScreenIndex = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<States> stateList = [];
   @override
@@ -46,7 +46,6 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     StateCItyModel.getAllStates().then((value) => {
           setState(() {
             stateList = value;
-            print(stateList);
           })
         });
     try {

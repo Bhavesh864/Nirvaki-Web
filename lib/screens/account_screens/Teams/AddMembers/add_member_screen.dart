@@ -10,6 +10,7 @@ import 'package:yes_broker/constants/firebase/Methods/add_member_send_email.dart
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
+import 'package:yes_broker/riverpodstate/add_member_state.dart';
 
 import '../../../../constants/utils/constants.dart';
 import '../../../../riverpodstate/user_data.dart';
@@ -23,6 +24,7 @@ class AddMemberScreen extends ConsumerStatefulWidget {
 }
 
 class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
+  User? user;
   final key = GlobalKey<FormState>();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
@@ -69,13 +71,33 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
   void backToTeamScreen() {
     if (Responsive.isMobile(context)) {
       Navigator.of(context).pop();
+    } else {
+      ref.read(addMemberScreenStateProvider.notifier).setAddMemberScreenState(false);
     }
-    ref.read(addMemberScreenStateProvider.notifier).setAddMemberScreenState(false);
+  }
+
+  void setEditDataToTextField() {
+    final editUser = ref.read(userForEditScreen);
+    final isEdit = ref.read(editAddMemberState);
+    if (isEdit) {
+      _firstNameController.text = editUser?.userfirstname ?? '';
+      _lastNameController.text = editUser?.userlastname ?? '';
+      _mobileController.text = editUser?.mobile ?? '';
+      _emailController.text = editUser?.email ?? '';
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setEditDataToTextField();
   }
 
   @override
   Widget build(BuildContext context) {
-    final User currentUserData = ref.read(userDataProvider);
+    final User? currentUserData = ref.read(userDataProvider);
+    final isEdit = ref.read(editAddMemberState);
+    final editUser = ref.read(userForEditScreen);
 
     return Card(
       elevation: 5,
@@ -120,12 +142,12 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                             validator: (value) => validateEmail(value),
                           ),
                           FutureBuilder(
-                              future: User.getAllUsers(currentUserData),
+                              future: User.getAllUsers(currentUserData!),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   final List<String> userNames = snapshot.data!.map((user) => "${user.userfirstname} ${user.userlastname}").toList();
                                   return DropDownField(
-                                      defaultValues: "",
+                                      defaultValues: "help",
                                       title: "Manager",
                                       optionsList: userNames,
                                       onchanged: (e) {
@@ -161,7 +183,7 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                               ),
                               const SizedBox(width: 7),
                               CustomButton(
-                                text: "Send Invite",
+                                text: isEdit ? "Update" : "Send Invite",
                                 borderColor: AppColor.primary,
                                 height: 39,
                                 onPressed: () => submitMemberRole(),

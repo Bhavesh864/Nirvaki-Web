@@ -11,6 +11,7 @@ import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';
 
 import '../constants/functions/auth/auth_functions.dart';
+import '../screens/account_screens/Teams/team_screen.dart';
 import '../widgets/chat_modal_view.dart';
 
 class LargeScreen extends ConsumerStatefulWidget {
@@ -35,59 +36,63 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
     int currentIndex = 0;
     final beamerKey = GlobalKey<BeamerState>();
 
-    final path = (context.currentBeamLocation.state as BeamState).uri.path;
-
-    if (path.contains('/ ')) {
-      currentIndex = 0;
-    } else if (path.contains('/todo')) {
-      currentIndex = 1;
-    } else if (path.contains('/inventory')) {
-      currentIndex = 2;
-    } else if (path.contains('/lead')) {
-      currentIndex = 3;
-    } else if (path.contains('/calendar')) {
-      currentIndex = 4;
-    }
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SingleChildScrollView(
-            child: Container(
-              color: Colors.white,
-              height: 600,
-              padding: EdgeInsets.only(top: height! * 0.2),
-              child: NavigationRail(
-                backgroundColor: Colors.white,
-                labelType: NavigationRailLabelType.all,
-                minWidth: 60,
-                useIndicator: false,
-                onDestinationSelected: (index) {
-                  setState(() {
-                    beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[index].nav);
-                  });
-                },
-                destinations: sideBarItems
-                    .sublist(0, 5)
-                    .map(
-                      (e) => NavigationRailDestination(
-                        icon: Icon(e.iconData),
-                        selectedIcon: Icon(e.iconData, color: AppColor.primary),
-                        label: Text(
-                          e.label,
-                          style: const TextStyle(
-                            fontSize: 10,
+          StatefulBuilder(builder: (context, setstate) {
+            final path = (context.currentBeamLocation.state as BeamState).uri.path;
+
+            if (path.contains('/ ')) {
+              currentIndex = 0;
+            } else if (path.contains('/todo')) {
+              currentIndex = 1;
+            } else if (path.contains('/inventory')) {
+              currentIndex = 2;
+            } else if (path.contains('/lead')) {
+              currentIndex = 3;
+            } else if (path.contains('/calendar')) {
+              currentIndex = 4;
+            } else {
+              currentIndex = 0;
+            }
+
+            return SingleChildScrollView(
+              child: Container(
+                color: Colors.white,
+                height: 600,
+                padding: EdgeInsets.only(top: height! * 0.2),
+                child: NavigationRail(
+                  backgroundColor: Colors.white,
+                  labelType: NavigationRailLabelType.all,
+                  minWidth: 60,
+                  useIndicator: false,
+                  selectedIndex: currentIndex > 4 ? 0 : currentIndex,
+                  onDestinationSelected: (index) {
+                    setstate(() {
+                      beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[index].nav);
+                    });
+                  },
+                  destinations: sideBarItems
+                      .sublist(0, 5)
+                      .map(
+                        (e) => NavigationRailDestination(
+                          icon: Icon(e.iconData),
+                          selectedIcon: Icon(e.iconData, color: AppColor.primary),
+                          label: Text(
+                            e.label,
+                            style: const TextStyle(
+                              fontSize: 10,
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                    .toList(),
-                selectedIndex: currentIndex > 4 ? 0 : currentIndex,
+                      )
+                      .toList(),
+                ),
               ),
-            ),
-          ),
+            );
+          }),
           Expanded(
             flex: 20,
             child: Column(
@@ -97,6 +102,9 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                     if (selectedVal != 'Logout') {
                       final ProfileMenuItems profile = profileMenuItems.firstWhere((element) => element.title == selectedVal);
                       ref.read(selectedProfileItemProvider.notifier).setSelectedItem(profile);
+                      if (profile.id == 2) {
+                        ref.read(addMemberScreenStateProvider.notifier).setAddMemberScreenState(false);
+                      }
                       context.beamToNamed('/profile');
                     } else if (selectedVal == "Logout") {
                       userLogout(ref, context);

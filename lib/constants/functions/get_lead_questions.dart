@@ -209,6 +209,7 @@ Widget buildLeadQuestions(
               keyboardType: isPriceField ? TextInputType.number : TextInputType.name,
               inputController: controller,
               labelText: question.questionTitle,
+              isMandatory: isvalidationtrue,
               onChanged: (newvalue) {
                 try {
                   int number = int.parse(newvalue);
@@ -248,7 +249,6 @@ Widget buildLeadQuestions(
         for (var user in assignedusers) {
           userids.add(user.userid!);
         }
-        print(userids);
       }
       return AssignUser(
         addUser: (users) {
@@ -267,7 +267,6 @@ Widget buildLeadQuestions(
     if (!isEdit && question.questionTitle.contains("Bedroom")) {
       defaultValue = "1";
     }
-
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 7),
       child: DropDownField(
@@ -338,7 +337,7 @@ Widget buildLeadQuestions(
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       stateValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
-    RangeValues buyRangeValues = const RangeValues(0, 100000000);
+    RangeValues buyRangeValues = const RangeValues(500000, 50000000);
     RangeValues rentRangeValues = const RangeValues(0, 1000000);
     RangeValues defaultBuyRangeValues = stateValue ?? buyRangeValues;
     RangeValues defaultRentRangeValues = stateValue ?? rentRangeValues;
@@ -384,13 +383,13 @@ Widget buildLeadQuestions(
               ),
               RangeSlider(
                 values: defaultBuyRangeValues,
-                min: 0,
-                max: 1000000000,
+                min: 500000,
+                max: 500000000,
                 labels: RangeLabels(
                   formatValue(defaultBuyRangeValues.start),
                   formatValue(defaultBuyRangeValues.end),
                 ),
-                divisions: (100000000 - 100000) ~/ divisionValue,
+                divisions: (50000000 - 100000) ~/ divisionValue,
                 onChanged: (RangeValues newVal) {
                   setState(() {
                     defaultBuyRangeValues = newVal;

@@ -15,7 +15,7 @@ import '../../functions/convertStringTorange/convert_range_string.dart';
 Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async {
   print(isEdit);
   final randomId = randomNumeric(5);
-  final User currentUserdata = ref.read(userDataProvider);
+  final User? currentUserdata = ref.read(userDataProvider);
   var res = "pending";
   //  leadcategory example =  rent ,buy
   //   propertycategory example = residental ,commerical,
@@ -86,7 +86,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       status: "New",
       cardCategory: leadCategory,
       linkedItemType: "LD",
-      brokerid: currentUserdata.brokerId,
+      brokerid: currentUserdata?.brokerId,
       cardType: "LD",
       cardTitle: "$propertyCategory $propertyKind-$propertyCity",
       cardDescription: "Want to $leadCategory her $bedrooms BHK for ${formatValue(budgetPrice!.start)}-${formatValue(budgetPrice.end)} rupees",
@@ -94,9 +94,9 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       cardStatus: "New",
       assignedto: assignedToList,
       createdby: cards.Createdby(
-          userfirstname: currentUserdata.userfirstname, userid: currentUserdata.userId, userlastname: currentUserdata.userlastname, userimage: currentUserdata.image),
+          userfirstname: currentUserdata?.userfirstname, userid: currentUserdata?.userId, userlastname: currentUserdata?.userlastname, userimage: currentUserdata?.image),
       createdate: Timestamp.now(),
-      managerid: currentUserdata.managerid,
+      managerid: currentUserdata?.managerid,
       propertyarearange: cards.Propertyarearange(arearangestart: carpetArea, unit: areaUnit),
       roomconfig: cards.Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom),
       propertypricerange: cards.Propertypricerange(arearangestart: "${formatValue(budgetPrice.start)}-${formatValue(budgetPrice.end)}"));
@@ -119,7 +119,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       typeofhospitality: typeofhospitality,
       hospitalrooms: hospitalrooms,
       propertykind: propertyKind,
-      managerid: currentUserdata.managerid,
+      managerid: currentUserdata?.managerid,
       commericialtype: commericialtype,
       availability: availability,
       typeofretail: typeofretail,
@@ -131,7 +131,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       typeofschool: typeofschool,
       transactiontype: transactionType,
       attachments: attachments ?? [],
-      brokerid: currentUserdata.brokerId,
+      brokerid: currentUserdata?.brokerId,
       leadcategory: leadCategory,
       propertycategory: propertyCategory,
       leadType: leadSource == "Broker" ? "Broker" : leadSource,
@@ -154,7 +154,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       createdate: Timestamp.now(),
       assignedto: assignedListInLead,
       createdby:
-          Createdby(userfirstname: currentUserdata.userfirstname, userid: currentUserdata.userId, userlastname: currentUserdata.userlastname, userimage: currentUserdata.image));
+          Createdby(userfirstname: currentUserdata?.userfirstname, userid: currentUserdata?.userId, userlastname: currentUserdata?.userlastname, userimage: currentUserdata?.image));
 
   isEdit
       ? await cards.CardDetails.updateCardDetails(id: existingLeadId, cardDetails: card).then((value) => {res = "success"})

@@ -177,7 +177,7 @@ class _HeaderChipsState extends ConsumerState<HeaderChips> {
 
   @override
   Widget build(BuildContext context) {
-    final User user = ref.read(userDataProvider);
+    final User? user = ref.read(userDataProvider);
     return Wrap(
       children: [
         CustomChip(
@@ -218,7 +218,7 @@ class _HeaderChipsState extends ConsumerState<HeaderChips> {
               currentStatus = value;
               setState(() {});
               notifyToUser(
-                  currentuserdata: user,
+                  currentuserdata: user!,
                   itemid: widget.id,
                   assignedto: widget.inventoryDetails.assignedto,
                   content: "${user.userfirstname} ${user.userlastname} change status to $value",

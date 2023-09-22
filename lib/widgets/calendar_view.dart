@@ -24,9 +24,9 @@ class CustomCalendarView extends ConsumerStatefulWidget {
 class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
   @override
   Widget build(BuildContext context) {
-    final User user = ref.read(userDataProvider);
+    final User? user = ref.read(userDataProvider);
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('calenderDetails').where('brokerId', isEqualTo: user.brokerId).snapshots(),
+      stream: FirebaseFirestore.instance.collection('calenderDetails').where('brokerId', isEqualTo: user?.brokerId).snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Loader();

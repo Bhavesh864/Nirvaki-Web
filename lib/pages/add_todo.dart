@@ -56,11 +56,11 @@ class _AddTodoState extends ConsumerState<AddTodo> {
     } else {}
   }
 
-  goBack(List<int> id) {
+  goBack(List<int> id, type) {
     if (currentScreenIndex > 0) {
       setState(() {
         currentScreenIndex--;
-        // ref.read(myArrayProvider.notifier).remove(id);
+        type ? ref.read(myArrayProvider.notifier).remove(id) : null;
         pageController!.previousPage(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
@@ -230,7 +230,8 @@ class _AddTodoState extends ConsumerState<AddTodo> {
               onPressed: () {
                 final currentScreenQuestions = screensDataList[currentScreenIndex].questions;
                 final ids = currentScreenQuestions.map((q) => q.questionId).toList();
-                goBack(ids);
+                final questiontype = currentScreenQuestions.any((element) => element.questionTitle.contains("Link Work Item"));
+                goBack(ids, questiontype);
               },
               icon: const Icon(
                 Icons.arrow_back,

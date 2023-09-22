@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
 import 'package:yes_broker/constants/firebase/send_notification.dart';
 import 'package:yes_broker/constants/functions/navigation/navigation_functions.dart';
@@ -107,7 +108,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
 
   @override
   Widget build(BuildContext context) {
-    final User user = ref.read(userDataProvider);
+    final User? user = ref.read(userDataProvider);
     return Scaffold(
       appBar: Responsive.isMobile(context)
           ? AppBar(
@@ -224,7 +225,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                           currentStatus = value;
                                           setState(() {});
                                           notifyToUser(
-                                              currentuserdata: user,
+                                              currentuserdata: user!,
                                               itemid: data.todoId!,
                                               assignedto: data.assignedto,
                                               content: "${user.userfirstname} ${user.userlastname} change status to $value",
@@ -239,13 +240,15 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                     ),
                                     Row(
                                       children: [
-                                        CustomButton(
-                                          text: data.linkedWorkItem![0].workItemId!.contains('LD') ? 'View Lead Details' : 'View Inventory Details',
-                                          onPressed: () {
-                                            navigateBasedOnId(context, data.linkedWorkItem![0].workItemId!, ref);
-                                          },
-                                          height: 40,
-                                        ),
+                                        checkNotNUllItem(data.linkedWorkItem?[0].workItemTitle)
+                                            ? CustomButton(
+                                                text: data.linkedWorkItem![0].workItemId!.contains('LD') ? 'View Lead Details' : 'View Inventory Details',
+                                                onPressed: () {
+                                                  navigateBasedOnId(context, data.linkedWorkItem![0].workItemId!, ref);
+                                                },
+                                                height: 40,
+                                              )
+                                            : const SizedBox.shrink(),
                                         const SizedBox(
                                           width: 10,
                                         ),
@@ -577,21 +580,25 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 8.0),
-                                  child: CustomText(
-                                    title: data.linkedWorkItem![0].workItemTitle!,
-                                    fontWeight: FontWeight.w600,
-                                    size: 20,
-                                  ),
-                                ),
-                                CustomButton(
-                                  text: data.linkedWorkItem![0].workItemId!.contains('LD') ? 'View Lead Details' : 'View Inventory Details',
-                                  onPressed: () {
-                                    navigateBasedOnId(context, data.linkedWorkItem![0].workItemId!, ref);
-                                  },
-                                  height: 40,
-                                ),
+                                checkNotNUllItem(data.linkedWorkItem?[0].workItemTitle)
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(bottom: 8.0),
+                                        child: CustomText(
+                                          title: data.linkedWorkItem![0].workItemTitle!,
+                                          fontWeight: FontWeight.w600,
+                                          size: 20,
+                                        ),
+                                      )
+                                    : const SizedBox.shrink(),
+                                checkNotNUllItem(data.linkedWorkItem?[0].workItemTitle)
+                                    ? CustomButton(
+                                        text: data.linkedWorkItem![0].workItemId!.contains('LD') ? 'View Lead Details' : 'View Inventory Details',
+                                        onPressed: () {
+                                          navigateBasedOnId(context, data.linkedWorkItem![0].workItemId!, ref);
+                                        },
+                                        height: 40,
+                                      )
+                                    : const SizedBox.shrink(),
                                 if (Responsive.isDesktop(context))
                                   AssignmentWidget(
                                     assignto: data.assignedto!,

@@ -45,8 +45,8 @@ void updateLeadListInventory(WidgetRef ref, String option, screenList) {
     questionNotifier.updateScreenIsActive(setTrueInScreens: ["S15"], setFalseInScreens: []);
   }
   if (option.contains("Land")) {
-    List<String> setTofalse = ["S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S17"];
-    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S16", "S6"], setFalseInScreens: setTofalse);
+    List<String> setTofalse = ["S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S17", "S16"];
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S6"], setFalseInScreens: setTofalse);
   }
   if (option.contains("Constructed Property")) {
     List<String> setTofalse = ["S6", "S16", "S17"];
