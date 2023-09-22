@@ -187,6 +187,7 @@ class User extends HiveObject {
     try {
       final hiveUserData = UserHiveMethods.getdata(userId);
       if (hiveUserData != null) {
+        print('======if=======');
         final Map<String, dynamic> userDataMap = Map.from(hiveUserData);
         final User user = User.fromMap(userDataMap);
         AppConst.setRole(user.role);
@@ -195,6 +196,7 @@ class User extends HiveObject {
         });
         return user;
       } else {
+        print('======else=======');
         final DocumentSnapshot documentSnapshot = await usersCollection.doc(userId).get();
         if (documentSnapshot.exists) {
           final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
