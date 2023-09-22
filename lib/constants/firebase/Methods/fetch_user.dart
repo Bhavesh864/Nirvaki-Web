@@ -6,8 +6,8 @@ import '../../app_constant.dart';
 import '../userModel/user_info.dart';
 
 Future<List<User>> fetchUsers(WidgetRef ref) async {
-  final User user = ref.read(userDataProvider);
-  final snapshot = await FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: user.brokerId).get();
+  final User? user = ref.read(userDataProvider);
+  final snapshot = await FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: user?.brokerId).get();
 
   final usersListSnapshot = snapshot.docs;
   List<User> usersList = usersListSnapshot.map((doc) => User.fromSnapshot(doc)).toList();

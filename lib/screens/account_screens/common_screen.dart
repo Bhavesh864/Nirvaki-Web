@@ -5,6 +5,7 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/screens/account_screens/screens_state.dart';
 import '../../constants/functions/auth/auth_functions.dart';
+import 'Teams/team_screen.dart';
 
 final selectedProfileItemProvider = StateNotifierProvider<SelectedItemNotifier, ProfileMenuItems?>((ref) {
   return SelectedItemNotifier();
@@ -19,6 +20,9 @@ class CommonScreen extends ConsumerWidget {
 
     void onItemSelected(ProfileMenuItems item) {
       ref.read(selectedProfileItemProvider.notifier).setSelectedItem(item);
+      if (item.id == 2) {
+        ref.read(addMemberScreenStateProvider.notifier).setAddMemberScreenState(false);
+      }
     }
 
     return Scaffold(

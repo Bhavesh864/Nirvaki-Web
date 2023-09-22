@@ -108,7 +108,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
 
   @override
   Widget build(BuildContext context) {
-    final User user = ref.read(userDataProvider);
+    final User? user = ref.read(userDataProvider);
     return Scaffold(
       appBar: Responsive.isMobile(context)
           ? AppBar(
@@ -225,7 +225,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                           currentStatus = value;
                                           setState(() {});
                                           notifyToUser(
-                                              currentuserdata: user,
+                                              currentuserdata: user!,
                                               itemid: data.todoId!,
                                               assignedto: data.assignedto,
                                               content: "${user.userfirstname} ${user.userlastname} change status to $value",

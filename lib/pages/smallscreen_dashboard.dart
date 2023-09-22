@@ -7,6 +7,7 @@ import 'package:yes_broker/widgets/app/app_bar.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';
 import '../constants/functions/auth/auth_functions.dart';
 import '../constants/utils/constants.dart';
+import '../screens/account_screens/Teams/team_screen.dart';
 import '../screens/account_screens/common_screen.dart';
 
 final currentIndexProvider = StateProvider<int>((ref) {
@@ -59,6 +60,9 @@ class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingOb
         if (selectedVal != 'Logout') {
           final ProfileMenuItems profile = profileMenuItems.firstWhere((element) => element.title == selectedVal);
           ref.read(selectedProfileItemProvider.notifier).setSelectedItem(profile);
+          if (profile.id == 2) {
+            ref.read(addMemberScreenStateProvider.notifier).setAddMemberScreenState(false);
+          }
         } else if (selectedVal == "Logout") {
           userLogout(ref, context);
         }

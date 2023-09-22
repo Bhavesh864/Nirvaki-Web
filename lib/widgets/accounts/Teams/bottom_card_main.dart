@@ -6,7 +6,10 @@ import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/riverpodstate/add_member_state.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
+import 'package:yes_broker/screens/account_screens/Teams/team_screen.dart';
+import 'package:yes_broker/widgets/accounts/Teams/bottom_card_header.dart';
 
 import '../../../constants/firebase/userModel/user_info.dart';
 
@@ -20,7 +23,7 @@ class BottomCardMain extends ConsumerStatefulWidget {
 class _BottomCardMainState extends ConsumerState<BottomCardMain> {
   @override
   Widget build(BuildContext context) {
-    final User user = ref.read(userDataProvider);
+    final User? user = ref.read(userDataProvider);
     return Container(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -36,7 +39,7 @@ class _BottomCardMainState extends ConsumerState<BottomCardMain> {
             ],
           ),
           StreamBuilder(
-              stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: user.brokerId).snapshots(),
+              stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: user?.brokerId).snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
@@ -72,7 +75,11 @@ class _BottomCardMainState extends ConsumerState<BottomCardMain> {
                                 child: IconButton(
                                   tooltip: "Edit",
                                   iconSize: 12,
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    ref.read(editAddMemberState.notifier).isEdit(true);
+                                    showAddMemberScreen(ref);
+                                    ref.read(userForEditScreen.notifier).setUserForEdit(user);
+                                  },
                                   icon: const Icon(Icons.edit),
                                 ),
                               )

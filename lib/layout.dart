@@ -13,9 +13,10 @@ import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/pages/Auth/login/login_screen.dart';
 import 'package:yes_broker/pages/largescreen_dashboard.dart';
 import 'package:yes_broker/pages/smallscreen_dashboard.dart';
+
 import 'package:yes_broker/screens/main_screens/public_view_screen/public_inventory_details.dart';
 import 'package:yes_broker/screens/main_screens/public_view_screen/public_lead_details.dart';
-
+import 'constants/firebase/userModel/user_info.dart' as userinfo;
 import 'constants/notification/app_notification.dart';
 
 class LayoutView extends ConsumerStatefulWidget {
@@ -29,11 +30,9 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   Stream<User?>? authState;
   FirebaseMessaging messaging = FirebaseMessaging.instance;
-
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-
     switch (state) {
       case AppLifecycleState.resumed:
         ref.read(chatControllerProvider).setUserState(true);
@@ -53,6 +52,7 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
     authState = authentication.authStateChanges();
     if (token != null) {
       AppConst.setAccessToken(token);
+      userinfo.User.getUser(token, ref: ref);
     }
     setAllNotification();
     super.initState();
@@ -68,7 +68,6 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
-
     return StreamBuilder(
       stream: authState,
       builder: (context, snapshot) {

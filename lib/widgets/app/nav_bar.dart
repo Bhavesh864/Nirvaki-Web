@@ -5,18 +5,17 @@ import 'package:beamer/beamer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:yes_broker/Customs/custom_chip.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/userModel/notification_model.dart';
 import 'package:yes_broker/customs/loader.dart';
-
 import '../../Customs/custom_text.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/navigation/navigation_functions.dart';
 import '../../constants/functions/time_formatter.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
+import '../../screens/account_screens/Teams/team_screen.dart';
 
 final notificationListProvider = StateProvider<List<NotificationModel>>((ref) => []);
 
@@ -29,14 +28,16 @@ class LargeScreenNavBar extends ConsumerStatefulWidget {
 }
 
 class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
+  late Future<User?> user;
+  @override
+  void initState() {
+    super.initState();
+    user = User.getUser(AppConst.getAccessToken(), ref: ref);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final token = AppConst.getAccessToken();
     final notificationCollection = FirebaseFirestore.instance.collection("notification");
-
-    // Stream to get the count of notifications
-    // final notificationCountStream = notificationCollection.where("userId", isEqualTo: token).snapshots().map((snapshot) => snapshot.docs.length);
-
     return Container(
       height: 70,
       margin: const EdgeInsets.only(bottom: 5, right: 5),
@@ -52,7 +53,7 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
         color: Colors.white,
       ),
       child: FutureBuilder(
-        future: User.getUser(token!, ref: ref),
+        future: user,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
@@ -120,11 +121,16 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
                     },
                     color: Colors.white.withOpacity(1),
                     offset: const Offset(200, 40),
-                    itemBuilder: (contex) => profileMenuItems.map(
-                      (e) {
-                        return popupMenuItem(e.title);
-                      },
-                    ).toList(),
+                    itemBuilder: (contex) {
+                      // if (snapshot.data?.role != "Broker" && profileMenuItems.any((element) => element.title != "Team")) {
+                      // profileMenuItems.insert(1, ProfileMenuItems(title: "Team", screen: const TeamScreen(), id: 2));
+                      // }
+                      return profileMenuItems.map(
+                        (e) {
+                          return popupMenuItem(e.title);
+                        },
+                      ).toList();
+                    },
                     child: Container(
                       height: 30,
                       width: 30,
@@ -324,8 +330,7 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                                   },
                                   titleAlignment: ListTileTitleAlignment.top,
                                   leading: CircleAvatar(
-                                    backgroundImage:
-                                        NetworkImage(notificationData.imageUrl!.isNotEmpty && notificationData.imageUrl != null ? notificationData.imageUrl! : noImg),
+                                    backgroundImage: NetworkImage(notificationData.imageUrl!.isNotEmpty && notificationData.imageUrl != null ? notificationData.imageUrl! : noImg),
                                   ),
                                   title: SizedBox(
                                     height: 80,

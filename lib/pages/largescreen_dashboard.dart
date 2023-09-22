@@ -11,6 +11,7 @@ import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';
 
 import '../constants/functions/auth/auth_functions.dart';
+import '../screens/account_screens/Teams/team_screen.dart';
 import '../widgets/chat_modal_view.dart';
 
 class LargeScreen extends ConsumerStatefulWidget {
@@ -101,6 +102,9 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                     if (selectedVal != 'Logout') {
                       final ProfileMenuItems profile = profileMenuItems.firstWhere((element) => element.title == selectedVal);
                       ref.read(selectedProfileItemProvider.notifier).setSelectedItem(profile);
+                      if (profile.id == 2) {
+                        ref.read(addMemberScreenStateProvider.notifier).setAddMemberScreenState(false);
+                      }
                       context.beamToNamed('/profile');
                     } else if (selectedVal == "Logout") {
                       userLogout(ref, context);

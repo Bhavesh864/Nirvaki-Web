@@ -11,7 +11,7 @@ import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 
 Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
-  final User currentUserdata = ref.read(userDataProvider);
+  final User? currentUserdata = ref.read(userDataProvider);
   final randomId = randomNumeric(5);
   var res = "pending";
   final todotype = getDataById(state, 1);
@@ -33,10 +33,10 @@ Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
   final cards.CardDetails card = cards.CardDetails(
     workitemId: "TD$randomId",
     status: "New",
-    brokerid: currentUserdata.brokerId,
+    brokerid: currentUserdata?.brokerId,
     cardType: todotype,
     duedate: dueDate,
-    managerid: currentUserdata.managerid,
+    managerid: currentUserdata?.managerid,
     cardTitle: todoTitle,
     cardDescription: todoDescription,
     linkedItemType: cardDetail != null ? cardDetail.cardType : "",
@@ -53,7 +53,7 @@ Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
     linkedItemId: cardDetail != null ? cardDetail.workitemId : "",
     assignedto: assignedToList,
     createdby: cards.Createdby(
-        userfirstname: currentUserdata.userfirstname, userid: currentUserdata.userId, userlastname: currentUserdata.userlastname, userimage: currentUserdata.image),
+        userfirstname: currentUserdata?.userfirstname, userid: currentUserdata?.userId, userlastname: currentUserdata?.userlastname, userimage: currentUserdata?.image),
     createdate: Timestamp.now(),
   );
   final List<Assignedto> assignedListTodo = assignto.map((user) {
@@ -67,9 +67,9 @@ Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
   }).toList();
   final TodoDetails todo = TodoDetails(
     todoId: "TD$randomId",
-    managerId: currentUserdata.managerid,
+    managerId: currentUserdata?.managerid,
     todoType: todotype,
-    brokerId: currentUserdata.brokerId,
+    brokerId: currentUserdata?.brokerId,
     dueDate: dueDate,
     todoName: todoTitle,
     todoDescription: todoDescription,
