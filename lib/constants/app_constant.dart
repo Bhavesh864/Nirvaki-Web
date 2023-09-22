@@ -62,6 +62,15 @@ class AppConst {
     _isAuthenticated = val;
   }
 
+  static String role = "";
+  static String getRole() {
+    return role;
+  }
+
+  static setRole(String val) {
+    role = val;
+  }
+
   static showConsoleLog(message) {
     if (kDebugMode) {
       print(message);

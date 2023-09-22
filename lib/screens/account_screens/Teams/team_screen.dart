@@ -20,19 +20,11 @@ final addMemberScreenStateProvider = StateNotifierProvider<AddMemberScreenStateN
 
 class TeamScreen extends ConsumerWidget {
   const TeamScreen({super.key});
-  showAlertDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const AddMemberScreen();
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isAddMemberScreen = ref.watch(addMemberScreenStateProvider);
-    final User currentUserdata = ref.read(userDataProvider);
+    final User? currentUserdata = ref.read(userDataProvider);
 
     if (!Responsive.isMobile(context)) {
       if (isAddMemberScreen) {
@@ -119,7 +111,7 @@ class TeamScreen extends ConsumerWidget {
               const SizedBox(height: 20),
               const AppText(text: "Team", fontWeight: FontWeight.w700, fontsize: 16),
               StreamBuilder(
-                  stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: currentUserdata.brokerId).snapshots(),
+                  stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: currentUserdata?.brokerId).snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(
@@ -141,11 +133,26 @@ class TeamScreen extends ConsumerWidget {
                     return const SizedBox();
                   }),
               const SizedBox(height: 12),
-              CustomButton(text: "Add Member", onPressed: () => showAlertDialog(context))
+              CustomButton(
+                  text: "Add Member",
+                  onPressed: () => {
+                        showAddMemberAlertDailogBox(context),
+                        ref.read(editAddMemberState.notifier).isEdit(false),
+                        ref.read(userForEditScreen.notifier).setUserForEdit(null),
+                      })
             ],
           ),
         ),
       );
     }
   }
+}
+
+showAddMemberAlertDailogBox(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return const AddMemberScreen();
+    },
+  );
 }

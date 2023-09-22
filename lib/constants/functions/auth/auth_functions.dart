@@ -21,6 +21,7 @@ void userLogout(WidgetRef ref, BuildContext context) {
           ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null),
           ref.read(userDataProvider.notifier).resetState(),
           AppConst.setAccessToken(null),
+          AppConst.setRole("")
         },
       );
 }

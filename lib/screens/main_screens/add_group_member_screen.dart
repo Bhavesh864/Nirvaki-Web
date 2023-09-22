@@ -126,7 +126,7 @@ class _AddGroupMembersScreenBodyState extends ConsumerState<AddGroupMembersScree
   @override
   Widget build(BuildContext context) {
     final selectedUserIds = ref.read(selectedUserIdsProvider.notifier).state;
-    final User user = ref.read(userDataProvider);
+    final User? user = ref.read(userDataProvider);
 
     return Column(
       children: [
@@ -166,7 +166,7 @@ class _AddGroupMembersScreenBodyState extends ConsumerState<AddGroupMembersScree
               .collection("users")
               .where(
                 "brokerId",
-                isEqualTo: user.brokerId,
+                isEqualTo: user?.brokerId,
               )
               .snapshots(),
           builder: (context, snapshot) {
