@@ -215,6 +215,7 @@ Widget buildInventoryQuestions(
               keyboardType: isPriceField ? TextInputType.number : TextInputType.name,
               inputController: controller,
               labelText: question.questionTitle,
+              isMandatory: isvalidationtrue,
               onChanged: (newvalue) {
                 try {
                   int number = int.parse(newvalue);
@@ -298,10 +299,9 @@ Widget buildInventoryQuestions(
     }
   } else if (question.questionOptionType == 'dropdown') {
     String? defaultValue;
-    String? selectedState;
-    String? selectedCity;
+
     final isState = question.questionTitle.contains("State");
-    // final isCity = question.questionTitle.contains("City");
+
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
@@ -312,19 +312,16 @@ Widget buildInventoryQuestions(
       List<String?> cities = [];
       final List<String?> states = stateList.map((e) => e.state).toList();
       return StatefulBuilder(builder: (context, setState) {
-        void updateCitiesList(String? selectedState) {
-          final index = states.indexOf(selectedState);
+        void updateCitiesList(String? newSelectedState) {
+          final index = states.indexOf(newSelectedState);
+
           if (index >= 0 && index < stateList.length && stateList[index].districts != null) {
             setState(() {
               cities = stateList[index].districts!;
-              selectedState = selectedState; // Update the selected state
-              selectedCity = null; // Reset the selected city
             });
           } else {
             setState(() {
-              cities = []; // Clear the cities list when no districts are available
-              selectedState = null; // Clear the selected state
-              selectedCity = null; // Reset the selected city
+              cities = [];
             });
           }
         }
@@ -340,15 +337,15 @@ Widget buildInventoryQuestions(
                 onchanged: (Object e) {
                   final selectedState = e as String?;
                   updateCitiesList(selectedState);
-                  notify.add({"id": question.questionId, "item": e});
+                  // notify.add({"id": question.questionId, "item": e});
                 },
               ),
               DropDownField(
                 title: "City",
-                defaultValues: selectedCity ?? "",
+                defaultValues: defaultValue ?? "",
                 optionsList: cities,
                 onchanged: (Object e) {
-                  notify.add({"id": 27, "item": e});
+                  // notify.add({"id": 27, "item": e});
                 },
               ),
             ],

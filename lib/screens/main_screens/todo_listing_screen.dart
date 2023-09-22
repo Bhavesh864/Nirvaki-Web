@@ -137,7 +137,6 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                                           Container(
                                             constraints: const BoxConstraints(),
                                             child: WorkItemsList(
-                                              isScrollable: false,
                                               title: 'To do',
                                               getCardDetails: filterTodoList,
                                             ),

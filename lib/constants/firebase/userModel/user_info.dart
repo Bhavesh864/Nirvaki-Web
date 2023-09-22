@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
@@ -180,25 +181,26 @@ class User extends HiveObject {
   }
 
   static Future<User?> getUser(String userId, {WidgetRef? ref}) async {
+    if (ref == null) {
+      return null;
+    }
     try {
       final hiveUserData = UserHiveMethods.getdata(userId);
-
       if (hiveUserData != null) {
         final Map<String, dynamic> userDataMap = Map.from(hiveUserData);
         final User user = User.fromMap(userDataMap);
-
-        Future.delayed(const Duration(milliseconds: 500)).then(
-          (value) => {
-            ref?.read(userDataProvider.notifier).storeUserData(user),
-          },
-        );
+        AppConst.setRole(user.role);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          ref.read(userDataProvider.notifier).storeUserData(user);
+        });
         return user;
       } else {
         final DocumentSnapshot documentSnapshot = await usersCollection.doc(userId).get();
         if (documentSnapshot.exists) {
           final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
           final User user = User.fromMap(data);
-          ref?.read(userDataProvider.notifier).storeUserData(user);
+          ref.read(userDataProvider.notifier).storeUserData(user);
+          AppConst.setRole(user.role);
           UserHiveMethods.addData(key: userId, data: user.toMap());
           return user;
         } else {

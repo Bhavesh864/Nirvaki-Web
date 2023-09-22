@@ -40,7 +40,7 @@ class CardHeaderState extends ConsumerState<CardHeader> {
   Widget build(BuildContext context) {
     final cardData = widget.cardDetails[widget.index];
     status = widget.cardDetails;
-    final User user = ref.read(userDataProvider);
+    final User? user = ref.read(userDataProvider);
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -91,7 +91,7 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                   }
                   setState(() {});
                   notifyToUser(
-                    currentuserdata: user,
+                    currentuserdata: user!,
                     itemid: cardData.workitemId!,
                     assignedto: cardData.assignedto,
                     content: "${user.userfirstname} ${user.userlastname} change status to $value",

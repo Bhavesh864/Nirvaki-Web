@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 
 import 'package:yes_broker/constants/functions/workitems_detail_methods.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
@@ -51,8 +52,8 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final User user = ref.read(userDataProvider);
-
+    final User? user = ref.read(userDataProvider);
+    print(user?.email);
     return Scaffold(
       appBar: Responsive.isMobile(context)
           ? AppBar(
@@ -66,7 +67,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
           : null,
       body: SafeArea(
         child: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('calenderDetails').where('brokerId', isEqualTo: user.brokerId).snapshots(),
+          stream: FirebaseFirestore.instance.collection('calenderDetails').where('brokerId', isEqualTo: user?.brokerId).snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Loader();

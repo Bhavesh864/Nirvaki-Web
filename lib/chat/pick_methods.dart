@@ -7,7 +7,9 @@ import 'package:yes_broker/customs/snackbar.dart';
 Future<File?> pickImageFromGallery(BuildContext context) async {
   File? image;
   try {
-    final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedImage = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
 
     if (pickedImage != null) {
       image = File(pickedImage.path);
