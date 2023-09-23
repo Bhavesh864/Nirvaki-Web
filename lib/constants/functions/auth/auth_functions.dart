@@ -1,6 +1,7 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 import '../../../chat/controller/chat_controller.dart';
@@ -25,8 +26,6 @@ void userLogout(WidgetRef ref, BuildContext context) {
         },
       );
 }
-
-
 
 // void logoutaction(WidgetRef ref, BuildContext context) {
 //   authentication.signOut().then((value) {
