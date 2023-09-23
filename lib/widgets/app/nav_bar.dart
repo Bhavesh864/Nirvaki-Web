@@ -16,6 +16,7 @@ import '../../constants/functions/time_formatter.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
 import '../../screens/account_screens/Teams/team_screen.dart';
+import '../../screens/account_screens/organisation_screen.dart';
 
 final notificationListProvider = StateProvider<List<NotificationModel>>((ref) => []);
 
@@ -127,11 +128,17 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
                     color: Colors.white.withOpacity(1),
                     offset: const Offset(200, 40),
                     itemBuilder: (contex) {
-                      final alreadyExists = profileMenuItems.any((element) => element.title == "Team");
-                      if (!alreadyExists && snapshot.data!.role.contains("Broker")) {
+                      final teamExists = profileMenuItems.any((element) => element.title == "Team");
+                      final organizationExists = profileMenuItems.any((element) => element.title == "Organization");
+                      if (!teamExists && snapshot.data!.role.contains("Broker")) {
                         profileMenuItems.insert(1, ProfileMenuItems(title: "Team", screen: const TeamScreen(), id: 2));
-                      } else if (alreadyExists && !snapshot.data!.role.contains("Broker")) {
+                      } else if (teamExists && !snapshot.data!.role.contains("Broker")) {
                         profileMenuItems.removeWhere((element) => element.title == "Team");
+                      }
+                      if (!organizationExists && snapshot.data!.role.contains("Broker")) {
+                        profileMenuItems.insert(2, ProfileMenuItems(title: "Organization", screen: const Center(child: OrganisationScreen()), id: 7));
+                      } else if (organizationExists && !snapshot.data!.role.contains("Broker")) {
+                        profileMenuItems.removeWhere((element) => element.title == "Organization");
                       }
                       return profileMenuItems.map(
                         (e) {

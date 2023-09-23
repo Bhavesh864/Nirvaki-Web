@@ -36,6 +36,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   int currentScreenIndex = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<States> stateList = [];
+
   @override
   void initState() {
     super.initState();
@@ -227,7 +228,9 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                         Row(
                                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                           children: [
-                                                            if (i == currentScreenList[index].questions.length - 1 && isEdit && currentScreenList[index].title != "Assign to") ...[
+                                                            if (i == currentScreenList[index].questions.length - 1 &&
+                                                                isEdit &&
+                                                                currentScreenList[index].title != "Assign to") ...[
                                                               // CustomButton(
                                                               //   height: 39,
                                                               //   text: "Jump To Submit",

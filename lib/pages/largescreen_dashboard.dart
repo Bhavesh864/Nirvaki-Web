@@ -11,6 +11,7 @@ import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';
 
 import '../constants/functions/auth/auth_functions.dart';
+import '../constants/functions/chat_group/group.dart';
 import '../screens/account_screens/Teams/team_screen.dart';
 import '../widgets/chat_modal_view.dart';
 
@@ -70,9 +71,11 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                   useIndicator: false,
                   selectedIndex: currentIndex > 4 ? 0 : currentIndex,
                   onDestinationSelected: (index) {
-                    setstate(() {
-                      beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[index].nav);
-                    });
+                    setstate(
+                      () {
+                        beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[index].nav);
+                      },
+                    );
                   },
                   destinations: sideBarItems
                       .sublist(0, 5)
@@ -107,7 +110,10 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                       }
                       context.beamToNamed('/profile');
                     } else if (selectedVal == "Logout") {
-                      userLogout(ref, context);
+                      // userLogout(ref, context);
+                      customConfirmationAlertDialog(context, () {
+                        userLogout(ref, context);
+                      }, 'Logout', 'Are you sure you want to logout?');
                     }
                   },
                 ),
