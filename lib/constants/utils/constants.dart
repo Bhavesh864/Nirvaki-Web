@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/screens/account_screens/profile_screen.dart';
 
 import '../../screens/account_screens/Teams/team_screen.dart';
+import '../../screens/account_screens/organisation_screen.dart';
 
 double? height = 707;
 double? width = 1440;
@@ -30,7 +32,11 @@ class ProfileMenuItems {
   final String title;
   final Widget screen;
 
-  ProfileMenuItems({required this.title, required this.screen, required this.id});
+  ProfileMenuItems({
+    required this.title,
+    required this.screen,
+    required this.id,
+  });
 }
 
 class BottomBarItem {
@@ -330,7 +336,8 @@ List<String> inventoryDetailsImageUrls = [
 ];
 
 List<ProfileMenuItems> profileMenuItems = [
-  ProfileMenuItems(title: "Profile", screen: const Center(child: Text('Screen for Item 1')), id: 1),
+  ProfileMenuItems(title: "Profile", screen: const Center(child: ProfileScreen()), id: 1),
+  ProfileMenuItems(title: "Organization", screen: const Center(child: OrganisationScreen()), id: 7),
   ProfileMenuItems(title: "Team", screen: const TeamScreen(), id: 2),
   ProfileMenuItems(title: "Settings", screen: const Center(child: Text('Screen for Item 3')), id: 3),
   ProfileMenuItems(title: "Subscription", screen: const Center(child: Text('Screen for Item 4')), id: 4),
