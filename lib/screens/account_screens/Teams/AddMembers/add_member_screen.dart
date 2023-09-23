@@ -24,7 +24,6 @@ class AddMemberScreen extends ConsumerStatefulWidget {
 }
 
 class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
-  User? user;
   final key = GlobalKey<FormState>();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
@@ -34,39 +33,77 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
   bool loading = false;
   String? editManagerName;
   String? editRoleName;
-  var role;
+  String? role;
 
   void submitMemberRole() {
+    final isEdit = ref.read(editAddMemberState);
+    final editUser = ref.read(userForEditScreen);
+
     final isvalid = key.currentState?.validate();
     if (isvalid!) {
       setState(() {
         loading = true;
       });
-      sendInvitationEmail(
-              email: _emailController.text,
-              firstname: _firstNameController.text,
-              lastname: _lastNameController.text,
-              mobile: _mobileController.text,
-              managerName: '${manager?.userfirstname} ${manager?.userlastname}',
-              managerid: manager?.userId,
-              role: role.toString())
-          .then((value) => {
-                if (value == "success")
-                  {
-                    backToTeamScreen(),
-                    // customSnackBar(context: context, text: "Add Member successfully"),
-                    setState(() {
-                      loading = false;
-                    })
-                  }
-                else
-                  {
-                    customSnackBar(context: context, text: value),
-                    setState(() {
-                      loading = false;
-                    })
-                  }
-              });
+      if (isEdit) {
+        print("object");
+        updateTeamMember(
+                email: _emailController.text,
+                firstname: _firstNameController.text,
+                lastname: _lastNameController.text,
+                mobile: _mobileController.text,
+                managerName: manager != null ? '${manager?.userfirstname} ${manager?.userlastname}' : editUser?.managerName,
+                managerid: manager != null ? manager?.userId : editUser?.managerid,
+                role: role ?? editUser?.role,
+                brokerId: editUser?.brokerId,
+                userId: editUser?.userId,
+                fcmToken: editUser?.fcmToken,
+                imageUrl: editUser?.image,
+                status: editUser?.status,
+                isOnline: editUser?.isOnline)
+            .then((value) => {
+                  if (value == "success")
+                    {
+                      backToTeamScreen(),
+                      customSnackBar(context: context, text: "Member Updated Successfully"),
+                      setState(() {
+                        loading = false;
+                      })
+                    }
+                  else
+                    {
+                      customSnackBar(context: context, text: value),
+                      setState(() {
+                        loading = false;
+                      })
+                    }
+                });
+      } else {
+        sendInvitationEmail(
+                email: _emailController.text,
+                firstname: _firstNameController.text,
+                lastname: _lastNameController.text,
+                mobile: _mobileController.text,
+                managerName: '${manager?.userfirstname} ${manager?.userlastname}',
+                managerid: manager?.userId,
+                role: role)
+            .then((value) => {
+                  if (value == "success")
+                    {
+                      backToTeamScreen(),
+                      // customSnackBar(context: context, text: "Add Member successfully"),
+                      setState(() {
+                        loading = false;
+                      })
+                    }
+                  else
+                    {
+                      customSnackBar(context: context, text: value),
+                      setState(() {
+                        loading = false;
+                      })
+                    }
+                });
+      }
     }
   }
 
@@ -141,6 +178,7 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                           LabelTextInputField(
                             labelText: "Email",
                             inputController: _emailController,
+                            readOnly: isEdit ? true : false,
                             validator: (value) => validateEmail(value),
                           ),
                           FutureBuilder(
@@ -148,28 +186,36 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   final List<String> userNames = snapshot.data!.map((user) => "${user.userfirstname} ${user.userlastname}").toList();
-                                  return DropDownField(
-                                      defaultValues: isEdit ? editUser?.managerName : "",
-                                      title: "Manager",
-                                      optionsList: userNames,
-                                      onchanged: (e) {
-                                        setState(() {
-                                          User selectedUser = snapshot.data!.firstWhere((user) => '${user.userfirstname} ${user.userlastname}' == e);
-                                          manager = selectedUser;
-                                        });
-                                      });
+                                  return Container(
+                                    margin: const EdgeInsets.all(5),
+                                    child: DropDownField(
+                                        defaultValues: isEdit ? editUser?.managerName : "",
+                                        title: "Manager",
+                                        optionsList: userNames,
+                                        onchanged: (e) {
+                                          setState(() {
+                                            User selectedUser = snapshot.data!.firstWhere((user) => '${user.userfirstname} ${user.userlastname}' == e);
+                                            manager = selectedUser;
+                                          });
+                                        }),
+                                  );
                                 }
-                                return DropDownField(title: "Manager", defaultValues: isEdit ? editUser?.managerName : "", optionsList: const [], onchanged: (e) {});
+                                return Container(
+                                    margin: const EdgeInsets.all(5),
+                                    child: DropDownField(title: "Manager", defaultValues: isEdit ? editUser?.managerName : "", optionsList: const [], onchanged: (e) {}));
                               }),
-                          DropDownField(
-                              title: "Role",
-                              defaultValues: isEdit ? editUser?.role : "",
-                              optionsList: const ["Employee", "Manager"],
-                              onchanged: (e) {
-                                setState(() {
-                                  role = e;
-                                });
-                              }),
+                          Container(
+                            margin: const EdgeInsets.all(5),
+                            child: DropDownField(
+                                title: "Role",
+                                defaultValues: isEdit ? editUser?.role : "",
+                                optionsList: const ["Employee", "Manager"],
+                                onchanged: (e) {
+                                  setState(() {
+                                    role = e as String?;
+                                  });
+                                }),
+                          ),
                           const SizedBox(height: 20),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.end,

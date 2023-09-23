@@ -43,7 +43,7 @@ class User extends HiveObject {
   @HiveField(11)
   String? managerName;
   @HiveField(12)
-  String? fcmToken;
+  dynamic fcmToken;
   @HiveField(13)
   bool isOnline;
   User({
@@ -119,7 +119,7 @@ class User extends HiveObject {
       whatsAppNumber: map['whatsAppNumber'] as String,
       managerid: map['managerid'] != null ? map['managerid'] as String : null,
       managerName: map['managerName'] != null ? map['managerName'] as String : null,
-      fcmToken: map['fcmToken'] != null ? map['fcmToken'] as String : null,
+      fcmToken: map['fcmToken'] != null ? map['fcmToken'] as dynamic : null,
       isOnline: map['isOnline'] as bool,
     );
   }
@@ -131,6 +131,15 @@ class User extends HiveObject {
       // print('User added successfully');
     } catch (error) {
       // print('Failed to add user: $error');
+    }
+  }
+
+  static Future<void> updateUser(User user) async {
+    try {
+      await usersCollection.doc(user.userId).update(user.toMap());
+      print('User updated successfully');
+    } catch (error) {
+      print('Failed to update user: $error');
     }
   }
 
@@ -187,6 +196,7 @@ class User extends HiveObject {
     try {
       final hiveUserData = UserHiveMethods.getdata(userId);
       if (hiveUserData != null) {
+        print('======if=======');
         final Map<String, dynamic> userDataMap = Map.from(hiveUserData);
         final User user = User.fromMap(userDataMap);
         AppConst.setRole(user.role);
@@ -195,6 +205,7 @@ class User extends HiveObject {
         });
         return user;
       } else {
+        print('======else=======');
         final DocumentSnapshot documentSnapshot = await usersCollection.doc(userId).get();
         if (documentSnapshot.exists) {
           final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
@@ -213,15 +224,6 @@ class User extends HiveObject {
         print('Failed to get user: $error');
       }
       return null;
-    }
-  }
-
-  static Future<void> updateUser(User updatedUser) async {
-    try {
-      await usersCollection.doc(updatedUser.brokerId).update(updatedUser.toMap());
-      // print('User updated successfully');
-    } catch (error) {
-      // print('Failed to update user: $error');
     }
   }
 

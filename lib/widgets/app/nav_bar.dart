@@ -33,6 +33,10 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
   void initState() {
     super.initState();
     user = User.getUser(AppConst.getAccessToken(), ref: ref);
+    // print(AppConst.getRole() == "Broker" && profileMenuItems.any((element) => element.title != "Team"));
+    // if (AppConst.getRole() == "Broker" && profileMenuItems.any((element) => element.title != "Team")) {
+    //   profileMenuItems.insert(1, ProfileMenuItems(title: "Team", screen: const TeamScreen(), id: 2));
+    // }
   }
 
   @override
@@ -67,6 +71,7 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           final notificationCount = snapshot.data!.docs.length;
+
                           return Stack(
                             children: <Widget>[
                               InkWell(
@@ -122,9 +127,12 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
                     color: Colors.white.withOpacity(1),
                     offset: const Offset(200, 40),
                     itemBuilder: (contex) {
-                      // if (snapshot.data?.role != "Broker" && profileMenuItems.any((element) => element.title != "Team")) {
-                      // profileMenuItems.insert(1, ProfileMenuItems(title: "Team", screen: const TeamScreen(), id: 2));
-                      // }
+                      final alreadyExists = profileMenuItems.any((element) => element.title == "Team");
+                      if (!alreadyExists && snapshot.data!.role.contains("Broker")) {
+                        profileMenuItems.insert(1, ProfileMenuItems(title: "Team", screen: const TeamScreen(), id: 2));
+                      } else if (alreadyExists && !snapshot.data!.role.contains("Broker")) {
+                        profileMenuItems.removeWhere((element) => element.title == "Team");
+                      }
                       return profileMenuItems.map(
                         (e) {
                           return popupMenuItem(e.title);
