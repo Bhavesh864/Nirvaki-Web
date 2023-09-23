@@ -120,7 +120,8 @@ class TeamScreen extends ConsumerWidget {
                     }
                     if (snapshot.hasData) {
                       final usersListSnapshot = snapshot.data!.docs;
-                      List<User> usersList = usersListSnapshot.map((doc) => User.fromSnapshot(doc)).toList();
+                      List<User> listOfUser = usersListSnapshot.map((doc) => User.fromSnapshot(doc)).toList();
+                      List<User> usersList = listOfUser.where((element) => !element.role.contains("Broker")).toList();
                       return ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),

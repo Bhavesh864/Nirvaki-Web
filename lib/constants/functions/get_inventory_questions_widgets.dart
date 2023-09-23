@@ -307,6 +307,9 @@ Widget buildInventoryQuestions(
       defaultValue = "1";
     }
     if (isState) {
+      if (!isEdit && question.questionTitle.contains("State")) {
+        defaultValue = "Haryana";
+      }
       try {
         List<String?> cities = [];
         final List<String?> states = stateList.map((e) => e.state).toList();
