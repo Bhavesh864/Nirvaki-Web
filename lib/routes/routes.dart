@@ -292,12 +292,13 @@ class BeamerScreenNavigation extends StatelessWidget {
                   ),
                 );
                 // child: PublicViewInventoryDetails());
+              } else {
+                return const BeamPage(
+                  key: ValueKey('/inventory-listing'),
+                  type: BeamPageType.scaleTransition,
+                  child: InventoryListingScreen(),
+                );
               }
-              return const BeamPage(
-                key: ValueKey('/inventory-listing'),
-                type: BeamPageType.scaleTransition,
-                child: InventoryListingScreen(),
-              );
             },
             '/lead': (p0, state, p2) {
               if (state.pathPatternSegments.contains('lead-details')) {

@@ -228,20 +228,20 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                   ],
                 ),
               ] else ...[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: const Color(0xff898989).withOpacity(0.5),
+                GestureDetector(
+                  onTap: () {
+                    startEditingFullName("${userData.userfirstname} ${userData.userlastname}");
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: const Color(0xff898989).withOpacity(0.5),
+                        ),
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-                        startEditingFullName("${userData.userfirstname} ${userData.userlastname}");
-                      },
                       child: const Row(
                         children: [
                           Icon(

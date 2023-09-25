@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -7,7 +8,13 @@ import '../../customs/custom_text.dart';
 
 class WorkItemSuccessWidget extends StatelessWidget {
   final String isInventory;
-  const WorkItemSuccessWidget({Key? key, this.isInventory = 'IN'}) : super(key: key);
+  final bool isEdit;
+
+  const WorkItemSuccessWidget({
+    Key? key,
+    required this.isInventory,
+    required this.isEdit,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +30,7 @@ class WorkItemSuccessWidget extends StatelessWidget {
           ),
         ),
         CustomText(
-          title: ' ${isInventory == 'IN' ? 'Inventory' : isInventory == 'Todo' ? 'Todo' : 'Lead'} have been \n Successfully created',
+          title: ' ${isInventory == 'IN' ? 'Inventory' : isInventory == 'Todo' ? 'Todo' : 'Lead'} has been \n  ${isEdit ? 'Edited' : 'Created'} Successfully',
           size: 48,
           fontWeight: FontWeight.w700,
           color: Colors.white,

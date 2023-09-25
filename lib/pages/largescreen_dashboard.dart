@@ -36,6 +36,7 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
   Widget build(BuildContext context) {
     int currentIndex = 0;
     final beamerKey = GlobalKey<BeamerState>();
+    bool showFloatingButton = true;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -139,28 +140,31 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
         ],
       ),
       floatingActionButton: !AppConst.getPublicView()
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                const CustomSpeedDialButton(),
-                const SizedBox(
-                  height: 10,
-                ),
-                CircleAvatar(
-                  radius: 28,
-                  backgroundColor: AppColor.primary,
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.chat_outlined,
-                      color: Colors.white,
-                      size: 24,
-                    ),
-                    onPressed: () {
-                      showChatDialog();
-                    },
+          ? Visibility(
+              visible: showFloatingButton,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  const CustomSpeedDialButton(),
+                  const SizedBox(
+                    height: 10,
                   ),
-                ),
-              ],
+                  CircleAvatar(
+                    radius: 28,
+                    backgroundColor: AppColor.primary,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.chat_outlined,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                      onPressed: () {
+                        showChatDialog();
+                      },
+                    ),
+                  ),
+                ],
+              ),
             )
           : null,
     );
