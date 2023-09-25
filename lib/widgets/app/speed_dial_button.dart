@@ -20,7 +20,6 @@ class CustomSpeedDialButton extends ConsumerStatefulWidget {
 class CustomSpeedDialButtonState extends ConsumerState<CustomSpeedDialButton> {
   @override
   Widget build(BuildContext context) {
-    AppConst.setOuterContext(context);
     return SpeedDial(
       animatedIcon: AnimatedIcons.add_event,
       foregroundColor: Colors.white,
@@ -31,7 +30,12 @@ class CustomSpeedDialButtonState extends ConsumerState<CustomSpeedDialButton> {
       children: [
         SpeedDialChild(
           onTap: () {
-            context.beamToNamed(AppRoutes.addInventory);
+            AppConst.getOuterContext()!.beamToNamed(AppRoutes.addInventory);
+            // Navigator.of(context).push(MaterialPageRoute(
+            //   builder: (context) {
+            //     return const inventory.AddInventory();
+            //   },
+            // ));
             ref.read(inventory.myArrayProvider.notifier).resetState();
           },
           labelShadow: [
@@ -51,7 +55,7 @@ class CustomSpeedDialButtonState extends ConsumerState<CustomSpeedDialButton> {
         ),
         SpeedDialChild(
           onTap: () {
-            context.beamToNamed(AppRoutes.addLead);
+            AppConst.getOuterContext()!.beamToNamed(AppRoutes.addLead);
             ref.read(lead.myArrayProvider.notifier).resetState();
           },
           labelShadow: [
@@ -71,7 +75,7 @@ class CustomSpeedDialButtonState extends ConsumerState<CustomSpeedDialButton> {
         ),
         SpeedDialChild(
           onTap: () {
-            context.beamToNamed(AppRoutes.addTodo);
+            AppConst.getOuterContext()!.beamToNamed(AppRoutes.addTodo);
             ref.read(myArrayProvider.notifier).resetState();
           },
           labelShadow: [

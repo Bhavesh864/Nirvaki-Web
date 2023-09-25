@@ -432,17 +432,14 @@ void showAddCalendarModal({
                     ),
                     LabelTextInputField(
                       labelText: 'Title',
-                      onChanged: (p0) {
-                        // titleController.text = p0;
-                      },
+                      isMandatory: true,
                       inputController: titleController,
                       validator: (value) => validateForNormalFeild(props: "Title", value: value),
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: GestureDetector(
+                    if (Responsive.isMobile(context)) ...[
+                      Wrap(
+                        children: [
+                          GestureDetector(
                             onTap: () {
                               pickFromDateTime(
                                 pickDate: true,
@@ -453,22 +450,18 @@ void showAddCalendarModal({
                               );
                             },
                             child: LabelTextInputField(
-                              onChanged: (p0) {
-                                // dateController.text = p0;
-                              },
                               labelText: 'Date ',
+                              isMandatory: true,
                               inputController: dateController,
                               isDatePicker: true,
                               validator: (value) => validateForNormalFeild(props: "Title", value: value),
                               hintText: 'DD/MM/YYYY',
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        Expanded(
-                          child: GestureDetector(
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          GestureDetector(
                             onTap: () {
                               pickFromDateTime(
                                 pickDate: false,
@@ -479,10 +472,8 @@ void showAddCalendarModal({
                               );
                             },
                             child: LabelTextInputField(
-                              onChanged: (p0) {
-                                // timeController.text = p0;
-                              },
                               labelText: 'Time',
+                              isMandatory: true,
                               isDatePicker: true,
                               inputController: timeController,
                               rightIcon: Icons.schedule,
@@ -490,9 +481,61 @@ void showAddCalendarModal({
                               hintText: 'Select Time',
                             ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                    ] else ...[
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: GestureDetector(
+                              onTap: () {
+                                pickFromDateTime(
+                                  pickDate: true,
+                                  pickedDate: pickedDate,
+                                  context: context,
+                                  dateController: dateController,
+                                  timeController: timeController,
+                                );
+                              },
+                              child: LabelTextInputField(
+                                labelText: 'Date ',
+                                isMandatory: true,
+                                inputController: dateController,
+                                isDatePicker: true,
+                                validator: (value) => validateForNormalFeild(props: "Title", value: value),
+                                hintText: 'DD/MM/YYYY',
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                pickFromDateTime(
+                                  pickDate: false,
+                                  pickedDate: pickedDate,
+                                  context: context,
+                                  dateController: dateController,
+                                  timeController: timeController,
+                                );
+                              },
+                              child: LabelTextInputField(
+                                labelText: 'Time',
+                                isMandatory: true,
+                                isDatePicker: true,
+                                inputController: timeController,
+                                rightIcon: Icons.schedule,
+                                validator: (value) => validateForNormalFeild(props: "Title", value: value),
+                                hintText: 'Select Time',
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                     LabelTextAreaField(
                       labelText: 'Details',
                       onChanged: (p0) {

@@ -6,6 +6,7 @@ String? validateEmail(String? value) {
   if (!emailRegex.hasMatch(value)) {
     return 'Please enter a valid email address';
   }
+
   return null;
 }
 
