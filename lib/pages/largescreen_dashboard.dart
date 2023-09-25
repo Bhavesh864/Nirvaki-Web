@@ -2,17 +2,13 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/screens/account_screens/common_screen.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
-import 'package:yes_broker/widgets/app/speed_dial_button.dart';
-
 import '../constants/functions/auth/auth_functions.dart';
 import '../constants/functions/chat_group/group.dart';
-import '../widgets/chat_modal_view.dart';
 
 class LargeScreen extends ConsumerStatefulWidget {
   const LargeScreen({Key? key}) : super(key: key);
@@ -22,20 +18,10 @@ class LargeScreen extends ConsumerStatefulWidget {
 }
 
 class LargeScreenState extends ConsumerState<LargeScreen> {
-  showChatDialog() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const ChatDialogBox();
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     int currentIndex = 0;
     final beamerKey = GlobalKey<BeamerState>();
-    bool showFloatingButton = true;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -135,34 +121,6 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
           ),
         ],
       ),
-      floatingActionButton: !AppConst.getPublicView()
-          ? Visibility(
-              visible: showFloatingButton,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  const CustomSpeedDialButton(),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  CircleAvatar(
-                    radius: 28,
-                    backgroundColor: AppColor.primary,
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.chat_outlined,
-                        color: Colors.white,
-                        size: 24,
-                      ),
-                      onPressed: () {
-                        showChatDialog();
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            )
-          : null,
     );
   }
 }

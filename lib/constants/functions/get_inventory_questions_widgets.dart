@@ -6,6 +6,7 @@ import 'package:number_to_words/number_to_words.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/constants/validation/basic_validation.dart';
 
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/questionaries/questions_form_photos_view.dart';
@@ -216,6 +217,8 @@ Widget buildInventoryQuestions(
             question.questionTitle.contains('Mobile') ||
             question.questionTitle == 'Rent' ||
             question.questionTitle == 'Listing Price';
+
+        final isEmail = question.questionTitle.contains("Email");
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -240,14 +243,16 @@ Widget buildInventoryQuestions(
                 }
                 notify.add({"id": question.questionId, "item": newvalue.trim()});
               },
-              validator: isvalidationtrue
-                  ? (value) {
-                      if (value!.isEmpty) {
-                        return "Please enter ${question.questionTitle}";
-                      }
-                      return null;
-                    }
-                  : null,
+              validator: isEmail
+                  ? validateEmailNotMandatory
+                  : isvalidationtrue
+                      ? (value) {
+                          if (value!.isEmpty) {
+                            return "Please enter ${question.questionTitle}";
+                          }
+                          return null;
+                        }
+                      : null,
             ),
             isPriceField ? Text(textResult) : const SizedBox.shrink(),
           ],

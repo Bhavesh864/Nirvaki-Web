@@ -25,7 +25,7 @@ class CustomSpeedDialButtonState extends ConsumerState<CustomSpeedDialButton> {
       animatedIcon: AnimatedIcons.add_event,
       foregroundColor: Colors.white,
       backgroundColor: AppColor.primary,
-      overlayColor: Colors.black,
+      // overlayColor: Colors.black.withOpacity(0.2),
       // renderOverlay: false,
       overlayOpacity: 0.4,
       children: [
