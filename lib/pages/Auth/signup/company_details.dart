@@ -14,6 +14,7 @@ import 'package:yes_broker/riverpodstate/sign_up_state.dart';
 import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
 
 import 'package:yes_broker/constants/validation/basic_validation.dart';
+import 'package:yes_broker/screens/account_screens/profile_screen.dart';
 
 import '../../../customs/dropdown_field.dart';
 import '../../../constants/utils/constants.dart';
@@ -64,8 +65,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
     }
   }
 
-  // Future<XFile?> selectImagee() async {
-  selectImagee() async {
+  selectImage() async {
     XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
     setState(() {
       uploadLogocontroller.text = pickedImage!.name;
@@ -87,28 +87,6 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
   final TextEditingController statecontroller = TextEditingController();
   final TextEditingController citycontroller = TextEditingController();
   final TextEditingController uploadLogocontroller = TextEditingController();
-
-  void uploadImageToFirebase(imageUrl) async {
-    final uniqueKey = DateTime.now().microsecondsSinceEpoch.toString();
-    Reference referenceRoot = FirebaseStorage.instance.ref();
-    Reference referenceDirImages = referenceRoot.child('images');
-    Reference referenceImagesToUpload = referenceDirImages.child(uniqueKey);
-
-    try {
-      if (kIsWeb) {
-        final metaData = SettableMetadata(contentType: 'image/jpeg');
-        await referenceImagesToUpload.putData(imageUrl, metaData);
-      } else {
-        await referenceImagesToUpload.putFile(imageUrl);
-      }
-      imageUrl = await referenceImagesToUpload.getDownloadURL();
-      print("imageUrl--> $imageUrl");
-      final notify = ref.read(selectedItemForsignup.notifier);
-      notify.add({"id": 14, "item": imageUrl});
-    } catch (e) {
-      print(e);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -214,9 +192,13 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                               readonly: true,
                               labelText: "Upload Logo",
                               ontap: () {
-                                selectImagee().then((value) => {
-                                      uploadImageToFirebase(value)
-                                      // getImageUrl(value!).then((img) => {uploadImageToFirebase(img)})
+                                selectImage().then((value) => {
+                                      uploadImageToFirebases(value).then((url) {
+                                        if (url != "") {
+                                          final notify = ref.read(selectedItemForsignup.notifier);
+                                          notify.add({"id": 14, "item": url});
+                                        }
+                                      })
                                     });
                               },
                               rightIcon: Icons.publish,
