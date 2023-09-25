@@ -17,6 +17,7 @@ class LabelTextInputField extends StatelessWidget {
   final Function(String)? onChanged;
   final FormFieldValidator<String>? validator;
   final String? initialvalue;
+  final bool onlyDigits;
 
   const LabelTextInputField({
     Key? key,
@@ -32,6 +33,7 @@ class LabelTextInputField extends StatelessWidget {
     this.onChanged,
     this.validator,
     this.initialvalue,
+    this.onlyDigits = false,
   }) : super(key: key);
 
   @override
@@ -66,7 +68,7 @@ class LabelTextInputField extends StatelessWidget {
           ),
         ),
         CustomTextInput(
-          // indense: true,
+          onlyDigits: onlyDigits,
           enabled: isDropDown
               ? false
               : isDatePicker

@@ -31,7 +31,7 @@ class _OrganisationScreenState extends ConsumerState<OrganisationScreen> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Responsive.isMobile(context) ? 15.0 : 0),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       child: StreamBuilder(
           stream: brokerInfo,
           builder: (context, snapshot) {
@@ -216,20 +216,20 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                   ],
                 ),
               ] else ...[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: const Color(0xff898989).withOpacity(0.5),
+                GestureDetector(
+                  onTap: () {
+                    startEditingFullName(broker.companyname!);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: const Color(0xff898989).withOpacity(0.5),
+                        ),
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-                        startEditingFullName(broker.companyname!);
-                      },
                       child: const Row(
                         children: [
                           Icon(
