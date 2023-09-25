@@ -2,46 +2,46 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yes_broker/constants/firebase/Methods/add_member_send_email.dart';
-import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
-import 'package:yes_broker/constants/functions/assingment_methods.dart';
-import 'package:yes_broker/customs/responsive.dart';
-import 'package:yes_broker/riverpodstate/user_data.dart';
+
+import 'package:yes_broker/constants/app_constant.dart';
+import 'package:yes_broker/constants/firebase/Methods/update_broker_info.dart';
+import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
+import 'package:yes_broker/customs/loader.dart';
+import 'package:yes_broker/screens/account_screens/profile_screen.dart';
 
 import '../../Customs/custom_fields.dart';
-import '../../Customs/loader.dart';
+import '../../Customs/responsive.dart';
 import '../../Customs/text_utility.dart';
-import '../../constants/app_constant.dart';
 import '../../constants/utils/colors.dart';
 
-class ProfileScreen extends ConsumerStatefulWidget {
-  const ProfileScreen({super.key});
+class OrganisationScreen extends ConsumerStatefulWidget {
+  const OrganisationScreen({super.key});
 
   @override
-  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+  ConsumerState<OrganisationScreen> createState() => _OrganisationScreenState();
 }
 
-class _ProfileScreenState extends ConsumerState<ProfileScreen> {
-  late Stream<DocumentSnapshot<Map<String, dynamic>>> userInfo;
+class _OrganisationScreenState extends ConsumerState<OrganisationScreen> {
+  late Stream<DocumentSnapshot<Map<String, dynamic>>> brokerInfo;
   @override
   void initState() {
     super.initState();
-    userInfo = FirebaseFirestore.instance.collection('users').doc(AppConst.getAccessToken()).snapshots();
+    brokerInfo = FirebaseFirestore.instance.collection('brokerInfo').doc(AppConst.getAccessToken()).snapshots();
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Responsive.isMobile(context) ? 15.0 : 0),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       child: StreamBuilder(
-          stream: userInfo,
+          stream: brokerInfo,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Loader();
             }
             if (snapshot.hasData) {
               final dataList = snapshot.data;
-              User userInfo = User.fromSnapshot(dataList!);
+              BrokerInfo broker = BrokerInfo.fromSnapshot(dataList!);
               return Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,78 +50,107 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     const Padding(
                       padding: EdgeInsets.only(left: 5.0),
                       child: AppText(
-                        text: "Profile",
+                        text: "Organistion",
                         fontWeight: FontWeight.w700,
                         fontsize: 16,
                       ),
                     ),
-                  CustomAddressAndProfileCard(
+                  CustomCompanyDetailsCard(
                     isPersonalDetails: false,
-                    userData: userInfo,
+                    brokerData: broker,
+                    isAdressDetails: false,
                   ),
-                  CustomAddressAndProfileCard(
-                    title: 'Personal Information',
+                  CustomCompanyDetailsCard(
+                    title: 'Company Information',
+                    brokerData: broker,
                     isPersonalDetails: true,
-                    userData: userInfo,
+                    isAdressDetails: false,
                   ),
-                  CustomAddressAndProfileCard(
-                    title: 'Address',
+                  CustomCompanyDetailsCard(
+                    title: 'Company Address',
+                    brokerData: broker,
                     isPersonalDetails: false,
-                    userData: userInfo,
+                    isAdressDetails: true,
                   ),
                 ],
               );
             }
-            return const SizedBox.shrink();
+            return const SizedBox();
           }),
     );
   }
 }
 
-class CustomAddressAndProfileCard extends ConsumerStatefulWidget {
+class CustomCompanyDetailsCard extends ConsumerStatefulWidget {
   final String? title;
   final bool isPersonalDetails;
-  final User userData;
-  const CustomAddressAndProfileCard({
+  final bool isAdressDetails;
+  final BrokerInfo brokerData;
+
+  const CustomCompanyDetailsCard({
     Key? key,
     this.title,
-    required this.userData,
     required this.isPersonalDetails,
+    required this.brokerData,
+    required this.isAdressDetails,
   }) : super(key: key);
 
   @override
-  ConsumerState<CustomAddressAndProfileCard> createState() => _CustomAddressAndProfileCardState();
+  ConsumerState<CustomCompanyDetailsCard> createState() => _CustomCompanyDetailsCard();
 }
 
-class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndProfileCard> {
+class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> {
   bool isNameEditing = false;
   bool isPersonalDetailsEditing = false;
   bool isAddressEditing = false;
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController fullNameController = TextEditingController();
+
+  final TextEditingController companyNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+
+  final TextEditingController address1Controller = TextEditingController();
+  final TextEditingController address2Controller = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController stateController = TextEditingController();
 
   void startEditingFullName(String fullName) {
     setState(() {
       isNameEditing = true;
-      fullNameController.text = fullName;
+      companyNameController.text = fullName;
     });
   }
 
   void cancelEditingFullName() {
     setState(() {
       isNameEditing = false;
-      fullNameController.clear();
+      companyNameController.clear();
     });
   }
 
-  void startEditingPersonalDetails(String firstName, String lastName, String email, String phone) {
+  void startEditingAddressDetail(String city, String state, String address1, String address2) {
+    setState(() {
+      isAddressEditing = true;
+      address1Controller.text = address1;
+      address2Controller.text = address2;
+      cityController.text = city;
+      stateController.text = state;
+    });
+  }
+
+  void cancelEditingAddressDetail() {
+    setState(() {
+      isAddressEditing = false;
+      cityController.clear();
+      address1Controller.clear();
+      address2Controller.clear();
+      stateController.clear();
+    });
+  }
+
+  void startEditingPersonalDetails(String companyname, String email, String phone) {
     setState(() {
       isPersonalDetailsEditing = true;
-      firstNameController.text = firstName;
-      lastNameController.text = lastName;
+      companyNameController.text = companyname;
       phoneController.text = phone;
       emailController.text = email;
     });
@@ -130,8 +159,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
   void cancelEditingPersonalDetails() {
     setState(() {
       isPersonalDetailsEditing = false;
-      firstNameController.clear();
-      lastNameController.clear();
+      companyNameController.clear();
       emailController.clear();
       phoneController.clear();
     });
@@ -139,7 +167,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
 
   @override
   Widget build(BuildContext context) {
-    final userData = widget.userData;
+    final BrokerInfo broker = widget.brokerData;
     if (widget.title == null) {
       return Card(
         child: Padding(
@@ -157,7 +185,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                     onTap: () {},
                     child: CircleAvatar(
                       radius: 35,
-                      backgroundImage: isNameEditing ? null : NetworkImage(userData.image),
+                      backgroundImage: isNameEditing ? null : NetworkImage(broker.brokerlogo!),
                       child: isNameEditing
                           ? const Icon(
                               Icons.add,
@@ -173,32 +201,24 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // if (isNameEditing) ...[
-                      //   SizedBox(
-                      //     height: 50,
-                      //     width: fullNameController.text.length * 13,
-                      //     child: CustomTextInput(
-                      //       controller: fullNameController,
-                      //       onFieldSubmitted: (newValue) {},
-                      //     ),
-                      //   ),
-                      // ] else ...[
-                      Text(
-                        "${userData.userfirstname} ${userData.userlastname}",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                      if (isNameEditing) ...[
+                        SizedBox(
+                          height: 50,
+                          width: companyNameController.text.length * 13,
+                          child: CustomTextInput(
+                            controller: companyNameController,
+                            onFieldSubmitted: (newValue) {},
+                          ),
                         ),
-                      ),
-                      // ],
-                      Text(
-                        userData.role,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF818181),
-                          fontWeight: FontWeight.w500,
+                      ] else ...[
+                        Text(
+                          broker.companyname!,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      )
+                      ],
                     ],
                   ),
                 ],
@@ -222,7 +242,16 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                       borderColor: AppColor.primary,
                       height: 39,
                       onPressed: () {
-                        cancelEditingFullName();
+                        updateBrokerInfo(
+                                brokerId: broker.brokerid,
+                                role: broker.role,
+                                companyName: companyNameController.text,
+                                mobile: broker.brokercompanynumber,
+                                whatsapp: broker.brokercompanywhatsapp,
+                                email: broker.brokercompanyemail,
+                                image: broker.brokerlogo,
+                                companyAddress: broker.brokercompanyaddress)
+                            .then((value) => {cancelEditingFullName()});
                       },
                     ),
                   ],
@@ -230,7 +259,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
               ] else ...[
                 GestureDetector(
                   onTap: () {
-                    startEditingFullName("${userData.userfirstname} ${userData.userlastname}");
+                    startEditingFullName(broker.companyname!);
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -278,7 +307,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  if (isPersonalDetailsEditing && widget.isPersonalDetails) ...[
+                  if (isPersonalDetailsEditing && widget.isPersonalDetails || isAddressEditing && widget.isAdressDetails) ...[
                     Row(
                       children: [
                         CustomButton(
@@ -287,6 +316,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                           borderColor: AppColor.primary,
                           onPressed: () {
                             cancelEditingPersonalDetails();
+                            cancelEditingAddressDetail();
                           },
                           buttonColor: Colors.white,
                           textColor: AppColor.primary,
@@ -297,21 +327,33 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                           borderColor: AppColor.primary,
                           height: 39,
                           onPressed: () {
-                            updateTeamMember(
-                                    email: emailController.text.trim(),
-                                    firstname: firstNameController.text.trim(),
-                                    lastname: lastNameController.text.trim(),
-                                    mobile: phoneController.text.trim(),
-                                    managerName: userData.managerName,
-                                    managerid: userData.managerid,
-                                    role: userData.role,
-                                    brokerId: userData.brokerId,
-                                    userId: userData.userId,
-                                    fcmToken: userData.fcmToken,
-                                    imageUrl: userData.image,
-                                    status: userData.status,
-                                    isOnline: userData.isOnline)
-                                .then((value) => {cancelEditingPersonalDetails()});
+                            if (widget.isPersonalDetails) {
+                              updateBrokerInfo(
+                                      brokerId: broker.brokerid,
+                                      role: broker.role,
+                                      companyName: broker.companyname,
+                                      mobile: phoneController.text,
+                                      whatsapp: broker.brokercompanywhatsapp,
+                                      email: emailController.text,
+                                      image: broker.brokerlogo,
+                                      companyAddress: broker.brokercompanyaddress)
+                                  .then((value) => {cancelEditingPersonalDetails()});
+                            } else if (widget.isAdressDetails) {
+                              updateBrokerInfo(
+                                  brokerId: broker.brokerid,
+                                  role: broker.role,
+                                  companyName: broker.companyname,
+                                  mobile: broker.brokercompanynumber,
+                                  whatsapp: broker.brokercompanywhatsapp,
+                                  email: broker.brokercompanyemail,
+                                  image: broker.brokerlogo,
+                                  companyAddress: {
+                                    "city": cityController.text,
+                                    "state": stateController.text,
+                                    "Addressline1": address1Controller.text,
+                                    "Addressline2p": address2Controller.text
+                                  }).then((value) => {cancelEditingAddressDetail()});
+                            }
                           },
                         ),
                       ],
@@ -319,12 +361,20 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                   ] else ...[
                     GestureDetector(
                       onTap: () {
-                        startEditingPersonalDetails(
-                          userData.userfirstname,
-                          userData.userlastname,
-                          userData.email,
-                          userData.mobile,
-                        );
+                        if (widget.isPersonalDetails) {
+                          startEditingPersonalDetails(
+                            broker.companyname!,
+                            broker.brokercompanyemail!,
+                            broker.brokercompanynumber!,
+                          );
+                        } else if (widget.isAdressDetails) {
+                          startEditingAddressDetail(
+                            broker.brokercompanyaddress['city'],
+                            broker.brokercompanyaddress['state'],
+                            broker.brokercompanyaddress['Addressline1'],
+                            broker.brokercompanyaddress['Addressline2'],
+                          );
+                        }
                       },
                       child: Container(
                         padding: const EdgeInsets.all(5),
@@ -356,39 +406,22 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      buildInfoFields('First name', userData.userfirstname, isPersonalDetailsEditing, firstNameController),
-                      buildInfoFields('Last Name ', userData.userlastname, isPersonalDetailsEditing, lastNameController),
-                      const SizedBox(
-                        width: 60,
-                      ),
-                      const SizedBox(),
-                      const SizedBox(),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      buildInfoFields('Email address', userData.email, isPersonalDetailsEditing, emailController),
-                      buildInfoFields('Phone ', userData.mobile, isPersonalDetailsEditing, phoneController),
-                      if (!Responsive.isMobile(context)) buildInfoFields('Employee ID', userData.userId, false, TextEditingController()),
+                      buildInfoFields('Email address', broker.brokercompanyemail!, isPersonalDetailsEditing, emailController),
+                      buildInfoFields('Phone ', broker.brokercompanynumber!, isPersonalDetailsEditing, phoneController),
                       const SizedBox(),
                       const SizedBox(),
                       const SizedBox(),
                     ],
                   ),
                 ),
-                if (Responsive.isMobile(context)) buildInfoFields('Employee ID', userData.userId, false, TextEditingController()),
               ] else ...[
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      buildInfoFields('City', 'New Delhi', false, TextEditingController()),
-                      buildInfoFields('State ', 'Delhi', false, TextEditingController()),
+                      buildInfoFields('Address 1', broker.brokercompanyaddress['Addressline1'], isAddressEditing, address1Controller),
+                      buildInfoFields('City', broker.brokercompanyaddress['city'], isAddressEditing, cityController),
                       const SizedBox(
                         width: 60,
                       ),
@@ -402,8 +435,8 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      buildInfoFields('Country', 'India', false, TextEditingController()),
-                      buildInfoFields('Pin Code ', '110077', false, TextEditingController()),
+                      buildInfoFields('Address 2', broker.brokercompanyaddress['Addressline2'], isAddressEditing, address2Controller),
+                      buildInfoFields('State', broker.brokercompanyaddress['state'], isAddressEditing, stateController),
                       const SizedBox(),
                       const SizedBox(),
                       const SizedBox(),
@@ -417,38 +450,4 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
       );
     }
   }
-}
-
-Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, TextEditingController textController) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        fieldName,
-        style: const TextStyle(
-          fontSize: 14,
-          color: Color(0xFF818181),
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-      if (isEditing) ...[
-        SizedBox(
-          height: 50,
-          width: fieldDetail.length * 13,
-          child: CustomTextInput(
-            controller: textController,
-            onFieldSubmitted: (newValue) {},
-          ),
-        ),
-      ] else ...[
-        Text(
-          fieldDetail,
-          style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ]
-    ],
-  );
 }

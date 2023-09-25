@@ -16,6 +16,7 @@ import '../../constants/functions/time_formatter.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
 import '../../screens/account_screens/Teams/team_screen.dart';
+import '../../screens/account_screens/organisation_screen.dart';
 
 final notificationListProvider = StateProvider<List<NotificationModel>>((ref) => []);
 
@@ -33,6 +34,10 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
   void initState() {
     super.initState();
     user = User.getUser(AppConst.getAccessToken(), ref: ref);
+    // print(AppConst.getRole() == "Broker" && profileMenuItems.any((element) => element.title != "Team"));
+    // if (AppConst.getRole() == "Broker" && profileMenuItems.any((element) => element.title != "Team")) {
+    //   profileMenuItems.insert(1, ProfileMenuItems(title: "Team", screen: const TeamScreen(), id: 2));
+    // }
   }
 
   @override
@@ -67,6 +72,7 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           final notificationCount = snapshot.data!.docs.length;
+
                           return Stack(
                             children: <Widget>[
                               InkWell(
@@ -122,9 +128,7 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
                     color: Colors.white.withOpacity(1),
                     offset: const Offset(200, 40),
                     itemBuilder: (contex) {
-                      // if (snapshot.data?.role != "Broker" && profileMenuItems.any((element) => element.title != "Team")) {
-                      // profileMenuItems.insert(1, ProfileMenuItems(title: "Team", screen: const TeamScreen(), id: 2));
-                      // }
+                      addOrRemoveTeamAndOrganization(snapshot);
                       return profileMenuItems.map(
                         (e) {
                           return popupMenuItem(e.title);
@@ -152,6 +156,21 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
         },
       ),
     );
+  }
+}
+
+void addOrRemoveTeamAndOrganization(AsyncSnapshot<User?> snapshot) {
+  final teamExists = profileMenuItems.any((element) => element.title == "Team");
+  final organizationExists = profileMenuItems.any((element) => element.title == "Organization");
+  if (!teamExists && snapshot.data!.role.contains("Broker")) {
+    profileMenuItems.insert(1, ProfileMenuItems(title: "Team", screen: const TeamScreen(), id: 2));
+  } else if (teamExists && !snapshot.data!.role.contains("Broker")) {
+    profileMenuItems.removeWhere((element) => element.title == "Team");
+  }
+  if (!organizationExists && snapshot.data!.role.contains("Broker")) {
+    profileMenuItems.insert(2, ProfileMenuItems(title: "Organization", screen: const Center(child: OrganisationScreen()), id: 7));
+  } else if (organizationExists && !snapshot.data!.role.contains("Broker")) {
+    profileMenuItems.removeWhere((element) => element.title == "Organization");
   }
 }
 

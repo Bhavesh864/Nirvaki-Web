@@ -133,7 +133,7 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                       ),
                     )
                   : const SizedBox(),
-              checkNotNUllItem(cardData.propertyarearange?.arearangestart)
+              checkNotNUllItem(cardData.propertyarearange?.arearangestart) && checkNotNUllItem(cardData.propertyarearange?.unit)
                   ? CustomChip(
                       label: CustomText(
                         title: "${cardData.propertyarearange?.arearangestart} ${cardData.propertyarearange?.unit}",

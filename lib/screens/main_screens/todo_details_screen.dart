@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
@@ -175,7 +176,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                       isEditingTodoName
                                           ? SizedBox(
                                               height: 35,
-                                              width: data.todoName!.length * 9,
+                                              width: data.todoName!.length * 13,
                                               child: CustomTextInput(
                                                 autofocus: true,
                                                 controller: todoNameEditingController,
