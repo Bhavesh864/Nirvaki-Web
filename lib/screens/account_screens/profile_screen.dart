@@ -1,11 +1,18 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+import 'dart:js_interop';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/constants/firebase/Methods/add_member_send_email.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/functions/assingment_methods.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 
@@ -103,6 +110,9 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  File? profilePhoto;
+  Uint8List? webProfile;
+  String? uploadProfile;
 
   void startEditingFullName(String fullName) {
     setState(() {
@@ -138,6 +148,25 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
     });
   }
 
+  selectImage() async {
+    XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      var webUrl = await pickedImage.readAsBytes();
+      var imageUrl = File(pickedImage.path);
+      if (kIsWeb) {
+        setState(() {
+          webProfile = webUrl;
+        });
+        return webUrl;
+      }
+      setState(() {
+        profilePhoto = imageUrl;
+      });
+      return imageUrl;
+    }
+    return '';
+  }
+
   @override
   Widget build(BuildContext context) {
     final userData = widget.userData;
@@ -155,15 +184,35 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                     width: 10,
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      if (isNameEditing) {
+                        selectImage().then((value) {
+                          if (value != "") {
+                            uploadImageToFirebases(value).then((url) {
+                              if (url != "") {
+                                // print(url);
+                                setState(() {
+                                  uploadProfile = url;
+                                });
+                              }
+                            });
+                          }
+                        });
+                      }
+                    },
                     child: CircleAvatar(
                       radius: 35,
                       backgroundImage: isNameEditing ? null : NetworkImage(userData.image),
+                      // backgroundImage: webProfile != null ? MemoryImage(webProfile!) : null,
                       child: isNameEditing
-                          ? const Icon(
-                              Icons.add,
-                              size: 25,
-                            )
+                          ? profilePhoto == null && webProfile == null
+                              ? const Icon(
+                                  Icons.add,
+                                  size: 25,
+                                )
+                              : (kIsWeb)
+                                  ? ClipOval(child: Image.memory(webProfile!, width: 70, height: 70, fit: BoxFit.cover))
+                                  : ClipOval(child: Image.file(profilePhoto!, width: 70, height: 70, fit: BoxFit.cover))
                           : null,
                     ),
                   ),
@@ -454,4 +503,26 @@ Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, Tex
       ]
     ],
   );
+}
+
+Future<String> uploadImageToFirebases(imageUrl) async {
+  final uniqueKey = DateTime.now().microsecondsSinceEpoch.toString();
+  Reference referenceRoot = FirebaseStorage.instance.ref();
+  Reference referenceDirImages = referenceRoot.child('images');
+  Reference referenceImagesToUpload = referenceDirImages.child(uniqueKey);
+
+  try {
+    if (kIsWeb) {
+      final metaData = SettableMetadata(contentType: 'image/jpeg');
+      await referenceImagesToUpload.putData(imageUrl, metaData);
+    } else {
+      await referenceImagesToUpload.putFile(imageUrl);
+    }
+    imageUrl = await referenceImagesToUpload.getDownloadURL();
+    print("imageUrl--> $imageUrl");
+    return imageUrl;
+  } catch (e) {
+    print(e);
+    return '';
+  }
 }
