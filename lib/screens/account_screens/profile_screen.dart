@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
 import 'package:yes_broker/constants/firebase/Methods/add_member_send_email.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/functions/assingment_methods.dart';
@@ -311,7 +312,9 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                                     imageUrl: userData.image,
                                     status: userData.status,
                                     isOnline: userData.isOnline)
-                                .then((value) => {cancelEditingPersonalDetails()});
+                                .then((value) => {
+                                      cancelEditingPersonalDetails(),
+                                    });
                           },
                         ),
                       ],
