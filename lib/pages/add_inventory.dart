@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/firebase/statesModel/state_c_ity_model.dart';
@@ -61,7 +62,9 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
         }
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -122,7 +125,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     final isPlotSelected = ref.read(filterPlotQuestion);
     final allInventoryQuestionsNotifier = ref.read(allInventoryQuestion.notifier);
     final allInventoryQuestions = ref.read(allInventoryQuestion);
-    final assignIsselected = selectedValues.firstWhere((element) => element["id"] == 36)["item"];
+    // final assignIsselected = selectedValues.firstWhere((element) => element["id"] == 36)["item"];
     return Scaffold(
       body: FutureBuilder<List<InventoryQuestions>>(
           future: getQuestions,
@@ -233,55 +236,6 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                         SizedBox(height: question.questionOptionType != 'textfield' ? 10 : 0),
                                                         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                                                           const SizedBox(),
-
-                                                          // if (i == currentScreenList[index].questions.length - 1 &&
-                                                          //     isEdit &&
-                                                          //     currentScreenList[index].title != "Assign to") ...[
-                                                          //   // Align(
-                                                          //   //   alignment: Alignment.centerRight,
-                                                          //   //   child: CustomButton(
-                                                          //   //     height: 39,
-                                                          //   //     text: "Next",
-                                                          //   //     onPressed: () {
-                                                          //   //       nextQuestion(screensDataList: currentScreenList, option: "");
-                                                          //   //       //  currentScreenIndex = currentScreenList.length - 1;
-                                                          //   //       //     pageController?.jumpToPage(currentScreenList.length - 1);
-                                                          //   //     },
-                                                          //   //   ),
-                                                          //   // ),
-                                                          // ] else ...[
-                                                          //   const SizedBox()
-                                                          // ],
-
-                                                          // Container(
-                                                          //   child: shouldShowButton
-                                                          //       ? allQuestionFinishes
-                                                          //           ? const Center(
-                                                          //               child: CircularProgressIndicator.adaptive(),
-                                                          //             )
-                                                          //           : CustomButton(
-                                                          //               text: buttonText,
-                                                          //               onPressed: () {
-                                                          //                 if (!allQuestionFinishes) {
-                                                          //                   if (currentScreenList[index].title != "Assign to") {
-                                                          //                     if (_formKey.currentState!.validate()) {
-                                                          //                       nextQuestion(screensDataList: currentScreenList, option: "");
-                                                          //                     }
-                                                          //                   }
-                                                          //                   if (currentScreenList[index].title == "Assign to") {
-                                                          //                     setState(() {
-                                                          //                       allQuestionFinishes = true;
-                                                          //                     });
-                                                          //                     addDataOnfirestore(notify);
-                                                          //                   }
-                                                          //                 }
-                                                          //               },
-                                                          //               width: currentScreenList[index].title == "Assign to" ? 90 : 70,
-                                                          //               height: 39,
-                                                          //             )
-                                                          //       : const SizedBox(),
-                                                          // )
-
                                                           if (i == currentScreenList[index].questions.length - 1 && question.questionOptionType != 'chip') ...[
                                                             Container(
                                                               // alignment: Alignment.centerRight,
@@ -299,14 +253,14 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                                             }
                                                                           }
                                                                           if (currentScreenList[index].title == "Assign to") {
-                                                                            if (assignIsselected.lenth > 0) {
-                                                                              setState(() {
-                                                                                allQuestionFinishes = true;
-                                                                              });
-                                                                              addDataOnfirestore(notify);
-                                                                            } else {
-                                                                              customSnackBar(context: context, text: "Assign this inventory to Member");
-                                                                            }
+                                                                            // if (assignIsselected.lenth > 0) {
+                                                                            setState(() {
+                                                                              allQuestionFinishes = true;
+                                                                            });
+                                                                            addDataOnfirestore(notify);
+                                                                            // } else {
+                                                                            //   customSnackBar(context: context, text: "Assign this inventory to Member");
+                                                                            // }
                                                                           }
                                                                         }
                                                                       },
