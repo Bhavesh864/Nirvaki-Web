@@ -29,7 +29,7 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
   @override
   Widget build(BuildContext context) {
     final workItemId = ref.read(selectedWorkItemId);
-    final User user = ref.read(userDataProvider);
+    final User? user = ref.read(userDataProvider);
 
     return Column(
       children: [
@@ -59,13 +59,9 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
                   text: 'Add Note',
                   onPressed: () {
                     if (controller.text.isNotEmpty) {
-                      submitActivity(itemid: workItemId, activitytitle: controller.text.trim(), user: user);
+                      submitActivity(itemid: workItemId, activitytitle: controller.text.trim(), user: user!);
                       notifyToUser(
-                          currentuserdata: user,
-                          assignedto: widget.details.assignedto,
-                          content: "$workItemId added new Activity",
-                          title: controller.text,
-                          itemid: workItemId);
+                          currentuserdata: user, assignedto: widget.details.assignedto, content: "$workItemId added new Activity", title: controller.text, itemid: workItemId);
                       controller.clear();
                     } else {
                       customSnackBar(context: context, text: 'Please enter note to submit');

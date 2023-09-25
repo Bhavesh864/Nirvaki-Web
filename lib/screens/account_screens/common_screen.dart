@@ -8,6 +8,7 @@ import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/screens/account_screens/screens_state.dart';
 
 import '../../constants/functions/auth/auth_functions.dart';
+import 'Teams/team_screen.dart';
 
 final selectedProfileItemProvider = StateNotifierProvider<SelectedItemNotifier, ProfileMenuItems?>((ref) {
   return SelectedItemNotifier();
@@ -15,7 +16,6 @@ final selectedProfileItemProvider = StateNotifierProvider<SelectedItemNotifier, 
 
 class CommonScreen extends ConsumerWidget {
   final BuildContext outerContext;
-
   const CommonScreen({
     super.key,
     required this.outerContext,
@@ -24,9 +24,11 @@ class CommonScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedItem = ref.watch(selectedProfileItemProvider);
-
     void onItemSelected(ProfileMenuItems item) {
       ref.read(selectedProfileItemProvider.notifier).setSelectedItem(item);
+      if (item.id == 2) {
+        ref.read(addMemberScreenStateProvider.notifier).setAddMemberScreenState(false);
+      }
     }
 
     return Scaffold(

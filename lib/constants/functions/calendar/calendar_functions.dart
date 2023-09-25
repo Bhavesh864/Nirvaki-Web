@@ -89,7 +89,7 @@ void addCalenderDatatoFirebase({
   required String time,
   required WidgetRef ref,
 }) {
-  final User user = ref.read(userDataProvider);
+  final User? user = ref.read(userDataProvider);
   final CalendarModel calendarModel = CalendarModel(
     calenderTitle: title,
     calenderDescription: description,
@@ -97,9 +97,9 @@ void addCalenderDatatoFirebase({
     id: generateUid(),
     dueDate: dueDate,
     time: time,
-    userId: user.userId,
-    brokerId: user.brokerId,
-    managerId: user.managerid,
+    userId: user?.userId,
+    brokerId: user?.brokerId,
+    managerId: user?.managerid,
   );
 
   CalendarModel.addCalendarModel(calendarModel);

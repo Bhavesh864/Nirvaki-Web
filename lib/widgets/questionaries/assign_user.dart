@@ -42,7 +42,7 @@ class _AssignUserState extends ConsumerState<AssignUser> {
 
   @override
   Widget build(BuildContext context) {
-    final User user = ref.read(userDataProvider);
+    final User? user = ref.read(userDataProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,7 +58,7 @@ class _AssignUserState extends ConsumerState<AssignUser> {
         SizedBox(
           height: 45,
           child: StreamBuilder(
-              stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: user.brokerId).snapshots(),
+              stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: user?.brokerId).snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data == null) {
                   return const CircularProgressIndicator.adaptive();
@@ -91,7 +91,8 @@ class _AssignUserState extends ConsumerState<AssignUser> {
                       focusNode: focusNode,
                       onTap: () {},
                       decoration: InputDecoration(
-                        hintText: '@',
+                        hintText: 'Type here...',
+                        hintStyle: const TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(6),
                         ),

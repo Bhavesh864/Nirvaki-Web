@@ -110,7 +110,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
 
   @override
   Widget build(BuildContext context) {
-    final User user = ref.read(userDataProvider);
+    final User? user = ref.read(userDataProvider);
     return Scaffold(
       appBar: Responsive.isMobile(context)
           ? AppBar(
@@ -177,7 +177,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                       isEditingTodoName
                                           ? SizedBox(
                                               height: 35,
-                                              width: data.todoName!.length * 9,
+                                              width: data.todoName!.length * 13,
                                               child: CustomTextInput(
                                                 autofocus: true,
                                                 controller: todoNameEditingController,
@@ -227,7 +227,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                           currentStatus = value;
                                           setState(() {});
                                           notifyToUser(
-                                              currentuserdata: user,
+                                              currentuserdata: user!,
                                               itemid: data.todoId!,
                                               assignedto: data.assignedto,
                                               content: "${user.userfirstname} ${user.userlastname} change status to $value",

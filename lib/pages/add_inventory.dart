@@ -40,6 +40,10 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   @override
   void initState() {
     super.initState();
+    initializeData();
+  }
+
+  void initializeData() async {
     final answers = ref.read(myArrayProvider);
     getQuestions = InventoryQuestions.getAllQuestionssFromFirestore();
     pageController = PageController(initialPage: currentScreenIndex);

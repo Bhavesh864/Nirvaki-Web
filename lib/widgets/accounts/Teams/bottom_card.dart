@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:yes_broker/widgets/accounts/Teams/bottom_card_header.dart';
 import 'package:yes_broker/widgets/accounts/Teams/bottom_card_main.dart';
 
+import '../../../constants/firebase/userModel/user_info.dart';
 import '../../../constants/utils/constants.dart';
 
 class BottomCard extends StatelessWidget {
-  const BottomCard({super.key});
+  final List<User> userList;
+  const BottomCard({required this.userList, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class BottomCard extends StatelessWidget {
             children: [
               const BottomCardHeader(),
               SizedBox(height: height! * 0.07),
-              const BottomCardMain(),
+              BottomCardMain(userList: userList),
             ],
           ),
         ),
