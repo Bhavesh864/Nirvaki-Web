@@ -20,7 +20,10 @@ import '../mapview_widget.dart';
 class AttachmentPreviewDialog extends StatelessWidget {
   final String attachmentPath;
 
-  const AttachmentPreviewDialog({super.key, required this.attachmentPath});
+  const AttachmentPreviewDialog({
+    super.key,
+    required this.attachmentPath,
+  });
 
   @override
   Widget build(BuildContext context) {

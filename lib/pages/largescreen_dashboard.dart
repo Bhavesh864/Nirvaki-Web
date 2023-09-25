@@ -7,6 +7,7 @@ import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/screens/account_screens/common_screen.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
+import '../constants/app_constant.dart';
 import '../constants/functions/auth/auth_functions.dart';
 import '../constants/functions/chat_group/group.dart';
 import '../screens/account_screens/Teams/team_screen.dart';
@@ -23,6 +24,7 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
   Widget build(BuildContext context) {
     int currentIndex = 0;
     final beamerKey = GlobalKey<BeamerState>();
+    AppConst.setOuterContext(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -125,6 +127,31 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
           ),
         ],
       ),
+      // floatingActionButton: !AppConst.getPublicView()
+      //     ? Column(
+      //         mainAxisAlignment: MainAxisAlignment.end,
+      //         children: [
+      //           const CustomSpeedDialButton(),
+      //           const SizedBox(
+      //             height: 10,
+      //           ),
+      //           CircleAvatar(
+      //             radius: 28,
+      //             backgroundColor: AppColor.primary,
+      //             child: IconButton(
+      //               icon: const Icon(
+      //                 Icons.chat_outlined,
+      //                 color: Colors.white,
+      //                 size: 24,
+      //               ),
+      //               onPressed: () {
+      //                 showChatDialog();
+      //               },
+      //             ),
+      //           ),
+      //         ],
+      //       )
+      //     : null,
     );
   }
 }
