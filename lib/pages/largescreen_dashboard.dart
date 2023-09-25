@@ -11,6 +11,7 @@ import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';
 
 import '../constants/functions/auth/auth_functions.dart';
+import '../constants/functions/chat_group/group.dart';
 import '../screens/account_screens/Teams/team_screen.dart';
 import '../widgets/chat_modal_view.dart';
 
@@ -35,6 +36,7 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
   Widget build(BuildContext context) {
     int currentIndex = 0;
     final beamerKey = GlobalKey<BeamerState>();
+    bool showFloatingButton = true;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -70,9 +72,11 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                   useIndicator: false,
                   selectedIndex: currentIndex > 4 ? 0 : currentIndex,
                   onDestinationSelected: (index) {
-                    setstate(() {
-                      beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[index].nav);
-                    });
+                    setstate(
+                      () {
+                        beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[index].nav);
+                      },
+                    );
                   },
                   destinations: sideBarItems
                       .sublist(0, 5)
@@ -107,7 +111,10 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                       }
                       context.beamToNamed('/profile');
                     } else if (selectedVal == "Logout") {
-                      userLogout(ref, context);
+                      // userLogout(ref, context);
+                      customConfirmationAlertDialog(context, () {
+                        userLogout(ref, context);
+                      }, 'Logout', 'Are you sure you want to logout?');
                     }
                   },
                 ),
@@ -133,28 +140,31 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
         ],
       ),
       floatingActionButton: !AppConst.getPublicView()
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                const CustomSpeedDialButton(),
-                const SizedBox(
-                  height: 10,
-                ),
-                CircleAvatar(
-                  radius: 28,
-                  backgroundColor: AppColor.primary,
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.chat_outlined,
-                      color: Colors.white,
-                      size: 24,
-                    ),
-                    onPressed: () {
-                      showChatDialog();
-                    },
+          ? Visibility(
+              visible: showFloatingButton,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  const CustomSpeedDialButton(),
+                  const SizedBox(
+                    height: 10,
                   ),
-                ),
-              ],
+                  CircleAvatar(
+                    radius: 28,
+                    backgroundColor: AppColor.primary,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.chat_outlined,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                      onPressed: () {
+                        showChatDialog();
+                      },
+                    ),
+                  ),
+                ],
+              ),
             )
           : null,
     );

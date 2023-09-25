@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart' as user;
-
 import '../../app_constant.dart';
 
 Future<String> sendInvitationEmail({
@@ -52,6 +50,45 @@ Future<String> sendInvitationEmail({
     return res;
   } catch (e) {
     print('Failed to send invitation email: $e');
+    return e.toString();
+  }
+}
+
+Future<String> updateTeamMember(
+    {required email,
+    required firstname,
+    required lastname,
+    required mobile,
+    required managerName,
+    required managerid,
+    required role,
+    required brokerId,
+    required userId,
+    required fcmToken,
+    required imageUrl,
+    required status,
+    required isOnline}) async {
+  var res = "pending";
+  try {
+    final user.User items = user.User(
+        brokerId: brokerId,
+        status: status,
+        userfirstname: firstname,
+        whatsAppNumber: mobile,
+        userlastname: lastname,
+        isOnline: isOnline,
+        userId: userId,
+        managerName: managerName,
+        managerid: managerid,
+        mobile: mobile,
+        email: email,
+        role: role,
+        fcmToken: fcmToken,
+        image: imageUrl);
+    await user.User.updateUser(items).then((value) => {res = "success"});
+    return res;
+  } catch (e) {
+    print(e.toString());
     return e.toString();
   }
 }

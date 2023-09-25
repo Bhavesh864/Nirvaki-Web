@@ -2,7 +2,6 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/number_symbols_data.dart';
 import 'package:number_to_words/number_to_words.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
@@ -183,13 +182,16 @@ Widget buildInventoryQuestions(
                 Column(
                   children: [
                     LabelTextInputField(
+                      keyboardType: TextInputType.number,
+                      onlyDigits: true,
                       onChanged: (newvalue) {
                         notify.add({"id": question.questionId, "item": newvalue.trim()});
                       },
                       inputController: controller,
+                      isMandatory: true,
                       labelText: question.questionTitle,
                       validator: (value) {
-                        if (isChecked && value!.isEmpty) {
+                        if (!isChecked && value!.isEmpty) {
                           return "Please enter ${question.questionTitle}";
                         }
                         return null;
@@ -205,6 +207,12 @@ Widget buildInventoryQuestions(
     return StatefulBuilder(
       builder: (context, setState) {
         final isPriceField = question.questionId == 46 || question.questionId == 48 || question.questionId == 50;
+        final isDigitsOnly = question.questionTitle.contains('Mobile') ||
+            question.questionTitle == 'Rent' ||
+            question.questionTitle == 'Listing Price' ||
+            question.questionTitle.contains('Floor Number') ||
+            question.questionTitle.contains('Property Area');
+
         final isvalidationtrue =
             question.questionTitle.contains('First') || question.questionTitle.contains('Mobile') || question.questionTitle == 'Rent' || question.questionTitle == 'Listing Price';
         return Column(
@@ -212,6 +220,7 @@ Widget buildInventoryQuestions(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             LabelTextInputField(
+              onlyDigits: isDigitsOnly,
               keyboardType: isPriceField ? TextInputType.number : TextInputType.name,
               inputController: controller,
               labelText: question.questionTitle,
@@ -299,9 +308,7 @@ Widget buildInventoryQuestions(
     }
   } else if (question.questionOptionType == 'dropdown') {
     String? defaultValue;
-
     final isState = question.questionTitle.contains("State");
-
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
@@ -309,49 +316,51 @@ Widget buildInventoryQuestions(
       defaultValue = "1";
     }
     if (isState) {
-      List<String?> cities = [];
-      final List<String?> states = stateList.map((e) => e.state).toList();
-      return StatefulBuilder(builder: (context, setState) {
-        void updateCitiesList(String? newSelectedState) {
-          final index = states.indexOf(newSelectedState);
-
-          if (index >= 0 && index < stateList.length && stateList[index].districts != null) {
-            setState(() {
-              cities = stateList[index].districts!;
-            });
-          } else {
+      try {
+        List<String?> cities = [];
+        final List<String?> states = stateList.map((e) => e.state).toList();
+        return StatefulBuilder(builder: (context, setState) {
+          void updateCitiesList(String? newSelectedState) {
             setState(() {
               cities = [];
             });
+            final index = states.indexOf(newSelectedState);
+            if (index >= 0 && index < stateList.length && stateList[index].districts != null) {
+              setState(() {
+                cities = stateList[index].districts!;
+              });
+            }
           }
-        }
 
-        return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 7),
-          child: Column(
-            children: [
-              DropDownField(
-                title: question.questionTitle,
-                defaultValues: defaultValue ?? "",
-                optionsList: states,
-                onchanged: (Object e) {
-                  final selectedState = e as String?;
-                  updateCitiesList(selectedState);
-                  // notify.add({"id": question.questionId, "item": e});
-                },
-              ),
-              DropDownField(
-                title: "City",
-                defaultValues: defaultValue ?? "",
-                optionsList: cities,
-                onchanged: (Object e) {
-                  // notify.add({"id": 27, "item": e});
-                },
-              ),
-            ],
-          ),
-        );
-      });
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 7),
+            child: Column(
+              children: [
+                DropDownField(
+                  title: question.questionTitle,
+                  defaultValues: defaultValue ?? "",
+                  optionsList: states,
+                  onchanged: (Object e) {
+                    final selectedState = e as String?;
+                    updateCitiesList(selectedState);
+                    notify.add({"id": question.questionId, "item": e});
+                  },
+                ),
+                DropDownField(
+                  title: "City",
+                  defaultValues: defaultValue ?? "",
+                  optionsList: cities,
+                  onchanged: (Object e) {
+                    notify.add({"id": 27, "item": e});
+                  },
+                ),
+              ],
+            ),
+          );
+        });
+      } catch (e) {
+        print(e.toString());
+      }
     }
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 7),

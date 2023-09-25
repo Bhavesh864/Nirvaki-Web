@@ -91,10 +91,12 @@ List<MenuItem> sideBarItems = [
     iconData: calendarIcon,
     screen: const CalendarScreen(),
   ),
-  MenuItem(
-    label: profilePageLabel,
-    screen: const CommonScreen(),
-  ),
+  // MenuItem(
+  //   label: profilePageLabel,
+  //   screen: CommonScreen(
+  //     outerContext: context,
+  //   ),
+  // ),
   MenuItem(
     nav: '/inventorydetails',
     label: inventoryDetailsLabel,
@@ -290,12 +292,13 @@ class BeamerScreenNavigation extends StatelessWidget {
                   ),
                 );
                 // child: PublicViewInventoryDetails());
+              } else {
+                return const BeamPage(
+                  key: ValueKey('/inventory-listing'),
+                  type: BeamPageType.scaleTransition,
+                  child: InventoryListingScreen(),
+                );
               }
-              return const BeamPage(
-                key: ValueKey('/inventory-listing'),
-                type: BeamPageType.scaleTransition,
-                child: InventoryListingScreen(),
-              );
             },
             '/lead': (p0, state, p2) {
               if (state.pathPatternSegments.contains('lead-details')) {
@@ -324,10 +327,12 @@ class BeamerScreenNavigation extends StatelessWidget {
                   type: BeamPageType.scaleTransition,
                   child: CalendarScreen(),
                 ),
-            '/profile': (p0, p1, p2) => const BeamPage(
-                  key: ValueKey('/calendar'),
+            '/profile': (p0, p1, p2) => BeamPage(
+                  key: const ValueKey('/calendar'),
                   type: BeamPageType.scaleTransition,
-                  child: CommonScreen(),
+                  child: CommonScreen(
+                    outerContext: context,
+                  ),
                 ),
             AppRoutes.editTodo: (p0, p1, data) {
               return BeamPage(

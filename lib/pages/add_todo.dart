@@ -162,9 +162,10 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                                                         size: 30,
                                                         title: screensDataList[index].questions[i].questionTitle,
                                                         fontWeight: FontWeight.bold),
-                                                  buildTodoQuestions(screensDataList[index].questions[i], screensDataList, currentScreenIndex, notify, nextQuestion, context,
-                                                      selectedValues, linkState),
-                                                  if (i == screensDataList[index].questions.length - 1 && screensDataList[index].questions[i].questionOptionType != 'chip')
+                                                  buildTodoQuestions(screensDataList[index].questions[i], screensDataList, currentScreenIndex, notify, nextQuestion,
+                                                      context, selectedValues, linkState),
+                                                  if (i == screensDataList[index].questions.length - 1 &&
+                                                      screensDataList[index].questions[i].questionOptionType != 'chip')
                                                     Container(
                                                       margin: const EdgeInsets.only(top: 10),
                                                       alignment: Alignment.centerRight,
@@ -206,6 +207,7 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                           )
                         : const WorkItemSuccessWidget(
                             isInventory: 'Todo',
+                            isEdit: false,
                           )),
                 !allQuestionFinishes ? leadAppbar(screensDataList) : const SizedBox(),
               ],

@@ -91,7 +91,8 @@ class _AssignUserState extends ConsumerState<AssignUser> {
                       focusNode: focusNode,
                       onTap: () {},
                       decoration: InputDecoration(
-                        hintText: '@',
+                        hintText: 'Type here...',
+                        hintStyle: const TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(6),
                         ),

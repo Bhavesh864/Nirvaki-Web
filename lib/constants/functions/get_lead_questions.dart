@@ -184,8 +184,9 @@ Widget buildLeadQuestions(
                   },
                   inputController: controller,
                   labelText: question.questionTitle,
+                  isMandatory: true,
                   validator: (value) {
-                    if (isChecked && value!.isEmpty) {
+                    if (!isChecked && value!.isEmpty) {
                       return "Please enter ${question.questionTitle}";
                     }
                     return null;

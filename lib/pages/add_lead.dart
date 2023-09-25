@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
@@ -219,22 +220,54 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                   ),
                                                   SizedBox(height: currentScreenList[index].questions[i].questionOptionType != 'textfield' ? 10 : 0),
                                                   Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                                                    if (i == currentScreenList[index].questions.length - 1 && isEdit && currentScreenList[index].title != "Assign to") ...[
-                                                      // CustomButton(
-                                                      //   height: 39,
-                                                      //   text: "Jump To Submit",
-                                                      //   onPressed: () {
-                                                      //     // setState(() {
-                                                      //     // currentScreenIndex = currentScreenList.length - 1;
-                                                      //     pageController?.jumpToPage(currentScreenList.length - 1);
-                                                      //     // });
-                                                      //   },
-                                                      // ),
+                                                    const SizedBox(),
+                                                    // if (i == currentScreenList[index].questions.length - 1 && isEdit && currentScreenList[index].title != "Assign to") ...[
+                                                    //   // CustomButton(
+                                                    //   //   height: 39,
+                                                    //   //   text: "Jump To Submit",
+                                                    //   //   onPressed: () {
+                                                    //   //     // setState(() {
+                                                    //   //     // currentScreenIndex = currentScreenList.length - 1;
+                                                    //   //     pageController?.jumpToPage(currentScreenList.length - 1);
+                                                    //   //     // });
+                                                    //   //   },
+                                                    //   // ),
 
-                                                      const SizedBox()
-                                                    ] else ...[
-                                                      const SizedBox()
-                                                    ],
+                                                    // ] else ...[
+                                                    //   const SizedBox()
+                                                    // ],
+
+                                                    // bool isLastQuestion = i == currentScreenList[index].questions.length - 1;
+                                                    // bool shouldShowButton = isEdit ? isLastQuestion : (isLastQuestion && question.questionOptionType != 'chip');
+                                                    // String buttonText = currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next';
+
+                                                    // Container(
+                                                    //   child: i == currentScreenList[index].questions.length - 1
+                                                    //       ? allQuestionFinishes
+                                                    //           ? const Loader()
+                                                    //           : CustomButton(
+                                                    //               text: currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next',
+                                                    //               onPressed: () {
+                                                    //                 if (!allQuestionFinishes) {
+                                                    //                   if (currentScreenList[index].title != "Assign to") {
+                                                    //                     if (_formKey.currentState!.validate()) {
+                                                    //                       nextQuestion(screensDataList: screensDataList, option: "");
+                                                    //                     }
+                                                    //                   }
+                                                    //                   if (currentScreenList[index].title == "Assign to") {
+                                                    //                     setState(() {
+                                                    //                       allQuestionFinishes = true;
+                                                    //                     });
+                                                    //                     addDataOnfirestore(notify);
+                                                    //                   }
+                                                    //                 }
+                                                    //               },
+                                                    //               width: currentScreenList[index].title == "Assign to" ? 90 : 70,
+                                                    //               height: 39,
+                                                    //             )
+                                                    //       : const SizedBox(),
+                                                    // ),
+
                                                     if (i == currentScreenList[index].questions.length - 1 &&
                                                         currentScreenList[index].questions[i].questionOptionType != 'chip') ...[
                                                       Container(
@@ -280,8 +313,9 @@ class _AddLeadState extends ConsumerState<AddLead> {
                               },
                             ),
                           )
-                        : const WorkItemSuccessWidget(
+                        : WorkItemSuccessWidget(
                             isInventory: 'LD',
+                            isEdit: isEdit,
                           )),
                 !allQuestionFinishes ? leadAppbar(screensDataList) : const SizedBox(),
               ],
