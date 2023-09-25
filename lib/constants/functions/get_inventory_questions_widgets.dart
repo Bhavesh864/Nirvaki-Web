@@ -186,9 +186,10 @@ Widget buildInventoryQuestions(
                         notify.add({"id": question.questionId, "item": newvalue.trim()});
                       },
                       inputController: controller,
+                      isMandatory: true,
                       labelText: question.questionTitle,
                       validator: (value) {
-                        if (isChecked && value!.isEmpty) {
+                        if (!isChecked && value!.isEmpty) {
                           return "Please enter ${question.questionTitle}";
                         }
                         return null;
@@ -204,10 +205,8 @@ Widget buildInventoryQuestions(
     return StatefulBuilder(
       builder: (context, setState) {
         final isPriceField = question.questionId == 46 || question.questionId == 48 || question.questionId == 50;
-        final isvalidationtrue = question.questionTitle.contains('First') ||
-            question.questionTitle.contains('Mobile') ||
-            question.questionTitle == 'Rent' ||
-            question.questionTitle == 'Listing Price';
+        final isvalidationtrue =
+            question.questionTitle.contains('First') || question.questionTitle.contains('Mobile') || question.questionTitle == 'Rent' || question.questionTitle == 'Listing Price';
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -308,9 +307,6 @@ Widget buildInventoryQuestions(
       defaultValue = "1";
     }
     if (isState) {
-      if (!isEdit && question.questionTitle.contains("State")) {
-        defaultValue = "Haryana";
-      }
       try {
         List<String?> cities = [];
         final List<String?> states = stateList.map((e) => e.state).toList();

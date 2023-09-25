@@ -176,7 +176,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                       isEditingTodoName
                                           ? SizedBox(
                                               height: 35,
-                                              width: data.todoName!.length * 9,
+                                              width: data.todoName!.length * 13,
                                               child: CustomTextInput(
                                                 autofocus: true,
                                                 controller: todoNameEditingController,

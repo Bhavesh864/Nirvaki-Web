@@ -95,8 +95,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       cardTitle: "$propertyCategory $propertyKind-$propertyCity",
       cardDescription:
           "Want to $inventoryCategory her $bedrooms BHK for ${inventoryCategory == "Rent" ? convertToCroresAndLakhs(rentamount) : convertToCroresAndLakhs(price)} rupees",
-      customerinfo:
-          cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
+      customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
       cardStatus: "New",
       assignedto: assignedToList,
       createdby: cards.Createdby(
@@ -146,8 +145,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       reservedparking: Reservedparking(covered: coveredparking),
       propertyarea: Propertyarea(unit: areaUnit, superarea: superArea),
       plotdetails: Plotdetails(boundarywall: boundaryWall, opensides: openSides),
-      customerinfo:
-          Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo ?? mobileNo),
+      customerinfo: Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo ?? mobileNo),
       roomconfig: Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom ?? [], balconies: balconies, bathroom: bathrooms),
       propertyfacing: propertyFacing,
       comments: comments,
@@ -164,11 +162,11 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       createdby: Createdby(
           userfirstname: currentUserdata?.userfirstname, userid: currentUserdata?.userId, userlastname: currentUserdata?.userlastname, userimage: currentUserdata?.image));
 
-  isEdit
-      ? await cards.CardDetails.updateCardDetails(id: existingInventoryId, cardDetails: card).then((value) => {res = "success"})
-      : await cards.CardDetails.addCardDetails(card).then((value) => {res = "success"});
-  isEdit
-      ? await InventoryDetails.updateInventoryDetails(id: existingInventoryId, inventoryDetails: inventory).then((value) => {res = "success"})
-      : await InventoryDetails.addInventoryDetails(inventory).then((value) => {res = "success"});
+  // isEdit
+  //     ? await cards.CardDetails.updateCardDetails(id: existingInventoryId, cardDetails: card).then((value) => {res = "success"})
+  //     : await cards.CardDetails.addCardDetails(card).then((value) => {res = "success"});
+  // isEdit
+  //     ? await InventoryDetails.updateInventoryDetails(id: existingInventoryId, inventoryDetails: inventory).then((value) => {res = "success"})
+  //     : await InventoryDetails.addInventoryDetails(inventory).then((value) => {res = "success"});
   return res;
 }

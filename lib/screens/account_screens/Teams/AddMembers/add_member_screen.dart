@@ -45,7 +45,6 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
         loading = true;
       });
       if (isEdit) {
-        print("object");
         updateTeamMember(
                 email: _emailController.text,
                 firstname: _firstNameController.text,
@@ -78,31 +77,35 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                     }
                 });
       } else {
-        sendInvitationEmail(
-                email: _emailController.text,
-                firstname: _firstNameController.text,
-                lastname: _lastNameController.text,
-                mobile: _mobileController.text,
-                managerName: '${manager?.userfirstname} ${manager?.userlastname}',
-                managerid: manager?.userId,
-                role: role)
-            .then((value) => {
-                  if (value == "success")
-                    {
-                      backToTeamScreen(),
-                      // customSnackBar(context: context, text: "Add Member successfully"),
-                      setState(() {
-                        loading = false;
-                      })
-                    }
-                  else
-                    {
-                      customSnackBar(context: context, text: value),
-                      setState(() {
-                        loading = false;
-                      })
-                    }
-                });
+        if (manager != null && role != null) {
+          sendInvitationEmail(
+                  email: _emailController.text,
+                  firstname: _firstNameController.text,
+                  lastname: _lastNameController.text,
+                  mobile: _mobileController.text,
+                  managerName: '${manager?.userfirstname} ${manager?.userlastname}',
+                  managerid: manager?.userId,
+                  role: role)
+              .then((value) => {
+                    if (value == "success")
+                      {
+                        backToTeamScreen(),
+                        // customSnackBar(context: context, text: "Add Member successfully"),
+                        setState(() {
+                          loading = false;
+                        })
+                      }
+                    else
+                      {
+                        customSnackBar(context: context, text: value),
+                        setState(() {
+                          loading = false;
+                        })
+                      }
+                  });
+        } else {
+          customSnackBar(context: context, text: "Please Fill All Details");
+        }
       }
     }
   }
@@ -167,15 +170,21 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                             labelText: "First Name",
                             inputController: _firstNameController,
                             validator: (value) => validateForNormalFeild(value: value, props: "First Name"),
+                            isMandatory: true,
                           ),
                           LabelTextInputField(
                             labelText: "Last Name",
+                            isMandatory: true,
                             inputController: _lastNameController,
                             validator: (value) => validateForNormalFeild(value: value, props: "Last Name"),
                           ),
                           LabelTextInputField(
-                              labelText: "Mobile", inputController: _mobileController, validator: (value) => validateForMobileNumberFeild(value: value, props: "Mobile")),
+                              isMandatory: true,
+                              labelText: "Mobile",
+                              inputController: _mobileController,
+                              validator: (value) => validateForMobileNumberFeild(value: value, props: "Mobile")),
                           LabelTextInputField(
+                            isMandatory: true,
                             labelText: "Email",
                             inputController: _emailController,
                             readOnly: isEdit ? true : false,
