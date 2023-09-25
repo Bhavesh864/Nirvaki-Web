@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/riverpodstate/add_member_state.dart';
 
 import '../../../Customs/text_utility.dart';
 import '../../../constants/utils/colors.dart';
@@ -10,10 +11,6 @@ class BottomCardHeader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    void showAddMemberScreen() {
-      ref.read(addMemberScreenStateProvider.notifier).setAddMemberScreenState(true);
-    }
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -24,7 +21,11 @@ class BottomCardHeader extends ConsumerWidget {
           fontWeight: FontWeight.bold,
         ),
         GestureDetector(
-          onTap: showAddMemberScreen,
+          onTap: () => {
+            ref.read(editAddMemberState.notifier).isEdit(false),
+            showAddMemberScreen(ref),
+            ref.read(userForEditScreen.notifier).setUserForEdit(null),
+          },
           child: const AppText(
             text: "Add Members",
             fontsize: 18,
@@ -36,4 +37,8 @@ class BottomCardHeader extends ConsumerWidget {
       ],
     );
   }
+}
+
+void showAddMemberScreen(WidgetRef ref) {
+  ref.read(addMemberScreenStateProvider.notifier).setAddMemberScreenState(true);
 }

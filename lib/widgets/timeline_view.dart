@@ -27,7 +27,8 @@ class CustomTimeLineView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final workitemId = ref.read(selectedWorkItemId);
-    final User user = ref.read(userDataProvider);
+    final User? user = ref.read(userDataProvider);
+    print("user====> $user");
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10),
@@ -69,7 +70,7 @@ class CustomTimeLineView extends ConsumerWidget {
           ),
           StreamBuilder(
             stream: fromHome
-                ? FirebaseFirestore.instance.collection('activityDetails').where("brokerid", isEqualTo: user.brokerId).snapshots()
+                ? FirebaseFirestore.instance.collection('activityDetails').where("brokerid", isEqualTo: user?.brokerId ?? "").snapshots()
                 : FirebaseFirestore.instance.collection('activityDetails').where('itemid', isEqualTo: workitemId).snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {

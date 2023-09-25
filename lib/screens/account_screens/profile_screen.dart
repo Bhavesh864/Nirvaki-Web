@@ -1,12 +1,17 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:yes_broker/constants/firebase/Methods/add_member_send_email.dart';
+import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/constants/functions/assingment_methods.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 
 import '../../Customs/custom_fields.dart';
+import '../../Customs/loader.dart';
 import '../../Customs/text_utility.dart';
+import '../../constants/app_constant.dart';
 import '../../constants/utils/colors.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -17,36 +22,58 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  late Stream<DocumentSnapshot<Map<String, dynamic>>> userInfo;
+  @override
+  void initState() {
+    super.initState();
+    userInfo = FirebaseFirestore.instance.collection('users').doc(AppConst.getAccessToken()).snapshots();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (Responsive.isMobile(context))
-            const Padding(
-              padding: EdgeInsets.only(left: 5.0),
-              child: AppText(
-                text: "Profile",
-                fontWeight: FontWeight.w700,
-                fontsize: 16,
-              ),
-            ),
-          const CustomAddressAndProfileCard(
-            isPersonalDetails: false,
-          ),
-          const CustomAddressAndProfileCard(
-            title: 'Personal Information',
-            isPersonalDetails: true,
-          ),
-          const CustomAddressAndProfileCard(
-            title: 'Address',
-            isPersonalDetails: false,
-          ),
-        ],
-      ),
+      padding: EdgeInsets.symmetric(horizontal: Responsive.isMobile(context) ? 15.0 : 0),
+      child: StreamBuilder(
+          stream: userInfo,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Loader();
+            }
+            if (snapshot.hasData) {
+              final dataList = snapshot.data;
+              User userInfo = User.fromSnapshot(dataList!);
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (Responsive.isMobile(context))
+                    const Padding(
+                      padding: EdgeInsets.only(left: 5.0),
+                      child: AppText(
+                        text: "Profile",
+                        fontWeight: FontWeight.w700,
+                        fontsize: 16,
+                      ),
+                    ),
+                  CustomAddressAndProfileCard(
+                    isPersonalDetails: false,
+                    userData: userInfo,
+                  ),
+                  CustomAddressAndProfileCard(
+                    title: 'Personal Information',
+                    isPersonalDetails: true,
+                    userData: userInfo,
+                  ),
+                  CustomAddressAndProfileCard(
+                    title: 'Address',
+                    isPersonalDetails: false,
+                    userData: userInfo,
+                  ),
+                ],
+              );
+            }
+            return const SizedBox.shrink();
+          }),
     );
   }
 }
@@ -54,10 +81,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 class CustomAddressAndProfileCard extends ConsumerStatefulWidget {
   final String? title;
   final bool isPersonalDetails;
-
+  final User userData;
   const CustomAddressAndProfileCard({
     Key? key,
     this.title,
+    required this.userData,
     required this.isPersonalDetails,
   }) : super(key: key);
 
@@ -111,8 +139,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
 
   @override
   Widget build(BuildContext context) {
-    final userData = ref.read(userDataProvider);
-
+    final userData = widget.userData;
     if (widget.title == null) {
       return Card(
         child: Padding(
@@ -146,24 +173,24 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (isNameEditing) ...[
-                        SizedBox(
-                          height: 50,
-                          width: fullNameController.text.length * 13,
-                          child: CustomTextInput(
-                            controller: fullNameController,
-                            onFieldSubmitted: (newValue) {},
-                          ),
+                      // if (isNameEditing) ...[
+                      //   SizedBox(
+                      //     height: 50,
+                      //     width: fullNameController.text.length * 13,
+                      //     child: CustomTextInput(
+                      //       controller: fullNameController,
+                      //       onFieldSubmitted: (newValue) {},
+                      //     ),
+                      //   ),
+                      // ] else ...[
+                      Text(
+                        "${userData.userfirstname} ${userData.userlastname}",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
                         ),
-                      ] else ...[
-                        Text(
-                          "${userData.userfirstname} ${userData.userlastname}",
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
+                      ),
+                      // ],
                       Text(
                         userData.role,
                         style: const TextStyle(
@@ -270,7 +297,21 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                           borderColor: AppColor.primary,
                           height: 39,
                           onPressed: () {
-                            cancelEditingPersonalDetails();
+                            updateTeamMember(
+                                    email: emailController.text.trim(),
+                                    firstname: firstNameController.text.trim(),
+                                    lastname: lastNameController.text.trim(),
+                                    mobile: phoneController.text.trim(),
+                                    managerName: userData.managerName,
+                                    managerid: userData.managerid,
+                                    role: userData.role,
+                                    brokerId: userData.brokerId,
+                                    userId: userData.userId,
+                                    fcmToken: userData.fcmToken,
+                                    imageUrl: userData.image,
+                                    status: userData.status,
+                                    isOnline: userData.isOnline)
+                                .then((value) => {cancelEditingPersonalDetails()});
                           },
                         ),
                       ],

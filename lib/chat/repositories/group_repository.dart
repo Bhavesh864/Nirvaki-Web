@@ -37,7 +37,7 @@ class GroupRepository {
     Uint8List? webImage,
   ) async {
     try {
-      final User currentUser = ref.read(userDataProvider);
+      final User? currentUser = ref.read(userDataProvider);
       List<String> uids = [];
 
       for (int i = 0; i < selectedUsers.length; i++) {
@@ -69,13 +69,13 @@ class GroupRepository {
         senderId: AppConst.getAccessToken(),
         name: name,
         groupId: groupId,
-        lastMessage: '${currentUser.userfirstname} ${currentUser.userlastname} has created the group',
+        lastMessage: '${currentUser?.userfirstname} ${currentUser?.userlastname} has created the group',
         groupIcon: profileUrl,
         membersUid: [AppConst.getAccessToken().toString(), ...uids],
         timeSent: Timestamp.now(),
         lastMessageIsSeen: false,
         lastMessageSenderId: AppConst.getAccessToken().toString(),
-        groupCreatedBy: '${currentUser.userfirstname} ${currentUser.userlastname} created group "$name"',
+        groupCreatedBy: '${currentUser?.userfirstname} ${currentUser?.userlastname} created group "$name"',
       );
 
       await firestore.collection('groups').doc(groupId).set(group.toMap());

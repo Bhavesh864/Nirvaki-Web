@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/riverpodstate/add_member_state.dart';
+import 'package:yes_broker/screens/account_screens/Teams/team_screen.dart';
 
 import '../../../constants/firebase/userModel/user_info.dart';
 import '../../../constants/utils/colors.dart';
 
-class MobileMemberCard extends StatelessWidget {
+class MobileMemberCard extends ConsumerWidget {
   final User user;
   const MobileMemberCard({super.key, required this.user});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4),
       child: Card(
@@ -41,7 +44,11 @@ class MobileMemberCard extends StatelessWidget {
                         child: IconButton(
                           tooltip: "Edit",
                           iconSize: 14,
-                          onPressed: () {},
+                          onPressed: () {
+                            showAddMemberAlertDailogBox(context);
+                            ref.read(editAddMemberState.notifier).isEdit(true);
+                            ref.read(userForEditScreen.notifier).setUserForEdit(user);
+                          },
                           icon: const Icon(Icons.edit),
                         ),
                       ),

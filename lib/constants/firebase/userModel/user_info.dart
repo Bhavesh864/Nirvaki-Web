@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
@@ -42,7 +43,7 @@ class User extends HiveObject {
   @HiveField(11)
   String? managerName;
   @HiveField(12)
-  String? fcmToken;
+  dynamic fcmToken;
   @HiveField(13)
   bool isOnline;
   User({
@@ -118,7 +119,7 @@ class User extends HiveObject {
       whatsAppNumber: map['whatsAppNumber'] as String,
       managerid: map['managerid'] != null ? map['managerid'] as String : null,
       managerName: map['managerName'] != null ? map['managerName'] as String : null,
-      fcmToken: map['fcmToken'] != null ? map['fcmToken'] as String : null,
+      fcmToken: map['fcmToken'] != null ? map['fcmToken'] as dynamic : null,
       isOnline: map['isOnline'] as bool,
     );
   }
@@ -130,6 +131,15 @@ class User extends HiveObject {
       // print('User added successfully');
     } catch (error) {
       // print('Failed to add user: $error');
+    }
+  }
+
+  static Future<void> updateUser(User user) async {
+    try {
+      await usersCollection.doc(user.userId).update(user.toMap());
+      print('User updated successfully');
+    } catch (error) {
+      print('Failed to update user: $error');
     }
   }
 
@@ -180,25 +190,28 @@ class User extends HiveObject {
   }
 
   static Future<User?> getUser(String userId, {WidgetRef? ref}) async {
+    if (ref == null) {
+      return null;
+    }
     try {
       final hiveUserData = UserHiveMethods.getdata(userId);
-
       if (hiveUserData != null) {
+        print('======if=======');
         final Map<String, dynamic> userDataMap = Map.from(hiveUserData);
         final User user = User.fromMap(userDataMap);
-
-        Future.delayed(const Duration(milliseconds: 500)).then(
-          (value) => {
-            ref?.read(userDataProvider.notifier).storeUserData(user),
-          },
-        );
+        AppConst.setRole(user.role);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          ref.read(userDataProvider.notifier).storeUserData(user);
+        });
         return user;
       } else {
+        print('======else=======');
         final DocumentSnapshot documentSnapshot = await usersCollection.doc(userId).get();
         if (documentSnapshot.exists) {
           final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
           final User user = User.fromMap(data);
-          ref?.read(userDataProvider.notifier).storeUserData(user);
+          ref.read(userDataProvider.notifier).storeUserData(user);
+          AppConst.setRole(user.role);
           UserHiveMethods.addData(key: userId, data: user.toMap());
           return user;
         } else {
@@ -211,15 +224,6 @@ class User extends HiveObject {
         print('Failed to get user: $error');
       }
       return null;
-    }
-  }
-
-  static Future<void> updateUser(User updatedUser) async {
-    try {
-      await usersCollection.doc(updatedUser.brokerId).update(updatedUser.toMap());
-      // print('User updated successfully');
-    } catch (error) {
-      // print('Failed to update user: $error');
     }
   }
 

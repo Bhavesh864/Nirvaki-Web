@@ -94,7 +94,7 @@ void assginUserToTodo(BuildContext context, Function assign, List<dynamic> assig
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           child: Container(
             padding: const EdgeInsets.all(15),
-            height: 250,
+            height: 200,
             width: 500,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
@@ -110,7 +110,7 @@ void assginUserToTodo(BuildContext context, Function assign, List<dynamic> assig
                   },
                   assignedUserIds: assignto.map((item) => item.userid).toList(),
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 10),
                 Align(
                   alignment: Alignment.bottomRight,
                   child: ElevatedButton(

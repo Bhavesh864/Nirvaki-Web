@@ -11,7 +11,7 @@ import '../../../riverpodstate/user_data.dart';
 import '../../functions/convertStringTorange/convert_number_to_string.dart';
 
 Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) async {
-  final User currentUserdata = ref.read(userDataProvider);
+  final User? currentUserdata = ref.read(userDataProvider);
   final randomId = randomNumeric(5);
   var res = "pending";
   //  inventorycategory example =  rent ,sell
@@ -89,18 +89,17 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       status: "New",
       cardCategory: inventoryCategory,
       linkedItemType: "IN",
-      brokerid: currentUserdata.brokerId,
-      managerid: currentUserdata.managerid,
+      brokerid: currentUserdata?.brokerId,
+      managerid: currentUserdata?.managerid,
       cardType: "IN",
       cardTitle: "$propertyCategory $propertyKind-$propertyCity",
       cardDescription:
           "Want to $inventoryCategory her $bedrooms BHK for ${inventoryCategory == "Rent" ? convertToCroresAndLakhs(rentamount) : convertToCroresAndLakhs(price)} rupees",
-      customerinfo:
-          cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
+      customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
       cardStatus: "New",
       assignedto: assignedToList,
       createdby: cards.Createdby(
-          userfirstname: currentUserdata.userfirstname, userid: currentUserdata.userId, userlastname: currentUserdata.userlastname, userimage: currentUserdata.image),
+          userfirstname: currentUserdata?.userfirstname, userid: currentUserdata?.userId, userlastname: currentUserdata?.userlastname, userimage: currentUserdata?.image),
       createdate: Timestamp.now(),
       propertyarearange: cards.Propertyarearange(arearangestart: superArea, unit: areaUnit),
       roomconfig: cards.Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom),
@@ -121,7 +120,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       inventoryStatus: "New",
       typeofoffice: typeofoffice,
       approvedbeds: approvedbeds,
-      managerid: currentUserdata.managerid,
+      managerid: currentUserdata?.managerid,
       typeofhospitality: typeofhospitality,
       hospitalrooms: hospitalrooms,
       propertykind: propertyKind,
@@ -131,7 +130,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       villatype: villaType,
       typeofschool: typeofschool,
       transactiontype: transactionType,
-      brokerid: currentUserdata.brokerId,
+      brokerid: currentUserdata?.brokerId,
       inventorycategory: inventoryCategory,
       propertycategory: propertyCategory,
       inventoryType: inventorySource == "Broker" ? "Broker" : inventorySource,
@@ -146,8 +145,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       reservedparking: Reservedparking(covered: coveredparking),
       propertyarea: Propertyarea(unit: areaUnit, superarea: superArea),
       plotdetails: Plotdetails(boundarywall: boundaryWall, opensides: openSides),
-      customerinfo:
-          Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo ?? mobileNo),
+      customerinfo: Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo ?? mobileNo),
       roomconfig: Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom ?? [], balconies: balconies, bathroom: bathrooms),
       propertyfacing: propertyFacing,
       comments: comments,
@@ -162,7 +160,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       updatedby: AppConst.getAccessToken(),
       assignedto: assignedListInInventory,
       createdby: Createdby(
-          userfirstname: currentUserdata.userfirstname, userid: currentUserdata.userId, userlastname: currentUserdata.userlastname, userimage: currentUserdata.image));
+          userfirstname: currentUserdata?.userfirstname, userid: currentUserdata?.userId, userlastname: currentUserdata?.userlastname, userimage: currentUserdata?.image));
 
   isEdit
       ? await cards.CardDetails.updateCardDetails(id: existingInventoryId, cardDetails: card).then((value) => {res = "success"})

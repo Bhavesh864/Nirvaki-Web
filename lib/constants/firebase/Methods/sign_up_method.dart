@@ -29,7 +29,7 @@ Future<String> signUpMethod({required state}) async {
       brokercompanynumber: companyMobileNumber,
       brokercompanywhatsapp: companyWhatsAppMobileNumber ?? companyMobileNumber,
       brokercompanyemail: email,
-      brokerlogo: companyLogo,
+      brokerlogo: companyLogo ?? "",
       brokercompanyaddress: {"address": companyAddress, "city": companyCity, "state": companyState},
     );
     final User items = User(
@@ -44,7 +44,7 @@ Future<String> signUpMethod({required state}) async {
       email: email,
       role: registerAs,
       fcmToken: null,
-      image: companyLogo,
+      image: "",
     );
     await User.addUser(items);
     await BrokerInfo.addBrokerInfo(item);
