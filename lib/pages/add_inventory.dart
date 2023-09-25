@@ -40,6 +40,10 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   @override
   void initState() {
     super.initState();
+    initializeData();
+  }
+
+  void initializeData() async {
     final answers = ref.read(myArrayProvider);
     getQuestions = InventoryQuestions.getAllQuestionssFromFirestore();
     pageController = PageController(initialPage: currentScreenIndex);
@@ -228,9 +232,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                         Row(
                                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                           children: [
-                                                            if (i == currentScreenList[index].questions.length - 1 &&
-                                                                isEdit &&
-                                                                currentScreenList[index].title != "Assign to") ...[
+                                                            if (i == currentScreenList[index].questions.length - 1 && isEdit && currentScreenList[index].title != "Assign to") ...[
                                                               // CustomButton(
                                                               //   height: 39,
                                                               //   text: "Jump To Submit",

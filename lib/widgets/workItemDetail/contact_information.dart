@@ -26,11 +26,13 @@ class ContactInformation extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CustomText(
-                title: '${customerinfo.firstname} ${customerinfo.lastname}',
-                fontWeight: FontWeight.w600,
-                size: 20,
-              ),
+              checkNotNUllItem(customerinfo?.firstname) || checkNotNUllItem(customerinfo?.lastname)
+                  ? CustomText(
+                      title: '${customerinfo.firstname} ${checkNotNUllItem(customerinfo?.lastname) ? customerinfo.lastname : ""}',
+                      fontWeight: FontWeight.w600,
+                      size: 20,
+                    )
+                  : const SizedBox(),
               if (!AppConst.getPublicView())
                 const CustomChip(
                   label: Icon(
