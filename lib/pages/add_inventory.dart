@@ -6,6 +6,7 @@ import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/constants/functions/get_inventory_questions_widgets.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/customs/snackbar.dart';
 import 'package:yes_broker/riverpodstate/filterQuestions/inventory_all_question.dart';
 import 'package:yes_broker/riverpodstate/inventory_res_filter_question.dart';
 import 'package:yes_broker/widgets/questionaries/workitem_success.dart';
@@ -121,6 +122,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     final isPlotSelected = ref.read(filterPlotQuestion);
     final allInventoryQuestionsNotifier = ref.read(allInventoryQuestion.notifier);
     final allInventoryQuestions = ref.read(allInventoryQuestion);
+    final assignIsselected = selectedValues.firstWhere((element) => element["id"] == 36)["item"];
     return Scaffold(
       body: FutureBuilder<List<InventoryQuestions>>(
           future: getQuestions,
@@ -297,10 +299,14 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                                             }
                                                                           }
                                                                           if (currentScreenList[index].title == "Assign to") {
-                                                                            setState(() {
-                                                                              allQuestionFinishes = true;
-                                                                            });
-                                                                            addDataOnfirestore(notify);
+                                                                            if (assignIsselected.lenth > 0) {
+                                                                              setState(() {
+                                                                                allQuestionFinishes = true;
+                                                                              });
+                                                                              addDataOnfirestore(notify);
+                                                                            } else {
+                                                                              customSnackBar(context: context, text: "Assign this inventory to Member");
+                                                                            }
                                                                           }
                                                                         }
                                                                       },
