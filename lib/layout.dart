@@ -120,12 +120,12 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
       final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
 
       if (location.isNotEmpty && location.contains('inventory-details')) {
-        AppConst.setPublicView(true);
+        // AppConst.setPublicView(true);
         return PublicViewInventoryDetails(
           inventoryId: extractItemIdFromPath(location, 'inventory')!,
         );
       } else if (location.isNotEmpty && location.contains('lead-details')) {
-        AppConst.setPublicView(true);
+        // AppConst.setPublicView(true);
 
         return PublicViewLeadDetails(
           leadId: extractItemIdFromPath(location, 'lead')!,

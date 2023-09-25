@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
@@ -31,6 +32,7 @@ class CustomTextInput extends StatefulWidget {
   final EdgeInsetsGeometry? margin;
   final Iterable<String>? autofillHints;
   final TextInputAction? textInputAction;
+  final bool onlyDigits;
 
   const CustomTextInput(
       {Key? key,
@@ -59,6 +61,7 @@ class CustomTextInput extends StatefulWidget {
       this.contentPadding = 0,
       this.onFieldSubmitted,
       this.autofillHints,
+      this.onlyDigits = false,
       this.margin = const EdgeInsets.all(5)})
       : super(key: key);
 
@@ -80,6 +83,12 @@ class CustomTextInputState extends State<CustomTextInput> {
     return Container(
       margin: widget.margin,
       child: TextFormField(
+        inputFormatters: widget.onlyDigits
+            ? <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(10),
+              ]
+            : null,
         autofocus: widget.autofocus!,
         textInputAction: widget.textInputAction ?? TextInputAction.done,
         focusNode: widget.focusnode,
