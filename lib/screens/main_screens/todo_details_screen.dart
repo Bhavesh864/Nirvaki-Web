@@ -17,6 +17,7 @@ import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
 import 'package:yes_broker/constants/firebase/send_notification.dart';
 import 'package:yes_broker/constants/functions/navigation/navigation_functions.dart';
+import 'package:yes_broker/customs/text_utility.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../Customs/custom_chip.dart';
@@ -583,11 +584,12 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                               children: [
                                 checkNotNUllItem(data.linkedWorkItem?[0].workItemTitle)
                                     ? Padding(
-                                        padding: const EdgeInsets.only(bottom: 8.0),
-                                        child: CustomText(
-                                          title: data.linkedWorkItem![0].workItemTitle!,
+                                        padding: const EdgeInsets.only(bottom: 8.0, right: 4),
+                                        child: AppText(
+                                          overflow: TextOverflow.ellipsis,
+                                          text: data.linkedWorkItem![0].workItemTitle!,
                                           fontWeight: FontWeight.w600,
-                                          size: 20,
+                                          fontsize: 20,
                                         ),
                                       )
                                     : const SizedBox.shrink(),

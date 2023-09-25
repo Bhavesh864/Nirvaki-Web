@@ -1,4 +1,4 @@
-// import 'dart:html';
+import 'dart:html';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -255,9 +255,9 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                       // );
                                       // final res = await downloadFile(attachment.path, 'fileName', 'download');
                                       // if (kIsWeb) {
-                                      //   AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                      //   anchorElement.download = 'Attachment file';
-                                      //   anchorElement.click();
+                                      AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                      anchorElement.download = 'Attachment file';
+                                      anchorElement.click();
                                       // }
                                     },
                                   ),
