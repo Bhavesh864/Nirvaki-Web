@@ -187,7 +187,7 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                             isMandatory: true,
                             labelText: "Email",
                             inputController: _emailController,
-                            readOnly: isEdit ? true : false,
+                            readyOnly: isEdit ? true : false,
                             validator: (value) => validateEmail(value),
                           ),
                           FutureBuilder(

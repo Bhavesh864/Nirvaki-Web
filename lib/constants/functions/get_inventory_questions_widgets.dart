@@ -182,6 +182,8 @@ Widget buildInventoryQuestions(
                 Column(
                   children: [
                     LabelTextInputField(
+                      keyboardType: TextInputType.number,
+                      onlyDigits: true,
                       onChanged: (newvalue) {
                         notify.add({"id": question.questionId, "item": newvalue.trim()});
                       },
@@ -205,6 +207,12 @@ Widget buildInventoryQuestions(
     return StatefulBuilder(
       builder: (context, setState) {
         final isPriceField = question.questionId == 46 || question.questionId == 48 || question.questionId == 50;
+        final isDigitsOnly = question.questionTitle.contains('Mobile') ||
+            question.questionTitle == 'Rent' ||
+            question.questionTitle == 'Listing Price' ||
+            question.questionTitle.contains('Floor Number') ||
+            question.questionTitle.contains('Property Area');
+
         final isvalidationtrue =
             question.questionTitle.contains('First') || question.questionTitle.contains('Mobile') || question.questionTitle == 'Rent' || question.questionTitle == 'Listing Price';
         return Column(
@@ -212,6 +220,7 @@ Widget buildInventoryQuestions(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             LabelTextInputField(
+              onlyDigits: isDigitsOnly,
               keyboardType: isPriceField ? TextInputType.number : TextInputType.name,
               inputController: controller,
               labelText: question.questionTitle,
