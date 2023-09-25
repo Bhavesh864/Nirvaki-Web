@@ -162,11 +162,11 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       createdby: Createdby(
           userfirstname: currentUserdata?.userfirstname, userid: currentUserdata?.userId, userlastname: currentUserdata?.userlastname, userimage: currentUserdata?.image));
 
-  // isEdit
-  //     ? await cards.CardDetails.updateCardDetails(id: existingInventoryId, cardDetails: card).then((value) => {res = "success"})
-  //     : await cards.CardDetails.addCardDetails(card).then((value) => {res = "success"});
-  // isEdit
-  //     ? await InventoryDetails.updateInventoryDetails(id: existingInventoryId, inventoryDetails: inventory).then((value) => {res = "success"})
-  //     : await InventoryDetails.addInventoryDetails(inventory).then((value) => {res = "success"});
+  isEdit
+      ? await cards.CardDetails.updateCardDetails(id: existingInventoryId, cardDetails: card).then((value) => {res = "success"})
+      : await cards.CardDetails.addCardDetails(card).then((value) => {res = "success"});
+  isEdit
+      ? await InventoryDetails.updateInventoryDetails(id: existingInventoryId, inventoryDetails: inventory).then((value) => {res = "success"})
+      : await InventoryDetails.addInventoryDetails(inventory).then((value) => {res = "success"});
   return res;
 }

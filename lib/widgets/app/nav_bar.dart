@@ -128,18 +128,7 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
                     color: Colors.white.withOpacity(1),
                     offset: const Offset(200, 40),
                     itemBuilder: (contex) {
-                      final teamExists = profileMenuItems.any((element) => element.title == "Team");
-                      final organizationExists = profileMenuItems.any((element) => element.title == "Organization");
-                      if (!teamExists && snapshot.data!.role.contains("Broker")) {
-                        profileMenuItems.insert(1, ProfileMenuItems(title: "Team", screen: const TeamScreen(), id: 2));
-                      } else if (teamExists && !snapshot.data!.role.contains("Broker")) {
-                        profileMenuItems.removeWhere((element) => element.title == "Team");
-                      }
-                      if (!organizationExists && snapshot.data!.role.contains("Broker")) {
-                        profileMenuItems.insert(2, ProfileMenuItems(title: "Organization", screen: const Center(child: OrganisationScreen()), id: 7));
-                      } else if (organizationExists && !snapshot.data!.role.contains("Broker")) {
-                        profileMenuItems.removeWhere((element) => element.title == "Organization");
-                      }
+                      addOrRemoveTeamAndOrganization(snapshot);
                       return profileMenuItems.map(
                         (e) {
                           return popupMenuItem(e.title);
@@ -167,6 +156,21 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
         },
       ),
     );
+  }
+}
+
+void addOrRemoveTeamAndOrganization(AsyncSnapshot<User?> snapshot) {
+  final teamExists = profileMenuItems.any((element) => element.title == "Team");
+  final organizationExists = profileMenuItems.any((element) => element.title == "Organization");
+  if (!teamExists && snapshot.data!.role.contains("Broker")) {
+    profileMenuItems.insert(1, ProfileMenuItems(title: "Team", screen: const TeamScreen(), id: 2));
+  } else if (teamExists && !snapshot.data!.role.contains("Broker")) {
+    profileMenuItems.removeWhere((element) => element.title == "Team");
+  }
+  if (!organizationExists && snapshot.data!.role.contains("Broker")) {
+    profileMenuItems.insert(2, ProfileMenuItems(title: "Organization", screen: const Center(child: OrganisationScreen()), id: 7));
+  } else if (organizationExists && !snapshot.data!.role.contains("Broker")) {
+    profileMenuItems.removeWhere((element) => element.title == "Organization");
   }
 }
 
