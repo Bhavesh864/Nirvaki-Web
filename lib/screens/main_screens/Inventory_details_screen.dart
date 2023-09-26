@@ -1,7 +1,9 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore: file_names
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -13,15 +15,17 @@ import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/pages/add_inventory.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
+
 import '../../Customs/custom_text.dart';
 import '../../constants/functions/convertStringTorange/convert_number_to_string.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
+import '../../riverpodstate/common_index_state.dart';
 import '../../riverpodstate/selected_workitem.dart';
-import '../../widgets/workItemDetail/inventory_details_header.dart';
 import '../../widgets/workItemDetail/assignment_widget.dart';
 import '../../widgets/workItemDetail/contact_information.dart';
+import '../../widgets/workItemDetail/inventory_details_header.dart';
 import '../../widgets/workItemDetail/mapview_widget.dart';
 import '../../widgets/workItemDetail/tab_bar_widget.dart';
 import '../../widgets/workItemDetail/tab_views/activity_tab_view.dart';
@@ -29,8 +33,12 @@ import '../../widgets/workItemDetail/tab_views/details_tab_view.dart';
 import '../../widgets/workItemDetail/tab_views/todo_tab_view.dart';
 
 class InventoryDetailsScreen extends ConsumerStatefulWidget {
-  final String inventoryId;
-  const InventoryDetailsScreen({super.key, this.inventoryId = ''});
+  final String? inventoryId;
+
+  const InventoryDetailsScreen({
+    super.key,
+    this.inventoryId,
+  });
 
   @override
   InventoryDetailsScreenState createState() => InventoryDetailsScreenState();
@@ -44,9 +52,10 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
   @override
   void initState() {
     super.initState();
-    tabviewController = TabController(length: 4, vsync: this);
+    final currentIndex = ref.read(detailsPageIndexTabProvider);
+    currentSelectedTab = currentIndex;
+    tabviewController = TabController(length: 4, vsync: this, initialIndex: currentIndex);
     final workItemId = ref.read(selectedWorkItemId);
-    // inventoryDetails = InventoryDetails.getInventoryDetails(workItemId == '' ? widget.inventoryId : workItemId);
     inventoryDetails =
         FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId == '' ? widget.inventoryId : workItemId).snapshots();
   }

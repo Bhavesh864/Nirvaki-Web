@@ -190,27 +190,22 @@ class User extends HiveObject {
   }
 
   static Future<User?> getUser(String userId, {WidgetRef? ref}) async {
-    if (ref == null) {
-      return null;
-    }
     try {
       final hiveUserData = UserHiveMethods.getdata(userId);
       if (hiveUserData != null) {
-        print('======if=======');
         final Map<String, dynamic> userDataMap = Map.from(hiveUserData);
         final User user = User.fromMap(userDataMap);
         AppConst.setRole(user.role);
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          ref.read(userDataProvider.notifier).storeUserData(user);
+          ref?.read(userDataProvider.notifier).storeUserData(user);
         });
         return user;
       } else {
-        print('======else=======');
         final DocumentSnapshot documentSnapshot = await usersCollection.doc(userId).get();
         if (documentSnapshot.exists) {
           final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
           final User user = User.fromMap(data);
-          ref.read(userDataProvider.notifier).storeUserData(user);
+          ref?.read(userDataProvider.notifier).storeUserData(user);
           AppConst.setRole(user.role);
           UserHiveMethods.addData(key: userId, data: user.toMap());
           return user;
@@ -219,7 +214,6 @@ class User extends HiveObject {
         }
       }
     } catch (error) {
-      print(error);
       if (kDebugMode) {
         print('Failed to get user: $error');
       }

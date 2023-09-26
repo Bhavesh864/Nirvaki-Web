@@ -31,11 +31,6 @@ class CustomSpeedDialButtonState extends ConsumerState<CustomSpeedDialButton> {
         SpeedDialChild(
           onTap: () {
             AppConst.getOuterContext()!.beamToNamed(AppRoutes.addInventory);
-            // Navigator.of(context).push(MaterialPageRoute(
-            //   builder: (context) {
-            //     return const inventory.AddInventory();
-            //   },
-            // ));
             ref.read(inventory.myArrayProvider.notifier).resetState();
           },
           labelShadow: [
