@@ -1,20 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
-import 'dart:js_interop';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/constants/firebase/Methods/add_member_send_email.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
-import 'package:yes_broker/constants/functions/assingment_methods.dart';
-import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/responsive.dart';
-import 'package:yes_broker/riverpodstate/user_data.dart';
 
 import '../../Customs/custom_fields.dart';
 import '../../Customs/loader.dart';
