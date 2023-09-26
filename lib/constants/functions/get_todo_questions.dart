@@ -161,20 +161,21 @@ Widget buildTodoQuestions(
     return FutureBuilder(
         future: CardDetails.getCardDetails(),
         builder: (context, snapshot) {
-          final List<String> options = [];
+          final List options = [];
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator.adaptive(),
             );
           } else if (snapshot.hasData) {
             for (var data in snapshot.data!) {
-              options.add(data.workitemId!);
+              options.add(data.workitemId);
             }
           }
           return DropDownField(
             defaultValues: "",
             title: question.questionTitle,
             optionsList: options,
+            isMultiValueOnDropdownlist: true,
             onchanged: (Object e) {
               CardDetails selectedUser = snapshot.data!.firstWhere((user) => user.workitemId == e);
               notify.add({"id": question.questionId, "item": selectedUser});

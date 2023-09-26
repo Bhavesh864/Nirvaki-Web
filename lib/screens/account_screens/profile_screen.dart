@@ -1,10 +1,21 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+<<<<<<< HEAD
 import 'package:yes_broker/constants/firebase/Methods/add_member_send_email.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+=======
+import 'package:image_picker/image_picker.dart';
+import 'package:yes_broker/constants/firebase/Methods/add_member_send_email.dart';
+import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+
+>>>>>>> 9ad69a506aaf68b3b87a6d6f6b628c2ceaeba7b1
 import 'package:yes_broker/customs/responsive.dart';
 
 import '../../Customs/custom_fields.dart';
@@ -101,6 +112,9 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  File? profilePhoto;
+  Uint8List? webProfile;
+  String? uploadProfile;
 
   void startEditingFullName(String fullName) {
     setState(() {
@@ -136,6 +150,25 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
     });
   }
 
+  selectImage() async {
+    XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      var webUrl = await pickedImage.readAsBytes();
+      var imageUrl = File(pickedImage.path);
+      if (kIsWeb) {
+        setState(() {
+          webProfile = webUrl;
+        });
+        return webUrl;
+      }
+      setState(() {
+        profilePhoto = imageUrl;
+      });
+      return imageUrl;
+    }
+    return '';
+  }
+
   @override
   Widget build(BuildContext context) {
     final userData = widget.userData;
@@ -153,15 +186,35 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                     width: 10,
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      if (isNameEditing) {
+                        selectImage().then((value) {
+                          if (value != "") {
+                            uploadImageToFirebases(value).then((url) {
+                              if (url != "") {
+                                // print(url);
+                                setState(() {
+                                  uploadProfile = url;
+                                });
+                              }
+                            });
+                          }
+                        });
+                      }
+                    },
                     child: CircleAvatar(
                       radius: 35,
                       backgroundImage: isNameEditing ? null : NetworkImage(userData.image),
+                      // backgroundImage: webProfile != null ? MemoryImage(webProfile!) : null,
                       child: isNameEditing
-                          ? const Icon(
-                              Icons.add,
-                              size: 25,
-                            )
+                          ? profilePhoto == null && webProfile == null
+                              ? const Icon(
+                                  Icons.add,
+                                  size: 25,
+                                )
+                              : (kIsWeb)
+                                  ? ClipOval(child: Image.memory(webProfile!, width: 70, height: 70, fit: BoxFit.cover))
+                                  : ClipOval(child: Image.file(profilePhoto!, width: 70, height: 70, fit: BoxFit.cover))
                           : null,
                     ),
                   ),
@@ -310,7 +363,9 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                                     imageUrl: userData.image,
                                     status: userData.status,
                                     isOnline: userData.isOnline)
-                                .then((value) => {cancelEditingPersonalDetails()});
+                                .then((value) => {
+                                      cancelEditingPersonalDetails(),
+                                    });
                           },
                         ),
                       ],
@@ -352,30 +407,25 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
               if (widget.isPersonalDetails) ...[
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Table(
                     children: [
-                      buildInfoFields('First name', userData.userfirstname, isPersonalDetailsEditing, firstNameController),
-                      buildInfoFields('Last Name ', userData.userlastname, isPersonalDetailsEditing, lastNameController),
-                      const SizedBox(
-                        width: 60,
-                      ),
-                      const SizedBox(),
-                      const SizedBox(),
+                      TableRow(children: [
+                        buildInfoFields('First name', userData.userfirstname, isPersonalDetailsEditing, firstNameController),
+                        buildInfoFields('Last Name ', userData.userlastname, isPersonalDetailsEditing, lastNameController),
+                        const SizedBox(),
+                      ])
                     ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Table(
                     children: [
-                      buildInfoFields('Email address', userData.email, isPersonalDetailsEditing, emailController),
-                      buildInfoFields('Phone ', userData.mobile, isPersonalDetailsEditing, phoneController),
-                      if (!Responsive.isMobile(context)) buildInfoFields('Employee ID', userData.userId, false, TextEditingController()),
-                      const SizedBox(),
-                      const SizedBox(),
-                      const SizedBox(),
+                      TableRow(children: [
+                        buildInfoFields('Email address', userData.email, isPersonalDetailsEditing, emailController),
+                        buildInfoFields('Phone ', userData.mobile, isPersonalDetailsEditing, phoneController),
+                        if (!Responsive.isMobile(context)) buildInfoFields('Employee ID', userData.userId, false, TextEditingController()),
+                      ])
                     ],
                   ),
                 ),
@@ -383,29 +433,25 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
               ] else ...[
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Table(
                     children: [
-                      buildInfoFields('City', 'New Delhi', false, TextEditingController()),
-                      buildInfoFields('State ', 'Delhi', false, TextEditingController()),
-                      const SizedBox(
-                        width: 60,
-                      ),
-                      const SizedBox(),
-                      const SizedBox(),
+                      TableRow(children: [
+                        buildInfoFields('City', 'New Delhi', false, TextEditingController()),
+                        buildInfoFields('State ', 'Delhi', false, TextEditingController()),
+                        const SizedBox()
+                      ])
                     ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Table(
                     children: [
-                      buildInfoFields('Country', 'India', false, TextEditingController()),
-                      buildInfoFields('Pin Code ', '110077', false, TextEditingController()),
-                      const SizedBox(),
-                      const SizedBox(),
-                      const SizedBox(),
+                      TableRow(children: [
+                        buildInfoFields('Country', 'India', false, TextEditingController()),
+                        buildInfoFields('Pin Code ', '110077', false, TextEditingController()),
+                        const SizedBox(),
+                      ])
                     ],
                   ),
                 ),
@@ -450,4 +496,26 @@ Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, Tex
       ]
     ],
   );
+}
+
+Future<String> uploadImageToFirebases(imageUrl) async {
+  final uniqueKey = DateTime.now().microsecondsSinceEpoch.toString();
+  Reference referenceRoot = FirebaseStorage.instance.ref();
+  Reference referenceDirImages = referenceRoot.child('images');
+  Reference referenceImagesToUpload = referenceDirImages.child(uniqueKey);
+
+  try {
+    if (kIsWeb) {
+      final metaData = SettableMetadata(contentType: 'image/jpeg');
+      await referenceImagesToUpload.putData(imageUrl, metaData);
+    } else {
+      await referenceImagesToUpload.putFile(imageUrl);
+    }
+    imageUrl = await referenceImagesToUpload.getDownloadURL();
+    print("imageUrl--> $imageUrl");
+    return imageUrl;
+  } catch (e) {
+    print(e);
+    return '';
+  }
 }
