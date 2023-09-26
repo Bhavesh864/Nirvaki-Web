@@ -5,6 +5,7 @@ import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/riverpodstate/common_index_state.dart';
 import 'package:yes_broker/widgets/card/custom_card.dart';
 
 import '../../constants/functions/navigation/navigation_functions.dart';
@@ -87,6 +88,9 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                           return GestureDetector(
                             onTap: () {
                               final id = widget.getCardDetails[index].workitemId;
+                              ref.read(detailsPageIndexTabProvider.notifier).update(
+                                    (state) => 0,
+                                  );
                               navigateBasedOnId(context, id!, ref);
                             },
                             child: CustomCard(index: index, cardDetails: widget.getCardDetails),
