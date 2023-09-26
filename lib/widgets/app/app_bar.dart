@@ -6,6 +6,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/widgets/app/nav_bar.dart';
 import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
 
@@ -28,40 +29,42 @@ AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect, 
       ],
     ),
     actions: [
-      PopupMenuButton(
-        onSelected: (value) {
-          onOptionSelect(value);
-        },
-        color: Colors.white.withOpacity(1),
-        offset: const Offset(200, 40),
-        itemBuilder: (context) => profileMenuItems.map(
-          (e) {
-            return appBarPopupMenuItem(e.title, onOptionSelect);
-          },
-        ).toList(),
-        child: FutureBuilder(
-            future: User.getUser(AppConst.getAccessToken().toString(), ref: ref),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                // Future.delayed(const Duration(seconds: 1)).then((value) => {ref.read(userDataProvider.notifier).storeUserData(snapshot.data!)});
-                return Container(
-                  height: 25,
-                  width: 35,
-                  margin: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(
-                        snapshot.data!.image.isEmpty ? noImg : snapshot.data!.image.toString(),
+      FutureBuilder(
+          future: User.getUser(AppConst.getAccessToken().toString(), ref: ref),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return PopupMenuButton(
+                  onSelected: (value) {
+                    onOptionSelect(value);
+                  },
+                  color: Colors.white.withOpacity(1),
+                  offset: const Offset(200, 40),
+                  itemBuilder: (context) {
+                    addOrRemoveTeamAndOrganization(snapshot);
+                    return profileMenuItems.map(
+                      (e) {
+                        return appBarPopupMenuItem(e.title, onOptionSelect);
+                      },
+                    ).toList();
+                  },
+                  child: Container(
+                    height: 25,
+                    width: 35,
+                    margin: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(
+                          snapshot.data!.image.isEmpty ? noImg : snapshot.data!.image.toString(),
+                        ),
                       ),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                );
-              }
-              return const SizedBox();
-            }),
-      ),
+                  ));
+            }
+
+            return const SizedBox.shrink();
+          }),
     ],
   );
 }
