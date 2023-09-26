@@ -18,6 +18,7 @@ import '../../customs/custom_text.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
+import '../../riverpodstate/common_index_state.dart';
 import '../../riverpodstate/selected_workitem.dart';
 import '../../widgets/workItemDetail/assignment_widget.dart';
 import '../../widgets/workItemDetail/contact_information.dart';
@@ -47,8 +48,9 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
   @override
   void initState() {
     super.initState();
-
-    tabviewController = TabController(length: 4, vsync: this);
+    final currentIndex = ref.read(detailsPageIndexTabProvider);
+    currentSelectedTab = currentIndex;
+    tabviewController = TabController(length: 4, vsync: this, initialIndex: currentIndex);
     final workItemId = ref.read(selectedWorkItemId);
     leadDetails = FirebaseFirestore.instance.collection('leadDetails').where('leadId', isEqualTo: workItemId == '' ? widget.leadId : workItemId).snapshots();
   }

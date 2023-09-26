@@ -47,7 +47,6 @@ class TeamScreen extends ConsumerWidget {
                     List<User> usersList = listOfUser.where((element) => !element.role.contains("Broker")).toList();
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      // mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         const Row(
                           crossAxisAlignment: CrossAxisAlignment.center,

@@ -6,9 +6,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/constants/firebase/Methods/add_member_send_email.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+
 import 'package:yes_broker/customs/responsive.dart';
 
 import '../../Customs/custom_fields.dart';
@@ -356,7 +358,9 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                                     imageUrl: userData.image,
                                     status: userData.status,
                                     isOnline: userData.isOnline)
-                                .then((value) => {cancelEditingPersonalDetails()});
+                                .then((value) => {
+                                      cancelEditingPersonalDetails(),
+                                    });
                           },
                         ),
                       ],
@@ -398,30 +402,25 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
               if (widget.isPersonalDetails) ...[
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Table(
                     children: [
-                      buildInfoFields('First name', userData.userfirstname, isPersonalDetailsEditing, firstNameController),
-                      buildInfoFields('Last Name ', userData.userlastname, isPersonalDetailsEditing, lastNameController),
-                      const SizedBox(
-                        width: 60,
-                      ),
-                      const SizedBox(),
-                      const SizedBox(),
+                      TableRow(children: [
+                        buildInfoFields('First name', userData.userfirstname, isPersonalDetailsEditing, firstNameController),
+                        buildInfoFields('Last Name ', userData.userlastname, isPersonalDetailsEditing, lastNameController),
+                        const SizedBox(),
+                      ])
                     ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Table(
                     children: [
-                      buildInfoFields('Email address', userData.email, isPersonalDetailsEditing, emailController),
-                      buildInfoFields('Phone ', userData.mobile, isPersonalDetailsEditing, phoneController),
-                      if (!Responsive.isMobile(context)) buildInfoFields('Employee ID', userData.userId, false, TextEditingController()),
-                      const SizedBox(),
-                      const SizedBox(),
-                      const SizedBox(),
+                      TableRow(children: [
+                        buildInfoFields('Email address', userData.email, isPersonalDetailsEditing, emailController),
+                        buildInfoFields('Phone ', userData.mobile, isPersonalDetailsEditing, phoneController),
+                        if (!Responsive.isMobile(context)) buildInfoFields('Employee ID', userData.userId, false, TextEditingController()),
+                      ])
                     ],
                   ),
                 ),
@@ -429,29 +428,25 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
               ] else ...[
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Table(
                     children: [
-                      buildInfoFields('City', 'New Delhi', false, TextEditingController()),
-                      buildInfoFields('State ', 'Delhi', false, TextEditingController()),
-                      const SizedBox(
-                        width: 60,
-                      ),
-                      const SizedBox(),
-                      const SizedBox(),
+                      TableRow(children: [
+                        buildInfoFields('City', 'New Delhi', false, TextEditingController()),
+                        buildInfoFields('State ', 'Delhi', false, TextEditingController()),
+                        const SizedBox()
+                      ])
                     ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Table(
                     children: [
-                      buildInfoFields('Country', 'India', false, TextEditingController()),
-                      buildInfoFields('Pin Code ', '110077', false, TextEditingController()),
-                      const SizedBox(),
-                      const SizedBox(),
-                      const SizedBox(),
+                      TableRow(children: [
+                        buildInfoFields('Country', 'India', false, TextEditingController()),
+                        buildInfoFields('Pin Code ', '110077', false, TextEditingController()),
+                        const SizedBox(),
+                      ])
                     ],
                   ),
                 ),

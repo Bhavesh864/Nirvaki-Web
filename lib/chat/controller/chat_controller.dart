@@ -51,6 +51,7 @@ class ChatController {
     bool isGroupChat,
   ) async {
     final User? user = await User.getUser(AppConst.getAccessToken());
+    print(user?.userfirstname);
     // ignore: use_build_context_synchronously
     chatRepository.sendTextMessage(
       context: context,

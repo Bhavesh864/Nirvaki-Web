@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/routes/routes.dart';
@@ -54,6 +55,7 @@ class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingOb
   Widget build(BuildContext context) {
     final currentIndex = ref.watch(currentIndexProvider);
     final selectedItem = ref.watch(selectedProfileItemProvider);
+    AppConst.setOuterContext(context);
 
     return Scaffold(
       appBar: mobileAppBar(context, (selectedVal) {
