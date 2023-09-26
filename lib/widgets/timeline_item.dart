@@ -10,6 +10,7 @@ import 'package:yes_broker/constants/utils/constants.dart';
 
 import '../constants/functions/navigation/navigation_functions.dart';
 import '../constants/functions/time_formatter.dart';
+import '../riverpodstate/common_index_state.dart';
 
 class TimeLineItem extends ConsumerStatefulWidget {
   final int index;
@@ -25,6 +26,7 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
   Widget build(BuildContext context) {
     var timeLine = widget.activitiesList[widget.index];
     final formattedTime = TimeFormatter.formatFirestoreTimestamp(timeLine.createdate);
+
     return Container(
       padding: const EdgeInsets.only(top: 0, left: 5),
       height: 100,
@@ -42,8 +44,9 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               if (!timeLine.itemid!.contains('TD'))
-                InkWell(
+                GestureDetector(
                   onTap: () {
+                    ref.read(detailsPageIndexTabProvider.notifier).state = 1;
                     navigateBasedOnId(context, timeLine.itemid!, ref);
                   },
                   child: CustomChip(
@@ -53,7 +56,7 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
                     ),
                     color: timeLine.itemid!.contains('LD') ? AppColor.leadChipColor : AppColor.inventoryChipColor,
                     avatar: Icon(
-                      timeLine.itemid!.contains('LD') ? MaterialSymbols.location_home_outlined : MaterialSymbols.location_away,
+                      timeLine.itemid!.contains('LD') ? MaterialSymbols.location_away : MaterialSymbols.location_home_outlined,
                       color: timeLine.itemid!.contains('LD') ? AppColor.leadIconColor : AppColor.inventoryIconColor,
                     ),
                   ),
