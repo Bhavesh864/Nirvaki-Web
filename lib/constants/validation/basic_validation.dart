@@ -6,6 +6,7 @@ String? validateEmail(String? value) {
   if (!emailRegex.hasMatch(value)) {
     return 'Please enter a valid email address';
   }
+
   return null;
 }
 
@@ -31,6 +32,16 @@ String? validateForMobileNumberFeild({required String? value, required String? p
     return 'Please enter your $props';
   } else if (value.length < 10) {
     return "Enter Valid $props";
+  }
+  return null;
+}
+
+String? validateEmailNotMandatory(String? value) {
+  if (value == null || value.isNotEmpty) {
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$');
+    if (!emailRegex.hasMatch(value!)) {
+      return 'Please enter a valid email address';
+    }
   }
   return null;
 }

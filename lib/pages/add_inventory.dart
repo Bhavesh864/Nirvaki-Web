@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/firebase/statesModel/state_c_ity_model.dart';
@@ -6,6 +7,7 @@ import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/constants/functions/get_inventory_questions_widgets.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/customs/snackbar.dart';
 import 'package:yes_broker/riverpodstate/filterQuestions/inventory_all_question.dart';
 import 'package:yes_broker/riverpodstate/inventory_res_filter_question.dart';
 import 'package:yes_broker/widgets/questionaries/workitem_success.dart';
@@ -60,7 +62,9 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
         }
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -121,6 +125,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     final isPlotSelected = ref.read(filterPlotQuestion);
     final allInventoryQuestionsNotifier = ref.read(allInventoryQuestion.notifier);
     final allInventoryQuestions = ref.read(allInventoryQuestion);
+    // final assignIsselected = selectedValues.firstWhere((element) => element["id"] == 36)["item"];
     return Scaffold(
       body: FutureBuilder<List<InventoryQuestions>>(
           future: getQuestions,
@@ -179,13 +184,16 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                 itemBuilder: (context, index) {
                                   return Center(
                                     child: Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
                                       child: Container(
-                                        constraints: BoxConstraints(
+                                        constraints: const BoxConstraints(
                                           minHeight: 0,
-                                          maxHeight: Responsive.isMobile(context) ? height! * 0.8 : height! * 0.88,
+                                          maxHeight: double.infinity,
                                         ),
                                         width: Responsive.isMobile(context) ? width! * 0.9 : 650,
-                                        padding: const EdgeInsets.all(25),
+                                        padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
                                         child: ScrollConfiguration(
                                           behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                                           child: SingleChildScrollView(
@@ -196,7 +204,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                   CustomText(
                                                     softWrap: true,
                                                     textAlign: TextAlign.center,
-                                                    size: 30,
+                                                    size: Responsive.isDesktop(context) ? 26 : 20,
                                                     title: currentScreenList[index].title.toString(),
                                                     fontWeight: FontWeight.bold,
                                                   ),
@@ -208,14 +216,16 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                     final question = currentScreenList[index].questions[i];
                                                     return Column(
                                                       children: [
-                                                        if (currentScreenList[index].title == null)
+                                                        if (currentScreenList[index].title == null) ...[
                                                           CustomText(
                                                             softWrap: true,
                                                             textAlign: TextAlign.center,
-                                                            size: 30,
+                                                            size: Responsive.isDesktop(context) ? 26 : 20,
                                                             title: question.questionTitle,
                                                             fontWeight: FontWeight.bold,
                                                           ),
+                                                        ],
+                                                        // const SizedBox(height: 5),
                                                         buildInventoryQuestions(
                                                           question,
                                                           currentScreenList,
@@ -231,55 +241,6 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                         SizedBox(height: question.questionOptionType != 'textfield' ? 10 : 0),
                                                         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                                                           const SizedBox(),
-
-                                                          // if (i == currentScreenList[index].questions.length - 1 &&
-                                                          //     isEdit &&
-                                                          //     currentScreenList[index].title != "Assign to") ...[
-                                                          //   // Align(
-                                                          //   //   alignment: Alignment.centerRight,
-                                                          //   //   child: CustomButton(
-                                                          //   //     height: 39,
-                                                          //   //     text: "Next",
-                                                          //   //     onPressed: () {
-                                                          //   //       nextQuestion(screensDataList: currentScreenList, option: "");
-                                                          //   //       //  currentScreenIndex = currentScreenList.length - 1;
-                                                          //   //       //     pageController?.jumpToPage(currentScreenList.length - 1);
-                                                          //   //     },
-                                                          //   //   ),
-                                                          //   // ),
-                                                          // ] else ...[
-                                                          //   const SizedBox()
-                                                          // ],
-
-                                                          // Container(
-                                                          //   child: shouldShowButton
-                                                          //       ? allQuestionFinishes
-                                                          //           ? const Center(
-                                                          //               child: CircularProgressIndicator.adaptive(),
-                                                          //             )
-                                                          //           : CustomButton(
-                                                          //               text: buttonText,
-                                                          //               onPressed: () {
-                                                          //                 if (!allQuestionFinishes) {
-                                                          //                   if (currentScreenList[index].title != "Assign to") {
-                                                          //                     if (_formKey.currentState!.validate()) {
-                                                          //                       nextQuestion(screensDataList: currentScreenList, option: "");
-                                                          //                     }
-                                                          //                   }
-                                                          //                   if (currentScreenList[index].title == "Assign to") {
-                                                          //                     setState(() {
-                                                          //                       allQuestionFinishes = true;
-                                                          //                     });
-                                                          //                     addDataOnfirestore(notify);
-                                                          //                   }
-                                                          //                 }
-                                                          //               },
-                                                          //               width: currentScreenList[index].title == "Assign to" ? 90 : 70,
-                                                          //               height: 39,
-                                                          //             )
-                                                          //       : const SizedBox(),
-                                                          // )
-
                                                           if (i == currentScreenList[index].questions.length - 1 && question.questionOptionType != 'chip') ...[
                                                             Container(
                                                               // alignment: Alignment.centerRight,
@@ -297,10 +258,14 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                                             }
                                                                           }
                                                                           if (currentScreenList[index].title == "Assign to") {
+                                                                            // if (assignIsselected.lenth > 0) {
                                                                             setState(() {
                                                                               allQuestionFinishes = true;
                                                                             });
                                                                             addDataOnfirestore(notify);
+                                                                            // } else {
+                                                                            //   customSnackBar(context: context, text: "Assign this inventory to Member");
+                                                                            // }
                                                                           }
                                                                         }
                                                                       },

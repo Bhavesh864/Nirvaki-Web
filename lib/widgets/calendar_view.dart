@@ -22,11 +22,22 @@ class CustomCalendarView extends ConsumerStatefulWidget {
 }
 
 class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
+  late Stream<QuerySnapshot<Map<String, dynamic>>> calenderDetails;
+  @override
+  void initState() {
+    super.initState();
+    getCalenderDetailsfunc();
+  }
+
+  void getCalenderDetailsfunc() {
+    final User? user = ref.read(userDataProvider);
+    calenderDetails = FirebaseFirestore.instance.collection('calenderDetails').where('brokerId', isEqualTo: user?.brokerId).snapshots();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final User? user = ref.read(userDataProvider);
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('calenderDetails').where('brokerId', isEqualTo: user?.brokerId).snapshots(),
+      stream: calenderDetails,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Loader();

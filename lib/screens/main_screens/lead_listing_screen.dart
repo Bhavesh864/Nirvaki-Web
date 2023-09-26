@@ -8,6 +8,7 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/widgets/workitems/workitem_filter_view.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/utils/constants.dart';
+import '../../riverpodstate/common_index_state.dart';
 import '../../routes/routes.dart';
 import '../../widgets/card/custom_card.dart';
 import '../../widgets/table_view/table_view_widgets.dart';
@@ -249,6 +250,9 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
                                           itemBuilder: (context, index) => GestureDetector(
                                             onTap: () {
                                               final id = filteredleadList[index].workitemId;
+                                              ref.read(detailsPageIndexTabProvider.notifier).update(
+                                                    (state) => 0,
+                                                  );
                                               navigateBasedOnId(context, id!, ref);
                                             },
                                             child: CustomCard(index: index, cardDetails: filteredleadList),

@@ -12,6 +12,7 @@ import '../../constants/firebase/detailsModels/todo_details.dart';
 import '../../constants/functions/navigation/navigation_functions.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
+import '../../riverpodstate/common_index_state.dart';
 import '../app/dropdown_menu.dart';
 import '../app/nav_bar.dart';
 
@@ -286,6 +287,9 @@ TableCell buildWorkItemTableItem(
     child: GestureDetector(
       onTap: () {
         if (context != null && ref != null && id != '') {
+          ref.read(detailsPageIndexTabProvider.notifier).update(
+                (state) => 0,
+              );
           navigateBasedOnId(context, id!, ref);
         }
       },
