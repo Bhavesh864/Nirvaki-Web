@@ -448,43 +448,38 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
               if (widget.isPersonalDetails) ...[
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Table(
                     children: [
-                      buildInfoFields('Email address', broker.brokercompanyemail!, isPersonalDetailsEditing, emailController),
-                      buildInfoFields('Phone ', broker.brokercompanynumber!, isPersonalDetailsEditing, phoneController),
-                      const SizedBox(),
-                      const SizedBox(),
-                      const SizedBox(),
+                      TableRow(children: [
+                        buildInfoFields('Email address', broker.brokercompanyemail!, isPersonalDetailsEditing, emailController),
+                        buildInfoFields('Phone ', broker.brokercompanynumber!, isPersonalDetailsEditing, phoneController),
+                        const SizedBox(),
+                      ])
                     ],
                   ),
                 ),
               ] else ...[
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Table(
                     children: [
-                      buildInfoFields('Address 1', broker.brokercompanyaddress['Addressline1'], isAddressEditing, address1Controller),
-                      buildInfoFields('City', broker.brokercompanyaddress['city'], isAddressEditing, cityController),
-                      const SizedBox(
-                        width: 60,
-                      ),
-                      const SizedBox(),
-                      const SizedBox(),
+                      TableRow(children: [
+                        buildInfoFields('Address 1', broker.brokercompanyaddress['Addressline1'], isAddressEditing, address1Controller),
+                        buildInfoFields('City', broker.brokercompanyaddress['city'], isAddressEditing, cityController),
+                        const SizedBox(),
+                      ])
                     ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Table(
                     children: [
-                      buildInfoFields('Address 2', broker.brokercompanyaddress['Addressline2'], isAddressEditing, address2Controller),
-                      buildInfoFields('State', broker.brokercompanyaddress['state'], isAddressEditing, stateController),
-                      const SizedBox(),
-                      const SizedBox(),
-                      const SizedBox(),
+                      TableRow(children: [
+                        buildInfoFields('Address 2', broker.brokercompanyaddress['Addressline2'], isAddressEditing, address2Controller),
+                        buildInfoFields('State', broker.brokercompanyaddress['state'], isAddressEditing, stateController),
+                        const SizedBox(),
+                      ])
                     ],
                   ),
                 ),

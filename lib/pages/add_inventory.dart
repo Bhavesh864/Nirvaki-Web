@@ -184,13 +184,16 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                 itemBuilder: (context, index) {
                                   return Center(
                                     child: Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
                                       child: Container(
-                                        constraints: BoxConstraints(
+                                        constraints: const BoxConstraints(
                                           minHeight: 0,
-                                          maxHeight: Responsive.isMobile(context) ? height! * 0.8 : height! * 0.88,
+                                          maxHeight: double.infinity,
                                         ),
                                         width: Responsive.isMobile(context) ? width! * 0.9 : 650,
-                                        padding: const EdgeInsets.all(25),
+                                        padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
                                         child: ScrollConfiguration(
                                           behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                                           child: SingleChildScrollView(
@@ -201,7 +204,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                   CustomText(
                                                     softWrap: true,
                                                     textAlign: TextAlign.center,
-                                                    size: 30,
+                                                    size: Responsive.isDesktop(context) ? 26 : 20,
                                                     title: currentScreenList[index].title.toString(),
                                                     fontWeight: FontWeight.bold,
                                                   ),
@@ -213,14 +216,16 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                     final question = currentScreenList[index].questions[i];
                                                     return Column(
                                                       children: [
-                                                        if (currentScreenList[index].title == null)
+                                                        if (currentScreenList[index].title == null) ...[
                                                           CustomText(
                                                             softWrap: true,
                                                             textAlign: TextAlign.center,
-                                                            size: 30,
+                                                            size: Responsive.isDesktop(context) ? 26 : 20,
                                                             title: question.questionTitle,
                                                             fontWeight: FontWeight.bold,
                                                           ),
+                                                        ],
+                                                        // const SizedBox(height: 5),
                                                         buildInventoryQuestions(
                                                           question,
                                                           currentScreenList,
