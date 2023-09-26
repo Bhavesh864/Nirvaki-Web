@@ -7,15 +7,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-<<<<<<< HEAD
-import 'package:yes_broker/constants/firebase/Methods/add_member_send_email.dart';
-import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
-=======
 import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/constants/firebase/Methods/add_member_send_email.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
->>>>>>> 9ad69a506aaf68b3b87a6d6f6b628c2ceaeba7b1
 import 'package:yes_broker/customs/responsive.dart';
 
 import '../../Customs/custom_fields.dart';
