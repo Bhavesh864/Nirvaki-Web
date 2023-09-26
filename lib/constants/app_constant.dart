@@ -102,10 +102,22 @@ dynamic checkIconByCategory(CardDetails carddata) {
   } else if (carddata.linkedItemType!.contains(ItemCategory.isInventory)) {
     return MaterialSymbols.location_home_outlined;
   }
-  return MaterialSymbols.location_home_outlined;
+  return MaterialSymbols.location_away;
 }
 
 Color checkIconColorByCategory(CardDetails carddata) {
+  // if (carddata.workitemId!.contains('TD')) {
+  //   if (carddata.linkedItemId!.contains(ItemCategory.isInventory)) {
+  //     return AppColor.inventoryIconColor;
+  //   } else if (carddata.linkedItemId!.contains(ItemCategory.isLead)) {
+  //     return AppColor.leadIconColor;
+  //   } else if (carddata.linkedItemType!.contains(ItemCategory.isLead)) {
+  //     return AppColor.leadIconColor;
+  //   } else if (carddata.linkedItemType!.contains(ItemCategory.isInventory)) {
+  //     return AppColor.inventoryIconColor;
+  //   }
+  // }
+
   if (carddata.workitemId!.contains(ItemCategory.isInventory)) {
     return AppColor.inventoryIconColor;
   } else if (carddata.workitemId!.contains(ItemCategory.isLead)) {
@@ -128,7 +140,7 @@ Color checkChipColorByCategory(CardDetails carddata) {
   } else if (carddata.linkedItemType!.contains(ItemCategory.isInventory)) {
     return AppColor.inventoryChipColor;
   }
-  return AppColor.inventoryChipColor;
+  return AppColor.leadChipColor;
 }
 
 bool checkNotNUllItem(dynamic data) {

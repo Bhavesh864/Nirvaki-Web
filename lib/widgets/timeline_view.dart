@@ -28,7 +28,6 @@ class CustomTimeLineView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final workitemId = ref.read(selectedWorkItemId);
     final User? user = ref.read(userDataProvider);
-    print("user====> $user");
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10),
@@ -79,6 +78,7 @@ class CustomTimeLineView extends ConsumerWidget {
               if (snapshot.hasData) {
                 final dataList = snapshot.data!.docs;
                 List<ActivityDetails> activities = dataList.map((e) => ActivityDetails.fromSnapshot(e)).toList();
+
                 activities.sort((a, b) => b.createdate!.compareTo(a.createdate!));
                 if (activities.isNotEmpty) {
                   if (fromHome) {

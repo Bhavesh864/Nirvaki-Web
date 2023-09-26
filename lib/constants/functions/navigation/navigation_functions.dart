@@ -9,7 +9,7 @@ import '../../../screens/main_screens/home_screen.dart';
 import '../../../screens/main_screens/lead_details_screen.dart';
 import '../../../screens/main_screens/todo_details_screen.dart';
 
-void navigateBasedOnId(BuildContext context, String id, WidgetRef ref) {
+void navigateBasedOnId(BuildContext context, String id, WidgetRef ref, {bool fromTimeline = false}) {
   final routePrefix = id.substring(0, 2);
   ref.read(selectedWorkItemId.notifier).addItemId(id);
 
