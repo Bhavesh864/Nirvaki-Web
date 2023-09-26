@@ -135,12 +135,13 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                                     ),
                                     child: SingleChildScrollView(
                                       child: Container(
-                                        constraints: const BoxConstraints(
-                                          minHeight: 0,
-                                          maxHeight: double.infinity,
-                                        ),
+                                        // constraints: const BoxConstraints(
+                                        //   minHeight: 0,
+                                        //   maxHeight: double.infinity,
+                                        // ),
                                         width: Responsive.isMobile(context) ? width! * 0.9 : 650,
-                                        padding: const EdgeInsets.all(25),
+                                        padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
+
                                         child: Column(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
@@ -148,7 +149,7 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                                               CustomText(
                                                 softWrap: true,
                                                 textAlign: TextAlign.center,
-                                                size: 30,
+                                                size: Responsive.isDesktop(context) ? 26 : 20,
                                                 title: screensDataList[index].title.toString(),
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -159,13 +160,12 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                                                     CustomText(
                                                         softWrap: true,
                                                         textAlign: TextAlign.center,
-                                                        size: 30,
+                                                        size: Responsive.isDesktop(context) ? 26 : 20,
                                                         title: screensDataList[index].questions[i].questionTitle,
                                                         fontWeight: FontWeight.bold),
-                                                  buildTodoQuestions(screensDataList[index].questions[i], screensDataList, currentScreenIndex, notify, nextQuestion,
-                                                      context, selectedValues, linkState),
-                                                  if (i == screensDataList[index].questions.length - 1 &&
-                                                      screensDataList[index].questions[i].questionOptionType != 'chip')
+                                                  buildTodoQuestions(screensDataList[index].questions[i], screensDataList, currentScreenIndex, notify, nextQuestion, context,
+                                                      selectedValues, linkState),
+                                                  if (i == screensDataList[index].questions.length - 1 && screensDataList[index].questions[i].questionOptionType != 'chip')
                                                     Container(
                                                       margin: const EdgeInsets.only(top: 10),
                                                       alignment: Alignment.centerRight,
@@ -241,6 +241,18 @@ class _AddTodoState extends ConsumerState<AddTodo> {
               ),
             ),
             title: const Text('Add Todo'),
+            actions: [
+              CustomButton(
+                text: Responsive.isMobile(context) ? "" : "Back to home",
+                fontsize: 20,
+                buttonColor: Colors.transparent,
+                borderColor: Colors.transparent,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                leftIcon: Icons.home_outlined,
+              )
+            ],
           ),
         );
       },

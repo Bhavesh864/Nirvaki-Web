@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:yes_broker/Customs/text_utility.dart';
 
 import 'custom_text.dart';
 
 class DropDownField extends StatefulWidget {
   final String title;
   final List optionsList;
+  final List<Map<String, dynamic>>? multipleValuesmap;
   final void Function(Object e) onchanged;
   final String? defaultValues;
-  const DropDownField({super.key, required this.title, required this.optionsList, required this.onchanged, this.defaultValues});
+  final bool isMultiValueOnDropdownlist;
+
+  const DropDownField({
+    super.key,
+    required this.title,
+    required this.optionsList,
+    required this.onchanged,
+    this.defaultValues,
+    this.isMultiValueOnDropdownlist = false,
+    this.multipleValuesmap,
+  });
 
   @override
   State<DropDownField> createState() => _DropDownFieldState();
@@ -58,7 +70,6 @@ class _DropDownFieldState extends State<DropDownField> {
               value: selectedValues!.isEmpty ? null : selectedValues!,
               onChanged: (e) {
                 widget.onchanged(e!);
-                print(e);
                 setState(() {
                   selectedValues = e;
                 });
@@ -72,6 +83,24 @@ class _DropDownFieldState extends State<DropDownField> {
             ),
           ),
         ),
+      ],
+    );
+  }
+}
+
+class CustomDropdownItem extends StatelessWidget {
+  final String text;
+  final String title;
+
+  const CustomDropdownItem({super.key, required this.text, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        AppText(text: title, fontsize: 18),
+        const SizedBox(height: 8),
+        AppText(text: text),
       ],
     );
   }

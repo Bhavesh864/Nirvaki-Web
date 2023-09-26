@@ -3,6 +3,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:number_to_words/number_to_words.dart';
+import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
@@ -12,6 +13,7 @@ import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/questionaries/questions_form_photos_view.dart';
 import 'package:yes_broker/widgets/questionaries/assign_user.dart';
 import 'package:yes_broker/widgets/questionaries/google_maps.dart';
+import '../../Customs/responsive.dart';
 import '../../customs/custom_fields.dart';
 import '../../customs/custom_text.dart';
 import '../../customs/dropdown_field.dart';
@@ -214,10 +216,8 @@ Widget buildInventoryQuestions(
             question.questionTitle.contains('Floor Number') ||
             question.questionTitle.contains('Property Area');
 
-        final isvalidationtrue = question.questionTitle.contains('First') ||
-            question.questionTitle.contains('Mobile') ||
-            question.questionTitle == 'Rent' ||
-            question.questionTitle == 'Listing Price';
+        final isvalidationtrue =
+            question.questionTitle.contains('First') || question.questionTitle.contains('Mobile') || question.questionTitle == 'Rent' || question.questionTitle == 'Listing Price';
 
         final isEmail = question.questionTitle.contains("Email");
         return Column(
@@ -255,7 +255,7 @@ Widget buildInventoryQuestions(
                         }
                       : null,
             ),
-            isPriceField ? Text(textResult) : const SizedBox.shrink(),
+            isPriceField ? AppText(text: textResult.toUpperCase(), textColor: AppColor.green) : const SizedBox.shrink(),
           ],
         );
       },

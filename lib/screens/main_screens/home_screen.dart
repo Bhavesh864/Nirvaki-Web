@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,12 +24,11 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class HomeScreenState extends ConsumerState<HomeScreen> {
-  late Future<List<CardDetails>> getCardDetails;
-
+  late Stream<QuerySnapshot<Map<String, dynamic>>> cardDetails;
   @override
   void initState() {
     super.initState();
-    getCardDetails = CardDetails.getCardDetails();
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
   }
 
   showChatDialog() {
@@ -45,21 +45,15 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: StreamBuilder(
-        // future: getCardDetails,
-        stream: cardDetailsCollection.orderBy("createdate", descending: true).snapshots(),
+        stream: cardDetails,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Loader();
           }
-
           if (snapshot.hasData) {
             final filterItem = snapshot.data?.docs.where((item) => item["assignedto"].any((user) => user["userid"] == AppConst.getAccessToken()));
-            final List<CardDetails> todoItems =
-                filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
-
-            final List<CardDetails> workItems =
-                filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
-
+            final List<CardDetails> todoItems = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
+            final List<CardDetails> workItems = filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
             return Row(
               children: [
                 if (workItems.isEmpty && todoItems.isEmpty) ...[

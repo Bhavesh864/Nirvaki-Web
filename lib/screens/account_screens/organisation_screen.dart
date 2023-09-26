@@ -1,7 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/Methods/update_broker_info.dart';
@@ -112,6 +117,9 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
   final TextEditingController address2Controller = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController stateController = TextEditingController();
+  File? profilePhoto;
+  Uint8List? webProfile;
+  String? uploadProfile;
 
   void startEditingFullName(String fullName) {
     setState(() {
@@ -165,6 +173,25 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
     });
   }
 
+  selectImage() async {
+    XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      var webUrl = await pickedImage.readAsBytes();
+      var imageUrl = File(pickedImage.path);
+      if (kIsWeb) {
+        setState(() {
+          webProfile = webUrl;
+        });
+        return webUrl;
+      }
+      setState(() {
+        profilePhoto = imageUrl;
+      });
+      return imageUrl;
+    }
+    return '';
+  }
+
   @override
   Widget build(BuildContext context) {
     final BrokerInfo broker = widget.brokerData;
@@ -182,15 +209,33 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                     width: 10,
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      if (isNameEditing) {
+                        selectImage().then((value) {
+                          if (value != "") {
+                            uploadImageToFirebases(value).then((url) {
+                              if (url != "") {
+                                setState(() {
+                                  uploadProfile = url;
+                                });
+                              }
+                            });
+                          }
+                        });
+                      }
+                    },
                     child: CircleAvatar(
                       radius: 35,
                       backgroundImage: isNameEditing ? null : NetworkImage(broker.brokerlogo!),
                       child: isNameEditing
-                          ? const Icon(
-                              Icons.add,
-                              size: 25,
-                            )
+                          ? profilePhoto == null && webProfile == null
+                              ? const Icon(
+                                  Icons.add,
+                                  size: 25,
+                                )
+                              : (kIsWeb)
+                                  ? ClipOval(child: Image.memory(webProfile!, width: 70, height: 70, fit: BoxFit.cover))
+                                  : ClipOval(child: Image.file(profilePhoto!, width: 70, height: 70, fit: BoxFit.cover))
                           : null,
                     ),
                   ),
@@ -403,43 +448,38 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
               if (widget.isPersonalDetails) ...[
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Table(
                     children: [
-                      buildInfoFields('Email address', broker.brokercompanyemail!, isPersonalDetailsEditing, emailController),
-                      buildInfoFields('Phone ', broker.brokercompanynumber!, isPersonalDetailsEditing, phoneController),
-                      const SizedBox(),
-                      const SizedBox(),
-                      const SizedBox(),
+                      TableRow(children: [
+                        buildInfoFields('Email address', broker.brokercompanyemail!, isPersonalDetailsEditing, emailController),
+                        buildInfoFields('Phone ', broker.brokercompanynumber!, isPersonalDetailsEditing, phoneController),
+                        const SizedBox(),
+                      ])
                     ],
                   ),
                 ),
               ] else ...[
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Table(
                     children: [
-                      buildInfoFields('Address 1', broker.brokercompanyaddress['Addressline1'], isAddressEditing, address1Controller),
-                      buildInfoFields('City', broker.brokercompanyaddress['city'], isAddressEditing, cityController),
-                      const SizedBox(
-                        width: 60,
-                      ),
-                      const SizedBox(),
-                      const SizedBox(),
+                      TableRow(children: [
+                        buildInfoFields('Address 1', broker.brokercompanyaddress['Addressline1'], isAddressEditing, address1Controller),
+                        buildInfoFields('City', broker.brokercompanyaddress['city'], isAddressEditing, cityController),
+                        const SizedBox(),
+                      ])
                     ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Table(
                     children: [
-                      buildInfoFields('Address 2', broker.brokercompanyaddress['Addressline2'], isAddressEditing, address2Controller),
-                      buildInfoFields('State', broker.brokercompanyaddress['state'], isAddressEditing, stateController),
-                      const SizedBox(),
-                      const SizedBox(),
-                      const SizedBox(),
+                      TableRow(children: [
+                        buildInfoFields('Address 2', broker.brokercompanyaddress['Addressline2'], isAddressEditing, address2Controller),
+                        buildInfoFields('State', broker.brokercompanyaddress['state'], isAddressEditing, stateController),
+                        const SizedBox(),
+                      ])
                     ],
                   ),
                 ),

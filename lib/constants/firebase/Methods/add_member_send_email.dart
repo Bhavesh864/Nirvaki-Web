@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart' as user;
 import '../../app_constant.dart';
 
@@ -85,7 +86,13 @@ Future<String> updateTeamMember(
         role: role,
         fcmToken: fcmToken,
         image: imageUrl);
-    await user.User.updateUser(items).then((value) => {res = "success"});
+    await user.User.updateUser(items).then((value) => {
+          res = "success",
+          UserHiveMethods.addData(
+            key: userId,
+            data: items,
+          )
+        });
     return res;
   } catch (e) {
     print(e.toString());
