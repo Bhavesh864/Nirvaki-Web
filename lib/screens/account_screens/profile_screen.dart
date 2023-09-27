@@ -36,49 +36,62 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Responsive.isMobile(context) ? 15.0 : 0),
-      child: StreamBuilder(
-          stream: userInfo,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Loader();
-            }
-            if (snapshot.hasData) {
-              final dataList = snapshot.data;
-              User userInfo = User.fromSnapshot(dataList!);
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (Responsive.isMobile(context))
-                    const Padding(
-                      padding: EdgeInsets.only(left: 5.0),
-                      child: AppText(
-                        text: "Profile",
-                        fontWeight: FontWeight.w700,
-                        fontsize: 16,
-                      ),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: Responsive.isMobile(context) ? 0 : 10),
+          child: StreamBuilder(
+              stream: userInfo,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Loader();
+                }
+                if (snapshot.hasData) {
+                  final dataList = snapshot.data;
+                  User userInfo = User.fromSnapshot(dataList!);
+                  return SingleChildScrollView(
+                    child: Column(
+                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (Responsive.isMobile(context))
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+                            // padding: EdgeInsets.only(left: 5.0, bottom: 10),
+                            child: AppText(
+                              text: "Profile",
+                              fontWeight: FontWeight.w700,
+                              fontsize: 16,
+                            ),
+                          ),
+                        CustomAddressAndProfileCard(
+                          isPersonalDetails: false,
+                          userData: userInfo,
+                        ),
+                        SizedBox(height: Responsive.isMobile(context) ? 20 : 40),
+                        CustomAddressAndProfileCard(
+                          title: 'Personal Information',
+                          isPersonalDetails: true,
+                          userData: userInfo,
+                        ),
+                        SizedBox(height: Responsive.isMobile(context) ? 20 : 40),
+                        CustomAddressAndProfileCard(
+                          title: 'Address',
+                          isPersonalDetails: false,
+                          userData: userInfo,
+                        ),
+                      ],
                     ),
-                  CustomAddressAndProfileCard(
-                    isPersonalDetails: false,
-                    userData: userInfo,
-                  ),
-                  CustomAddressAndProfileCard(
-                    title: 'Personal Information',
-                    isPersonalDetails: true,
-                    userData: userInfo,
-                  ),
-                  CustomAddressAndProfileCard(
-                    title: 'Address',
-                    isPersonalDetails: false,
-                    userData: userInfo,
-                  ),
-                ],
-              );
-            }
-            return const SizedBox.shrink();
-          }),
+                  );
+                }
+                return const SizedBox.shrink();
+              }),
+        ),
+      ),
     );
   }
 }
@@ -155,13 +168,38 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
           webProfile = webUrl;
         });
         return webUrl;
+      } else {
+        setState(() {
+          profilePhoto = imageUrl;
+        });
+        return imageUrl;
       }
-      setState(() {
-        profilePhoto = imageUrl;
-      });
-      return imageUrl;
     }
     return '';
+  }
+
+  void submitPhoto() {
+    final userData = widget.userData;
+    updateTeamMember(
+            email: userData.email,
+            firstname: userData.userfirstname,
+            lastname: userData.userfirstname,
+            mobile: userData.mobile,
+            managerName: userData.managerName,
+            managerid: userData.managerid,
+            role: userData.role,
+            brokerId: userData.brokerId,
+            userId: userData.userId,
+            fcmToken: userData.fcmToken,
+            imageUrl: uploadProfile,
+            status: userData.status,
+            isOnline: userData.isOnline)
+        .then((value) => {
+              uploadProfile = '',
+              profilePhoto = null,
+              webProfile = null,
+              cancelEditingFullName(),
+            });
   }
 
   @override
@@ -170,7 +208,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
     if (widget.title == null) {
       return Card(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          padding: const EdgeInsets.only(left: 5, right: 15, top: 10, bottom: 10),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -187,7 +225,6 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                           if (value != "") {
                             uploadImageToFirebases(value).then((url) {
                               if (url != "") {
-                                // print(url);
                                 setState(() {
                                   uploadProfile = url;
                                 });
@@ -200,7 +237,6 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                     child: CircleAvatar(
                       radius: 35,
                       backgroundImage: isNameEditing ? null : NetworkImage(userData.image),
-                      // backgroundImage: webProfile != null ? MemoryImage(webProfile!) : null,
                       child: isNameEditing
                           ? profilePhoto == null && webProfile == null
                               ? const Icon(
@@ -220,16 +256,6 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // if (isNameEditing) ...[
-                      //   SizedBox(
-                      //     height: 50,
-                      //     width: fullNameController.text.length * 13,
-                      //     child: CustomTextInput(
-                      //       controller: fullNameController,
-                      //       onFieldSubmitted: (newValue) {},
-                      //     ),
-                      //   ),
-                      // ] else ...[
                       Text(
                         "${userData.userfirstname} ${userData.userlastname}",
                         style: const TextStyle(
@@ -253,25 +279,57 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
               if (isNameEditing) ...[
                 Row(
                   children: [
-                    CustomButton(
-                      height: 39,
-                      text: "cancel",
-                      borderColor: AppColor.primary,
-                      onPressed: () {
-                        cancelEditingFullName();
-                      },
-                      buttonColor: Colors.white,
-                      textColor: AppColor.primary,
-                    ),
+                    if (Responsive.isMobile(context)) ...[
+                      InkWell(
+                        onTap: () {
+                          cancelEditingFullName();
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(5),
+                          child: Icon(
+                            Icons.cancel_outlined,
+                            size: 25,
+                            color: Colors.black,
+                          ),
+                        ),
+                      )
+                    ] else ...[
+                      CustomButton(
+                        height: 39,
+                        text: "cancel",
+                        borderColor: AppColor.primary,
+                        onPressed: () {
+                          cancelEditingFullName();
+                        },
+                        buttonColor: Colors.white,
+                        textColor: AppColor.primary,
+                      ),
+                    ],
                     const SizedBox(width: 7),
-                    CustomButton(
-                      text: "Save",
-                      borderColor: AppColor.primary,
-                      height: 39,
-                      onPressed: () {
-                        cancelEditingFullName();
-                      },
-                    ),
+                    if (Responsive.isDesktop(context)) ...[
+                      CustomButton(
+                        text: "Save",
+                        borderColor: AppColor.primary,
+                        height: 39,
+                        onPressed: () {
+                          submitPhoto();
+                        },
+                      ),
+                    ] else ...[
+                      InkWell(
+                        onTap: () {
+                          submitPhoto();
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(5),
+                          child: Icon(
+                            Icons.check,
+                            size: 25,
+                            color: AppColor.primary,
+                          ),
+                        ),
+                      )
+                    ],
                   ],
                 ),
               ] else ...[
@@ -279,29 +337,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                   onTap: () {
                     startEditingFullName("${userData.userfirstname} ${userData.userlastname}");
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Container(
-                      padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: const Color(0xff898989).withOpacity(0.5),
-                        ),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: const Row(
-                        children: [
-                          Icon(
-                            Icons.edit_outlined,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text('Edit'),
-                        ],
-                      ),
-                    ),
-                  ),
+                  child: const EditBlock(),
                 ),
               ]
             ],
@@ -375,26 +411,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                           userData.mobile,
                         );
                       },
-                      child: Container(
-                        padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: const Color(0xff898989).withOpacity(0.5),
-                          ),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: const Row(
-                          children: [
-                            Icon(
-                              Icons.edit_outlined,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text('Edit'),
-                          ],
-                        ),
-                      ),
+                      child: const EditBlock(),
                     ),
                   ]
                 ],
@@ -405,9 +422,9 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                   child: Table(
                     children: [
                       TableRow(children: [
-                        buildInfoFields('First name', userData.userfirstname, isPersonalDetailsEditing, firstNameController),
-                        buildInfoFields('Last Name ', userData.userlastname, isPersonalDetailsEditing, lastNameController),
-                        const SizedBox(),
+                        buildInfoFields('First name', userData.userfirstname, isPersonalDetailsEditing, firstNameController, context),
+                        buildInfoFields('Last Name ', userData.userlastname, isPersonalDetailsEditing, lastNameController, context),
+                        if (Responsive.isDesktop(context)) ...[const SizedBox()],
                       ])
                     ],
                   ),
@@ -417,22 +434,22 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                   child: Table(
                     children: [
                       TableRow(children: [
-                        buildInfoFields('Email address', userData.email, isPersonalDetailsEditing, emailController),
-                        buildInfoFields('Phone ', userData.mobile, isPersonalDetailsEditing, phoneController),
-                        if (!Responsive.isMobile(context)) buildInfoFields('Employee ID', userData.userId, false, TextEditingController()),
+                        buildInfoFields('Email address', userData.email, isPersonalDetailsEditing, emailController, context),
+                        buildInfoFields('Phone ', userData.mobile, isPersonalDetailsEditing, phoneController, context),
+                        if (!Responsive.isMobile(context)) buildInfoFields('Employee ID', userData.userId, false, TextEditingController(), context),
                       ])
                     ],
                   ),
                 ),
-                if (Responsive.isMobile(context)) buildInfoFields('Employee ID', userData.userId, false, TextEditingController()),
+                if (Responsive.isMobile(context)) buildInfoFields('Employee ID', userData.userId, false, TextEditingController(), context),
               ] else ...[
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
                   child: Table(
                     children: [
                       TableRow(children: [
-                        buildInfoFields('City', 'New Delhi', false, TextEditingController()),
-                        buildInfoFields('State ', 'Delhi', false, TextEditingController()),
+                        buildInfoFields('City', 'New Delhi', false, TextEditingController(), context),
+                        buildInfoFields('State ', 'Delhi', false, TextEditingController(), context),
                         const SizedBox()
                       ])
                     ],
@@ -443,8 +460,8 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                   child: Table(
                     children: [
                       TableRow(children: [
-                        buildInfoFields('Country', 'India', false, TextEditingController()),
-                        buildInfoFields('Pin Code ', '110077', false, TextEditingController()),
+                        buildInfoFields('Country', 'India', false, TextEditingController(), context),
+                        buildInfoFields('Pin Code ', '110077', false, TextEditingController(), context),
                         const SizedBox(),
                       ])
                     ],
@@ -459,7 +476,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
   }
 }
 
-Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, TextEditingController textController) {
+Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, TextEditingController textController, BuildContext context) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -474,13 +491,15 @@ Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, Tex
       if (isEditing) ...[
         SizedBox(
           height: 50,
-          width: fieldDetail.length * 13,
+          width: Responsive.isDesktop(context) ? 300 : 160,
+          // width: fieldDetail.length * 15,
           child: CustomTextInput(
             controller: textController,
             onFieldSubmitted: (newValue) {},
           ),
         ),
       ] else ...[
+        const SizedBox(height: 3),
         Text(
           fieldDetail,
           style: const TextStyle(
@@ -507,10 +526,40 @@ Future<String> uploadImageToFirebases(imageUrl) async {
       await referenceImagesToUpload.putFile(imageUrl);
     }
     imageUrl = await referenceImagesToUpload.getDownloadURL();
-    print("imageUrl--> $imageUrl");
     return imageUrl;
   } catch (e) {
     print(e);
     return '';
+  }
+}
+
+class EditBlock extends StatelessWidget {
+  const EditBlock({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: const Color(0xff898989).withOpacity(0.5),
+        ),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 5),
+        child: Row(
+          children: [
+            Icon(
+              Icons.edit_outlined,
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            Text('Edit'),
+          ],
+        ),
+      ),
+    );
   }
 }
