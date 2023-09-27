@@ -12,6 +12,7 @@ import 'package:yes_broker/constants/firebase/Methods/add_member_send_email.dart
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
 import 'package:yes_broker/customs/responsive.dart';
+import 'package:yes_broker/riverpodstate/user_data.dart';
 
 import '../../Customs/custom_fields.dart';
 import '../../Customs/loader.dart';
@@ -193,7 +194,8 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
             fcmToken: userData.fcmToken,
             imageUrl: uploadProfile,
             status: userData.status,
-            isOnline: userData.isOnline)
+            isOnline: userData.isOnline,
+            ref: ref)
         .then((value) => {
               uploadProfile = '',
               profilePhoto = null,
@@ -393,7 +395,8 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                                     fcmToken: userData.fcmToken,
                                     imageUrl: userData.image,
                                     status: userData.status,
-                                    isOnline: userData.isOnline)
+                                    isOnline: userData.isOnline,
+                                    ref: ref)
                                 .then((value) => {
                                       cancelEditingPersonalDetails(),
                                     });
