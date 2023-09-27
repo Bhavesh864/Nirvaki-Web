@@ -12,7 +12,6 @@ import 'package:yes_broker/constants/firebase/Methods/add_member_send_email.dart
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
 import 'package:yes_broker/customs/responsive.dart';
-import 'package:yes_broker/riverpodstate/user_data.dart';
 
 import '../../Customs/custom_fields.dart';
 import '../../Customs/loader.dart';
@@ -116,6 +115,8 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
   bool isNameEditing = false;
   bool isPersonalDetailsEditing = false;
   bool isAddressEditing = false;
+  bool isPhotoUploading = false;
+
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController fullNameController = TextEditingController();
@@ -123,7 +124,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
   final TextEditingController phoneController = TextEditingController();
   File? profilePhoto;
   Uint8List? webProfile;
-  String? uploadProfile;
+  ValueNotifier<String> uploadProfile = ValueNotifier<String>('');
 
   void startEditingFullName(String fullName) {
     setState(() {
@@ -192,16 +193,24 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
             brokerId: userData.brokerId,
             userId: userData.userId,
             fcmToken: userData.fcmToken,
-            imageUrl: uploadProfile,
+            imageUrl: uploadProfile.value,
             status: userData.status,
             isOnline: userData.isOnline,
             ref: ref)
         .then((value) => {
-              uploadProfile = '',
+              uploadProfile.value = '',
               profilePhoto = null,
               webProfile = null,
               cancelEditingFullName(),
             });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    uploadProfile.addListener(() => setState(() {
+          isPhotoUploading = false;
+        }));
   }
 
   @override
@@ -225,10 +234,13 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                       if (isNameEditing) {
                         selectImage().then((value) {
                           if (value != "") {
+                            setState(() {
+                              isPhotoUploading = true;
+                            });
                             uploadImageToFirebases(value).then((url) {
                               if (url != "") {
                                 setState(() {
-                                  uploadProfile = url;
+                                  uploadProfile.value = url;
                                 });
                               }
                             });
@@ -308,29 +320,42 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                       ),
                     ],
                     const SizedBox(width: 7),
-                    if (Responsive.isDesktop(context)) ...[
-                      CustomButton(
-                        text: "Save",
-                        borderColor: AppColor.primary,
-                        height: 39,
-                        onPressed: () {
-                          submitPhoto();
-                        },
+                    if (isPhotoUploading) ...[
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: Responsive.isDesktop(context) ? 10 : 6),
+                        child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: Center(
+                                child: CircularProgressIndicator.adaptive(
+                              strokeWidth: Responsive.isDesktop(context) ? 4 : 2,
+                            ))),
                       ),
                     ] else ...[
-                      InkWell(
-                        onTap: () {
-                          submitPhoto();
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.all(5),
-                          child: Icon(
-                            Icons.check,
-                            size: 25,
-                            color: AppColor.primary,
-                          ),
+                      if (Responsive.isDesktop(context)) ...[
+                        CustomButton(
+                          text: "Save",
+                          borderColor: AppColor.primary,
+                          height: 39,
+                          onPressed: () {
+                            submitPhoto();
+                          },
                         ),
-                      )
+                      ] else ...[
+                        InkWell(
+                          onTap: () {
+                            submitPhoto();
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Icon(
+                              Icons.check,
+                              size: 25,
+                              color: AppColor.primary,
+                            ),
+                          ),
+                        )
+                      ],
                     ],
                   ],
                 ),
