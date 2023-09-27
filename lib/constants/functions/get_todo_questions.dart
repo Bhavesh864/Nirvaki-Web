@@ -168,7 +168,8 @@ Widget buildTodoQuestions(
             );
           } else if (snapshot.hasData) {
             for (var data in snapshot.data!) {
-              options.add(data.workitemId);
+              final newData = "${data.cardTitle} (${data.workitemId})";
+              options.add(newData);
             }
           }
           return DropDownField(
@@ -177,7 +178,8 @@ Widget buildTodoQuestions(
             optionsList: options,
             isMultiValueOnDropdownlist: true,
             onchanged: (Object e) {
-              CardDetails selectedUser = snapshot.data!.firstWhere((user) => user.workitemId == e);
+              // CardDetails selectedUser = snapshot.data!.firstWhere((user) => user.workitemId == e);
+              CardDetails selectedUser = snapshot.data!.firstWhere((user) => "${user.cardTitle} (${user.workitemId})" == e);
               notify.add({"id": question.questionId, "item": selectedUser});
             },
           );
