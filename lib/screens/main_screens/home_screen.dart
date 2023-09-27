@@ -52,12 +52,17 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
           }
           if (snapshot.hasData) {
             final filterItem = snapshot.data?.docs.where((item) => item["assignedto"].any((user) => user["userid"] == AppConst.getAccessToken()));
-            final List<CardDetails> todoItems = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
-            final List<CardDetails> workItems = filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
+            final List<CardDetails> todoItems =
+                filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
+            final List<CardDetails> workItems =
+                filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
             return Row(
               children: [
                 if (workItems.isEmpty && todoItems.isEmpty) ...[
-                  Expanded(flex: size.width > 1340 ? 5 : 6, child: const EmptyWorkItemList()),
+                  Expanded(
+                    flex: size.width > 1340 ? 5 : 6,
+                    child: const EmptyWorkItemList(),
+                  ),
                 ] else ...[
                   Expanded(
                     flex: size.width > 1340 ? 3 : 5,
@@ -112,8 +117,6 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                                     Expanded(
                                       child: Container(
                                         margin: const EdgeInsets.symmetric(horizontal: 10),
-
-                                        // height: 360,
                                         child: const CustomTimeLineView(
                                           fromHome: true,
                                         ),
