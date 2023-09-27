@@ -8,7 +8,7 @@ import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
 import 'nav_bar.dart';
 
-AppBar mobileAppBar(User user, BuildContext context, void Function(String) onOptionSelect, WidgetRef ref) {
+AppBar mobileAppBar(User? user, BuildContext context, void Function(String) onOptionSelect, WidgetRef ref) {
   return AppBar(
     foregroundColor: Colors.black,
     scrolledUnderElevation: 0.0,
@@ -34,7 +34,7 @@ AppBar mobileAppBar(User user, BuildContext context, void Function(String) onOpt
           color: Colors.white.withOpacity(1),
           offset: const Offset(200, 40),
           itemBuilder: (context) {
-            addOrRemoveTeamAndOrganization(user);
+            addOrRemoveTeamAndOrganization(user!);
             return profileMenuItems.map(
               (e) {
                 return appBarPopupMenuItem(e.title, onOptionSelect);
@@ -49,7 +49,7 @@ AppBar mobileAppBar(User user, BuildContext context, void Function(String) onOpt
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: NetworkImage(
-                  user.image.isEmpty ? noImg : user.image.toString(),
+                  user?.image ?? noImg,
                 ),
               ),
               borderRadius: BorderRadius.circular(12),
