@@ -117,7 +117,7 @@ TableRow buildWorkItemRowTile(
                     ),
                   )
                 : const SizedBox(),
-            checkNotNUllItem(cardItem.propertyarearange?.arearangestart)
+            checkNotNUllItem(cardItem.propertyarearange?.arearangestart) && checkNotNUllItem(cardItem.propertyarearange?.unit)
                 ? CustomChip(
                     label: CustomText(
                       title: "${cardItem.propertyarearange?.arearangestart} ${cardItem.propertyarearange?.unit}",
@@ -180,7 +180,7 @@ TableRow buildWorkItemRowTile(
               child: Container(
                 margin: const EdgeInsets.only(right: 3),
                 child: Text(
-                  "${cardItem.customerinfo!.firstname!} ${cardItem.customerinfo!.lastname!}",
+                  "${cardItem.customerinfo?.firstname} ${cardItem.customerinfo?.lastname ?? ""}",
                   style: const TextStyle(
                     fontSize: 14,
                     color: Colors.black,

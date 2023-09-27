@@ -87,144 +87,142 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
               children: [
                 Expanded(
                   flex: 5,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        TopSerachBar(
-                          onChanged: (value) {
-                            setState(() {});
-                          },
-                          onToggleShowTable: () {
-                            setState(() {
-                              showTableView = !showTableView;
-                            });
-                          },
-                          showTableView: showTableView,
-                          searchController: searchController,
-                          title: 'Todo',
-                          isMobile: Responsive.isMobile(context),
-                          isFilterOpen: isFilterOpen,
-                          onFilterClose: () {
-                            setState(() {
-                              isFilterOpen = false;
-                            });
-                          },
-                          onFilterOpen: () {
-                            if (Responsive.isMobile(context)) {
-                              Navigator.of(context).push(AppRoutes.createAnimatedRoute(const WorkItemFilterView(
-                                originalCardList: [],
-                              )));
-                            } else {
+                  child: ScrollConfiguration(
+                    behavior: const ScrollBehavior().copyWith(overscroll: false),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          TopSerachBar(
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            onToggleShowTable: () {
                               setState(() {
-                                isFilterOpen = true;
+                                showTableView = !showTableView;
                               });
-                            }
-                          },
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              flex: 5,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  if (Responsive.isMobile(context)) ...[
-                                    SingleChildScrollView(
-                                      child: Column(
+                            },
+                            showTableView: showTableView,
+                            searchController: searchController,
+                            title: 'Todo',
+                            isMobile: Responsive.isMobile(context),
+                            isFilterOpen: isFilterOpen,
+                            onFilterClose: () {
+                              setState(() {
+                                isFilterOpen = false;
+                              });
+                            },
+                            onFilterOpen: () {
+                              if (Responsive.isMobile(context)) {
+                                Navigator.of(context).push(AppRoutes.createAnimatedRoute(const WorkItemFilterView(
+                                  originalCardList: [],
+                                )));
+                              } else {
+                                setState(() {
+                                  isFilterOpen = true;
+                                });
+                              }
+                            },
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                flex: 5,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    if (Responsive.isMobile(context)) ...[
+                                      Column(
                                         children: [
                                           const CustomCalendarView(),
-                                          Container(
-                                            constraints: const BoxConstraints(),
-                                            child: WorkItemsList(
-                                              title: 'To do',
-                                              getCardDetails: filterTodoList,
-                                            ),
+                                          WorkItemsList(
+                                            title: 'To d',
+                                            getCardDetails: filterTodoList,
                                           ),
                                         ],
                                       ),
-                                    ),
-                                  ] else ...[
-                                    if (showTableView) ...[
-                                      filterTodoList.isNotEmpty
-                                          ? Container(
-                                              margin: const EdgeInsets.symmetric(horizontal: 10),
-                                              child: LayoutBuilder(builder: (context, constraints) {
-                                                final availableWidth = constraints.maxWidth;
-                                                return Table(
-                                                  columnWidths: {
-                                                    0: FixedColumnWidth(availableWidth * 0.25),
-                                                    1: FixedColumnWidth(availableWidth * 0.18),
-                                                    2: FixedColumnWidth(availableWidth * 0.15),
-                                                    3: FixedColumnWidth(availableWidth * 0.15),
-                                                    4: FixedColumnWidth(availableWidth * 0.1),
-                                                    5: FixedColumnWidth(availableWidth * 0.1),
-                                                  },
-                                                  border: TableBorder(
-                                                    bottom: BorderSide(color: Colors.grey.withOpacity(.5), width: 1.5),
-                                                    horizontalInside: BorderSide(color: Colors.grey.withOpacity(.5), width: 1.5),
-                                                  ),
-                                                  children: [
-                                                    buildTableHeader(),
-                                                    ...tableRowList,
-                                                  ],
-                                                );
-                                              }),
-                                            )
-                                          : SizedBox(
-                                              height: 500,
-                                              width: width! * 0.9,
-                                              child: const Center(
-                                                child: Text(
-                                                  "No results found.",
-                                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                                ),
-                                              ),
-                                            ),
                                     ] else ...[
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: AppColor.secondary,
-                                          borderRadius: BorderRadius.circular(15),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                                        margin: Responsive.isMobile(context) ? null : const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                        child: filterTodoList.isNotEmpty
-                                            ? GridView.builder(
-                                                shrinkWrap: true,
-                                                physics: const ScrollPhysics(),
-                                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                                    crossAxisCount: Responsive.isMobile(context)
-                                                        ? 1
-                                                        : Responsive.isTablet(context) || isFilterOpen
-                                                            ? 2
-                                                            : 3,
-                                                    crossAxisSpacing: 10.0,
-                                                    mainAxisExtent: Responsive.isMobile(context) ? 197 : 150),
-                                                itemCount: filterTodoList.length,
-                                                itemBuilder: (context, index) => GestureDetector(
-                                                  onTap: () {
-                                                    final id = filterTodoList[index].workitemId;
-                                                    navigateBasedOnId(context, id!, ref);
-                                                  },
-                                                  child: CustomCard(index: index, cardDetails: filterTodoList),
-                                                ),
+                                      if (showTableView) ...[
+                                        filterTodoList.isNotEmpty
+                                            ? Container(
+                                                margin: const EdgeInsets.symmetric(horizontal: 10),
+                                                child: LayoutBuilder(builder: (context, constraints) {
+                                                  final availableWidth = constraints.maxWidth;
+                                                  return Table(
+                                                    columnWidths: {
+                                                      0: FixedColumnWidth(availableWidth * 0.25),
+                                                      1: FixedColumnWidth(availableWidth * 0.18),
+                                                      2: FixedColumnWidth(availableWidth * 0.15),
+                                                      3: FixedColumnWidth(availableWidth * 0.15),
+                                                      4: FixedColumnWidth(availableWidth * 0.1),
+                                                      5: FixedColumnWidth(availableWidth * 0.1),
+                                                    },
+                                                    border: TableBorder(
+                                                      bottom: BorderSide(color: Colors.grey.withOpacity(.5), width: 1.5),
+                                                      horizontalInside: BorderSide(color: Colors.grey.withOpacity(.5), width: 1.5),
+                                                    ),
+                                                    children: [
+                                                      buildTableHeader(),
+                                                      ...tableRowList,
+                                                    ],
+                                                  );
+                                                }),
                                               )
-                                            : const Center(
-                                                child: Text(
-                                                  "No results found.",
-                                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                            : SizedBox(
+                                                height: 500,
+                                                width: width! * 0.9,
+                                                child: const Center(
+                                                  child: Text(
+                                                    "No results found.",
+                                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                                  ),
                                                 ),
                                               ),
-                                      ),
+                                      ] else ...[
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: AppColor.secondary,
+                                            borderRadius: BorderRadius.circular(15),
+                                          ),
+                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                                          margin: Responsive.isMobile(context) ? null : const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                          child: filterTodoList.isNotEmpty
+                                              ? GridView.builder(
+                                                  shrinkWrap: true,
+                                                  physics: const ScrollPhysics(),
+                                                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                                      crossAxisCount: Responsive.isMobile(context)
+                                                          ? 1
+                                                          : Responsive.isTablet(context) || isFilterOpen
+                                                              ? 2
+                                                              : 3,
+                                                      crossAxisSpacing: 10.0,
+                                                      mainAxisExtent: Responsive.isMobile(context) ? 197 : 150),
+                                                  itemCount: filterTodoList.length,
+                                                  itemBuilder: (context, index) => GestureDetector(
+                                                    onTap: () {
+                                                      final id = filterTodoList[index].workitemId;
+                                                      navigateBasedOnId(context, id!, ref);
+                                                    },
+                                                    child: CustomCard(index: index, cardDetails: filterTodoList),
+                                                  ),
+                                                )
+                                              : const Center(
+                                                  child: Text(
+                                                    "No results found.",
+                                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                                  ),
+                                                ),
+                                        ),
+                                      ]
                                     ]
-                                  ]
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

@@ -58,7 +58,8 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                 fcmToken: editUser?.fcmToken,
                 imageUrl: editUser?.image,
                 status: editUser?.status,
-                isOnline: editUser?.isOnline)
+                isOnline: editUser?.isOnline,
+                ref: ref)
             .then((value) => {
                   if (value == "success")
                     {

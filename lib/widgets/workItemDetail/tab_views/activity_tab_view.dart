@@ -28,8 +28,8 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
   final TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final workItemId = ref.read(selectedWorkItemId);
-    final User? user = ref.read(userDataProvider);
+    final workItemId = ref.watch(selectedWorkItemId);
+    final User? user = ref.watch(userDataProvider);
 
     return Column(
       children: [

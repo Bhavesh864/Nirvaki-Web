@@ -56,7 +56,6 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
         'id': widget.id,
         'item': propertyphotos,
       });
-      print(propertyphotos.toJson());
     });
   }
 
@@ -104,7 +103,6 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
         await referenceImagesToUpload.putFile(imageUrl);
       }
       imageUrl = await referenceImagesToUpload.getDownloadURL();
-      print("imageUrl--> $imageUrl");
       selectedImagesUrlList.add(imageUrl);
       selectedImagesTitleList.add(imageTitle);
     } catch (e) {
