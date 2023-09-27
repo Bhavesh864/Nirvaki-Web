@@ -26,8 +26,8 @@ class CustomTimeLineView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final workitemId = ref.read(selectedWorkItemId);
-    final User? user = ref.read(userDataProvider);
+    final workitemId = ref.watch(selectedWorkItemId);
+    final User? user = ref.watch(userDataProvider);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10),

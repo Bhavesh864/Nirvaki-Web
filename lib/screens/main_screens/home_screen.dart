@@ -13,6 +13,8 @@ import 'package:yes_broker/widgets/workitems/empty_work_item_list.dart';
 import 'package:yes_broker/widgets/workitems/workitems_list.dart';
 
 import '../../constants/app_constant.dart';
+import '../../constants/firebase/userModel/user_info.dart';
+import '../../riverpodstate/user_data.dart';
 import '../../widgets/app/speed_dial_button.dart';
 import '../../widgets/chat_modal_view.dart';
 
@@ -28,7 +30,14 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    getUserData();
     cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
+  }
+
+  getUserData() async {
+    final User? user = await User.getUser(AppConst.getAccessToken());
+    ref.read(userDataProvider.notifier).storeUserData(user!);
+    AppConst.setRole(user.role);
   }
 
   showChatDialog() {

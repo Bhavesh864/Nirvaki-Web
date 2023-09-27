@@ -37,6 +37,13 @@ Widget buildLeadQuestions(
             if (isRentSelected && option == "Plot") {
               return const SizedBox();
             }
+            if (isRentSelected || !isRentSelected) {
+              final indexToRemove = selectedValues.indexWhere((map) => map['id'] == 32);
+              if (indexToRemove != -1) {
+                selectedValues.removeAt(indexToRemove);
+                selectedValues = selectedValues;
+              }
+            }
             return ChipButton(
               text: option,
               bgColor: selectedValues.any((answer) => answer["id"] == question.questionId && answer["item"] == option)

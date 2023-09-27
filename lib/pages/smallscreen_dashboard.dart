@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/widgets/app/app_bar.dart';
 import 'package:yes_broker/widgets/app/speed_dial_button.dart';
+import '../constants/firebase/userModel/user_info.dart';
 import '../constants/functions/auth/auth_functions.dart';
 import '../constants/utils/constants.dart';
 import '../screens/account_screens/Teams/team_screen.dart';
@@ -23,42 +25,15 @@ class SmallScreen extends ConsumerStatefulWidget {
 }
 
 class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingObserver {
-  // @override
-  // void initState() {
-  //   WidgetsBinding.instance.addObserver(this);
-
-  //   super.initState();
-  // }
-
-  // @override
-  // void dispose() {
-  //   WidgetsBinding.instance.removeObserver(this);
-  //   super.dispose();
-  // }
-
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   switch (state) {
-  //     case AppLifecycleState.resumed:
-  //       ref.read(chatControllerProvider).setUserState(true);
-  //       break;
-  //     case AppLifecycleState.inactive:
-  //     case AppLifecycleState.detached:
-  //     case AppLifecycleState.paused:
-  //       ref.read(chatControllerProvider).setUserState(false);
-  //       break;
-  //   }
-  //   super.didChangeAppLifecycleState(state);
-  // }
-
   @override
   Widget build(BuildContext context) {
     final currentIndex = ref.watch(currentIndexProvider);
     final selectedItem = ref.watch(selectedProfileItemProvider);
+    final User? user = ref.watch(userDataProvider);
     AppConst.setOuterContext(context);
 
     return Scaffold(
-      appBar: mobileAppBar(context, (selectedVal) {
+      appBar: mobileAppBar(user!, context, (selectedVal) {
         if (selectedVal != 'Logout') {
           final ProfileMenuItems profile = profileMenuItems.firstWhere((element) => element.title == selectedVal);
           ref.read(selectedProfileItemProvider.notifier).setSelectedItem(profile);

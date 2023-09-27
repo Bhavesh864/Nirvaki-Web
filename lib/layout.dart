@@ -13,6 +13,7 @@ import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/pages/Auth/login/login_screen.dart';
 import 'package:yes_broker/pages/largescreen_dashboard.dart';
 import 'package:yes_broker/pages/smallscreen_dashboard.dart';
+import 'package:yes_broker/riverpodstate/user_data.dart';
 
 import 'package:yes_broker/screens/main_screens/public_view_screen/public_inventory_details.dart';
 import 'package:yes_broker/screens/main_screens/public_view_screen/public_lead_details.dart';
@@ -55,7 +56,14 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
       userinfo.User.getUser(token, ref: ref);
     }
     setAllNotification();
+    getUserData();
     super.initState();
+  }
+
+  getUserData() async {
+    final userinfo.User? user = await userinfo.User.getUser(AppConst.getAccessToken());
+    ref.read(userDataProvider.notifier).storeUserData(user!);
+    AppConst.setRole(user.role);
   }
 
   @override
