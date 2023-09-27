@@ -92,6 +92,7 @@ class ChatRepository {
             lastMessage: chatContact.lastMessage,
             lastMessageIsSeen: chatContact.lastMessageIsSeen,
             lastMessageSenderId: chatContact.lastMessageSenderId,
+            role: chatContact.role,
           ),
         );
       }
@@ -124,9 +125,23 @@ class ChatRepository {
     bool isSender,
   ) async {
     try {
-      await firestore.collection('users').doc(AppConst.getAccessToken()).collection('chats').doc(recieverUserId).collection('messages').doc(messageId).update({'isSeen': true});
+      await firestore
+          .collection('users')
+          .doc(AppConst.getAccessToken())
+          .collection('chats')
+          .doc(recieverUserId)
+          .collection('messages')
+          .doc(messageId)
+          .update({'isSeen': true});
 
-      await firestore.collection('users').doc(recieverUserId).collection('chats').doc(AppConst.getAccessToken()).collection('messages').doc(messageId).update({'isSeen': true});
+      await firestore
+          .collection('users')
+          .doc(recieverUserId)
+          .collection('chats')
+          .doc(AppConst.getAccessToken())
+          .collection('messages')
+          .doc(messageId)
+          .update({'isSeen': true});
     } catch (e) {
       customSnackBar(
         context: context,
@@ -197,6 +212,7 @@ class ChatRepository {
       lastMessage: message,
       lastMessageIsSeen: false,
       lastMessageSenderId: AppConst.getAccessToken().toString(),
+      role: senderUserData.role,
     );
 
     if (isGroupChat) {
@@ -226,6 +242,7 @@ class ChatRepository {
         lastMessage: message,
         lastMessageIsSeen: false,
         lastMessageSenderId: AppConst.getAccessToken().toString(),
+        role: receiverUserData.role,
       );
       await firestore
           .collection('users')

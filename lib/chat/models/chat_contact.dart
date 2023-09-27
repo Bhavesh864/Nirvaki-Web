@@ -10,6 +10,7 @@ class ChatContact {
   final String lastMessage;
   final bool lastMessageIsSeen;
   final String lastMessageSenderId;
+  final String role;
 
   ChatContact({
     required this.name,
@@ -19,6 +20,7 @@ class ChatContact {
     required this.lastMessage,
     required this.lastMessageIsSeen,
     required this.lastMessageSenderId,
+    required this.role,
   });
 
   Map<String, dynamic> toMap() {
@@ -30,6 +32,7 @@ class ChatContact {
       'lastMessage': lastMessage,
       'lastMessageIsSeen': lastMessageIsSeen,
       'lastMessageSenderId': lastMessageSenderId,
+      'role': role,
     };
   }
 
@@ -42,6 +45,7 @@ class ChatContact {
       lastMessage: map['lastMessage'] as String,
       lastMessageIsSeen: map['lastMessageIsSeen'] as bool,
       lastMessageSenderId: map['lastMessageSenderId'] as String,
+      role: map['role'] as String,
     );
   }
 }

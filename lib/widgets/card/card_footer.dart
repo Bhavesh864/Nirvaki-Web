@@ -8,7 +8,7 @@ import '../../constants/app_constant.dart';
 import '../../constants/functions/make_call_function.dart';
 import '../../constants/functions/navigation/navigation_functions.dart';
 import '../../constants/utils/constants.dart';
-import '../workItemDetail/Inventory_details_header.dart';
+import '../workItemDetail/inventory_details_header.dart';
 
 class CardFooter extends StatelessWidget {
   final int index;
