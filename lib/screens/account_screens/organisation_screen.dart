@@ -36,52 +36,66 @@ class _OrganisationScreenState extends ConsumerState<OrganisationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: StreamBuilder(
-          stream: brokerInfo,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Loader();
-            }
-            if (snapshot.hasData) {
-              final dataList = snapshot.data;
-              BrokerInfo broker = BrokerInfo.fromSnapshot(dataList!);
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (Responsive.isMobile(context))
-                    const Padding(
-                      padding: EdgeInsets.only(left: 5.0),
-                      child: AppText(
-                        text: "Organistion",
-                        fontWeight: FontWeight.w700,
-                        fontsize: 16,
-                      ),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        body: Padding(
+          // padding: const EdgeInsets.symmetric(horizontal: 15),
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: Responsive.isMobile(context) ? 0 : 10),
+          child: StreamBuilder(
+              stream: brokerInfo,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Loader();
+                }
+                if (snapshot.hasData) {
+                  final dataList = snapshot.data;
+                  BrokerInfo broker = BrokerInfo.fromSnapshot(dataList!);
+                  return SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (Responsive.isMobile(context))
+                          const Padding(
+                            // padding: EdgeInsets.only(left: 5.0),
+                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+                            child: AppText(
+                              text: "Organistion",
+                              fontWeight: FontWeight.w700,
+                              fontsize: 16,
+                            ),
+                          ),
+                        CustomCompanyDetailsCard(
+                          isPersonalDetails: false,
+                          brokerData: broker,
+                          isAdressDetails: false,
+                        ),
+                        SizedBox(height: Responsive.isMobile(context) ? 20 : 40),
+                        CustomCompanyDetailsCard(
+                          title: 'Company Information',
+                          brokerData: broker,
+                          isPersonalDetails: true,
+                          isAdressDetails: false,
+                        ),
+                        SizedBox(height: Responsive.isMobile(context) ? 20 : 40),
+                        CustomCompanyDetailsCard(
+                          title: 'Company Address',
+                          brokerData: broker,
+                          isPersonalDetails: false,
+                          isAdressDetails: true,
+                        ),
+                      ],
                     ),
-                  CustomCompanyDetailsCard(
-                    isPersonalDetails: false,
-                    brokerData: broker,
-                    isAdressDetails: false,
-                  ),
-                  CustomCompanyDetailsCard(
-                    title: 'Company Information',
-                    brokerData: broker,
-                    isPersonalDetails: true,
-                    isAdressDetails: false,
-                  ),
-                  CustomCompanyDetailsCard(
-                    title: 'Company Address',
-                    brokerData: broker,
-                    isPersonalDetails: false,
-                    isAdressDetails: true,
-                  ),
-                ],
-              );
-            }
-            return const SizedBox();
-          }),
+                  );
+                }
+                return const SizedBox();
+              }),
+        ),
+      ),
     );
   }
 }
@@ -108,6 +122,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
   bool isNameEditing = false;
   bool isPersonalDetailsEditing = false;
   bool isAddressEditing = false;
+  bool isPhotoUploading = false;
 
   final TextEditingController companyNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -119,7 +134,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
   final TextEditingController stateController = TextEditingController();
   File? profilePhoto;
   Uint8List? webProfile;
-  String? uploadProfile;
+  ValueNotifier<String> uploadProfile = ValueNotifier<String>('');
 
   void startEditingFullName(String fullName) {
     setState(() {
@@ -193,12 +208,21 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
   }
 
   @override
+  void initState() {
+    super.initState();
+    uploadProfile.addListener(() => setState(() {
+          isPhotoUploading = false;
+        }));
+  }
+
+  @override
   Widget build(BuildContext context) {
     final BrokerInfo broker = widget.brokerData;
+
     if (widget.title == null) {
       return Card(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          padding: const EdgeInsets.only(left: 5, right: 15, top: 10, bottom: 10),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -213,10 +237,13 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                       if (isNameEditing) {
                         selectImage().then((value) {
                           if (value != "") {
+                            setState(() {
+                              isPhotoUploading = true;
+                            });
                             uploadImageToFirebases(value).then((url) {
                               if (url != "") {
                                 setState(() {
-                                  uploadProfile = url;
+                                  uploadProfile.value = url;
                                 });
                               }
                             });
@@ -240,7 +267,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                     ),
                   ),
                   const SizedBox(
-                    width: 20,
+                    width: 10,
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -249,7 +276,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                       if (isNameEditing) ...[
                         SizedBox(
                           height: 50,
-                          width: companyNameController.text.length * 13,
+                          width: Responsive.isDesktop(context) ? 300 : 180,
                           child: CustomTextInput(
                             controller: companyNameController,
                             onFieldSubmitted: (newValue) {},
@@ -271,65 +298,115 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
               if (isNameEditing) ...[
                 Row(
                   children: [
-                    CustomButton(
-                      height: 39,
-                      text: "cancel",
-                      borderColor: AppColor.primary,
-                      onPressed: () {
-                        cancelEditingFullName();
-                      },
-                      buttonColor: Colors.white,
-                      textColor: AppColor.primary,
-                    ),
-                    const SizedBox(width: 7),
-                    CustomButton(
-                      text: "Save",
-                      borderColor: AppColor.primary,
-                      height: 39,
-                      onPressed: () {
-                        updateBrokerInfo(
-                                brokerId: broker.brokerid,
-                                role: broker.role,
-                                companyName: companyNameController.text,
-                                mobile: broker.brokercompanynumber,
-                                whatsapp: broker.brokercompanywhatsapp,
-                                email: broker.brokercompanyemail,
-                                image: broker.brokerlogo,
-                                companyAddress: broker.brokercompanyaddress)
-                            .then((value) => {cancelEditingFullName()});
-                      },
-                    ),
+                    if (Responsive.isMobile(context)) ...[
+                      InkWell(
+                        onTap: () {
+                          cancelEditingFullName();
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(5),
+                          child: Icon(
+                            Icons.cancel_outlined,
+                            size: 25,
+                            color: Colors.black,
+                          ),
+                        ),
+                      )
+                    ] else ...[
+                      CustomButton(
+                        height: 39,
+                        text: "cancel",
+                        borderColor: AppColor.primary,
+                        onPressed: () {
+                          updateBrokerInfo(
+                                  brokerId: broker.brokerid,
+                                  role: broker.role,
+                                  companyName: companyNameController.text,
+                                  mobile: broker.brokercompanynumber,
+                                  whatsapp: broker.brokercompanywhatsapp,
+                                  email: broker.brokercompanyemail,
+                                  image: broker.brokerlogo,
+                                  companyAddress: broker.brokercompanyaddress)
+                              .then((value) => {cancelEditingFullName()});
+                        },
+                        buttonColor: Colors.white,
+                        textColor: AppColor.primary,
+                      ),
+                    ],
+                    SizedBox(width: Responsive.isDesktop(context) ? 10 : 4),
+                    if (isPhotoUploading) ...[
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: Responsive.isDesktop(context) ? 10 : 6),
+                        child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: Center(
+                                child: CircularProgressIndicator.adaptive(
+                              strokeWidth: Responsive.isDesktop(context) ? 4 : 2,
+                            ))),
+                      ),
+                    ] else ...[
+                      if (Responsive.isMobile(context)) ...[
+                        InkWell(
+                          onTap: () {
+                            updateBrokerInfo(
+                                    brokerId: broker.brokerid,
+                                    role: broker.role,
+                                    companyName: companyNameController.text,
+                                    mobile: broker.brokercompanynumber,
+                                    whatsapp: broker.brokercompanywhatsapp,
+                                    email: broker.brokercompanyemail,
+                                    image: uploadProfile.value != '' ? uploadProfile.value : broker.brokerlogo,
+                                    companyAddress: broker.brokercompanyaddress)
+                                .then((value) => {
+                                      cancelEditingFullName(),
+                                      profilePhoto = null,
+                                      webProfile = null,
+                                      uploadProfile.value = '',
+                                    });
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Icon(
+                              Icons.check,
+                              size: 25,
+                              color: AppColor.primary,
+                            ),
+                          ),
+                        )
+                      ] else ...[
+                        CustomButton(
+                          text: "Save",
+                          borderColor: AppColor.primary,
+                          height: 39,
+                          onPressed: () {
+                            updateBrokerInfo(
+                                    brokerId: broker.brokerid,
+                                    role: broker.role,
+                                    companyName: companyNameController.text,
+                                    mobile: broker.brokercompanynumber,
+                                    whatsapp: broker.brokercompanywhatsapp,
+                                    email: broker.brokercompanyemail,
+                                    image: uploadProfile.value != '' ? uploadProfile.value : broker.brokerlogo,
+                                    companyAddress: broker.brokercompanyaddress)
+                                .then((value) => {
+                                      cancelEditingFullName(),
+                                      profilePhoto = null,
+                                      webProfile = null,
+                                      uploadProfile.value = '',
+                                    });
+                          },
+                        ),
+                      ],
+                    ],
                   ],
                 ),
               ] else ...[
                 GestureDetector(
-                  onTap: () {
-                    startEditingFullName(broker.companyname!);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Container(
-                      padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: const Color(0xff898989).withOpacity(0.5),
-                        ),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: const Row(
-                        children: [
-                          Icon(
-                            Icons.edit_outlined,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text('Edit'),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                    onTap: () {
+                      startEditingFullName(broker.companyname!);
+                    },
+                    child: const EditBlock()),
               ]
             ],
           ),
@@ -366,7 +443,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                           buttonColor: Colors.white,
                           textColor: AppColor.primary,
                         ),
-                        const SizedBox(width: 7),
+                        SizedBox(width: Responsive.isDesktop(context) ? 10 : 7),
                         CustomButton(
                           text: "Save",
                           borderColor: AppColor.primary,
@@ -405,43 +482,23 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                     ),
                   ] else ...[
                     GestureDetector(
-                      onTap: () {
-                        if (widget.isPersonalDetails) {
-                          startEditingPersonalDetails(
-                            broker.companyname!,
-                            broker.brokercompanyemail!,
-                            broker.brokercompanynumber!,
-                          );
-                        } else if (widget.isAdressDetails) {
-                          startEditingAddressDetail(
-                            broker.brokercompanyaddress['city'],
-                            broker.brokercompanyaddress['state'],
-                            broker.brokercompanyaddress['Addressline1'],
-                            broker.brokercompanyaddress['Addressline2'],
-                          );
-                        }
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: const Color(0xff898989).withOpacity(0.5),
-                          ),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: const Row(
-                          children: [
-                            Icon(
-                              Icons.edit_outlined,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text('Edit'),
-                          ],
-                        ),
-                      ),
-                    ),
+                        onTap: () {
+                          if (widget.isPersonalDetails) {
+                            startEditingPersonalDetails(
+                              broker.companyname!,
+                              broker.brokercompanyemail!,
+                              broker.brokercompanynumber!,
+                            );
+                          } else if (widget.isAdressDetails) {
+                            startEditingAddressDetail(
+                              broker.brokercompanyaddress['city'],
+                              broker.brokercompanyaddress['state'],
+                              broker.brokercompanyaddress['Addressline1'],
+                              broker.brokercompanyaddress['Addressline2'],
+                            );
+                          }
+                        },
+                        child: const EditBlock()),
                   ]
                 ],
               ),
@@ -451,9 +508,9 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                   child: Table(
                     children: [
                       TableRow(children: [
-                        buildInfoFields('Email address', broker.brokercompanyemail!, isPersonalDetailsEditing, emailController),
-                        buildInfoFields('Phone ', broker.brokercompanynumber!, isPersonalDetailsEditing, phoneController),
-                        const SizedBox(),
+                        buildInfoFields('Email address', broker.brokercompanyemail!, isPersonalDetailsEditing, emailController, context),
+                        buildInfoFields('Phone ', broker.brokercompanynumber!, isPersonalDetailsEditing, phoneController, context),
+                        if (Responsive.isDesktop(context)) const SizedBox(),
                       ])
                     ],
                   ),
@@ -464,9 +521,9 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                   child: Table(
                     children: [
                       TableRow(children: [
-                        buildInfoFields('Address 1', broker.brokercompanyaddress['Addressline1'], isAddressEditing, address1Controller),
-                        buildInfoFields('City', broker.brokercompanyaddress['city'], isAddressEditing, cityController),
-                        const SizedBox(),
+                        buildInfoFields('Address 1', broker.brokercompanyaddress['Addressline1'], isAddressEditing, address1Controller, context),
+                        buildInfoFields('City', broker.brokercompanyaddress['city'], isAddressEditing, cityController, context),
+                        if (Responsive.isDesktop(context)) const SizedBox(),
                       ])
                     ],
                   ),
@@ -476,9 +533,9 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                   child: Table(
                     children: [
                       TableRow(children: [
-                        buildInfoFields('Address 2', broker.brokercompanyaddress['Addressline2'], isAddressEditing, address2Controller),
-                        buildInfoFields('State', broker.brokercompanyaddress['state'], isAddressEditing, stateController),
-                        const SizedBox(),
+                        buildInfoFields('Address 2', broker.brokercompanyaddress['Addressline2'], isAddressEditing, address2Controller, context),
+                        buildInfoFields('State', broker.brokercompanyaddress['state'], isAddressEditing, stateController, context),
+                        if (Responsive.isDesktop(context)) const SizedBox(),
                       ])
                     ],
                   ),
