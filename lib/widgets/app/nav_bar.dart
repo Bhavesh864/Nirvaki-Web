@@ -9,6 +9,7 @@ import 'package:yes_broker/Customs/custom_chip.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/userModel/notification_model.dart';
 import 'package:yes_broker/customs/loader.dart';
+import 'package:yes_broker/riverpodstate/user_data.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/navigation/navigation_functions.dart';
@@ -29,147 +30,131 @@ class LargeScreenNavBar extends ConsumerStatefulWidget {
 }
 
 class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
-  late Future<User?> user;
   @override
   void initState() {
     super.initState();
-    user = User.getUser(AppConst.getAccessToken(), ref: ref);
-    // print(AppConst.getRole() == "Broker" && profileMenuItems.any((element) => element.title != "Team"));
-    // if (AppConst.getRole() == "Broker" && profileMenuItems.any((element) => element.title != "Team")) {
-    //   profileMenuItems.insert(1, ProfileMenuItems(title: "Team", screen: const TeamScreen(), id: 2));
-    // }
   }
 
   @override
   Widget build(BuildContext context) {
     final notificationCollection = FirebaseFirestore.instance.collection("notification");
+    final userData = ref.watch(userDataProvider);
     return Container(
-      height: 70,
-      margin: const EdgeInsets.only(bottom: 5, right: 5),
-      decoration: const BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: AppColor.secondary,
-            spreadRadius: 12,
-            blurRadius: 4,
-            offset: Offset(5, -15),
-          ),
-        ],
-        color: Colors.white,
-      ),
-      child: FutureBuilder(
-        future: user,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  largeScreenView("${snapshot.data?.userfirstname} ${snapshot.data?.userlastname}", context),
-                  const Spacer(),
-                  StreamBuilder(
-                      stream: notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).where('isRead', isEqualTo: false).snapshots(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          final notificationCount = snapshot.data!.docs.length;
+        height: 70,
+        margin: const EdgeInsets.only(bottom: 5, right: 5),
+        decoration: const BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: AppColor.secondary,
+              spreadRadius: 12,
+              blurRadius: 4,
+              offset: Offset(5, -15),
+            ),
+          ],
+          color: Colors.white,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            largeScreenView("${userData?.userfirstname ?? ""} ${userData?.userlastname ?? ""}", context),
+            const Spacer(),
+            StreamBuilder(
+                stream: notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).where('isRead', isEqualTo: false).snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final notificationCount = snapshot.data!.docs.length;
 
-                          return Stack(
-                            children: <Widget>[
-                              InkWell(
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return const NotificationDialogBox();
-                                    },
-                                  );
-                                },
-                                child: const Icon(
-                                  Icons.notifications_none,
-                                  size: 25,
-                                ),
-                              ),
-                              if (notificationCount > 0)
-                                Positioned(
-                                  right: 0,
-                                  child: Container(
-                                    padding: const EdgeInsets.all(1),
-                                    decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    constraints: const BoxConstraints(
-                                      minWidth: 12,
-                                      minHeight: 12,
-                                    ),
-                                    child: Text(
-                                      notificationCount.toString(),
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 8,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                )
-                            ],
-                          );
-                        }
-                        return const SizedBox();
-                      }),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  PopupMenuButton(
-                    onCanceled: () {},
-                    onSelected: (value) {
-                      widget.onOptionSelect(value);
-                    },
-                    color: Colors.white.withOpacity(1),
-                    offset: const Offset(200, 40),
-                    itemBuilder: (contex) {
-                      addOrRemoveTeamAndOrganization(snapshot);
-                      return profileMenuItems.map(
-                        (e) {
-                          return popupMenuItem(e.title);
-                        },
-                      ).toList();
-                    },
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      margin: const EdgeInsets.only(right: 10),
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(snapshot.data!.image.trim().isEmpty ? noImg : snapshot.data!.image),
+                    return Stack(
+                      children: <Widget>[
+                        InkWell(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return const NotificationDialogBox();
+                              },
+                            );
+                          },
+                          child: const Icon(
+                            Icons.notifications_none,
+                            size: 25,
+                          ),
                         ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
+                        if (notificationCount > 0)
+                          Positioned(
+                            right: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(1),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              constraints: const BoxConstraints(
+                                minWidth: 12,
+                                minHeight: 12,
+                              ),
+                              child: Text(
+                                notificationCount.toString(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 8,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          )
+                      ],
+                    );
+                  }
+                  return const SizedBox();
+                }),
+            const SizedBox(
+              width: 20,
+            ),
+            PopupMenuButton(
+              onCanceled: () {},
+              onSelected: (value) {
+                widget.onOptionSelect(value);
+              },
+              color: Colors.white.withOpacity(1),
+              offset: const Offset(200, 40),
+              itemBuilder: (contex) {
+                addOrRemoveTeamAndOrganization(userData!);
+                return profileMenuItems.map(
+                  (e) {
+                    return popupMenuItem(e.title);
+                  },
+                ).toList();
+              },
+              child: Container(
+                height: 30,
+                width: 30,
+                margin: const EdgeInsets.only(right: 10),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(userData?.image ?? noImg),
                   ),
-                ],
-              );
-            }
-          }
-          return const SizedBox();
-        },
-      ),
-    );
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ],
+        ));
   }
 }
 
-void addOrRemoveTeamAndOrganization(AsyncSnapshot<User?> snapshot) {
+void addOrRemoveTeamAndOrganization(User userdata) {
   final teamExists = profileMenuItems.any((element) => element.title == "Team");
   final organizationExists = profileMenuItems.any((element) => element.title == "Organization");
-  if (!teamExists && snapshot.data!.role.contains("Broker")) {
+  if (!teamExists && userdata.role.contains("Broker")) {
     profileMenuItems.insert(1, ProfileMenuItems(title: "Team", screen: const TeamScreen(), id: 2));
-  } else if (teamExists && !snapshot.data!.role.contains("Broker")) {
+  } else if (teamExists && !userdata.role.contains("Broker")) {
     profileMenuItems.removeWhere((element) => element.title == "Team");
   }
-  if (!organizationExists && snapshot.data!.role.contains("Broker")) {
+  if (!organizationExists && userdata.role.contains("Broker")) {
     profileMenuItems.insert(2, ProfileMenuItems(title: "Organization", screen: const Center(child: OrganisationScreen()), id: 7));
-  } else if (organizationExists && !snapshot.data!.role.contains("Broker")) {
+  } else if (organizationExists && !userdata.role.contains("Broker")) {
     profileMenuItems.removeWhere((element) => element.title == "Organization");
   }
 }

@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:responsive_builder/responsive_builder.dart';
-
-import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
-import 'package:yes_broker/widgets/app/nav_bar.dart';
+
 import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
+import 'nav_bar.dart';
 
-AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect, WidgetRef ref) {
+AppBar mobileAppBar(User? user, BuildContext context, void Function(String) onOptionSelect, WidgetRef ref) {
   return AppBar(
     foregroundColor: Colors.black,
     scrolledUnderElevation: 0.0,
@@ -29,42 +27,34 @@ AppBar mobileAppBar(BuildContext context, void Function(String) onOptionSelect, 
       ],
     ),
     actions: [
-      FutureBuilder(
-          future: User.getUser(AppConst.getAccessToken().toString(), ref: ref),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return PopupMenuButton(
-                  onSelected: (value) {
-                    onOptionSelect(value);
-                  },
-                  color: Colors.white.withOpacity(1),
-                  offset: const Offset(200, 40),
-                  itemBuilder: (context) {
-                    addOrRemoveTeamAndOrganization(snapshot);
-                    return profileMenuItems.map(
-                      (e) {
-                        return appBarPopupMenuItem(e.title, onOptionSelect);
-                      },
-                    ).toList();
-                  },
-                  child: Container(
-                    height: 25,
-                    width: 35,
-                    margin: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(
-                          snapshot.data!.image.isEmpty ? noImg : snapshot.data!.image.toString(),
-                        ),
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ));
-            }
-
-            return const SizedBox.shrink();
-          }),
+      PopupMenuButton(
+          onSelected: (value) {
+            onOptionSelect(value);
+          },
+          color: Colors.white.withOpacity(1),
+          offset: const Offset(200, 40),
+          itemBuilder: (context) {
+            addOrRemoveTeamAndOrganization(user!);
+            return profileMenuItems.map(
+              (e) {
+                return appBarPopupMenuItem(e.title, onOptionSelect);
+              },
+            ).toList();
+          },
+          child: Container(
+            height: 25,
+            width: 35,
+            margin: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(
+                  user?.image ?? noImg,
+                ),
+              ),
+              borderRadius: BorderRadius.circular(12),
+            ),
+          )),
     ],
   );
 }

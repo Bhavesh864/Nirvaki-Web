@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart' as user;
+import 'package:yes_broker/riverpodstate/user_data.dart';
 import '../../app_constant.dart';
 
 Future<String> sendInvitationEmail({
@@ -68,7 +69,9 @@ Future<String> updateTeamMember(
     required fcmToken,
     required imageUrl,
     required status,
-    required isOnline}) async {
+    required isOnline,
+    required WidgetRef ref}) async {
+  final existingUser = ref.read(userDataProvider.notifier);
   var res = "pending";
   try {
     final user.User items = user.User(
@@ -88,10 +91,10 @@ Future<String> updateTeamMember(
         image: imageUrl);
     await user.User.updateUser(items).then((value) => {
           res = "success",
-          UserHiveMethods.addData(
-            key: userId,
-            data: items,
-          )
+          if (ref.read(userDataProvider)?.userId == userId)
+            {
+              existingUser.storeUserData(items),
+            }
         });
     return res;
   } catch (e) {
