@@ -10,75 +10,7 @@ import '../../Customs/custom_text.dart';
 import '../../constants/utils/colors.dart';
 import 'nav_bar.dart';
 
-class MobileAppBar extends ConsumerStatefulWidget {
-  final Function(String) onOptionSelect;
-  final User user;
-
-  const MobileAppBar({
-    Key? key,
-    required this.onOptionSelect,
-    required this.user,
-  }) : super(key: key);
-
-  @override
-  ConsumerState<MobileAppBar> createState() => _MobileAppBarState();
-}
-
-class _MobileAppBarState extends ConsumerState<MobileAppBar> {
-  @override
-  AppBar build(BuildContext context) {
-    return AppBar(
-      foregroundColor: Colors.black,
-      scrolledUnderElevation: 0.0,
-      backgroundColor: Colors.white,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          ScreenTypeLayout.builder(
-            breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
-            mobile: (p0) => const CustomText(
-              title: 'YesBroker',
-              fontWeight: FontWeight.bold,
-              size: 16,
-            ),
-          ),
-        ],
-      ),
-      actions: [
-        PopupMenuButton(
-            onSelected: (value) {
-              widget.onOptionSelect(value);
-            },
-            color: Colors.white.withOpacity(1),
-            offset: const Offset(200, 40),
-            itemBuilder: (context) {
-              addOrRemoveTeamAndOrganization(widget.user);
-              return profileMenuItems.map(
-                (e) {
-                  return appBarPopupMenuItem(e.title, widget.onOptionSelect);
-                },
-              ).toList();
-            },
-            child: Container(
-              height: 25,
-              width: 35,
-              margin: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(
-                    widget.user.image.isEmpty ? noImg : widget.user.image.toString(),
-                  ),
-                ),
-                borderRadius: BorderRadius.circular(12),
-              ),
-            )),
-      ],
-    );
-  }
-}
-
-AppBar mobileAppBar(User user, BuildContext context, void Function(String) onOptionSelect, WidgetRef ref) {
+AppBar mobileAppBar(User? user, BuildContext context, void Function(String) onOptionSelect, WidgetRef ref) {
   return AppBar(
     foregroundColor: Colors.black,
     scrolledUnderElevation: 0.0,
@@ -104,7 +36,7 @@ AppBar mobileAppBar(User user, BuildContext context, void Function(String) onOpt
           color: Colors.white.withOpacity(1),
           offset: const Offset(200, 40),
           itemBuilder: (context) {
-            addOrRemoveTeamAndOrganization(user);
+            addOrRemoveTeamAndOrganization(user!);
             return profileMenuItems.map(
               (e) {
                 return appBarPopupMenuItem(e.title, onOptionSelect);
@@ -119,7 +51,7 @@ AppBar mobileAppBar(User user, BuildContext context, void Function(String) onOpt
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: NetworkImage(
-                  user.image.isEmpty ? noImg : user.image.toString(),
+                  user?.image ?? noImg,
                 ),
               ),
               borderRadius: BorderRadius.circular(12),

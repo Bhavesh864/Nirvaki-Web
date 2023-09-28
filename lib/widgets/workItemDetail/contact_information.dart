@@ -43,6 +43,20 @@ class ContactInformation extends StatelessWidget {
             ],
           ),
         ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Icon(
+              Icons.apartment_outlined,
+            ),
+            CustomText(
+              title: customerinfo.companyname,
+              size: 12,
+              fontWeight: FontWeight.w400,
+              color: const Color(0xFFA8A8A8),
+            ),
+          ],
+        ),
         ListTile(
           minVerticalPadding: 0,
           contentPadding: const EdgeInsets.all(0),
@@ -61,7 +75,6 @@ class ContactInformation extends StatelessWidget {
           ),
         ),
         ListTile(
-          minVerticalPadding: 0,
           onTap: () => makePhoneCall(customerinfo.mobile!),
           contentPadding: const EdgeInsets.all(0),
           dense: true,
