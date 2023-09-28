@@ -1,4 +1,5 @@
 // ignore_for_file: constant_identifier_names
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,6 +8,7 @@ import 'package:yes_broker/constants/functions/navigation/navigation_functions.d
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/widgets/workitems/workitem_filter_view.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
+import '../../constants/functions/filterdataAccordingRole/data_according_role.dart';
 import '../../constants/utils/constants.dart';
 import '../../riverpodstate/common_index_state.dart';
 import '../../routes/routes.dart';
@@ -62,7 +64,8 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
   final TextEditingController searchController = TextEditingController();
   bool isFilterOpen = false;
   bool showTableView = false;
-  Future<List<CardDetails>>? future;
+  late Stream<QuerySnapshot<Map<String, dynamic>>> cardDetails;
+
   List<String> selectedFilters = [];
   RangeValues rateRange = const RangeValues(0, 2000000000);
 
@@ -70,8 +73,12 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
 
   @override
   void initState() {
-    future = CardDetails.getCardDetails();
     super.initState();
+    setCardDetails();
+  }
+
+  void setCardDetails() {
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
   }
 
   @override
@@ -88,8 +95,8 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
         ],
         color: Colors.white,
       ),
-      child: FutureBuilder(
-        future: future,
+      child: StreamBuilder(
+        stream: cardDetails,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -97,8 +104,8 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
             );
           }
           if (snapshot.hasData) {
-            List<CardDetails> leadList = snapshot.data!.where((item) => item.cardType == "LD").toList();
-
+            final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref);
+            final List<CardDetails> leadList = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "LD").toList();
             List<CardDetails> filteredleadList = leadList.where((item) {
               if (searchController.text.isEmpty) {
                 return true;

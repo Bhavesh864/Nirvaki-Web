@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/constants/functions/assingment_methods.dart';
 import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/dropdown_field.dart';
 import 'package:yes_broker/customs/label_text_field.dart';
@@ -195,7 +196,8 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                               future: User.getAllUsers(currentUserData!),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  final List<String> userNames = snapshot.data!.map((user) => "${user.userfirstname} ${user.userlastname}").toList();
+                                  final filter = snapshot.data?.where((element) => element.userId != editUser?.userId).toList();
+                                  final List<String> userNames = filter!.map((user) => "${user.userfirstname} ${user.userlastname}").toList();
                                   return Container(
                                     margin: const EdgeInsets.all(5),
                                     child: DropDownField(

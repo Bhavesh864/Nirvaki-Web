@@ -189,6 +189,27 @@ class User extends HiveObject {
     }
   }
 
+  static Future<List<User>> getUserAllRelatedToBrokerId(User currentuser, String managerId) async {
+    try {
+      final QuerySnapshot querySnapshot = await usersCollection.where("brokerId", isEqualTo: currentuser.brokerId).get();
+      final List<User> users = [];
+      for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        if (documentSnapshot.exists) {
+          final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+          final User user = User.fromMap(data);
+          users.add(user);
+        }
+      }
+      final List<User> userRelatedBYmanager = users.where((element) => element.managerid == managerId).toList();
+      return userRelatedBYmanager;
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to get users: $error');
+      }
+      return [];
+    }
+  }
+
   static Future<User?> getUser(String userId, {WidgetRef? ref}) async {
     try {
       // final hiveUserData = UserHiveMethods.getdata(userId);
