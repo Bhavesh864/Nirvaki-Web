@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/pages/smallscreen_dashboard.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 import '../../../chat/controller/chat_controller.dart';
 import '../../../routes/routes.dart';
@@ -15,6 +16,7 @@ void userLogout(WidgetRef ref, BuildContext context) {
   authentication.signOut().then(
         (value) => {
           ref.read(chatControllerProvider).setUserState(false),
+          ref.read(currentIndexProvider.notifier).update((state) => 0),
           context.beamToReplacementNamed(AppRoutes.loginScreen),
           User.updateFcmToken(fcmtoken: null, userid: AppConst.getAccessToken()!),
           UserHiveMethods.deleteData(AppConst.getAccessToken()),

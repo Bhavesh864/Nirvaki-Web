@@ -19,10 +19,10 @@ class ContactInformation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
+          padding: const EdgeInsets.only(bottom: 0.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -44,6 +44,24 @@ class ContactInformation extends StatelessWidget {
           ),
         ),
         ListTile(
+          minVerticalPadding: 0,
+          contentPadding: const EdgeInsets.all(0),
+          leading: const Icon(
+            Icons.apartment_outlined,
+          ),
+          dense: true,
+          minLeadingWidth: 2,
+          horizontalTitleGap: 8,
+          titleAlignment: ListTileTitleAlignment.center,
+          title: CustomText(
+            title: customerinfo.companyname,
+            size: 12,
+            fontWeight: FontWeight.w400,
+            color: const Color(0xFFA8A8A8),
+          ),
+        ),
+        ListTile(
+          minVerticalPadding: 0,
           onTap: () => makePhoneCall(customerinfo.mobile!),
           contentPadding: const EdgeInsets.all(0),
           dense: true,
@@ -63,6 +81,7 @@ class ContactInformation extends StatelessWidget {
           minLeadingWidth: 0,
         ),
         ListTile(
+          minVerticalPadding: 0,
           onTap: () => launchWhatsapp(customerinfo.whatsapp, context),
           contentPadding: const EdgeInsets.all(0),
           dense: true,
@@ -77,6 +96,25 @@ class ContactInformation extends StatelessWidget {
           title: CustomText(
             title: customerinfo.whatsapp ?? 'Not Active',
             size: 12,
+            color: const Color(0xFFA8A8A8),
+          ),
+          minLeadingWidth: 0,
+        ),
+        ListTile(
+          onTap: () {},
+          contentPadding: const EdgeInsets.all(0),
+          dense: true,
+          visualDensity: const VisualDensity(vertical: -2),
+          leading: const CustomChip(
+            label: Icon(
+              Icons.mail_outline,
+              color: Colors.black,
+            ),
+            paddingHorizontal: 3,
+          ),
+          title: CustomText(
+            title: customerinfo.email ?? 'Not Active',
+            size: 13,
             color: const Color(0xFFA8A8A8),
           ),
           minLeadingWidth: 0,

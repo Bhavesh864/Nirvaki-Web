@@ -3,14 +3,11 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
-import 'package:yes_broker/constants/app_constant.dart';
 
-import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
-import '../../../riverpodstate/user_data.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 
 final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
 

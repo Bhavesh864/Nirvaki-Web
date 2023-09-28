@@ -10,7 +10,6 @@ import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/customs/custom_chip.dart';
 import 'package:yes_broker/riverpodstate/filter_list_items_provider.dart';
-import 'package:yes_broker/widgets/workitems/inventory_checkbox_options.dart';
 
 class FilterOptions {
   List<String> roomConfigurations = [];
@@ -62,7 +61,7 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
         child: SingleChildScrollView(
           child: Container(
-            height: 800,
+            // height: 800,
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -94,9 +93,9 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
                   ),
                 ],
                 SizedBox(
-                  height: !Responsive.isMobile(context) ? 650 : 700,
+                  // height: !Responsive.isMobile(context) ? 650 : 700,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Padding(
@@ -163,7 +162,7 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const WorkItemCheckboxOptions(),
+                      // const WorkItemCheckboxOptions(),
                     ],
                   ),
                 ),

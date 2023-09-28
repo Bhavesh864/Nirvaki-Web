@@ -63,12 +63,12 @@ class TabBarWidget extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          Tab(
-            child: Text(
-              "Matches",
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
+          // Tab(
+          //   child: Text(
+          //     "Matches",
+          //     overflow: TextOverflow.ellipsis,
+          //   ),
+          // ),
         ],
       ),
     );
