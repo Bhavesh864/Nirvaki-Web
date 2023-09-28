@@ -181,25 +181,21 @@ Widget buildInventoryQuestions(
                   },
                 ),
               if (!isChecked)
-                Column(
-                  children: [
-                    LabelTextInputField(
-                      keyboardType: TextInputType.number,
-                      onlyDigits: true,
-                      onChanged: (newvalue) {
-                        notify.add({"id": question.questionId, "item": newvalue.trim()});
-                      },
-                      inputController: controller,
-                      isMandatory: true,
-                      labelText: question.questionTitle,
-                      validator: (value) {
-                        if (!isChecked && value!.isEmpty) {
-                          return "Please enter ${question.questionTitle}";
-                        }
-                        return null;
-                      },
-                    ),
-                  ],
+                LabelTextInputField(
+                  keyboardType: TextInputType.number,
+                  onlyDigits: true,
+                  onChanged: (newvalue) {
+                    notify.add({"id": question.questionId, "item": newvalue.trim()});
+                  },
+                  inputController: controller,
+                  isMandatory: true,
+                  labelText: question.questionTitle,
+                  validator: (value) {
+                    if (!isChecked && value!.isEmpty) {
+                      return "Please enter ${question.questionTitle}";
+                    }
+                    return null;
+                  },
                 ),
             ],
           );

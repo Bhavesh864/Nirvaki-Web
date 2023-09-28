@@ -81,28 +81,30 @@ class CardFooter extends StatelessWidget {
               //     paddingHorizontal: 3,
               //   ),
               // ),
-              CustomChip(
-                onPressed: () {
-                  shareUrl(
-                    context,
-                    textToCombine: navigationUrl(
+              if (!cardDetails[index].workitemId!.contains('TD'))
+                CustomChip(
+                  onPressed: () {
+                    shareUrl(
                       context,
-                      cardDetails[index].workitemId!,
-                    ),
-                  );
-                },
-                label: const Icon(
-                  Icons.share_outlined,
+                      textToCombine: navigationUrl(
+                        context,
+                        cardDetails[index].workitemId!,
+                      ),
+                    );
+                  },
+                  label: const Icon(
+                    Icons.share_outlined,
+                  ),
+                  paddingHorizontal: 3,
                 ),
-                paddingHorizontal: 3,
-              ),
-              CustomChip(
-                label: CustomText(
-                  title: cardData.workitemId!,
-                  size: 10,
+              if (!cardDetails[index].workitemId!.contains('TD'))
+                CustomChip(
+                  label: CustomText(
+                    title: cardData.workitemId!,
+                    size: 10,
+                  ),
+                  paddingHorizontal: 2,
                 ),
-                paddingHorizontal: 2,
-              ),
             ],
           ),
         ),

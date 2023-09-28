@@ -12,7 +12,6 @@ import 'package:yes_broker/constants/firebase/Methods/add_member_send_email.dart
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
 import 'package:yes_broker/customs/responsive.dart';
-import 'package:yes_broker/riverpodstate/user_data.dart';
 
 import '../../Customs/custom_fields.dart';
 import '../../Customs/loader.dart';
@@ -79,12 +78,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           isPersonalDetails: true,
                           userData: userInfo,
                         ),
-                        SizedBox(height: Responsive.isMobile(context) ? 20 : 40),
-                        CustomAddressAndProfileCard(
-                          title: 'Address',
-                          isPersonalDetails: false,
-                          userData: userInfo,
-                        ),
+                        // SizedBox(height: Responsive.isMobile(context) ? 20 : 40),
+                        // CustomAddressAndProfileCard(
+                        //   title: 'Address',
+                        //   isPersonalDetails: false,
+                        //   userData: userInfo,
+                        // ),
                       ],
                     ),
                   );

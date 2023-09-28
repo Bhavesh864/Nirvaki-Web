@@ -43,6 +43,7 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
             } else if (path.contains('/lead')) {
               currentIndex = 3;
             } else if (path.contains('/calendar')) {
+              print('object');
               currentIndex = 4;
             } else {
               currentIndex = 0;
@@ -62,6 +63,7 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                   onDestinationSelected: (index) {
                     setstate(
                       () {
+                        print(sideBarItems[index].nav);
                         beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[index].nav);
                       },
                     );
@@ -99,7 +101,6 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                       }
                       context.beamToNamed('/profile');
                     } else if (selectedVal == "Logout") {
-                      // userLogout(ref, context);
                       customConfirmationAlertDialog(context, () {
                         userLogout(ref, context);
                       }, 'Logout', 'Are you sure you want to logout?');

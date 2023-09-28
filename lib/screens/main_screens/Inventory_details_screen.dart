@@ -50,7 +50,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
     super.initState();
     final currentIndex = ref.read(detailsPageIndexTabProvider);
     currentSelectedTab = currentIndex;
-    tabviewController = TabController(length: 4, vsync: this, initialIndex: currentIndex);
+    tabviewController = TabController(length: 3, vsync: this, initialIndex: currentIndex);
     final workItemId = ref.read(selectedWorkItemId);
     inventoryDetails =
         FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId == '' ? widget.inventoryId : workItemId).snapshots();
