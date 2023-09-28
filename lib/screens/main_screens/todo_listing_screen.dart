@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -6,6 +7,7 @@ import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/functions/navigation/navigation_functions.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/widgets/todo/todo_filter_view.dart';
+import '../../constants/functions/filterdataAccordingRole/data_according_role.dart';
 import '../../constants/utils/constants.dart';
 import '../../routes/routes.dart';
 import '../../widgets/calendar_view.dart';
@@ -27,20 +29,24 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   final TextEditingController searchController = TextEditingController();
   bool isFilterOpen = false;
   bool showTableView = false;
-  Future<List<CardDetails>>? future;
+  late Stream<QuerySnapshot<Map<String, dynamic>>> cardDetails;
 
   List<CardDetails>? status;
 
   @override
   void initState() {
-    future = CardDetails.getCardDetails();
+    setCardDetails();
     super.initState();
+  }
+
+  void setCardDetails() {
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: future,
+    return StreamBuilder(
+        stream: cardDetails,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -48,7 +54,10 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
             );
           }
           if (snapshot.hasData) {
-            List<CardDetails> todoItemsList = snapshot.data!.where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
+            // final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, setState: setState);
+            final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref);
+            final List<CardDetails> todoItemsList =
+                filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
             List<CardDetails> filterTodoList = todoItemsList.where((item) {
               if (searchController.text.isEmpty) {
                 return true;
