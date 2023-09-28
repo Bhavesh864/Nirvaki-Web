@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/app_constant.dart';
@@ -33,9 +35,8 @@ class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingOb
     final selectedItem = ref.watch(selectedProfileItemProvider);
     final User? user = ref.watch(userDataProvider);
     AppConst.setOuterContext(context);
-
     return Scaffold(
-      appBar: mobileAppBar(user!, context, (selectedVal) {
+      appBar: mobileAppBar(user, context, (selectedVal) {
         if (selectedVal != 'Logout') {
           final ProfileMenuItems profile = profileMenuItems.firstWhere((element) => element.title == selectedVal);
           ref.read(selectedProfileItemProvider.notifier).setSelectedItem(profile);

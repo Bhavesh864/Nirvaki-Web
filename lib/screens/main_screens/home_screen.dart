@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
+import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
+import 'package:yes_broker/constants/functions/assingment_methods.dart';
+import 'package:yes_broker/constants/user_role.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/customs/loader.dart';
@@ -14,6 +17,7 @@ import 'package:yes_broker/widgets/workitems/workitems_list.dart';
 
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/userModel/user_info.dart';
+import '../../constants/functions/filterdataAccordingRole/data_according_role.dart';
 import '../../riverpodstate/user_data.dart';
 import '../../widgets/app/speed_dial_button.dart';
 import '../../widgets/chat_modal_view.dart';
@@ -27,10 +31,16 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class HomeScreenState extends ConsumerState<HomeScreen> {
   late Stream<QuerySnapshot<Map<String, dynamic>>> cardDetails;
+  bool isUserLoaded = false;
+  List<User> usersids = [];
   @override
   void initState() {
     super.initState();
     getUserData();
+    setCardDetails();
+  }
+
+  void setCardDetails() {
     cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
   }
 
@@ -49,6 +59,14 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
+  getDetails(User currentuser) async {
+    final List<User> userList = await User.getUserAllRelatedToBrokerId(currentuser, currentuser.userId);
+    if (usersids.isEmpty) {
+      usersids = userList;
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -60,14 +78,13 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             return const Loader();
           }
           if (snapshot.hasData) {
-            final filterItem = snapshot.data?.docs.where((item) => item["assignedto"].any((user) => user["userid"] == AppConst.getAccessToken()));
-            final List<CardDetails> todoItems =
-                filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
-            final List<CardDetails> workItems =
-                filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
+            final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref);
+            final List<CardDetails> todoItems = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
+            final List<CardDetails> workItems = filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
+            bool isDataEmpty = workItems.isEmpty && todoItems.isEmpty;
             return Row(
               children: [
-                if (workItems.isEmpty && todoItems.isEmpty) ...[
+                if (isDataEmpty) ...[
                   Expanded(
                     flex: size.width > 1340 ? 5 : 6,
                     child: const EmptyWorkItemList(),

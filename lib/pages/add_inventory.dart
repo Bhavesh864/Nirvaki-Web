@@ -126,193 +126,198 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     final allInventoryQuestionsNotifier = ref.read(allInventoryQuestion.notifier);
     final allInventoryQuestions = ref.read(allInventoryQuestion);
     // final assignIsselected = selectedValues.firstWhere((element) => element["id"] == 36)["item"];
-    return Scaffold(
-      body: FutureBuilder<List<InventoryQuestions>>(
-          future: getQuestions,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator.adaptive());
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else if (snapshot.hasData) {
-              final res = selectedValues.isNotEmpty ? getWhichItemIsSelectedBYId(selectedValues, 1) : "Residential";
-              InventoryQuestions? screenData = getcurrentInventory(snapshot, res);
-              List<Screen> screensDataList = screenData!.screens;
+    final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom;
+    return GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Scaffold(
+          body: FutureBuilder<List<InventoryQuestions>>(
+              future: getQuestions,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator.adaptive());
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (snapshot.hasData) {
+                  final res = selectedValues.isNotEmpty ? getWhichItemIsSelectedBYId(selectedValues, 1) : "Residential";
+                  InventoryQuestions? screenData = getcurrentInventory(snapshot, res);
+                  List<Screen> screensDataList = screenData!.screens;
 
-              if (allInventoryQuestions.isEmpty) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  allInventoryQuestionsNotifier.addAllQuestion(screensDataList);
-                });
-              }
-              if (selectedValues.isNotEmpty && selectedValues[0]["item"] == "Residential") {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  allInventoryQuestionsNotifier.addAllQuestion(screensDataList);
-                });
-              } else if (selectedValues.isNotEmpty && selectedValues[0]["item"] == "Commercial") {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  allInventoryQuestionsNotifier.addAllQuestion(screensDataList);
-                });
-              }
-              currentScreenList = allInventoryQuestions.isEmpty ? screensDataList : allInventoryQuestions.where((screen) => screen.isActive == true).toList();
-              if (isEdit) {
-                final arr = ["S1"];
-                final filter = currentScreenList.where((element) => !arr.contains(element.screenId)).toList();
-                currentScreenList = filter;
-              }
+                  if (allInventoryQuestions.isEmpty) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      allInventoryQuestionsNotifier.addAllQuestion(screensDataList);
+                    });
+                  }
+                  if (selectedValues.isNotEmpty && selectedValues[0]["item"] == "Residential") {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      allInventoryQuestionsNotifier.addAllQuestion(screensDataList);
+                    });
+                  } else if (selectedValues.isNotEmpty && selectedValues[0]["item"] == "Commercial") {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      allInventoryQuestionsNotifier.addAllQuestion(screensDataList);
+                    });
+                  }
+                  currentScreenList = allInventoryQuestions.isEmpty ? screensDataList : allInventoryQuestions.where((screen) => screen.isActive == true).toList();
+                  if (isEdit) {
+                    final arr = ["S1"];
+                    final filter = currentScreenList.where((element) => !arr.contains(element.screenId)).toList();
+                    currentScreenList = filter;
+                  }
 
-              return GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).unfocus();
-                },
-                child: Stack(
-                  children: [
-                    Container(
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(authBgImage),
-                            fit: BoxFit.cover,
-                            colorFilter: ColorFilter.mode(
-                              Colors.black38,
-                              BlendMode.darken,
+                  return GestureDetector(
+                    onTap: () {
+                      FocusScope.of(context).unfocus();
+                    },
+                    child: Stack(
+                      children: [
+                        Container(
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(authBgImage),
+                                fit: BoxFit.cover,
+                                colorFilter: ColorFilter.mode(
+                                  Colors.black38,
+                                  BlendMode.darken,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        child: !allQuestionFinishes
-                            ? Form(
-                                key: _formKey,
-                                child: PageView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  controller: pageController,
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: currentScreenList.length,
-                                  itemBuilder: (context, index) {
-                                    return Center(
-                                      child: Card(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        child: Container(
-                                          constraints: const BoxConstraints(
-                                            minHeight: 0,
-                                            maxHeight: double.infinity,
-                                          ),
-                                          width: Responsive.isMobile(context) ? width! * 0.9 : 650,
-                                          padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
-                                          child: ScrollConfiguration(
-                                            behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                                            child: SingleChildScrollView(
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  if (currentScreenList[index].title != null)
-                                                    CustomText(
-                                                      softWrap: true,
-                                                      textAlign: TextAlign.center,
-                                                      size: Responsive.isMobile(context) ? 20 : 26,
-                                                      title: currentScreenList[index].title.toString(),
-                                                      fontWeight: FontWeight.bold,
-                                                    ),
-                                                  ListView.builder(
-                                                    shrinkWrap: true,
-                                                    physics: const NeverScrollableScrollPhysics(),
-                                                    itemCount: currentScreenList[index].questions.length,
-                                                    itemBuilder: (context, i) {
-                                                      final question = currentScreenList[index].questions[i];
-                                                      return Column(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                        children: [
-                                                          if (currentScreenList[index].title == null) ...[
-                                                            CustomText(
-                                                              softWrap: true,
-                                                              textAlign: TextAlign.center,
-                                                              size: Responsive.isDesktop(context) ? 26 : 20,
-                                                              title: question.questionTitle,
-                                                              fontWeight: FontWeight.bold,
-                                                            ),
-                                                            const SizedBox(height: 20),
-                                                          ],
-                                                          buildInventoryQuestions(
-                                                            question,
-                                                            currentScreenList,
-                                                            currentScreenIndex,
-                                                            notify,
-                                                            nextQuestion,
-                                                            isRentSelected,
-                                                            isPlotSelected,
-                                                            isEdit,
-                                                            selectedValues,
-                                                            stateList,
-                                                          ),
-                                                          SizedBox(height: question.questionOptionType != 'textfield' ? 10 : 0),
-                                                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                                                            const SizedBox(),
-                                                            if (i == currentScreenList[index].questions.length - 1 && question.questionOptionType != 'chip') ...[
-                                                              Container(
-                                                                // alignment: Alignment.centerRight,
-                                                                child: allQuestionFinishes
-                                                                    ? const Center(
-                                                                        child: CircularProgressIndicator.adaptive(),
-                                                                      )
-                                                                    : Padding(
-                                                                        padding: const EdgeInsets.only(right: 5.0, top: 20),
-                                                                        child: CustomButton(
-                                                                          text: currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next',
-                                                                          onPressed: () {
-                                                                            FocusScope.of(context).unfocus();
-                                                                            if (!allQuestionFinishes) {
-                                                                              if (currentScreenList[index].title != "Assign to") {
-                                                                                if (_formKey.currentState!.validate()) {
-                                                                                  nextQuestion(screensDataList: currentScreenList, option: "");
-                                                                                }
-                                                                              }
-                                                                              if (currentScreenList[index].title == "Assign to") {
-                                                                                // if (assignIsselected.lenth > 0) {
-                                                                                setState(() {
-                                                                                  allQuestionFinishes = true;
-                                                                                });
-                                                                                addDataOnfirestore(notify);
-                                                                                // } else {
-                                                                                //   customSnackBar(context: context, text: "Assign this inventory to Member");
-                                                                                // }
-                                                                              }
-                                                                            }
-                                                                          },
-                                                                          width: currentScreenList[index].title == "Assign to" ? 90 : 70,
-                                                                          height: 39,
-                                                                        ),
-                                                                      ),
+                            child: !allQuestionFinishes
+                                ? Form(
+                                    key: _formKey,
+                                    child: PageView.builder(
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      controller: pageController,
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: currentScreenList.length,
+                                      itemBuilder: (context, index) {
+                                        return Center(
+                                          child: Card(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            child: Container(
+                                              constraints: const BoxConstraints(
+                                                minHeight: 0,
+                                                maxHeight: double.infinity,
+                                              ),
+                                              width: Responsive.isMobile(context) ? width! * 0.9 : 650,
+                                              padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
+                                              child: ScrollConfiguration(
+                                                behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      if (currentScreenList[index].title != null)
+                                                        CustomText(
+                                                          softWrap: true,
+                                                          textAlign: TextAlign.center,
+                                                          size: Responsive.isMobile(context) ? 20 : 26,
+                                                          title: currentScreenList[index].title.toString(),
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                      ListView.builder(
+                                                        shrinkWrap: true,
+                                                        physics: const NeverScrollableScrollPhysics(),
+                                                        itemCount: currentScreenList[index].questions.length,
+                                                        itemBuilder: (context, i) {
+                                                          final question = currentScreenList[index].questions[i];
+                                                          return Column(
+                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            children: [
+                                                              if (currentScreenList[index].title == null) ...[
+                                                                CustomText(
+                                                                  softWrap: true,
+                                                                  textAlign: TextAlign.center,
+                                                                  size: Responsive.isDesktop(context) ? 26 : 20,
+                                                                  title: question.questionTitle,
+                                                                  fontWeight: FontWeight.bold,
+                                                                ),
+                                                                const SizedBox(height: 20),
+                                                              ],
+                                                              buildInventoryQuestions(
+                                                                question,
+                                                                currentScreenList,
+                                                                currentScreenIndex,
+                                                                notify,
+                                                                nextQuestion,
+                                                                isRentSelected,
+                                                                isPlotSelected,
+                                                                isEdit,
+                                                                selectedValues,
+                                                                stateList,
                                                               ),
-                                                            ] else ...[
-                                                              const SizedBox()
-                                                            ]
-                                                          ]),
-                                                        ],
-                                                      );
-                                                    },
-                                                  )
-                                                ],
+                                                              SizedBox(height: question.questionOptionType != 'textfield' ? 10 : 0),
+                                                              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                                                const SizedBox(),
+                                                                if (i == currentScreenList[index].questions.length - 1 && question.questionOptionType != 'chip') ...[
+                                                                  Container(
+                                                                    // alignment: Alignment.centerRight,
+                                                                    child: allQuestionFinishes
+                                                                        ? const Center(
+                                                                            child: CircularProgressIndicator.adaptive(),
+                                                                          )
+                                                                        : Padding(
+                                                                            padding: const EdgeInsets.only(right: 5.0, top: 20),
+                                                                            child: CustomButton(
+                                                                              text: currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next',
+                                                                              onPressed: () {
+                                                                                FocusScope.of(context).unfocus();
+                                                                                if (!allQuestionFinishes) {
+                                                                                  if (currentScreenList[index].title != "Assign to") {
+                                                                                    if (_formKey.currentState!.validate()) {
+                                                                                      nextQuestion(screensDataList: currentScreenList, option: "");
+                                                                                    }
+                                                                                  }
+                                                                                  if (currentScreenList[index].title == "Assign to") {
+                                                                                    // if (assignIsselected.lenth > 0) {
+                                                                                    setState(() {
+                                                                                      allQuestionFinishes = true;
+                                                                                    });
+                                                                                    addDataOnfirestore(notify);
+                                                                                    // } else {
+                                                                                    //   customSnackBar(context: context, text: "Assign this inventory to Member");
+                                                                                    // }
+                                                                                  }
+                                                                                }
+                                                                              },
+                                                                              width: currentScreenList[index].title == "Assign to" ? 90 : 70,
+                                                                              height: 39,
+                                                                            ),
+                                                                          ),
+                                                                  ),
+                                                                ] else ...[
+                                                                  const SizedBox()
+                                                                ]
+                                                              ]),
+                                                            ],
+                                                          );
+                                                        },
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              )
-                            : WorkItemSuccessWidget(
-                                isInventory: "IN",
-                                isEdit: isEdit,
-                              )),
-                    !allQuestionFinishes ? inventoryAppBar(currentScreenList) : const SizedBox(),
-                  ],
-                ),
-              );
-            }
-            return const SizedBox();
-          }),
-    );
+                                        );
+                                      },
+                                    ),
+                                  )
+                                : WorkItemSuccessWidget(
+                                    isInventory: "IN",
+                                    isEdit: isEdit,
+                                  )),
+                        !allQuestionFinishes ? inventoryAppBar(currentScreenList) : const SizedBox(),
+                      ],
+                    ),
+                  );
+                }
+                return const SizedBox();
+              }),
+        ));
   }
 
   Consumer inventoryAppBar(List<Screen> screensDataList) {

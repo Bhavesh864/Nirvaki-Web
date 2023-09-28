@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-
 import 'package:yes_broker/Customs/custom_chip.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/activity_details.dart';
@@ -12,10 +11,9 @@ import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/timeline_item.dart';
-
 import '../riverpodstate/user_data.dart';
 
-class CustomTimeLineView extends ConsumerWidget {
+class CustomTimeLineView extends ConsumerStatefulWidget {
   final bool fromHome;
   final bool isScrollable;
   const CustomTimeLineView({
@@ -25,13 +23,17 @@ class CustomTimeLineView extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  CustomTimeLineViewState createState() => CustomTimeLineViewState();
+}
+
+class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
+  @override
+  Widget build(BuildContext context) {
     final workitemId = ref.watch(selectedWorkItemId);
     final User? user = ref.watch(userDataProvider);
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10),
-      decoration: !fromHome
+      decoration: !widget.fromHome
           ? null
           : BoxDecoration(
               color: Colors.white,
@@ -68,7 +70,7 @@ class CustomTimeLineView extends ConsumerWidget {
             height: 10,
           ),
           StreamBuilder(
-            stream: fromHome
+            stream: widget.fromHome
                 ? FirebaseFirestore.instance.collection('activityDetails').where("brokerid", isEqualTo: user?.brokerId ?? "").snapshots()
                 : FirebaseFirestore.instance.collection('activityDetails').where('itemid', isEqualTo: workitemId).snapshots(),
             builder: (context, snapshot) {
@@ -76,12 +78,11 @@ class CustomTimeLineView extends ConsumerWidget {
                 return const Center(child: CircularProgressIndicator.adaptive());
               }
               if (snapshot.hasData) {
-                final dataList = snapshot.data!.docs;
-                List<ActivityDetails> activities = dataList.map((e) => ActivityDetails.fromSnapshot(e)).toList();
-
+                final datalist = snapshot.data?.docs;
+                List<ActivityDetails> activities = datalist!.map((e) => ActivityDetails.fromSnapshot(e)).toList();
                 activities.sort((a, b) => b.createdate!.compareTo(a.createdate!));
                 if (activities.isNotEmpty) {
-                  if (fromHome) {
+                  if (widget.fromHome) {
                     return Expanded(
                       child: ScrollConfiguration(
                         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),

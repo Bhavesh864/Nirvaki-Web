@@ -9,6 +9,7 @@ import 'package:yes_broker/chat/controller/chat_controller.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
+import 'package:yes_broker/constants/functions/auth/auth_functions.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/pages/Auth/login/login_screen.dart';
 import 'package:yes_broker/pages/largescreen_dashboard.dart';
@@ -54,8 +55,6 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
     print(token);
     if (token != null) {
       AppConst.setAccessToken(token);
-      print(AppConst.getAccessToken());
-      userinfo.User.getUser(token, ref: ref);
     }
     setAllNotification();
     getUserData();
@@ -63,9 +62,11 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
   }
 
   getUserData() async {
-    final userinfo.User? user = await userinfo.User.getUser(AppConst.getAccessToken());
-    ref.read(userDataProvider.notifier).storeUserData(user!);
-    AppConst.setRole(user.role);
+    if (AppConst.getAccessToken() != null) {
+      final userinfo.User? user = await userinfo.User.getUser(AppConst.getAccessToken());
+      ref.read(userDataProvider.notifier).storeUserData(user!);
+      AppConst.setRole(user.role);
+    }
   }
 
   @override
