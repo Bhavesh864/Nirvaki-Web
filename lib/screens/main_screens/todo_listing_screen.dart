@@ -6,7 +6,9 @@ import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/functions/navigation/navigation_functions.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/widgets/todo/todo_filter_view.dart';
+import '../../Customs/loader.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/filterdataAccordingRole/data_according_role.dart';
 import '../../constants/utils/constants.dart';
@@ -33,7 +35,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   late Stream<QuerySnapshot<Map<String, dynamic>>> cardDetails;
   List<User> userList = [];
   List<CardDetails>? status;
-
+  bool isUserLoaded = false;
   @override
   void initState() {
     setCardDetails();
@@ -45,16 +47,15 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   }
 
   void getDetails(User currentuser) async {
-    final List<User> user = await User.getUserAllRelatedToBrokerId(currentuser, currentuser.userId);
-    if (userList.isEmpty) {
-      setState(() {
-        userList = user;
-      });
-    }
+    final List<User> user = await User.getUserAllRelatedToBrokerId(currentuser);
+    setState(() {
+      userList = user;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userDataProvider);
     return StreamBuilder(
         stream: cardDetails,
         builder: (context, snapshot) {
@@ -64,8 +65,13 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
             );
           }
           if (snapshot.hasData) {
+            if (user == null) return const Loader();
+            if (!isUserLoaded) {
+              getDetails(user);
+              isUserLoaded = true;
+            }
             // final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, setState: setState);
-            final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, getDetails: getDetails, userList: userList);
+            final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
             final List<CardDetails> todoItemsList =
                 filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
             List<CardDetails> filterTodoList = todoItemsList.where((item) {
