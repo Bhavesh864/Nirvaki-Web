@@ -37,6 +37,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
 
   late Stream<QuerySnapshot<Map<String, dynamic>>> cardDetails;
   List<CardDetails>? status;
+  List<User> userList = [];
 
   @override
   void initState() {
@@ -67,7 +68,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
           );
         }
         if (snapshot.hasData) {
-          final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref);
+          final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, getDetails: getDetails, userList: userList);
           final List<CardDetails> inventoryList = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN").toList();
           List<CardDetails> filteredInventoryList = inventoryList.where((item) {
             if (searchController.text.isEmpty) {
