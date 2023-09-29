@@ -167,3 +167,35 @@ String buildBedroomText(roomconfig) {
 
   return "";
 }
+
+String buildRoomsText(roomconfig) {
+  final bedroom = roomconfig?.bedroom;
+  final additionalRooms = roomconfig?.additionalroom;
+  final bathroom = roomconfig?.bathroom;
+  final balcony = roomconfig?.balconies;
+
+  List<String> roomTextList = [];
+
+  if (bedroom != null) {
+    roomTextList.add("$bedroom BHK");
+  }
+
+  if (bathroom != null) {
+    roomTextList.add("$bathroom Baths");
+  }
+
+  if (balcony != null) {
+    roomTextList.add("$balcony Balcony");
+  }
+
+  // Loop through additionalRooms and add their details to the list
+  if (additionalRooms != null && additionalRooms is List) {
+    for (var room in additionalRooms) {
+      roomTextList.add("$room Room");
+    }
+  }
+
+  String allRoomsText = roomTextList.join(', ');
+
+  return allRoomsText;
+}
