@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
-import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
-import 'package:yes_broker/constants/functions/assingment_methods.dart';
-import 'package:yes_broker/constants/user_role.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/customs/loader.dart';
@@ -32,7 +29,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 class HomeScreenState extends ConsumerState<HomeScreen> {
   late Stream<QuerySnapshot<Map<String, dynamic>>> cardDetails;
   bool isUserLoaded = false;
-  List<User> usersids = [];
+  List<User> userList = [];
   @override
   void initState() {
     super.initState();
@@ -60,15 +57,16 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   getDetails(User currentuser) async {
-    final List<User> userList = await User.getUserAllRelatedToBrokerId(currentuser, currentuser.userId);
-    if (usersids.isEmpty) {
-      usersids = userList;
+    final List<User> user = await User.getUserAllRelatedToBrokerId(currentuser, currentuser.userId);
+    if (userList.isEmpty) {
+      userList = user;
       setState(() {});
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // final user = ref.watch(userDataProvider);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: StreamBuilder(
@@ -78,7 +76,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             return const Loader();
           }
           if (snapshot.hasData) {
-            final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref);
+            final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, getDetails: getDetails, userList: userList);
             final List<CardDetails> todoItems = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
             final List<CardDetails> workItems = filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
             bool isDataEmpty = workItems.isEmpty && todoItems.isEmpty;
@@ -143,7 +141,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                                     Expanded(
                                       child: Container(
                                         margin: const EdgeInsets.symmetric(horizontal: 10),
-                                        child: const CustomTimeLineView(
+                                        child: CustomTimeLineView(
+                                          itemIds: filterItem.map((card) => card["workitemId"]).toList(),
                                           fromHome: true,
                                         ),
                                       ),

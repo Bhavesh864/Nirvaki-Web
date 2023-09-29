@@ -7,6 +7,7 @@ import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/functions/navigation/navigation_functions.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/widgets/todo/todo_filter_view.dart';
+import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/filterdataAccordingRole/data_according_role.dart';
 import '../../constants/utils/constants.dart';
 import '../../routes/routes.dart';
@@ -30,7 +31,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   bool isFilterOpen = false;
   bool showTableView = false;
   late Stream<QuerySnapshot<Map<String, dynamic>>> cardDetails;
-
+  List<User> userList = [];
   List<CardDetails>? status;
 
   @override
@@ -41,6 +42,15 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
 
   void setCardDetails() {
     cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
+  }
+
+  void getDetails(User currentuser) async {
+    final List<User> user = await User.getUserAllRelatedToBrokerId(currentuser, currentuser.userId);
+    if (userList.isEmpty) {
+      setState(() {
+        userList = user;
+      });
+    }
   }
 
   @override
@@ -55,7 +65,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
           }
           if (snapshot.hasData) {
             // final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, setState: setState);
-            final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref);
+            final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, getDetails: getDetails, userList: userList);
             final List<CardDetails> todoItemsList =
                 filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
             List<CardDetails> filterTodoList = todoItemsList.where((item) {
