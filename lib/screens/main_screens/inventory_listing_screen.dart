@@ -12,6 +12,7 @@ import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/widgets/top_search_bar.dart';
 import 'package:yes_broker/widgets/workitems/workitem_filter_view.dart';
+import '../../Customs/loader.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/userModel/user_info.dart';
@@ -38,7 +39,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
   late Stream<QuerySnapshot<Map<String, dynamic>>> cardDetails;
   List<CardDetails>? status;
   List<User> userList = [];
-
+  bool isUserLoaded = false;
   @override
   void initState() {
     super.initState();
@@ -50,7 +51,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
   }
 
   getDetails(User currentuser) async {
-    final List<User> userList = await User.getUserAllRelatedToBrokerId(currentuser, currentuser.userId);
+    final List<User> userList = await User.getUserAllRelatedToBrokerId(currentuser);
     if (usersids.isEmpty) {
       usersids = userList;
       setState(() {});
@@ -59,6 +60,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userDataProvider);
     return StreamBuilder(
       stream: cardDetails,
       builder: (context, snapshot) {
@@ -68,7 +70,12 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
           );
         }
         if (snapshot.hasData) {
-          final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, getDetails: getDetails, userList: userList);
+          if (user == null) return const Loader();
+          if (!isUserLoaded) {
+            getDetails(user);
+            isUserLoaded = true;
+          }
+          final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
           final List<CardDetails> inventoryList = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN").toList();
           List<CardDetails> filteredInventoryList = inventoryList.where((item) {
             if (searchController.text.isEmpty) {

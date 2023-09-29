@@ -186,7 +186,7 @@ class User extends HiveObject {
     }
   }
 
-  static Future<List<User>> getUserAllRelatedToBrokerId(User currentuser, String managerId) async {
+  static Future<List<User>> getUserAllRelatedToBrokerId(User currentuser) async {
     try {
       final QuerySnapshot querySnapshot = await usersCollection.where("brokerId", isEqualTo: currentuser.brokerId).get();
       final List<User> users = [];
@@ -197,7 +197,7 @@ class User extends HiveObject {
           users.add(user);
         }
       }
-      final List<User> userRelatedBYmanager = users.where((element) => element.managerid == managerId).toList();
+      final List<User> userRelatedBYmanager = users.where((element) => element.managerid == currentuser.userId).toList();
       return userRelatedBYmanager;
     } catch (error) {
       if (kDebugMode) {

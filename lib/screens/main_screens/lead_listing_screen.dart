@@ -6,7 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/functions/navigation/navigation_functions.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/widgets/workitems/workitem_filter_view.dart';
+import '../../Customs/loader.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/filterdataAccordingRole/data_according_role.dart';
@@ -65,6 +67,7 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
   final TextEditingController searchController = TextEditingController();
   bool isFilterOpen = false;
   bool showTableView = false;
+  bool isUserLoaded = false;
   late Stream<QuerySnapshot<Map<String, dynamic>>> cardDetails;
   List<User> userList = [];
   List<String> selectedFilters = [];
@@ -83,7 +86,7 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
   }
 
   void getDetails(User currentuser) async {
-    final List<User> user = await User.getUserAllRelatedToBrokerId(currentuser, currentuser.userId);
+    final List<User> user = await User.getUserAllRelatedToBrokerId(currentuser);
     if (userList.isEmpty) {
       setState(() {
         userList = user;
@@ -93,6 +96,7 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userDataProvider);
     return Container(
       decoration: const BoxDecoration(
         boxShadow: [
@@ -114,7 +118,13 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
             );
           }
           if (snapshot.hasData) {
-            final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, getDetails: getDetails, userList: userList);
+            if (user == null) return const Loader();
+
+            if (!isUserLoaded) {
+              getDetails(user);
+              isUserLoaded = true;
+            }
+            final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
             final List<CardDetails> leadList = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "LD").toList();
             List<CardDetails> filteredleadList = leadList.where((item) {
               if (searchController.text.isEmpty) {

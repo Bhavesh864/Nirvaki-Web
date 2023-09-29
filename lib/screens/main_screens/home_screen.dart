@@ -30,6 +30,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   late Stream<QuerySnapshot<Map<String, dynamic>>> cardDetails;
   bool isUserLoaded = false;
   List<User> userList = [];
+
   @override
   void initState() {
     super.initState();
@@ -57,7 +58,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   getDetails(User currentuser) async {
-    final List<User> user = await User.getUserAllRelatedToBrokerId(currentuser, currentuser.userId);
+    final List<User> user = await User.getUserAllRelatedToBrokerId(currentuser);
     if (userList.isEmpty) {
       userList = user;
       setState(() {});
@@ -66,7 +67,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final user = ref.watch(userDataProvider);
+    final user = ref.watch(userDataProvider);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: StreamBuilder(
@@ -76,7 +77,12 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             return const Loader();
           }
           if (snapshot.hasData) {
-            final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, getDetails: getDetails, userList: userList);
+            if (user == null) return const Loader();
+            if (!isUserLoaded) {
+              getDetails(user);
+              isUserLoaded = true;
+            }
+            final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
             final List<CardDetails> todoItems = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
             final List<CardDetails> workItems = filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
             bool isDataEmpty = workItems.isEmpty && todoItems.isEmpty;
