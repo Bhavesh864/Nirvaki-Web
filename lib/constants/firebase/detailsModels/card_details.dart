@@ -377,6 +377,22 @@ class CardDetails {
     }
   }
 
+  static Future<List<Map<String, dynamic>>> getAssignUsersInCards({required String itemid}) async {
+    try {
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: itemid).get();
+      List<Map<String, dynamic>> assignedUsersList = [];
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+        List<Map<String, dynamic>> existingAssignToData = List<Map<String, dynamic>>.from(data['assignedto'] ?? []);
+        assignedUsersList.addAll(existingAssignToData);
+      }
+      return assignedUsersList;
+    } catch (error) {
+      print('Failed : $error');
+      return []; // Return an empty list in case of an error.
+    }
+  }
+
   static Future<void> deleteCardAssignUser({required String itemId, required String userid}) async {
     try {
       QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: itemId).get();

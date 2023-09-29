@@ -8,6 +8,7 @@ import 'package:yes_broker/constants/functions/navigation/navigation_functions.d
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/widgets/workitems/workitem_filter_view.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
+import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/filterdataAccordingRole/data_according_role.dart';
 import '../../constants/utils/constants.dart';
 import '../../riverpodstate/common_index_state.dart';
@@ -65,7 +66,7 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
   bool isFilterOpen = false;
   bool showTableView = false;
   late Stream<QuerySnapshot<Map<String, dynamic>>> cardDetails;
-
+  List<User> userList = [];
   List<String> selectedFilters = [];
   RangeValues rateRange = const RangeValues(0, 2000000000);
 
@@ -79,6 +80,15 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
 
   void setCardDetails() {
     cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
+  }
+
+  void getDetails(User currentuser) async {
+    final List<User> user = await User.getUserAllRelatedToBrokerId(currentuser, currentuser.userId);
+    if (userList.isEmpty) {
+      setState(() {
+        userList = user;
+      });
+    }
   }
 
   @override
@@ -104,7 +114,7 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
             );
           }
           if (snapshot.hasData) {
-            final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref);
+            final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, getDetails: getDetails, userList: userList);
             final List<CardDetails> leadList = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "LD").toList();
             List<CardDetails> filteredleadList = leadList.where((item) {
               if (searchController.text.isEmpty) {

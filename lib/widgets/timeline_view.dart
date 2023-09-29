@@ -6,7 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:yes_broker/Customs/custom_chip.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/Customs/loader.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/activity_details.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
@@ -16,7 +18,9 @@ import '../riverpodstate/user_data.dart';
 class CustomTimeLineView extends ConsumerStatefulWidget {
   final bool fromHome;
   final bool isScrollable;
+  final List<dynamic>? itemIds;
   const CustomTimeLineView({
+    this.itemIds = const [],
     super.key,
     this.isScrollable = true,
     this.fromHome = false,
@@ -75,11 +79,14 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                 : FirebaseFirestore.instance.collection('activityDetails').where('itemid', isEqualTo: workitemId).snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator.adaptive());
+                return const Loader();
               }
               if (snapshot.hasData) {
                 final datalist = snapshot.data?.docs;
                 List<ActivityDetails> activities = datalist!.map((e) => ActivityDetails.fromSnapshot(e)).toList();
+                if (widget.fromHome) {
+                  activities = activities.where((activity) => widget.itemIds!.contains(activity.itemid)).toList();
+                }
                 activities.sort((a, b) => b.createdate!.compareTo(a.createdate!));
                 if (activities.isNotEmpty) {
                   if (widget.fromHome) {
