@@ -126,7 +126,6 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     final allInventoryQuestionsNotifier = ref.read(allInventoryQuestion.notifier);
     final allInventoryQuestions = ref.read(allInventoryQuestion);
     // final assignIsselected = selectedValues.firstWhere((element) => element["id"] == 36)["item"];
-    final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom;
     return GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();

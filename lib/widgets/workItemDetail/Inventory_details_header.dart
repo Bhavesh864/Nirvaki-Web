@@ -78,7 +78,8 @@ class InventoryDetailsHeader extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Flexible(
+            SizedBox(
+              width: Responsive.isMobile(context) ? width! * 0.75 : null,
               child: Padding(
                 padding: const EdgeInsets.only(right: 8.0), // Adjust as needed
                 child: Text(
@@ -140,7 +141,7 @@ class InventoryDetailsHeader extends ConsumerWidget {
             const Spacer(),
             if (!Responsive.isMobile(context) && !AppConst.getPublicView())
               CustomText(
-                title: price!,
+                title: price!.contains('₹') ? price! : '₹$price',
                 color: AppColor.primary,
               ),
           ],
