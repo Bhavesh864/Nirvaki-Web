@@ -112,8 +112,7 @@ class InventoryDetailsHeader extends ConsumerWidget {
             ),
             if (!AppConst.getPublicView() || AppConst.getIsAuthenticated())
               PopupMenuButton(
-                tooltip: '',
-                splashRadius: 0,
+                // tooltip: '',
                 padding: EdgeInsets.zero,
                 color: Colors.white.withOpacity(1),
                 offset: const Offset(10, 40),
@@ -131,11 +130,12 @@ class InventoryDetailsHeader extends ConsumerWidget {
                       }, showicon: true, icon: e['icon']),
                     )
                     .toList(),
-                child: const CustomChip(
+                child: const Chip(
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  padding: EdgeInsets.zero,
                   label: Icon(
                     Icons.more_vert,
                   ),
-                  paddingHorizontal: 3,
                 ),
               ),
             const Spacer(),
@@ -206,25 +206,28 @@ class _HeaderChipsState extends ConsumerState<HeaderChips> {
           ),
         ),
         if (!AppConst.getPublicView())
-          CustomStatusDropDown(
-            status: currentStatus ?? widget.status,
-            itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
-            onSelected: (value) {
-              CardDetails.updateCardStatus(id: widget.id, newStatus: value);
-              if (widget.id.contains(ItemCategory.isInventory)) {
-                InventoryDetails.updatecardStatus(id: widget.id, newStatus: value);
-              } else if (widget.id.contains(ItemCategory.isLead)) {
-                LeadDetails.updatecardStatus(id: widget.id, newStatus: value);
-              }
-              currentStatus = value;
-              setState(() {});
-              notifyToUser(
-                  currentuserdata: user!,
-                  itemid: widget.id,
-                  assignedto: widget.inventoryDetails.assignedto,
-                  content: "${user.userfirstname} ${user.userlastname} change status to $value",
-                  title: "${widget.id.contains(ItemCategory.isInventory) ? "Inventory" : "Lead"} status changed");
-            },
+          Container(
+            margin: const EdgeInsets.only(right: 4),
+            child: CustomStatusDropDown(
+              status: currentStatus ?? widget.status,
+              itemBuilder: (context) => dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
+              onSelected: (value) {
+                CardDetails.updateCardStatus(id: widget.id, newStatus: value);
+                if (widget.id.contains(ItemCategory.isInventory)) {
+                  InventoryDetails.updatecardStatus(id: widget.id, newStatus: value);
+                } else if (widget.id.contains(ItemCategory.isLead)) {
+                  LeadDetails.updatecardStatus(id: widget.id, newStatus: value);
+                }
+                currentStatus = value;
+                setState(() {});
+                notifyToUser(
+                    currentuserdata: user!,
+                    itemid: widget.id,
+                    assignedto: widget.inventoryDetails.assignedto,
+                    content: "${user.userfirstname} ${user.userlastname} change status to $value",
+                    title: "${widget.id.contains(ItemCategory.isInventory) ? "Inventory" : "Lead"} status changed");
+              },
+            ),
           ),
       ],
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yes_broker/constants/functions/assingment_methods.dart';
+
 import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/dropdown_field.dart';
 import 'package:yes_broker/customs/label_text_field.dart';

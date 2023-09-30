@@ -74,30 +74,33 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                 ),
                 color: checkChipColorByCategory(cardData),
               ),
-              CustomStatusDropDown(
-                status: status![widget.index].status ?? cardData.status,
-                itemBuilder: (context) => isTypeisTodo(cardData)
-                    ? todoDropDownList.map((e) => popupMenuItem(e.toString())).toList()
-                    : dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
-                onSelected: (value) {
-                  CardDetails.updateCardStatus(id: cardData.workitemId!, newStatus: value);
-                  status![widget.index].status = value;
-                  if (cardData.workitemId!.contains(ItemCategory.isInventory)) {
-                    InventoryDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
-                  } else if (cardData.workitemId!.contains(ItemCategory.isLead)) {
-                    LeadDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
-                  } else if (cardData.workitemId!.contains(ItemCategory.isTodo)) {
-                    TodoDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
-                  }
-                  setState(() {});
-                  notifyToUser(
-                    currentuserdata: user!,
-                    itemid: cardData.workitemId!,
-                    assignedto: cardData.assignedto,
-                    content: "${user.userfirstname} ${user.userlastname} change status to $value",
-                    title: "${cardData.workitemId} status changed",
-                  );
-                },
+              Container(
+                margin: const EdgeInsets.only(right: 5),
+                child: CustomStatusDropDown(
+                  status: status![widget.index].status ?? cardData.status,
+                  itemBuilder: (context) => isTypeisTodo(cardData)
+                      ? todoDropDownList.map((e) => popupMenuItem(e.toString())).toList()
+                      : dropDownStatusDataList.map((e) => popupMenuItem(e.toString())).toList(),
+                  onSelected: (value) {
+                    CardDetails.updateCardStatus(id: cardData.workitemId!, newStatus: value);
+                    status![widget.index].status = value;
+                    if (cardData.workitemId!.contains(ItemCategory.isInventory)) {
+                      InventoryDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
+                    } else if (cardData.workitemId!.contains(ItemCategory.isLead)) {
+                      LeadDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
+                    } else if (cardData.workitemId!.contains(ItemCategory.isTodo)) {
+                      TodoDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
+                    }
+                    setState(() {});
+                    notifyToUser(
+                      currentuserdata: user!,
+                      itemid: cardData.workitemId!,
+                      assignedto: cardData.assignedto,
+                      content: "${user.userfirstname} ${user.userlastname} change status to $value",
+                      title: "${cardData.workitemId} status changed",
+                    );
+                  },
+                ),
               ),
               checkNotNUllItem(cardData.cardCategory)
                   ? CustomChip(

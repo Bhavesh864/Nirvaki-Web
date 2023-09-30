@@ -128,7 +128,9 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     // final assignIsselected = selectedValues.firstWhere((element) => element["id"] == 36)["item"];
     return GestureDetector(
         onTap: () {
-          FocusScope.of(context).unfocus();
+          if (Responsive.isMobile(context)) {
+            // FocusScope.of(context).unfocus();
+          }
         },
         child: Scaffold(
           body: FutureBuilder<List<InventoryQuestions>>(
@@ -166,7 +168,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
 
                   return GestureDetector(
                     onTap: () {
-                      FocusScope.of(context).unfocus();
+                      // FocusScope.of(context).unfocus();
                     },
                     child: Stack(
                       children: [
@@ -263,7 +265,9 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                                             child: CustomButton(
                                                                               text: currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next',
                                                                               onPressed: () {
-                                                                                FocusScope.of(context).unfocus();
+                                                                                if (Responsive.isMobile(context)) {
+                                                                                  // FocusScope.of(context).unfocus();
+                                                                                }
                                                                                 if (!allQuestionFinishes) {
                                                                                   if (currentScreenList[index].title != "Assign to") {
                                                                                     if (_formKey.currentState!.validate()) {
