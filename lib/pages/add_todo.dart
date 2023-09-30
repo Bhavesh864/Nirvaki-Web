@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -105,112 +106,118 @@ class _AddTodoState extends ConsumerState<AddTodo> {
             if (!isLinkItem) {
               screensDataList = screensDataList.where((element) => element.screenId != "S5").toList();
             }
-            return Stack(
-              children: [
-                Container(
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(authBgImage),
-                        fit: BoxFit.cover,
-                        colorFilter: ColorFilter.mode(
-                          Colors.black38,
-                          BlendMode.darken,
+            return GestureDetector(
+              onTap: () {
+                if (!kIsWeb) FocusScope.of(context).unfocus();
+              },
+              child: Stack(
+                children: [
+                  Container(
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(authBgImage),
+                          fit: BoxFit.cover,
+                          colorFilter: ColorFilter.mode(
+                            Colors.black38,
+                            BlendMode.darken,
+                          ),
                         ),
                       ),
-                    ),
-                    child: !allQuestionFinishes
-                        ? Form(
-                            key: _formKey,
-                            child: PageView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              controller: pageController,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: screensDataList.length,
-                              itemBuilder: (context, index) {
-                                return Center(
-                                  child: Card(
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: SingleChildScrollView(
-                                      child: Container(
-                                        // constraints: const BoxConstraints(
-                                        //   minHeight: 0,
-                                        //   maxHeight: double.infinity,
-                                        // ),
-                                        width: Responsive.isMobile(context) ? width! * 0.9 : 650,
-                                        padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
-
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            if (screensDataList[index].title != null)
-                                              CustomText(
-                                                softWrap: true,
-                                                textAlign: TextAlign.center,
-                                                size: Responsive.isDesktop(context) ? 26 : 20,
-                                                title: screensDataList[index].title.toString(),
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            for (var i = 0; i < screensDataList[index].questions.length; i++)
-                                              Column(
-                                                children: [
-                                                  if (screensDataList[index].title == null)
-                                                    CustomText(
-                                                        softWrap: true,
-                                                        textAlign: TextAlign.center,
-                                                        size: Responsive.isDesktop(context) ? 26 : 20,
-                                                        title: screensDataList[index].questions[i].questionTitle,
-                                                        fontWeight: FontWeight.bold),
-                                                  buildTodoQuestions(screensDataList[index].questions[i], screensDataList, currentScreenIndex, notify, nextQuestion, context,
-                                                      selectedValues, linkState),
-                                                  if (i == screensDataList[index].questions.length - 1 && screensDataList[index].questions[i].questionOptionType != 'chip')
-                                                    Container(
-                                                      margin: const EdgeInsets.only(top: 10),
-                                                      alignment: Alignment.centerRight,
-                                                      child: allQuestionFinishes
-                                                          ? const Center(
-                                                              child: CircularProgressIndicator.adaptive(),
-                                                            )
-                                                          : CustomButton(
-                                                              text: screensDataList[index].title == "Assign to" ? 'Submit' : 'Next',
-                                                              onPressed: () {
-                                                                if (!allQuestionFinishes) {
-                                                                  if (screensDataList[index].title != "Assign to") {
-                                                                    if (_formKey.currentState!.validate()) {
-                                                                      nextQuestion(screensDataList: screensDataList);
+                      child: !allQuestionFinishes
+                          ? Form(
+                              key: _formKey,
+                              child: PageView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                controller: pageController,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: screensDataList.length,
+                                itemBuilder: (context, index) {
+                                  return Center(
+                                    child: Card(
+                                      color: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: SingleChildScrollView(
+                                        child: Container(
+                                          // constraints: const BoxConstraints(
+                                          //   minHeight: 0,
+                                          //   maxHeight: double.infinity,
+                                          // ),
+                                          width: Responsive.isMobile(context) ? width! * 0.9 : 650,
+                                          padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
+                                          child: Column(
+                                            // mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              if (screensDataList[index].title != null)
+                                                CustomText(
+                                                  softWrap: true,
+                                                  textAlign: TextAlign.center,
+                                                  size: Responsive.isDesktop(context) ? 26 : 20,
+                                                  title: screensDataList[index].title.toString(),
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              for (var i = 0; i < screensDataList[index].questions.length; i++)
+                                                Column(
+                                                  children: [
+                                                    if (screensDataList[index].title == null)
+                                                      CustomText(
+                                                          softWrap: true,
+                                                          textAlign: TextAlign.center,
+                                                          size: Responsive.isDesktop(context) ? 26 : 20,
+                                                          title: screensDataList[index].questions[i].questionTitle,
+                                                          fontWeight: FontWeight.bold),
+                                                    buildTodoQuestions(screensDataList[index].questions[i], screensDataList, currentScreenIndex, notify, nextQuestion,
+                                                        context, selectedValues, linkState),
+                                                    if (i == screensDataList[index].questions.length - 1 &&
+                                                        screensDataList[index].questions[i].questionOptionType != 'chip')
+                                                      Container(
+                                                        margin: const EdgeInsets.only(top: 10),
+                                                        alignment: Alignment.centerRight,
+                                                        child: allQuestionFinishes
+                                                            ? const Center(
+                                                                child: CircularProgressIndicator.adaptive(),
+                                                              )
+                                                            : CustomButton(
+                                                                text: screensDataList[index].title == "Assign to" ? 'Submit' : 'Next',
+                                                                onPressed: () {
+                                                                  if (!kIsWeb) FocusScope.of(context).unfocus();
+                                                                  if (!allQuestionFinishes) {
+                                                                    if (screensDataList[index].title != "Assign to") {
+                                                                      if (_formKey.currentState!.validate()) {
+                                                                        nextQuestion(screensDataList: screensDataList);
+                                                                      }
+                                                                    }
+                                                                    if (screensDataList[index].title == "Assign to") {
+                                                                      setState(() {
+                                                                        allQuestionFinishes = true;
+                                                                      });
+                                                                      addDataOnfirestore(notify);
                                                                     }
                                                                   }
-                                                                  if (screensDataList[index].title == "Assign to") {
-                                                                    setState(() {
-                                                                      allQuestionFinishes = true;
-                                                                    });
-                                                                    addDataOnfirestore(notify);
-                                                                  }
-                                                                }
-                                                              },
-                                                              width: screensDataList[index].title == "Assign to" ? 90 : 70,
-                                                              height: 39,
-                                                            ),
-                                                    ),
-                                                ],
-                                              ),
-                                          ],
+                                                                },
+                                                                width: screensDataList[index].title == "Assign to" ? 90 : 70,
+                                                                height: 39,
+                                                              ),
+                                                      ),
+                                                  ],
+                                                ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              },
-                            ),
-                          )
-                        : const WorkItemSuccessWidget(
-                            isInventory: 'Todo',
-                            isEdit: false,
-                          )),
-                !allQuestionFinishes ? leadAppbar(screensDataList) : const SizedBox(),
-              ],
+                                  );
+                                },
+                              ),
+                            )
+                          : const WorkItemSuccessWidget(
+                              isInventory: 'Todo',
+                              isEdit: false,
+                            )),
+                  !allQuestionFinishes ? leadAppbar(screensDataList) : const SizedBox(),
+                ],
+              ),
             );
           }
         },

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/customs/loader.dart';
 
 import '../../../Customs/custom_chip.dart';
@@ -144,99 +145,207 @@ class _DetailsTabViewState extends State<DetailsTabView> {
             height: 10,
           ),
         ],
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 10.0),
+          child: CustomText(
+            title: "Property Details",
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         if (!widget.isLeadView) ...[
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 10.0),
-            child: CustomText(
-              title: "Property Details",
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          Wrap(
-            children: [
-              if (checkNotNUllItem(widget.data.roomconfig.bedroom))
-                buildInfoFields(
-                  'Layout',
-                  buildRoomsText(widget.data.roomconfig),
-                  context,
-                ),
-              if (checkNotNUllItem(widget.data.propertyarea.superarea) && checkNotNUllItem(widget.data.propertyarea.unit))
-                buildInfoFields(
-                  'Area',
-                  "${widget.data.propertyarea.superarea} ${widget.data.propertyarea.unit}",
-                  context,
-                ),
-              if (widget.data.inventorycategory == 'Rent' && widget.data.propertyrent.securityamount != null)
-                buildInfoFields(
-                  'Security Deposit',
-                  "₹${widget.data.propertyrent.securityamount}",
-                  context,
-                ),
-              if (checkNotNUllItem(widget.data.transactiontype))
-                buildInfoFields(
-                  'Transaction Type',
-                  widget.data.transactiontype,
-                  context,
-                ),
-              if (checkNotNUllItem(widget.data.availability))
-                buildInfoFields(
-                  'Availability',
-                  widget.data.availability,
-                  context,
-                ),
-              if (checkNotNUllItem(widget.data.possessiondate))
-                buildInfoFields(
-                  'Possessiondate',
-                  widget.data.possessiondate,
-                  context,
-                ),
-              if (checkNotNUllItem(widget.data.propertyfacing))
-                buildInfoFields(
-                  'Property Facing',
-                  widget.data.propertyfacing,
-                  context,
-                ),
-              if (checkNotNUllItem(widget.data.villatype))
-                buildInfoFields(
-                  'Villa Type',
-                  widget.data.villatype,
-                  context,
-                ),
-              if (widget.data.propertykind == 'Plot')
-                buildInfoFields(
-                  'No. of Open Sides',
-                  widget.data.plotdetails.opensides,
-                  context,
-                ),
+          Wrap(children: [
+            if (checkNotNUllItem(widget.data.roomconfig.bedroom)) ...[
+              buildInfoFields(
+                'Layout',
+                buildRoomsText(widget.data.roomconfig, false),
+                context,
+              ),
+              buildInfoFields(
+                'Additional Room',
+                buildRoomsText(widget.data.roomconfig, true),
+                context,
+              ),
             ],
-          ),
+            if (checkNotNUllItem(widget.data.propertyarea.superarea) && checkNotNUllItem(widget.data.propertyarea.unit))
+              buildInfoFields(
+                'Area',
+                "${widget.data.propertyarea.superarea} ${widget.data.propertyarea.unit}",
+                context,
+              ),
+            if (widget.data.inventorycategory == 'Rent' && widget.data.propertyrent.securityamount != null)
+              buildInfoFields(
+                'Security Deposit',
+                "₹${widget.data.propertyrent.securityamount}",
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.transactiontype))
+              buildInfoFields(
+                'Transaction Type',
+                widget.data.transactiontype,
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.availability))
+              buildInfoFields(
+                'Availability',
+                widget.data.availability,
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.possessiondate))
+              buildInfoFields(
+                'Possessiondate',
+                widget.data.possessiondate,
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.propertyfacing))
+              buildInfoFields(
+                'Property Facing',
+                widget.data.propertyfacing,
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.villatype))
+              buildInfoFields(
+                'Villa Type',
+                widget.data.villatype,
+                context,
+              ),
+            if (widget.data.propertykind == 'Plot')
+              buildInfoFields(
+                'No. of Open Sides',
+                widget.data.plotdetails.opensides,
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.plotdetails.boundarywall))
+              buildInfoFields(
+                'Boundary',
+                widget.data.plotdetails.boundarywall,
+                context,
+              ),
+          ]),
           const Divider(
             height: 40,
           ),
+        ] else ...[
+          Wrap(children: [
+            if (checkNotNUllItem(widget.data.roomconfig.bedroom)) ...[
+              buildInfoFields(
+                'Layout',
+                buildRoomsText(widget.data.roomconfig, false),
+                context,
+              ),
+              buildInfoFields(
+                'Additional Room',
+                buildRoomsText(widget.data.roomconfig, true),
+                context,
+              ),
+            ],
+            if (checkNotNUllItem(widget.data.propertyarea.superarea) && checkNotNUllItem(widget.data.propertyarea.unit))
+              buildInfoFields(
+                'Area',
+                "${widget.data.propertyarea.superarea} ${widget.data.propertyarea.unit}",
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.transactiontype))
+              buildInfoFields(
+                'Transaction Type',
+                widget.data.transactiontype,
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.availability))
+              buildInfoFields(
+                'Availability',
+                widget.data.availability,
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.possessiondate))
+              buildInfoFields(
+                'Possessiondate',
+                widget.data.possessiondate,
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.preferredpropertyfacing))
+              buildInfoFields(
+                'Property Facing',
+                widget.data.preferredpropertyfacing,
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.villatype))
+              buildInfoFields(
+                'Villa Type',
+                widget.data.villatype,
+                context,
+              ),
+            if (widget.data.propertykind == 'Plot')
+              buildInfoFields(
+                'No. of Open Sides',
+                widget.data.plotdetails.opensides,
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.plotdetails.boundarywall))
+              buildInfoFields(
+                'Boundary',
+                widget.data.plotdetails.boundarywall,
+                context,
+              ),
+            const Divider(
+              height: 40,
+            ),
+          ]),
         ],
         if (widget.data.amenities != null) ...[
           CustomText(
             title: !widget.isLeadView ? "Features" : 'Requirements',
             fontWeight: FontWeight.w700,
           ),
+
           Wrap(
             children: List<Widget>.generate(
-              widget.data.amenities!.length,
-              (index) => Padding(
-                padding: const EdgeInsets.only(right: 8.0, top: 10),
-                child: CustomChip(
-                  label: Text(
-                    widget.data.amenities![index],
-                  ),
-                ),
-              ),
+              widget.data.amenities!.length + 1,
+              (index) {
+                if (index == widget.data.amenities!.length) {
+                  return Stack(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(right: 8.0, top: 10),
+                        child: CustomChip(
+                          label: Text(
+                            'No. of Reserved Parking',
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 6,
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColor.primary,
+                          ),
+                          child: Text(
+                            '${widget.data.reservedparking.covered}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8.0, top: 10),
+                    child: CustomChip(
+                      label: Text(
+                        widget.data.amenities![index],
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
           ),
-          buildInfoFields(
-            'No. of Reserved Parking',
-            widget.data.reservedparking.covered,
-            context,
-          ),
+
           // Padding(
           //   padding: const EdgeInsets.symmetric(vertical: 5.0),
           //   child: Row(

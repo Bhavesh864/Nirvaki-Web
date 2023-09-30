@@ -211,8 +211,10 @@ Widget buildInventoryQuestions(
             question.questionTitle.contains('Floor Number') ||
             question.questionTitle.contains('Property Area');
 
-        final isvalidationtrue =
-            question.questionTitle.contains('First') || question.questionTitle.contains('Mobile') || question.questionTitle == 'Rent' || question.questionTitle == 'Listing Price';
+        final isvalidationtrue = question.questionTitle.contains('First') ||
+            question.questionTitle.contains('Mobile') ||
+            question.questionTitle == 'Rent' ||
+            question.questionTitle == 'Listing Price';
 
         final isEmail = question.questionTitle.contains("Email");
         return Column(

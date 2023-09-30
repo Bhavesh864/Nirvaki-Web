@@ -396,7 +396,7 @@ class CustomChoiceChip extends StatelessWidget {
       ),
       selected: selected,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-      labelPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+      labelPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
       onSelected: onSelected,
       selectedColor: selectedColor,
       backgroundColor: bgcolor,
