@@ -28,17 +28,18 @@ class CustomStatusDropDown extends StatelessWidget {
         onSelected(value);
       },
       child: IntrinsicWidth(
-        child: Chip(
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          padding: const EdgeInsets.all(0),
-          labelPadding: const EdgeInsets.symmetric(horizontal: 4),
-          backgroundColor: taskStatusColor(status).withOpacity(0.1),
-          label: Row(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            color: taskStatusColor(status).withOpacity(0.1),
+          ),
+          child: Row(
             children: [
               CustomText(
                 title: status,
-                color: taskStatusColor(status),
                 size: 10,
+                color: taskStatusColor(status),
               ),
               Icon(
                 Icons.expand_more,
