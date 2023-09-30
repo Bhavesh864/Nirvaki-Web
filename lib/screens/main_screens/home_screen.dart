@@ -61,10 +61,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
           }
           if (snapshot.hasData) {
             final filterItem = snapshot.data?.docs.where((item) => item["assignedto"].any((user) => user["userid"] == AppConst.getAccessToken()));
-            final List<CardDetails> todoItems =
-                filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
-            final List<CardDetails> workItems =
-                filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
+            final List<CardDetails> todoItems = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
+            final List<CardDetails> workItems = filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
             return Row(
               children: [
                 if (workItems.isEmpty && todoItems.isEmpty) ...[
