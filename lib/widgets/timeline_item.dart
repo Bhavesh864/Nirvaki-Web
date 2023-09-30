@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/activity_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
-import 'package:yes_broker/Customs/custom_chip.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 
 import '../constants/functions/navigation/navigation_functions.dart';
@@ -44,26 +43,38 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               if (!timeLine.itemid!.contains('TD'))
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     ref.read(detailsPageIndexTabProvider.notifier).state = 1;
                     navigateBasedOnId(context, timeLine.itemid!, ref);
                   },
-                  child: CustomChip(
-                    label: CustomText(
-                      title: timeLine.itemid!,
-                      size: 12,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: timeLine.itemid!.contains('LD') ? AppColor.leadChipColor : AppColor.inventoryChipColor,
                     ),
-                    color: timeLine.itemid!.contains('LD') ? AppColor.leadChipColor : AppColor.inventoryChipColor,
-                    avatar: Icon(
-                      timeLine.itemid!.contains('LD') ? MaterialSymbols.location_away : MaterialSymbols.location_home_outlined,
-                      color: timeLine.itemid!.contains('LD') ? AppColor.leadIconColor : AppColor.inventoryIconColor,
+                    child: Row(
+                      children: [
+                        Icon(
+                          timeLine.itemid!.contains('LD') ? MaterialSymbols.location_away : MaterialSymbols.location_home_outlined,
+                          color: timeLine.itemid!.contains('LD') ? AppColor.leadIconColor : AppColor.inventoryIconColor,
+                        ),
+                        const SizedBox(width: 5),
+                        CustomText(
+                          title: timeLine.itemid!,
+                          size: 12,
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              CustomText(
-                title: capitalizeFirstLetter(timeLine.activitybody!.activitytitle!),
-                size: 14,
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: CustomText(
+                  title: capitalizeFirstLetter(timeLine.activitybody!.activitytitle!),
+                  size: 14,
+                ),
               )
             ],
           ),
@@ -79,8 +90,7 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
               height: 20,
               width: 20,
               decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: NetworkImage(timeLine.userImageUrl == null || timeLine.userImageUrl!.isEmpty ? noImg : timeLine.userImageUrl!), fit: BoxFit.fill),
+                image: DecorationImage(image: NetworkImage(timeLine.userImageUrl == null || timeLine.userImageUrl!.isEmpty ? noImg : timeLine.userImageUrl!), fit: BoxFit.fill),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
