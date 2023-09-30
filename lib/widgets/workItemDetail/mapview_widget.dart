@@ -24,6 +24,7 @@ class MapViewWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     String googleMapsLink = '';
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 10, top: 20),
@@ -50,6 +51,15 @@ class MapViewWidget extends StatelessWidget {
               ),
             ],
           ),
+        ),
+        CustomText(
+          softWrap: true,
+          title: '$addressline1, $addressline2, $city, $state',
+          size: 12,
+          color: Colors.grey,
+        ),
+        const SizedBox(
+          height: 20,
         ),
         SizedBox(
           height: 200,

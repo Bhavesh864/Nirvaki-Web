@@ -16,6 +16,7 @@ import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
 import '../firebase/detailsModels/lead_details.dart';
 import '../utils/colors.dart';
+import '../validation/basic_validation.dart';
 import 'convertStringTorange/convert_range_string.dart';
 
 Widget buildLeadQuestions(
@@ -135,7 +136,7 @@ Widget buildLeadQuestions(
                   children: [
                     for (var item in items)
                       Padding(
-                        padding: const EdgeInsets.only(right: 10, top: 5, bottom: 5),
+                        padding: const EdgeInsets.only(right: 5, top: 5, bottom: 5),
                         child: CustomChoiceChip(
                             label: item,
                             selected: selectedOptions.contains(item),
@@ -207,13 +208,25 @@ Widget buildLeadQuestions(
     return StatefulBuilder(
       builder: (context, setState) {
         final isPriceField = question.questionId == 46 || question.questionId == 48 || question.questionId == 50;
-        final isvalidationtrue =
-            question.questionTitle.contains('First') || question.questionTitle.contains('Mobile') || question.questionTitle == 'Rent' || question.questionTitle == 'Listing Price';
+        final isvalidationtrue = question.questionTitle.contains('First') ||
+            question.questionTitle.contains('Mobile') ||
+            question.questionTitle == 'Rent' ||
+            question.questionTitle == 'Listing Price';
+
+        final isDigitsOnly = question.questionTitle.contains('Mobile') ||
+            question.questionTitle == 'Rent' ||
+            question.questionTitle == 'Listing Price' ||
+            question.questionTitle.contains('Floor Number') ||
+            question.questionTitle.contains('Property Area');
+
+        final isEmail = question.questionTitle.contains("Email");
+
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             LabelTextInputField(
+              onlyDigits: isDigitsOnly,
               keyboardType: isPriceField ? TextInputType.number : TextInputType.name,
               inputController: controller,
               labelText: question.questionTitle,
@@ -232,16 +245,21 @@ Widget buildLeadQuestions(
                 }
                 notify.add({"id": question.questionId, "item": newvalue.trim()});
               },
-              validator: isvalidationtrue
-                  ? (value) {
-                      if (value!.isEmpty) {
-                        return "Please enter ${question.questionTitle}";
-                      }
-                      return null;
-                    }
-                  : null,
+              validator: isEmail
+                  ? validateEmailNotMandatory
+                  : isvalidationtrue
+                      ? (value) {
+                          if (value!.isEmpty) {
+                            return "Please enter ${question.questionTitle}";
+                          }
+                          return null;
+                        }
+                      : null,
             ),
             isPriceField ? Text(textResult) : const SizedBox.shrink(),
+            const SizedBox(
+              height: 6,
+            ),
           ],
         );
       },
