@@ -81,7 +81,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (!widget.isLeadView) ...[
+        if (!widget.isLeadView && widget.data.propertyphotos != null) ...[
           const CustomText(
             title: "Images",
             fontWeight: FontWeight.w700,
@@ -140,10 +140,10 @@ class _DetailsTabViewState extends State<DetailsTabView> {
               },
             ),
           ),
+          const Divider(
+            height: 10,
+          ),
         ],
-        const SizedBox(
-          height: 10,
-        ),
         if (!widget.isLeadView) ...[
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 10.0),
@@ -154,7 +154,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
           ),
           Wrap(
             children: [
-              if (checkNotNUllItem(widget.data.roomconfig))
+              if (checkNotNUllItem(widget.data.roomconfig.bedroom))
                 buildInfoFields(
                   'Layout',
                   buildRoomsText(widget.data.roomconfig),
@@ -210,10 +210,10 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                 ),
             ],
           ),
+          const Divider(
+            height: 40,
+          ),
         ],
-        const SizedBox(
-          height: 20,
-        ),
         if (widget.data.amenities != null) ...[
           CustomText(
             title: !widget.isLeadView ? "Features" : 'Requirements',
@@ -232,7 +232,11 @@ class _DetailsTabViewState extends State<DetailsTabView> {
               ),
             ),
           ),
-          buildInfoFields('No. of Reserved Parking', widget.data.reservedparking.covered, context),
+          buildInfoFields(
+            'No. of Reserved Parking',
+            widget.data.reservedparking.covered,
+            context,
+          ),
           // Padding(
           //   padding: const EdgeInsets.symmetric(vertical: 5.0),
           //   child: Row(
@@ -255,8 +259,8 @@ class _DetailsTabViewState extends State<DetailsTabView> {
           //     ],
           //   ),
           // ),
-          const SizedBox(
-            height: 30,
+          const Divider(
+            height: 40,
           ),
         ],
         const Padding(
@@ -270,8 +274,8 @@ class _DetailsTabViewState extends State<DetailsTabView> {
           widget.data.comments!,
           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey),
         ),
-        const SizedBox(
-          height: 30,
+        const Divider(
+          height: 40,
         ),
         if (!AppConst.getPublicView())
           Column(
@@ -477,11 +481,13 @@ Widget buildInfoFields(String fieldName, String fieldDetail, BuildContext contex
           ),
         ),
         const SizedBox(width: 15),
-        Text(
-          fieldDetail,
-          style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
+        Flexible(
+          child: Text(
+            fieldDetail,
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ],
