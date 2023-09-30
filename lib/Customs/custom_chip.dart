@@ -27,16 +27,14 @@ class CustomChip extends StatelessWidget {
       padding: const EdgeInsets.only(right: 4.0),
       child: InkWell(
         onTap: onPressed,
-        child: IntrinsicWidth(
-          child: Chip(
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            avatar: avatar,
-            labelPadding: EdgeInsets.symmetric(horizontal: paddingHorizontal ?? 1, vertical: 0),
-            backgroundColor: color,
-            label: Container(
-              padding: EdgeInsets.zero,
-              child: label,
-            ),
+        child: Chip(
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          avatar: avatar,
+          labelPadding: EdgeInsets.symmetric(horizontal: paddingHorizontal ?? 1, vertical: 0),
+          backgroundColor: color,
+          label: Container(
+            padding: EdgeInsets.zero,
+            child: label,
           ),
         ),
       ),

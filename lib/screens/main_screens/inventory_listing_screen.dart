@@ -213,7 +213,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                                                   ? 2
                                                   : 3,
                                           crossAxisSpacing: 10.0,
-                                          mainAxisExtent: 165,
+                                          mainAxisExtent: 150,
                                         ),
                                         itemCount: filteredInventoryList.length,
                                         itemBuilder: (context, index) {

@@ -38,7 +38,7 @@ Widget buildLeadQuestions(
             if (isRentSelected && option == "Plot") {
               return const SizedBox();
             }
-            if (isRentSelected || !isRentSelected) {
+            if (option == "Rent" || option == "Buy") {
               final indexToRemove = selectedValues.indexWhere((map) => map['id'] == 32);
               if (indexToRemove != -1) {
                 selectedValues.removeAt(indexToRemove);
@@ -367,6 +367,9 @@ Widget buildLeadQuestions(
     RangeValues rentRangeValues = const RangeValues(0, 1000000);
     RangeValues defaultBuyRangeValues = stateValue ?? buyRangeValues;
     RangeValues defaultRentRangeValues = stateValue ?? rentRangeValues;
+    // if (selectedValues.any((element) => element["id"] != 32)) {
+    //   print("object");
+    // }
     if (isRentSelected) {
       double divisionValue = 5000;
       return StatefulBuilder(

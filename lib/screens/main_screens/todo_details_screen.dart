@@ -144,11 +144,11 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                 return GestureDetector(
                   onTap: () {
                     if (isEditingTodoName) {
-                      TodoDetails.updatetodoName(id: data.todoId!, todoName: todoNameEditingController.text).then((value) => setState(() {
+                      TodoDetails.updatetodoName(id: data.todoId!, todoName: todoNameEditingController.text.trim()).then((value) => setState(() {
                             isEditingTodoName = false;
                             todoNameEditingController.clear();
                           }));
-                      CardDetails.updatecardTitle(id: data.todoId!, cardTitle: todoNameEditingController.text);
+                      CardDetails.updatecardTitle(id: data.todoId!, cardTitle: todoNameEditingController.text.trim());
                       cancelEditingTodoName();
                     } else if (iseditingTodoDescription) {
                       cancelEditingTodoDescription();
@@ -199,7 +199,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                 startEditingTodoName(data.todoName!);
                                               },
                                               child: Text(
-                                                data.todoName!,
+                                                data.todoName!.trim(),
                                                 style: const TextStyle(
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.w500,
@@ -384,7 +384,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                           child: Textarea(controller: todoDescriptionEditingController),
                                         )
                                       : Text(
-                                          data.todoDescription!,
+                                          data.todoDescription!.trim(),
                                           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey),
                                         ),
                                   const SizedBox(height: 10),
