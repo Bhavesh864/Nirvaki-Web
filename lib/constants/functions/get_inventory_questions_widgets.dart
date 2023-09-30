@@ -181,25 +181,21 @@ Widget buildInventoryQuestions(
                   },
                 ),
               if (!isChecked)
-                Column(
-                  children: [
-                    LabelTextInputField(
-                      keyboardType: TextInputType.number,
-                      onlyDigits: true,
-                      onChanged: (newvalue) {
-                        notify.add({"id": question.questionId, "item": newvalue.trim()});
-                      },
-                      inputController: controller,
-                      isMandatory: true,
-                      labelText: question.questionTitle,
-                      validator: (value) {
-                        if (!isChecked && value!.isEmpty) {
-                          return "Please enter ${question.questionTitle}";
-                        }
-                        return null;
-                      },
-                    ),
-                  ],
+                LabelTextInputField(
+                  keyboardType: TextInputType.number,
+                  onlyDigits: true,
+                  onChanged: (newvalue) {
+                    notify.add({"id": question.questionId, "item": newvalue.trim()});
+                  },
+                  inputController: controller,
+                  isMandatory: true,
+                  labelText: question.questionTitle,
+                  validator: (value) {
+                    if (!isChecked && value!.isEmpty) {
+                      return "Please enter ${question.questionTitle}";
+                    }
+                    return null;
+                  },
                 ),
             ],
           );
@@ -215,10 +211,8 @@ Widget buildInventoryQuestions(
             question.questionTitle.contains('Floor Number') ||
             question.questionTitle.contains('Property Area');
 
-        final isvalidationtrue = question.questionTitle.contains('First') ||
-            question.questionTitle.contains('Mobile') ||
-            question.questionTitle == 'Rent' ||
-            question.questionTitle == 'Listing Price';
+        final isvalidationtrue =
+            question.questionTitle.contains('First') || question.questionTitle.contains('Mobile') || question.questionTitle == 'Rent' || question.questionTitle == 'Listing Price';
 
         final isEmail = question.questionTitle.contains("Email");
         return Column(
@@ -256,7 +250,7 @@ Widget buildInventoryQuestions(
                         }
                       : null,
             ),
-            isPriceField ? AppText(text: textResult.toUpperCase(), textColor: AppColor.green) : const SizedBox.shrink(),
+            isPriceField ? AppText(text: textResult.toUpperCase(), textColor: AppColor.grey, fontsize: 16) : const SizedBox.shrink(),
           ],
         );
       },
@@ -332,6 +326,7 @@ Widget buildInventoryQuestions(
             setState(() {
               cities = [];
             });
+            print(cities);
             final index = states.indexOf(newSelectedState);
             if (index >= 0 && index < stateList.length && stateList[index].districts != null) {
               setState(() {

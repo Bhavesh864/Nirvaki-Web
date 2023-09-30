@@ -3,14 +3,11 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
-import 'package:yes_broker/constants/app_constant.dart';
 
-import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
-import '../../../riverpodstate/user_data.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 
 final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
 
@@ -181,6 +178,27 @@ class User extends HiveObject {
         }
       }
       return users;
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to get users: $error');
+      }
+      return [];
+    }
+  }
+
+  static Future<List<User>> getUserAllRelatedToBrokerId(User currentuser) async {
+    try {
+      final QuerySnapshot querySnapshot = await usersCollection.where("brokerId", isEqualTo: currentuser.brokerId).get();
+      final List<User> users = [];
+      for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        if (documentSnapshot.exists) {
+          final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+          final User user = User.fromMap(data);
+          users.add(user);
+        }
+      }
+      final List<User> userRelatedBYmanager = users.where((element) => element.managerid == currentuser.userId).toList();
+      return userRelatedBYmanager;
     } catch (error) {
       if (kDebugMode) {
         print('Failed to get users: $error');

@@ -328,7 +328,7 @@ class BeamerScreenNavigation extends StatelessWidget {
                   child: CalendarScreen(),
                 ),
             '/profile': (p0, p1, p2) => BeamPage(
-                  key: const ValueKey('/calendar'),
+                  key: const ValueKey('/profile'),
                   type: BeamPageType.scaleTransition,
                   child: CommonScreen(
                     outerContext: context,

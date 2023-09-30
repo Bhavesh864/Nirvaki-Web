@@ -1,19 +1,19 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 
-import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
-import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/widgets/app/app_bar.dart';
-import 'package:yes_broker/widgets/app/speed_dial_button.dart';
+
 import '../constants/firebase/userModel/user_info.dart';
 import '../constants/functions/auth/auth_functions.dart';
+import '../constants/utils/colors.dart';
 import '../constants/utils/constants.dart';
+
+import '../routes/routes.dart';
 import '../screens/account_screens/Teams/team_screen.dart';
 import '../screens/account_screens/common_screen.dart';
+import '../widgets/app/speed_dial_button.dart';
 
 final currentIndexProvider = StateProvider<int>((ref) {
   return 0;
@@ -42,7 +42,9 @@ class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingOb
             ref.read(addMemberScreenStateProvider.notifier).setAddMemberScreenState(false);
           }
         } else if (selectedVal == "Logout") {
+          // customConfirmationAlertDialog(context, () {
           userLogout(ref, context);
+          // }, 'Logout', 'Are you sure you want to logout?');
         }
       }, ref),
       bottomNavigationBar: BottomNavigationBar(

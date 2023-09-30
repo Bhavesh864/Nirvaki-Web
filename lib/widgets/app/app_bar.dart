@@ -1,11 +1,13 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 
-import '../../constants/utils/colors.dart';
 import '../../Customs/custom_text.dart';
+import '../../constants/utils/colors.dart';
 import 'nav_bar.dart';
 
 AppBar mobileAppBar(User? user, BuildContext context, void Function(String) onOptionSelect, WidgetRef ref) {

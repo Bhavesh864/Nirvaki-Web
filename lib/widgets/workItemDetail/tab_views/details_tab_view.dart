@@ -1,7 +1,3 @@
-// import 'dart:html';
-
-// import 'dart:html';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -85,7 +81,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (!widget.isLeadView) ...[
+        if (!widget.isLeadView && widget.data.propertyphotos != null) ...[
           const CustomText(
             title: "Images",
             fontWeight: FontWeight.w700,
@@ -144,13 +140,83 @@ class _DetailsTabViewState extends State<DetailsTabView> {
               },
             ),
           ),
-          const SizedBox(
-            height: 30,
+          const Divider(
+            height: 10,
+          ),
+        ],
+        if (!widget.isLeadView) ...[
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 10.0),
+            child: CustomText(
+              title: "Property Details",
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          Wrap(
+            children: [
+              if (checkNotNUllItem(widget.data.roomconfig.bedroom))
+                buildInfoFields(
+                  'Layout',
+                  buildRoomsText(widget.data.roomconfig),
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.propertyarea.superarea) && checkNotNUllItem(widget.data.propertyarea.unit))
+                buildInfoFields(
+                  'Area',
+                  "${widget.data.propertyarea.superarea} ${widget.data.propertyarea.unit}",
+                  context,
+                ),
+              if (widget.data.inventorycategory == 'Rent' && widget.data.propertyrent.securityamount != null)
+                buildInfoFields(
+                  'Security Deposit',
+                  "₹${widget.data.propertyrent.securityamount}",
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.transactiontype))
+                buildInfoFields(
+                  'Transaction Type',
+                  widget.data.transactiontype,
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.availability))
+                buildInfoFields(
+                  'Availability',
+                  widget.data.availability,
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.possessiondate))
+                buildInfoFields(
+                  'Possessiondate',
+                  widget.data.possessiondate,
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.propertyfacing))
+                buildInfoFields(
+                  'Property Facing',
+                  widget.data.propertyfacing,
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.villatype))
+                buildInfoFields(
+                  'Villa Type',
+                  widget.data.villatype,
+                  context,
+                ),
+              if (widget.data.propertykind == 'Plot')
+                buildInfoFields(
+                  'No. of Open Sides',
+                  widget.data.plotdetails.opensides,
+                  context,
+                ),
+            ],
+          ),
+          const Divider(
+            height: 40,
           ),
         ],
         if (widget.data.amenities != null) ...[
           CustomText(
-            title: !widget.isLeadView ? "Overview" : 'Requirements',
+            title: !widget.isLeadView ? "Features" : 'Requirements',
             fontWeight: FontWeight.w700,
           ),
           Wrap(
@@ -159,13 +225,42 @@ class _DetailsTabViewState extends State<DetailsTabView> {
               (index) => Padding(
                 padding: const EdgeInsets.only(right: 8.0, top: 10),
                 child: CustomChip(
-                  label: Text(widget.data.amenities![index]),
+                  label: Text(
+                    widget.data.amenities![index],
+                  ),
                 ),
               ),
             ),
           ),
-          const SizedBox(
-            height: 30,
+          buildInfoFields(
+            'No. of Reserved Parking',
+            widget.data.reservedparking.covered,
+            context,
+          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(vertical: 5.0),
+          //   child: Row(
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //       Text(
+          //         'No. of Reserved Parking',
+          //         style: const TextStyle(
+          //           fontSize: 14,
+          //           color: Color(0xFF818181),
+          //           fontWeight: FontWeight.w500,
+          //         ),
+          //       ),
+          //       const SizedBox(width: 15),
+          //       CustomChip(
+          //         label: Text(
+          //           widget.data.reservedparking.covered,
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          const Divider(
+            height: 40,
           ),
         ],
         const Padding(
@@ -179,8 +274,8 @@ class _DetailsTabViewState extends State<DetailsTabView> {
           widget.data.comments!,
           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey),
         ),
-        const SizedBox(
-          height: 30,
+        const Divider(
+          height: 40,
         ),
         if (!AppConst.getPublicView())
           Column(
@@ -371,19 +466,31 @@ class _DetailsTabViewState extends State<DetailsTabView> {
   }
 }
 
-// Future<void> downloadAndSavePhoto(String url) async {
-//   final response = await http.get(Uri.parse(url));
-//   if (response.statusCode == 200) {
-//     if (kIsWeb) {
-//       // Set web-specific directory
-//     } else {
-//       final directory = await getApplicationDocumentsDirectory();
-//       final filePath = '${directory.path}/photo.jpg';
-//       final file = File(filePath);
-//       await file.writeAsBytes(response.bodyBytes);
-//       print('Photo downloaded and saved to $filePath');
-//     }
-//   } else {
-//     throw Exception('Failed to download photo');
-//   }
-// }
+Widget buildInfoFields(String fieldName, String fieldDetail, BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 5.0),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '$fieldName:',
+          style: const TextStyle(
+            fontSize: 14,
+            color: Color(0xFF818181),
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(width: 15),
+        Flexible(
+          child: Text(
+            fieldDetail,
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}

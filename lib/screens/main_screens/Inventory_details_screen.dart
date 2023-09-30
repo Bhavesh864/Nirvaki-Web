@@ -50,7 +50,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
     super.initState();
     final currentIndex = ref.read(detailsPageIndexTabProvider);
     currentSelectedTab = currentIndex;
-    tabviewController = TabController(length: 4, vsync: this, initialIndex: currentIndex);
+    tabviewController = TabController(length: 3, vsync: this, initialIndex: currentIndex);
     final workItemId = ref.read(selectedWorkItemId);
     inventoryDetails =
         FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId == '' ? widget.inventoryId : workItemId).snapshots();
@@ -86,6 +86,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
           if (snapshot.hasData) {
             final dataList = snapshot.data!.docs;
             List<InventoryDetails> inventoryList = dataList.map((doc) => InventoryDetails.fromSnapshot(doc)).toList();
+
             for (var data in inventoryList) {
               Future.delayed(const Duration(milliseconds: 500)).then((value) => {
                     setEditData(notify, data),
@@ -141,7 +142,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                 horizontalTitleGap: 8,
                                 titleAlignment: ListTileTitleAlignment.center,
                                 title: CustomText(
-                                  title: '${data.propertyaddress!.state},${data.propertyaddress!.city},${data.propertyaddress!.addressline1}',
+                                  title: '${data.propertyaddress!.city},${data.propertyaddress!.state}',
                                   size: 12,
                                   fontWeight: FontWeight.w400,
                                   color: const Color(0xFFA8A8A8),

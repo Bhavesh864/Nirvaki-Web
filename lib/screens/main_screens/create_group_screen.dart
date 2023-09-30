@@ -160,44 +160,156 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _usersFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Loader();
-        }
-        if (snapshot.hasData) {
-          final filterUser = snapshot.data!;
+    return Scaffold(
+      body: FutureBuilder(
+        future: _usersFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Loader();
+          }
+          if (snapshot.hasData) {
+            final filterUser = snapshot.data!;
 
-          if (Responsive.isMobile(context)) {
-            return Scaffold(
-              appBar: AppBar(
-                foregroundColor: Colors.black,
-                iconTheme: const IconThemeData(size: 20),
-                centerTitle: false,
-                title: AppText(
-                  text: widget.createGroup! ? 'New Group' : 'New Chat',
-                  fontsize: 15,
-                  textColor: Colors.black,
-                  fontWeight: FontWeight.w600,
+            if (Responsive.isMobile(context)) {
+              return Scaffold(
+                appBar: AppBar(
+                  foregroundColor: Colors.black,
+                  iconTheme: const IconThemeData(size: 20),
+                  centerTitle: false,
+                  title: AppText(
+                    text: widget.createGroup! ? 'New Group' : 'New Chat',
+                    fontsize: 15,
+                    textColor: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-              backgroundColor: Colors.white,
-              body: Column(
+                backgroundColor: Colors.white,
+                body: Column(
+                  children: [
+                    if (widget.createGroup!) ...[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: _showImageSourceDialog,
+                              child: CircleAvatar(
+                                backgroundImage: groupIcon != null ? FileImage(groupIcon!) : null,
+                                radius: 25,
+                                child: groupIcon != null
+                                    ? null
+                                    : const Icon(
+                                        Icons.camera_alt_outlined,
+                                        size: 22,
+                                      ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: width! * 3 / 4,
+                              child: CustomTextInput(
+                                controller: groupNameController,
+                                labelText: 'Group Name',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                    StatefulBuilder(builder: (context, setstate) {
+                      return Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 5),
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                          ),
+                          child: NewGroupUserList(
+                            users: filterUser,
+                            selectedUser: selectedUsers,
+                            toggleUser: (user) {
+                              if (widget.createGroup!) {
+                                toggleUser(user);
+                              } else {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (ctx) => ChatScreen(
+                                      user: user,
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                      );
+                    }),
+                  ],
+                ),
+                floatingActionButton: widget.createGroup!
+                    ? FloatingActionButton(
+                        onPressed: () {
+                          onPressCreateGroupButton();
+                        },
+                        backgroundColor: AppColor.primary,
+                        child: const Icon(Icons.check),
+                      )
+                    : null,
+              );
+            } else {
+              return Column(
                 children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          widget.goToChatList!();
+                        },
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          size: 22,
+                        ),
+                      ),
+                      AppText(
+                        text: widget.createGroup! ? 'New Group' : 'New Chat',
+                        fontsize: 15,
+                        textColor: Colors.black,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: const Icon(
+                          Icons.close,
+                          size: 22,
+                        ),
+                      ),
+                    ],
+                  ),
                   if (widget.createGroup!) ...[
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
-                            onTap: _showImageSourceDialog,
+                            onTap: () async {
+                              XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                              if (image != null) {
+                                var f = await image.readAsBytes();
+
+                                setState(() {
+                                  groupIconWeb = f;
+                                });
+                              }
+                            },
                             child: CircleAvatar(
-                              backgroundImage: groupIcon != null ? FileImage(groupIcon!) : null,
+                              backgroundImage: groupIconWeb != null ? MemoryImage(groupIconWeb!) : null,
                               radius: 25,
-                              child: groupIcon != null
+                              child: groupIconWeb != null
                                   ? null
                                   : const Icon(
                                       Icons.camera_alt_outlined,
@@ -206,7 +318,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                             ),
                           ),
                           SizedBox(
-                            width: width! * 3 / 4,
+                            width: 250,
                             child: CustomTextInput(
                               controller: groupNameController,
                               labelText: 'Group Name',
@@ -230,169 +342,59 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                             if (widget.createGroup!) {
                               toggleUser(user);
                             } else {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (ctx) => ChatScreen(
-                                    user: user,
+                              if (Responsive.isMobile(context)) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (ctx) => ChatScreen(
+                                      user: user,
+                                    ),
                                   ),
-                                ),
-                              );
+                                );
+                              } else {
+                                widget.goToChatScreen!(user);
+                              }
                             }
                           },
                         ),
                       ),
                     );
                   }),
-                ],
-              ),
-              floatingActionButton: widget.createGroup!
-                  ? FloatingActionButton(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    child: ElevatedButton(
                       onPressed: () {
                         onPressCreateGroupButton();
                       },
-                      backgroundColor: AppColor.primary,
-                      child: const Icon(Icons.check),
-                    )
-                  : null,
-            );
-          } else {
-            return Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        widget.goToChatList!();
-                      },
-                      icon: const Icon(
-                        Icons.arrow_back,
-                        size: 22,
-                      ),
-                    ),
-                    AppText(
-                      text: widget.createGroup! ? 'New Group' : 'New Chat',
-                      fontsize: 15,
-                      textColor: Colors.black,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        Icons.close,
-                        size: 22,
-                      ),
-                    ),
-                  ],
-                ),
-                if (widget.createGroup!) ...[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: () async {
-                            XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
-                            if (image != null) {
-                              var f = await image.readAsBytes();
-
-                              setState(() {
-                                groupIconWeb = f;
-                              });
-                            }
-                          },
-                          child: CircleAvatar(
-                            backgroundImage: groupIconWeb != null ? MemoryImage(groupIconWeb!) : null,
-                            radius: 25,
-                            child: groupIconWeb != null
-                                ? null
-                                : const Icon(
-                                    Icons.camera_alt_outlined,
-                                    size: 22,
-                                  ),
-                          ),
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        SizedBox(
-                          width: 250,
-                          child: CustomTextInput(
-                            controller: groupNameController,
-                            labelText: 'Group Name',
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AppText(
+                            text: 'Create Group',
+                            textColor: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontsize: 17,
                           ),
-                        ),
-                      ],
+                          SizedBox(width: 8.0),
+                          Icon(
+                            Icons.group_add_outlined,
+                            size: 20,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
-                StatefulBuilder(builder: (context, setstate) {
-                  return Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 5),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                      ),
-                      child: NewGroupUserList(
-                        users: filterUser,
-                        selectedUser: selectedUsers,
-                        toggleUser: (user) {
-                          if (widget.createGroup!) {
-                            toggleUser(user);
-                          } else {
-                            if (Responsive.isMobile(context)) {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (ctx) => ChatScreen(
-                                    user: user,
-                                  ),
-                                ),
-                              );
-                            } else {
-                              widget.goToChatScreen!(user);
-                            }
-                          }
-                        },
-                      ),
-                    ),
-                  );
-                }),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      onPressCreateGroupButton();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        AppText(
-                          text: 'Create Group',
-                          textColor: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontsize: 17,
-                        ),
-                        SizedBox(width: 8.0),
-                        Icon(
-                          Icons.group_add_outlined,
-                          size: 20,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            );
+              );
+            }
           }
-        }
-        return const SizedBox();
-      },
+          return const SizedBox();
+        },
+      ),
     );
   }
 }

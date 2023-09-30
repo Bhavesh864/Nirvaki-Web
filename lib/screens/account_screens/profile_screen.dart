@@ -78,12 +78,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           isPersonalDetails: true,
                           userData: userInfo,
                         ),
-                        SizedBox(height: Responsive.isMobile(context) ? 20 : 40),
-                        CustomAddressAndProfileCard(
-                          title: 'Address',
-                          isPersonalDetails: false,
-                          userData: userInfo,
-                        ),
+                        // SizedBox(height: Responsive.isMobile(context) ? 20 : 40),
+                        // CustomAddressAndProfileCard(
+                        //   title: 'Address',
+                        //   isPersonalDetails: false,
+                        //   userData: userInfo,
+                        // ),
                       ],
                     ),
                   );

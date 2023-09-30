@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/utils/constants.dart';
 
@@ -29,7 +28,11 @@ class CustomStatusDropDown extends StatelessWidget {
         onSelected(value);
       },
       child: IntrinsicWidth(
-        child: CustomChip(
+        child: Chip(
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          padding: const EdgeInsets.all(0),
+          labelPadding: const EdgeInsets.symmetric(horizontal: 4),
+          backgroundColor: taskStatusColor(status).withOpacity(0.1),
           label: Row(
             children: [
               CustomText(
@@ -44,7 +47,6 @@ class CustomStatusDropDown extends StatelessWidget {
               ),
             ],
           ),
-          color: taskStatusColor(status).withOpacity(0.1),
         ),
       ),
     );
