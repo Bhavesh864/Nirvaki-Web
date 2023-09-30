@@ -89,22 +89,32 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     } else {}
   }
 
-  goBack(List<int> id, type) {
-    if (currentScreenIndex > 0) {
-      setState(() {
-        currentScreenIndex--;
-        !isEdit
-            ? type
-                ? null
-                : ref.read(myArrayProvider.notifier).remove(id)
-            : null;
-        pageController!.previousPage(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-      });
-    } else {
-      Navigator.pop(context);
+  bool backButtonEnabled = true;
+
+  void goBack(List<int> id, type) {
+    if (backButtonEnabled) {
+      if (currentScreenIndex > 0) {
+        setState(() {
+          backButtonEnabled = false;
+          currentScreenIndex--;
+          !isEdit
+              ? type
+                  ? null
+                  : ref.read(myArrayProvider.notifier).remove(id)
+              : null;
+          pageController!.previousPage(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        });
+        Future.delayed(const Duration(seconds: 1), () {
+          setState(() {
+            backButtonEnabled = true;
+          });
+        });
+      } else {
+        Navigator.pop(context);
+      }
     }
   }
 
@@ -141,8 +151,14 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else if (snapshot.hasData) {
+                  // if (selectedValues.isNotEmpty) {/
+                  //   print(getWhichItemIsSelectedBYId(selectedValues, 1));
+                  // }
+
                   final res = selectedValues.isNotEmpty ? getWhichItemIsSelectedBYId(selectedValues, 1) : "Residential";
+
                   InventoryQuestions? screenData = getcurrentInventory(snapshot, res);
+
                   List<Screen> screensDataList = screenData!.screens;
 
                   if (allInventoryQuestions.isEmpty) {
@@ -150,11 +166,11 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                       allInventoryQuestionsNotifier.addAllQuestion(screensDataList);
                     });
                   }
-                  if (selectedValues.isNotEmpty && selectedValues[0]["item"] == "Residential") {
+                  if (selectedValues.isNotEmpty && getWhichItemIsSelectedBYId(selectedValues, 1) == "Residential") {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       allInventoryQuestionsNotifier.addAllQuestion(screensDataList);
                     });
-                  } else if (selectedValues.isNotEmpty && selectedValues[0]["item"] == "Commercial") {
+                  } else if (selectedValues.isNotEmpty && getWhichItemIsSelectedBYId(selectedValues, 1) == "Commercial") {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       allInventoryQuestionsNotifier.addAllQuestion(screensDataList);
                     });

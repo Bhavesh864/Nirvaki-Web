@@ -63,6 +63,12 @@ Widget buildInventoryQuestions(
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       selectedOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
+    // if (question.questionId == 23) {
+    //   selectedOption = "Sq ft";
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     notify.add({"id": question.questionId, "item": selectedOption});
+    //   });
+    // }
     return StatefulBuilder(builder: (context, setState) {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 7),
@@ -119,11 +125,11 @@ Widget buildInventoryQuestions(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CustomText(
-                fontWeight: FontWeight.w500,
-                size: 16,
-                title: question.questionTitle,
-              ),
+              // CustomText(
+              //   fontWeight: FontWeight.w500,
+              //   size: 16,
+              //   title: question.questionTitle,
+              // ),
               SizedBox(
                 width: double.infinity,
                 child: Wrap(
@@ -211,9 +217,11 @@ Widget buildInventoryQuestions(
             question.questionTitle.contains('Floor Number') ||
             question.questionTitle.contains('Property Area');
 
-        final isvalidationtrue =
-            question.questionTitle.contains('First') || question.questionTitle.contains('Mobile') || question.questionTitle == 'Rent' || question.questionTitle == 'Listing Price';
-
+        final isvalidationtrue = question.questionTitle.contains('First') ||
+            question.questionTitle.contains('Property Area') ||
+            question.questionTitle.contains('Mobile') ||
+            question.questionTitle == 'Rent' ||
+            question.questionTitle == 'Listing Price';
         final isEmail = question.questionTitle.contains("Email");
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -250,7 +258,9 @@ Widget buildInventoryQuestions(
                         }
                       : null,
             ),
-            isPriceField ? AppText(text: textResult.toUpperCase(), textColor: AppColor.grey, fontsize: 16) : const SizedBox.shrink(),
+            isPriceField
+                ? Container(margin: const EdgeInsets.all(7), child: AppText(text: textResult.toUpperCase(), textColor: AppColor.grey, fontsize: 16))
+                : const SizedBox.shrink(),
           ],
         );
       },
