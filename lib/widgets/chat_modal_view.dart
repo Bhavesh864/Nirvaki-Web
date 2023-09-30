@@ -13,6 +13,7 @@ import '../Customs/custom_text.dart';
 import '../chat/controller/chat_controller.dart';
 import '../constants/app_constant.dart';
 import '../constants/functions/datetime/date_time.dart';
+import '../constants/utils/colors.dart';
 import 'chat/chat_input.dart';
 import 'chat/chat_screen_header.dart';
 import 'chat/message_box.dart';
@@ -208,7 +209,9 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                                   padding: const EdgeInsets.only(top: 10, bottom: 10),
                                   child: Chip(
                                     shape: const StadiumBorder(),
-                                    backgroundColor: Colors.grey.shade200,
+                                    // backgroundColor: Colors.grey.shade200,
+                                    backgroundColor: AppColor.chipGreyColor,
+
                                     label: Padding(
                                       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
                                       child: Text(
@@ -260,7 +263,9 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                                               padding: const EdgeInsets.only(top: 10, bottom: 10),
                                               child: Chip(
                                                 shape: const StadiumBorder(),
-                                                backgroundColor: Colors.grey.shade200,
+                                                // backgroundColor: Colors.grey.shade200,
+                                                backgroundColor: AppColor.chipGreyColor,
+
                                                 label: Padding(
                                                   padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
                                                   child: Text(
@@ -278,7 +283,9 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                                               padding: const EdgeInsets.only(top: 10.0, bottom: 10),
                                               child: Chip(
                                                 shape: const StadiumBorder(),
-                                                backgroundColor: Colors.grey.shade200,
+                                                // backgroundColor: Colors.grey.shade200,
+                                                backgroundColor: AppColor.chipGreyColor,
+
                                                 label: Padding(
                                                   padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
                                                   child: Text(
@@ -293,6 +300,7 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                                             ),
                                           ],
                                           MessageBox(
+                                            isGroupChat: isGroupChat,
                                             message: messageData.text,
                                             isSender: isSender,
                                             data: messageData,

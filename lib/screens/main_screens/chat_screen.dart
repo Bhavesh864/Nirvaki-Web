@@ -16,6 +16,7 @@ import 'package:yes_broker/widgets/chat/chat_screen_header.dart';
 import 'package:yes_broker/widgets/chat/message_box.dart';
 
 import '../../constants/functions/datetime/date_time.dart';
+import '../../constants/utils/colors.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   final ChatItem? chatItem;
@@ -116,7 +117,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                           padding: const EdgeInsets.only(top: 10, bottom: 10),
                           child: Chip(
                             shape: const StadiumBorder(),
-                            backgroundColor: Colors.grey.shade200,
+                            // backgroundColor: Colors.grey.shade200,
+                            backgroundColor: AppColor.chipGreyColor,
+
                             label: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
                               child: Text(
@@ -171,7 +174,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                       padding: const EdgeInsets.only(top: 10, bottom: 10),
                                       child: Chip(
                                         shape: const StadiumBorder(),
-                                        backgroundColor: Colors.grey.shade200,
+                                        // backgroundColor: Colors.grey.shade200,
+                                        backgroundColor: AppColor.chipGreyColor,
+
                                         label: Padding(
                                           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
                                           child: Text(
@@ -189,7 +194,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                       padding: const EdgeInsets.only(top: 10.0, bottom: 10),
                                       child: Chip(
                                         shape: const StadiumBorder(),
-                                        backgroundColor: Colors.grey.shade200,
+                                        // backgroundColor: Colors.grey.shade200,
+                                        backgroundColor: AppColor.chipGreyColor,
+
                                         label: Padding(
                                           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
                                           child: Text(
@@ -204,6 +211,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                     ),
                                   ],
                                   MessageBox(
+                                    isGroupChat: isGroupChat,
                                     message: messageData.text,
                                     isSender: isSender,
                                     data: messageData,

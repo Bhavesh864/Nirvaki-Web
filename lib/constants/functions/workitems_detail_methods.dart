@@ -35,6 +35,12 @@ void showImageSliderCarousel(List<String> imageUrls, int initialIndex, BuildCont
           children: [
             CarouselSlider(
               options: CarouselOptions(
+                autoPlay: true,
+                animateToClosest: true,
+                autoPlayCurve: Curves.linear,
+                pauseAutoPlayOnManualNavigate: true,
+                pauseAutoPlayOnTouch: true,
+                pauseAutoPlayInFiniteScroll: true,
                 height: Responsive.isMobile(context) ? null : 550,
                 initialPage: initialIndex,
                 enlargeCenterPage: true,

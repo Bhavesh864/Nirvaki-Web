@@ -1,15 +1,20 @@
 // ignore_for_file: invalid_use_of_protected_member
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/constants/functions/filterdataAccordingRole/data_according_role.dart';
 import 'package:yes_broker/constants/functions/navigation/navigation_functions.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/widgets/top_search_bar.dart';
 import 'package:yes_broker/widgets/workitems/workitem_filter_view.dart';
+import '../../Customs/loader.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
+import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/utils/constants.dart';
+import '../../riverpodstate/user_data.dart';
 import '../../widgets/card/custom_card.dart';
 import '../../widgets/table_view/table_view_widgets.dart';
 
@@ -23,23 +28,39 @@ class InventoryListingScreen extends ConsumerStatefulWidget {
 class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> {
   bool isFilterOpen = false;
   bool showTableView = false;
+  List<User> usersids = [];
+
   List<String> selectedFilters = [];
   final TextEditingController searchController = TextEditingController();
   RangeValues rateRange = const RangeValues(0, 0);
 
-  Future<List<CardDetails>>? future;
+  late Stream<QuerySnapshot<Map<String, dynamic>>> cardDetails;
   List<CardDetails>? status;
-
+  List<User> userList = [];
+  bool isUserLoaded = false;
   @override
   void initState() {
-    future = CardDetails.getCardDetails();
     super.initState();
+    setCardDetails();
+  }
+
+  void setCardDetails() {
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
+  }
+
+  getDetails(User currentuser) async {
+    final List<User> userList = await User.getUserAllRelatedToBrokerId(currentuser);
+    if (usersids.isEmpty) {
+      usersids = userList;
+      setState(() {});
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: future,
+    final user = ref.watch(userDataProvider);
+    return StreamBuilder(
+      stream: cardDetails,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
@@ -47,8 +68,13 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
           );
         }
         if (snapshot.hasData) {
-          List<CardDetails> inventoryList = snapshot.data!.where((item) => item.cardType == "IN").toList();
-
+          if (user == null) return const Loader();
+          if (!isUserLoaded) {
+            getDetails(user);
+            isUserLoaded = true;
+          }
+          final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
+          final List<CardDetails> inventoryList = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN").toList();
           List<CardDetails> filteredInventoryList = inventoryList.where((item) {
             if (searchController.text.isEmpty) {
               return true;
@@ -187,7 +213,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                                                   ? 2
                                                   : 3,
                                           crossAxisSpacing: 10.0,
-                                          mainAxisExtent: 150,
+                                          mainAxisExtent: 165,
                                         ),
                                         itemCount: filteredInventoryList.length,
                                         itemBuilder: (context, index) {
