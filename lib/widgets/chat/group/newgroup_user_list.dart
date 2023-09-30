@@ -5,6 +5,8 @@ import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 
+import '../../../Customs/custom_chip.dart';
+
 class NewGroupUserList extends StatelessWidget {
   final List<User> users;
   final List<String> selectedUser;
@@ -37,11 +39,24 @@ class NewGroupUserList extends StatelessWidget {
                 tag: user.userId,
                 child: CircleAvatar(radius: 26, backgroundImage: NetworkImage(user.image.isEmpty ? noImg : user.image)),
               ),
-              title: AppText(
-                text: '${user.userfirstname} ${user.userlastname}',
-                textColor: const Color.fromRGBO(44, 44, 46, 1),
-                fontWeight: FontWeight.w500,
-                fontsize: 16,
+              title: Row(
+                children: [
+                  AppText(
+                    text: '${user.userfirstname} ${user.userlastname}',
+                    textColor: const Color.fromRGBO(44, 44, 46, 1),
+                    fontWeight: FontWeight.w500,
+                    fontsize: 16,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  CustomChip(
+                    label: AppText(
+                      text: user.role,
+                      fontsize: 9,
+                    ),
+                  ),
+                ],
               ),
               trailing: selectedUser.isNotEmpty && selectedUser.contains(user.userId)
                   ? const Icon(

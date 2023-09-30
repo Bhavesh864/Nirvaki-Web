@@ -181,7 +181,7 @@ String buildRoomsText(roomconfig) {
   }
 
   if (bathroom != null) {
-    roomTextList.add("$bathroom Baths");
+    roomTextList.add("$bathroom Bathroom");
   }
 
   if (balcony != null) {
