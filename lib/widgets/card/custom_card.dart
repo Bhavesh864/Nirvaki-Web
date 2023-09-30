@@ -23,6 +23,8 @@ class CustomCard extends StatelessWidget {
             CardHeader(index: index, cardDetails: cardDetails),
             const SizedBox(height: 10),
             Text(
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               cardDetails[index].cardTitle!,
               style: const TextStyle(
                 fontSize: 14,
@@ -33,6 +35,8 @@ class CustomCard extends StatelessWidget {
             const SizedBox(height: 5),
             Text(
               cardDetails[index].cardDescription!,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 fontSize: 12,
                 color: Colors.grey,
