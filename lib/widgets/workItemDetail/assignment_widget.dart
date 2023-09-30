@@ -38,7 +38,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final User? user = ref.read(userDataProvider);
+    final User? user = ref.watch(userDataProvider);
     return Column(
       children: [
         if (!AppConst.getPublicView())
@@ -144,14 +144,16 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                       }).toList(),
                     ),
                     user?.role != "Employee"
-                        ? GestureDetector(
+                        ? InkWell(
+                            overlayColor: const MaterialStatePropertyAll(Colors.transparent),
+                            hoverColor: Colors.transparent,
                             onTap: () {
                               assginUserToTodo(context, assign, widget.assignto, widget.id, () {
                                 Navigator.of(context).pop();
                               }, user!);
                             },
                             child: const Padding(
-                              padding: EdgeInsets.only(top: 14),
+                              padding: EdgeInsets.all(8.0),
                               child: Row(
                                 children: [
                                   Icon(Icons.add),

@@ -63,7 +63,6 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                   onDestinationSelected: (index) {
                     setstate(
                       () {
-                        print(sideBarItems[index].nav);
                         beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[index].nav);
                       },
                     );

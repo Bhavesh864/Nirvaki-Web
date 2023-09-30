@@ -50,7 +50,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
   final addressLine2 = getDataById(state, 29);
   final floorNumber = getDataById(state, 30);
   final latlng = getDataById(state, 31);
-  final RangeValues? budgetPrice = getDataById(state, 32);
+  final budgetPrice = getDataById(state, 32);
 
   final preferredpropertyfacing = getDataById(state, 34);
   final comments = getDataById(state, 35);
@@ -71,7 +71,6 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
   final widthofRoad = getDataById(state, 46);
   final attachments = getDataById(state, 100);
   final existingLeadId = getDataById(state, 101);
-
   final List<cards.Assignedto> assignedToList = assignto.map((user) {
     return cards.Assignedto(
       firstname: user.userfirstname,
@@ -110,7 +109,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
     );
   }).toList();
   final LeadDetails lead = LeadDetails(
-      leadTitle: "$propertyCategory $propertyKind-$propertyCity",
+      leadTitle: "$propertyCategory $propertyKind",
       leadDescription: "lead",
       leadId: isEdit ? existingLeadId : "LD$randomId",
       leadStatus: "New",
@@ -153,8 +152,8 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       updatedby: AppConst.getAccessToken(),
       createdate: Timestamp.now(),
       assignedto: assignedListInLead,
-      createdby:
-          Createdby(userfirstname: currentUserdata?.userfirstname, userid: currentUserdata?.userId, userlastname: currentUserdata?.userlastname, userimage: currentUserdata?.image));
+      createdby: Createdby(
+          userfirstname: currentUserdata?.userfirstname, userid: currentUserdata?.userId, userlastname: currentUserdata?.userlastname, userimage: currentUserdata?.image));
 
   isEdit
       ? await cards.CardDetails.updateCardDetails(id: existingLeadId, cardDetails: card).then((value) => {res = "success"})

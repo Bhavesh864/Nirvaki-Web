@@ -222,7 +222,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                                                               ? 2
                                                               : 3,
                                                       crossAxisSpacing: 10.0,
-                                                      mainAxisExtent: Responsive.isMobile(context) ? 197 : 150),
+                                                      mainAxisExtent: 150),
                                                   itemCount: filterTodoList.length,
                                                   itemBuilder: (context, index) => GestureDetector(
                                                     onTap: () {

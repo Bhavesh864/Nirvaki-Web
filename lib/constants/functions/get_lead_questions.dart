@@ -37,7 +37,7 @@ Widget buildLeadQuestions(
             if (isRentSelected && option == "Plot") {
               return const SizedBox();
             }
-            if (isRentSelected || !isRentSelected) {
+            if (option == "Rent" || option == "Buy") {
               final indexToRemove = selectedValues.indexWhere((map) => map['id'] == 32);
               if (indexToRemove != -1) {
                 selectedValues.removeAt(indexToRemove);
@@ -207,8 +207,11 @@ Widget buildLeadQuestions(
     return StatefulBuilder(
       builder: (context, setState) {
         final isPriceField = question.questionId == 46 || question.questionId == 48 || question.questionId == 50;
-        final isvalidationtrue =
-            question.questionTitle.contains('First') || question.questionTitle.contains('Mobile') || question.questionTitle == 'Rent' || question.questionTitle == 'Listing Price';
+        final isvalidationtrue = question.questionTitle.contains('First') ||
+            question.questionTitle.contains('Mobile') ||
+            question.questionTitle == 'Rent' ||
+            question.questionTitle == 'Listing Price' ||
+            question.questionTitle.contains('Property Area');
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -349,6 +352,9 @@ Widget buildLeadQuestions(
     RangeValues rentRangeValues = const RangeValues(0, 1000000);
     RangeValues defaultBuyRangeValues = stateValue ?? buyRangeValues;
     RangeValues defaultRentRangeValues = stateValue ?? rentRangeValues;
+    // if (selectedValues.any((element) => element["id"] != 32)) {
+    //   print("object");
+    // }
     if (isRentSelected) {
       double divisionValue = 5000;
       return StatefulBuilder(

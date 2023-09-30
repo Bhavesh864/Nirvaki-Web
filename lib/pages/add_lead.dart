@@ -78,22 +78,31 @@ class _AddLeadState extends ConsumerState<AddLead> {
     } else {}
   }
 
-  goBack(List<int> id, type) {
-    if (currentScreenIndex > 0) {
-      setState(() {
-        currentScreenIndex--;
-        !isEdit
-            ? type
-                ? null
-                : ref.read(myArrayProvider.notifier).remove(id)
-            : null;
-        pageController!.previousPage(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-      });
-    } else {
-      Navigator.pop(context);
+  bool backButtonEnabled = true;
+  void goBack(List<int> id, type) {
+    if (backButtonEnabled) {
+      if (currentScreenIndex > 0) {
+        setState(() {
+          backButtonEnabled = false;
+          currentScreenIndex--;
+          !isEdit
+              ? type
+                  ? null
+                  : ref.read(myArrayProvider.notifier).remove(id)
+              : null;
+          pageController!.previousPage(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        });
+        Future.delayed(const Duration(seconds: 1), () {
+          setState(() {
+            backButtonEnabled = true;
+          });
+        });
+      } else {
+        Navigator.pop(context);
+      }
     }
   }
 
@@ -138,11 +147,11 @@ class _AddLeadState extends ConsumerState<AddLead> {
                   allLeadQuestionsNotifier.addAllQuestion(screensDataList);
                 });
               }
-              if (selectedValues.isNotEmpty && selectedValues[0]["item"] == "Residential") {
+              if (selectedValues.isNotEmpty && getWhichItemIsSelectedBYId(selectedValues, 1) == "Residential") {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   allLeadQuestionsNotifier.addAllQuestion(screensDataList);
                 });
-              } else if (selectedValues.isNotEmpty && selectedValues[0]["item"] == "Commercial") {
+              } else if (selectedValues.isNotEmpty && getWhichItemIsSelectedBYId(selectedValues, 1) == "Commercial") {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   allLeadQuestionsNotifier.addAllQuestion(screensDataList);
                 });
@@ -297,7 +306,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                 final currentScreenQuestions = screensDataList[currentScreenIndex].questions;
                 final ids = currentScreenQuestions.map((q) => q.questionId).toList();
                 final allquestion = currentScreenQuestions.map((q) => q.questionOptionType).toList();
-                final questiontype = allquestion.any((element) => element == "textfield" || element == "photo");
+                final questiontype = allquestion.any((element) => element == "textfield" || element == "rangeSlider");
                 goBack(ids, questiontype);
               },
               icon: const Icon(

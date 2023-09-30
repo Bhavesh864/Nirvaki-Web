@@ -114,7 +114,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
     );
   }).toList();
   final InventoryDetails inventory = InventoryDetails(
-      inventoryTitle: "$propertyCategory $propertyKind-$propertyCity",
+      inventoryTitle: "$propertyCategory $propertyKind",
       inventoryDescription: "Want to $inventoryCategory her $bedrooms BHK for $price rupees",
       inventoryId: isEdit ? existingInventoryId : "IN$randomId",
       inventoryStatus: "New",
