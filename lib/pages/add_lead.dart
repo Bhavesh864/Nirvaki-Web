@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/Customs/snackbar.dart';
 
 import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/customs/responsive.dart';
@@ -252,7 +253,16 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                                           nextQuestion(screensDataList: screensDataList, option: "");
                                                                         }
                                                                       }
-                                                                      if (currentScreenList[index].title == "Assign to") {
+                                                                      final hasvalues = selectedValues.any((element) => element["id"] == 36);
+                                                                      final assignFieldValue = selectedValues.firstWhere((element) => element["id"] == 36);
+                                                                      if (currentScreenList[index].title == "Assign to" && hasvalues && assignFieldValue.isNotEmpty && !isEdit) {
+                                                                        setState(() {
+                                                                          allQuestionFinishes = true;
+                                                                        });
+                                                                        addDataOnfirestore(notify);
+                                                                      } else if (currentScreenList[index].title == "Assign to" && !hasvalues) {
+                                                                        customSnackBar(context: context, text: "Please assign to user");
+                                                                      } else if (currentScreenList[index].title == "Assign to" && assignFieldValue.isNotEmpty && isEdit) {
                                                                         setState(() {
                                                                           allQuestionFinishes = true;
                                                                         });
