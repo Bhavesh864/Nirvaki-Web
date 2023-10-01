@@ -113,8 +113,10 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       userid: user.userId,
     );
   }).toList();
+  bool isResidential = propertyCategory == "Residential";
+  var title = isResidential ? "" : commericialtype;
   final InventoryDetails inventory = InventoryDetails(
-      inventoryTitle: "$propertyCategory $propertyKind",
+      inventoryTitle: "$propertyCategory $title $propertyKind",
       inventoryDescription: "Want to $inventoryCategory her $bedrooms BHK for $price rupees",
       inventoryId: isEdit ? existingInventoryId : "IN$randomId",
       inventoryStatus: "New",
