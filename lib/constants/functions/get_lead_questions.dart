@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:number_to_words/number_to_words.dart';
+import 'convertStringTorange/convert_range_string.dart';
 
 import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
@@ -17,8 +18,6 @@ import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
 import '../firebase/detailsModels/lead_details.dart';
 import '../utils/colors.dart';
-import '../validation/basic_validation.dart';
-import 'convertStringTorange/convert_range_string.dart';
 
 Widget buildLeadQuestions(
   Question question,
