@@ -12,9 +12,9 @@
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/cloud_firestore-4.9.1/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/emoji_picker_flutter-1.6.1/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/file_picker-5.5.0/android" />
-            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_analytics-10.4.5/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_analytics-10.5.0/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_auth-4.9.0/android" />
-            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_core-2.15.1/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_core-2.16.0/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_database-10.2.5/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_dynamic_links-5.3.5/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_messaging-14.6.7/android" />
@@ -30,6 +30,7 @@
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/url_launcher_android-6.1.0/android" />
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/../../fluttersdk/flutter/packages/integration_test/android" />
           </set>
         </option>
       </GradleProjectSettings>
