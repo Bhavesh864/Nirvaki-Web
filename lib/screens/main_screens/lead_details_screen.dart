@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
@@ -15,7 +14,6 @@ import 'package:yes_broker/pages/add_lead.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import '../../constants/functions/convertStringTorange/convert_string_to_range.dart';
 import '../../customs/custom_text.dart';
-import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
 import '../../riverpodstate/common_index_state.dart';
@@ -146,74 +144,74 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                 //   ),
                                 // ),
                                 if (Responsive.isMobile(context))
-                                  Row(
-                                    children: [
-                                      CustomButton(
-                                        text: 'View Owner Details',
-                                        onPressed: () {
-                                          showOwnerDetailsAndAssignToBottomSheet(
-                                            context,
-                                            'Owner Details',
-                                            ContactInformation(customerinfo: data.customerinfo!),
-                                          );
-                                        },
-                                        height: 40,
-                                        width: 180,
+                                  // Row(
+                                  //   children: [
+                                  //     CustomButton(
+                                  //       text: 'View Owner Details',
+                                  //       onPressed: () {
+                                  //         showOwnerDetailsAndAssignToBottomSheet(
+                                  //           context,
+                                  //           'Owner Details',
+                                  //           ContactInformation(customerinfo: data.customerinfo!),
+                                  //         );
+                                  //       },
+                                  //       height: 40,
+                                  //       width: 180,
+                                  //     ),
+                                  //     const SizedBox(
+                                  //       width: 10,
+                                  //     ),
+                                  //     GestureDetector(
+                                  //       onTap: () {
+                                  //         showOwnerDetailsAndAssignToBottomSheet(
+                                  //           context,
+                                  //           'Assignment',
+                                  //           AssignmentWidget(
+                                  //             id: data.leadId!,
+                                  //             assignto: data.assignedto!,
+                                  //             imageUrlCreatedBy:
+                                  //                 data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                  //             createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
+                                  //           ),
+                                  //         );
+                                  //       },
+                                  //       child: Row(
+                                  //         mainAxisAlignment: MainAxisAlignment.end,
+                                  //         children: data.assignedto!.asMap().entries.map((entry) {
+                                  //           final index = entry.key;
+                                  //           final user = entry.value;
+                                  //           return Transform.translate(
+                                  //             offset: Offset(index * -8.0, 0),
+                                  //             child: Container(
+                                  //               width: 24,
+                                  //               height: 24,
+                                  //               decoration: BoxDecoration(
+                                  //                 border: Border.all(color: Colors.white),
+                                  //                 image: DecorationImage(
+                                  //                   image: NetworkImage(
+                                  //                     user.image!.isEmpty ? noImg : user.image!,
+                                  //                   ),
+                                  //                   fit: BoxFit.fill,
+                                  //                 ),
+                                  //                 borderRadius: BorderRadius.circular(40),
+                                  //               ),
+                                  //             ),
+                                  //           );
+                                  //         }).toList(),
+                                  //       ),
+                                  //     ),
+                                  //   ],
+                                  // ),
+                                  if (Responsive.isMobile(context))
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 12.0),
+                                      child: CustomText(
+                                        title: data.propertypricerange?.arearangestart != null
+                                            ? '${data.propertypricerange?.arearangestart} ${data.propertypricerange?.arearangeend}'
+                                            : '50k/month',
+                                        color: AppColor.primary,
                                       ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          showOwnerDetailsAndAssignToBottomSheet(
-                                            context,
-                                            'Assignment',
-                                            AssignmentWidget(
-                                              id: data.leadId!,
-                                              assignto: data.assignedto!,
-                                              imageUrlCreatedBy:
-                                                  data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                              createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
-                                            ),
-                                          );
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          children: data.assignedto!.asMap().entries.map((entry) {
-                                            final index = entry.key;
-                                            final user = entry.value;
-                                            return Transform.translate(
-                                              offset: Offset(index * -8.0, 0),
-                                              child: Container(
-                                                width: 24,
-                                                height: 24,
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(color: Colors.white),
-                                                  image: DecorationImage(
-                                                    image: NetworkImage(
-                                                      user.image!.isEmpty ? noImg : user.image!,
-                                                    ),
-                                                    fit: BoxFit.fill,
-                                                  ),
-                                                  borderRadius: BorderRadius.circular(40),
-                                                ),
-                                              ),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                if (Responsive.isMobile(context))
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 12.0),
-                                    child: CustomText(
-                                      title: data.propertypricerange?.arearangestart != null
-                                          ? '${data.propertypricerange?.arearangestart} ${data.propertypricerange?.arearangeend}'
-                                          : '50k/month',
-                                      color: AppColor.primary,
                                     ),
-                                  ),
                                 if (!AppConst.getPublicView())
                                   TabBarWidget(
                                     tabviewController: tabviewController,
@@ -271,9 +269,9 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                   MapViewWidget(
                                     state: data.preferredlocality!.state!,
                                     city: data.preferredlocality!.city!,
-                                    addressline1: data.preferredlocality!.addressline1!,
+                                    addressline1: data.preferredlocality?.addressline1,
                                     addressline2: data.preferredlocality?.addressline2,
-                                    locality: data.preferredlocality?.locality,
+                                    locality: data.preferredlocality!.locality!,
                                   ),
                               ],
                             ),
