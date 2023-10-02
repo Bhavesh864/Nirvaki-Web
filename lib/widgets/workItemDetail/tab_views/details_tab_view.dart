@@ -1,10 +1,8 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/customs/loader.dart';
-
 import '../../../Customs/custom_chip.dart';
 import '../../../Customs/custom_text.dart';
 import '../../../Customs/responsive.dart';

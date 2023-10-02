@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
+import 'package:yes_broker/constants/validation/basic_validation.dart';
 
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 
@@ -90,19 +91,15 @@ Widget buildTodoQuestions(
         ),
       );
     }
-
     return LabelTextInputField(
+      keyboardType: TextInputType.name,
       inputController: controller,
+      isMandatory: true,
       labelText: question.questionTitle,
       onChanged: (newvalue) {
         notify.add({"id": question.questionId, "item": newvalue.trim()});
       },
-      validator: (value) {
-        if (value!.isEmpty) {
-          return "Please enter ${question.questionTitle}";
-        }
-        return null;
-      },
+      validator: (value) => validateForNormalFeild(value: value, props: "Title"),
     );
   } else if (question.questionOptionType == 'textarea') {
     final value = selectedValues.where((e) => e["id"] == question.questionId).toList();

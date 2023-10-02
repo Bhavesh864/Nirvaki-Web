@@ -20,13 +20,13 @@ Iterable<QueryDocumentSnapshot<Map<String, dynamic>>>? filterCardsAccordingToRol
         final hasAssignedToManager = assignedTo?.any((user) => user["userid"] == currentUserId || userList.any((userinfo) => user["userid"] == userinfo.userId)) ?? false;
         return hasAssignedToManager;
       case UserRole.employee:
-        final hasUserList = userList.isNotEmpty;
-        if (hasUserList) {
-          final hasAssignedToManager = assignedTo?.any((user) => user["userid"] == currentUserId || userList.any((userinfo) => user["userid"] == userinfo.userId)) ?? false;
-          return hasAssignedToManager;
-        } else {
-          return assignedTo?.any((user) => user["userid"] == currentUserId) ?? false;
-        }
+        // final hasUserList = userList.isNotEmpty;
+        // if (hasUserList) {
+        //   final hasAssignedToManager = assignedTo?.any((user) => user["userid"] == currentUserId || userList.any((userinfo) => user["userid"] == userinfo.userId)) ?? false;
+        //   return hasAssignedToManager;
+        // } else {
+        return assignedTo?.any((user) => user["userid"] == currentUserId) ?? false;
+      // }
       default:
         return false;
     }
