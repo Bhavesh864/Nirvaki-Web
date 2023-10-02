@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
-import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/customs/loader.dart';
 
 import '../../../Customs/custom_chip.dart';
@@ -302,35 +301,35 @@ class _DetailsTabViewState extends State<DetailsTabView> {
               widget.data.amenities!.length + 1,
               (index) {
                 if (index == widget.data.amenities!.length) {
-                  return Stack(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(right: 8.0, top: 10),
-                        child: CustomChip(
-                          label: Text(
-                            'No. of Reserved Parking',
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8.0, top: 10),
+                    child: CustomChip(
+                      label: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          const Text(
+                            'No. of Reserved Parking: ',
                           ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 0,
-                        right: 6,
-                        child: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColor.primary,
+                          const SizedBox(
+                            width: 3,
                           ),
-                          child: Text(
-                            '${widget.data.reservedparking.covered}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey.shade600,
+                            ),
+                            child: Text(
+                              '${widget.data.reservedparking.covered}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   );
                 } else {
                   return Padding(

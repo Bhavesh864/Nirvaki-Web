@@ -151,8 +151,19 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                               if (Responsive.isMobile(context))
                                 Row(
                                   children: [
-                                    CustomButton(
-                                      text: 'View Owner Detail',
+                                    // CustomButton(
+                                    //   text: 'Owner Details',
+                                    //   onPressed: () {
+                                    //     showOwnerDetailsAndAssignToBottomSheet(
+                                    //       context,
+                                    //       'Owner Details',
+                                    //       ContactInformation(customerinfo: data.customerinfo!),
+                                    //     );
+                                    //   },
+                                    //   height: 35,
+                                    //   width: 135,
+                                    // ),
+                                    ElevatedButton(
                                       onPressed: () {
                                         showOwnerDetailsAndAssignToBottomSheet(
                                           context,
@@ -160,8 +171,15 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                           ContactInformation(customerinfo: data.customerinfo!),
                                         );
                                       },
-                                      height: 40,
-                                      width: 180,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColor.primary, // Set the button's background color
+                                        // minimumSize: const Size(100, 20),
+                                        padding: const EdgeInsets.all(8), // Set the button's size
+                                      ),
+                                      child: const Text(
+                                        'Owner Details',
+                                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                                      ),
                                     ),
                                     const SizedBox(
                                       width: 10,
@@ -263,6 +281,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                   assignto: data.assignedto!,
                                   imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                   createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
+                                  data: data,
                                 ),
                               if (Responsive.isDesktop(context))
                                 MapViewWidget(
