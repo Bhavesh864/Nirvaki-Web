@@ -209,7 +209,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 24, top: 2),
+                  padding: const EdgeInsets.only(left: 29, top: 2),
                   child: Row(
                     children: [
                       SmallCustomCircularImage(imageUrl: widget.imageUrlCreatedBy),
@@ -300,13 +300,15 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 5),
+                padding: const EdgeInsets.only(left: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Column(
                       mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: widget.assignto.map((item) {
                         return Container(
                           margin: const EdgeInsets.only(bottom: 7),
@@ -318,8 +320,9 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                               SmallCustomCircularImage(imageUrl: item.image!.isNotEmpty ? item.image! : noImg),
                               Text(
                                 "${item.firstname!} ${item.lastname}",
+                                // "${item.firstname!} /${item.lastname}",
                                 overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.left,
+                                // textAlign: TextAlign.left,
                                 style: const TextStyle(
                                   color: AppColor.primary,
                                   fontSize: 14,

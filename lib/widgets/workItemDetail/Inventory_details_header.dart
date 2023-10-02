@@ -88,7 +88,7 @@ class InventoryDetailsHeader extends ConsumerWidget {
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
                   ),
-                  overflow: TextOverflow.ellipsis,
+                  // overflow: TextOverflow.ellipsis,
                 ),
               ),
             ),

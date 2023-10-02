@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:yes_broker/customs/responsive.dart';
 
 import '../../Customs/custom_text.dart';
 import '../../constants/utils/constants.dart';
@@ -29,7 +31,7 @@ class CustomStatusDropDown extends StatelessWidget {
       },
       child: IntrinsicWidth(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: kIsWeb ? 5.5 : 7),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),
             color: taskStatusColor(status).withOpacity(0.1),
