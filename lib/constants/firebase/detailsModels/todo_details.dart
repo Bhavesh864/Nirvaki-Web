@@ -10,7 +10,7 @@ class TodoDetails {
   String? todoName;
   String? todoDescription;
   String? dueDate;
-  Timestamp? createDate;
+  Timestamp? createdate;
   String? createdBy;
   String? todoStatus;
   Customerinfo? customerinfo;
@@ -26,7 +26,7 @@ class TodoDetails {
       this.todoName,
       this.todoDescription,
       this.dueDate,
-      this.createDate,
+      this.createdate,
       this.createdBy,
       this.todoStatus,
       this.customerinfo,
@@ -45,7 +45,7 @@ class TodoDetails {
       assignedto: (json["assignedto"] as List<dynamic>?)?.map((e) => Assignedto.fromJson(e)).toList(),
       managerId: json["managerId"],
       createdBy: json["createdBy"],
-      createDate: json["createdate"],
+      createdate: json["createdate"],
       todoType: json["todoType"],
       dueDate: json["dueDate"],
       linkedWorkItem: (json["linkedWorkItem"] as List<dynamic>?)?.map((e) => LinkedWorkItem.fromJson(e)).toList(),
@@ -76,8 +76,8 @@ class TodoDetails {
     if (json["dueDate"] is String) {
       dueDate = json["dueDate"];
     }
-    if (json["createDate"] is Timestamp) {
-      createDate = json["createDate"];
+    if (json["createdate"] is Timestamp) {
+      createdate = json["createdate"];
     }
     if (json["createdBy"] is String) {
       createdBy = json["createdBy"];
@@ -108,7 +108,7 @@ class TodoDetails {
     data["todoName"] = todoName;
     data["todoDescription"] = todoDescription;
     data["dueDate"] = dueDate;
-    data["createDate"] = createDate;
+    data["createdate"] = createdate;
     data["createdBy"] = createdBy;
     data["todoStatus"] = todoStatus;
     if (customerinfo != null) {
