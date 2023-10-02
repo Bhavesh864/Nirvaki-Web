@@ -261,16 +261,9 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                                           nextQuestion(screensDataList: screensDataList, option: "");
                                                                         }
                                                                       }
-                                                                      final hasvalues = selectedValues.any((element) => element["id"] == 36);
-                                                                      final assignFieldValue = selectedValues.firstWhere((element) => element["id"] == 36);
-                                                                      if (currentScreenList[index].title == "Assign to" && hasvalues && assignFieldValue.isNotEmpty && !isEdit) {
-                                                                        setState(() {
-                                                                          allQuestionFinishes = true;
-                                                                        });
-                                                                        addDataOnfirestore(notify);
-                                                                      } else if (currentScreenList[index].title == "Assign to" && !hasvalues) {
-                                                                        customSnackBar(context: context, text: "Please assign to user");
-                                                                      } else if (currentScreenList[index].title == "Assign to" && assignFieldValue.isNotEmpty && isEdit) {
+                                                                      // final hasvalues = selectedValues.any((element) => element["id"] == 36);
+                                                                      // final assignFieldValue = selectedValues.firstWhere((element) => element["id"] == 36);
+                                                                      if (currentScreenList[index].title == "Assign to") {
                                                                         setState(() {
                                                                           allQuestionFinishes = true;
                                                                         });

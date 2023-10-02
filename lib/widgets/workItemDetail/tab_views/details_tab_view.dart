@@ -1,3 +1,5 @@
+// import 'dart:html';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
@@ -150,143 +152,281 @@ class _DetailsTabViewState extends State<DetailsTabView> {
           ),
         ),
         if (!widget.isLeadView) ...[
-          Wrap(children: [
-            if (checkNotNUllItem(widget.data.roomconfig.bedroom)) ...[
+          if (widget.data.propertycategory == 'Commercial') ...[
+            Wrap(children: [
+              if (checkNotNUllItem(widget.data.availability)) ...[
+                buildInfoFields(
+                  'Property Category',
+                  widget.data.availability,
+                  context,
+                ),
+              ],
+              if (checkNotNUllItem(widget.data.propertykind))
+                buildInfoFields(
+                  'Type of Land',
+                  "${widget.data.propertykind}",
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.commericialtype))
+                buildInfoFields(
+                  'Property Type',
+                  "${widget.data.commericialtype}",
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.typeofoffice))
+                buildInfoFields(
+                  'Type of office',
+                  widget.data.typeofoffice,
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.typeofretail))
+                buildInfoFields(
+                  'Type of Retail',
+                  widget.data.typeofretail,
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.typeofhospitality))
+                buildInfoFields(
+                  'Type of Hospitality',
+                  widget.data.typeofhospitality,
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.typeofhealthcare))
+                buildInfoFields(
+                  'Type of Helathcare',
+                  widget.data.propertyfacing,
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.approvedbeds))
+                buildInfoFields(
+                  'Approve beds',
+                  widget.data.approvedbeds,
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.typeofschool))
+                buildInfoFields(
+                  'Type of School',
+                  widget.data.typeofschool,
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.hospitalrooms))
+                buildInfoFields(
+                  'Rooms Constructed',
+                  widget.data.hospitalrooms,
+                  context,
+                ),
+            ]),
+            const Divider(
+              height: 40,
+            ),
+          ] else ...[
+            Wrap(children: [
+              if (checkNotNUllItem(widget.data.roomconfig.bedroom)) ...[
+                buildInfoFields(
+                  'Layout',
+                  buildRoomsText(widget.data.roomconfig, false),
+                  context,
+                ),
+                buildInfoFields(
+                  'Additional Room',
+                  buildRoomsText(widget.data.roomconfig, true),
+                  context,
+                ),
+              ],
+              if (checkNotNUllItem(widget.data.propertyarea.superarea) && checkNotNUllItem(widget.data.propertyarea.unit))
+                buildInfoFields(
+                  'Area',
+                  "${widget.data.propertyarea.superarea} ${widget.data.propertyarea.unit}",
+                  context,
+                ),
+              if (widget.data.inventorycategory == 'Rent' && widget.data.propertyrent.securityamount != null)
+                buildInfoFields(
+                  'Security Deposit',
+                  "₹${widget.data.propertyrent.securityamount}",
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.transactiontype))
+                buildInfoFields(
+                  'Transaction Type',
+                  widget.data.transactiontype,
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.availability))
+                buildInfoFields(
+                  'Availability',
+                  widget.data.availability,
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.possessiondate))
+                buildInfoFields(
+                  'Possessiondate',
+                  widget.data.possessiondate,
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.propertyfacing))
+                buildInfoFields(
+                  'Property Facing',
+                  widget.data.propertyfacing,
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.villatype))
+                buildInfoFields(
+                  'Villa Type',
+                  widget.data.villatype,
+                  context,
+                ),
+              if (widget.data.propertykind == 'Plot')
+                buildInfoFields(
+                  'No. of Open Sides',
+                  widget.data.plotdetails.opensides,
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.plotdetails.boundarywall))
+                buildInfoFields(
+                  'Boundary',
+                  widget.data.plotdetails.boundarywall,
+                  context,
+                ),
+            ]),
+            const Divider(
+              height: 40,
+            ),
+          ]
+        ] else ...[
+          if (widget.data.propertycategory == 'Commercial') ...[
+            if (checkNotNUllItem(widget.data.availability)) ...[
               buildInfoFields(
-                'Layout',
-                buildRoomsText(widget.data.roomconfig, false),
-                context,
-              ),
-              buildInfoFields(
-                'Additional Room',
-                buildRoomsText(widget.data.roomconfig, true),
-                context,
-              ),
-            ],
-            if (checkNotNUllItem(widget.data.propertyarea.superarea) && checkNotNUllItem(widget.data.propertyarea.unit))
-              buildInfoFields(
-                'Area',
-                "${widget.data.propertyarea.superarea} ${widget.data.propertyarea.unit}",
-                context,
-              ),
-            if (widget.data.inventorycategory == 'Rent' && widget.data.propertyrent.securityamount != null)
-              buildInfoFields(
-                'Security Deposit',
-                "₹${widget.data.propertyrent.securityamount}",
-                context,
-              ),
-            if (checkNotNUllItem(widget.data.transactiontype))
-              buildInfoFields(
-                'Transaction Type',
-                widget.data.transactiontype,
-                context,
-              ),
-            if (checkNotNUllItem(widget.data.availability))
-              buildInfoFields(
-                'Availability',
+                'Property Category',
                 widget.data.availability,
                 context,
               ),
-            if (checkNotNUllItem(widget.data.possessiondate))
+            ],
+            if (checkNotNUllItem(widget.data.propertykind))
               buildInfoFields(
-                'Possessiondate',
-                widget.data.possessiondate,
+                'Type of Land',
+                "${widget.data.propertykind}",
                 context,
               ),
-            if (checkNotNUllItem(widget.data.propertyfacing))
+            if (checkNotNUllItem(widget.data.commericialtype))
               buildInfoFields(
-                'Property Facing',
+                'Property Type',
+                "${widget.data.commericialtype}",
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.typeofoffice))
+              buildInfoFields(
+                'Type of office',
+                widget.data.typeofoffice,
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.typeofretail))
+              buildInfoFields(
+                'Type of Retail',
+                widget.data.typeofretail,
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.typeofhospitality))
+              buildInfoFields(
+                'Type of Hospitality',
+                widget.data.typeofhospitality,
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.typeofhealthcare))
+              buildInfoFields(
+                'Type of Helathcare',
                 widget.data.propertyfacing,
                 context,
               ),
-            if (checkNotNUllItem(widget.data.villatype))
+            if (checkNotNUllItem(widget.data.approvedbeds))
               buildInfoFields(
-                'Villa Type',
-                widget.data.villatype,
+                'Approve beds',
+                widget.data.approvedbeds,
                 context,
               ),
-            if (widget.data.propertykind == 'Plot')
+            if (checkNotNUllItem(widget.data.typeofschool))
               buildInfoFields(
-                'No. of Open Sides',
-                widget.data.plotdetails.opensides,
+                'Type of School',
+                widget.data.typeofschool,
                 context,
               ),
-            if (checkNotNUllItem(widget.data.plotdetails.boundarywall))
+            if (checkNotNUllItem(widget.data.hospitalrooms))
               buildInfoFields(
-                'Boundary',
-                widget.data.plotdetails.boundarywall,
-                context,
-              ),
-          ]),
-          const Divider(
-            height: 40,
-          ),
-        ] else ...[
-          Wrap(children: [
-            if (checkNotNUllItem(widget.data.roomconfig.bedroom)) ...[
-              buildInfoFields(
-                'Layout',
-                buildRoomsText(widget.data.roomconfig, false),
-                context,
-              ),
-              buildInfoFields(
-                'Additional Room',
-                buildRoomsText(widget.data.roomconfig, true),
-                context,
-              ),
-            ],
-            if (checkNotNUllItem(widget.data.propertyarea.superarea) && checkNotNUllItem(widget.data.propertyarea.unit))
-              buildInfoFields(
-                'Area',
-                "${widget.data.propertyarea.superarea} ${widget.data.propertyarea.unit}",
-                context,
-              ),
-            if (checkNotNUllItem(widget.data.transactiontype))
-              buildInfoFields(
-                'Transaction Type',
-                widget.data.transactiontype,
-                context,
-              ),
-            if (checkNotNUllItem(widget.data.availability))
-              buildInfoFields(
-                'Availability',
-                widget.data.availability,
-                context,
-              ),
-            if (checkNotNUllItem(widget.data.possessiondate))
-              buildInfoFields(
-                'Possessiondate',
-                widget.data.possessiondate,
-                context,
-              ),
-            if (checkNotNUllItem(widget.data.preferredpropertyfacing))
-              buildInfoFields(
-                'Property Facing',
-                widget.data.preferredpropertyfacing,
-                context,
-              ),
-            if (checkNotNUllItem(widget.data.villatype))
-              buildInfoFields(
-                'Villa Type',
-                widget.data.villatype,
-                context,
-              ),
-            if (widget.data.propertykind == 'Plot')
-              buildInfoFields(
-                'No. of Open Sides',
-                widget.data.plotdetails.opensides,
-                context,
-              ),
-            if (checkNotNUllItem(widget.data.plotdetails.boundarywall))
-              buildInfoFields(
-                'Boundary',
-                widget.data.plotdetails.boundarywall,
+                'Rooms Constructed',
+                widget.data.hospitalrooms,
                 context,
               ),
             const Divider(
               height: 40,
             ),
-          ]),
+          ] else ...[
+            Wrap(
+              children: [
+                if (checkNotNUllItem(widget.data.roomconfig.bedroom)) ...[
+                  buildInfoFields(
+                    'Layout',
+                    buildRoomsText(widget.data.roomconfig, false),
+                    context,
+                  ),
+                  buildInfoFields(
+                    'Additional Room',
+                    buildRoomsText(widget.data.roomconfig, true),
+                    context,
+                  ),
+                ],
+                if (checkNotNUllItem(widget.data.propertyarea.superarea) && checkNotNUllItem(widget.data.propertyarea.unit))
+                  buildInfoFields(
+                    'Area',
+                    "${widget.data.propertyarea.superarea} ${widget.data.propertyarea.unit}",
+                    context,
+                  ),
+                if (checkNotNUllItem(widget.data.transactiontype))
+                  buildInfoFields(
+                    'Transaction Type',
+                    widget.data.transactiontype,
+                    context,
+                  ),
+                if (checkNotNUllItem(widget.data.availability))
+                  buildInfoFields(
+                    'Availability',
+                    widget.data.availability,
+                    context,
+                  ),
+                if (checkNotNUllItem(widget.data.possessiondate))
+                  buildInfoFields(
+                    'Possessiondate',
+                    widget.data.possessiondate,
+                    context,
+                  ),
+                if (checkNotNUllItem(widget.data.preferredpropertyfacing))
+                  buildInfoFields(
+                    'Property Facing',
+                    widget.data.preferredpropertyfacing,
+                    context,
+                  ),
+                if (checkNotNUllItem(widget.data.villatype))
+                  buildInfoFields(
+                    'Villa Type',
+                    widget.data.villatype,
+                    context,
+                  ),
+                if (widget.data.propertykind == 'Plot')
+                  buildInfoFields(
+                    'No. of Open Sides',
+                    widget.data.plotdetails.opensides,
+                    context,
+                  ),
+                if (checkNotNUllItem(widget.data.plotdetails.boundarywall))
+                  buildInfoFields(
+                    'Boundary',
+                    widget.data.plotdetails.boundarywall,
+                    context,
+                  ),
+                const Divider(
+                  height: 40,
+                ),
+              ],
+            ),
+          ],
         ],
         if (widget.data.amenities != null) ...[
           CustomText(
