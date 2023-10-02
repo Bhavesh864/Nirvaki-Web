@@ -264,6 +264,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                 id: data.todoId!,
                                                 imageUrlCreatedBy: data.createdBy == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
                                                 createdBy: '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
+                                                data: data,
                                               ),
                                             );
                                           },
@@ -608,6 +609,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                     id: data.todoId!,
                                     imageUrlCreatedBy: data.createdBy == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
                                     createdBy: '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
+                                    data: data,
                                   ),
                               ],
                             ),
