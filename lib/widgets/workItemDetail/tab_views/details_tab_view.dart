@@ -1,7 +1,9 @@
 // import 'dart:html';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/customs/loader.dart';
@@ -10,6 +12,7 @@ import '../../../Customs/custom_text.dart';
 import '../../../Customs/responsive.dart';
 import '../../../constants/app_constant.dart';
 import '../../../constants/functions/workitems_detail_methods.dart';
+import '../../../constants/utils/colors.dart';
 import '../../../constants/utils/constants.dart';
 import '../mapview_widget.dart';
 
@@ -58,11 +61,14 @@ class _DetailsTabViewState extends State<DetailsTabView> {
   List<PlatformFile> pickedFilesList = [];
   List<String> selectedDocsNameList = [];
   bool isUploading = false;
+  // String videoUrl = "https://www.youtube.com/embed/C3aRyxcpy5A";
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     List<String> allImages = [];
     List<String> allTitles = [];
+    final videoUrl = !widget.isLeadView && widget.data?.propertyvideo != null ? widget.data.propertyvideo : "";
 
     if (!widget.isLeadView) {
       final inventoryData = widget.data as InventoryDetails;
@@ -686,6 +692,40 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                       }
                     }),
               ),
+              // ================================ Video Section ================================
+              if (!widget.isLeadView && videoUrl != null && videoUrl.contains('youtube.com')) ...[
+                const Divider(
+                  height: 40,
+                ),
+                const CustomText(
+                  title: "Video",
+                  fontWeight: FontWeight.w700,
+                ),
+                const SizedBox(height: 12),
+                Container(
+                  width: kIsWeb ? 400 : width / 1.1,
+                  height: kIsWeb ? 250 : 220,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: AppColor.chipGreyColor,
+                    // color: const Color.fromARGB(40, 68, 97, 239),
+                  ),
+                  child: HtmlWidget(
+                    '''
+                    <iframe
+                      width="300"
+                      height="300"
+                      src="$videoUrl"
+                      frameborder="0"
+                      title="Brokr"
+                      allow="accelerometer"
+                      allowfullscreen
+                    ></iframe>
+                  ''',
+                  ),
+                ),
+              ]
             ],
           ),
         if (!Responsive.isDesktop(context)) ...[
