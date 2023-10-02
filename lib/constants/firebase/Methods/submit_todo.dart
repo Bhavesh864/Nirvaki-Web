@@ -85,7 +85,7 @@ Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
     assignedto: assignedListTodo,
     createdBy: AppConst.getAccessToken(),
     attachments: [],
-    createDate: Timestamp.now(),
+    createdate: Timestamp.now(),
     linkedWorkItem: [
       cardDetail != null
           ? LinkedWorkItem(

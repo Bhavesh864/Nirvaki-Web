@@ -63,12 +63,7 @@ Widget buildInventoryQuestions(
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       selectedOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
-    // if (question.questionId == 23) {
-    //   selectedOption = "Sq ft";
-    //   WidgetsBinding.instance.addPostFrameCallback((_) {
-    //     notify.add({"id": question.questionId, "item": selectedOption});
-    //   });
-    // }
+
     return StatefulBuilder(builder: (context, setState) {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 7),

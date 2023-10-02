@@ -5,6 +5,7 @@ import 'package:number_to_words/number_to_words.dart';
 
 import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/questionaries/questions_form_photos_view.dart';
 import 'package:yes_broker/widgets/questionaries/assign_user.dart';
@@ -208,19 +209,11 @@ Widget buildLeadQuestions(
     return StatefulBuilder(
       builder: (context, setState) {
         final isPriceField = question.questionId == 46 || question.questionId == 48 || question.questionId == 50;
-        final isvalidationtrue = question.questionTitle.contains('First') ||
-            question.questionTitle.contains('Mobile') ||
-            question.questionTitle == 'Rent' ||
-            question.questionTitle == 'Listing Price';
-
-        final isDigitsOnly = question.questionTitle.contains('Mobile') ||
-            question.questionTitle == 'Rent' ||
-            question.questionTitle == 'Listing Price' ||
-            question.questionTitle.contains('Floor Number') ||
-            question.questionTitle.contains('Property Area');
+        final isDigitsOnly = question.questionTitle.contains('Mobile') || question.questionTitle.contains('Property Area');
+        final isvalidationtrue =
+            question.questionTitle.contains('First') || question.questionTitle.contains('Mobile') || question.questionTitle == 'Rent' || question.questionTitle == 'Listing Price';
 
         final isEmail = question.questionTitle.contains("Email");
-
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -2,6 +2,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/Customs/snackbar.dart';
 
 import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/customs/responsive.dart';
@@ -260,6 +261,8 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                                           nextQuestion(screensDataList: screensDataList, option: "");
                                                                         }
                                                                       }
+                                                                      // final hasvalues = selectedValues.any((element) => element["id"] == 36);
+                                                                      // final assignFieldValue = selectedValues.firstWhere((element) => element["id"] == 36);
                                                                       if (currentScreenList[index].title == "Assign to") {
                                                                         setState(() {
                                                                           allQuestionFinishes = true;
