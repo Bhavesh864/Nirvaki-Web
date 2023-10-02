@@ -61,13 +61,14 @@ class _DetailsTabViewState extends State<DetailsTabView> {
   List<PlatformFile> pickedFilesList = [];
   List<String> selectedDocsNameList = [];
   bool isUploading = false;
-  String videoUrl = "https://www.youtube.com/embed/C3aRyxcpy5A";
+  // String videoUrl = "https://www.youtube.com/embed/C3aRyxcpy5A";
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     List<String> allImages = [];
     List<String> allTitles = [];
+    final videoUrl = widget.data.propertyvideo;
 
     if (!widget.isLeadView) {
       final inventoryData = widget.data as InventoryDetails;
@@ -554,7 +555,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                     }),
               ),
               // ================================ Video Section ================================
-              if (!widget.isLeadView && videoUrl.contains('youtube.com')) ...[
+              if (!widget.isLeadView && videoUrl != null && videoUrl.contains('youtube.com')) ...[
                 const Divider(
                   height: 40,
                 ),

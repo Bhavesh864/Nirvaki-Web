@@ -4,11 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
+import 'package:yes_broker/constants/functions/datetime/date_time.dart';
 import 'package:yes_broker/pages/add_inventory.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 
@@ -121,116 +123,154 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                               ),
                               if (Responsive.isMobile(context))
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: HeaderChips(
-                                      inventoryDetails: data,
-                                      category: data.inventorycategory!,
-                                      type: data.inventoryType!,
-                                      propertyCategory: data.propertycategory!,
-                                      status: data.inventoryStatus!,
-                                      id: data.inventoryId!),
+                                  padding: const EdgeInsets.only(top: 15, bottom: 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      HeaderChips(
+                                          inventoryDetails: data,
+                                          category: data.inventorycategory!,
+                                          type: data.inventoryType!,
+                                          propertyCategory: data.propertycategory!,
+                                          status: data.inventoryStatus!,
+                                          id: data.inventoryId!),
+                                      SizedBox(
+                                        width: 120,
+                                        child: CustomText(
+                                          size: 14,
+                                          softWrap: true,
+                                          textAlign: TextAlign.center,
+                                          title: data.propertyprice?.price != null ? '${data.propertyprice!.price}${data.propertyprice!.unit}' : '50k/month',
+                                          color: AppColor.primary,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ListTile(
-                                contentPadding: const EdgeInsets.all(0),
-                                leading: const Icon(
-                                  Icons.location_on_outlined,
-                                  size: 20,
-                                  color: Colors.black,
-                                ),
-                                minLeadingWidth: 2,
-                                horizontalTitleGap: 8,
-                                titleAlignment: ListTileTitleAlignment.center,
-                                title: CustomText(
-                                  title: '${data.propertyaddress!.city},${data.propertyaddress!.state}',
-                                  size: 12,
-                                  fontWeight: FontWeight.w400,
-                                  color: const Color(0xFFA8A8A8),
-                                ),
-                              ),
-                              if (Responsive.isMobile(context))
+                              // ListTile(
+                              //   contentPadding: const EdgeInsets.all(0),
+                              //   leading: const Icon(
+                              //     Icons.location_on_outlined,
+                              //     size: 20,
+                              //     color: Colors.black,
+                              //   ),
+                              //   minLeadingWidth: 2,
+                              //   horizontalTitleGap: 8,
+                              //   titleAlignment: ListTileTitleAlignment.center,
+                              //   title: CustomText(
+                              //     title: '${data.propertyaddress!.city},${data.propertyaddress!.state}',
+                              //     size: 12,
+                              //     fontWeight: FontWeight.w400,
+                              //     color: const Color(0xFFA8A8A8),
+                              //   ),
+                              // ),
+                              if (Responsive.isMobile(context)) ...[
+                                const SizedBox(height: 18),
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    // CustomButton(
-                                    //   text: 'Owner Details',
-                                    //   onPressed: () {
-                                    //     showOwnerDetailsAndAssignToBottomSheet(
-                                    //       context,
-                                    //       'Owner Details',
-                                    //       ContactInformation(customerinfo: data.customerinfo!),
-                                    //     );
-                                    //   },
-                                    //   height: 35,
-                                    //   width: 135,
-                                    // ),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        showOwnerDetailsAndAssignToBottomSheet(
-                                          context,
-                                          'Owner Details',
-                                          ContactInformation(customerinfo: data.customerinfo!),
-                                        );
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: AppColor.primary, // Set the button's background color
-                                        // minimumSize: const Size(100, 20),
-                                        padding: const EdgeInsets.all(8), // Set the button's size
-                                      ),
-                                      child: const Text(
-                                        'Owner Details',
-                                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        showOwnerDetailsAndAssignToBottomSheet(
-                                          context,
-                                          'Assignment',
-                                          AssignmentWidget(
-                                            id: data.inventoryId!,
-                                            assignto: data.assignedto!,
-                                            imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                            createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
+                                    Row(
+                                      children: [
+                                        // CustomButton(
+                                        //   text: 'Owner Details',
+                                        //   onPressed: () {
+                                        //     showOwnerDetailsAndAssignToBottomSheet(
+                                        //       context,
+                                        //       'Owner Details',
+                                        //       ContactInformation(customerinfo: data.customerinfo!),
+                                        //     );
+                                        //   },
+                                        //   height: 35,
+                                        //   width: 135,
+                                        // ),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            showOwnerDetailsAndAssignToBottomSheet(
+                                              context,
+                                              'Owner Details',
+                                              ContactInformation(customerinfo: data.customerinfo!),
+                                            );
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: AppColor.primary, // Set the button's background color
+                                            // minimumSize: const Size(100, 20),
+                                            padding: const EdgeInsets.all(8), // Set the button's size
                                           ),
-                                        );
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: data.assignedto!.asMap().entries.map((entry) {
-                                          final index = entry.key;
-                                          final user = entry.value;
-                                          return Transform.translate(
-                                            offset: Offset(index * -8.0, 0),
-                                            child: Container(
-                                              width: 24,
-                                              height: 24,
-                                              decoration: BoxDecoration(
-                                                border: Border.all(color: Colors.white),
-                                                image: DecorationImage(
-                                                  image: NetworkImage(
-                                                    user.image!.isEmpty ? noImg : user.image!,
-                                                  ),
-                                                  fit: BoxFit.fill,
-                                                ),
-                                                borderRadius: BorderRadius.circular(40),
+                                          child: const Text(
+                                            'Owner Details',
+                                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            showOwnerDetailsAndAssignToBottomSheet(
+                                              context,
+                                              'Assignment',
+                                              AssignmentWidget(
+                                                id: data.inventoryId!,
+                                                assignto: data.assignedto!,
+                                                imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                               ),
-                                            ),
-                                          );
-                                        }).toList(),
-                                      ),
+                                            );
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: data.assignedto!.asMap().entries.map((entry) {
+                                              final index = entry.key;
+                                              final user = entry.value;
+                                              return Transform.translate(
+                                                offset: Offset(index * -8.0, 0),
+                                                child: Container(
+                                                  width: 24,
+                                                  height: 24,
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(color: Colors.white),
+                                                    image: DecorationImage(
+                                                      image: NetworkImage(
+                                                        user.image!.isEmpty ? noImg : user.image!,
+                                                      ),
+                                                      fit: BoxFit.fill,
+                                                    ),
+                                                    borderRadius: BorderRadius.circular(40),
+                                                  ),
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.calendar_month_outlined,
+                                          size: 20,
+                                          color: Colors.black,
+                                        ),
+                                        const SizedBox(width: 5),
+                                        CustomText(
+                                          title: DateFormat('d MMM y').format(data.createdate!.toDate()),
+                                          size: 12,
+                                          fontWeight: FontWeight.w400,
+                                          color: const Color(0xFFA8A8A8),
+                                        ),
+                                      ],
                                     )
                                   ],
                                 ),
-                              if (Responsive.isMobile(context))
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 12.0),
-                                  child: CustomText(
-                                    title: data.propertyprice?.price != null ? '${data.propertyprice!.price}${data.propertyprice!.unit}' : '50k/month',
-                                    color: AppColor.primary,
-                                  ),
-                                ),
+                              ],
+                              // if (Responsive.isMobile(context))
+                              //   Padding(
+                              //     padding: const EdgeInsets.only(top: 12.0),
+                              //     child: CustomText(
+                              //       title: data.propertyprice?.price != null ? '${data.propertyprice!.price}${data.propertyprice!.unit}' : '50k/month',
+                              //       color: AppColor.primary,
+                              //     ),
+                              //   ),
                               if (!AppConst.getPublicView())
                                 TabBarWidget(
                                   tabviewController: tabviewController,
