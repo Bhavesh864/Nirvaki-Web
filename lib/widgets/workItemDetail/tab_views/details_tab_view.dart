@@ -68,7 +68,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
     final width = MediaQuery.of(context).size.width;
     List<String> allImages = [];
     List<String> allTitles = [];
-    final videoUrl = widget.data.propertyvideo;
+    final videoUrl = !widget.isLeadView && widget.data?.propertyvideo != null ? widget.data.propertyvideo : "";
 
     if (!widget.isLeadView) {
       final inventoryData = widget.data as InventoryDetails;
@@ -575,17 +575,16 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                   ),
                   child: HtmlWidget(
                     '''
-                  <iframe
-                    width="300"
-                    height="300"
-                    src="$videoUrl"
-                    frameborder="0"
-                    title="Brokr"
-                    allow="accelerometer"
-                    allowfullscreen
-                    autoplay=true
-                  ></iframe>
-                ''',
+                    <iframe
+                      width="300"
+                      height="300"
+                      src="$videoUrl"
+                      frameborder="0"
+                      title="Brokr"
+                      allow="accelerometer"
+                      allowfullscreen
+                    ></iframe>
+                  ''',
                   ),
                 ),
               ]
