@@ -22,14 +22,8 @@ class _LoginScreenState extends State<LoginScreen> {
   var isloading = false;
   final FocusNode emailFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
-
   final TextEditingController emailcontroller = TextEditingController();
   final TextEditingController passwordcontroller = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   void loginwithemailpassword(BuildContext context) {
     FocusScope.of(context).unfocus();
@@ -138,6 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           margin: const EdgeInsets.only(bottom: 5),
                           child: CustomTextInput(
                             focusnode: emailFocusNode,
+                            // key: const Key('usernameField'),
                             controller: emailcontroller,
                             labelText: 'Email address',
                             validator: validateEmail,
@@ -149,6 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         CustomTextInput(
+                          // key: const Key('passwordField'),
                           focusnode: passwordFocusNode,
                           controller: passwordcontroller,
                           labelText: 'Password',
@@ -163,6 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             : SizedBox(
                                 width: w,
                                 child: CustomButton(
+                                  key: const Key("loginButton"),
                                   text: 'Login',
                                   onPressed: () => loginwithemailpassword(context),
                                   height: 40.0,

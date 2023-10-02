@@ -1,8 +1,10 @@
 import 'package:beamer/beamer.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_driver/driver_extension.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+
 import 'package:hive_flutter/adapters.dart';
 import 'firebase_options.dart';
 import 'package:yes_broker/constants/firebase/Hive/timestamp.dart';
@@ -11,6 +13,7 @@ import 'constants/notification/app_notification.dart';
 import 'package:yes_broker/constants/utils/theme.dart';
 
 void main() async {
+  enableFlutterDriverExtension();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   getToken();
