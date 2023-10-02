@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:random_string/random_string.dart';
@@ -69,6 +69,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
   final typeofschool = getDataById(state, 44);
   final hospitalrooms = getDataById(state, 45);
   final widthofRoad = getDataById(state, 46);
+  final widthofRoadft = getDataById(state, 47);
   final attachments = getDataById(state, 100);
   final existingLeadId = getDataById(state, 101);
   final List<cards.Assignedto> assignedToList = assignto.map((user) {
@@ -108,8 +109,10 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       userid: user.userId,
     );
   }).toList();
+  bool isResidential = propertyCategory == "Residential";
+  var title = isResidential ? "" : commericialtype;
   final LeadDetails lead = LeadDetails(
-      leadTitle: "$propertyCategory $propertyKind",
+      leadTitle: "$propertyCategory $title $propertyKind",
       leadDescription: "lead",
       leadId: isEdit ? existingLeadId : "LD$randomId",
       leadStatus: "New",
@@ -123,7 +126,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       availability: availability,
       typeofretail: typeofretail,
       typeofhealthcare: typeofhealthcare,
-      preferredroadwidth: widthofRoad,
+      preferredroadwidth: "$widthofRoad $widthofRoadft",
       propertylocation: latlng,
       villatype: villaType,
       preferredlocation: latlng,
