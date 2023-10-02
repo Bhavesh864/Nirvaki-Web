@@ -37,7 +37,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
   late Future<List<LeadQuestions>> getQuestions;
   List<Screen> currentScreenList = [];
   PageController? pageController;
-  int currentScreenIndex = 14;
+  int currentScreenIndex = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
