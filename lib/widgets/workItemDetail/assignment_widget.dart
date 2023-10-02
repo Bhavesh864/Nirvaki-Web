@@ -253,7 +253,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 42, top: 2),
+                  padding: const EdgeInsets.only(left: 47, top: 2),
                   child: Row(
                     children: [
                       const Icon(Icons.calendar_month_outlined),
