@@ -208,20 +208,11 @@ Widget buildLeadQuestions(
     return StatefulBuilder(
       builder: (context, setState) {
         final isPriceField = question.questionId == 46 || question.questionId == 48 || question.questionId == 50;
-        // final isDigitsOnly = question.questionTitle.contains('Mobile') || question.questionTitle.contains('Property Area');
-        final isvalidationtrue = question.questionTitle.contains('First') ||
-            question.questionTitle.contains('Mobile') ||
-            question.questionTitle == 'Rent' ||
-            question.questionTitle == 'Listing Price';
-
-        final isDigitsOnly = question.questionTitle.contains('Mobile') ||
-            question.questionTitle == 'Rent' ||
-            question.questionTitle == 'Listing Price' ||
-            question.questionTitle.contains('Floor Number') ||
-            question.questionTitle.contains('Property Area');
+        final isDigitsOnly = question.questionTitle.contains('Mobile') || question.questionTitle.contains('Property Area');
+        final isvalidationtrue =
+            question.questionTitle.contains('First') || question.questionTitle.contains('Mobile') || question.questionTitle == 'Rent' || question.questionTitle == 'Listing Price';
 
         final isEmail = question.questionTitle.contains("Email");
-
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,

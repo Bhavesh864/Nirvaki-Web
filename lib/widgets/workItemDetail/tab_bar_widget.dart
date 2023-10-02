@@ -16,7 +16,7 @@ class TabBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 62,
-      margin: const EdgeInsets.only(top: 22),
+      margin: const EdgeInsets.only(top: 15),
       decoration: BoxDecoration(
         color: AppColor.secondary,
         borderRadius: BorderRadius.circular(
