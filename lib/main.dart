@@ -13,7 +13,6 @@ import 'constants/notification/app_notification.dart';
 import 'package:yes_broker/constants/utils/theme.dart';
 
 void main() async {
-  enableFlutterDriverExtension();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   getToken();
