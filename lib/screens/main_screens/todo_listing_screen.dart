@@ -161,7 +161,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                                         children: [
                                           const CustomCalendarView(),
                                           WorkItemsList(
-                                            title: 'To d',
+                                            title: 'To do',
                                             getCardDetails: filterTodoList,
                                           ),
                                         ],

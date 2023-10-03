@@ -8,6 +8,7 @@ import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/constants/functions/get_inventory_questions_widgets.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/customs/snackbar.dart';
 import 'package:yes_broker/riverpodstate/filterQuestions/inventory_all_question.dart';
 import 'package:yes_broker/riverpodstate/inventory_res_filter_question.dart';
 import 'package:yes_broker/widgets/questionaries/workitem_success.dart';
@@ -39,6 +40,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<States> stateList = [];
 
+  String errorMessage = "";
   @override
   void initState() {
     super.initState();
@@ -290,8 +292,25 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                                                 }
                                                                                 if (!allQuestionFinishes) {
                                                                                   if (currentScreenList[index].title != "Assign to") {
+                                                                                    // setState(() {
+                                                                                    //   errorMessage = "";
+                                                                                    // });
                                                                                     if (_formKey.currentState!.validate()) {
+                                                                                      // if (currentScreenList[index].screenId != "S14") {
                                                                                       nextQuestion(screensDataList: currentScreenList, option: "");
+                                                                                      // } else if (currentScreenList[index].screenId == "S14" ||
+                                                                                      //     currentScreenList[index].screenId == "S8") {
+                                                                                      //   if (selectedValues.isNotEmpty &&
+                                                                                      //       selectedValues
+                                                                                      //           .any((item) => item['id'] == 23 || item["id"] == 14 && item['item'].isNotEmpty)) {
+                                                                                      //     print("object");
+                                                                                      //     nextQuestion(screensDataList: currentScreenList, option: "");
+                                                                                      //   } else {
+                                                                                      //     setState(() {
+                                                                                      //       errorMessage = "Please select a valid item";
+                                                                                      //     });
+                                                                                      //   }
+                                                                                      // }
                                                                                     }
                                                                                   }
                                                                                   if (currentScreenList[index].title == "Assign to") {
