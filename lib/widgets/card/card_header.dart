@@ -153,20 +153,35 @@ class CardHeaderState extends ConsumerState<CardHeader> {
         Row(
           children: [
             if (cardData.duedate != null)
+              // CustomChip(
+              //   avatar: const Icon(
+              //     Icons.calendar_month_outlined,
+              //     size: 14,
+              //   ),
+              //   paddingHorizontal: 0,
+              //   label: AppText(
+              //     // text: DateFormat(' d MMM y').format(DateTime.parse(cardData.duedate!)),
+              //     text: cardData.duedate!,
+              //     fontsize: 9,
+              //   ),
+              // ),
               Container(
-                color: const Color.fromARGB(255, 244, 244, 244),
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(2),
+                  color: AppColor.chipGreyColor,
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 4),
                 child: Row(
                   children: [
                     const Icon(
                       Icons.calendar_month_outlined,
-                      size: 16,
+                      size: 15,
                     ),
                     const SizedBox(width: 2),
                     AppText(
                       // text: DateFormat(' d MMM y').format(DateTime.parse(cardData.duedate!)),
                       text: cardData.duedate!,
-                      fontsize: 11,
+                      fontsize: 10,
                     ),
                   ],
                 ),
