@@ -88,9 +88,6 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             }
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
 
-            // final List<CardDetails> todoItems =
-            //     filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
-
             final List<CardDetails> todoItems = filterItem!
                 .map((doc) => CardDetails.fromSnapshot(doc))
                 .where((item) => item.cardType != "IN" && item.cardType != "LD" && item.status != "Closed")
