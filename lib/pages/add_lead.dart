@@ -1,4 +1,5 @@
 // ignore_for_file: invalid_use_of_protected_member
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
@@ -129,7 +130,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
 
     return GestureDetector(
       onTap: () {
-        FocusScope.of(context).unfocus();
+        if (!kIsWeb) FocusScope.of(context).unfocus();
       },
       child: Scaffold(
         body: FutureBuilder<List<LeadQuestions>>(
@@ -194,33 +195,39 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                       ),
                                       child: SingleChildScrollView(
                                         child: Container(
-                                          constraints: const BoxConstraints(
-                                            minHeight: 0,
-                                            maxHeight: double.infinity,
-                                          ),
+                                          // constraints: BoxConstraints(
+                                          //   minHeight: 0,
+                                          //   maxHeight: double.infinity,
+                                          // ),
                                           width: Responsive.isMobile(context) ? width! * 0.9 : 650,
                                           padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
                                           child: Column(
-                                            mainAxisSize: MainAxisSize.min,
+                                            // mainAxisSize: MainAxisSize.min,
                                             children: [
                                               if (currentScreenList[index].title != null)
-                                                CustomText(
-                                                  softWrap: true,
-                                                  textAlign: TextAlign.center,
-                                                  size: Responsive.isDesktop(context) ? 26 : 20,
-                                                  title: currentScreenList[index].title.toString(),
-                                                  fontWeight: FontWeight.bold,
+                                                Padding(
+                                                  padding: const EdgeInsets.only(bottom: 20.0),
+                                                  child: CustomText(
+                                                    softWrap: true,
+                                                    textAlign: TextAlign.center,
+                                                    size: Responsive.isDesktop(context) ? 26 : 20,
+                                                    title: currentScreenList[index].title.toString(),
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
                                               for (var i = 0; i < currentScreenList[index].questions.length; i++)
                                                 Column(
                                                   children: [
                                                     if (currentScreenList[index].title == null)
-                                                      CustomText(
-                                                          softWrap: true,
-                                                          textAlign: TextAlign.center,
-                                                          size: Responsive.isDesktop(context) ? 26 : 20,
-                                                          title: currentScreenList[index].questions[i].questionTitle,
-                                                          fontWeight: FontWeight.bold),
+                                                      Padding(
+                                                        padding: const EdgeInsets.only(bottom: 20.0),
+                                                        child: CustomText(
+                                                            softWrap: true,
+                                                            textAlign: TextAlign.center,
+                                                            size: Responsive.isDesktop(context) ? 26 : 20,
+                                                            title: currentScreenList[index].questions[i].questionTitle,
+                                                            fontWeight: FontWeight.bold),
+                                                      ),
                                                     buildLeadQuestions(
                                                       currentScreenList[index].questions[i],
                                                       currentScreenList,
@@ -247,6 +254,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                               : CustomButton(
                                                                   text: currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next',
                                                                   onPressed: () {
+                                                                    if (!kIsWeb) FocusScope.of(context).unfocus();
                                                                     if (!allQuestionFinishes) {
                                                                       if (currentScreenList[index].title != "Assign to") {
                                                                         if (_formKey.currentState!.validate()) {

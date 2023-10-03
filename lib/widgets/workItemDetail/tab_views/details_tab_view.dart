@@ -1,7 +1,9 @@
 // import 'dart:html';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/customs/loader.dart';
@@ -10,6 +12,7 @@ import '../../../Customs/custom_text.dart';
 import '../../../Customs/responsive.dart';
 import '../../../constants/app_constant.dart';
 import '../../../constants/functions/workitems_detail_methods.dart';
+import '../../../constants/utils/colors.dart';
 import '../../../constants/utils/constants.dart';
 import '../mapview_widget.dart';
 
@@ -58,11 +61,14 @@ class _DetailsTabViewState extends State<DetailsTabView> {
   List<PlatformFile> pickedFilesList = [];
   List<String> selectedDocsNameList = [];
   bool isUploading = false;
+  // String videoUrl = "https://www.youtube.com/embed/C3aRyxcpy5A";
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     List<String> allImages = [];
     List<String> allTitles = [];
+    final videoUrl = !widget.isLeadView && widget.data?.propertyvideo != null ? widget.data.propertyvideo : "";
 
     if (!widget.isLeadView) {
       final inventoryData = widget.data as InventoryDetails;
@@ -144,22 +150,95 @@ class _DetailsTabViewState extends State<DetailsTabView> {
             height: 10,
           ),
         ],
-        if (!widget.isLeadView) ...[
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 10.0),
-            child: CustomText(
-              title: "Property Details",
-              fontWeight: FontWeight.w700,
-            ),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 10.0),
+          child: CustomText(
+            title: "Property Details",
+            fontWeight: FontWeight.w700,
           ),
-          Wrap(
-            children: [
-              if (checkNotNUllItem(widget.data.roomconfig.bedroom))
+        ),
+        if (!widget.isLeadView) ...[
+          if (widget.data.propertycategory == 'Commercial') ...[
+            Wrap(children: [
+              if (checkNotNUllItem(widget.data.availability)) ...[
                 buildInfoFields(
-                  'Layout',
-                  buildRoomsText(widget.data.roomconfig),
+                  'Property Category',
+                  widget.data.availability,
                   context,
                 ),
+              ],
+              if (checkNotNUllItem(widget.data.propertykind))
+                buildInfoFields(
+                  'Type of Land',
+                  "${widget.data.propertykind}",
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.commericialtype))
+                buildInfoFields(
+                  'Property Type',
+                  "${widget.data.commericialtype}",
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.typeofoffice))
+                buildInfoFields(
+                  'Type of office',
+                  widget.data.typeofoffice,
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.typeofretail))
+                buildInfoFields(
+                  'Type of Retail',
+                  widget.data.typeofretail,
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.typeofhospitality))
+                buildInfoFields(
+                  'Type of Hospitality',
+                  widget.data.typeofhospitality,
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.typeofhealthcare))
+                buildInfoFields(
+                  'Type of Helathcare',
+                  widget.data.propertyfacing,
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.approvedbeds))
+                buildInfoFields(
+                  'Approve beds',
+                  widget.data.approvedbeds,
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.typeofschool))
+                buildInfoFields(
+                  'Type of School',
+                  widget.data.typeofschool,
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.hospitalrooms))
+                buildInfoFields(
+                  'Rooms Constructed',
+                  widget.data.hospitalrooms,
+                  context,
+                ),
+            ]),
+            const Divider(
+              height: 40,
+            ),
+          ] else ...[
+            Wrap(children: [
+              if (checkNotNUllItem(widget.data.roomconfig.bedroom)) ...[
+                buildInfoFields(
+                  'Layout',
+                  buildRoomsText(widget.data.roomconfig, false),
+                  context,
+                ),
+                buildInfoFields(
+                  'Additional Room',
+                  buildRoomsText(widget.data.roomconfig, true),
+                  context,
+                ),
+              ],
               if (checkNotNUllItem(widget.data.propertyarea.superarea) && checkNotNUllItem(widget.data.propertyarea.unit))
                 buildInfoFields(
                   'Area',
@@ -208,35 +287,208 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                   widget.data.plotdetails.opensides,
                   context,
                 ),
+              if (checkNotNUllItem(widget.data.plotdetails.boundarywall))
+                buildInfoFields(
+                  'Boundary',
+                  widget.data.plotdetails.boundarywall,
+                  context,
+                ),
+            ]),
+            const Divider(
+              height: 40,
+            ),
+          ]
+        ] else ...[
+          if (widget.data.propertycategory == 'Commercial') ...[
+            if (checkNotNUllItem(widget.data.availability)) ...[
+              buildInfoFields(
+                'Property Category',
+                widget.data.availability,
+                context,
+              ),
             ],
-          ),
-          const Divider(
-            height: 40,
-          ),
+            if (checkNotNUllItem(widget.data.propertykind))
+              buildInfoFields(
+                'Type of Land',
+                "${widget.data.propertykind}",
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.commericialtype))
+              buildInfoFields(
+                'Property Type',
+                "${widget.data.commericialtype}",
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.typeofoffice))
+              buildInfoFields(
+                'Type of office',
+                widget.data.typeofoffice,
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.typeofretail))
+              buildInfoFields(
+                'Type of Retail',
+                widget.data.typeofretail,
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.typeofhospitality))
+              buildInfoFields(
+                'Type of Hospitality',
+                widget.data.typeofhospitality,
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.typeofhealthcare))
+              buildInfoFields(
+                'Type of Helathcare',
+                widget.data.propertyfacing,
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.approvedbeds))
+              buildInfoFields(
+                'Approve beds',
+                widget.data.approvedbeds,
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.typeofschool))
+              buildInfoFields(
+                'Type of School',
+                widget.data.typeofschool,
+                context,
+              ),
+            if (checkNotNUllItem(widget.data.hospitalrooms))
+              buildInfoFields(
+                'Rooms Constructed',
+                widget.data.hospitalrooms,
+                context,
+              ),
+            const Divider(
+              height: 40,
+            ),
+          ] else ...[
+            Wrap(
+              children: [
+                if (checkNotNUllItem(widget.data.roomconfig.bedroom)) ...[
+                  buildInfoFields(
+                    'Layout',
+                    buildRoomsText(widget.data.roomconfig, false),
+                    context,
+                  ),
+                  buildInfoFields(
+                    'Additional Room',
+                    buildRoomsText(widget.data.roomconfig, true),
+                    context,
+                  ),
+                ],
+                if (checkNotNUllItem(widget.data.propertyarea.superarea) && checkNotNUllItem(widget.data.propertyarea.unit))
+                  buildInfoFields(
+                    'Area',
+                    "${widget.data.propertyarea.superarea} ${widget.data.propertyarea.unit}",
+                    context,
+                  ),
+                if (checkNotNUllItem(widget.data.transactiontype))
+                  buildInfoFields(
+                    'Transaction Type',
+                    widget.data.transactiontype,
+                    context,
+                  ),
+                if (checkNotNUllItem(widget.data.availability))
+                  buildInfoFields(
+                    'Availability',
+                    widget.data.availability,
+                    context,
+                  ),
+                if (checkNotNUllItem(widget.data.possessiondate))
+                  buildInfoFields(
+                    'Possessiondate',
+                    widget.data.possessiondate,
+                    context,
+                  ),
+                if (checkNotNUllItem(widget.data.preferredpropertyfacing))
+                  buildInfoFields(
+                    'Property Facing',
+                    widget.data.preferredpropertyfacing,
+                    context,
+                  ),
+                if (checkNotNUllItem(widget.data.villatype))
+                  buildInfoFields(
+                    'Villa Type',
+                    widget.data.villatype,
+                    context,
+                  ),
+                if (widget.data.propertykind == 'Plot')
+                  buildInfoFields(
+                    'No. of Open Sides',
+                    widget.data.plotdetails.opensides,
+                    context,
+                  ),
+                if (checkNotNUllItem(widget.data.plotdetails.boundarywall))
+                  buildInfoFields(
+                    'Boundary',
+                    widget.data.plotdetails.boundarywall,
+                    context,
+                  ),
+                const Divider(
+                  height: 40,
+                ),
+              ],
+            ),
+          ],
         ],
         if (widget.data.amenities != null) ...[
           CustomText(
             title: !widget.isLeadView ? "Features" : 'Requirements',
             fontWeight: FontWeight.w700,
           ),
+
           Wrap(
             children: List<Widget>.generate(
-              widget.data.amenities!.length,
-              (index) => Padding(
-                padding: const EdgeInsets.only(right: 8.0, top: 10),
-                child: CustomChip(
-                  label: Text(
-                    widget.data.amenities![index],
-                  ),
-                ),
-              ),
+              widget.data.amenities!.length + 1,
+              (index) {
+                if (index == widget.data.amenities!.length) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8.0, top: 10),
+                    child: CustomChip(
+                      label: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          const Text(
+                            'No. of Reserved Parking: ',
+                          ),
+                          const SizedBox(
+                            width: 3,
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey.shade600,
+                            ),
+                            child: Text(
+                              '${widget.data.reservedparking.covered}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                } else {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8.0, top: 10),
+                    child: CustomChip(
+                      label: Text(
+                        widget.data.amenities![index],
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
           ),
-          buildInfoFields(
-            'No. of Reserved Parking',
-            widget.data.reservedparking.covered,
-            context,
-          ),
+
           // Padding(
           //   padding: const EdgeInsets.symmetric(vertical: 5.0),
           //   child: Row(
@@ -440,6 +692,40 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                       }
                     }),
               ),
+              // ================================ Video Section ================================
+              if (!widget.isLeadView && videoUrl != null && videoUrl.contains('youtube.com')) ...[
+                const Divider(
+                  height: 40,
+                ),
+                const CustomText(
+                  title: "Video",
+                  fontWeight: FontWeight.w700,
+                ),
+                const SizedBox(height: 12),
+                Container(
+                  width: kIsWeb ? 400 : width / 1.1,
+                  height: kIsWeb ? 250 : 220,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: AppColor.chipGreyColor,
+                    // color: const Color.fromARGB(40, 68, 97, 239),
+                  ),
+                  child: HtmlWidget(
+                    '''
+                    <iframe
+                      width="300"
+                      height="300"
+                      src="$videoUrl"
+                      frameborder="0"
+                      title="Brokr"
+                      allow="accelerometer"
+                      allowfullscreen
+                    ></iframe>
+                  ''',
+                  ),
+                ),
+              ]
             ],
           ),
         if (!Responsive.isDesktop(context)) ...[

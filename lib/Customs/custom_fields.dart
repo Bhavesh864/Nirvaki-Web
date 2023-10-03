@@ -177,26 +177,28 @@ class CustomButton extends StatefulWidget {
   final double height;
   final TextStyle? textStyle;
   final Color? borderColor;
+  final EdgeInsets? padding;
 
-  const CustomButton({
-    Key? key,
-    required this.text,
-    required this.onPressed,
-    this.fontsize = 16,
-    this.buttonColor = AppColor.primary,
-    this.textColor = Colors.white,
-    this.rightIcon,
-    this.leftIcon,
-    this.opacity = 1,
-    this.righticonColor = Colors.white,
-    this.lefticonColor = Colors.white,
-    this.height = 50.0,
-    this.textStyle,
-    this.width,
-    this.isBorder = true,
-    this.borderColor = Colors.grey,
-    this.titleLeft = false,
-  }) : super(key: key);
+  const CustomButton(
+      {Key? key,
+      required this.text,
+      required this.onPressed,
+      this.fontsize = 16,
+      this.buttonColor = AppColor.primary,
+      this.textColor = Colors.white,
+      this.rightIcon,
+      this.leftIcon,
+      this.opacity = 1,
+      this.righticonColor = Colors.white,
+      this.lefticonColor = Colors.white,
+      this.height = 50.0,
+      this.textStyle,
+      this.width,
+      this.isBorder = true,
+      this.borderColor = Colors.grey,
+      this.titleLeft = false,
+      this.padding = const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8)})
+      : super(key: key);
 
   @override
   State<CustomButton> createState() => _CustomButtonState();
@@ -229,7 +231,7 @@ class _CustomButtonState extends State<CustomButton> {
           alignment: Alignment.center,
           height: widget.height,
           width: widget.width,
-          padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
+          padding: widget.padding,
           decoration: BoxDecoration(
             border: widget.isBorder! ? Border.all(color: widget.borderColor!) : null,
             color: widget.buttonColor,
@@ -396,7 +398,7 @@ class CustomChoiceChip extends StatelessWidget {
       ),
       selected: selected,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-      labelPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+      labelPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
       onSelected: onSelected,
       selectedColor: selectedColor,
       backgroundColor: bgcolor,

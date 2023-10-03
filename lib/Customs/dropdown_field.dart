@@ -42,6 +42,7 @@ class _DropDownFieldState extends State<DropDownField> {
       children: [
         CustomText(
           fontWeight: FontWeight.w500,
+          color: Colors.black,
           size: 16,
           title: widget.title,
         ),
@@ -57,7 +58,7 @@ class _DropDownFieldState extends State<DropDownField> {
             ),
             child: DropdownButton(
               // isDense: true,
-              itemHeight: null,
+              // itemHeight: null,
               focusColor: Colors.transparent,
               hint: const CustomText(
                 title: '--Select--',

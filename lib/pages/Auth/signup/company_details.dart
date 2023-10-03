@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/responsive.dart';
+import 'package:yes_broker/customs/snackbar.dart';
 import 'package:yes_broker/riverpodstate/sign_up_state.dart';
 import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
@@ -41,13 +42,6 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                 setState(() {
                   isloading = false;
                 }),
-                // if (Responsive.isMobile(context))
-                //   {
-                //     Navigator.of(context).pushReplacementNamed(AppRoutes.loginScreen),
-                //   }
-                // else
-                //   {
-                // }
                 context.beamToReplacementNamed(AppRoutes.loginScreen),
               }
             else
@@ -62,16 +56,33 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
   }
 
   selectImage() async {
-    XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
-    setState(() {
-      uploadLogocontroller.text = pickedImage!.name;
-    });
+    XFile? pickedImage = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 60,
+    );
+
     var webUrl = await pickedImage!.readAsBytes();
     var imageUrl = File(pickedImage.path);
-    if (kIsWeb) {
-      return webUrl;
+
+    if (!kIsWeb) {
+      if (imageUrl.lengthSync() <= 1048576) {
+        setState(() {
+          uploadLogocontroller.text = pickedImage.name;
+        });
+        return imageUrl;
+      } else {
+        return 'Image size should not exceeds 1 MB';
+      }
+    } else {
+      if (webUrl.length <= 1048576) {
+        setState(() {
+          uploadLogocontroller.text = pickedImage.name;
+        });
+        return webUrl;
+      } else {
+        return 'Image size should not exceeds 1 MB';
+      }
     }
-    return imageUrl;
   }
 
   final List<String> dropdownitem = ["Broker", "Builder"];
@@ -87,7 +98,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(selectedItemForsignup.notifier);
-    print("notify---> $notify");
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -143,6 +154,30 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                 notify.add({"id": 7, "item": value.trim()});
                               },
                             ),
+                            GestureDetector(
+                              onTap: () {
+                                selectImage().then((value) => {
+                                      if (!value.contains('Image size'))
+                                        {
+                                          uploadImageToFirebases(value).then((url) {
+                                            if (url != "") {
+                                              final notify = ref.read(selectedItemForsignup.notifier);
+                                              notify.add({"id": 14, "item": url});
+                                            }
+                                          })
+                                        }
+                                      else
+                                        {customSnackBar(context: context, text: value.toString())}
+                                    });
+                              },
+                              child: CustomTextInput(
+                                controller: uploadLogocontroller,
+                                readonly: true,
+                                enabled: false,
+                                labelText: "Upload Logo",
+                                rightIcon: Icons.publish,
+                              ),
+                            ),
                             CustomTextInput(
                               margin: const EdgeInsets.all(7),
                               labelText: 'Mobile',
@@ -175,29 +210,22 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                 },
                               ),
                             CustomTextInput(
-                              labelText: 'Address',
+                              labelText: 'Address 1',
                               margin: const EdgeInsets.all(7),
                               controller: address1controller,
-                              validator: (value) => validateForNormalFeild(value: value, props: "Address"),
+                              validator: (value) => validateForNormalFeild(value: value, props: "Addressline 1"),
                               onChanged: (value) {
                                 notify.add({"id": 10, "item": value.trim()});
                               },
                             ),
                             CustomTextInput(
-                              controller: uploadLogocontroller,
-                              readonly: true,
-                              labelText: "Upload Logo",
-                              ontap: () {
-                                selectImage().then((value) => {
-                                      uploadImageToFirebases(value).then((url) {
-                                        if (url != "") {
-                                          final notify = ref.read(selectedItemForsignup.notifier);
-                                          notify.add({"id": 14, "item": url});
-                                        }
-                                      })
-                                    });
+                              labelText: 'Address 2',
+                              margin: const EdgeInsets.all(7),
+                              controller: address1controller,
+                              validator: (value) => validateForNormalFeild(value: value, props: "Addressline 2"),
+                              onChanged: (value) {
+                                notify.add({"id": 15, "item": value.trim()});
                               },
-                              rightIcon: Icons.publish,
                             ),
                             Container(
                               margin: const EdgeInsets.symmetric(horizontal: 6),

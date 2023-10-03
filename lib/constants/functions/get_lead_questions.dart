@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:number_to_words/number_to_words.dart';
+import 'convertStringTorange/convert_range_string.dart';
 
 import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
@@ -17,7 +18,6 @@ import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
 import '../firebase/detailsModels/lead_details.dart';
 import '../utils/colors.dart';
-import 'convertStringTorange/convert_range_string.dart';
 
 Widget buildLeadQuestions(
   Question question,
@@ -136,7 +136,7 @@ Widget buildLeadQuestions(
                   children: [
                     for (var item in items)
                       Padding(
-                        padding: const EdgeInsets.only(right: 10, top: 5, bottom: 5),
+                        padding: const EdgeInsets.only(right: 5, top: 5, bottom: 5),
                         child: CustomChoiceChip(
                             label: item,
                             selected: selectedOptions.contains(item),
@@ -209,11 +209,9 @@ Widget buildLeadQuestions(
       builder: (context, setState) {
         final isPriceField = question.questionId == 46 || question.questionId == 48 || question.questionId == 50;
         final isDigitsOnly = question.questionTitle.contains('Mobile') || question.questionTitle.contains('Property Area');
-        final isvalidationtrue = question.questionTitle.contains('First') ||
-            question.questionTitle.contains('Mobile') ||
-            question.questionTitle == 'Rent' ||
-            question.questionTitle == 'Listing Price' ||
-            question.questionTitle.contains('Property Area');
+        final isvalidationtrue =
+            question.questionTitle.contains('First') || question.questionTitle.contains('Mobile') || question.questionTitle == 'Rent' || question.questionTitle == 'Listing Price';
+
         final isEmail = question.questionTitle.contains("Email");
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -251,6 +249,9 @@ Widget buildLeadQuestions(
                       : null,
             ),
             isPriceField ? Text(textResult) : const SizedBox.shrink(),
+            const SizedBox(
+              height: 6,
+            ),
           ],
         );
       },
