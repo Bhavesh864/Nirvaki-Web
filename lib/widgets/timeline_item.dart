@@ -42,33 +42,33 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              if (!timeLine.itemid!.contains('TD'))
-                InkWell(
-                  onTap: () {
-                    ref.read(detailsPageIndexTabProvider.notifier).state = 1;
-                    navigateBasedOnId(context, timeLine.itemid!, ref);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: timeLine.itemid!.contains('LD') ? AppColor.leadChipColor : AppColor.inventoryChipColor,
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          timeLine.itemid!.contains('LD') ? MaterialSymbols.location_away : MaterialSymbols.location_home_outlined,
-                          color: timeLine.itemid!.contains('LD') ? AppColor.leadIconColor : AppColor.inventoryIconColor,
-                        ),
-                        const SizedBox(width: 5),
-                        CustomText(
-                          title: timeLine.itemid!,
-                          size: 12,
-                        ),
-                      ],
-                    ),
+              // if (!timeLine.itemid!.contains('TD'))
+              InkWell(
+                onTap: () {
+                  ref.read(detailsPageIndexTabProvider.notifier).state = 1;
+                  navigateBasedOnId(context, timeLine.itemid!, ref);
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: timeLine.itemid!.contains('LD') ? AppColor.leadChipColor : AppColor.inventoryChipColor,
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        timeLine.itemid!.contains('LD') ? MaterialSymbols.location_away : MaterialSymbols.location_home_outlined,
+                        color: timeLine.itemid!.contains('LD') ? AppColor.leadIconColor : AppColor.inventoryIconColor,
+                      ),
+                      const SizedBox(width: 5),
+                      CustomText(
+                        title: timeLine.itemid!,
+                        size: 12,
+                      ),
+                    ],
                   ),
                 ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 8),
                 child: CustomText(
@@ -90,7 +90,8 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
               height: 20,
               width: 20,
               decoration: BoxDecoration(
-                image: DecorationImage(image: NetworkImage(timeLine.userImageUrl == null || timeLine.userImageUrl!.isEmpty ? noImg : timeLine.userImageUrl!), fit: BoxFit.fill),
+                image: DecorationImage(
+                    image: NetworkImage(timeLine.userImageUrl == null || timeLine.userImageUrl!.isEmpty ? noImg : timeLine.userImageUrl!), fit: BoxFit.fill),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,8 +20,7 @@ import '../../constants/functions/filterdataAccordingRole/data_according_role.da
 import '../../riverpodstate/user_data.dart';
 import '../../widgets/app/speed_dial_button.dart';
 import '../../widgets/chat_modal_view.dart';
-
-final chatBadgeProvider = StateProvider<int>((ref) => 0);
+import 'chat_list_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -72,7 +73,6 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
     final user = ref.watch(userDataProvider);
     Size size = MediaQuery.of(context).size;
 
-    print(ref.read(chatBadgeProvider));
     return Scaffold(
       body: StreamBuilder(
         stream: cardDetails,
@@ -87,8 +87,21 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               isUserLoaded = true;
             }
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
-            final List<CardDetails> todoItems =
-                filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
+
+            // final List<CardDetails> todoItems =
+            //     filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
+
+            final List<CardDetails> todoItems = filterItem!
+                .map((doc) => CardDetails.fromSnapshot(doc))
+                .where((item) => item.cardType != "IN" && item.cardType != "LD" && item.status != "Closed")
+                .toList();
+
+            todoItems.sort((a, b) {
+              final DateTime dueDateA = DateTime.parse("20${a.duedate!.replaceAll('-', '')}");
+              final DateTime dueDateB = DateTime.parse("20${b.duedate!.replaceAll('-', '')}");
+              return dueDateA.compareTo(dueDateB);
+            });
+
             final List<CardDetails> workItems =
                 filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
             bool isDataEmpty = workItems.isEmpty && todoItems.isEmpty;
@@ -181,19 +194,73 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                CircleAvatar(
-                  radius: 28,
-                  backgroundColor: AppColor.primary,
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.chat_outlined,
-                      color: Colors.white,
-                      size: 24,
-                    ),
-                    onPressed: () {
-                      showChatDialog();
-                    },
-                  ),
+                StreamBuilder(
+                  stream: mergeChatContactsAndGroups(ref),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final chatItems = snapshot.data!;
+
+                      final unseenChatItems = chatItems.where((chatItem) {
+                        final isSender = chatItem.lastMessageSenderId == AppConst.getAccessToken();
+                        return !isSender && !chatItem.lastMessageIsSeen;
+                      }).toList();
+
+                      final badgeCount = unseenChatItems.length;
+
+                      return Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          CircleAvatar(
+                            radius: 28,
+                            backgroundColor: AppColor.primary,
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.chat_outlined,
+                                color: Colors.white,
+                                size: 24,
+                              ),
+                              onPressed: () {
+                                showChatDialog();
+                              },
+                            ),
+                          ),
+                          if (badgeCount > 0)
+                            Positioned(
+                              top: -5,
+                              child: Container(
+                                padding: const EdgeInsets.all(7),
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.red,
+                                ),
+                                child: Text(
+                                  badgeCount.toString(),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      );
+                    } else {
+                      return CircleAvatar(
+                        radius: 28,
+                        backgroundColor: AppColor.primary,
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.chat_outlined,
+                            color: Colors.white,
+                            size: 24,
+                          ),
+                          onPressed: () {
+                            showChatDialog();
+                          },
+                        ),
+                      );
+                    }
+                  },
                 ),
               ],
             )

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 
@@ -33,6 +34,7 @@ class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingOb
     final selectedItem = ref.watch(selectedProfileItemProvider);
     final User? user = ref.watch(userDataProvider);
     AppConst.setOuterContext(context);
+
     return Scaffold(
       appBar: mobileAppBar(user, context, (selectedVal) {
         if (selectedVal != 'Logout') {
@@ -47,6 +49,57 @@ class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingOb
           // }, 'Logout', 'Are you sure you want to logout?');
         }
       }, ref),
+      body: Stack(
+        children: [
+          if (selectedItem == null) ...[
+            bottomBarItems[currentIndex].screen,
+          ],
+          if (selectedItem != null) ...[
+            selectedItem.screen,
+          ],
+        ],
+      ),
+      // body: OfflineBuilder(
+      //   connectivityBuilder: (
+      //     BuildContext context,
+      //     ConnectivityResult connectivity,
+      //     Widget child,
+      //   ) {
+      //     final bool connected = connectivity != ConnectivityResult.none;
+      //     return Stack(
+      //       fit: StackFit.expand,
+      //       children: [
+      //         Positioned(
+      //           height: 24.0,
+      //           left: 0.0,
+      //           right: 0.0,
+      //           child: Container(
+      //             color: connected ? const Color(0xFF00EE44) : const Color(0xFFEE4400),
+      //             child: Center(
+      //               child: Text("${connected ? 'ONLINE' : 'OFFLINE'}"),
+      //             ),
+      //           ),
+      //         ),
+      //         Stack(
+      //           children: [
+      //             if (selectedItem == null) ...[
+      //               bottomBarItems[currentIndex].screen,
+      //             ],
+      //             if (selectedItem != null) ...[
+      //               selectedItem.screen,
+      //             ],
+      //           ],
+      //         ),
+      //       ],
+      //     );
+      //   },
+      //   child: const Center(
+      //     child: Text(
+      //       'laksdjflajksdf;ladjsk;flgjasdf',
+      //       style: TextStyle(color: Colors.black),
+      //     ),
+      //   ),
+      // ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedItemColor: AppColor.primary,
@@ -67,16 +120,6 @@ class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingOb
             label: bottomBarItems[index].label,
           ),
         ),
-      ),
-      body: Stack(
-        children: [
-          if (selectedItem == null) ...[
-            bottomBarItems[currentIndex].screen,
-          ],
-          if (selectedItem != null) ...[
-            selectedItem.screen,
-          ],
-        ],
       ),
       floatingActionButton: const CustomSpeedDialButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

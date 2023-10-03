@@ -439,7 +439,6 @@ class _DetailsTabViewState extends State<DetailsTabView> {
             title: !widget.isLeadView ? "Features" : 'Requirements',
             fontWeight: FontWeight.w700,
           ),
-
           Wrap(
             children: List<Widget>.generate(
               widget.data.amenities!.length + 1,
@@ -488,29 +487,6 @@ class _DetailsTabViewState extends State<DetailsTabView> {
               },
             ),
           ),
-
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(vertical: 5.0),
-          //   child: Row(
-          //     crossAxisAlignment: CrossAxisAlignment.start,
-          //     children: [
-          //       Text(
-          //         'No. of Reserved Parking',
-          //         style: const TextStyle(
-          //           fontSize: 14,
-          //           color: Color(0xFF818181),
-          //           fontWeight: FontWeight.w500,
-          //         ),
-          //       ),
-          //       const SizedBox(width: 15),
-          //       CustomChip(
-          //         label: Text(
-          //           widget.data.reservedparking.covered,
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
           const Divider(
             height: 40,
           ),
@@ -596,23 +572,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                       Icons.download_for_offline,
                                       size: 18,
                                     ),
-                                    onTap: () async {
-                                      // FileDownloader.downloadFile(
-                                      //   url: attachment.path.trim(),
-                                      //   onDownloadError: (errorMessage) {
-                                      //     print('errorMessage');
-                                      //   },
-                                      //   onDownloadCompleted: (path) {
-                                      //     print(path);
-                                      //   },
-                                      // );
-                                      // final res = await downloadFile(attachment.path, 'fileName', 'download');
-                                      // if (kIsWeb) {
-                                      // AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                      // anchorElement.download = 'Attachment file';
-                                      // anchorElement.click();
-                                      // }
-                                    },
+                                    onTap: () async {},
                                   ),
                                   GestureDetector(
                                     child: const Icon(

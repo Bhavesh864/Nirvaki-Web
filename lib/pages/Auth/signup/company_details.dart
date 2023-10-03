@@ -181,6 +181,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                             CustomTextInput(
                               margin: const EdgeInsets.all(7),
                               labelText: 'Mobile',
+                              onlyDigits: true,
                               controller: mobilenumbercontroller,
                               validator: (value) => validateForMobileNumberFeild(value: value, props: "Mobile Number"),
                               onChanged: (value) {
