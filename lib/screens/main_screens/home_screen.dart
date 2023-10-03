@@ -96,7 +96,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             todoItems.sort((a, b) {
               final DateTime dueDateA = DateTime.parse("20${a.duedate!.replaceAll('-', '')}");
               final DateTime dueDateB = DateTime.parse("20${b.duedate!.replaceAll('-', '')}");
-              return dueDateA.compareTo(dueDateB);
+              return dueDateB.compareTo(dueDateA);
             });
 
             final List<CardDetails> workItems =
