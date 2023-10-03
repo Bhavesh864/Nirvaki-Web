@@ -135,11 +135,13 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     final isPlotSelected = ref.read(filterPlotQuestion);
     final allInventoryQuestionsNotifier = ref.read(allInventoryQuestion.notifier);
     final allInventoryQuestions = ref.read(allInventoryQuestion);
+    final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom;
+
     // final assignIsselected = selectedValues.firstWhere((element) => element["id"] == 36)["item"];
     return GestureDetector(
         onTap: () {
-          if (Responsive.isMobile(context)) {
-            // FocusScope.of(context).unfocus();
+          if (!kIsWeb) {
+            FocusScope.of(context).unfocus();
           }
         },
         child: Scaffold(
@@ -184,7 +186,9 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
 
                   return GestureDetector(
                     onTap: () {
-                      // FocusScope.of(context).unfocus();
+                      if (!kIsWeb) {
+                        FocusScope.of(context).unfocus();
+                      }
                     },
                     child: Stack(
                       children: [
@@ -281,8 +285,8 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                                             child: CustomButton(
                                                                               text: currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next',
                                                                               onPressed: () {
-                                                                                if (Responsive.isMobile(context)) {
-                                                                                  // FocusScope.of(context).unfocus();
+                                                                                if (!kIsWeb) {
+                                                                                  FocusScope.of(context).unfocus();
                                                                                 }
                                                                                 if (!allQuestionFinishes) {
                                                                                   if (currentScreenList[index].title != "Assign to") {
@@ -329,7 +333,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                     isInventory: "IN",
                                     isEdit: isEdit,
                                   )),
-                        !allQuestionFinishes ? inventoryAppBar(currentScreenList) : const SizedBox(),
+                        isKeyboardOpen == 0 && !allQuestionFinishes ? inventoryAppBar(currentScreenList) : const SizedBox(),
                       ],
                     ),
                   );

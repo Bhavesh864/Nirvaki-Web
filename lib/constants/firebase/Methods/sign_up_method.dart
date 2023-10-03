@@ -14,7 +14,8 @@ Future<String> signUpMethod({required state}) async {
   final companyName = getDataById(state, 7);
   final companyMobileNumber = getDataById(state, 8);
   final companyWhatsAppMobileNumber = getDataById(state, 9);
-  final companyAddress = getDataById(state, 10);
+  final companyAddress1 = getDataById(state, 10);
+  final companyAddress2 = getDataById(state, 15);
   final companyState = getDataById(state, 11);
   final companyCity = getDataById(state, 12);
   final registerAs = getDataById(state, 13);
@@ -30,8 +31,14 @@ Future<String> signUpMethod({required state}) async {
       brokercompanywhatsapp: companyWhatsAppMobileNumber ?? companyMobileNumber,
       brokercompanyemail: email,
       brokerlogo: companyLogo ?? "",
-      brokercompanyaddress: {"address": companyAddress, "city": companyCity, "state": companyState},
+      brokercompanyaddress: {
+        "Addressline1": companyAddress1,
+        "Addressline2": companyAddress2,
+        "city": companyCity,
+        "state": companyState,
+      },
     );
+
     final User items = User(
       brokerId: authentication.currentUser!.uid,
       status: 'accepted',
@@ -46,6 +53,7 @@ Future<String> signUpMethod({required state}) async {
       fcmToken: null,
       image: "",
     );
+
     await User.addUser(items);
     await BrokerInfo.addBrokerInfo(item);
     final uid = authResult.user!.uid;
