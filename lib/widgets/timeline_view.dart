@@ -33,7 +33,6 @@ class CustomTimeLineView extends ConsumerStatefulWidget {
 class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
   @override
   Widget build(BuildContext context) {
-    print("object");
     final workitemId = ref.watch(selectedWorkItemId);
     final User? user = ref.watch(userDataProvider);
     return Container(

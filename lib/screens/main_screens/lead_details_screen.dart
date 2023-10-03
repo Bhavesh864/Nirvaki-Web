@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
@@ -15,8 +14,8 @@ import 'package:yes_broker/pages/add_lead.dart';
 
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import '../../constants/functions/convertStringTorange/convert_string_to_range.dart';
-import '../../customs/custom_text.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
+import '../../customs/custom_text.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
 import '../../riverpodstate/common_index_state.dart';
@@ -319,9 +318,9 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                   MapViewWidget(
                                     state: data.preferredlocality!.state!,
                                     city: data.preferredlocality!.city!,
-                                    addressline1: data.preferredlocality!.addressline1!,
+                                    addressline1: data.preferredlocality?.addressline1,
                                     addressline2: data.preferredlocality?.addressline2,
-                                    locality: data.preferredlocality?.locality,
+                                    locality: data.preferredlocality!.locality!,
                                   ),
                               ],
                             ),
