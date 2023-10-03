@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -46,7 +47,7 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Responsive.isMobile(context)
+      appBar: !kIsWeb
           ? AppBar(
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
@@ -70,172 +71,173 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
               return const Center(child: CircularProgressIndicator.adaptive());
             }
             if (snapshot.hasData) {
-              final data = snapshot.data;
+              final data = snapshot.data!;
 
-              return Column(
-                children: [
-                  largeScreenView('Public View', context),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: ScrollConfiguration(
-                          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                          child: SingleChildScrollView(
-                            child: Container(
-                              padding: const EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 10),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  InventoryDetailsHeader(
-                                    setState: () {
-                                      setState(() {});
-                                    },
-                                    id: data!.leadId!,
-                                    title: data.leadTitle!,
-                                    category: data.leadcategory!,
-                                    type: data.leadType!,
-                                    propertyCategory: data.propertycategory!,
-                                    status: data.leadStatus!,
-                                    price: data.propertypricerange?.arearangestart,
-                                  ),
-                                  if (Responsive.isMobile(context))
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 10),
-                                      child: HeaderChips(
-                                        id: data.leadId!,
-                                        category: data.leadcategory!,
-                                        type: data.leadType!,
-                                        propertyCategory: data.propertycategory!,
-                                        status: data.leadStatus!,
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    largeScreenView('Public View', context),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: ScrollConfiguration(
+                            behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                            child: SingleChildScrollView(
+                              child: Container(
+                                padding: const EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 10),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    InventoryDetailsHeader(
+                                      setState: () {
+                                        setState(() {});
+                                      },
+                                      id: data!.leadId!,
+                                      title: data.leadTitle!,
+                                      category: data.leadcategory!,
+                                      type: data.leadType!,
+                                      propertyCategory: data.propertycategory!,
+                                      status: data.leadStatus!,
+                                      price: data.propertypricerange?.arearangestart,
+                                    ),
+                                    if (Responsive.isMobile(context))
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 10),
+                                        child: HeaderChips(
+                                          id: data.leadId!,
+                                          category: data.leadcategory!,
+                                          type: data.leadType!,
+                                          propertyCategory: data.propertycategory!,
+                                          status: data.leadStatus!,
+                                        ),
+                                      ),
+                                    ListTile(
+                                      contentPadding: const EdgeInsets.all(0),
+                                      leading: const Icon(
+                                        Icons.location_on_outlined,
+                                        size: 20,
+                                        color: Colors.black,
+                                      ),
+                                      minLeadingWidth: 2,
+                                      horizontalTitleGap: 8,
+                                      titleAlignment: ListTileTitleAlignment.center,
+                                      title: CustomText(
+                                        title: '${data.preferredlocality!.state},${data.preferredlocality!.city},${data.preferredlocality!.addressline1}',
+                                        size: 12,
+                                        fontWeight: FontWeight.w400,
+                                        color: const Color(0xFFA8A8A8),
                                       ),
                                     ),
-                                  ListTile(
-                                    contentPadding: const EdgeInsets.all(0),
-                                    leading: const Icon(
-                                      Icons.location_on_outlined,
-                                      size: 20,
-                                      color: Colors.black,
-                                    ),
-                                    minLeadingWidth: 2,
-                                    horizontalTitleGap: 8,
-                                    titleAlignment: ListTileTitleAlignment.center,
-                                    title: CustomText(
-                                      title: '${data.preferredlocality!.state},${data.preferredlocality!.city},${data.preferredlocality!.addressline1}',
-                                      size: 12,
-                                      fontWeight: FontWeight.w400,
-                                      color: const Color(0xFFA8A8A8),
-                                    ),
-                                  ),
-                                  if (Responsive.isMobile(context))
-                                    Row(
-                                      children: [
-                                        CustomButton(
-                                          text: 'View Owner Details',
-                                          onPressed: () {
-                                            showOwnerDetailsAndAssignToBottomSheet(
-                                              context,
-                                              'Owner Details',
-                                              ContactInformation(customerinfo: data.customerinfo!),
-                                            );
-                                          },
-                                          height: 40,
-                                          width: 180,
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            showOwnerDetailsAndAssignToBottomSheet(
-                                              context,
-                                              'Assignment',
-                                              AssignmentWidget(
-                                                id: data.leadId!,
-                                                assignto: data.assignedto!,
-                                                imageUrlCreatedBy:
-                                                    data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                                createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
-                                              ),
-                                            );
-                                          },
-                                          child: SmallCustomCircularImage(
-                                            width: 30,
-                                            height: 30,
-                                            imageUrl: data.assignedto![0].image!,
+                                    if (Responsive.isMobile(context))
+                                      Row(
+                                        children: [
+                                          CustomButton(
+                                            text: 'View Owner Details',
+                                            onPressed: () {
+                                              showOwnerDetailsAndAssignToBottomSheet(
+                                                context,
+                                                'Owner Details',
+                                                ContactInformation(customerinfo: data.customerinfo!),
+                                              );
+                                            },
+                                            height: 40,
+                                            width: 180,
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  if (Responsive.isMobile(context))
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 12.0),
-                                      child: CustomText(
-                                        title: data.propertypricerange?.arearangestart != null
-                                            ? '${data.propertypricerange!.arearangestart}${data.propertypricerange!.unit}'
-                                            : '50k/month',
-                                        color: AppColor.primary,
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              showOwnerDetailsAndAssignToBottomSheet(
+                                                context,
+                                                'Assignment',
+                                                AssignmentWidget(
+                                                  id: data.leadId!,
+                                                  assignto: data.assignedto!,
+                                                  imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                  createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
+                                                ),
+                                              );
+                                            },
+                                            child: SmallCustomCircularImage(
+                                              width: 30,
+                                              height: 30,
+                                              imageUrl: data.assignedto![0].image!,
+                                            ),
+                                          ),
+                                        ],
                                       ),
+                                    if (Responsive.isMobile(context))
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 12.0),
+                                        child: CustomText(
+                                          title: data.propertypricerange?.arearangestart != null
+                                              ? '${data.propertypricerange!.arearangestart}${data.propertypricerange!.unit}'
+                                              : '50k/month',
+                                          color: AppColor.primary,
+                                        ),
+                                      ),
+                                    const SizedBox(
+                                      height: 30,
                                     ),
-                                  const SizedBox(
-                                    height: 30,
-                                  ),
-                                  if (currentSelectedTab == 0)
-                                    DetailsTabView(
-                                      id: data.leadId!,
-                                      isLeadView: true,
-                                      data: data,
-                                    ),
-                                ],
+                                    if (currentSelectedTab == 0)
+                                      DetailsTabView(
+                                        id: data.leadId!,
+                                        isLeadView: true,
+                                        data: data,
+                                      ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      if (Responsive.isDesktop(context)) ...[
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                          width: 1,
-                          color: Colors.grey.withOpacity(0.5),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            child: Column(
-                              children: [
-                                StreamBuilder(
-                                  stream: FirebaseFirestore.instance.collection("brokerInfo").where("brokerid", isEqualTo: data.brokerid).snapshots(),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      final dataList = snapshot.data?.docs;
-                                      List<BrokerInfo> inventoryList = dataList!.map((doc) => BrokerInfo.fromSnapshot(doc)).toList();
+                        if (Responsive.isDesktop(context)) ...[
+                          Container(
+                            margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                            width: 1,
+                            color: Colors.grey.withOpacity(0.5),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              child: Column(
+                                children: [
+                                  StreamBuilder(
+                                    stream: FirebaseFirestore.instance.collection("brokerInfo").where("brokerid", isEqualTo: data.brokerid).snapshots(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        final dataList = snapshot.data?.docs;
+                                        List<BrokerInfo> inventoryList = dataList!.map((doc) => BrokerInfo.fromSnapshot(doc)).toList();
 
-                                      return CompanyInformation(
-                                        companyInfo: inventoryList[0],
-                                      );
-                                    }
-                                    return const SizedBox();
-                                  },
-                                ),
-                                if (Responsive.isDesktop(context))
-                                  MapViewWidget(
-                                    state: data.preferredlocality!.state!,
-                                    city: data.preferredlocality!.city!,
-                                    addressline1: data.preferredlocality!.addressline1!,
-                                    addressline2: data.preferredlocality?.addressline2,
-                                    locality: data.preferredlocality!.locality!,
+                                        return CompanyInformation(
+                                          companyInfo: inventoryList[0],
+                                        );
+                                      }
+                                      return const SizedBox();
+                                    },
                                   ),
-                              ],
+                                  // if (Responsive.isDesktop(context))
+                                  //   MapViewWidget(
+                                  //     state: data.preferredlocality!.state!,
+                                  //     city: data.preferredlocality!.city!,
+                                  //     addressline1: data.preferredlocality!.addressline1!,
+                                  //     addressline2: data.preferredlocality?.addressline2,
+                                  //     locality: data.preferredlocality!.locality!,
+                                  //   ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ],
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               );
             }
             return Container(

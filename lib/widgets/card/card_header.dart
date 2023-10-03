@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
@@ -11,6 +12,7 @@ import 'package:yes_broker/constants/firebase/send_notification.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
+import '../../Customs/text_utility.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/utils/constants.dart';
@@ -46,7 +48,7 @@ class CardHeaderState extends ConsumerState<CardHeader> {
       children: [
         SizedBox(
           height: 30,
-          width: 260,
+          width: 200,
           child: ListView(
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
@@ -148,9 +150,47 @@ class CardHeaderState extends ConsumerState<CardHeader> {
           ),
         ),
         const Spacer(),
-        const Icon(
-          Icons.chevron_right,
-          size: 20,
+        Row(
+          children: [
+            if (cardData.duedate != null)
+              // CustomChip(
+              //   avatar: const Icon(
+              //     Icons.calendar_month_outlined,
+              //     size: 14,
+              //   ),
+              //   paddingHorizontal: 0,
+              //   label: AppText(
+              //     // text: DateFormat(' d MMM y').format(DateTime.parse(cardData.duedate!)),
+              //     text: cardData.duedate!,
+              //     fontsize: 9,
+              //   ),
+              // ),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(2),
+                  color: AppColor.chipGreyColor,
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 4),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.calendar_month_outlined,
+                      size: 15,
+                    ),
+                    const SizedBox(width: 2),
+                    AppText(
+                      // text: DateFormat(' d MMM y').format(DateTime.parse(cardData.duedate!)),
+                      text: cardData.duedate!,
+                      fontsize: 10,
+                    ),
+                  ],
+                ),
+              ),
+            const Icon(
+              Icons.chevron_right,
+              size: 20,
+            )
+          ],
         )
       ],
     );

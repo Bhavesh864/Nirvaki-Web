@@ -215,6 +215,26 @@ class CompanyInformation extends StatelessWidget {
           ),
           minLeadingWidth: 0,
         ),
+        ListTile(
+          contentPadding: const EdgeInsets.all(0),
+          dense: true,
+          visualDensity: const VisualDensity(vertical: -2),
+          leading: const CustomChip(
+            label: Icon(
+              Icons.home_outlined,
+              color: Colors.black,
+            ),
+            paddingHorizontal: 3,
+          ),
+          title: CustomText(
+            softWrap: true,
+            title:
+                "${companyInfo.brokercompanyaddress["Addressline1"]}, ${companyInfo.brokercompanyaddress["Addressline2"]}, ${companyInfo.brokercompanyaddress["city"]}, ${companyInfo.brokercompanyaddress["state"]}",
+            size: 12,
+            color: const Color(0xFFA8A8A8),
+          ),
+          minLeadingWidth: 0,
+        ),
       ],
     );
   }
