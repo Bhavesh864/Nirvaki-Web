@@ -107,6 +107,7 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
                               },
                             ),
                             CustomTextInput(
+                              onlyDigits: true,
                               labelText: 'Mobile',
                               controller: mobilenumbercontroller,
                               validator: (value) => validateForMobileNumberFeild(value: value, props: "Mobile Number"),

@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, prefer_const_constructors
 // ignore: depend_on_referenced_packages
+import 'dart:async';
+
 import "package:rxdart/rxdart.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,6 +18,7 @@ import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/screens/main_screens/chat_screen.dart';
 import 'package:yes_broker/screens/main_screens/create_group_screen.dart';
+import 'package:yes_broker/screens/main_screens/home_screen.dart';
 
 import '../../Customs/responsive.dart';
 import '../../constants/utils/colors.dart';
@@ -183,6 +186,11 @@ class TestList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // void updateUnreadMessagesCount() {
+    //   final chatBadge = ref.read(chatBadgeProvider.notifier);
+    //   chatBadge.state++;
+    // }
+
     return StreamBuilder<List<ChatItem>>(
       stream: mergeChatContactsAndGroups(ref),
       builder: (context, snapshot) {
@@ -191,6 +199,14 @@ class TestList extends ConsumerWidget {
         }
         if (snapshot.hasData) {
           final chatItems = snapshot.data!;
+
+          final unseenChatItems = chatItems.where((chatItem) {
+            final isSender = chatItem.lastMessageSenderId == AppConst.getAccessToken();
+            return !isSender && !chatItem.lastMessageIsSeen;
+          }).toList();
+
+          final unreadMessageCount = unseenChatItems.length;
+
           return ScrollConfiguration(
             behavior: const ScrollBehavior().copyWith(overscroll: false),
             child: ListView.builder(

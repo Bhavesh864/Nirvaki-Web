@@ -11,10 +11,10 @@ import '../questionaries/google_maps.dart';
 class MapViewWidget extends StatelessWidget {
   final String state;
   final String city;
-  final String addressline1;
+  final String? addressline1;
   final String? addressline2;
-  final String? locality;
-  const MapViewWidget({super.key, required this.state, required this.city, required this.addressline1, required this.addressline2, this.locality});
+  final String locality;
+  const MapViewWidget({super.key, required this.state, required this.city, required this.addressline1, required this.addressline2, required this.locality});
 
   String getGoogleMapsLink(LatLng latLng) {
     String link = 'https://www.google.com/maps/search/?api=1&query=${latLng.latitude},${latLng.longitude}';
@@ -55,7 +55,8 @@ class MapViewWidget extends StatelessWidget {
         ),
         CustomText(
           softWrap: true,
-          title: !AppConst.getPublicView() ? '$addressline1, $addressline2, $locality, $city, $state' : "$locality, $city, $state",
+          // '${addressline1 ?? ''} ${addressline2 ?? ""} $locality, $city, $state',
+          title: !AppConst.getPublicView() ? '${addressline1 ?? ''}, ${addressline2 ?? ""}, $locality, $city, $state' : "$locality, $city, $state",
           size: 12,
           color: Colors.grey,
         ),
@@ -71,9 +72,9 @@ class MapViewWidget extends StatelessWidget {
             },
             stateName: state,
             cityName: city,
-            address1: addressline1,
+            address1: addressline1 ?? '',
             address2: addressline2 ?? 'wtp',
-            locality: locality!,
+            locality: locality,
           ),
         ),
       ],

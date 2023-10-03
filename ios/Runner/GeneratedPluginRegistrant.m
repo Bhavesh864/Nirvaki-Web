@@ -6,10 +6,22 @@
 
 #import "GeneratedPluginRegistrant.h"
 
+#if __has_include(<audio_session/AudioSessionPlugin.h>)
+#import <audio_session/AudioSessionPlugin.h>
+#else
+@import audio_session;
+#endif
+
 #if __has_include(<cloud_firestore/FLTFirebaseFirestorePlugin.h>)
 #import <cloud_firestore/FLTFirebaseFirestorePlugin.h>
 #else
 @import cloud_firestore;
+#endif
+
+#if __has_include(<connectivity_plus/ConnectivityPlusPlugin.h>)
+#import <connectivity_plus/ConnectivityPlusPlugin.h>
+#else
+@import connectivity_plus;
 #endif
 
 #if __has_include(<emoji_picker_flutter/EmojiPickerFlutterPlugin.h>)
@@ -84,6 +96,24 @@
 @import image_picker_ios;
 #endif
 
+#if __has_include(<just_audio/JustAudioPlugin.h>)
+#import <just_audio/JustAudioPlugin.h>
+#else
+@import just_audio;
+#endif
+
+#if __has_include(<network_info_plus/FLTNetworkInfoPlusPlugin.h>)
+#import <network_info_plus/FLTNetworkInfoPlusPlugin.h>
+#else
+@import network_info_plus;
+#endif
+
+#if __has_include(<package_info_plus/FLTPackageInfoPlusPlugin.h>)
+#import <package_info_plus/FLTPackageInfoPlusPlugin.h>
+#else
+@import package_info_plus;
+#endif
+
 #if __has_include(<path_provider_foundation/PathProviderPlugin.h>)
 #import <path_provider_foundation/PathProviderPlugin.h>
 #else
@@ -108,6 +138,18 @@
 @import url_launcher_ios;
 #endif
 
+#if __has_include(<video_player_avfoundation/FVPVideoPlayerPlugin.h>)
+#import <video_player_avfoundation/FVPVideoPlayerPlugin.h>
+#else
+@import video_player_avfoundation;
+#endif
+
+#if __has_include(<wakelock_plus/WakelockPlusPlugin.h>)
+#import <wakelock_plus/WakelockPlusPlugin.h>
+#else
+@import wakelock_plus;
+#endif
+
 #if __has_include(<webview_flutter_wkwebview/FLTWebViewFlutterPlugin.h>)
 #import <webview_flutter_wkwebview/FLTWebViewFlutterPlugin.h>
 #else
@@ -117,7 +159,9 @@
 @implementation GeneratedPluginRegistrant
 
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
+  [AudioSessionPlugin registerWithRegistrar:[registry registrarForPlugin:@"AudioSessionPlugin"]];
   [FLTFirebaseFirestorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseFirestorePlugin"]];
+  [ConnectivityPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"ConnectivityPlusPlugin"]];
   [EmojiPickerFlutterPlugin registerWithRegistrar:[registry registrarForPlugin:@"EmojiPickerFlutterPlugin"]];
   [FilePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FilePickerPlugin"]];
   [FLTFirebaseAnalyticsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseAnalyticsPlugin"]];
@@ -130,10 +174,15 @@
   [FlutterLocalNotificationsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterLocalNotificationsPlugin"]];
   [FLTGoogleMapsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTGoogleMapsPlugin"]];
   [FLTImagePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTImagePickerPlugin"]];
+  [JustAudioPlugin registerWithRegistrar:[registry registrarForPlugin:@"JustAudioPlugin"]];
+  [FLTNetworkInfoPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTNetworkInfoPlusPlugin"]];
+  [FLTPackageInfoPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPackageInfoPlusPlugin"]];
   [PathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"PathProviderPlugin"]];
   [SharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"SharedPreferencesPlugin"]];
   [SqflitePlugin registerWithRegistrar:[registry registrarForPlugin:@"SqflitePlugin"]];
   [FLTURLLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTURLLauncherPlugin"]];
+  [FVPVideoPlayerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FVPVideoPlayerPlugin"]];
+  [WakelockPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"WakelockPlusPlugin"]];
   [FLTWebViewFlutterPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTWebViewFlutterPlugin"]];
 }
 
