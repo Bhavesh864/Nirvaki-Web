@@ -72,6 +72,7 @@ dependencies:
   flutter_file_downloader: ^1.1.2
   number_to_words: ^1.0.0
   flutter_widget_from_html: ^0.10.5+3
+  flutter_offline: ^3.0.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0

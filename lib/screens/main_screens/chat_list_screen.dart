@@ -186,10 +186,10 @@ class TestList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    void updateUnreadMessagesCount() {
-      final chatBadge = ref.read(chatBadgeProvider.notifier);
-      chatBadge.state++;
-    }
+    // void updateUnreadMessagesCount() {
+    //   final chatBadge = ref.read(chatBadgeProvider.notifier);
+    //   chatBadge.state++;
+    // }
 
     return StreamBuilder<List<ChatItem>>(
       stream: mergeChatContactsAndGroups(ref),

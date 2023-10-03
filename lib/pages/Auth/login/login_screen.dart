@@ -164,7 +164,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 width: w,
                                 child: CustomButton(
                                   text: 'Login',
-                                  onPressed: () => loginwithemailpassword(context),
+                                  onPressed: () {
+                                    loginwithemailpassword(context);
+                                  },
                                   height: 40.0,
                                 ),
                               ),
