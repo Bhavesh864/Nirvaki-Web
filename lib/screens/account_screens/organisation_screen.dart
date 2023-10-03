@@ -473,7 +473,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                                     "city": cityController.text,
                                     "state": stateController.text,
                                     "Addressline1": address1Controller.text,
-                                    "Addressline2p": address2Controller.text
+                                    "Addressline2": address2Controller.text
                                   }).then((value) => {cancelEditingAddressDetail()});
                             }
                           },
@@ -515,14 +515,25 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                     ],
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
+                  child: Table(
+                    children: [
+                      TableRow(children: [
+                        buildInfoFields('Whatsapp Number ', broker.brokercompanywhatsapp!, isPersonalDetailsEditing, phoneController, context),
+                        if (Responsive.isDesktop(context)) const SizedBox(),
+                      ])
+                    ],
+                  ),
+                ),
               ] else ...[
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
                   child: Table(
                     children: [
                       TableRow(children: [
-                        buildInfoFields('Address 1', broker.brokercompanyaddress['Addressline1'], isAddressEditing, address1Controller, context),
-                        buildInfoFields('City', broker.brokercompanyaddress['city'], isAddressEditing, cityController, context),
+                        buildInfoFields('Address 1', broker.brokercompanyaddress['Addressline1'] ?? "", isAddressEditing, address1Controller, context),
+                        buildInfoFields('Address 2', broker.brokercompanyaddress['Addressline2'] ?? "", isAddressEditing, address2Controller, context),
                         if (Responsive.isDesktop(context)) const SizedBox(),
                       ])
                     ],
@@ -533,7 +544,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                   child: Table(
                     children: [
                       TableRow(children: [
-                        buildInfoFields('Address 2', broker.brokercompanyaddress['Addressline2'], isAddressEditing, address2Controller, context),
+                        buildInfoFields('City', broker.brokercompanyaddress['city'], isAddressEditing, cityController, context),
                         buildInfoFields('State', broker.brokercompanyaddress['state'], isAddressEditing, stateController, context),
                         if (Responsive.isDesktop(context)) const SizedBox(),
                       ])

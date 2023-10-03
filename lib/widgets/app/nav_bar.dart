@@ -39,108 +39,132 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
   Widget build(BuildContext context) {
     final notificationCollection = FirebaseFirestore.instance.collection("notification");
     final userData = ref.watch(userDataProvider);
-    return Container(
-        height: 70,
-        margin: const EdgeInsets.only(bottom: 5, right: 5),
-        decoration: const BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: AppColor.secondary,
-              spreadRadius: 12,
-              blurRadius: 4,
-              offset: Offset(5, -15),
-            ),
-          ],
-          color: Colors.white,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            largeScreenView("${userData?.userfirstname ?? ""} ${userData?.userlastname ?? ""}", context),
-            const Spacer(),
-            StreamBuilder(
-                stream: notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).where('isRead', isEqualTo: false).snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    final notificationCount = snapshot.data!.docs.length;
 
-                    return Stack(
-                      children: <Widget>[
-                        InkWell(
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return const NotificationDialogBox();
-                              },
-                            );
-                          },
-                          child: const Icon(
-                            Icons.notifications_none,
-                            size: 25,
-                          ),
+    return Container(
+      height: 70,
+      margin: const EdgeInsets.only(bottom: 5, right: 5),
+      decoration: const BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: AppColor.secondary,
+            spreadRadius: 12,
+            blurRadius: 4,
+            offset: Offset(5, -15),
+          ),
+        ],
+        color: Colors.white,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          largeScreenView("${userData?.userfirstname ?? ""} ${userData?.userlastname ?? ""}", context),
+          const Spacer(),
+          StreamBuilder(
+              stream: notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).where('isRead', isEqualTo: false).snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final notificationCount = snapshot.data!.docs.length;
+
+                  return Stack(
+                    children: <Widget>[
+                      InkWell(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return const NotificationDialogBox();
+                            },
+                          );
+                        },
+                        child: const Icon(
+                          Icons.notifications_none,
+                          size: 25,
                         ),
-                        if (notificationCount > 0)
-                          Positioned(
-                            right: 0,
-                            child: Container(
-                              padding: const EdgeInsets.all(1),
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              constraints: const BoxConstraints(
-                                minWidth: 12,
-                                minHeight: 12,
-                              ),
-                              child: Text(
-                                notificationCount.toString(),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 8,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
+                      ),
+                      if (notificationCount > 0)
+                        Positioned(
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(1),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(6),
                             ),
-                          )
-                      ],
-                    );
-                  }
-                  return const SizedBox();
-                }),
-            const SizedBox(
-              width: 20,
-            ),
-            PopupMenuButton(
-              onCanceled: () {},
-              onSelected: (value) {
-                widget.onOptionSelect(value);
-              },
-              color: Colors.white.withOpacity(1),
-              offset: const Offset(200, 40),
-              itemBuilder: (contex) {
-                addOrRemoveTeamAndOrganization(userData!);
-                return profileMenuItems.map(
-                  (e) {
-                    return popupMenuItem(e.title);
-                  },
-                ).toList();
-              },
-              child: Container(
-                height: 30,
-                width: 30,
-                margin: const EdgeInsets.only(right: 10),
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(userData?.image ?? noImg),
+                            constraints: const BoxConstraints(
+                              minWidth: 12,
+                              minHeight: 12,
+                            ),
+                            child: Text(
+                              notificationCount.toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 8,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        )
+                    ],
+                  );
+                }
+                return const SizedBox();
+              }),
+          const SizedBox(
+            width: 20,
+          ),
+          PopupMenuButton(
+            onSelected: (value) {
+              widget.onOptionSelect(value);
+            },
+            color: Colors.white.withOpacity(1),
+            offset: const Offset(200, 40),
+            itemBuilder: (contex) {
+              addOrRemoveTeamAndOrganization(userData!);
+              return profileMenuItems.map(
+                (e) {
+                  return popupMenuItem(e.title);
+                },
+              ).toList();
+            },
+            child: userData?.image != '' && userData?.image != null
+                ? Container(
+                    height: 30,
+                    width: 30,
+                    margin: const EdgeInsets.only(right: 10),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(userData?.image ?? noImg),
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  )
+                : Container(
+                    height: 30,
+                    width: 30,
+                    margin: const EdgeInsets.only(right: 10),
+                    decoration: BoxDecoration(
+                      color: AppColor.primary, // Set your desired background color
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: Text(
+                        // Get the first letters of the first name and last name
+                        (userData?.userfirstname.isNotEmpty == true ? userData!.userfirstname[0].toUpperCase() : '') +
+                            (userData?.userlastname.isNotEmpty == true ? userData!.userlastname[0].toUpperCase() : ''),
+                        style: const TextStyle(
+                          letterSpacing: 1,
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -334,7 +358,8 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                                   },
                                   titleAlignment: ListTileTitleAlignment.top,
                                   leading: CircleAvatar(
-                                    backgroundImage: NetworkImage(notificationData.imageUrl!.isNotEmpty && notificationData.imageUrl != null ? notificationData.imageUrl! : noImg),
+                                    backgroundImage:
+                                        NetworkImage(notificationData.imageUrl!.isNotEmpty && notificationData.imageUrl != null ? notificationData.imageUrl! : noImg),
                                   ),
                                   title: SizedBox(
                                     height: 80,
