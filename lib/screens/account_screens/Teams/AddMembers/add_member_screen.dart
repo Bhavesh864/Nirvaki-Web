@@ -183,6 +183,7 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                           ),
                           LabelTextInputField(
                               isMandatory: true,
+                              onlyDigits: true,
                               labelText: "Mobile",
                               inputController: _mobileController,
                               validator: (value) => validateForMobileNumberFeild(value: value, props: "Mobile")),

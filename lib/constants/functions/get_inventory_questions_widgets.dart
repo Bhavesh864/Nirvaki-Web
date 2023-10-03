@@ -33,6 +33,9 @@ Widget buildInventoryQuestions(
   List<Map<String, dynamic>> selectedValues,
   List<States> stateList,
 ) {
+  if (isPlotSelected) {
+    selectedValues.removeWhere((element) => element["id"] == 14);
+  }
   if (question.questionOptionType == 'chip') {
     return Column(
       children: [
@@ -63,7 +66,12 @@ Widget buildInventoryQuestions(
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       selectedOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
-
+    if (selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 23)) {
+      selectedOption = "Sq ft";
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        notify.add({"id": 23, "item": selectedOption});
+      });
+    }
     return StatefulBuilder(builder: (context, setState) {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 7),
@@ -89,11 +97,7 @@ Widget buildInventoryQuestions(
                         bgcolor: selectedOption == option ? AppColor.primary : AppColor.primary.withOpacity(0.05),
                         onSelected: (selectedItem) {
                           setState(() {
-                            if (selectedOption == option) {
-                              selectedOption = '';
-                            } else {
-                              selectedOption = option;
-                            }
+                            selectedOption = option;
                           });
                           notify.add({"id": question.questionId, "item": selectedOption});
                         },
@@ -210,7 +214,8 @@ Widget buildInventoryQuestions(
             question.questionTitle == 'Rent' ||
             question.questionTitle == 'Listing Price' ||
             question.questionTitle.contains('Floor Number') ||
-            question.questionTitle.contains('Property Area');
+            question.questionTitle.contains('Property Area') ||
+            question.questionId == 22;
 
         final isvalidationtrue = question.questionTitle.contains('First') ||
             question.questionTitle.contains('Property Area') ||
@@ -319,8 +324,13 @@ Widget buildInventoryQuestions(
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
-    if (!isEdit && question.questionTitle.contains("Bedroom")) {
+    bool isSetBedroomvalue = selectedValues.isNotEmpty && question.questionTitle.contains("Bedroom") && !selectedValues.any((element) => element["id"] == 14);
+
+    if (isSetBedroomvalue) {
       defaultValue = "1";
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        notify.add({"id": 14, "item": defaultValue});
+      });
     }
     if (isState) {
       try {
@@ -331,7 +341,7 @@ Widget buildInventoryQuestions(
             setState(() {
               cities = [];
             });
-            print(cities);
+
             final index = states.indexOf(newSelectedState);
             if (index >= 0 && index < stateList.length && stateList[index].districts != null) {
               setState(() {

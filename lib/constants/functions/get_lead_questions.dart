@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:number_to_words/number_to_words.dart';
 import 'convertStringTorange/convert_range_string.dart';
-
 import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
@@ -66,6 +65,12 @@ Widget buildLeadQuestions(
     String selectedOption = '';
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       selectedOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
+    }
+    if (selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 23)) {
+      selectedOption = "Sq ft";
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        notify.add({"id": 23, "item": selectedOption});
+      });
     }
     return StatefulBuilder(builder: (context, setState) {
       return Container(
@@ -208,9 +213,12 @@ Widget buildLeadQuestions(
     return StatefulBuilder(
       builder: (context, setState) {
         final isPriceField = question.questionId == 46 || question.questionId == 48 || question.questionId == 50;
-        final isDigitsOnly = question.questionTitle.contains('Mobile') || question.questionTitle.contains('Property Area');
-        final isvalidationtrue =
-            question.questionTitle.contains('First') || question.questionTitle.contains('Mobile') || question.questionTitle == 'Rent' || question.questionTitle == 'Listing Price';
+        final isDigitsOnly = question.questionTitle.contains('Mobile') || question.questionTitle.contains('Property Area') || question.questionId == 22;
+        final isvalidationtrue = question.questionTitle.contains('First') ||
+            question.questionTitle.contains('Mobile') ||
+            question.questionTitle == 'Rent' ||
+            question.questionTitle == 'Listing Price' ||
+            question.questionTitle.contains('Property Area');
 
         final isEmail = question.questionTitle.contains("Email");
         return Column(
@@ -282,8 +290,11 @@ Widget buildLeadQuestions(
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
-    if (!isEdit && question.questionTitle.contains("Bedroom")) {
+    if (selectedValues.isNotEmpty && question.questionTitle.contains("Bedroom") && !selectedValues.any((element) => element["id"] == 14)) {
       defaultValue = "1";
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        notify.add({"id": 14, "item": defaultValue});
+      });
     }
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 7),
