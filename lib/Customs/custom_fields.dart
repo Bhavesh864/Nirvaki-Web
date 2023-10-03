@@ -85,7 +85,8 @@ class CustomTextInputState extends State<CustomTextInput> {
       child: TextFormField(
         inputFormatters: widget.onlyDigits
             ? <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly,
+                // FilteringTextInputFormatter.digitsOnly,
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
                 LengthLimitingTextInputFormatter(10),
               ]
             : null,

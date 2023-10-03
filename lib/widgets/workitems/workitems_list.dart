@@ -32,7 +32,6 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-
     if (Responsive.isMobile(context)) {
       return Container(
         margin: const EdgeInsets.only(left: 8, right: 3),
