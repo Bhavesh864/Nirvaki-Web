@@ -325,7 +325,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                 MapViewWidget(
                                   state: data.propertyaddress!.state!,
                                   city: data.propertyaddress!.city!,
-                                  addressline1: data.propertyaddress!.addressline1!,
+                                  addressline1: data.propertyaddress!.addressline1,
                                   addressline2: data.propertyaddress?.addressline2,
                                   locality: data.propertyaddress!.locality!,
                                 ),

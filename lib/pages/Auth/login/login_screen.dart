@@ -161,7 +161,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: CustomButton(
                                   key: const Key("loginButton"),
                                   text: 'Login',
-                                  onPressed: () => loginwithemailpassword(context),
+                                  onPressed: () {
+                                    loginwithemailpassword(context);
+                                  },
                                   height: 40.0,
                                 ),
                               ),

@@ -139,7 +139,7 @@ class InventoryDetailsHeader extends ConsumerWidget {
                 ),
               ),
             const Spacer(),
-            if (!Responsive.isMobile(context) && !AppConst.getPublicView())
+            if (!Responsive.isMobile(context))
               CustomText(
                 title: price!.contains('₹') ? price! : '₹$price',
                 color: AppColor.primary,
@@ -189,14 +189,15 @@ class _HeaderChipsState extends ConsumerState<HeaderChips> {
             color: AppColor.primary,
           ),
         ),
-        CustomChip(
-          color: AppColor.primary.withOpacity(0.1),
-          label: CustomText(
-            title: widget.type,
-            size: 10,
-            color: AppColor.primary,
+        if (!AppConst.getPublicView())
+          CustomChip(
+            color: AppColor.primary.withOpacity(0.1),
+            label: CustomText(
+              title: widget.type,
+              size: 10,
+              color: AppColor.primary,
+            ),
           ),
-        ),
         CustomChip(
           color: AppColor.primary.withOpacity(0.1),
           label: CustomText(

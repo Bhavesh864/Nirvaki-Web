@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
@@ -54,7 +55,8 @@ class MapViewWidget extends StatelessWidget {
         ),
         CustomText(
           softWrap: true,
-          title: '${addressline1 ?? ''} ${addressline2 ?? ""} $locality, $city, $state',
+          // '${addressline1 ?? ''} ${addressline2 ?? ""} $locality, $city, $state',
+          title: !AppConst.getPublicView() ? '${addressline1 ?? ''}, ${addressline2 ?? ""}, $locality, $city, $state' : "$locality, $city, $state",
           size: 12,
           color: Colors.grey,
         ),

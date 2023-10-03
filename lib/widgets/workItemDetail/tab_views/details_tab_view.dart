@@ -3,10 +3,10 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/customs/loader.dart';
+import 'package:yes_broker/widgets/workItemDetail/tab_views/iframe_modules.dart';
 import '../../../Customs/custom_chip.dart';
 import '../../../Customs/custom_text.dart';
 import '../../../Customs/responsive.dart';
@@ -15,6 +15,7 @@ import '../../../constants/functions/workitems_detail_methods.dart';
 import '../../../constants/utils/colors.dart';
 import '../../../constants/utils/constants.dart';
 import '../mapview_widget.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class AttachmentPreviewDialog extends StatelessWidget {
   final String attachmentPath;
@@ -61,7 +62,26 @@ class _DetailsTabViewState extends State<DetailsTabView> {
   List<PlatformFile> pickedFilesList = [];
   List<String> selectedDocsNameList = [];
   bool isUploading = false;
-  // String videoUrl = "https://www.youtube.com/embed/C3aRyxcpy5A";
+  late YoutubePlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = YoutubePlayerController(
+      params: const YoutubePlayerParams(
+        showControls: true,
+        mute: false,
+        showFullscreenButton: true,
+        loop: false,
+      ),
+    );
+
+    _controller.setFullScreenListener(
+      (isFullScreen) {
+        print('${isFullScreen ? 'Entered' : 'Exited'} Fullscreen.');
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +89,24 @@ class _DetailsTabViewState extends State<DetailsTabView> {
     List<String> allImages = [];
     List<String> allTitles = [];
     final videoUrl = !widget.isLeadView && widget.data?.propertyvideo != null ? widget.data.propertyvideo : "";
+    if (!widget.isLeadView && videoUrl != null && videoUrl.contains('youtube.com')) {
+      _controller.loadVideo(videoUrl);
+
+      final regex = RegExp(r'.*\?v=(.+?)($|[\&])', caseSensitive: false);
+      String? videoId = '';
+      try {
+        if (regex.hasMatch(videoUrl)) {
+          videoId = regex.firstMatch(videoUrl)!.group(1);
+        }
+      } catch (e) {
+        print(e);
+      }
+      _controller = YoutubePlayerController.fromVideoId(
+        videoId: videoId!,
+        autoPlay: false,
+        params: const YoutubePlayerParams(showFullscreenButton: true),
+      );
+    }
 
     if (!widget.isLeadView) {
       final inventoryData = widget.data as InventoryDetails;
@@ -150,6 +188,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
             height: 10,
           ),
         ],
+        // if (!AppConst.getPublicView()) ...[
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 10.0),
           child: CustomText(
@@ -434,12 +473,13 @@ class _DetailsTabViewState extends State<DetailsTabView> {
             ),
           ],
         ],
+        // ],
+        // if (!AppConst.getPublicView())
         if (widget.data.amenities != null) ...[
           CustomText(
             title: !widget.isLeadView ? "Features" : 'Requirements',
             fontWeight: FontWeight.w700,
           ),
-
           Wrap(
             children: List<Widget>.generate(
               widget.data.amenities!.length + 1,
@@ -488,47 +528,26 @@ class _DetailsTabViewState extends State<DetailsTabView> {
               },
             ),
           ),
-
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(vertical: 5.0),
-          //   child: Row(
-          //     crossAxisAlignment: CrossAxisAlignment.start,
-          //     children: [
-          //       Text(
-          //         'No. of Reserved Parking',
-          //         style: const TextStyle(
-          //           fontSize: 14,
-          //           color: Color(0xFF818181),
-          //           fontWeight: FontWeight.w500,
-          //         ),
-          //       ),
-          //       const SizedBox(width: 15),
-          //       CustomChip(
-          //         label: Text(
-          //           widget.data.reservedparking.covered,
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
           const Divider(
             height: 40,
           ),
         ],
-        const Padding(
-          padding: EdgeInsets.only(bottom: 8.0),
-          child: CustomText(
-            title: "Property Description",
-            fontWeight: FontWeight.w700,
+        if (!AppConst.getPublicView()) ...[
+          const Padding(
+            padding: EdgeInsets.only(bottom: 8.0),
+            child: CustomText(
+              title: "Property Description",
+              fontWeight: FontWeight.w700,
+            ),
           ),
-        ),
-        Text(
-          widget.data.comments!,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey),
-        ),
-        const Divider(
-          height: 40,
-        ),
+          Text(
+            widget.data.comments!,
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey),
+          ),
+          const Divider(
+            height: 40,
+          ),
+        ],
         if (!AppConst.getPublicView())
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -596,23 +615,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                       Icons.download_for_offline,
                                       size: 18,
                                     ),
-                                    onTap: () async {
-                                      // FileDownloader.downloadFile(
-                                      //   url: attachment.path.trim(),
-                                      //   onDownloadError: (errorMessage) {
-                                      //     print('errorMessage');
-                                      //   },
-                                      //   onDownloadCompleted: (path) {
-                                      //     print(path);
-                                      //   },
-                                      // );
-                                      // final res = await downloadFile(attachment.path, 'fileName', 'download');
-                                      // if (kIsWeb) {
-                                      // AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                      // anchorElement.download = 'Attachment file';
-                                      // anchorElement.click();
-                                      // }
-                                    },
+                                    onTap: () async {},
                                   ),
                                   GestureDetector(
                                     child: const Icon(
@@ -703,32 +706,56 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                 ),
                 const SizedBox(height: 12),
                 Container(
-                  width: kIsWeb ? 400 : width / 1.1,
-                  height: kIsWeb ? 250 : 220,
+                  width: Responsive.isDesktop(context) ? 400 : width / 1.1,
+                  height: Responsive.isDesktop(context) ? 250 : 220,
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     color: AppColor.chipGreyColor,
                     // color: const Color.fromARGB(40, 68, 97, 239),
                   ),
-                  child: HtmlWidget(
-                    '''
-                    <iframe
-                      width="300"
-                      height="300"
-                      src="$videoUrl"
-                      frameborder="0"
-                      title="Brokr"
-                      allow="accelerometer"
-                      allowfullscreen
-                    ></iframe>
-                  ''',
+                  child: YoutubePlayerScaffold(
+                    controller: _controller,
+                    builder: (context, player) {
+                      return LayoutBuilder(
+                        builder: (context, constraints) {
+                          if (kIsWeb && constraints.maxWidth > 750) {
+                            return Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      player,
+                                      const VideoPositionIndicator(),
+                                    ],
+                                  ),
+                                ),
+                                const Expanded(
+                                  child: SingleChildScrollView(
+                                    child: Controls(),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+
+                          return ListView(
+                            children: [
+                              player,
+                              const VideoPositionIndicator(),
+                              const Controls(),
+                            ],
+                          );
+                        },
+                      );
+                    },
                   ),
                 ),
               ]
             ],
           ),
-        if (!Responsive.isDesktop(context)) ...[
+        if (!Responsive.isDesktop(context) && !AppConst.getPublicView()) ...[
           if (widget.isLeadView) ...[
             MapViewWidget(
               state: widget.data.preferredlocality!.state!,
