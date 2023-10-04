@@ -615,7 +615,13 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                       Icons.download_for_offline,
                                       size: 18,
                                     ),
-                                    onTap: () async {},
+                                    onTap: () async {
+                                      // if (kIsWeb) {
+                                      //   AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                      //   anchorElement.download = 'Attachment file';
+                                      //   anchorElement.click();
+                                      // }
+                                    },
                                   ),
                                   GestureDetector(
                                     child: const Icon(

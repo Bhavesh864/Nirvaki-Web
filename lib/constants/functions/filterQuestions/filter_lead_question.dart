@@ -83,6 +83,11 @@ void updateLeadListInventory(WidgetRef ref, String option, screenList) {
     List<String> setToTrue = ["S10", "S14"];
     questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
   }
+  if (option.contains("Hotel") || option.contains("Resort") || option.contains("Guest House")) {
+    List<String> setTofalse = ["S12"];
+    List<String> setToTrue = [];
+    questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
+  }
   if (option.contains("Healthcare")) {
     List<String> setTofalse = ["S8", "S9", "S10", "S12", "S13", "S14"];
     List<String> setToTrue = ["S11"];

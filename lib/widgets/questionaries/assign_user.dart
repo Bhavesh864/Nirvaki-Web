@@ -43,7 +43,6 @@ class _AssignUserState extends ConsumerState<AssignUser> {
   @override
   Widget build(BuildContext context) {
     final User? user = ref.read(userDataProvider);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

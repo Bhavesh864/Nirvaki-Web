@@ -2,6 +2,8 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:number_to_words/number_to_words.dart';
 
 import 'package:yes_broker/Customs/text_utility.dart';
@@ -392,12 +394,17 @@ Widget buildInventoryQuestions(
       ),
     );
   } else if (question.questionOptionType == 'map') {
+    List<double> defaultValue = [];
+    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+      defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
+    }
     final state = getDataById(selectedValues, 26);
     final city = getDataById(selectedValues, 27);
     final address1 = getDataById(selectedValues, 28);
     final address2 = getDataById(selectedValues, 29);
     final locality = getDataById(selectedValues, 54);
     return CustomGoogleMap(
+      seletedLatLng: defaultValue,
       onLatLngSelected: (latLng) {
         notify.add({
           "id": question.questionId,
@@ -427,4 +434,14 @@ Widget buildInventoryQuestions(
   }
 
   return const SizedBox.shrink();
+}
+
+LatLng convertListToLatLng(List<double> doubles) {
+  if (doubles.length < 2) {
+    throw ArgumentError("List must contain at least two doubles (latitude and longitude).");
+  }
+  double latitude = doubles[0];
+  double longitude = doubles[1];
+
+  return LatLng(latitude, longitude);
 }
