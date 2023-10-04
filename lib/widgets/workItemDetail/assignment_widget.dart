@@ -42,6 +42,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.id.contains("TD") ? widget.data.toJson() : "man");
     final User? user = ref.watch(userDataProvider);
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Add this line
@@ -261,7 +262,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                         width: 4,
                       ),
                       Text(
-                        formatMessageDate(widget.data.createdate.toDate()),
+                        checkNotNUllItem(widget.data.createdate) ? formatMessageDate(widget.data.createdate.toDate()) : "",
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
                         style: const TextStyle(

@@ -39,6 +39,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<States> stateList = [];
 
+  String errorMessage = "";
   @override
   void initState() {
     super.initState();
@@ -290,8 +291,25 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                                                 }
                                                                                 if (!allQuestionFinishes) {
                                                                                   if (currentScreenList[index].title != "Assign to") {
+                                                                                    // setState(() {
+                                                                                    //   errorMessage = "";
+                                                                                    // });
                                                                                     if (_formKey.currentState!.validate()) {
+                                                                                      // if (currentScreenList[index].screenId != "S14") {
                                                                                       nextQuestion(screensDataList: currentScreenList, option: "");
+                                                                                      // } else if (currentScreenList[index].screenId == "S14" ||
+                                                                                      //     currentScreenList[index].screenId == "S8") {
+                                                                                      //   if (selectedValues.isNotEmpty &&
+                                                                                      //       selectedValues
+                                                                                      //           .any((item) => item['id'] == 23 || item["id"] == 14 && item['item'].isNotEmpty)) {
+                                                                                      //     print("object");
+                                                                                      //     nextQuestion(screensDataList: currentScreenList, option: "");
+                                                                                      //   } else {
+                                                                                      //     setState(() {
+                                                                                      //       errorMessage = "Please select a valid item";
+                                                                                      //     });
+                                                                                      //   }
+                                                                                      // }
                                                                                     }
                                                                                   }
                                                                                   if (currentScreenList[index].title == "Assign to") {
