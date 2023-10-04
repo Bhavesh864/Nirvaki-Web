@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../riverpodstate/filterQuestions/inventory_all_question.dart';
 import '../../../riverpodstate/inventory_res_filter_question.dart';
 
-void updateListInventory(WidgetRef ref, String option, screenList) {
+void updateListInventory(WidgetRef ref, String option) {
   final questionNotifier = ref.read(allInventoryQuestion.notifier);
   final plotNotifier = ref.read(filterPlotQuestion.notifier);
   final isCommercial = ref.read(filterCommercialQuestion);
@@ -81,6 +81,11 @@ void updateListInventory(WidgetRef ref, String option, screenList) {
   if (option.contains("Hospitality")) {
     List<String> setTofalse = ["S8", "S9", "S11", "S12", "S13"];
     List<String> setToTrue = ["S10", "S14"];
+    questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
+  }
+  if (option.contains("Hotel") || option.contains("Resort") || option.contains("Guest House")) {
+    List<String> setTofalse = ["S12"];
+    List<String> setToTrue = [];
     questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
   }
   if (option.contains("Healthcare")) {

@@ -79,7 +79,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   }
 
   nextQuestion({List<Screen>? screensDataList, required String option}) {
-    updateListInventory(ref, option, screensDataList);
+    updateListInventory(ref, option);
     if (currentScreenIndex < screensDataList!.length - 1 && !allQuestionFinishes) {
       setState(() {
         currentScreenIndex++;
@@ -138,7 +138,6 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     final allInventoryQuestionsNotifier = ref.read(allInventoryQuestion.notifier);
     final allInventoryQuestions = ref.read(allInventoryQuestion);
     final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom;
-
     // final assignIsselected = selectedValues.firstWhere((element) => element["id"] == 36)["item"];
     return GestureDetector(
         onTap: () {

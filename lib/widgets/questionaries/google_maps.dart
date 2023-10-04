@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:yes_broker/constants/functions/get_inventory_questions_widgets.dart';
 import 'package:yes_broker/constants/functions/lat_lng_get.dart';
 
 class CustomGoogleMap extends StatefulWidget {
@@ -9,6 +10,7 @@ class CustomGoogleMap extends StatefulWidget {
   final String? address2;
   final String locality;
   final bool isReadOnly;
+  final List<double>? seletedLatLng;
   final void Function(LatLng) onLatLngSelected;
 
   const CustomGoogleMap({
@@ -20,6 +22,7 @@ class CustomGoogleMap extends StatefulWidget {
     this.address2,
     this.isReadOnly = false,
     required this.locality,
+    this.seletedLatLng,
   }) : super(key: key);
 
   @override
@@ -35,7 +38,18 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   void initState() {
     super.initState();
     // Load the map when the widget is first initialized
-    _loadMap();
+    if (widget.seletedLatLng!.isEmpty) {
+      print("object");
+      _loadMap();
+    } else {
+      print("isnothaveany ");
+      location = convertListToLatLng(widget.seletedLatLng!);
+      if (location != null && mapController != null) {
+        mapController!.animateCamera(CameraUpdate.newLatLng(location!));
+      }
+      // widget.onLatLngSelected(location!);
+      setState(() {});
+    }
   }
 
   Future<void> _loadMap() async {
