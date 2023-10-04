@@ -18,7 +18,6 @@ import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/screens/main_screens/chat_screen.dart';
 import 'package:yes_broker/screens/main_screens/create_group_screen.dart';
-import 'package:yes_broker/screens/main_screens/home_screen.dart';
 
 import '../../Customs/responsive.dart';
 import '../../constants/utils/colors.dart';
@@ -199,13 +198,6 @@ class TestList extends ConsumerWidget {
         }
         if (snapshot.hasData) {
           final chatItems = snapshot.data!;
-
-          final unseenChatItems = chatItems.where((chatItem) {
-            final isSender = chatItem.lastMessageSenderId == AppConst.getAccessToken();
-            return !isSender && !chatItem.lastMessageIsSeen;
-          }).toList();
-
-          final unreadMessageCount = unseenChatItems.length;
 
           return ScrollConfiguration(
             behavior: const ScrollBehavior().copyWith(overscroll: false),

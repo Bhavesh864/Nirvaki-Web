@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:yes_broker/customs/responsive.dart';
 
 import '../../Customs/custom_text.dart';
 import '../../constants/utils/constants.dart';

@@ -237,7 +237,7 @@
   //               questionId: 21,
   //               questionOptionType: "multichip",
   //               questionTitle: "What are the amenities available with this property?",
-  //               questionOption: ["Power Backup", "24 X 7 security", "Lift", "Gym", "Swimming Pool", "Club House Park", "Garden"],
+  //               questionOption: ["Power Backup", "24 X 7 security", "Lift", "Gym", "Swimming Pool", "Club House Park", "Garden","Gated Community"],
   //             ),
   //           ],
   //           isActive: true,
@@ -249,9 +249,9 @@
   //           questions: [
   //             Question(
   //               questionId: 22,
-  //               questionOptionType: "dropdown",
+  //               questionOptionType: "textfield",
   //               questionTitle: "No of Reserved Parkings?",
-  //               questionOption: ["1", "2", "3", "4", "5"],
+  //               questionOption: "",
   //             ),
   //           ],
   //           isActive: true,
