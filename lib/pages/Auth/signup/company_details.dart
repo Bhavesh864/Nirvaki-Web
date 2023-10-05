@@ -47,6 +47,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                   isloading = false;
                 }),
                 context.beamToReplacementNamed(AppRoutes.loginScreen),
+                customSnackBar(context: context, text: "Verification email sent. Please check your inbox to verify your email"),
               }
             else
               {
@@ -107,6 +108,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(selectedItemForsignup.notifier);
+    print(notify.state);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -278,12 +280,15 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                               statecontroller.text = placesList[index] ?? "";
                                               address1controller.text = "$address, $city";
                                               address2controller.text = "$district, $state";
+                                              notify.add({});
                                               setState(() {
                                                 placesList = [];
                                               });
                                             } catch (e) {
                                               setState(() {
                                                 placesList = [];
+                                                address1controller.text = "";
+                                                address2controller.text = "";
                                               });
                                               print(e);
                                             }
@@ -340,7 +345,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
 }
 
 Future<GooglePlacesModel> getPlaces(String text) async {
-  print(text);
+  // print(text);
   final uri = Uri.parse("http://142.93.234.216:44210/api/v1/user/locations?name=${text}");
 
   final response = await http.get(
@@ -352,7 +357,7 @@ Future<GooglePlacesModel> getPlaces(String text) async {
     },
   );
   var responseData = json.decode(response.body.toString());
-  print("responseData=----> $responseData");
+  // print("responseData=----> $responseData");
   if (response.statusCode == 200) {
     return GooglePlacesModel.fromJson(responseData);
   } else {
