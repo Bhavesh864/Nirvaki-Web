@@ -82,7 +82,7 @@ class AppConst {
 
   static String? docTypeImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9RsiK7WSMHn6rVq5pLvEgINRyVTNKJ7drsg&usqp=CAU';
 
-  static String? googlemapkey = 'AIzaSyD7KtQoq29-5TqELLdPBSQoqCD376-qGjA';
+  static String googlemapkey = 'AIzaSyD7KtQoq29-5TqELLdPBSQoqCD376-qGjA';
 }
 
 bool isTypeisTodo(CardDetails cardData) {

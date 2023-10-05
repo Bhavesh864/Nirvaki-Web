@@ -74,6 +74,7 @@ dependencies:
   youtube_player_iframe: ^4.0.4
   flutter_widget_from_html: ^0.10.5+3
   flutter_offline: ^3.0.0
+  google_places_flutter: ^2.0.6
 
 dev_dependencies:
   flutter_lints: ^2.0.0
