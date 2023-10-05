@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
@@ -42,6 +43,7 @@ class CardHeaderState extends ConsumerState<CardHeader> {
     final cardData = widget.cardDetails[widget.index];
     status = widget.cardDetails;
     final User? user = ref.read(userDataProvider);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -168,20 +170,24 @@ class CardHeaderState extends ConsumerState<CardHeader> {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4),
-                  color: AppColor.chipGreyColor,
+                  color: cardData.duedate != null && DateFormat('dd-MM-yy').parse(cardData.duedate!).isBefore(DateTime.now())
+                      ? const Color.fromARGB(255, 249, 145, 137).withOpacity(0.2)
+                      : AppColor.chipGreyColor,
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 4),
                 child: Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.calendar_month_outlined,
                       size: 15,
+                      color: cardData.duedate != null && DateFormat('dd-MM-yy').parse(cardData.duedate!).isBefore(DateTime.now()) ? Colors.red : Colors.black,
                     ),
                     const SizedBox(width: 2),
                     AppText(
-                      // text: DateFormat(' d MMM y').format(DateTime.parse(cardData.duedate!)),
-                      text: cardData.duedate!,
+                      text: DateFormat('dd MMM yyyy').format(DateFormat('dd-MM-yy').parse(cardData.duedate!)),
                       fontsize: 10,
+                      textColor:
+                          cardData.duedate != null && DateFormat('dd-MM-yy').parse(cardData.duedate!).isBefore(DateTime.now()) ? Colors.red.shade500 : Colors.black,
                     ),
                   ],
                 ),

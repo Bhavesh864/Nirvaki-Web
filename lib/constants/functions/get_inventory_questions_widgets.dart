@@ -555,7 +555,10 @@ Widget buildInventoryQuestions(
     final address1 = getDataById(selectedValues, 28);
     final address2 = getDataById(selectedValues, 29);
     final locality = getDataById(selectedValues, 54);
+
     return CustomGoogleMap(
+      isEdit: isEdit,
+      selectedValues: selectedValues,
       seletedLatLng: defaultValue,
       onLatLngSelected: (latLng) {
         notify.add({
