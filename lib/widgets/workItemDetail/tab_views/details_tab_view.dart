@@ -3,6 +3,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/customs/loader.dart';
@@ -764,6 +765,9 @@ class _DetailsTabViewState extends State<DetailsTabView> {
         if (!Responsive.isDesktop(context) && !AppConst.getPublicView()) ...[
           if (widget.isLeadView) ...[
             MapViewWidget(
+              latLng: widget.isLeadView
+                  ? LatLng(widget.data.preferredlocation[0], widget.data.preferredlocation[1])
+                  : LatLng(widget.data.propertylocation[0], widget.data.propertylocation[0]),
               state: widget.data.preferredlocality!.state!,
               city: widget.data.preferredlocality!.city!,
               addressline1: widget.data.preferredlocality!.addressline1!,
@@ -772,6 +776,9 @@ class _DetailsTabViewState extends State<DetailsTabView> {
             ),
           ] else ...[
             MapViewWidget(
+              latLng: widget.isLeadView
+                  ? LatLng(widget.data.preferredlocation[0], widget.data.preferredlocation[1])
+                  : LatLng(widget.data.propertylocation[0], widget.data.propertylocation[1]),
               state: widget.data.propertyaddress!.state!,
               city: widget.data.propertyaddress!.city!,
               addressline1: widget.data.propertyaddress!.addressline1,

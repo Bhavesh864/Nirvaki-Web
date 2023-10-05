@@ -42,11 +42,9 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.id.contains("TD") ? widget.data.toJson() : "man");
     final User? user = ref.watch(userDataProvider);
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Add this line
-
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         // Row(
         //   children: [
@@ -254,7 +252,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 47, top: 2),
+                  padding: const EdgeInsets.only(left: 29, top: 2),
                   child: Row(
                     children: [
                       const Icon(Icons.calendar_month_outlined),

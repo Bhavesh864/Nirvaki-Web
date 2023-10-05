@@ -36,10 +36,11 @@ class _LoginScreenState extends State<LoginScreen> {
       signinMethod(email: emailcontroller.text, password: passwordcontroller.text).then((value) => {
             if (value == 'success')
               {
-                context.beamToReplacementNamed('/'),
-                User.updateFcmToken(fcmtoken: AppConst.getFcmToken()!, userid: AppConst.getAccessToken()!),
+                print('Manish code ==== >>>${auth.currentUser?.uid}'),
                 AppConst.setAccessToken(auth.currentUser?.uid),
+                User.updateFcmToken(fcmtoken: AppConst.getFcmToken()!, userid: AppConst.getAccessToken()!),
                 AppConst.setPublicView(false),
+                context.beamToReplacementNamed('/'),
               }
             else
               {
@@ -65,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
               image: AssetImage(authBgImage),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
-                Colors.black12,
+                Colors.black26,
                 BlendMode.darken,
               ),
             ),

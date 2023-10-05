@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member
-
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'package:number_to_words/number_to_words.dart';
 import 'convertStringTorange/convert_range_string.dart';
 import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
@@ -308,12 +309,20 @@ Widget buildLeadQuestions(
       ),
     );
   } else if (question.questionOptionType == 'map') {
+    // List? defaultValue;
+
+    // if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+    //   defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
+    // }
     final state = getDataById(selectedValues, 26);
     final city = getDataById(selectedValues, 27);
     final address1 = getDataById(selectedValues, 28);
     final address2 = getDataById(selectedValues, 29);
     final locality = getDataById(selectedValues, 54);
+
     return CustomGoogleMap(
+        isEdit: isEdit,
+        selectedValues: selectedValues,
         onLatLngSelected: (latLng) {
           notify.add({
             "id": question.questionId,

@@ -53,8 +53,8 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
     if (token != null) {
       AppConst.setAccessToken(token);
     }
-    setAllNotification();
     getUserData();
+    setAllNotification();
     super.initState();
   }
 
