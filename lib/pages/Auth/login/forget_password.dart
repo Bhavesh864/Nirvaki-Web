@@ -30,13 +30,12 @@ class _ForgetPasswordState extends State<ForgetPassword> {
         },
         child: SafeArea(
           child: Container(
-            // height: 760,
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(authBgImage),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
-                  Colors.black38,
+                  Colors.black26,
                   BlendMode.darken,
                 ),
               ),

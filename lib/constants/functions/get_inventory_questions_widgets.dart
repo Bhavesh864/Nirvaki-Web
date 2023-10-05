@@ -405,7 +405,10 @@ Widget buildInventoryQuestions(
     final address1 = getDataById(selectedValues, 28);
     final address2 = getDataById(selectedValues, 29);
     final locality = getDataById(selectedValues, 54);
+
     return CustomGoogleMap(
+      isEdit: isEdit,
+      selectedValues: selectedValues,
       seletedLatLng: defaultValue,
       onLatLngSelected: (latLng) {
         notify.add({
@@ -449,7 +452,6 @@ LatLng convertListToLatLng(List<double> doubles) {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -502,7 +504,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             placesAutoCompleteTextField(),
           ],
         ),
@@ -512,11 +514,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   placesAutoCompleteTextField() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: GooglePlaceAutoCompleteTextField(
         textEditingController: controller,
         googleAPIKey: "YOUR_GOOGLE_API_KEY",
-        inputDecoration: InputDecoration(
+        inputDecoration: const InputDecoration(
           hintText: "Search your location",
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
@@ -532,15 +534,15 @@ class _MyHomePageState extends State<MyHomePage> {
           controller.text = prediction.description ?? "";
           controller.selection = TextSelection.fromPosition(TextPosition(offset: prediction.description?.length ?? 0));
         },
-        seperatedBuilder: Divider(),
+        seperatedBuilder: const Divider(),
         // OPTIONAL// If you want to customize list view item builder
         itemBuilder: (context, index, Prediction prediction) {
           return Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Row(
               children: [
-                Icon(Icons.location_on),
-                SizedBox(
+                const Icon(Icons.location_on),
+                const SizedBox(
                   width: 7,
                 ),
                 Expanded(child: Text("${prediction.description ?? ""}"))

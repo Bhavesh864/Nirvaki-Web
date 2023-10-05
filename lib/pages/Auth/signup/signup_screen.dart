@@ -72,7 +72,7 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                 image: AssetImage(authBgImage),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
-                  Colors.black12,
+                  Colors.black26,
                   BlendMode.darken,
                 ),
               ),

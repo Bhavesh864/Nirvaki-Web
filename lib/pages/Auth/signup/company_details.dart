@@ -23,9 +23,6 @@ import '../../../routes/routes.dart';
 import '../../../widgets/auth/details_header.dart';
 
 // ================================== Second method ==================================
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
 import 'package:google_places_flutter/model/prediction.dart';
 
@@ -127,7 +124,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                 image: AssetImage(authBgImage),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
-                  Colors.black12,
+                  Colors.black26,
                   BlendMode.darken,
                 ),
               ),
@@ -299,7 +296,8 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                   controller.text = prediction.description ?? "";
                                   address1controller.text = "$address, $city";
                                   address2controller.text = "$district, $state";
-                                  controller.selection = TextSelection.fromPosition(TextPosition(offset: prediction.description != null ? prediction.description!.length : 0));
+                                  controller.selection =
+                                      TextSelection.fromPosition(TextPosition(offset: prediction.description != null ? prediction.description!.length : 0));
                                 }),
                             CustomTextInput(
                               labelText: 'Address 1',
