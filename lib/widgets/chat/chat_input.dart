@@ -68,6 +68,7 @@ class _ChatInputState extends ConsumerState<ChatInput> {
           );
     }
     messageController.clear();
+    focusNode.unfocus();
   }
 
   void sendFileMessage(

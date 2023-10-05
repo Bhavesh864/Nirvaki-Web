@@ -102,6 +102,7 @@ class InventoryDetailsHeader extends ConsumerWidget {
                 id: id,
               ),
             CustomChip(
+              paddingVertical: 8,
               onPressed: () {
                 shareUrl(context);
               },
@@ -182,6 +183,7 @@ class _HeaderChipsState extends ConsumerState<HeaderChips> {
     return Wrap(
       children: [
         CustomChip(
+          paddingVertical: 8,
           color: AppColor.primary.withOpacity(0.1),
           label: CustomText(
             title: widget.category,
@@ -191,6 +193,7 @@ class _HeaderChipsState extends ConsumerState<HeaderChips> {
         ),
         if (!AppConst.getPublicView())
           CustomChip(
+            paddingVertical: 8,
             color: AppColor.primary.withOpacity(0.1),
             label: CustomText(
               title: widget.type,
@@ -199,6 +202,7 @@ class _HeaderChipsState extends ConsumerState<HeaderChips> {
             ),
           ),
         CustomChip(
+          paddingVertical: 8,
           color: AppColor.primary.withOpacity(0.1),
           label: CustomText(
             title: widget.propertyCategory,

@@ -127,14 +127,15 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       HeaderChips(
-                                          inventoryDetails: data,
-                                          category: data.inventorycategory!,
-                                          type: data.inventoryType!,
-                                          propertyCategory: data.propertycategory!,
-                                          status: data.inventoryStatus!,
-                                          id: data.inventoryId!),
+                                        inventoryDetails: data,
+                                        category: data.inventorycategory!,
+                                        type: data.inventoryType!,
+                                        propertyCategory: data.propertycategory!,
+                                        status: data.inventoryStatus!,
+                                        id: data.inventoryId!,
+                                      ),
                                       SizedBox(
-                                        width: 120,
+                                        // width: 120,
                                         child: CustomText(
                                           size: 14,
                                           softWrap: true,
@@ -217,26 +218,79 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                               ),
                                             );
                                           },
+                                          // child: Row(
+                                          //   mainAxisAlignment: MainAxisAlignment.end,
+                                          //   children: data.assignedto!.asMap().entries.map((entry) {
+                                          //     final index = entry.key;
+                                          //     final user = entry.value;
+                                          //     return Transform.translate(
+                                          //       offset: Offset(index * -8.0, 0),
+                                          //       child: Container(
+                                          //         width: 24,
+                                          //         height: 24,
+                                          //         decoration: BoxDecoration(
+                                          //           border: Border.all(color: Colors.white),
+                                          //           image: DecorationImage(
+                                          //             image: NetworkImage(
+                                          //               user.image!.isEmpty ? noImg : user.image!,
+                                          //             ),
+                                          //             fit: BoxFit.fill,
+                                          //           ),
+                                          //           borderRadius: BorderRadius.circular(40),
+                                          //         ),
+                                          //       ),
+                                          //     );
+                                          //   }).toList(),
+                                          // ),
                                           child: Row(
+                                            mainAxisSize: MainAxisSize.min,
                                             mainAxisAlignment: MainAxisAlignment.end,
-                                            children: data.assignedto!.asMap().entries.map((entry) {
+                                            children: data.assignedto!
+                                                .sublist(
+                                                    0,
+                                                    data.assignedto!.length < 2
+                                                        ? 1
+                                                        : data.assignedto!.length < 3
+                                                            ? 2
+                                                            : 3)
+                                                .asMap()
+                                                .entries
+                                                .map((entry) {
                                               final index = entry.key;
                                               final user = entry.value;
                                               return Transform.translate(
                                                 offset: Offset(index * -8.0, 0),
                                                 child: Container(
+                                                  margin: EdgeInsets.zero,
                                                   width: 24,
                                                   height: 24,
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(color: Colors.white),
-                                                    image: DecorationImage(
-                                                      image: NetworkImage(
-                                                        user.image!.isEmpty ? noImg : user.image!,
-                                                      ),
-                                                      fit: BoxFit.fill,
-                                                    ),
-                                                    borderRadius: BorderRadius.circular(40),
-                                                  ),
+                                                  decoration: index > 1
+                                                      ? BoxDecoration(
+                                                          border: Border.all(color: Colors.white),
+                                                          color: index > 1 ? Colors.grey.shade300 : null,
+                                                          borderRadius: BorderRadius.circular(40),
+                                                        )
+                                                      : BoxDecoration(
+                                                          border: Border.all(color: Colors.white),
+                                                          image: DecorationImage(
+                                                            image: NetworkImage(
+                                                              user.image!.isEmpty ? noImg : user.image!,
+                                                            ),
+                                                            fit: BoxFit.fill,
+                                                          ),
+                                                          borderRadius: BorderRadius.circular(40),
+                                                        ),
+                                                  child: index > 1
+                                                      ? Center(
+                                                          child: CustomText(
+                                                            title: '+${data.assignedto!.length - 2}',
+                                                            color: Colors.black,
+                                                            size: 9,
+                                                            // textAlign: TextAlign.center,
+                                                            fontWeight: FontWeight.w600,
+                                                          ),
+                                                        )
+                                                      : null,
                                                 ),
                                               );
                                             }).toList(),

@@ -57,7 +57,6 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-    ref.read(chatControllerProvider).setUserState(true);
 
     final token = UserHiveMethods.getdata("token");
     authState = authentication.authStateChanges();

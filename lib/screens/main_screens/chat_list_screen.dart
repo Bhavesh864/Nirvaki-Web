@@ -253,6 +253,7 @@ class TestList extends ConsumerWidget {
                                 ),
                                 if (!chatItem.isGroupChat && chatItem.role != 'Employee')
                                   CustomChip(
+                                    paddingVertical: 8,
                                     label: AppText(
                                       text: chatItem.role!,
                                       fontsize: 10,

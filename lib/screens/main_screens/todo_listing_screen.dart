@@ -74,6 +74,13 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
             final List<CardDetails> todoItemsList =
                 filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
+
+            todoItemsList.sort((a, b) {
+              final DateTime dueDateA = DateTime.parse("20${a.duedate!.replaceAll('-', '')}");
+              final DateTime dueDateB = DateTime.parse("20${b.duedate!.replaceAll('-', '')}");
+              return dueDateB.compareTo(dueDateA);
+            });
+
             List<CardDetails> filterTodoList = todoItemsList.where((item) {
               if (searchController.text.isEmpty) {
                 return true;
@@ -216,13 +223,14 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                                                   shrinkWrap: true,
                                                   physics: const ScrollPhysics(),
                                                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                                      crossAxisCount: Responsive.isMobile(context)
-                                                          ? 1
-                                                          : Responsive.isTablet(context) || isFilterOpen
-                                                              ? 2
-                                                              : 3,
-                                                      crossAxisSpacing: 10.0,
-                                                      mainAxisExtent: 150),
+                                                    crossAxisCount: Responsive.isMobile(context)
+                                                        ? 1
+                                                        : Responsive.isTablet(context) || isFilterOpen
+                                                            ? 2
+                                                            : 3,
+                                                    crossAxisSpacing: 10.0,
+                                                    mainAxisExtent: 140,
+                                                  ),
                                                   itemCount: filterTodoList.length,
                                                   itemBuilder: (context, index) => GestureDetector(
                                                     onTap: () {
