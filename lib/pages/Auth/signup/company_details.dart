@@ -290,6 +290,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                               address1controller.text = "";
                                               address2controller.text = "";
                                             }
+                                            FocusScope.of(context).unfocus();
                                           },
                                         );
                                       },
