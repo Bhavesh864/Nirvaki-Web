@@ -92,3 +92,17 @@ Future<void> setNotificationTOfirestore(String title, String content, String ite
     print(e.toString());
   }
 }
+
+Future<String> getAllCategoryItems(String text) async {
+  print(text);
+  final uri = Uri.parse('https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${text}&key=AIzaSyBJXgFzyAEn02NMURljQ5xNdsPehFL9mXA');
+
+  final response = await http.get(uri, headers: {"Accept": "application/json", "Access-Control_Allow_Origin": "*"});
+  var responseData = json.decode(response.body.toString());
+  if (response.statusCode == 200) {
+    print("responseData=----> $responseData");
+    return responseData["predictions"][0]["description"];
+  } else {
+    throw Exception('Failed to load data');
+  }
+}
