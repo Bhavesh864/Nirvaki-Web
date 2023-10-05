@@ -23,7 +23,6 @@ Future<String> signUpMethod({required state}) async {
 
   try {
     final authResult = await auth.createUserWithEmailAndPassword(email: email, password: password);
-    await authResult.user?.sendEmailVerification();
     final BrokerInfo item = BrokerInfo(
       brokerid: authentication.currentUser?.uid,
       role: registerAs,
@@ -39,7 +38,6 @@ Future<String> signUpMethod({required state}) async {
         "state": companyState,
       },
     );
-
     final User items = User(
       brokerId: authentication.currentUser!.uid,
       status: 'accepted',
@@ -57,9 +55,10 @@ Future<String> signUpMethod({required state}) async {
 
     await User.addUser(items);
     await BrokerInfo.addBrokerInfo(item);
-    final uid = authResult.user!.uid;
-    UserHiveMethods.addData(key: "token", data: uid);
-    AppConst.setAccessToken(uid);
+    // final uid = authResult.user!.uid;
+    // UserHiveMethods.addData(key: "token", data: uid);
+    // AppConst.setAccessToken(uid);
+    await authResult.user?.sendEmailVerification();
     res = "success";
     return res;
   } catch (er) {

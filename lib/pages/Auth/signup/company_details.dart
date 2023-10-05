@@ -16,6 +16,7 @@ import 'package:yes_broker/riverpodstate/sign_up_state.dart';
 import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/screens/account_screens/profile_screen.dart';
+import '../../../Customs/dropdown_field.dart';
 import '../../../constants/utils/constants.dart';
 import '../../../constants/utils/image_constants.dart';
 import '../../../routes/routes.dart';
@@ -46,7 +47,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                 setState(() {
                   isloading = false;
                 }),
-                context.beamToReplacementNamed(AppRoutes.loginScreen),
+                context.beamToReplacementNamed('/'),
                 customSnackBar(context: context, text: "Verification email sent. Please check your inbox to verify your email"),
               }
             else
@@ -108,7 +109,6 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(selectedItemForsignup.notifier);
-    print(notify.state);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -228,16 +228,12 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                   controller: statecontroller,
                                   validator: (value) => validateForNormalFeild(value: value, props: "Search Location"),
                                   onChanged: (value) {
-                                    var list = [];
-                                    getPlaces(value).then((places) => {
-                                          for (var i = 0; i < places.data!.predictions!.length; i++)
-                                            {
-                                              list.add(places.data!.predictions![i].description),
-                                            },
-                                          setState(() {
-                                            placesList = list;
-                                          })
-                                        });
+                                    getPlaces(value).then((places) {
+                                      final descriptions = places.data?.predictions?.map((prediction) => prediction.description) ?? [];
+                                      setState(() {
+                                        placesList = descriptions.toList();
+                                      });
+                                    });
                                   },
                                 ),
                                 if (placesList.isNotEmpty)
@@ -259,38 +255,42 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                             final str = placesList[index];
 
                                             try {
-                                              // List<String> splitList = str.split(',').map((item) => item.trimRight()).toList().reversed.toList();
-                                              // List<String> splitList = str.split(',').map((item) => item.trim()).take(2).toList();
-                                              // String remainingPart = str.split(',').skip(2).join(',').trim();
-                                              // List<String> splitList = str.split(',').reversed.take(3).toList();
-//                                               splitList = splitList.reversed.toList();
-//                                               String remainingPart = str.split(',').skip(2).join(',').trim();
-//                                               List<String> stateName = remainingPart.split(", ");
-//                                               print("splitList-----> ${splitList.join(', ')}");
-//                                               print("splitList-----> $remainingPart");
-//                                               print("splitList-----> ${stateName[0]}");
-//                                               print("splitList-----> ${stateName[1]}");
+                                              List<String> words = str.split(' ');
+                                              if (words.length >= 3) {
+                                                String lastThreeWords = words.sublist(words.length - 3).join(' ');
+                                                String remainingWords = words.sublist(0, words.length - 3).join(' ');
+                                                List<String> lastThreeWordsList = lastThreeWords.split(' ');
+                                                if (lastThreeWordsList.isNotEmpty) {
+                                                  lastThreeWordsList.removeLast();
+                                                  lastThreeWords = lastThreeWordsList.join(' ');
+                                                }
+                                                statecontroller.text = placesList[index] ?? "";
+                                                address1controller.text = remainingWords;
+                                                address2controller.text = lastThreeWords;
+                                                notify.add({"id": 10, "item": remainingWords});
+                                                notify.add({"id": 15, "item": lastThreeWords});
 
-                                              // Assign each part to the respective variable
-                                              List<String> parts = str.split(", ");
-                                              String address = parts[0];
-                                              String city = parts[1];
-                                              String district = parts[2];
-                                              String state = parts[3];
-                                              statecontroller.text = placesList[index] ?? "";
-                                              address1controller.text = "$address, $city";
-                                              address2controller.text = "$district, $state";
-                                              notify.add({});
-                                              setState(() {
-                                                placesList = [];
-                                              });
+                                                notify.add({"id": 12, "item": lastThreeWordsList[0]});
+                                                notify.add({"id": 11, "item": lastThreeWordsList[1]});
+                                                setState(() {
+                                                  placesList = [];
+                                                });
+                                              } else {
+                                                setState(() {
+                                                  placesList = [];
+                                                });
+                                                address1controller.text = "";
+                                                address2controller.text = "";
+                                                customSnackBar(context: context, text: 'Choose a proper address');
+                                              }
                                             } catch (e) {
                                               setState(() {
                                                 placesList = [];
                                                 address1controller.text = "";
                                                 address2controller.text = "";
                                               });
-                                              print(e);
+                                              address1controller.text = "";
+                                              address2controller.text = "";
                                             }
                                           },
                                         );
@@ -314,6 +314,20 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                   onChanged: (value) {
                                     notify.add({"id": 15, "item": value.trim()});
                                   },
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.symmetric(horizontal: 6),
+                                  child: Column(
+                                    children: [
+                                      DropDownField(
+                                          title: "Register As",
+                                          defaultValues: "",
+                                          optionsList: dropdownitem,
+                                          onchanged: (value) {
+                                            notify.add({"id": 13, "item": value});
+                                          }),
+                                    ],
+                                  ),
                                 ),
                                 Container(
                                   margin: const EdgeInsets.only(top: 10, bottom: 10),
@@ -345,7 +359,6 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
 }
 
 Future<GooglePlacesModel> getPlaces(String text) async {
-  // print(text);
   final uri = Uri.parse("http://142.93.234.216:44210/api/v1/user/locations?name=${text}");
 
   final response = await http.get(
@@ -357,7 +370,6 @@ Future<GooglePlacesModel> getPlaces(String text) async {
     },
   );
   var responseData = json.decode(response.body.toString());
-  // print("responseData=----> $responseData");
   if (response.statusCode == 200) {
     return GooglePlacesModel.fromJson(responseData);
   } else {

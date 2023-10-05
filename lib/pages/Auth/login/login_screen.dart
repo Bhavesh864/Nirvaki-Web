@@ -33,24 +33,22 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         isloading = true;
       });
-
       signinMethod(email: emailcontroller.text, password: passwordcontroller.text).then((value) => {
             if (value == 'success')
               {
-                if (auth.currentUser?.emailVerified == true)
-                  {
-                    context.beamToReplacementNamed('/'),
-                    User.updateFcmToken(fcmtoken: AppConst.getFcmToken()!, userid: AppConst.getAccessToken()!),
-                    AppConst.setAccessToken(auth.currentUser?.uid),
-                    AppConst.setPublicView(false),
-                  }
-                else
-                  {
-                    setState(() {
-                      isloading = false;
-                    }),
-                    customSnackBar(context: context, text: 'Please verify your email address.')
-                  }
+                // if (auth.currentUser?.emailVerified == true)
+                //   {
+                User.updateFcmToken(fcmtoken: AppConst.getFcmToken()!, userid: AppConst.getAccessToken()!),
+                AppConst.setAccessToken(auth.currentUser?.uid),
+                AppConst.setPublicView(false),
+                // }
+                // else
+                //   {
+                //     setState(() {
+                //       isloading = false;
+                //     }),
+                //     customSnackBar(context: context, text: 'Please verify your email address.')
+                //   }
               }
             else
               {
