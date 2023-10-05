@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,6 +15,7 @@ import 'package:yes_broker/widgets/timeline_view.dart';
 import 'package:yes_broker/widgets/workitems/empty_work_item_list.dart';
 import 'package:yes_broker/widgets/workitems/workitems_list.dart';
 
+import '../../chat/controller/chat_controller.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/filterdataAccordingRole/data_according_role.dart';
@@ -37,6 +39,10 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    if (kIsWeb) {
+      print('aksjdflkasdjflk --------${AppConst.getAccessToken()}');
+      ref.read(chatControllerProvider).setUserState(true);
+    }
     getUserData();
     setCardDetails();
   }
