@@ -30,35 +30,70 @@ AppBar mobileAppBar(User? user, BuildContext context, void Function(String) onOp
     ),
     actions: [
       PopupMenuButton(
-          onSelected: (value) {
-            onOptionSelect(value);
-          },
-          color: Colors.white.withOpacity(1),
-          offset: const Offset(200, 40),
-          itemBuilder: (context) {
-            if (user != null) {
-              addOrRemoveTeamAndOrganization(user);
-            }
-            return profileMenuItems.map(
-              (e) {
-                return appBarPopupMenuItem(e.title, onOptionSelect);
-              },
-            ).toList();
-          },
-          child: Container(
-            height: 25,
-            width: 35,
-            margin: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: NetworkImage(
-                  user?.image ?? noImg,
+        onSelected: (value) {
+          onOptionSelect(value);
+        },
+        color: Colors.white.withOpacity(1),
+        offset: const Offset(200, 40),
+        itemBuilder: (context) {
+          if (user != null) {
+            addOrRemoveTeamAndOrganization(user);
+          }
+          return profileMenuItems.map(
+            (e) {
+              return appBarPopupMenuItem(e.title, onOptionSelect);
+            },
+          ).toList();
+        },
+        // child: Container(
+        //   height: 25,
+        //   width: 35,
+        //   margin: const EdgeInsets.all(10),
+        //   decoration: BoxDecoration(
+        //     image: DecorationImage(
+        //       fit: BoxFit.cover,
+        //       image: NetworkImage(
+        //         user?.image ?? noImg,
+        //       ),
+        //     ),
+        //     borderRadius: BorderRadius.circular(12),
+        //   ),
+        // ),
+        child: user?.image != '' && user?.image != null
+            ? Container(
+                height: 25,
+                width: 35,
+                margin: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(user?.image ?? noImg),
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              )
+            : Container(
+                height: 25,
+                width: 35,
+                margin: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: AppColor.primary,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                  child: Text(
+                    (user?.userfirstname.isNotEmpty == true ? user!.userfirstname[0].toUpperCase() : '') +
+                        (user?.userlastname.isNotEmpty == true ? user!.userlastname[0].toUpperCase() : ''),
+                    style: const TextStyle(
+                      letterSpacing: 1,
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
-              borderRadius: BorderRadius.circular(12),
-            ),
-          )),
+      ),
     ],
   );
 }

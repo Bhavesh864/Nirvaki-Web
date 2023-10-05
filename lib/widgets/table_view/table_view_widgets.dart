@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
@@ -12,6 +11,7 @@ import '../../constants/firebase/detailsModels/todo_details.dart';
 import '../../constants/functions/navigation/navigation_functions.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
+import '../../customs/custom_chip.dart';
 import '../../riverpodstate/common_index_state.dart';
 import '../app/dropdown_menu.dart';
 import '../app/nav_bar.dart';
@@ -52,17 +52,14 @@ TableRow buildTableHeader() {
         ),
       ),
       buildWorkItemTableItem(
-          const Text(
-            'ASSIGNED TO',
-            style: TextStyle(
-              color: AppColor.cardtitleColor,
-            ),
+        const Text(
+          'ASSIGNED TO',
+          style: TextStyle(
+            color: AppColor.cardtitleColor,
           ),
-          align: Alignment.center),
-      // buildWorkItemTableItem(
-      //   Container(),
-      //   align: Alignment.center,
-      // ),
+        ),
+        align: Alignment.center,
+      ),
     ],
   );
 }
@@ -86,12 +83,13 @@ TableRow buildWorkItemRowTile(
         context: context,
         ref: ref,
       ),
+
       buildWorkItemTableItem(
         ListView(
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
           children: [
-            CustomChip(
+            CustomChip2(
                 label: Icon(
                   checkIconByCategory(cardItem),
                   color: checkIconColorByCategory(cardItem),
@@ -100,15 +98,16 @@ TableRow buildWorkItemRowTile(
                 ),
                 color: checkChipColorByCategory(cardItem)),
             checkNotNUllItem(cardItem.roomconfig?.bedroom)
-                ? CustomChip(
+                ? CustomChip2(
                     label: CustomText(
-                      title: "${cardItem.roomconfig?.bedroom}BHK+${cardItem.roomconfig?.additionalroom?[0] ?? ""}",
+                      // title: "${cardItem.roomconfig?.bedroom}BHK+${cardItem.roomconfig?.additionalroom?[0] ?? ""}",
+                      title: buildBedroomText(cardItem.roomconfig),
                       size: 10,
                     ),
                   )
                 : const SizedBox(),
             isTypeisTodo(cardItem)
-                ? CustomChip(
+                ? CustomChip2(
                     color: AppColor.primary.withOpacity(0.1),
                     label: CustomText(
                       title: "${cardItem.cardType}",
@@ -118,7 +117,7 @@ TableRow buildWorkItemRowTile(
                   )
                 : const SizedBox(),
             checkNotNUllItem(cardItem.propertyarearange?.arearangestart) && checkNotNUllItem(cardItem.propertyarearange?.unit)
-                ? CustomChip(
+                ? CustomChip2(
                     label: CustomText(
                       title: "${cardItem.propertyarearange?.arearangestart} ${cardItem.propertyarearange?.unit}",
                       size: 10,
@@ -126,15 +125,15 @@ TableRow buildWorkItemRowTile(
                   )
                 : const SizedBox(),
             checkNotNUllItem(cardItem.propertypricerange?.arearangestart)
-                ? CustomChip(
+                ? CustomChip2(
                     label: CustomText(
-                      title: "${cardItem.propertypricerange?.arearangestart}${cardItem.propertypricerange?.unit}",
+                      title: "${cardItem.propertypricerange?.arearangestart}",
                       size: 10,
                     ),
                   )
                 : const SizedBox(),
             checkNotNUllItem(cardItem.cardCategory)
-                ? CustomChip(
+                ? CustomChip2(
                     label: CustomText(
                       title: cardItem.cardCategory!,
                       size: 10,
@@ -147,6 +146,7 @@ TableRow buildWorkItemRowTile(
         context: context,
         ref: ref,
       ),
+
       buildWorkItemTableItem(
         StatefulBuilder(builder: (context, setstate) {
           return CustomStatusDropDown(
@@ -172,6 +172,7 @@ TableRow buildWorkItemRowTile(
         context: context,
         ref: ref,
       ),
+
       buildWorkItemTableItem(
         ListView(
           scrollDirection: Axis.horizontal,
@@ -189,13 +190,13 @@ TableRow buildWorkItemRowTile(
                 ),
               ),
             ),
-            const CustomChip(
+            const CustomChip2(
               label: Icon(
                 Icons.call_outlined,
               ),
               paddingHorizontal: 3,
             ),
-            const CustomChip(
+            const CustomChip2(
               label: FaIcon(
                 FontAwesomeIcons.whatsapp,
               ),
@@ -207,66 +208,77 @@ TableRow buildWorkItemRowTile(
         context: context,
         ref: ref,
       ),
+
       buildWorkItemTableItem(
         align: Alignment.center,
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: cardItem.assignedto!
-              .sublist(
-                  0,
-                  cardItem.assignedto!.length < 2
-                      ? 1
-                      : cardItem.assignedto!.length < 3
-                          ? 2
-                          : 3)
-              .asMap()
-              .entries
-              .map((entry) {
-            final index = entry.key;
-            final user = entry.value;
-            return Transform.translate(
-              offset: Offset(index * -8.0, 0),
-              child: Container(
-                margin: EdgeInsets.zero,
-                width: 24,
-                height: 24,
-                decoration: index > 1
-                    ? BoxDecoration(
-                        border: Border.all(color: Colors.white),
-                        color: index > 1 ? Colors.grey.shade300 : null,
-                        borderRadius: BorderRadius.circular(40),
-                      )
-                    : BoxDecoration(
-                        border: Border.all(color: Colors.white),
-                        image: DecorationImage(
-                          image: NetworkImage(
-                            user.image!.isEmpty ? noImg : user.image!,
-                          ),
-                          fit: BoxFit.fill,
-                        ),
-                        borderRadius: BorderRadius.circular(40),
-                      ),
-                child: index > 1
-                    ? Center(
-                        child: CustomText(
-                          title: '+${cardItem.assignedto!.length - 2}',
-                          color: Colors.black,
-                          size: 9,
-                          // textAlign: TextAlign.center,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      )
-                    : null,
-              ),
-            );
-          }).toList(),
-        ),
+        checkNotNUllItem(cardItem.assignedto) && cardItem.assignedto!.isNotEmpty
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: cardItem.assignedto!
+                    .sublist(
+                        0,
+                        cardItem.assignedto!.length < 2
+                            ? 1
+                            : cardItem.assignedto!.length < 3
+                                ? 2
+                                : 3)
+                    .asMap()
+                    .entries
+                    .map((entry) {
+                  final index = entry.key;
+                  final user = entry.value;
+                  return Transform.translate(
+                    offset: Offset(index * -8.0, 0),
+                    child: Container(
+                      margin: EdgeInsets.zero,
+                      width: 24,
+                      height: 24,
+                      decoration: index > 1
+                          ? BoxDecoration(
+                              border: Border.all(color: Colors.white),
+                              color: index > 1 ? Colors.grey.shade300 : null,
+                              borderRadius: BorderRadius.circular(40),
+                            )
+                          : BoxDecoration(
+                              border: Border.all(color: Colors.white),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  user.image!.isEmpty ? noImg : user.image!,
+                                ),
+                                fit: BoxFit.fill,
+                              ),
+                              borderRadius: BorderRadius.circular(40),
+                            ),
+                      child: index > 1
+                          ? Center(
+                              child: CustomText(
+                                title: '+${cardItem.assignedto!.length - 2}',
+                                color: Colors.black,
+                                size: 9,
+                                // textAlign: TextAlign.center,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            )
+                          : null,
+                    ),
+                  );
+                }).toList(),
+              )
+            : const SizedBox(),
         id: id,
         context: context,
         ref: ref,
       ),
 
+      // buildWorkItemTableItem(
+      //   Container(),
+      //   align: Alignment.center,
+      // ),
+      // buildWorkItemTableItem(
+      //   Container(),
+      //   align: Alignment.center,
+      // ),
       // buildWorkItemTableItem(
       //   Container(),
       //   align: Alignment.center,

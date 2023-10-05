@@ -774,7 +774,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
             MapViewWidget(
               state: widget.data.propertyaddress!.state!,
               city: widget.data.propertyaddress!.city!,
-              addressline1: widget.data.propertyaddress!.addressline1!,
+              addressline1: widget.data.propertyaddress!.addressline1,
               addressline2: widget.data.propertyaddress?.addressline2,
               locality: widget.data.propertyaddress!.locality!,
             ),
