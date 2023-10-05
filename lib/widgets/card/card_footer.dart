@@ -25,9 +25,10 @@ class CardFooter extends StatelessWidget {
     final cardData = cardDetails[index];
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SizedBox(
-          height: 30,
+          height: 25,
           width: 260,
           child: ListView(
             scrollDirection: Axis.horizontal,
@@ -51,6 +52,7 @@ class CardFooter extends StatelessWidget {
                         onPressed: () => makePhoneCall(cardData.customerinfo!.mobile!),
                         label: const Icon(
                           Icons.call_outlined,
+                          size: 12,
                         ),
                         paddingHorizontal: 3,
                       )
@@ -60,6 +62,7 @@ class CardFooter extends StatelessWidget {
                         onPressed: () => launchWhatsapp(cardData.customerinfo?.whatsapp, context),
                         label: const FaIcon(
                           FontAwesomeIcons.whatsapp,
+                          size: 12,
                         ),
                         paddingHorizontal: 3,
                       )
@@ -94,6 +97,7 @@ class CardFooter extends StatelessWidget {
                   },
                   label: const Icon(
                     Icons.share_outlined,
+                    size: 12,
                   ),
                   paddingHorizontal: 3,
                 ),

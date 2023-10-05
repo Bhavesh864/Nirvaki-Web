@@ -140,6 +140,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
               List<TodoDetails> todoList = dataList.map((doc) => TodoDetails.fromSnapshot(doc)).toList();
 
               for (var data in todoList) {
+                print('asldkjflaksdjf kj-----${data.linkedWorkItem![0].workItemId}');
                 final attachments = data.attachments;
                 return GestureDetector(
                   onTap: () {
@@ -210,6 +211,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                       Padding(
                                         padding: const EdgeInsets.only(left: 8.0),
                                         child: CustomChip(
+                                          paddingVertical: 8,
                                           color: AppColor.primary.withOpacity(0.1),
                                           label: CustomText(
                                             title: data.todoType!,

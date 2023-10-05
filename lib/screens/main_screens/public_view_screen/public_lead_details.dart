@@ -19,7 +19,6 @@ import '../../../widgets/app/nav_bar.dart';
 import '../../../widgets/workItemDetail/inventory_details_header.dart';
 import '../../../widgets/workItemDetail/assignment_widget.dart';
 import '../../../widgets/workItemDetail/contact_information.dart';
-import '../../../widgets/workItemDetail/mapview_widget.dart';
 import '../../../widgets/workItemDetail/tab_views/details_tab_view.dart';
 
 class PublicViewLeadDetails extends ConsumerStatefulWidget {
@@ -95,7 +94,7 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
                                       setState: () {
                                         setState(() {});
                                       },
-                                      id: data!.leadId!,
+                                      id: data.leadId!,
                                       title: data.leadTitle!,
                                       category: data.leadcategory!,
                                       type: data.leadType!,
@@ -157,7 +156,8 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
                                                 AssignmentWidget(
                                                   id: data.leadId!,
                                                   assignto: data.assignedto!,
-                                                  imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                  imageUrlCreatedBy:
+                                                      data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                   createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                                 ),
                                               );

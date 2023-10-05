@@ -50,6 +50,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CustomChip(
+                paddingVertical: 8,
                 paddingHorizontal: 0,
                 avatar: Icon(Icons.calendar_view_week_outlined),
                 label: CustomText(
@@ -58,6 +59,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                 ),
               ),
               CustomChip(
+                paddingVertical: 8,
                 label: Row(
                   children: [
                     CustomText(
@@ -123,7 +125,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                     );
                   } else {
                     return ScrollConfiguration(
-                      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                      behavior: const ScrollBehavior().copyWith(overscroll: false),
                       child: ListView.builder(
                         shrinkWrap: true,
                         itemCount: activities.length,

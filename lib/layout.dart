@@ -1,6 +1,5 @@
 import 'package:beamer/beamer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
@@ -49,7 +48,6 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-    ref.read(chatControllerProvider).setUserState(true);
     final token = UserHiveMethods.getdata("token");
     authState = authentication.authStateChanges();
     if (token != null) {
@@ -121,7 +119,6 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
                   ),
                 );
               }
-              // ref.read(chatControllerProvider).setUserState(true);
               return ScreenTypeLayout.builder(
                 breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
                 mobile: (p0) => _buildMobileLayout(snapshot.hasData),

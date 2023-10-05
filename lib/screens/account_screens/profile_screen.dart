@@ -10,10 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/constants/firebase/Methods/add_member_send_email.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
-
 import 'package:yes_broker/customs/responsive.dart';
-import 'package:yes_broker/customs/snackbar.dart';
-
 import '../../Customs/custom_fields.dart';
 import '../../Customs/loader.dart';
 import '../../Customs/text_utility.dart';

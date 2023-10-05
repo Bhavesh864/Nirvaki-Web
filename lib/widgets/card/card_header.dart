@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
@@ -44,11 +43,12 @@ class CardHeaderState extends ConsumerState<CardHeader> {
     status = widget.cardDetails;
     final User? user = ref.read(userDataProvider);
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SizedBox(
-          height: 30,
-          width: 200,
+          height: 25,
+          width: cardData.workitemId!.contains('TD') ? 180 : 250,
           child: ListView(
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
@@ -71,7 +71,7 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                 label: Icon(
                   checkIconByCategory(cardData),
                   color: checkIconColorByCategory(cardData),
-                  size: 16,
+                  size: 14,
                   // weight: 10.12,
                 ),
                 color: checkChipColorByCategory(cardData),
@@ -149,7 +149,7 @@ class CardHeaderState extends ConsumerState<CardHeader> {
             ],
           ),
         ),
-        const Spacer(),
+        // const Spacer(),
         Row(
           children: [
             if (cardData.duedate != null)
@@ -167,7 +167,7 @@ class CardHeaderState extends ConsumerState<CardHeader> {
               // ),
               Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(4),
                   color: AppColor.chipGreyColor,
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 4),
