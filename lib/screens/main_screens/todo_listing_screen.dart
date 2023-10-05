@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,6 +10,8 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/widgets/todo/todo_filter_view.dart';
 import '../../Customs/loader.dart';
+import '../../chat/controller/chat_controller.dart';
+import '../../constants/app_constant.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/filterdataAccordingRole/data_according_role.dart';
 import '../../constants/utils/constants.dart';
@@ -36,9 +39,14 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   List<User> userList = [];
   List<CardDetails>? status;
   bool isUserLoaded = false;
+
   @override
   void initState() {
     setCardDetails();
+    if (!kIsWeb) {
+      print('aksjdflkasdjflk --------${AppConst.getAccessToken()}');
+      ref.read(chatControllerProvider).setUserState(true);
+    }
     super.initState();
   }
 
@@ -47,10 +55,14 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   }
 
   void getDetails(User currentuser) async {
-    final List<User> user = await User.getUserAllRelatedToBrokerId(currentuser);
-    setState(() {
-      userList = user;
-    });
+    if (mounted) {
+      final List<User> user = await User.getUserAllRelatedToBrokerId(currentuser);
+      if (mounted) {
+        setState(() {
+          userList = user;
+        });
+      }
+    }
   }
 
   @override

@@ -35,11 +35,9 @@ class _LoginScreenState extends State<LoginScreen> {
       signinMethod(email: emailcontroller.text, password: passwordcontroller.text).then((value) => {
             if (value == 'success')
               {
-                setState(() {
-                  isloading = false;
-                }),
                 context.beamToReplacementNamed('/'),
                 User.updateFcmToken(fcmtoken: AppConst.getFcmToken()!, userid: AppConst.getAccessToken()!),
+                AppConst.setAccessToken(auth.currentUser?.uid),
                 AppConst.setPublicView(false),
               }
             else

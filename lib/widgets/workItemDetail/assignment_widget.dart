@@ -241,7 +241,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                     Padding(
                       padding: EdgeInsets.only(left: 4, top: 1, bottom: 1),
                       child: Text(
-                        "Edit on",
+                        "Added on",
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
                         style: TextStyle(
@@ -436,7 +436,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
           //   children: [
           //     const Icon(Icons.add),
           //     const Text(
-          //       "Edit on",
+          //       "Added on",
           //       overflow: TextOverflow.ellipsis,
           //       textAlign: TextAlign.left,
           //       style: TextStyle(

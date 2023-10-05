@@ -57,7 +57,6 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-
     final token = UserHiveMethods.getdata("token");
     authState = authentication.authStateChanges();
 
@@ -132,7 +131,7 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
                   ),
                 );
               }
-              ref.read(chatControllerProvider).setUserState(true);
+
               return ScreenTypeLayout.builder(
                 breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
                 mobile: (p0) => _buildMobileLayout(snapshot.hasData),

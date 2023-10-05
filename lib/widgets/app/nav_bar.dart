@@ -144,12 +144,11 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
                     width: 30,
                     margin: const EdgeInsets.only(right: 10),
                     decoration: BoxDecoration(
-                      color: AppColor.primary, // Set your desired background color
+                      color: AppColor.primary,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Center(
                       child: Text(
-                        // Get the first letters of the first name and last name
                         (userData?.userfirstname.isNotEmpty == true ? userData!.userfirstname[0].toUpperCase() : '') +
                             (userData?.userlastname.isNotEmpty == true ? userData!.userlastname[0].toUpperCase() : ''),
                         style: const TextStyle(
