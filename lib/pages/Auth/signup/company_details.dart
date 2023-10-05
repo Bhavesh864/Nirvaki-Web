@@ -227,16 +227,12 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                   controller: statecontroller,
                                   validator: (value) => validateForNormalFeild(value: value, props: "Search Location"),
                                   onChanged: (value) {
-                                    var list = [];
-                                    getPlaces(value).then((places) => {
-                                          for (var i = 0; i < places.data!.predictions!.length; i++)
-                                            {
-                                              list.add(places.data!.predictions![i].description),
-                                            },
-                                          setState(() {
-                                            placesList = list;
-                                          })
-                                        });
+                                    getPlaces(value).then((places) {
+                                      final descriptions = places.data?.predictions?.map((prediction) => prediction.description) ?? [];
+                                      setState(() {
+                                        placesList = descriptions.toList();
+                                      });
+                                    });
                                   },
                                 ),
                                 if (placesList.isNotEmpty)
@@ -263,7 +259,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                                 String lastThreeWords = words.sublist(words.length - 3).join(' ');
                                                 String remainingWords = words.sublist(0, words.length - 3).join(' ');
                                                 List<String> lastThreeWordsList = lastThreeWords.split(' ');
-                                                if (lastThreeWordsList.length >= 1) {
+                                                if (lastThreeWordsList.isNotEmpty) {
                                                   lastThreeWordsList.removeLast();
                                                   lastThreeWords = lastThreeWordsList.join(' ');
                                                 }
@@ -341,7 +337,6 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
 }
 
 Future<GooglePlacesModel> getPlaces(String text) async {
-  print(text);
   final uri = Uri.parse("http://142.93.234.216:44210/api/v1/user/locations?name=${text}");
 
   final response = await http.get(
@@ -353,7 +348,6 @@ Future<GooglePlacesModel> getPlaces(String text) async {
     },
   );
   var responseData = json.decode(response.body.toString());
-  print("responseData=----> $responseData");
   if (response.statusCode == 200) {
     return GooglePlacesModel.fromJson(responseData);
   } else {
