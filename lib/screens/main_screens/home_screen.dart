@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
@@ -44,7 +45,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
       print('aksjdflkasdjflk --------${AppConst.getAccessToken()}');
       ref.read(chatControllerProvider).setUserState(true);
     }
-    getUserData();
+    // getUserData();
     setCardDetails();
     // setData();
   }
@@ -53,11 +54,11 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
     cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
   }
 
-  getUserData() async {
-    final User? user = await User.getUser(AppConst.getAccessToken());
-    ref.read(userDataProvider.notifier).storeUserData(user!);
-    AppConst.setRole(user.role);
-  }
+  // getUserData() async {
+  //   final User? user = await User.getUser(AppConst.getAccessToken());
+  //   ref.read(userDataProvider.notifier).storeUserData(user!);
+  //   AppConst.setRole(user.role);
+  // }
 
   showChatDialog() {
     showDialog(
@@ -101,16 +102,21 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             }
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
 
-            final List<CardDetails> todoItems =
-                filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD" && item.status != "Closed").toList();
+            final List<CardDetails> todoItems = filterItem!
+                .map((doc) => CardDetails.fromSnapshot(doc))
+                .where((item) => item.cardType != "IN" && item.cardType != "LD" && item.status != "Closed")
+                .toList();
 
-            todoItems.sort((a, b) {
-              final DateTime dueDateA = DateTime.parse("20${a.duedate!.replaceAll('-', '')}");
-              final DateTime dueDateB = DateTime.parse("20${b.duedate!.replaceAll('-', '')}");
-              return dueDateB.compareTo(dueDateA);
-            });
+            int compareDueDates(CardDetails a, CardDetails b) {
+              DateTime aDueDate = DateFormat('dd-MM-yy').parse(a.duedate!);
+              DateTime bDueDate = DateFormat('dd-MM-yy').parse(b.duedate!);
+              return aDueDate.compareTo(bDueDate);
+            }
 
-            final List<CardDetails> workItems = filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
+            todoItems.sort(compareDueDates);
+
+            final List<CardDetails> workItems =
+                filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
             bool isDataEmpty = workItems.isEmpty && todoItems.isEmpty;
             return Row(
               children: [
@@ -234,6 +240,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                           if (badgeCount > 0)
                             Positioned(
                               top: -5,
+                              left: 0,
                               child: Container(
                                 padding: const EdgeInsets.all(7),
                                 decoration: const BoxDecoration(

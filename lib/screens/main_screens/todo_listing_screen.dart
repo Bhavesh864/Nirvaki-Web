@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
@@ -87,11 +88,13 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
             final List<CardDetails> todoItemsList =
                 filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
 
-            todoItemsList.sort((a, b) {
-              final DateTime dueDateA = DateTime.parse("20${a.duedate!.replaceAll('-', '')}");
-              final DateTime dueDateB = DateTime.parse("20${b.duedate!.replaceAll('-', '')}");
-              return dueDateB.compareTo(dueDateA);
-            });
+            int compareDueDates(CardDetails a, CardDetails b) {
+              DateTime aDueDate = DateFormat('dd-MM-yy').parse(a.duedate!);
+              DateTime bDueDate = DateFormat('dd-MM-yy').parse(b.duedate!);
+              return aDueDate.compareTo(bDueDate);
+            }
+
+            todoItemsList.sort(compareDueDates);
 
             List<CardDetails> filterTodoList = todoItemsList.where((item) {
               if (searchController.text.isEmpty) {

@@ -40,6 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 //   {
                 User.updateFcmToken(fcmtoken: AppConst.getFcmToken()!, userid: AppConst.getAccessToken()!),
                 AppConst.setAccessToken(auth.currentUser?.uid),
+                User.updateFcmToken(fcmtoken: AppConst.getFcmToken()!, userid: AppConst.getAccessToken()!),
                 AppConst.setPublicView(false),
                 // }
                 // else
@@ -74,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
               image: AssetImage(authBgImage),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
-                Colors.black12,
+                Colors.black26,
                 BlendMode.darken,
               ),
             ),

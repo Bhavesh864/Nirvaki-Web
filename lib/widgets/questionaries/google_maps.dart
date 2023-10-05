@@ -1,35 +1,43 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:yes_broker/constants/functions/lat_lng_get.dart';
 
-class CustomGoogleMap extends StatefulWidget {
-  final String stateName;
-  final String cityName;
+class CustomGoogleMap extends ConsumerStatefulWidget {
+  final bool isEdit;
+  final String? stateName;
+  final String? cityName;
+  final List<Map<String, dynamic>>? selectedValues;
   final String? address1;
   final String? address2;
-  final String locality;
+  final String? locality;
   final bool isReadOnly;
   final List<double>? seletedLatLng;
+  final LatLng? latLng;
   final void Function(LatLng) onLatLngSelected;
 
   const CustomGoogleMap({
-    required this.onLatLngSelected,
     Key? key,
-    required this.stateName,
-    required this.cityName,
+    this.isEdit = false,
+    this.stateName,
+    this.cityName,
+    this.selectedValues,
     this.address1,
     this.address2,
+    this.locality,
     this.isReadOnly = false,
-    required this.locality,
     this.seletedLatLng,
+    this.latLng,
+    required this.onLatLngSelected,
   }) : super(key: key);
 
   @override
-  State<CustomGoogleMap> createState() => _CustomGoogleMapState();
+  ConsumerState<CustomGoogleMap> createState() => _CustomGoogleMapState();
 }
 
-class _CustomGoogleMapState extends State<CustomGoogleMap> {
+class _CustomGoogleMapState extends ConsumerState<CustomGoogleMap> {
   GoogleMapController? mapController;
   bool showMaps = true;
   LatLng? location;
@@ -37,14 +45,39 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   @override
   void initState() {
     super.initState();
-    _loadMap();
+    if (widget.isReadOnly || widget.isEdit) {
+      _loadMap();
+    } else {
+      loadMap();
+    }
   }
 
   Future<void> _loadMap() async {
-    final placeName = '${widget.stateName} ${widget.cityName} ${widget.locality} ${widget.address1} ${widget.address2}';
-    location = await getLatLng(placeName);
+    // final placeName = '${widget.stateName} ${widget.cityName} ${widget.locality} ${widget.address1} ${widget.address2}';
+
+    // location = await getLatLng(placeName);
+    location = LatLng(widget.latLng!.latitude, widget.latLng!.longitude);
     if (location != null && mapController != null) {
       mapController!.animateCamera(CameraUpdate.newLatLng(location!));
+    }
+    setState(() {});
+  }
+
+  Future<void> loadMap() async {
+    final placeName = '${widget.stateName} ${widget.cityName} ${widget.locality} ${widget.address1 ?? ''} ${widget.address2 ?? ''}';
+    location = await getLatLng(placeName);
+
+    if (!widget.selectedValues!.any((element) => element['id'] == 31)) {
+      mapController!.animateCamera(CameraUpdate.newLatLng(location!));
+    } else {
+      Map<String, dynamic>? latLngItem = widget.selectedValues!.firstWhere((item) => item["id"] == 31);
+      List<dynamic> latLng = latLngItem["item"];
+      if (latLng.length == 2) {
+        double latitude = latLng[0];
+        double longitude = latLng[1];
+        mapController!.animateCamera(CameraUpdate.newLatLng(LatLng(latitude, longitude)));
+        location = LatLng(latitude, longitude);
+      }
     }
     widget.onLatLngSelected(location!);
     setState(() {});
@@ -60,7 +93,11 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         child: GoogleMap(
           onMapCreated: (controller) {
             mapController = controller;
-            _loadMap();
+            if (widget.isReadOnly) {
+              _loadMap();
+            } else {
+              loadMap();
+            }
           },
           initialCameraPosition: CameraPosition(
             target: location ?? const LatLng(20.5937, 78.9629),

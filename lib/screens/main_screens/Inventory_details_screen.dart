@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
@@ -377,6 +378,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                 ),
                               if (Responsive.isDesktop(context))
                                 MapViewWidget(
+                                  latLng: LatLng(data.propertylocation![0], data.propertylocation![1]),
                                   state: data.propertyaddress!.state!,
                                   city: data.propertyaddress!.city!,
                                   addressline1: data.propertyaddress!.addressline1,

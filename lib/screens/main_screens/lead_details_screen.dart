@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 
 import 'package:yes_broker/customs/responsive.dart';
@@ -316,6 +317,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                   ),
                                 if (Responsive.isDesktop(context))
                                   MapViewWidget(
+                                    latLng: LatLng(data.preferredlocation![0], data.preferredlocation![1]),
                                     state: data.preferredlocality!.state!,
                                     city: data.preferredlocality!.city!,
                                     addressline1: data.preferredlocality?.addressline1,
