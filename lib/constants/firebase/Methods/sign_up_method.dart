@@ -23,6 +23,7 @@ Future<String> signUpMethod({required state}) async {
 
   try {
     final authResult = await auth.createUserWithEmailAndPassword(email: email, password: password);
+    await authResult.user?.sendEmailVerification();
     final BrokerInfo item = BrokerInfo(
       brokerid: authentication.currentUser?.uid,
       role: registerAs,
