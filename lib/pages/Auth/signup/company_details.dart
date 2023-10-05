@@ -258,35 +258,35 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                             final str = placesList[index];
 
                                             try {
-                                              // List<String> splitList = str.split(',').map((item) => item.trimRight()).toList().reversed.toList();
-                                              // List<String> splitList = str.split(',').map((item) => item.trim()).take(2).toList();
-                                              // String remainingPart = str.split(',').skip(2).join(',').trim();
-                                              // List<String> splitList = str.split(',').reversed.take(3).toList();
-//                                               splitList = splitList.reversed.toList();
-//                                               String remainingPart = str.split(',').skip(2).join(',').trim();
-//                                               List<String> stateName = remainingPart.split(", ");
-//                                               print("splitList-----> ${splitList.join(', ')}");
-//                                               print("splitList-----> $remainingPart");
-//                                               print("splitList-----> ${stateName[0]}");
-//                                               print("splitList-----> ${stateName[1]}");
-
-                                              // Assign each part to the respective variable
-                                              List<String> parts = str.split(", ");
-                                              String address = parts[0];
-                                              String city = parts[1];
-                                              String district = parts[2];
-                                              String state = parts[3];
-                                              statecontroller.text = placesList[index] ?? "";
-                                              address1controller.text = "$address, $city";
-                                              address2controller.text = "$district, $state";
-                                              setState(() {
-                                                placesList = [];
-                                              });
+                                              List<String> words = str.split(' ');
+                                              if (words.length >= 3) {
+                                                String lastThreeWords = words.sublist(words.length - 3).join(' ');
+                                                String remainingWords = words.sublist(0, words.length - 3).join(' ');
+                                                List<String> lastThreeWordsList = lastThreeWords.split(' ');
+                                                if (lastThreeWordsList.length >= 1) {
+                                                  lastThreeWordsList.removeLast();
+                                                  lastThreeWords = lastThreeWordsList.join(' ');
+                                                }
+                                                statecontroller.text = placesList[index] ?? "";
+                                                address1controller.text = remainingWords;
+                                                address2controller.text = lastThreeWords;
+                                                setState(() {
+                                                  placesList = [];
+                                                });
+                                              } else {
+                                                setState(() {
+                                                  placesList = [];
+                                                });
+                                                address1controller.text = "";
+                                                address2controller.text = "";
+                                                customSnackBar(context: context, text: 'Choose a proper address');
+                                              }
                                             } catch (e) {
                                               setState(() {
                                                 placesList = [];
                                               });
-                                              print(e);
+                                              address1controller.text = "";
+                                              address2controller.text = "";
                                             }
                                           },
                                         );
