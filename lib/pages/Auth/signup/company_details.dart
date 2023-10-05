@@ -8,7 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/google_places_model.dart';
-
 import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/customs/snackbar.dart';
@@ -19,7 +18,6 @@ import 'package:yes_broker/screens/account_screens/profile_screen.dart';
 import '../../../Customs/dropdown_field.dart';
 import '../../../constants/utils/constants.dart';
 import '../../../constants/utils/image_constants.dart';
-import '../../../routes/routes.dart';
 import '../../../widgets/auth/details_header.dart';
 import 'package:http/http.dart' as http;
 

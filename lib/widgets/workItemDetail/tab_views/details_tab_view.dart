@@ -573,7 +573,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                         return Stack(
                           children: [
                             GestureDetector(
-                              onTap: () async {
+                              onTap: () {
                                 showDialog(
                                   context: context,
                                   builder: (context) {
