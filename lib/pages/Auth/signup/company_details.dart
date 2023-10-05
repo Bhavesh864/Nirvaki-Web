@@ -108,6 +108,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(selectedItemForsignup.notifier);
+    print(notify.state);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -266,6 +267,11 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                                 statecontroller.text = placesList[index] ?? "";
                                                 address1controller.text = remainingWords;
                                                 address2controller.text = lastThreeWords;
+                                                notify.add({"id": 10, "item": remainingWords});
+                                                notify.add({"id": 15, "item": lastThreeWords});
+
+                                                notify.add({"id": 12, "item": lastThreeWordsList[0]});
+                                                notify.add({"id": 11, "item": lastThreeWordsList[1]});
                                                 setState(() {
                                                   placesList = [];
                                                 });
