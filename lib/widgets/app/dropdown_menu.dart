@@ -36,6 +36,7 @@ class CustomStatusDropDown extends StatelessWidget {
             color: taskStatusColor(status).withOpacity(0.1),
           ),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CustomText(
                 title: status,
@@ -44,7 +45,7 @@ class CustomStatusDropDown extends StatelessWidget {
               ),
               Icon(
                 Icons.expand_more,
-                size: 18,
+                size: 16,
                 color: taskStatusColor(status),
               ),
             ],
