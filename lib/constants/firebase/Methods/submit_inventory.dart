@@ -138,7 +138,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       inventoryType: inventorySource == "Broker" ? "Broker" : inventorySource,
       inventorysource: inventorySource,
       possessiondate: possession,
-      amenities: amenities,
+      amenities: amenities ?? [],
       attachments: attachments ?? [],
       commercialphotos: commercialphotos,
       propertyrent: Propertyrent(rentamount: rentamount, securityamount: securityamount, securityunit: securityunit, lockinperiod: lockinperiod),

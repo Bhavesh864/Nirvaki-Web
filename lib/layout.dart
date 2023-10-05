@@ -182,7 +182,6 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
       return const LargeScreen();
     } else {
       final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
-
       if (location.isNotEmpty && location.contains('inventory-details')) {
         AppConst.setPublicView(true);
         return PublicViewInventoryDetails(
