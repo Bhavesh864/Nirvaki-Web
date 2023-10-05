@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:beamer/beamer.dart';
@@ -7,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/constants/app_constant.dart';
-import 'package:yes_broker/constants/state_list.dart';
+
 import 'package:yes_broker/constants/utils/colors.dart';
 
 import 'package:yes_broker/customs/custom_fields.dart';
@@ -17,7 +16,7 @@ import 'package:yes_broker/riverpodstate/sign_up_state.dart';
 import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/screens/account_screens/profile_screen.dart';
-import '../../../customs/dropdown_field.dart';
+
 import '../../../constants/utils/constants.dart';
 import '../../../constants/utils/image_constants.dart';
 import '../../../routes/routes.dart';
@@ -285,24 +284,21 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                   final str = prediction.description;
                                   print("placeDetail--> s" + str!);
                                   List<String> parts = str.split(", ");
-
-                                  // Assign each part to the respective variable
+                                  // Assign each part o the respective variable
                                   String address = parts[0];
                                   String city = parts[1];
                                   String district = parts[2];
                                   String state = parts[3];
-                                  String country = parts[4];
-
+                                  // String country = parts[4];
                                   // Print the variables
                                   print("Address: $address");
                                   print("City: $city");
                                   print("District: $district");
                                   print("State: $state");
-                                  print("Country: $country");
+                                  // print("Country: $country");
                                   controller.text = prediction.description ?? "";
                                   address1controller.text = "$address, $city";
                                   address2controller.text = "$district, $state";
-
                                   controller.selection = TextSelection.fromPosition(TextPosition(offset: prediction.description != null ? prediction.description!.length : 0));
                                 }),
                             CustomTextInput(

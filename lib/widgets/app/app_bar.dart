@@ -36,7 +36,9 @@ AppBar mobileAppBar(User? user, BuildContext context, void Function(String) onOp
           color: Colors.white.withOpacity(1),
           offset: const Offset(200, 40),
           itemBuilder: (context) {
-            addOrRemoveTeamAndOrganization(user!);
+            if (user != null) {
+              addOrRemoveTeamAndOrganization(user);
+            }
             return profileMenuItems.map(
               (e) {
                 return appBarPopupMenuItem(e.title, onOptionSelect);

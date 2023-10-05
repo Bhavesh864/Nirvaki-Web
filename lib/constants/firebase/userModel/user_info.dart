@@ -146,6 +146,16 @@ class User extends HiveObject {
     });
   }
 
+  static Future<String> resetPassword(String email) async {
+    try {
+      var res = "pending";
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email).then((value) => {res = "success"});
+      return res;
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
   static Future<List<User>> getListOfUsersByIds(List<dynamic> userIds) async {
     try {
       final QuerySnapshot querySnapshot = await usersCollection.where("userId", whereIn: userIds).get();

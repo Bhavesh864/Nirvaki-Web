@@ -207,6 +207,7 @@ final routerDelegate = BeamerDelegate(
         return const EditTodo();
       },
       AppRoutes.singupscreen: (p0, p1, p2) => const SignUpScreen(),
+      AppRoutes.forgetPassword: (p0, p1, p2) => const ForgetPassword(),
       AppRoutes.personalDetailsScreen: (p0, p1, p2) => const PersonalDetailsAuthScreen(),
       AppRoutes.companyDetailsScreen: (p0, p1, p2) => const CompanyDetailsAuthScreen(),
     },
