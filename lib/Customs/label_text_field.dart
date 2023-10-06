@@ -35,7 +35,7 @@ class LabelTextInputField extends StatelessWidget {
     this.isDatePicker = false,
     this.isMandatory = false,
     this.maxLines,
-    this.keyboardType = TextInputType.none,
+    this.keyboardType = TextInputType.name,
     required this.inputController,
     this.onChanged,
     this.validator,

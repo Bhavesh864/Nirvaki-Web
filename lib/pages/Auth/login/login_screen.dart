@@ -36,11 +36,20 @@ class _LoginScreenState extends State<LoginScreen> {
       signinMethod(email: emailcontroller.text, password: passwordcontroller.text).then((value) => {
             if (value == 'success')
               {
-                print('Manish code ==== >>>${auth.currentUser?.uid}'),
+                // if (auth.currentUser?.emailVerified == true)
+                //   {
+                User.updateFcmToken(fcmtoken: AppConst.getFcmToken()!, userid: AppConst.getAccessToken()!),
                 AppConst.setAccessToken(auth.currentUser?.uid),
                 User.updateFcmToken(fcmtoken: AppConst.getFcmToken()!, userid: AppConst.getAccessToken()!),
                 AppConst.setPublicView(false),
-                context.beamToReplacementNamed('/'),
+                // }
+                // else
+                //   {
+                //     setState(() {
+                //       isloading = false;
+                //     }),
+                //     customSnackBar(context: context, text: 'Please verify your email address.')
+                //   }
               }
             else
               {

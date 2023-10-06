@@ -139,7 +139,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       leadsource: leadSource,
       possessiondate: possession,
       plotdetails: Plotdetails(boundarywall: boundaryWall, opensides: openSides),
-      amenities: amenities,
+      amenities: amenities ?? [],
       propertyarea: Propertyarea(carpetarea: carpetArea, superarea: superArea, unit: areaUnit),
       preferredlocality: Preferredlocality(
           state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, prefferedfloornumber: floorNumber, locality: locality),
