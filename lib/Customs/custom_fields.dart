@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 
+import '../customs/text_utility.dart';
+
 //-------------------------------------------TextformField-------------------------------------->
 class CustomTextInput extends StatefulWidget {
   final TextEditingController controller;
@@ -446,3 +448,83 @@ class CustomCheckboxListTile extends StatelessWidget {
 //   }
 //   print('No Image Selected');
 // }
+
+class MobileNumberInputField extends StatefulWidget {
+  const MobileNumberInputField({
+    super.key,
+    required this.isEmpty,
+    required this.openModal,
+    required this.countryCode,
+    required this.onChange,
+    required this.controller,
+    required this.hintText,
+    this.fontsize = 16.0,
+    this.bottomMargin = const EdgeInsets.only(bottom: 0),
+  });
+  final bool isEmpty;
+  final String countryCode;
+  final String hintText;
+  final double? fontsize;
+  final EdgeInsets? bottomMargin;
+  final TextEditingController controller;
+  final void Function() openModal;
+  final void Function(String) onChange;
+  @override
+  State<MobileNumberInputField> createState() => _MobileNumberInputFieldState();
+}
+
+class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: !widget.isEmpty ? Colors.grey : Colors.red,
+          width: 1.0,
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          InkWell(
+            onTap: widget.openModal,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              child: AppText(text: widget.countryCode, fontsize: widget.fontsize!),
+            ),
+          ),
+          const SizedBox(width: 10.0),
+          Expanded(
+            child: Container(
+              margin: widget.bottomMargin,
+              child: TextFormField(
+                maxLength: 10,
+                onChanged: (value) {
+                  widget.onChange(value);
+                },
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w400,
+                ),
+                controller: widget.controller,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(
+                    hintText: widget.hintText,
+                    counterText: "",
+                    hintStyle: const TextStyle(color: Colors.grey),
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    errorBorder: InputBorder.none),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
