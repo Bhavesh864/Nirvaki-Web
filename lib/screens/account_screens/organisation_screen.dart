@@ -18,6 +18,7 @@ import '../../Customs/custom_fields.dart';
 import '../../Customs/responsive.dart';
 import '../../Customs/text_utility.dart';
 import '../../constants/utils/colors.dart';
+import '../../pages/Auth/signup/country_code_modal.dart';
 
 class OrganisationScreen extends ConsumerStatefulWidget {
   const OrganisationScreen({super.key});
@@ -127,6 +128,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
   final TextEditingController companyNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  final TextEditingController whatsappPhoneController = TextEditingController();
 
   final TextEditingController address1Controller = TextEditingController();
   final TextEditingController address2Controller = TextEditingController();
@@ -135,6 +137,8 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
   File? profilePhoto;
   Uint8List? webProfile;
   ValueNotifier<String> uploadProfile = ValueNotifier<String>('');
+  String countryCode = "";
+  String whatsappCountryCode = "";
 
   void startEditingFullName(String fullName) {
     setState(() {
@@ -170,11 +174,35 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
     });
   }
 
-  void startEditingPersonalDetails(String companyname, String email, String phone) {
+  void startEditingPersonalDetails(String companyname, String email, String phone, String whatsAppPhone) {
+    List<String> splitString = phone.split(' ');
+    if (splitString.length == 2) {
+      setState(() {
+        countryCode = splitString[0];
+        phoneController.text = splitString[1];
+      });
+    } else {
+      setState(() {
+        countryCode = '+91';
+        phoneController.text = phone;
+      });
+    }
+    List<String> splitString2 = whatsAppPhone.split(' ');
+    if (splitString.length == 2) {
+      setState(() {
+        whatsappCountryCode = splitString2[0];
+        whatsappPhoneController.text = splitString2[1];
+      });
+    } else {
+      setState(() {
+        whatsappCountryCode = '+91';
+        whatsappPhoneController.text = whatsAppPhone;
+      });
+    }
     setState(() {
       isPersonalDetailsEditing = true;
       companyNameController.text = companyname;
-      phoneController.text = phone;
+      // phoneController.text = phone;
       emailController.text = email;
     });
   }
@@ -205,6 +233,36 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
       return imageUrl;
     }
     return '';
+  }
+
+  void openModal() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return CountryCodeModel(onCountrySelected: (data) {
+          if (data.isNotEmpty) {
+            setState(() {
+              countryCode = data;
+            });
+          }
+        });
+      },
+    );
+  }
+
+  void openModalForWhatapp() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return CountryCodeModel(onCountrySelected: (data) {
+          if (data.isNotEmpty) {
+            setState(() {
+              whatsappCountryCode = data;
+            });
+          }
+        });
+      },
+    );
   }
 
   @override
@@ -454,8 +512,9 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                                       brokerId: broker.brokerid,
                                       role: broker.role,
                                       companyName: broker.companyname,
-                                      mobile: phoneController.text,
-                                      whatsapp: broker.brokercompanywhatsapp,
+                                      mobile: "$countryCode ${phoneController.text}",
+                                      // whatsapp: broker.brokercompanywhatsapp,
+                                      whatsapp: "$whatsappCountryCode ${whatsappPhoneController.text}",
                                       email: emailController.text,
                                       image: broker.brokerlogo,
                                       companyAddress: broker.brokercompanyaddress)
@@ -488,6 +547,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                               broker.companyname!,
                               broker.brokercompanyemail!,
                               broker.brokercompanynumber!,
+                              broker.brokercompanywhatsapp!,
                             );
                           } else if (widget.isAdressDetails) {
                             startEditingAddressDetail(
@@ -509,7 +569,8 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                     children: [
                       TableRow(children: [
                         buildInfoFields('Email address', broker.brokercompanyemail!, isPersonalDetailsEditing, emailController, context),
-                        buildInfoFields('Phone ', broker.brokercompanynumber!, isPersonalDetailsEditing, phoneController, context),
+                        // buildInfoFields('Phone ', broker.brokercompanynumber!, isPersonalDetailsEditing, phoneController, context),
+                        mobileInfoFields('Phone ', broker.brokercompanynumber!, isPersonalDetailsEditing, phoneController, context, countryCode, openModal),
                         if (Responsive.isDesktop(context)) const SizedBox(),
                       ])
                     ],
@@ -520,7 +581,9 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                   child: Table(
                     children: [
                       TableRow(children: [
-                        buildInfoFields('Whatsapp Number ', broker.brokercompanywhatsapp!, isPersonalDetailsEditing, phoneController, context),
+                        // buildInfoFields('Whatsapp Number ', broker.brokercompanywhatsapp!, isPersonalDetailsEditing, phoneController, context),
+                        mobileInfoFields('Whatsapp Number ', broker.brokercompanywhatsapp!, isPersonalDetailsEditing, whatsappPhoneController, context, whatsappCountryCode,
+                            openModalForWhatapp),
                         if (Responsive.isDesktop(context)) const SizedBox(),
                       ])
                     ],

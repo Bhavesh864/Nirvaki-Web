@@ -10,18 +10,21 @@ import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/google_places_model.dart';
 
-import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/customs/snackbar.dart';
 import 'package:yes_broker/riverpodstate/sign_up_state.dart';
 import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/screens/account_screens/profile_screen.dart';
+import '../../../Customs/custom_fields.dart';
+import '../../../Customs/dropdown_field.dart';
 import '../../../constants/utils/constants.dart';
 import '../../../constants/utils/image_constants.dart';
 import '../../../routes/routes.dart';
 import '../../../widgets/auth/details_header.dart';
 import 'package:http/http.dart' as http;
+
+import 'country_code_modal.dart';
 
 class CompanyDetailsAuthScreen extends ConsumerStatefulWidget {
   const CompanyDetailsAuthScreen({super.key});
@@ -37,6 +40,16 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
 
   void submitSignupForm(SelectedSignupItems notify) {
     final isvalid = key.currentState?.validate();
+    if (mobilenumbercontroller.text == "") {
+      setState(() {
+        isMobileEmpty = true;
+      });
+      return;
+    } else {
+      setState(() {
+        isMobileEmpty = false;
+      });
+    }
     if (isvalid!) {
       setState(() {
         isloading = true;
@@ -104,11 +117,29 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
   final TextEditingController citycontroller = TextEditingController();
   final TextEditingController uploadLogocontroller = TextEditingController();
   List placesList = [];
+  String selectedCountryCode = '+91';
+  bool isMobileEmpty = false;
+
+  void openModal() {
+    final notify = ref.read(selectedItemForsignup.notifier);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return CountryCodeModel(onCountrySelected: (data) {
+          if (data.isNotEmpty) {
+            setState(() {
+              selectedCountryCode = data;
+            });
+            notify.add({"id": 8, "item": "$data ${mobilenumbercontroller.text}"});
+          }
+        });
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(selectedItemForsignup.notifier);
-    print(notify.state);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -190,16 +221,38 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                     rightIcon: Icons.publish,
                                   ),
                                 ),
-                                CustomTextInput(
-                                  margin: const EdgeInsets.all(7),
-                                  labelText: 'Mobile',
-                                  onlyDigits: true,
+                                // CustomTextInput(
+                                //   margin: const EdgeInsets.all(7),
+                                //   labelText: 'Mobile',
+                                //   onlyDigits: true,
+                                //   controller: mobilenumbercontroller,
+                                //   validator: (value) => validateForMobileNumberFeild(value: value, props: "Mobile Number"),
+                                //   onChanged: (value) {
+                                //     notify.add({"id": 8, "item": value.trim()});
+                                //   },
+                                // ),
+                                MobileNumberInputField(
                                   controller: mobilenumbercontroller,
-                                  validator: (value) => validateForMobileNumberFeild(value: value, props: "Mobile Number"),
-                                  onChanged: (value) {
-                                    notify.add({"id": 8, "item": value.trim()});
+                                  hintText: 'Mobile Number',
+                                  isEmpty: isMobileEmpty,
+                                  openModal: openModal,
+                                  countryCode: selectedCountryCode,
+                                  onChange: (value) {
+                                    notify.add({"id": 8, "item": "$selectedCountryCode ${value.trim()}"});
                                   },
                                 ),
+                                if (isMobileEmpty)
+                                  const Padding(
+                                    padding: EdgeInsets.only(left: 15.0, bottom: 5),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: AppText(
+                                        text: 'Please enter Mobile Number',
+                                        textColor: Colors.red,
+                                        fontsize: 12,
+                                      ),
+                                    ),
+                                  ),
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 8.0),
                                   child: CustomCheckbox(
@@ -229,6 +282,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                   validator: (value) => validateForNormalFeild(value: value, props: "Search Location"),
                                   onChanged: (value) {
                                     getPlaces(value).then((places) {
+                                      // print(places);
                                       final descriptions = places.data?.predictions?.map((prediction) => prediction.description) ?? [];
                                       setState(() {
                                         placesList = descriptions.toList();
@@ -256,22 +310,38 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
 
                                             try {
                                               List<String> words = str.split(' ');
-                                              if (words.length >= 3) {
-                                                String lastThreeWords = words.sublist(words.length - 3).join(' ');
-                                                String remainingWords = words.sublist(0, words.length - 3).join(' ');
+                                              if (words.length > 3) {
+                                                String lastThreeWords =
+                                                    words.contains("India") ? words.sublist(words.length - 3).join(' ') : words.sublist(words.length - 2).join(' ');
+                                                String remainingWords =
+                                                    words.contains("India") ? words.sublist(0, words.length - 3).join(' ') : words.sublist(0, words.length - 2).join(' ');
+                                                if (remainingWords.endsWith(',')) {
+                                                  remainingWords = remainingWords.replaceFirst(RegExp(r',\s*$'), '');
+                                                }
+                                                if (lastThreeWords.endsWith(',')) {
+                                                  lastThreeWords = lastThreeWords.replaceFirst(RegExp(r',\s*$'), '');
+                                                }
                                                 List<String> lastThreeWordsList = lastThreeWords.split(' ');
                                                 if (lastThreeWordsList.isNotEmpty) {
-                                                  lastThreeWordsList.removeLast();
+                                                  if (lastThreeWordsList.contains('India')) {
+                                                    lastThreeWordsList.removeLast();
+                                                  }
                                                   lastThreeWords = lastThreeWordsList.join(' ');
+                                                }
+                                                if (lastThreeWords.endsWith(',')) {
+                                                  lastThreeWords = lastThreeWords.replaceFirst(RegExp(r',\s*$'), '');
                                                 }
                                                 statecontroller.text = placesList[index] ?? "";
                                                 address1controller.text = remainingWords;
                                                 address2controller.text = lastThreeWords;
                                                 notify.add({"id": 10, "item": remainingWords});
                                                 notify.add({"id": 15, "item": lastThreeWords});
-
-                                                notify.add({"id": 12, "item": lastThreeWordsList[0]});
-                                                notify.add({"id": 11, "item": lastThreeWordsList[1]});
+                                                final cityName =
+                                                    lastThreeWordsList[0].endsWith(',') ? lastThreeWordsList[0].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[0];
+                                                final stateName =
+                                                    lastThreeWordsList[1].endsWith(',') ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[1];
+                                                notify.add({"id": 12, "item": cityName});
+                                                notify.add({"id": 11, "item": stateName});
                                                 setState(() {
                                                   placesList = [];
                                                 });
@@ -314,6 +384,20 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                   },
                                 ),
                                 Container(
+                                  margin: const EdgeInsets.symmetric(horizontal: 6),
+                                  child: Column(
+                                    children: [
+                                      DropDownField(
+                                          title: "Register As",
+                                          defaultValues: "",
+                                          optionsList: dropdownitem,
+                                          onchanged: (value) {
+                                            notify.add({"id": 13, "item": value});
+                                          }),
+                                    ],
+                                  ),
+                                ),
+                                Container(
                                   margin: const EdgeInsets.only(top: 10, bottom: 10),
                                   alignment: Alignment.centerRight,
                                   child: isloading
@@ -343,15 +427,17 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
 }
 
 Future<GooglePlacesModel> getPlaces(String text) async {
+  // final uri = Uri.parse("https://api.greencenteral.com/api/v1/user/locations?name=${text}");
   final uri = Uri.parse("http://142.93.234.216:44210/api/v1/user/locations?name=${text}");
+  // final uri = Uri.parse("https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${text}&key=AIzaSyD7KtQoq29-5TqELLdPBSQoqCD376-qGjA&components=country:in");
 
   final response = await http.get(
     uri,
-    headers: <String, String>{
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET,POST,PUT,OPTIONS",
-      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
-    },
+    // headers: <String, String>{
+    //   "Access-Control-Allow-Origin": "*",
+    //   "Access-Control-Allow-Methods": "GET,POST,PUT,OPTIONS",
+    //   "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+    // },
   );
   var responseData = json.decode(response.body.toString());
   if (response.statusCode == 200) {
