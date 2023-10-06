@@ -24,6 +24,7 @@ import '../../customs/custom_text.dart';
 import '../../customs/dropdown_field.dart';
 import '../../customs/label_text_field.dart';
 import '../../pages/Auth/signup/company_details.dart';
+import '../../pages/Auth/signup/country_code_modal.dart';
 import '../../widgets/card/questions card/chip_button.dart';
 import '../firebase/statesModel/state_c_ity_model.dart';
 import '../utils/colors.dart';
@@ -174,16 +175,101 @@ Widget buildInventoryQuestions(
     final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
     TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
     bool isChecked = true;
+    String mobileCountryCode = '+91';
+    String whatsappCountryCode = '+91';
+    bool isMobileNoEmpty = false;
+    if (question.questionTitle == 'Mobile' && value.isNotEmpty) {
+      List<String> splitString = value[0]["item"].split(' ');
+      if (splitString.length == 2) {
+        mobileCountryCode = splitString[0];
+        controller.text = splitString[1];
+      }
+    }
+    if (question.questionTitle == 'Whatsapp Number' && value.isNotEmpty) {
+      isChecked = false;
+      List<String> splitString = value[0]["item"].split(' ');
+      if (splitString.length == 2) {
+        whatsappCountryCode = splitString[0];
+        controller.text = splitString[1];
+      }
+    }
+    void openModal({BuildContext? context, setState, bool? forMobile = true}) {
+      showDialog(
+        context: context!,
+        builder: (context) {
+          return CountryCodeModel(onCountrySelected: (data) {
+            if (data.isNotEmpty) {
+              setState(() {
+                if (forMobile == true) {
+                  mobileCountryCode = data;
+                } else {
+                  whatsappCountryCode = data;
+                }
+              });
+              notify.add({"id": question.questionId, "item": "$data ${controller.text}"});
+            }
+          });
+        },
+      );
+    }
+
     if (isPlotSelected && question.questionId == 30) {
       return const SizedBox();
     }
     // if (question.questionId == 27) {
     //   controller.text = selectedValues.isNotEmpty ? selectedValues.firstWhere((element) => element["id"] == 27)["item"] : "";
     // }
+    if (question.questionTitle == 'Mobile') {
+      return StatefulBuilder(builder: (context, setState) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: RichText(
+                text: const TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Mobile',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '*',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            MobileNumberInputField(
+              controller: controller,
+              hintText: 'Type here..',
+              isEmpty: isMobileNoEmpty,
+              openModal: () {
+                openModal(context: context, setState: setState);
+              },
+              countryCode: mobileCountryCode,
+              onChange: (value) {
+                notify.add({"id": question.questionId, "item": "$mobileCountryCode ${value.trim()}"});
+              },
+            ),
+          ],
+        );
+      });
+    }
     if (question.questionTitle == 'Whatsapp Number') {
       return StatefulBuilder(
         builder: (context, setState) {
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (question.questionTitle == 'Whatsapp Number')
                 CustomCheckbox(
@@ -195,23 +281,61 @@ Widget buildInventoryQuestions(
                     });
                   },
                 ),
-              if (!isChecked)
-                LabelTextInputField(
-                  keyboardType: TextInputType.number,
-                  onlyDigits: true,
-                  onChanged: (newvalue) {
-                    notify.add({"id": question.questionId, "item": newvalue.trim()});
+              if (!isChecked) ...[
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, top: 3),
+                  child: RichText(
+                    text: const TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Whatsapp Number',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        TextSpan(
+                          text: '*',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                MobileNumberInputField(
+                  controller: controller,
+                  hintText: 'Type here..',
+                  isEmpty: isMobileNoEmpty,
+                  openModal: () {
+                    openModal(context: context, setState: setState, forMobile: false);
                   },
-                  inputController: controller,
-                  isMandatory: true,
-                  labelText: question.questionTitle,
-                  validator: (value) {
-                    if (!isChecked && value!.isEmpty) {
-                      return "Please enter ${question.questionTitle}";
-                    }
-                    return null;
+                  countryCode: whatsappCountryCode,
+                  onChange: (value) {
+                    notify.add({"id": question.questionId, "item": "$whatsappCountryCode ${value.trim()}"});
                   },
                 ),
+              ],
+              // LabelTextInputField(
+              //   keyboardType: TextInputType.number,
+              //   onlyDigits: true,
+              //   onChanged: (newvalue) {
+              //     notify.add({"id": question.questionId, "item": newvalue.trim()});
+              //   },
+              //   inputController: controller,
+              //   isMandatory: true,
+              //   labelText: question.questionTitle,
+              //   validator: (value) {
+              //     if (!isChecked && value!.isEmpty) {
+              //       return "Please enter ${question.questionTitle}";
+              //     }
+              //     return null;
+              //   },
+              // ),
             ],
           );
         },
