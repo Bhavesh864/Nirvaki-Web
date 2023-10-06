@@ -1,6 +1,5 @@
 // ignore_for_file: invalid_use_of_protected_member
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:number_to_words/number_to_words.dart';
 import 'convertStringTorange/convert_range_string.dart';

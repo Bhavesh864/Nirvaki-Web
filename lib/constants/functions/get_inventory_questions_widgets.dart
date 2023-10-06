@@ -396,10 +396,10 @@ Widget buildInventoryQuestions(
       ),
     );
   } else if (question.questionOptionType == 'map') {
-    List<double> defaultValue = [];
-    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
-      defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
-    }
+    // List<double> defaultValue = [];
+    // if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+    //   defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
+    // }
     final state = getDataById(selectedValues, 26);
     final city = getDataById(selectedValues, 27);
     final address1 = getDataById(selectedValues, 28);
@@ -409,7 +409,6 @@ Widget buildInventoryQuestions(
     return CustomGoogleMap(
       isEdit: isEdit,
       selectedValues: selectedValues,
-      seletedLatLng: defaultValue,
       onLatLngSelected: (latLng) {
         notify.add({
           "id": question.questionId,
