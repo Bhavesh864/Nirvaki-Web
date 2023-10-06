@@ -14,7 +14,7 @@ class CustomGoogleMap extends ConsumerStatefulWidget {
   final String? address2;
   final String? locality;
   final bool isReadOnly;
-  final List<double>? seletedLatLng;
+
   final LatLng? latLng;
   final void Function(LatLng) onLatLngSelected;
 
@@ -28,7 +28,6 @@ class CustomGoogleMap extends ConsumerStatefulWidget {
     this.address2,
     this.locality,
     this.isReadOnly = false,
-    this.seletedLatLng,
     this.latLng,
     required this.onLatLngSelected,
   }) : super(key: key);
