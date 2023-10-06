@@ -37,16 +37,7 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    // switch (state) {
-    //   case AppLifecycleState.resumed:
-    //     ref.read(chatControllerProvider).setUserState(true);
-    //     break;
-    //   case AppLifecycleState.inactive:
-    //   case AppLifecycleState.detached:
-    //   case AppLifecycleState.paused:
-    //     ref.read(chatControllerProvider).setUserState(false);
-    //     break;
-    // }
+
     if (state == AppLifecycleState.resumed) {
       ref.read(chatControllerProvider).setUserState(true);
     } else {
@@ -57,16 +48,13 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-    ref.read(chatControllerProvider).setUserState(true);
-
     final token = UserHiveMethods.getdata("token");
     authState = authentication.authStateChanges();
-
     if (token != null) {
       AppConst.setAccessToken(token);
     }
-    setAllNotification();
     getUserData();
+    setAllNotification();
     super.initState();
   }
 
@@ -108,7 +96,6 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
       stream: authState,
       builder: (context, snapshot) {
         AppConst.setIsAuthenticated(snapshot.hasData ? true : false);
-
         return Scaffold(
           body: OfflineBuilder(
             connectivityBuilder: (
@@ -119,7 +106,6 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
               final bool connected = connectivity != ConnectivityResult.none;
               if (!connected) {
                 ref.read(chatControllerProvider).setUserState(false);
-
                 return const Center(
                   child: Padding(
                     padding: EdgeInsets.all(4.0),
@@ -133,7 +119,6 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
                   ),
                 );
               }
-              ref.read(chatControllerProvider).setUserState(true);
               return ScreenTypeLayout.builder(
                 breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
                 mobile: (p0) => _buildMobileLayout(snapshot.hasData),
@@ -197,7 +182,6 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
       return const LargeScreen();
     } else {
       final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
-
       if (location.isNotEmpty && location.contains('inventory-details')) {
         AppConst.setPublicView(true);
         return PublicViewInventoryDetails(

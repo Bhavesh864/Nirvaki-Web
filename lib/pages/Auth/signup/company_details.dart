@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 
@@ -9,7 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/google_places_model.dart';
-
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/customs/snackbar.dart';
 import 'package:yes_broker/riverpodstate/sign_up_state.dart';
@@ -20,7 +18,6 @@ import '../../../Customs/custom_fields.dart';
 import '../../../Customs/dropdown_field.dart';
 import '../../../constants/utils/constants.dart';
 import '../../../constants/utils/image_constants.dart';
-import '../../../routes/routes.dart';
 import '../../../widgets/auth/details_header.dart';
 import 'package:http/http.dart' as http;
 
@@ -60,7 +57,8 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                 setState(() {
                   isloading = false;
                 }),
-                context.beamToReplacementNamed(AppRoutes.loginScreen),
+                context.beamToReplacementNamed('/'),
+                customSnackBar(context: context, text: "Verification email sent. Please check your inbox to verify your email"),
               }
             else
               {
@@ -356,10 +354,13 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                             } catch (e) {
                                               setState(() {
                                                 placesList = [];
+                                                address1controller.text = "";
+                                                address2controller.text = "";
                                               });
                                               address1controller.text = "";
                                               address2controller.text = "";
                                             }
+                                            FocusScope.of(context).unfocus();
                                           },
                                         );
                                       },

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
@@ -9,6 +11,8 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/widgets/todo/todo_filter_view.dart';
 import '../../Customs/loader.dart';
+import '../../chat/controller/chat_controller.dart';
+import '../../constants/app_constant.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/filterdataAccordingRole/data_according_role.dart';
 import '../../constants/utils/constants.dart';
@@ -36,9 +40,14 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   List<User> userList = [];
   List<CardDetails>? status;
   bool isUserLoaded = false;
+
   @override
   void initState() {
     setCardDetails();
+    if (!kIsWeb) {
+      print('aksjdflkasdjflk --------${AppConst.getAccessToken()}');
+      ref.read(chatControllerProvider).setUserState(true);
+    }
     super.initState();
   }
 
@@ -47,10 +56,14 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   }
 
   void getDetails(User currentuser) async {
-    final List<User> user = await User.getUserAllRelatedToBrokerId(currentuser);
-    setState(() {
-      userList = user;
-    });
+    if (mounted) {
+      final List<User> user = await User.getUserAllRelatedToBrokerId(currentuser);
+      if (mounted) {
+        setState(() {
+          userList = user;
+        });
+      }
+    }
   }
 
   @override
@@ -74,6 +87,15 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
             final List<CardDetails> todoItemsList =
                 filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
+
+            int compareDueDates(CardDetails a, CardDetails b) {
+              DateTime aDueDate = DateFormat('dd-MM-yy').parse(a.duedate!);
+              DateTime bDueDate = DateFormat('dd-MM-yy').parse(b.duedate!);
+              return aDueDate.compareTo(bDueDate);
+            }
+
+            todoItemsList.sort(compareDueDates);
+
             List<CardDetails> filterTodoList = todoItemsList.where((item) {
               if (searchController.text.isEmpty) {
                 return true;
@@ -216,13 +238,14 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                                                   shrinkWrap: true,
                                                   physics: const ScrollPhysics(),
                                                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                                      crossAxisCount: Responsive.isMobile(context)
-                                                          ? 1
-                                                          : Responsive.isTablet(context) || isFilterOpen
-                                                              ? 2
-                                                              : 3,
-                                                      crossAxisSpacing: 10.0,
-                                                      mainAxisExtent: 150),
+                                                    crossAxisCount: Responsive.isMobile(context)
+                                                        ? 1
+                                                        : Responsive.isTablet(context) || isFilterOpen
+                                                            ? 2
+                                                            : 3,
+                                                    crossAxisSpacing: 10.0,
+                                                    mainAxisExtent: 140,
+                                                  ),
                                                   itemCount: filterTodoList.length,
                                                   itemBuilder: (context, index) => GestureDetector(
                                                     onTap: () {

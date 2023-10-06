@@ -43,7 +43,6 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
             } else if (path.contains('/lead')) {
               currentIndex = 3;
             } else if (path.contains('/calendar')) {
-              print('object');
               currentIndex = 4;
             } else {
               currentIndex = 0;

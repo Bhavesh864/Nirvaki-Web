@@ -35,6 +35,7 @@ class ContactInformation extends StatelessWidget {
                   : const SizedBox(),
               if (!AppConst.getPublicView())
                 const CustomChip(
+                  paddingVertical: 6,
                   label: Icon(
                     Icons.more_vert,
                   ),
@@ -88,6 +89,7 @@ class ContactInformation extends StatelessWidget {
           dense: true,
           visualDensity: const VisualDensity(vertical: -2),
           leading: const CustomChip(
+            paddingVertical: 6,
             label: Icon(
               Icons.call_outlined,
               color: Colors.black,
@@ -108,6 +110,7 @@ class ContactInformation extends StatelessWidget {
           dense: true,
           visualDensity: const VisualDensity(vertical: -2),
           leading: const CustomChip(
+            paddingVertical: 6,
             label: Icon(
               FontAwesomeIcons.whatsapp,
               color: Colors.black,
@@ -128,6 +131,7 @@ class ContactInformation extends StatelessWidget {
             dense: true,
             visualDensity: const VisualDensity(vertical: -2),
             leading: const CustomChip(
+              paddingVertical: 6,
               label: Icon(
                 Icons.mail_outline,
                 color: Colors.black,

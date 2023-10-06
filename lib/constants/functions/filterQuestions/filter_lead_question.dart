@@ -19,14 +19,17 @@ void updateLeadListInventory(WidgetRef ref, String option, screenList) {
     questionNotifier.updateScreenIsActive(setTrueInScreens: ["S8", "S10", "S7"], setFalseInScreens: []);
   } else if (option.contains("Independent House/Villa")) {
     plotNotifier.togglePlotQuestionary(false);
-    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S6", "S9", "S8"], setFalseInScreens: ["S10"]);
-  } else if (option.contains("Apartment") || option.contains("Builder Floor") || option.contains("Farm House")) {
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S6", "S9", "S8", "S11", "S13"], setFalseInScreens: ["S10"]);
+  } else if (option.contains("Apartment") || option.contains("Builder Floor")) {
     plotNotifier.togglePlotQuestionary(false);
-    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S9", "S8"], setFalseInScreens: ["S6", "S10"]);
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S9", "S8", "S11", "S13"], setFalseInScreens: ["S6", "S10"]);
+  } else if (option.contains("Farm House")) {
+    plotNotifier.togglePlotQuestionary(false);
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S9", "S8", "S11"], setFalseInScreens: ["S6", "S10", "S13"]);
   }
   if (option.contains("Plot")) {
     plotNotifier.togglePlotQuestionary(true);
-    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S10"], setFalseInScreens: ["S6", "S9", "S8"]);
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S10"], setFalseInScreens: ["S6", "S9", "S8", "S11", "S13"]);
   }
   // common flow
   if (option.contains("Residential")) {
@@ -78,6 +81,11 @@ void updateLeadListInventory(WidgetRef ref, String option, screenList) {
   if (option.contains("Hospitality")) {
     List<String> setTofalse = ["S8", "S9", "S11", "S12", "S13"];
     List<String> setToTrue = ["S10", "S14"];
+    questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
+  }
+  if (option.contains("Hotel") || option.contains("Resort") || option.contains("Guest House")) {
+    List<String> setTofalse = ["S12"];
+    List<String> setToTrue = [];
     questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
   }
   if (option.contains("Healthcare")) {

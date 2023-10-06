@@ -1,7 +1,10 @@
 // ignore: file_names
 
+// import 'dart:html';
+
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
@@ -12,6 +15,7 @@ import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
+import '../../Customs/snackbar.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
@@ -102,6 +106,7 @@ class InventoryDetailsHeader extends ConsumerWidget {
                 id: id,
               ),
             CustomChip(
+              paddingVertical: 8,
               onPressed: () {
                 shareUrl(context);
               },
@@ -182,6 +187,7 @@ class _HeaderChipsState extends ConsumerState<HeaderChips> {
     return Wrap(
       children: [
         CustomChip(
+          paddingVertical: 8,
           color: AppColor.primary.withOpacity(0.1),
           label: CustomText(
             title: widget.category,
@@ -191,6 +197,7 @@ class _HeaderChipsState extends ConsumerState<HeaderChips> {
         ),
         if (!AppConst.getPublicView())
           CustomChip(
+            paddingVertical: 8,
             color: AppColor.primary.withOpacity(0.1),
             label: CustomText(
               title: widget.type,
@@ -199,6 +206,7 @@ class _HeaderChipsState extends ConsumerState<HeaderChips> {
             ),
           ),
         CustomChip(
+          paddingVertical: 8,
           color: AppColor.primary.withOpacity(0.1),
           label: CustomText(
             title: widget.propertyCategory,

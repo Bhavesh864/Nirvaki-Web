@@ -271,7 +271,7 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
                                                     : 3,
                                             // mainAxisSpacing: 5.0,
                                             crossAxisSpacing: 10.0,
-                                            mainAxisExtent: 150,
+                                            mainAxisExtent: 140,
                                           ),
                                           itemCount: filteredleadList.length,
                                           itemBuilder: (context, index) => GestureDetector(

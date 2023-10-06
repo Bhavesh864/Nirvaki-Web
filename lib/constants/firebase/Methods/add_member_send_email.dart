@@ -24,10 +24,10 @@ Future<String> sendInvitationEmail({
       actionCodeSettings: ActionCodeSettings(
         url: 'https://brokr-in.web.app/#/login_screen', // Replace with your dynamic link URL
         handleCodeInApp: true,
-        iOSBundleId: 'com.example.yesBroker', // Replace with your iOS bundle ID
-        androidPackageName: 'com.example.yes_broker', // Replace with your Android package name
-        androidInstallApp: true,
-        androidMinimumVersion: '10',
+        iOSBundleId: 'com.example.yesBroker',
+        androidPackageName: 'com.example.yes_broker',
+        androidInstallApp: false,
+        androidMinimumVersion: '8',
       ),
     );
     final token = AppConst.getAccessToken();

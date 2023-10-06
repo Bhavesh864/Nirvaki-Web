@@ -5,6 +5,7 @@ import 'dart:convert';
 Future<LatLng?> getLatLng(String query) async {
   const apiKey = 'AIzaSyD7KtQoq29-5TqELLdPBSQoqCD376-qGjA';
   final url = 'https://maps.googleapis.com/maps/api/geocode/json?address=$query&key=$apiKey';
+
   final response = await http.get(Uri.parse(url));
   if (response.statusCode == 200) {
     final json = jsonDecode(response.body);

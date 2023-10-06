@@ -44,8 +44,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
   Widget build(BuildContext context) {
     final User? user = ref.watch(userDataProvider);
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Add this line
-
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         // Row(
         //   children: [
@@ -240,7 +239,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                     Padding(
                       padding: EdgeInsets.only(left: 4, top: 1, bottom: 1),
                       child: Text(
-                        "Edit on",
+                        "Added on",
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
                         style: TextStyle(
@@ -253,7 +252,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 47, top: 2),
+                  padding: const EdgeInsets.only(left: 29, top: 2),
                   child: Row(
                     children: [
                       const Icon(Icons.calendar_month_outlined),
@@ -261,7 +260,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                         width: 4,
                       ),
                       Text(
-                        formatMessageDate(widget.data.createdate.toDate()),
+                        checkNotNUllItem(widget.data.createdate) ? formatMessageDate(widget.data.createdate.toDate()) : "",
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
                         style: const TextStyle(
@@ -435,7 +434,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
           //   children: [
           //     const Icon(Icons.add),
           //     const Text(
-          //       "Edit on",
+          //       "Added on",
           //       overflow: TextOverflow.ellipsis,
           //       textAlign: TextAlign.left,
           //       style: TextStyle(

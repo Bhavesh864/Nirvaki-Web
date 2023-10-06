@@ -164,7 +164,8 @@ Widget buildTodoQuestions(
               child: CircularProgressIndicator.adaptive(),
             );
           } else if (snapshot.hasData) {
-            for (var data in snapshot.data!) {
+            List<CardDetails> listofCards = snapshot.data!.where((user) => user.workitemId!.contains("IN") || user.workitemId!.contains("LD")).toList();
+            for (var data in listofCards) {
               final newData = "${data.cardTitle} (${data.workitemId})";
               options.add(newData);
             }

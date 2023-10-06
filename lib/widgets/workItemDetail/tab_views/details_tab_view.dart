@@ -3,6 +3,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/customs/loader.dart';
@@ -572,7 +573,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                         return Stack(
                           children: [
                             GestureDetector(
-                              onTap: () async {
+                              onTap: () {
                                 showDialog(
                                   context: context,
                                   builder: (context) {
@@ -615,7 +616,13 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                       Icons.download_for_offline,
                                       size: 18,
                                     ),
-                                    onTap: () async {},
+                                    onTap: () async {
+                                      // if (kIsWeb) {
+                                      //   AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                      //   anchorElement.download = 'Attachment file';
+                                      //   anchorElement.click();
+                                      // }
+                                    },
                                   ),
                                   GestureDetector(
                                     child: const Icon(
@@ -758,6 +765,9 @@ class _DetailsTabViewState extends State<DetailsTabView> {
         if (!Responsive.isDesktop(context) && !AppConst.getPublicView()) ...[
           if (widget.isLeadView) ...[
             MapViewWidget(
+              latLng: widget.isLeadView
+                  ? LatLng(widget.data.preferredlocation[0], widget.data.preferredlocation[1])
+                  : LatLng(widget.data.propertylocation[0], widget.data.propertylocation[0]),
               state: widget.data.preferredlocality!.state!,
               city: widget.data.preferredlocality!.city!,
               addressline1: widget.data.preferredlocality!.addressline1!,
@@ -766,9 +776,12 @@ class _DetailsTabViewState extends State<DetailsTabView> {
             ),
           ] else ...[
             MapViewWidget(
+              latLng: widget.isLeadView
+                  ? LatLng(widget.data.preferredlocation[0], widget.data.preferredlocation[1])
+                  : LatLng(widget.data.propertylocation[0], widget.data.propertylocation[1]),
               state: widget.data.propertyaddress!.state!,
               city: widget.data.propertyaddress!.city!,
-              addressline1: widget.data.propertyaddress!.addressline1!,
+              addressline1: widget.data.propertyaddress!.addressline1,
               addressline2: widget.data.propertyaddress?.addressline2,
               locality: widget.data.propertyaddress!.locality!,
             ),

@@ -13,7 +13,6 @@ import 'package:yes_broker/riverpodstate/user_data.dart';
 import '../../functions/convertStringTorange/convert_range_string.dart';
 
 Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async {
-  print(isEdit);
   final randomId = randomNumeric(5);
   final User? currentUserdata = ref.read(userDataProvider);
   var res = "pending";
@@ -51,7 +50,6 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
   final floorNumber = getDataById(state, 30);
   final latlng = getDataById(state, 31);
   final budgetPrice = getDataById(state, 32);
-
   final preferredpropertyfacing = getDataById(state, 34);
   final comments = getDataById(state, 35);
   final List<User> assignto = getDataById(state, 36);
@@ -141,7 +139,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       leadsource: leadSource,
       possessiondate: possession,
       plotdetails: Plotdetails(boundarywall: boundaryWall, opensides: openSides),
-      amenities: amenities,
+      amenities: amenities ?? [],
       propertyarea: Propertyarea(carpetarea: carpetArea, superarea: superArea, unit: areaUnit),
       preferredlocality: Preferredlocality(
           state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, prefferedfloornumber: floorNumber, locality: locality),
