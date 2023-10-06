@@ -43,12 +43,14 @@ class CardHeaderState extends ConsumerState<CardHeader> {
     final cardData = widget.cardDetails[widget.index];
     status = widget.cardDetails;
     final User? user = ref.read(userDataProvider);
+
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SizedBox(
-          height: 30,
-          width: 200,
+          height: 25,
+          width: cardData.workitemId!.contains('TD') ? 180 : 250,
           child: ListView(
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
@@ -71,7 +73,7 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                 label: Icon(
                   checkIconByCategory(cardData),
                   color: checkIconColorByCategory(cardData),
-                  size: 16,
+                  size: 14,
                   // weight: 10.12,
                 ),
                 color: checkChipColorByCategory(cardData),
@@ -149,7 +151,7 @@ class CardHeaderState extends ConsumerState<CardHeader> {
             ],
           ),
         ),
-        const Spacer(),
+        // const Spacer(),
         Row(
           children: [
             if (cardData.duedate != null)
@@ -167,21 +169,25 @@ class CardHeaderState extends ConsumerState<CardHeader> {
               // ),
               Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(2),
-                  color: AppColor.chipGreyColor,
+                  borderRadius: BorderRadius.circular(4),
+                  color: cardData.duedate != null && DateFormat('dd-MM-yy').parse(cardData.duedate!).isBefore(DateTime.now())
+                      ? const Color.fromARGB(255, 249, 145, 137).withOpacity(0.2)
+                      : AppColor.chipGreyColor,
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 4),
                 child: Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.calendar_month_outlined,
                       size: 15,
+                      color: cardData.duedate != null && DateFormat('dd-MM-yy').parse(cardData.duedate!).isBefore(DateTime.now()) ? Colors.red : Colors.black,
                     ),
                     const SizedBox(width: 2),
                     AppText(
-                      // text: DateFormat(' d MMM y').format(DateTime.parse(cardData.duedate!)),
-                      text: cardData.duedate!,
+                      text: DateFormat('dd MMM yyyy').format(DateFormat('dd-MM-yy').parse(cardData.duedate!)),
                       fontsize: 10,
+                      textColor:
+                          cardData.duedate != null && DateFormat('dd-MM-yy').parse(cardData.duedate!).isBefore(DateTime.now()) ? Colors.red.shade500 : Colors.black,
                     ),
                   ],
                 ),

@@ -9,6 +9,7 @@ import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/widgets/auth/common_auth_widgets.dart';
 import '../../../constants/firebase/Methods/sign_in_method.dart';
+import '../../../constants/firebase/send_notification.dart';
 import '../../../constants/utils/image_constants.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -22,14 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
   var isloading = false;
   final FocusNode emailFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
-
   final TextEditingController emailcontroller = TextEditingController();
   final TextEditingController passwordcontroller = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   void loginwithemailpassword(BuildContext context) {
     FocusScope.of(context).unfocus();
@@ -41,12 +36,20 @@ class _LoginScreenState extends State<LoginScreen> {
       signinMethod(email: emailcontroller.text, password: passwordcontroller.text).then((value) => {
             if (value == 'success')
               {
-                setState(() {
-                  isloading = false;
-                }),
-                context.beamToReplacementNamed('/'),
+                // if (auth.currentUser?.emailVerified == true)
+                //   {
+                User.updateFcmToken(fcmtoken: AppConst.getFcmToken()!, userid: AppConst.getAccessToken()!),
+                AppConst.setAccessToken(auth.currentUser?.uid),
                 User.updateFcmToken(fcmtoken: AppConst.getFcmToken()!, userid: AppConst.getAccessToken()!),
                 AppConst.setPublicView(false),
+                // }
+                // else
+                //   {
+                //     setState(() {
+                //       isloading = false;
+                //     }),
+                //     customSnackBar(context: context, text: 'Please verify your email address.')
+                //   }
               }
             else
               {
@@ -72,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
               image: AssetImage(authBgImage),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
-                Colors.black12,
+                Colors.black26,
                 BlendMode.darken,
               ),
             ),
@@ -138,6 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           margin: const EdgeInsets.only(bottom: 5),
                           child: CustomTextInput(
                             focusnode: emailFocusNode,
+                            // key: const Key('usernameField'),
                             controller: emailcontroller,
                             labelText: 'Email address',
                             validator: validateEmail,
@@ -145,10 +149,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             textInputAction: TextInputAction.next,
                             onFieldSubmitted: (_) {
                               FocusScope.of(context).requestFocus(passwordFocusNode);
+                              getAllCategoryItems(emailcontroller.text);
                             },
                           ),
                         ),
                         CustomTextInput(
+                          // key: const Key('passwordField'),
                           focusnode: passwordFocusNode,
                           controller: passwordcontroller,
                           labelText: 'Password',
@@ -163,6 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             : SizedBox(
                                 width: w,
                                 child: CustomButton(
+                                  key: const Key("loginButton"),
                                   text: 'Login',
                                   onPressed: () {
                                     loginwithemailpassword(context);

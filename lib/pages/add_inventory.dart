@@ -39,6 +39,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<States> stateList = [];
 
+  String errorMessage = "";
   @override
   void initState() {
     super.initState();
@@ -77,7 +78,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   }
 
   nextQuestion({List<Screen>? screensDataList, required String option}) {
-    updateListInventory(ref, option, screensDataList);
+    updateListInventory(ref, option);
     if (currentScreenIndex < screensDataList!.length - 1 && !allQuestionFinishes) {
       setState(() {
         currentScreenIndex++;
@@ -136,7 +137,6 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     final allInventoryQuestionsNotifier = ref.read(allInventoryQuestion.notifier);
     final allInventoryQuestions = ref.read(allInventoryQuestion);
     final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom;
-
     // final assignIsselected = selectedValues.firstWhere((element) => element["id"] == 36)["item"];
     return GestureDetector(
         onTap: () {
@@ -290,8 +290,25 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                                                 }
                                                                                 if (!allQuestionFinishes) {
                                                                                   if (currentScreenList[index].title != "Assign to") {
+                                                                                    // setState(() {
+                                                                                    //   errorMessage = "";
+                                                                                    // });
                                                                                     if (_formKey.currentState!.validate()) {
+                                                                                      // if (currentScreenList[index].screenId != "S14") {
                                                                                       nextQuestion(screensDataList: currentScreenList, option: "");
+                                                                                      // } else if (currentScreenList[index].screenId == "S14" ||
+                                                                                      //     currentScreenList[index].screenId == "S8") {
+                                                                                      //   if (selectedValues.isNotEmpty &&
+                                                                                      //       selectedValues
+                                                                                      //           .any((item) => item['id'] == 23 || item["id"] == 14 && item['item'].isNotEmpty)) {
+                                                                                      //     print("object");
+                                                                                      //     nextQuestion(screensDataList: currentScreenList, option: "");
+                                                                                      //   } else {
+                                                                                      //     setState(() {
+                                                                                      //       errorMessage = "Please select a valid item";
+                                                                                      //     });
+                                                                                      //   }
+                                                                                      // }
                                                                                     }
                                                                                   }
                                                                                   if (currentScreenList[index].title == "Assign to") {

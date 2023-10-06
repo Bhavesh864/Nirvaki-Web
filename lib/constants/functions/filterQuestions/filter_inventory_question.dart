@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../riverpodstate/filterQuestions/inventory_all_question.dart';
 import '../../../riverpodstate/inventory_res_filter_question.dart';
 
-void updateListInventory(WidgetRef ref, String option, screenList) {
+void updateListInventory(WidgetRef ref, String option) {
   final questionNotifier = ref.read(allInventoryQuestion.notifier);
   final plotNotifier = ref.read(filterPlotQuestion.notifier);
   final isCommercial = ref.read(filterCommercialQuestion);
@@ -18,14 +18,18 @@ void updateListInventory(WidgetRef ref, String option, screenList) {
     questionNotifier.updateScreenIsActive(setTrueInScreens: ["S8", "S10", "S15", "S7"], setFalseInScreens: ["S16"]);
   } else if (option.contains("Independent House/Villa")) {
     plotNotifier.togglePlotQuestionary(false);
-    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S6", "S9"], setFalseInScreens: ["S10"]);
-  } else if (option.contains("Apartment") || option.contains("Builder Floor") || option.contains("Farm House")) {
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S6", "S9", "S11", "S13"], setFalseInScreens: ["S10"]);
+  } else if (option.contains("Apartment") || option.contains("Builder Floor")) {
     plotNotifier.togglePlotQuestionary(false);
-    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S9"], setFalseInScreens: ["S6", "S10"]);
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S9", "S11", "S13"], setFalseInScreens: ["S6", "S10"]);
+  }
+  if (option.contains("Farm House")) {
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S9", "S11"], setFalseInScreens: ["S6", "S10", "S13"]);
+    plotNotifier.togglePlotQuestionary(false);
   }
   if (option.contains("Plot")) {
     plotNotifier.togglePlotQuestionary(true);
-    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S10"], setFalseInScreens: ["S6", "S9"]);
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S10"], setFalseInScreens: ["S6", "S9", "S11", "S13"]);
   }
   // common flow
   if (option.contains("Residential")) {
@@ -77,6 +81,11 @@ void updateListInventory(WidgetRef ref, String option, screenList) {
   if (option.contains("Hospitality")) {
     List<String> setTofalse = ["S8", "S9", "S11", "S12", "S13"];
     List<String> setToTrue = ["S10", "S14"];
+    questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
+  }
+  if (option.contains("Hotel") || option.contains("Resort") || option.contains("Guest House")) {
+    List<String> setTofalse = ["S12"];
+    List<String> setToTrue = [];
     questionNotifier.updateScreenIsActive(setTrueInScreens: setToTrue, setFalseInScreens: setTofalse);
   }
   if (option.contains("Healthcare")) {

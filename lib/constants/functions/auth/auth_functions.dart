@@ -6,7 +6,7 @@ import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/pages/smallscreen_dashboard.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 import '../../../chat/controller/chat_controller.dart';
-import '../../../routes/routes.dart';
+
 import '../../../screens/account_screens/common_screen.dart';
 import '../../app_constant.dart';
 import '../../firebase/Hive/hive_methods.dart';
@@ -17,7 +17,8 @@ void userLogout(WidgetRef ref, BuildContext context) {
         (value) => {
           ref.read(chatControllerProvider).setUserState(false),
           ref.read(currentIndexProvider.notifier).update((state) => 0),
-          context.beamToReplacementNamed(AppRoutes.loginScreen),
+          // context.beamToReplacementNamed(AppRoutes.loginScreen),
+          Navigator.of(context).pop(),
           User.updateFcmToken(fcmtoken: null, userid: AppConst.getAccessToken()!),
           UserHiveMethods.deleteData(AppConst.getAccessToken()),
           UserHiveMethods.deleteData("token"),

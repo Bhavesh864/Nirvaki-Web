@@ -1,9 +1,12 @@
 // ignore_for_file: invalid_use_of_protected_member
-
 import 'package:flutter/material.dart';
-import 'package:number_to_words/number_to_words.dart';
-import 'convertStringTorange/convert_range_string.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import 'package:number_to_words/number_to_words.dart';
+import '../../Customs/snackbar.dart';
+import '../../Customs/text_utility.dart';
+import '../../pages/Auth/signup/company_details.dart';
+import 'convertStringTorange/convert_range_string.dart';
 import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
@@ -66,6 +69,12 @@ Widget buildLeadQuestions(
     String selectedOption = '';
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       selectedOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
+    }
+    if (selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 23)) {
+      selectedOption = "Sq ft";
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        notify.add({"id": 23, "item": selectedOption});
+      });
     }
     return StatefulBuilder(builder: (context, setState) {
       return Container(
@@ -205,12 +214,207 @@ Widget buildLeadQuestions(
         },
       );
     }
+    if (question.questionId == 56) {
+      String? statevalue = "";
+      String? cityvalue = "";
+      String? localityvalue = "";
+      String? address1value = "";
+      String? address2value = "";
+      final existingState = selectedValues.any((element) => element["id"] == 26);
+      final existingCity = selectedValues.any((element) => element["id"] == 27);
+      final existingLocality = selectedValues.any((element) => element["id"] == 54);
+      final existingaddress1 = selectedValues.any((element) => element["id"] == 28);
+      final existingaddress2 = selectedValues.any((element) => element["id"] == 29);
+      if (existingState) {
+        statevalue = selectedValues.firstWhere((element) => element["id"] == 26)["item"];
+      }
+      if (existingCity) {
+        cityvalue = selectedValues.firstWhere((element) => element["id"] == 27)["item"];
+      }
+      if (existingLocality) {
+        localityvalue = selectedValues.firstWhere((element) => element["id"] == 54)["item"];
+      }
+      if (existingaddress1) {
+        address1value = selectedValues.firstWhere((element) => element["id"] == 28)["item"];
+      }
+      if (existingaddress2) {
+        address2value = selectedValues.firstWhere((element) => element["id"] == 29)["item"];
+      }
+      TextEditingController statecontroller = TextEditingController(text: statevalue);
+      TextEditingController citycontroller = TextEditingController(text: cityvalue);
+      TextEditingController localitycontroller = TextEditingController(text: localityvalue);
+      TextEditingController address1controller = TextEditingController(text: address1value);
+      TextEditingController address2controller = TextEditingController(text: address2value);
+      List placesList = [];
+      return StatefulBuilder(builder: (context, setState) {
+        return Column(
+          children: [
+            LabelTextInputField(
+              labelText: 'Search your location',
+              inputController: controller,
+              isMandatory: true,
+              validator: (value) => !isEdit ? validateForNormalFeild(value: value, props: "Search Location") : null,
+              onChanged: (value) {
+                getPlaces(value).then((places) {
+                  final descriptions = places.data?.predictions?.map((prediction) => prediction.description) ?? [];
+                  setState(() {
+                    placesList = descriptions.toList();
+                  });
+                });
+              },
+            ),
+            if (placesList.isNotEmpty)
+              Container(
+                height: 200,
+                decoration: BoxDecoration(border: Border.all(color: Colors.grey, width: 0.8), borderRadius: BorderRadius.circular(8)),
+                margin: const EdgeInsets.symmetric(horizontal: 7),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: placesList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      title: AppText(
+                        fontsize: 13,
+                        text: placesList[index],
+                        textColor: Colors.black,
+                      ),
+                      onTap: () {
+                        final str = placesList[index];
+                        notify.add({"id": question.questionId, "item": str});
+                        controller.text = str;
+                        try {
+                          List<String> words = str.split(' ');
+                          if (words.length >= 3) {
+                            String lastThreeWords = words.sublist(words.length - 3).join(' ');
+                            String remainingWords = words.sublist(0, words.length - 3).join(' ');
+                            List<String> lastThreeWordsList = lastThreeWords.split(' ');
+                            if (lastThreeWordsList.isNotEmpty) {
+                              lastThreeWordsList.removeLast();
+                              lastThreeWords = lastThreeWordsList.join(' ');
+                            }
+
+                            final cityName = lastThreeWordsList[0].endsWith(',') ? lastThreeWordsList[0].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[0];
+                            final stateName = lastThreeWordsList[1].endsWith(',') ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[1];
+                            statecontroller.text = stateName;
+                            citycontroller.text = cityName;
+                            localitycontroller.text = remainingWords;
+                            // address1controller.text = str;
+                            // address2controller.text = str;
+                            notify.add({"id": 26, "item": stateName});
+                            notify.add({"id": 27, "item": cityName});
+                            notify.add({"id": 54, "item": remainingWords});
+                            // notify.add({"id": 26, "item": str});
+                            // notify.add({"id": 26, "item": str});
+                            // notify.add({"id": 26, "item": lastThreeWordsList[1]});
+                            // notify.add({"id": 56, "item": str});
+                            setState(() {
+                              placesList = [];
+                            });
+                          } else {
+                            setState(() {
+                              placesList = [];
+                            });
+                            // controller.text = "";
+                            // controller.text = "";
+                            customSnackBar(context: context, text: 'Choose a proper address');
+                          }
+                        } catch (e) {
+                          setState(() {
+                            placesList = [];
+                            // controller.text = "";
+                            // controller.text = "";
+                          });
+                          // controller.text = "";
+                          // controller.text = "";
+                        }
+                      },
+                    );
+                  },
+                ),
+              ),
+            LabelTextInputField(
+              onChanged: (newvalue) {
+                notify.add({"id": 26, "item": newvalue.trim()});
+              },
+              inputController: statecontroller,
+              isMandatory: true,
+              labelText: "State",
+              validator: (value) {
+                if (!isChecked && value!.isEmpty) {
+                  return "Please enter ${question.questionTitle}";
+                }
+                return null;
+              },
+            ),
+            LabelTextInputField(
+              onChanged: (newvalue) {
+                notify.add({"id": 27, "item": newvalue.trim()});
+              },
+              inputController: citycontroller,
+              isMandatory: true,
+              labelText: "City",
+              validator: (value) {
+                if (!isChecked && value!.isEmpty) {
+                  return "Please enter ${question.questionTitle}";
+                }
+                return null;
+              },
+            ),
+            LabelTextInputField(
+              onChanged: (newvalue) {
+                notify.add({"id": 54, "item": newvalue.trim()});
+              },
+              inputController: localitycontroller,
+              isMandatory: true,
+              labelText: "Locality",
+              validator: (value) {
+                if (!isChecked && value!.isEmpty) {
+                  return "Please enter ${question.questionTitle}";
+                }
+                return null;
+              },
+            ),
+            LabelTextInputField(
+              onChanged: (newvalue) {
+                notify.add({"id": 28, "item": newvalue.trim()});
+              },
+              inputController: address1controller,
+              isMandatory: true,
+              labelText: "Address1",
+              validator: (value) {
+                if (!isChecked && value!.isEmpty) {
+                  return "Please enter ${question.questionTitle}";
+                }
+                return null;
+              },
+            ),
+            LabelTextInputField(
+              onChanged: (newvalue) {
+                notify.add({"id": 29, "item": newvalue.trim()});
+              },
+              inputController: address2controller,
+              isMandatory: true,
+              labelText: "Address2",
+              validator: (value) {
+                if (!isChecked && value!.isEmpty) {
+                  return "Please enter ${question.questionTitle}";
+                }
+                return null;
+              },
+            ),
+          ],
+        );
+      });
+    }
     return StatefulBuilder(
       builder: (context, setState) {
         final isPriceField = question.questionId == 46 || question.questionId == 48 || question.questionId == 50;
-        final isDigitsOnly = question.questionTitle.contains('Mobile') || question.questionTitle.contains('Property Area');
-        final isvalidationtrue =
-            question.questionTitle.contains('First') || question.questionTitle.contains('Mobile') || question.questionTitle == 'Rent' || question.questionTitle == 'Listing Price';
+        final isDigitsOnly = question.questionTitle.contains('Mobile') || question.questionTitle.contains('Property Area') || question.questionId == 22;
+        final isvalidationtrue = question.questionTitle.contains('First') ||
+            question.questionTitle.contains('Mobile') ||
+            question.questionTitle == 'Rent' ||
+            question.questionTitle == 'Listing Price' ||
+            question.questionTitle.contains('Property Area');
 
         final isEmail = question.questionTitle.contains("Email");
         return Column(
@@ -282,8 +486,11 @@ Widget buildLeadQuestions(
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
-    if (!isEdit && question.questionTitle.contains("Bedroom")) {
+    if (selectedValues.isNotEmpty && question.questionTitle.contains("Bedroom") && !selectedValues.any((element) => element["id"] == 14)) {
       defaultValue = "1";
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        notify.add({"id": 14, "item": defaultValue});
+      });
     }
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 7),
@@ -297,12 +504,20 @@ Widget buildLeadQuestions(
       ),
     );
   } else if (question.questionOptionType == 'map') {
+    // List? defaultValue;
+
+    // if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+    //   defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
+    // }
     final state = getDataById(selectedValues, 26);
     final city = getDataById(selectedValues, 27);
     final address1 = getDataById(selectedValues, 28);
     final address2 = getDataById(selectedValues, 29);
     final locality = getDataById(selectedValues, 54);
+
     return CustomGoogleMap(
+        isEdit: isEdit,
+        selectedValues: selectedValues,
         onLatLngSelected: (latLng) {
           notify.add({
             "id": question.questionId,

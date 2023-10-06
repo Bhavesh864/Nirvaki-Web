@@ -1,6 +1,8 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 
@@ -8,13 +10,43 @@ import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../questionaries/google_maps.dart';
 
-class MapViewWidget extends StatelessWidget {
+class MapViewWidget extends StatefulWidget {
+  final LatLng latLng;
   final String state;
   final String city;
   final String? addressline1;
   final String? addressline2;
   final String locality;
-  const MapViewWidget({super.key, required this.state, required this.city, required this.addressline1, required this.addressline2, required this.locality});
+
+  const MapViewWidget({
+    Key? key,
+    required this.latLng,
+    required this.state,
+    required this.city,
+    required this.addressline1,
+    required this.addressline2,
+    required this.locality,
+  }) : super(key: key);
+
+  @override
+  State<MapViewWidget> createState() => _MapViewWidgetState();
+}
+
+class _MapViewWidgetState extends State<MapViewWidget> {
+  void openFullScreenMap() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => CustomGoogleMap(
+          onLatLngSelected: (k) {},
+          latLng: widget.latLng,
+          // stateName: widget.state,
+          // cityName: widget.city,
+          // isReadOnly: true,
+          // locality: widget.locality,
+        ),
+      ),
+    );
+  }
 
   String getGoogleMapsLink(LatLng latLng) {
     String link = 'https://www.google.com/maps/search/?api=1&query=${latLng.latitude},${latLng.longitude}';
@@ -40,6 +72,7 @@ class MapViewWidget extends StatelessWidget {
                 width: 10,
               ),
               CustomChip(
+                paddingVertical: 6,
                 onPressed: () {
                   Clipboard.setData(ClipboardData(text: googleMapsLink)).then((_) {
                     customSnackBar(context: context, text: "Google link copied to clipboard");
@@ -50,13 +83,27 @@ class MapViewWidget extends StatelessWidget {
                 ),
                 paddingHorizontal: 3,
               ),
+              const SizedBox(
+                width: 4,
+              ),
+              Tooltip(
+                message: 'Open Full-Screen Map',
+                child: InkWell(
+                  onTap: openFullScreenMap,
+                  child: const Icon(
+                    Icons.fullscreen,
+                    size: 25,
+                  ),
+                ),
+              )
             ],
           ),
         ),
         CustomText(
           softWrap: true,
-          // '${addressline1 ?? ''} ${addressline2 ?? ""} $locality, $city, $state',
-          title: !AppConst.getPublicView() ? '${addressline1 ?? ''}, ${addressline2 ?? ""}, $locality, $city, $state' : "$locality, $city, $state",
+          title: !AppConst.getPublicView()
+              ? '${widget.addressline1 ?? ''} ${widget.addressline2 ?? ""} ${widget.locality}, ${widget.city}, ${widget.state}'
+              : "${widget.locality}, ${widget.city}, ${widget.state}",
           size: 12,
           color: Colors.grey,
         ),
@@ -70,11 +117,12 @@ class MapViewWidget extends StatelessWidget {
             onLatLngSelected: (latLng) {
               googleMapsLink = getGoogleMapsLink(latLng);
             },
-            stateName: state,
-            cityName: city,
-            address1: addressline1 ?? '',
-            address2: addressline2 ?? 'wtp',
-            locality: locality,
+            latLng: LatLng(widget.latLng.latitude, widget.latLng.longitude),
+            // stateName: widget.state,
+            // cityName: widget.city,
+            // address1: widget.addressline1 ?? '',
+            // address2: widget.addressline2 ?? 'wtp',
+            // locality: widget.locality,
           ),
         ),
       ],

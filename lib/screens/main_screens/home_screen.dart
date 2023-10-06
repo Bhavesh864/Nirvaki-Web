@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
@@ -14,7 +16,9 @@ import 'package:yes_broker/widgets/timeline_view.dart';
 import 'package:yes_broker/widgets/workitems/empty_work_item_list.dart';
 import 'package:yes_broker/widgets/workitems/workitems_list.dart';
 
+import '../../chat/controller/chat_controller.dart';
 import '../../constants/app_constant.dart';
+import '../../constants/firebase/questionModels/inventory_question.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/filterdataAccordingRole/data_according_role.dart';
 import '../../riverpodstate/user_data.dart';
@@ -37,19 +41,24 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    getUserData();
+    if (kIsWeb) {
+      print('aksjdflkasdjflk --------${AppConst.getAccessToken()}');
+      ref.read(chatControllerProvider).setUserState(true);
+    }
+    // getUserData();
     setCardDetails();
+    // setData();
   }
 
   void setCardDetails() {
     cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
   }
 
-  getUserData() async {
-    final User? user = await User.getUser(AppConst.getAccessToken());
-    ref.read(userDataProvider.notifier).storeUserData(user!);
-    AppConst.setRole(user.role);
-  }
+  // getUserData() async {
+  //   final User? user = await User.getUser(AppConst.getAccessToken());
+  //   ref.read(userDataProvider.notifier).storeUserData(user!);
+  //   AppConst.setRole(user.role);
+  // }
 
   showChatDialog() {
     showDialog(
@@ -66,6 +75,11 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
       userList = user;
       setState(() {});
     }
+  }
+
+  void setData() async {
+    
+
   }
 
   @override
@@ -93,11 +107,13 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                 .where((item) => item.cardType != "IN" && item.cardType != "LD" && item.status != "Closed")
                 .toList();
 
-            todoItems.sort((a, b) {
-              final DateTime dueDateA = DateTime.parse("20${a.duedate!.replaceAll('-', '')}");
-              final DateTime dueDateB = DateTime.parse("20${b.duedate!.replaceAll('-', '')}");
-              return dueDateA.compareTo(dueDateB);
-            });
+            int compareDueDates(CardDetails a, CardDetails b) {
+              DateTime aDueDate = DateFormat('dd-MM-yy').parse(a.duedate!);
+              DateTime bDueDate = DateFormat('dd-MM-yy').parse(b.duedate!);
+              return aDueDate.compareTo(bDueDate);
+            }
+
+            todoItems.sort(compareDueDates);
 
             final List<CardDetails> workItems =
                 filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
@@ -224,6 +240,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                           if (badgeCount > 0)
                             Positioned(
                               top: -5,
+                              left: 0,
                               child: Container(
                                 padding: const EdgeInsets.all(7),
                                 decoration: const BoxDecoration(
