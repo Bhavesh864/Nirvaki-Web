@@ -15,9 +15,12 @@ import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/screens/account_screens/profile_screen.dart';
 
 import '../../Customs/custom_fields.dart';
+import '../../Customs/label_text_field.dart';
 import '../../Customs/responsive.dart';
+import '../../Customs/snackbar.dart';
 import '../../Customs/text_utility.dart';
 import '../../constants/utils/colors.dart';
+import '../../pages/Auth/signup/company_details.dart';
 import '../../pages/Auth/signup/country_code_modal.dart';
 
 class OrganisationScreen extends ConsumerStatefulWidget {
@@ -130,10 +133,13 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController whatsappPhoneController = TextEditingController();
 
+  final TextEditingController searchController = TextEditingController();
   final TextEditingController address1Controller = TextEditingController();
   final TextEditingController address2Controller = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController stateController = TextEditingController();
+  List placesList = [];
+
   File? profilePhoto;
   Uint8List? webProfile;
   ValueNotifier<String> uploadProfile = ValueNotifier<String>('');
@@ -263,6 +269,15 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
         });
       },
     );
+  }
+
+  void onChange(String value) {
+    getPlaces(value).then((places) {
+      final descriptions = places.predictions?.map((prediction) => prediction.description) ?? [];
+      setState(() {
+        placesList = descriptions.toList();
+      });
+    });
   }
 
   @override
@@ -495,6 +510,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                           text: "cancel",
                           borderColor: AppColor.primary,
                           onPressed: () {
+                            searchController.text = "";
                             cancelEditingPersonalDetails();
                             cancelEditingAddressDetail();
                           },
@@ -507,6 +523,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                           borderColor: AppColor.primary,
                           height: 39,
                           onPressed: () {
+                            searchController.text = "";
                             if (widget.isPersonalDetails) {
                               updateBrokerInfo(
                                       brokerId: broker.brokerid,
@@ -590,6 +607,87 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                   ),
                 ),
               ] else ...[
+                if (isAddressEditing) ...[
+                  serachLocationInfoFields(
+                    'Search your Location',
+                    "",
+                    isAddressEditing,
+                    searchController,
+                    context,
+                    onChange,
+                  ),
+                  if (placesList.isNotEmpty)
+                    Container(
+                      height: 200,
+                      decoration: BoxDecoration(border: Border.all(color: Colors.grey, width: 0.8), borderRadius: BorderRadius.circular(8)),
+                      margin: const EdgeInsets.symmetric(horizontal: 7),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: placesList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(
+                            title: AppText(
+                              fontsize: 13,
+                              text: placesList[index],
+                              textColor: Colors.black,
+                            ),
+                            onTap: () {
+                              final str = placesList[index];
+                              searchController.text = str;
+
+                              try {
+                                List<String> words = str.split(' ');
+                                if (words.length > 3) {
+                                  String lastThreeWords = words.contains("India") ? words.sublist(words.length - 3).join(' ') : words.sublist(words.length - 2).join(' ');
+                                  String remainingWords = words.contains("India") ? words.sublist(0, words.length - 3).join(' ') : words.sublist(0, words.length - 2).join(' ');
+                                  if (remainingWords.endsWith(',')) {
+                                    remainingWords = remainingWords.replaceFirst(RegExp(r',\s*$'), '');
+                                  }
+                                  if (lastThreeWords.endsWith(',')) {
+                                    lastThreeWords = lastThreeWords.replaceFirst(RegExp(r',\s*$'), '');
+                                  }
+                                  List<String> lastThreeWordsList = lastThreeWords.split(' ');
+                                  if (lastThreeWordsList.isNotEmpty) {
+                                    if (lastThreeWordsList.contains('India')) {
+                                      lastThreeWordsList.removeLast();
+                                    }
+                                    lastThreeWords = lastThreeWordsList.join(' ');
+                                  }
+                                  if (lastThreeWords.endsWith(',')) {
+                                    lastThreeWords = lastThreeWords.replaceFirst(RegExp(r',\s*$'), '');
+                                  }
+                                  address1Controller.text = remainingWords;
+                                  address2Controller.text = lastThreeWords;
+                                  final cityName = lastThreeWordsList[0].endsWith(',') ? lastThreeWordsList[0].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[0];
+                                  final stateName = lastThreeWordsList[1].endsWith(',') ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[1];
+                                  cityController.text = cityName;
+                                  stateController.text = stateName;
+                                  setState(() {
+                                    placesList = [];
+                                  });
+                                } else {
+                                  setState(() {
+                                    placesList = [];
+                                  });
+                                  address1Controller.text = "";
+                                  address2Controller.text = "";
+                                  customSnackBar(context: context, text: 'Choose a proper address');
+                                }
+                              } catch (e) {
+                                setState(() {
+                                  placesList = [];
+                                  address1Controller.text = "";
+                                  address2Controller.text = "";
+                                });
+                                address1Controller.text = "";
+                                address2Controller.text = "";
+                              }
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                ],
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
                   child: Table(
