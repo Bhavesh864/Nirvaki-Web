@@ -458,6 +458,7 @@ class MobileNumberInputField extends StatefulWidget {
     required this.onChange,
     required this.controller,
     required this.hintText,
+    this.validator,
     this.fontsize = 16.0,
     this.bottomMargin = const EdgeInsets.only(bottom: 0),
   });
@@ -469,6 +470,7 @@ class MobileNumberInputField extends StatefulWidget {
   final TextEditingController controller;
   final void Function() openModal;
   final void Function(String) onChange;
+  final FormFieldValidator<String>? validator;
   @override
   State<MobileNumberInputField> createState() => _MobileNumberInputFieldState();
 }
@@ -513,6 +515,7 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
                 ),
                 controller: widget.controller,
                 keyboardType: TextInputType.phone,
+                validator: widget.validator,
                 decoration: InputDecoration(
                     hintText: widget.hintText,
                     counterText: "",

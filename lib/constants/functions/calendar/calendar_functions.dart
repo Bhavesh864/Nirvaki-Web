@@ -68,16 +68,15 @@ Future pickFromDateTime({
   required DateTime pickedDate,
   required bool pickDate,
   required BuildContext context,
-  required TextEditingController dateController,
+  required TextEditingController? dateController,
   required TextEditingController timeController,
 }) async {
   final date = await pickDateTime(pickedDate, pickDate: pickDate, context: context);
 
   if (pickDate) {
     pickedDate = date!;
-    dateController.text = toDate(date);
+    dateController!.text = toDate(date);
   } else {
-    // pickedTime = date!;
     timeController.text = toTime(date!);
   }
 }

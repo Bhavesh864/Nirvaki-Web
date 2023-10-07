@@ -386,7 +386,7 @@ Widget buildInventoryQuestions(
               validator: (value) => !isEdit ? validateForNormalFeild(value: value, props: "Search Location") : null,
               onChanged: (value) {
                 getPlaces(value).then((places) {
-                  final descriptions = places.data?.predictions?.map((prediction) => prediction.description) ?? [];
+                  final descriptions = places.predictions?.map((prediction) => prediction.description) ?? [];
                   setState(() {
                     placesList = descriptions.toList();
                   });
@@ -685,7 +685,6 @@ Widget buildInventoryQuestions(
     return CustomGoogleMap(
       isEdit: isEdit,
       selectedValues: selectedValues,
-      seletedLatLng: defaultValue,
       onLatLngSelected: (latLng) {
         notify.add({
           "id": question.questionId,

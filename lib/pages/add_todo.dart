@@ -47,13 +47,15 @@ class _AddTodoState extends ConsumerState<AddTodo> {
 
   nextQuestion({List<Screen>? screensDataList, option}) {
     if (currentScreenIndex < screensDataList!.length - 1) {
-      setState(() {
-        currentScreenIndex++;
-        pageController!.nextPage(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-      });
+      setState(
+        () {
+          currentScreenIndex++;
+          pageController!.nextPage(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        },
+      );
     } else {}
   }
 

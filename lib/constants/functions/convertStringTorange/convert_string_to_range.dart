@@ -10,11 +10,11 @@ double convertFormattedStringToNumber(String formattedString) {
   String cleanedString = formattedString.replaceAll('₹', '').replaceAll(',', '').replaceAll(' ', '');
 
   double multiplier = 1.0;
-  if (cleanedString.contains('Lakhs')) {
-    cleanedString = cleanedString.replaceAll('Lakhs', '');
+  if (cleanedString.contains('L')) {
+    cleanedString = cleanedString.replaceAll('L', '');
     multiplier = 100000;
-  } else if (cleanedString.contains('Crores')) {
-    cleanedString = cleanedString.replaceAll('Crores', '');
+  } else if (cleanedString.contains('Cr')) {
+    cleanedString = cleanedString.replaceAll('Cr', '');
     multiplier = 10000000;
   }
   double numericValue = double.tryParse(cleanedString) ?? 0.0;

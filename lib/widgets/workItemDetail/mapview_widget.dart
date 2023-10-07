@@ -34,10 +34,12 @@ class MapViewWidget extends StatefulWidget {
 
 class _MapViewWidgetState extends State<MapViewWidget> {
   void openFullScreenMap() {
+    print(widget.latLng);
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => CustomGoogleMap(
           onLatLngSelected: (k) {},
+          isReadOnly: true,
           latLng: widget.latLng,
           // stateName: widget.state,
           // cityName: widget.city,
