@@ -1,6 +1,6 @@
 // ignore: file_names
 
-// import 'dart:html';
+import 'dart:html';
 
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +15,7 @@ import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
+import '../../Customs/snackbar.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
@@ -30,10 +31,10 @@ Future<void> shareUrl(BuildContext context, {String textToCombine = ''}) async {
     final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
     print(location);
 
-    // final currentUrl = window.location.href;
-    // Clipboard.setData(ClipboardData(text: currentUrl + textToCombine)).then((_) {
-    //   customSnackBar(context: context, text: 'URL copied to clipboard');
-    // });
+    final currentUrl = window.location.href;
+    Clipboard.setData(ClipboardData(text: currentUrl + textToCombine)).then((_) {
+      customSnackBar(context: context, text: 'URL copied to clipboard');
+    });
   } catch (e) {
     print('Error sharing URL: $e');
   }
@@ -64,9 +65,9 @@ class InventoryDetailsHeader extends ConsumerWidget {
 
   Future<void> shareUrl(BuildContext context) async {
     try {
-      // final currentUrl = window.location.href;
-      // await Clipboard.setData(ClipboardData(text: currentUrl));
-      // customSnackBar(context: context, text: 'URL copied to clipboard');
+      final currentUrl = window.location.href;
+      await Clipboard.setData(ClipboardData(text: currentUrl));
+      customSnackBar(context: context, text: 'URL copied to clipboard');
     } catch (e) {
       print('Error sharing URL: $e');
     }
