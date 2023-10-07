@@ -112,6 +112,7 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
                               (e) => Padding(
                                 padding: const EdgeInsets.only(right: 8, top: 8),
                                 child: CustomChip(
+                                  paddingVertical: 6,
                                   onPressed: () {
                                     if (filterOptions.roomConfigurations.contains(e)) {
                                       filterOptions.roomConfigurations.remove(e);

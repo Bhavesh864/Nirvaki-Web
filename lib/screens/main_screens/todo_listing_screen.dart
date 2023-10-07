@@ -83,7 +83,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
               getDetails(user);
               isUserLoaded = true;
             }
-            // final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, setState: setState);
+
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
             final List<CardDetails> todoItemsList =
                 filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
@@ -101,10 +101,11 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                 return true;
               } else {
                 final searchText = searchController.text.toLowerCase();
-                final fullName = "${item.customerinfo!.firstname} ${item.customerinfo!.lastname}".toLowerCase();
+                final fullName = "${item.customerinfo?.firstname} ${item.customerinfo?.lastname}".toLowerCase();
                 final title = item.cardTitle!.toLowerCase();
-                final mobileNumber = item.customerinfo!.mobile!.toLowerCase();
+                final mobileNumber = '${item.customerinfo?.mobile?.toLowerCase()}';
                 return fullName.contains(searchText) || title.contains(searchText) || mobileNumber.contains(searchText);
+                // return title.contains(searchText);
               }
             }).toList();
 
@@ -141,7 +142,9 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                         children: [
                           TopSerachBar(
                             onChanged: (value) {
-                              setState(() {});
+                              setState(() {
+                                // searchController.text = value;
+                              });
                             },
                             onToggleShowTable: () {
                               setState(() {

@@ -26,6 +26,7 @@ class LabelTextInputField extends StatelessWidget {
   final bool readyOnly;
   final bool isPhoneNumberField;
   final FutureOr<String?> Function(PhoneNumber?)? phonenumberValidator;
+
   const LabelTextInputField({
     Key? key,
     required this.labelText,
@@ -41,8 +42,8 @@ class LabelTextInputField extends StatelessWidget {
     this.validator,
     this.initialvalue,
     this.onlyDigits = false,
-    this.isPhoneNumberField = false,
     this.readyOnly = false,
+    this.isPhoneNumberField = false,
     this.phonenumberValidator,
   }) : super(key: key);
 
