@@ -44,6 +44,8 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
               currentIndex = 3;
             } else if (path.contains('/calendar')) {
               currentIndex = 4;
+            } else if (path.contains('/profile')) {
+              currentIndex = 5;
             } else {
               currentIndex = 0;
             }
@@ -97,7 +99,12 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                       if (profile.id == 2) {
                         ref.read(addMemberScreenStateProvider.notifier).setAddMemberScreenState(false);
                       }
-                      context.beamToNamed('/profile');
+                      setState(
+                        () {
+                          beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[7].nav);
+                        },
+                      );
+                      // context.beamToNamed('/profile');
                     } else if (selectedVal == "Logout") {
                       customConfirmationAlertDialog(context, () {
                         userLogout(ref, context);

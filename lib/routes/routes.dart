@@ -91,12 +91,7 @@ List<MenuItem> sideBarItems = [
     iconData: calendarIcon,
     screen: const CalendarScreen(),
   ),
-  // MenuItem(
-  //   label: profilePageLabel,
-  //   screen: CommonScreen(
-  //     outerContext: context,
-  //   ),
-  // ),
+
   MenuItem(
     nav: '/inventorydetails',
     label: inventoryDetailsLabel,
@@ -106,6 +101,11 @@ List<MenuItem> sideBarItems = [
     nav: '/lead-details',
     label: profilePageLabel,
     screen: const LeadDetailsScreen(),
+  ),
+  MenuItem(
+    nav: '/profile',
+    label: profilePageLabel,
+    screen: const CommonScreen(),
   ),
 ];
 
@@ -199,7 +199,7 @@ final routerDelegate = BeamerDelegate(
   locationBuilder: RoutesLocationBuilder(
     routes: {
       '/': (p0, p1, p2) => const LayoutView(),
-      '/profile': (p0, p1, p2) => const LargeScreen(),
+      // '/profile': (p0, p1, p2) => const LargeScreen(),
       AppRoutes.addInventory: (p0, p1, data) => const AddInventory(),
       AppRoutes.addLead: (p0, p1, p2) => const AddLead(),
       AppRoutes.addTodo: (p0, p1, p2) => const AddTodo(),
