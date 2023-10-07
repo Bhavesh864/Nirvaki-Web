@@ -18,7 +18,6 @@ import '../../../Customs/custom_fields.dart';
 import '../../../Customs/dropdown_field.dart';
 import '../../../constants/utils/constants.dart';
 import '../../../constants/utils/image_constants.dart';
-import '../../../routes/routes.dart';
 import '../../../widgets/auth/details_header.dart';
 import 'package:http/http.dart' as http;
 
@@ -335,10 +334,12 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                                 address2controller.text = lastThreeWords;
                                                 notify.add({"id": 10, "item": remainingWords});
                                                 notify.add({"id": 15, "item": lastThreeWords});
-                                                final cityName =
-                                                    lastThreeWordsList[0].endsWith(',') ? lastThreeWordsList[0].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[0];
-                                                final stateName =
-                                                    lastThreeWordsList[1].endsWith(',') ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[1];
+                                                final cityName = lastThreeWordsList[0].endsWith(',')
+                                                    ? lastThreeWordsList[0].replaceFirst(RegExp(r',\s*$'), '')
+                                                    : lastThreeWordsList[0];
+                                                final stateName = lastThreeWordsList[1].endsWith(',')
+                                                    ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '')
+                                                    : lastThreeWordsList[1];
                                                 notify.add({"id": 12, "item": cityName});
                                                 notify.add({"id": 11, "item": stateName});
                                                 setState(() {

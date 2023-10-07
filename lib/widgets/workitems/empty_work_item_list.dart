@@ -87,11 +87,11 @@ class EmptyWorkItemList extends StatelessWidget {
                   textColor: Colors.black,
                 ),
                 Container(
+                  alignment: Alignment.center,
                   width: 500,
                   margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                   child: const AppText(
-                    text:
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ...Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ...',
+                    text: 'Start creating your first Inventory, Lead or To Do...',
                     fontsize: 15,
                     fontWeight: FontWeight.w400,
                     textColor: Color(0xFF797979),
