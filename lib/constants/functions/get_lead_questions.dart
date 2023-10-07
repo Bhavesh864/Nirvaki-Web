@@ -33,6 +33,10 @@ Widget buildLeadQuestions(
   bool isEdit,
   bool isPlotSelected,
   List<Map<String, dynamic>> selectedValues,
+  bool isMobileNoEmpty,
+  bool iswhatsappMobileNoEmpty,
+  bool isChecked,
+  Function(bool) isCheckedUpdate,
 ) {
   if (question.questionOptionType == 'chip') {
     return Column(
@@ -187,11 +191,9 @@ Widget buildLeadQuestions(
 
     final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
     TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
-
-    bool isChecked = true;
     String mobileCountryCode = '+91';
     String whatsappCountryCode = '+91';
-    bool isMobileNoEmpty = false;
+
     if (question.questionTitle == 'Mobile' && value.isNotEmpty) {
       List<String> splitString = value[0]["item"].split(' ');
       if (splitString.length == 2) {
@@ -200,7 +202,6 @@ Widget buildLeadQuestions(
       }
     }
     if (question.questionTitle == 'Whatsapp Number' && value.isNotEmpty) {
-      isChecked = false;
       List<String> splitString = value[0]["item"].split(' ');
       if (splitString.length == 2) {
         whatsappCountryCode = splitString[0];
@@ -273,6 +274,18 @@ Widget buildLeadQuestions(
                 notify.add({"id": question.questionId, "item": "$mobileCountryCode ${value.trim()}"});
               },
             ),
+            if (isMobileNoEmpty)
+              const Padding(
+                padding: EdgeInsets.only(left: 15.0, bottom: 5),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: AppText(
+                    text: 'Please enter Mobile Number',
+                    textColor: Colors.red,
+                    fontsize: 12,
+                  ),
+                ),
+              ),
           ],
         );
       });
@@ -289,9 +302,7 @@ Widget buildLeadQuestions(
                   value: isChecked,
                   label: 'Use this as whatsapp number',
                   onChanged: (value) {
-                    setState(() {
-                      isChecked = value;
-                    });
+                    isCheckedUpdate(value);
                   },
                 ),
               if (!isChecked) ...[
@@ -323,7 +334,7 @@ Widget buildLeadQuestions(
                 MobileNumberInputField(
                   controller: controller,
                   hintText: 'Type here..',
-                  isEmpty: isMobileNoEmpty,
+                  isEmpty: iswhatsappMobileNoEmpty,
                   openModal: () {
                     openModal(context: context, setState: setState, forMobile: false);
                   },
@@ -332,6 +343,18 @@ Widget buildLeadQuestions(
                     notify.add({"id": question.questionId, "item": "$whatsappCountryCode ${value.trim()}"});
                   },
                 ),
+                if (!isChecked && iswhatsappMobileNoEmpty)
+                  const Padding(
+                    padding: EdgeInsets.only(left: 15.0, bottom: 5),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: AppText(
+                        text: 'Please enter Whatsapp Number',
+                        textColor: Colors.red,
+                        fontsize: 12,
+                      ),
+                    ),
+                  ),
               ],
             ],
           );

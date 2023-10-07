@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -38,6 +39,9 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   int currentScreenIndex = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<States> stateList = [];
+  bool isMobileNoEmpty = false;
+  bool iswhatsappMobileNoEmpty = false;
+  bool isChecked = true;
 
   String errorMessage = "";
   @override
@@ -78,6 +82,55 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
   }
 
   nextQuestion({List<Screen>? screensDataList, required String option}) {
+    if (currentScreenIndex == 3) {
+      final List<Map<String, dynamic>> selectedValues = ref.read(myArrayProvider);
+      final mobileNoValue = selectedValues.where((e) => e["id"] == 7).toList();
+      final whatsappNoValue = selectedValues.where((e) => e["id"] == 8).toList();
+
+      if (mobileNoValue.isEmpty) {
+        setState(() {
+          isMobileNoEmpty = true;
+        });
+        if (isChecked) {
+          return;
+        }
+      } else {
+        List<String> itemValue = mobileNoValue[0]["item"].split(' ');
+        if (itemValue[1] == "") {
+          setState(() {
+            isMobileNoEmpty = true;
+          });
+          return;
+        }
+        setState(() {
+          isMobileNoEmpty = false;
+        });
+      }
+
+      if (!isChecked) {
+        if (whatsappNoValue.isEmpty) {
+          setState(() {
+            iswhatsappMobileNoEmpty = true;
+          });
+          return;
+        } else {
+          List<String> itemValue = whatsappNoValue[0]["item"].split(' ');
+          if (itemValue[1] == "") {
+            setState(() {
+              iswhatsappMobileNoEmpty = true;
+            });
+            return;
+          }
+          setState(() {
+            iswhatsappMobileNoEmpty = false;
+          });
+        }
+      } else {
+        setState(() {
+          iswhatsappMobileNoEmpty = false;
+        });
+      }
+    }
     updateListInventory(ref, option);
     if (currentScreenIndex < screensDataList!.length - 1 && !allQuestionFinishes) {
       setState(() {
@@ -88,6 +141,12 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
         );
       });
     } else {}
+  }
+
+  void isCheckedUpdate(bool value) {
+    setState(() {
+      isChecked = value;
+    });
   }
 
   bool backButtonEnabled = true;
@@ -269,6 +328,10 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                                 isEdit,
                                                                 selectedValues,
                                                                 stateList,
+                                                                isMobileNoEmpty,
+                                                                iswhatsappMobileNoEmpty,
+                                                                isChecked,
+                                                                isCheckedUpdate,
                                                               ),
                                                               SizedBox(height: question.questionOptionType != 'textfield' ? 10 : 0),
                                                               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
