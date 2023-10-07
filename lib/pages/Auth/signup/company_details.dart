@@ -291,7 +291,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                 ),
                                 if (placesList.isNotEmpty)
                                   Container(
-                                    constraints: BoxConstraints(maxHeight: 200),
+                                    constraints: const BoxConstraints(maxHeight: 200),
                                     decoration: BoxDecoration(border: Border.all(color: Colors.grey, width: 0.8), borderRadius: BorderRadius.circular(8)),
                                     margin: const EdgeInsets.symmetric(horizontal: 7),
                                     child: ListView.builder(

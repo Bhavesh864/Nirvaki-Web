@@ -173,6 +173,8 @@ Widget buildInventoryQuestions(
     String mobileCountryCode = '+91';
     String whatsappCountryCode = '+91';
     bool isMobileNoEmpty = false;
+    bool iswhatsappMobileNoEmpty = false;
+
     if (question.questionTitle == 'Mobile' && value.isNotEmpty) {
       List<String> splitString = value[0]["item"].split(' ');
       if (splitString.length == 2) {
@@ -259,7 +261,7 @@ Widget buildInventoryQuestions(
                 MobileNumberInputField(
                   controller: controller,
                   hintText: 'Type here..',
-                  isEmpty: isMobileNoEmpty,
+                  isEmpty: iswhatsappMobileNoEmpty,
                   openModal: () {
                     openModal(context: context, setState: setState, forMobile: false);
                   },
