@@ -120,7 +120,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
       }
     });
 
-    if (widget.isEdit) {
+    if (widget.isEdit && widget.propertyphotos != null && widget.propertyphotos!.imageTitle!.isNotEmpty) {
       List list = [];
       selectedImagesTitleList.addAll(widget.propertyphotos!.imageTitle!);
       selectedImagesUrlList.addAll(widget.propertyphotos!.imageUrl!);

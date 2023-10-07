@@ -40,21 +40,19 @@ class MobileMemberCard extends ConsumerWidget {
                   ),
                   Row(
                     children: [
-                      user.role == UserRole.broker
-                          ? const SizedBox()
-                          : InkWell(
-                              onTap: () {
-                                showAddMemberAlertDailogBox(context);
-                                ref.read(editAddMemberState.notifier).isEdit(true);
-                                ref.read(userForEditScreen.notifier).setUserForEdit(user);
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.all(10),
-                                margin: const EdgeInsets.only(right: 5),
-                                decoration: BoxDecoration(color: AppColor.secondary, borderRadius: BorderRadius.circular(7)),
-                                child: const Icon(Icons.edit),
-                              ),
-                            ),
+                      InkWell(
+                        onTap: () {
+                          showAddMemberAlertDailogBox(context);
+                          ref.read(editAddMemberState.notifier).isEdit(true);
+                          ref.read(userForEditScreen.notifier).setUserForEdit(user);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          margin: const EdgeInsets.only(right: 5),
+                          decoration: BoxDecoration(color: AppColor.secondary, borderRadius: BorderRadius.circular(7)),
+                          child: const Icon(Icons.edit),
+                        ),
+                      ),
                       const SizedBox(width: 3),
                       const Text("200"),
                     ],
