@@ -8,8 +8,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:yes_broker/chat/controller/chat_controller.dart';
 
 import 'package:yes_broker/constants/app_constant.dart';
-import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
-import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
+
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/pages/Auth/login/login_screen.dart';
@@ -19,6 +18,8 @@ import 'package:yes_broker/riverpodstate/user_data.dart';
 
 import 'package:yes_broker/screens/main_screens/public_view_screen/public_inventory_details.dart';
 import 'package:yes_broker/screens/main_screens/public_view_screen/public_lead_details.dart';
+import 'constants/firebase/Hive/hive_methods.dart';
+import 'constants/firebase/userModel/broker_info.dart';
 import 'constants/firebase/userModel/user_info.dart' as userinfo;
 import 'constants/notification/app_notification.dart';
 
@@ -75,21 +76,6 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
-    // return StreamBuilder(
-    //   stream: authState,
-    //   builder: (context, snapshot) {
-    //     AppConst.setIsAuthenticated(snapshot.hasData ? true : false);
-
-    //     return Scaffold(
-    //       body: ScreenTypeLayout.builder(
-    //         breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
-    //         mobile: (p0) => _buildMobileLayout(snapshot.hasData),
-    //         tablet: (p0) => _buildTabletLayout(snapshot.hasData),
-    //         desktop: (p0) => _buildDesktopLayout(snapshot.hasData),
-    //       ),
-    //     );
-    //   },
-    // );
 
     return StreamBuilder(
       stream: authState,
@@ -178,6 +164,7 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
 
   Widget _buildDesktopLayout(bool isAuthenticated) {
     if (isAuthenticated) {
+      print(' ------==>>>Largescreen');
       return const LargeScreen();
     } else {
       final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;

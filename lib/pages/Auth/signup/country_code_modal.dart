@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 
@@ -17,8 +16,9 @@ class _CountryCodeModelState extends State<CountryCodeModel> {
 
   void filterCountries(String query) {
     setState(() {
-      filteredCountries =
-          countries.where((country) => country["name"]!.toLowerCase().contains(query.toLowerCase()) || country["dial_code"]!.toLowerCase().contains(query.toLowerCase())).toList();
+      filteredCountries = countries
+          .where((country) => country["name"]!.toLowerCase().contains(query.toLowerCase()) || country["dial_code"]!.toLowerCase().contains(query.toLowerCase()))
+          .toList();
     });
   }
 
