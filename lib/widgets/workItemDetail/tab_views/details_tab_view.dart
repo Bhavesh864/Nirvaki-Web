@@ -413,11 +413,12 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                     buildRoomsText(widget.data.roomconfig, false),
                     context,
                   ),
-                  buildInfoFields(
-                    'Additional Room',
-                    buildRoomsText(widget.data.roomconfig, true),
-                    context,
-                  ),
+                  if (widget.data.roomconfig?.additionalroom.length != 0)
+                    buildInfoFields(
+                      'Additional Room',
+                      buildRoomsText(widget.data.roomconfig, true),
+                      context,
+                    ),
                 ],
                 if (checkNotNUllItem(widget.data.propertyarea.superarea) && checkNotNUllItem(widget.data.propertyarea.unit))
                   buildInfoFields(
@@ -486,40 +487,45 @@ class _DetailsTabViewState extends State<DetailsTabView> {
               widget.data.amenities!.length + 1,
               (index) {
                 if (index == widget.data.amenities!.length) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8.0, top: 10),
-                    child: CustomChip(
-                      label: Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          const Text(
-                            'No. of Reserved Parking: ',
-                          ),
-                          const SizedBox(
-                            width: 3,
-                          ),
-                          Container(
-                            padding: const EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.grey.shade600,
+                  if (checkNotNUllItem(widget.data.reservedparking.covered)) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8.0, top: 10),
+                      child: CustomChip(
+                        paddingVertical: 3,
+                        label: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            const Text(
+                              'No. of Reserved Parking: ',
                             ),
-                            child: Text(
-                              '${widget.data.reservedparking.covered}',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 10,
+                            const SizedBox(
+                              width: 3,
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey.shade600,
+                              ),
+                              child: Text(
+                                '${widget.data.reservedparking.covered}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  }
+                  return const SizedBox();
                 } else {
                   return Padding(
                     padding: const EdgeInsets.only(right: 8.0, top: 10),
                     child: CustomChip(
+                      paddingVertical: 6,
                       label: Text(
                         widget.data.amenities![index],
                       ),
