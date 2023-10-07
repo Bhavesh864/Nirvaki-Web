@@ -751,25 +751,25 @@ Widget buildLeadQuestions(
         );
       }
     }
-    RangeValues areaRange = const RangeValues(0, 10);
-    double divisionValue = 5000;
+    RangeValues areaRange = const RangeValues(500, 10000);
+    double divisionValue = 50;
     return StatefulBuilder(
       builder: (context, setState) {
         return Column(
           children: [
             CustomText(
-              title: 'Area: ${formatValue(areaRange.start)} - ${formatValue(areaRange.end)}',
+              title: 'Area: ${formatValueforOnlyNumbers(areaRange.start)} - ${formatValueforOnlyNumbers(areaRange.end)}',
               size: 14,
             ),
             RangeSlider(
               values: areaRange,
-              min: 0,
-              max: 1000000,
+              min: 500,
+              max: 10000,
               labels: RangeLabels(
-                formatValue(areaRange.start),
-                formatValue(areaRange.end),
+                formatValueforOnlyNumbers(areaRange.start),
+                formatValueforOnlyNumbers(areaRange.end),
               ),
-              divisions: (100000000 - 1000) ~/ divisionValue,
+              divisions: (10000 - 500) ~/ divisionValue,
               onChanged: (RangeValues newVal) {
                 setState(() {
                   areaRange = newVal;
