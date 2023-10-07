@@ -18,6 +18,7 @@ import 'package:yes_broker/widgets/workitems/workitems_list.dart';
 
 import '../../chat/controller/chat_controller.dart';
 import '../../constants/app_constant.dart';
+import '../../constants/firebase/Hive/hive_methods.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/filterdataAccordingRole/data_according_role.dart';
 import '../../riverpodstate/user_data.dart';
@@ -40,24 +41,28 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    print("init");
+    final token = UserHiveMethods.getdata("token");
+    if (token != null) {
+      AppConst.setAccessToken(token);
+      getUserData(token);
+    }
+    setCardDetails();
     if (kIsWeb) {
-      print('aksjdflkasdjflk --------${AppConst.getAccessToken()}');
       ref.read(chatControllerProvider).setUserState(true);
     }
-    // getUserData();
-    setCardDetails();
-    // setData();
   }
 
   void setCardDetails() {
     cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
   }
 
-  // getUserData() async {
-  //   final User? user = await User.getUser(AppConst.getAccessToken());
-  //   ref.read(userDataProvider.notifier).storeUserData(user!);
-  //   AppConst.setRole(user.role);
-  // }
+  getUserData(token) async {
+    print("getdetaiils");
+    final User? user = await User.getUser(token);
+    ref.read(userDataProvider.notifier).storeUserData(user!);
+    AppConst.setRole(user.role);
+  }
 
   showChatDialog() {
     showDialog(

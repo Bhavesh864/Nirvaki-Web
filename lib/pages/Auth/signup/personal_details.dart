@@ -1,8 +1,8 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:yes_broker/customs/custom_fields.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/Customs/text_utility.dart';
 
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/riverpodstate/sign_up_state.dart';
@@ -12,8 +12,10 @@ import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/routes/routes.dart';
 
 import 'package:yes_broker/widgets/auth/details_header.dart';
+import '../../../Customs/custom_fields.dart';
 import '../../../constants/utils/constants.dart';
 import '../../../constants/utils/image_constants.dart';
+import 'country_code_modal.dart';
 
 class PersonalDetailsAuthScreen extends ConsumerStatefulWidget {
   const PersonalDetailsAuthScreen({super.key});
@@ -26,12 +28,45 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
   final TextEditingController lastnamecontroller = TextEditingController();
   final TextEditingController mobilenumbercontroller = TextEditingController();
   final TextEditingController whatsupnumbercontroller = TextEditingController();
+  String selectedCountryCode = '+91';
+  String whatsappCountryCode = '+91';
+  bool isMobileEmpty = false;
+  bool isWhatsEmpty = false;
 
   bool isChecked = true;
   final key = GlobalKey<FormState>();
   var isloading = false;
   void navigateTopage(SelectedSignupItems notify) {
     final isvalid = key.currentState?.validate();
+    if (mobilenumbercontroller.text == "") {
+      setState(() {
+        isMobileEmpty = true;
+      });
+      if (isChecked) {
+        return;
+      }
+    } else {
+      setState(() {
+        isMobileEmpty = false;
+      });
+    }
+
+    if (!isChecked) {
+      if (whatsupnumbercontroller.text == "") {
+        setState(() {
+          isWhatsEmpty = true;
+        });
+        return;
+      } else {
+        setState(() {
+          isWhatsEmpty = false;
+        });
+      }
+    } else {
+      setState(() {
+        isWhatsEmpty = false;
+      });
+    }
     if (isvalid!) {
       // if (Responsive.isMobile(context)) {
       //   Navigator.pushNamed(context, AppRoutes.companyDetailsScreen);
@@ -39,6 +74,30 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
       context.beamToNamed(AppRoutes.companyDetailsScreen);
       // }
     }
+  }
+
+  void openModal({bool? forMobile = true}) {
+    final notify = ref.read(selectedItemForsignup.notifier);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return CountryCodeModel(onCountrySelected: (data) {
+          if (data.isNotEmpty) {
+            if (forMobile == true) {
+              setState(() {
+                selectedCountryCode = data;
+              });
+              notify.add({"id": 5, "item": "$data ${mobilenumbercontroller.text}"});
+            } else {
+              setState(() {
+                whatsappCountryCode = data;
+              });
+              notify.add({"id": 6, "item": "$data ${whatsupnumbercontroller.text}"});
+            }
+          }
+        });
+      },
+    );
   }
 
   @override
@@ -106,36 +165,80 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
                                 notify.add({"id": 4, "item": value.trim()});
                               },
                             ),
-                            CustomTextInput(
-                              onlyDigits: true,
-                              labelText: 'Mobile',
+                            // CustomTextInput(
+                            //   onlyDigits: true,
+                            //   labelText: 'Mobile',
+                            //   controller: mobilenumbercontroller,
+                            //   validator: (value) => validateForMobileNumberFeild(value: value, props: "Mobile Number"),
+                            //   onChanged: (value) {
+                            //     notify.add({"id": 5, "item": value.trim()});
+                            //   },
+                            //   leftIcon: Icons.abc_sharp,
+                            // ),
+                            MobileNumberInputField(
                               controller: mobilenumbercontroller,
-                              validator: (value) => validateForMobileNumberFeild(value: value, props: "Mobile Number"),
-                              onChanged: (value) {
-                                notify.add({"id": 5, "item": value.trim()});
+                              hintText: 'Mobile Number',
+                              isEmpty: isMobileEmpty,
+                              openModal: openModal,
+                              countryCode: selectedCountryCode,
+                              onChange: (value) {
+                                notify.add({"id": 5, "item": "$selectedCountryCode ${value.trim()}"});
                               },
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: CustomCheckbox(
-                                value: isChecked,
-                                label: 'Use this as whatsapp number',
-                                onChanged: (value) {
-                                  setState(() {
-                                    isChecked = value;
-                                  });
-                                },
+                            if (isMobileEmpty)
+                              const Padding(
+                                padding: EdgeInsets.only(left: 15.0),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: AppText(
+                                    text: 'Please enter Mobile Number',
+                                    textColor: Colors.red,
+                                    fontsize: 12,
+                                  ),
+                                ),
                               ),
+                            CustomCheckbox(
+                              value: isChecked,
+                              label: 'Use this as whatsapp number',
+                              onChanged: (value) {
+                                setState(() {
+                                  isChecked = value;
+                                });
+                              },
                             ),
                             if (!isChecked)
-                              CustomTextInput(
-                                labelText: 'Whatsapp Number',
+                              MobileNumberInputField(
                                 controller: whatsupnumbercontroller,
-                                validator: !isChecked ? (value) => validateForMobileNumberFeild(value: value, props: "Whatsapp Number") : null,
-                                onChanged: (value) {
-                                  notify.add({"id": 6, "item": value.trim()});
+                                hintText: 'Whatsapp Number',
+                                isEmpty: isWhatsEmpty,
+                                openModal: () {
+                                  openModal(forMobile: false);
+                                },
+                                countryCode: whatsappCountryCode,
+                                onChange: (value) {
+                                  notify.add({"id": 6, "item": "$whatsappCountryCode ${value.trim()}"});
                                 },
                               ),
+                            if (!isChecked && isWhatsEmpty)
+                              const Padding(
+                                padding: EdgeInsets.only(left: 15.0),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: AppText(
+                                    text: 'Please enter Whatsapp Number',
+                                    textColor: Colors.red,
+                                    fontsize: 12,
+                                  ),
+                                ),
+                              ),
+                            // CustomTextInput(
+                            //   labelText: 'Whatsapp Number',
+                            //   controller: whatsupnumbercontroller,
+                            //   validator: !isChecked ? (value) => validateForMobileNumberFeild(value: value, props: "Whatsapp Number") : null,
+                            //   onChanged: (value) {
+                            //     notify.add({"id": 6, "item": value.trim()});
+                            //   },
+                            // ),
                             Container(
                               margin: const EdgeInsets.only(top: 10, bottom: 10),
                               alignment: Alignment.centerRight,
