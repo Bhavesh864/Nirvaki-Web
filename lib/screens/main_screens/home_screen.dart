@@ -42,6 +42,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    print("init");
     final token = UserHiveMethods.getdata("token");
     if (token != null) {
       AppConst.setAccessToken(token);
@@ -58,6 +59,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   getUserData(token) async {
+    print("getdetaiils");
     final User? user = await User.getUser(token);
     ref.read(userDataProvider.notifier).storeUserData(user!);
     AppConst.setRole(user.role);
