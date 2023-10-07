@@ -606,6 +606,52 @@ Widget mobileInfoFields(String fieldName, String fieldDetail, bool isEditing, Te
   );
 }
 
+Widget serachLocationInfoFields(
+  String fieldName,
+  String fieldDetail,
+  bool isEditing,
+  TextEditingController textController,
+  BuildContext context,
+  Function(String) onChange,
+) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        fieldName,
+        style: const TextStyle(
+          fontSize: 14,
+          color: Color(0xFF818181),
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      if (isEditing) ...[
+        SizedBox(
+          height: 50,
+          width: Responsive.isDesktop(context) ? 300 : 335,
+          child: CustomTextInput(
+            hintText: "Type here...",
+            controller: textController,
+            onFieldSubmitted: (newValue) {},
+            onChanged: (p) {
+              onChange(p);
+            },
+          ),
+        ),
+      ] else ...[
+        const SizedBox(height: 3),
+        Text(
+          fieldDetail,
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ]
+    ],
+  );
+}
+
 Future<String> uploadImageToFirebases(imageUrl) async {
   final uniqueKey = DateTime.now().microsecondsSinceEpoch.toString();
   Reference referenceRoot = FirebaseStorage.instance.ref();
