@@ -177,12 +177,12 @@ Widget buildInventoryQuestions(
     // if (question.questionId == 27) {
     //   controller.text = selectedValues.isNotEmpty ? selectedValues.firstWhere((element) => element["id"] == 27)["item"] : "";
     // }
-    if (question.questionTitle == 'Whatsapp Number') {
+    if (question.questionId == 8) {
       return StatefulBuilder(
         builder: (context, setState) {
           return Column(
             children: [
-              if (question.questionTitle == 'Whatsapp Number')
+              if (question.questionId == 8)
                 CustomCheckbox(
                   value: isChecked,
                   label: 'Use this as whatsapp number',
@@ -410,6 +410,8 @@ Widget buildInventoryQuestions(
     return StatefulBuilder(
       builder: (context, setState) {
         final isPriceField = question.questionId == 46 || question.questionId == 48 || question.questionId == 50;
+        final isVideoField = question.questionId == 34;
+
         final isDigitsOnly = question.questionTitle.contains('Mobile') ||
             question.questionTitle == 'Rent' ||
             question.questionTitle == 'Listing Price' ||
@@ -458,8 +460,25 @@ Widget buildInventoryQuestions(
                         }
                       : null,
             ),
+            isVideoField
+                ? Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 7),
+                    child: AppText(
+                      text: '(Enter youtube link of the video)',
+                      textColor: Colors.grey.shade500,
+                      fontsize: 14,
+                    ),
+                  )
+                : const SizedBox.shrink(),
             isPriceField
-                ? Container(margin: const EdgeInsets.all(7), child: AppText(text: textResult.toUpperCase(), textColor: AppColor.grey, fontsize: 16))
+                ? Container(
+                    margin: const EdgeInsets.all(7),
+                    child: AppText(
+                      text: textResult.toUpperCase(),
+                      textColor: AppColor.grey,
+                      fontsize: 16,
+                    ),
+                  )
                 : const SizedBox.shrink(),
           ],
         );

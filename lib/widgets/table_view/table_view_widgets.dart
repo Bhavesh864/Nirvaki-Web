@@ -8,6 +8,7 @@ import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
 import '../../constants/firebase/detailsModels/lead_details.dart';
 import '../../constants/firebase/detailsModels/todo_details.dart';
+import '../../constants/functions/make_call_function.dart';
 import '../../constants/functions/navigation/navigation_functions.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
@@ -100,7 +101,6 @@ TableRow buildWorkItemRowTile(
             checkNotNUllItem(cardItem.roomconfig?.bedroom)
                 ? CustomChip2(
                     label: CustomText(
-                      // title: "${cardItem.roomconfig?.bedroom}BHK+${cardItem.roomconfig?.additionalroom?[0] ?? ""}",
                       title: buildBedroomText(cardItem.roomconfig),
                       size: 10,
                     ),
@@ -190,17 +190,22 @@ TableRow buildWorkItemRowTile(
                 ),
               ),
             ),
-            const CustomChip2(
-              label: Icon(
+            CustomChip2(
+              onPressed: () => makePhoneCall(cardItem.customerinfo!.mobile!),
+              label: const Icon(
                 Icons.call_outlined,
               ),
               paddingHorizontal: 3,
             ),
-            const CustomChip2(
-              label: FaIcon(
-                FontAwesomeIcons.whatsapp,
+            InkWell(
+              onTap: () {},
+              child: CustomChip2(
+                onPressed: () => launchWhatsapp(cardItem.customerinfo?.whatsapp, context),
+                label: const FaIcon(
+                  FontAwesomeIcons.whatsapp,
+                ),
+                paddingHorizontal: 3,
               ),
-              paddingHorizontal: 3,
             ),
           ],
         ),

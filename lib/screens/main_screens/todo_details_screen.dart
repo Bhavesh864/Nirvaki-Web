@@ -5,7 +5,6 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -31,6 +30,7 @@ import '../../riverpodstate/selected_workitem.dart';
 import '../../widgets/app/nav_bar.dart';
 import '../../widgets/workItemDetail/assignment_widget.dart';
 import '../../widgets/workItemDetail/tab_views/activity_tab_view.dart';
+import '../../widgets/workItemDetail/tab_views/details_tab_view.dart';
 
 class TodoDetailsScreen extends ConsumerStatefulWidget {
   final String todoId;
@@ -90,12 +90,12 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
     });
   }
 
-  void updateDate(itemid) {
+  void updateDate(itemid, initialDate) {
     showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(DateTime.now().year + 1),
+      initialDate: initialDate,
+      firstDate: initialDate,
+      lastDate: DateTime(initialDate.year + 1),
     ).then(
       (pickedDate) {
         if (pickedDate == null) {
@@ -104,6 +104,37 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
         DateFormat formatter = DateFormat('dd-MM-yyyy');
         TodoDetails.updateCardDate(id: itemid, duedate: formatter.format(pickedDate));
         CardDetails.updateCardDate(id: itemid, duedate: formatter.format(pickedDate));
+      },
+    );
+  }
+
+  void updateTime(itemid, time) {
+    TimeOfDay initialTime = const TimeOfDay(hour: 0, minute: 0);
+
+    try {
+      initialTime = TimeOfDay.fromDateTime(DateFormat('hh:mm a').parse(time));
+    } catch (e) {
+      print('Error parsing time: $e');
+    }
+
+    showTimePicker(
+      context: context,
+      initialTime: initialTime,
+    ).then(
+      (time) {
+        if (time == null) {
+          return;
+        }
+        DateTime now = DateTime.now();
+
+        DateTime formattedDateTime = DateTime(
+          now.year,
+          now.month,
+          now.day,
+          time.hour,
+          time.minute,
+        );
+        TodoDetails.updateCardTime(id: itemid, dueTime: DateFormat('hh:mm a').format(formattedDateTime));
       },
     );
   }
@@ -339,19 +370,37 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
-                                  GestureDetector(
-                                    onTap: () => updateDate(data.todoId),
-                                    child: CustomChip(
-                                      paddingVertical: 6,
-                                      label: Text(
-                                        DateFormat('dd MMM yyyy').format(
+                                  Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () => updateDate(
+                                          data.todoId,
                                           DateFormat('dd-MM-yy').parse(data.dueDate!),
                                         ),
+                                        child: CustomChip(
+                                          paddingVertical: 6,
+                                          label: Text(
+                                            DateFormat('dd MMM yyyy').format(
+                                              DateFormat('dd-MM-yy').parse(data.dueDate!),
+                                            ),
+                                          ),
+                                          avatar: const Icon(
+                                            Icons.calendar_month_outlined,
+                                          ),
+                                        ),
                                       ),
-                                      avatar: const Icon(
-                                        Icons.calendar_month_outlined,
-                                      ),
-                                    ),
+                                      if (checkNotNUllItem(data.dueTime))
+                                        GestureDetector(
+                                          onTap: () => updateTime(data.todoId, data.dueTime!),
+                                          child: CustomChip(
+                                            paddingVertical: 6,
+                                            label: Text(data.dueTime!),
+                                            avatar: const Icon(
+                                              Icons.schedule,
+                                            ),
+                                          ),
+                                        ),
+                                    ],
                                   ),
                                   if (Responsive.isMobile(context)) ...[
                                     const Divider(
@@ -376,6 +425,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                       GestureDetector(
                                         onTap: () => startEditingTodoDescription(data.todoDescription!),
                                         child: const CustomChip(
+                                          paddingVertical: 6,
                                           label: Icon(
                                             Icons.edit_outlined,
                                             size: 14,
@@ -450,28 +500,40 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                     final attachment = attachments[index];
                                                     return Stack(
                                                       children: [
-                                                        Container(
-                                                          height: 99,
-                                                          margin: const EdgeInsets.only(right: 15),
-                                                          width: 108,
-                                                          alignment: Alignment.center,
-                                                          decoration: BoxDecoration(
-                                                            border: Border.all(color: Colors.grey.withOpacity(0.5)),
-                                                            borderRadius: BorderRadius.circular(10),
-                                                          ),
-                                                          child: Column(
-                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                            children: [
-                                                              const Icon(
-                                                                Icons.image_outlined,
-                                                                size: 40,
-                                                              ),
-                                                              CustomText(
-                                                                title: attachment.title!,
-                                                                size: 13,
-                                                                fontWeight: FontWeight.w400,
-                                                              ),
-                                                            ],
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            showDialog(
+                                                              context: context,
+                                                              builder: (context) {
+                                                                return AttachmentPreviewDialog(
+                                                                  attachmentPath: attachment.path!,
+                                                                );
+                                                              },
+                                                            );
+                                                          },
+                                                          child: Container(
+                                                            height: 99,
+                                                            margin: const EdgeInsets.only(right: 15),
+                                                            width: 108,
+                                                            alignment: Alignment.center,
+                                                            decoration: BoxDecoration(
+                                                              border: Border.all(color: Colors.grey.withOpacity(0.5)),
+                                                              borderRadius: BorderRadius.circular(10),
+                                                            ),
+                                                            child: Column(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              children: [
+                                                                const Icon(
+                                                                  Icons.image_outlined,
+                                                                  size: 40,
+                                                                ),
+                                                                CustomText(
+                                                                  title: attachment.title!,
+                                                                  size: 13,
+                                                                  fontWeight: FontWeight.w400,
+                                                                ),
+                                                              ],
+                                                            ),
                                                           ),
                                                         ),
                                                         Positioned(
@@ -485,11 +547,11 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                                   size: 18,
                                                                 ),
                                                                 onTap: () {
-                                                                  if (kIsWeb) {
-                                                                    // AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                                                    // anchorElement.download = 'Attachment file';
-                                                                    // anchorElement.click();
-                                                                  }
+                                                                  // if (kIsWeb) {
+                                                                  //   AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                                                  //   anchorElement.download = 'Attachment file';
+                                                                  //   anchorElement.click();
+                                                                  // }
                                                                 },
                                                               ),
                                                               GestureDetector(
