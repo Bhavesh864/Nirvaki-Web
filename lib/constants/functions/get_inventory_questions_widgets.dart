@@ -3,16 +3,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:number_to_words/number_to_words.dart';
-
-import 'package:google_places_flutter/google_places_flutter.dart';
-import 'package:google_places_flutter/model/prediction.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
-import 'package:yes_broker/constants/utils/image_constants.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/questionaries/questions_form_photos_view.dart';
@@ -342,13 +337,8 @@ Widget buildInventoryQuestions(
               },
               inputController: statecontroller,
               isMandatory: true,
+              validator: (value) => validateForNormalFeild(value: value, props: "State"),
               labelText: "State",
-              validator: (value) {
-                if (!isChecked && value!.isEmpty) {
-                  return "Please enter ${question.questionTitle}";
-                }
-                return null;
-              },
             ),
             LabelTextInputField(
               onChanged: (newvalue) {
@@ -357,12 +347,7 @@ Widget buildInventoryQuestions(
               inputController: citycontroller,
               isMandatory: true,
               labelText: "City",
-              validator: (value) {
-                if (!isChecked && value!.isEmpty) {
-                  return "Please enter ${question.questionTitle}";
-                }
-                return null;
-              },
+              validator: (value) => validateForNormalFeild(value: value, props: "City"),
             ),
             LabelTextInputField(
               onChanged: (newvalue) {
@@ -371,12 +356,7 @@ Widget buildInventoryQuestions(
               inputController: localitycontroller,
               isMandatory: true,
               labelText: "Locality",
-              validator: (value) {
-                if (!isChecked && value!.isEmpty) {
-                  return "Please enter ${question.questionTitle}";
-                }
-                return null;
-              },
+              validator: (value) => validateForNormalFeild(value: value, props: "Locality"),
             ),
             LabelTextInputField(
               onChanged: (newvalue) {
@@ -385,12 +365,6 @@ Widget buildInventoryQuestions(
               inputController: address1controller,
               isMandatory: true,
               labelText: "Address1",
-              validator: (value) {
-                if (!isChecked && value!.isEmpty) {
-                  return "Please enter ${question.questionTitle}";
-                }
-                return null;
-              },
             ),
             LabelTextInputField(
               onChanged: (newvalue) {
@@ -399,12 +373,6 @@ Widget buildInventoryQuestions(
               inputController: address2controller,
               isMandatory: true,
               labelText: "Address2",
-              validator: (value) {
-                if (!isChecked && value!.isEmpty) {
-                  return "Please enter ${question.questionTitle}";
-                }
-                return null;
-              },
             ),
           ],
         );

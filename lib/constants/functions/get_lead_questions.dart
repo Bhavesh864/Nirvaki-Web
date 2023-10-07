@@ -333,47 +333,29 @@ Widget buildLeadQuestions(
                 ),
               ),
             LabelTextInputField(
-              onChanged: (newvalue) {
-                notify.add({"id": 26, "item": newvalue.trim()});
-              },
-              inputController: statecontroller,
-              isMandatory: true,
-              labelText: "State",
-              validator: (value) {
-                if (!isChecked && value!.isEmpty) {
-                  return "Please enter ${question.questionTitle}";
-                }
-                return null;
-              },
-            ),
+                onChanged: (newvalue) {
+                  notify.add({"id": 26, "item": newvalue.trim()});
+                },
+                inputController: statecontroller,
+                isMandatory: true,
+                labelText: "State",
+                validator: (value) => validateForNormalFeild(value: value, props: "State")),
             LabelTextInputField(
-              onChanged: (newvalue) {
-                notify.add({"id": 27, "item": newvalue.trim()});
-              },
-              inputController: citycontroller,
-              isMandatory: true,
-              labelText: "City",
-              validator: (value) {
-                if (!isChecked && value!.isEmpty) {
-                  return "Please enter ${question.questionTitle}";
-                }
-                return null;
-              },
-            ),
+                onChanged: (newvalue) {
+                  notify.add({"id": 27, "item": newvalue.trim()});
+                },
+                inputController: citycontroller,
+                isMandatory: true,
+                labelText: "City",
+                validator: (value) => validateForNormalFeild(value: value, props: "City")),
             LabelTextInputField(
-              onChanged: (newvalue) {
-                notify.add({"id": 54, "item": newvalue.trim()});
-              },
-              inputController: localitycontroller,
-              isMandatory: true,
-              labelText: "Locality",
-              validator: (value) {
-                if (!isChecked && value!.isEmpty) {
-                  return "Please enter ${question.questionTitle}";
-                }
-                return null;
-              },
-            ),
+                onChanged: (newvalue) {
+                  notify.add({"id": 54, "item": newvalue.trim()});
+                },
+                inputController: localitycontroller,
+                isMandatory: true,
+                labelText: "Locality",
+                validator: (value) => validateForNormalFeild(value: value, props: "Locality")),
             LabelTextInputField(
               onChanged: (newvalue) {
                 notify.add({"id": 28, "item": newvalue.trim()});

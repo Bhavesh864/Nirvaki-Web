@@ -373,34 +373,10 @@
 //           ),
 //           Screen(
 //             questions: [
-//               Question(
-//                 questionId: 26,
-//                 questionOptionType: "dropdown",
-//                 questionTitle: "State",
-//                 questionOption: ["Rajasthan"],
-//               ),
-//               Question(
-//                 questionId: 27,
-//                 questionOptionType: "dropdown",
-//                 questionTitle: "City",
-//                 questionOption: ['Bikaner'],
-//               ),
-//               Question(
-//                 questionId: 54,
-//                 questionOptionType: "dropdown",
-//                 questionTitle: "Locality",
-//                 questionOption: ["pawan-puri"],
-//               ),
-//               Question(
-//                 questionId: 28,
+//              Question(
+//                 questionId: 56,
 //                 questionOptionType: "textfield",
-//                 questionTitle: "Address Line 1",
-//                 questionOption: "",
-//               ),
-//               Question(
-//                 questionId: 29,
-//                 questionOptionType: "textfield",
-//                 questionTitle: "Address Line 2",
+//                 questionTitle: "Address Look up",
 //                 questionOption: "",
 //               ),
 //               Question(
@@ -409,6 +385,7 @@
 //                 questionTitle: "Floor Number",
 //                 questionOption: "",
 //               ),
+//         
 //             ],
 //             title: "Property Address",
 //             isActive: true,
