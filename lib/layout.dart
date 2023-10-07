@@ -48,25 +48,22 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-    // final token = UserHiveMethods.getdata("token");
-    // print("========token-==$token");
-    // authState = authentication.authStateChanges();
-    // if (token != null) {
-    //   AppConst.setAccessToken(token);
-    //   getUserData(token);
-    // }
+    final token = UserHiveMethods.getdata("token");
+    authState = authentication.authStateChanges();
+    if (token != null) {
+      AppConst.setAccessToken(token);
+      getUserData(token);
+    }
     authState = authentication.authStateChanges();
     setAllNotification();
     super.initState();
   }
 
-  // getUserData(token) async {
-  //   print("-----------------object----------");
-  //   final userinfo.User? user = await userinfo.User.getUser(token);
-  //   ref.read(userDataProvider.notifier).storeUserData(user!);
-  //   AppConst.setRole(user.role);
-  //   print("checking========${user.email}");
-  // }
+  getUserData(token) async {
+    final userinfo.User? user = await userinfo.User.getUser(token);
+    ref.read(userDataProvider.notifier).storeUserData(user!);
+    AppConst.setRole(user.role);
+  }
 
   @override
   void dispose() {

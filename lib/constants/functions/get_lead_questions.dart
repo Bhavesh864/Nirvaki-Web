@@ -42,11 +42,13 @@ Widget buildLeadQuestions(
             if (isRentSelected && option == "Plot") {
               return const SizedBox();
             }
-            if (option == "Rent" || option == "Buy") {
-              final indexToRemove = selectedValues.indexWhere((map) => map['id'] == 32);
-              if (indexToRemove != -1) {
-                selectedValues.removeAt(indexToRemove);
-                selectedValues = selectedValues;
+            if (!isEdit) {
+              if (option == "Rent" || option == "Buy") {
+                final indexToRemove = selectedValues.indexWhere((map) => map['id'] == 32);
+                if (indexToRemove != -1) {
+                  selectedValues.removeAt(indexToRemove);
+                  selectedValues = selectedValues;
+                }
               }
             }
             return ChipButton(
@@ -722,9 +724,20 @@ Widget buildLeadQuestions(
     RangeValues rentRangeValues = const RangeValues(0, 1000000);
     RangeValues defaultBuyRangeValues = stateValue ?? buyRangeValues;
     RangeValues defaultRentRangeValues = stateValue ?? rentRangeValues;
-    // if (selectedValues.any((element) => element["id"] != 32)) {
-    //   print("object");
-    // }
+
+    if (selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 32)) {
+      if (isRentSelected) {
+        stateValue = const RangeValues(0, 1000000);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          notify.add({"id": 32, "item": stateValue});
+        });
+      } else if (!isRentSelected) {
+        stateValue = const RangeValues(500000, 50000000);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          notify.add({"id": 32, "item": stateValue});
+        });
+      }
+    }
     if (isRentSelected) {
       double divisionValue = 5000;
       return StatefulBuilder(
