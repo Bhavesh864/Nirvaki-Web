@@ -16,6 +16,7 @@ import '../../Customs/loader.dart';
 import '../../Customs/text_utility.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/utils/colors.dart';
+import '../../pages/Auth/signup/country_code_modal.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -120,6 +121,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  String countryCode = "";
   File? profilePhoto;
   Uint8List? webProfile;
   ValueNotifier<String> uploadProfile = ValueNotifier<String>('');
@@ -139,11 +141,22 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
   }
 
   void startEditingPersonalDetails(String firstName, String lastName, String email, String phone) {
+    List<String> splitString = phone.split(' ');
+    if (splitString.length == 2) {
+      setState(() {
+        countryCode = splitString[0];
+        phoneController.text = splitString[1];
+      });
+    } else {
+      setState(() {
+        countryCode = '+91';
+        phoneController.text = phone;
+      });
+    }
     setState(() {
       isPersonalDetailsEditing = true;
       firstNameController.text = firstName;
       lastNameController.text = lastName;
-      phoneController.text = phone;
       emailController.text = email;
     });
   }
@@ -201,6 +214,21 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
               webProfile = null,
               cancelEditingFullName(),
             });
+  }
+
+  void openModal() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return CountryCodeModel(onCountrySelected: (data) {
+          if (data.isNotEmpty) {
+            setState(() {
+              countryCode = data;
+            });
+          }
+        });
+      },
+    );
   }
 
   @override
@@ -409,7 +437,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                                     email: emailController.text.trim(),
                                     firstname: firstNameController.text.trim(),
                                     lastname: lastNameController.text.trim(),
-                                    mobile: phoneController.text.trim(),
+                                    mobile: '$countryCode ${phoneController.text.trim()}',
                                     managerName: userData.managerName,
                                     managerid: userData.managerid,
                                     role: userData.role,
@@ -461,7 +489,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                     children: [
                       TableRow(children: [
                         buildInfoFields('Email address', userData.email, isPersonalDetailsEditing, emailController, context),
-                        buildInfoFields('Phone ', userData.mobile, isPersonalDetailsEditing, phoneController, context),
+                        mobileInfoFields('Phone ', userData.mobile, isPersonalDetailsEditing, phoneController, context, countryCode, openModal),
                         if (!Responsive.isMobile(context)) buildInfoFields('Employee ID', userData.userId, false, TextEditingController(), context),
                       ])
                     ],
@@ -518,10 +546,50 @@ Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, Tex
         SizedBox(
           height: 50,
           width: Responsive.isDesktop(context) ? 300 : 160,
-          // width: fieldDetail.length * 15,
           child: CustomTextInput(
             controller: textController,
             onFieldSubmitted: (newValue) {},
+          ),
+        ),
+      ] else ...[
+        const SizedBox(height: 3),
+        Text(
+          fieldDetail,
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ]
+    ],
+  );
+}
+
+Widget mobileInfoFields(String fieldName, String fieldDetail, bool isEditing, TextEditingController textController, BuildContext context, String countryCode, openModal) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        fieldName,
+        style: const TextStyle(
+          fontSize: 14,
+          color: Color(0xFF818181),
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      if (isEditing) ...[
+        SizedBox(
+          height: 50,
+          width: Responsive.isDesktop(context) ? 300 : 160,
+          child: MobileNumberInputField(
+            bottomMargin: const EdgeInsets.only(bottom: 8.5),
+            fontsize: 13.0,
+            controller: textController,
+            hintText: 'Phone',
+            isEmpty: false,
+            openModal: openModal,
+            countryCode: countryCode,
+            onChange: (value) {},
           ),
         ),
       ] else ...[

@@ -13,6 +13,7 @@ import 'package:yes_broker/widgets/todo/todo_filter_view.dart';
 import '../../Customs/loader.dart';
 import '../../chat/controller/chat_controller.dart';
 import '../../constants/app_constant.dart';
+import '../../constants/firebase/Hive/hive_methods.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/filterdataAccordingRole/data_according_role.dart';
 import '../../constants/utils/constants.dart';
@@ -43,12 +44,22 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
 
   @override
   void initState() {
+    final token = UserHiveMethods.getdata("token");
+    if (token != null) {
+      AppConst.setAccessToken(token);
+      getUserData(token);
+    }
     setCardDetails();
     if (!kIsWeb) {
-      print('aksjdflkasdjflk --------${AppConst.getAccessToken()}');
       ref.read(chatControllerProvider).setUserState(true);
     }
     super.initState();
+  }
+
+  getUserData(token) async {
+    final User? user = await User.getUser(token);
+    ref.read(userDataProvider.notifier).storeUserData(user!);
+    AppConst.setRole(user.role);
   }
 
   void setCardDetails() {
