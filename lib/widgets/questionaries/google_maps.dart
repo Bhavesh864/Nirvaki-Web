@@ -14,7 +14,7 @@ class CustomGoogleMap extends ConsumerStatefulWidget {
   final String? address2;
   final String? locality;
   final bool isReadOnly;
-  final List<double>? seletedLatLng;
+
   final LatLng? latLng;
   final void Function(LatLng) onLatLngSelected;
 
@@ -28,7 +28,6 @@ class CustomGoogleMap extends ConsumerStatefulWidget {
     this.address2,
     this.locality,
     this.isReadOnly = false,
-    this.seletedLatLng,
     this.latLng,
     required this.onLatLngSelected,
   }) : super(key: key);
@@ -42,20 +41,25 @@ class _CustomGoogleMapState extends ConsumerState<CustomGoogleMap> {
   bool showMaps = true;
   LatLng? location;
 
-  @override
-  void initState() {
-    super.initState();
-    if (widget.isReadOnly || widget.isEdit) {
-      _loadMap();
-    } else {
-      loadMap();
-    }
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   if (widget.isReadOnly || widget.isEdit) {
+  //     // print('asldkjfasfd${widget.latLng!.latitude}');
+  //     print('ReadOnly');
+  //     _loadMap();
+  //   } else {
+  //     loadMap();
+  //     print('NotReadOnly');
+  //   }
+  // }
 
   Future<void> _loadMap() async {
     // final placeName = '${widget.stateName} ${widget.cityName} ${widget.locality} ${widget.address1} ${widget.address2}';
 
     // location = await getLatLng(placeName);
+    print(widget.latLng!.latitude);
+
     location = LatLng(widget.latLng!.latitude, widget.latLng!.longitude);
     if (location != null && mapController != null) {
       mapController!.animateCamera(CameraUpdate.newLatLng(location!));
@@ -93,7 +97,7 @@ class _CustomGoogleMapState extends ConsumerState<CustomGoogleMap> {
         child: GoogleMap(
           onMapCreated: (controller) {
             mapController = controller;
-            if (widget.isReadOnly) {
+            if (widget.isReadOnly || widget.isEdit) {
               _loadMap();
             } else {
               loadMap();

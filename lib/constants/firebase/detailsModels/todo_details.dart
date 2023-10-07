@@ -10,6 +10,7 @@ class TodoDetails {
   String? todoName;
   String? todoDescription;
   String? dueDate;
+  String? dueTime;
   Timestamp? createdate;
   String? createdBy;
   String? todoStatus;
@@ -18,21 +19,23 @@ class TodoDetails {
   List<LinkedWorkItem>? linkedWorkItem;
   List<Attachments>? attachments;
 
-  TodoDetails(
-      {this.todoType,
-      this.todoId,
-      this.brokerId,
-      this.managerId,
-      this.todoName,
-      this.todoDescription,
-      this.dueDate,
-      this.createdate,
-      this.createdBy,
-      this.todoStatus,
-      this.customerinfo,
-      this.assignedto,
-      this.linkedWorkItem,
-      this.attachments});
+  TodoDetails({
+    this.todoType,
+    this.todoId,
+    this.brokerId,
+    this.managerId,
+    this.todoName,
+    this.todoDescription,
+    this.dueDate,
+    this.dueTime,
+    this.createdate,
+    this.createdBy,
+    this.todoStatus,
+    this.customerinfo,
+    this.assignedto,
+    this.linkedWorkItem,
+    this.attachments,
+  });
 
   factory TodoDetails.fromSnapshot(DocumentSnapshot snapshot) {
     final json = snapshot.data() as Map<String, dynamic>;
@@ -48,6 +51,7 @@ class TodoDetails {
       createdate: json["createdate"],
       todoType: json["todoType"],
       dueDate: json["dueDate"],
+      dueTime: json["dueTime"],
       linkedWorkItem: (json["linkedWorkItem"] as List<dynamic>?)?.map((e) => LinkedWorkItem.fromJson(e)).toList(),
       attachments: (json["attachments"] as List<dynamic>?)?.map((e) => Attachments.fromJson(e)).toList(),
       customerinfo: Customerinfo.fromJson(json["customerinfo"]),
@@ -75,6 +79,9 @@ class TodoDetails {
     }
     if (json["dueDate"] is String) {
       dueDate = json["dueDate"];
+    }
+    if (json["dueTime"] is String) {
+      dueTime = json["dueTime"];
     }
     if (json["createdate"] is Timestamp) {
       createdate = json["createdate"];
@@ -108,6 +115,7 @@ class TodoDetails {
     data["todoName"] = todoName;
     data["todoDescription"] = todoDescription;
     data["dueDate"] = dueDate;
+    data["dueTime"] = dueTime;
     data["createdate"] = createdate;
     data["createdBy"] = createdBy;
     data["todoStatus"] = todoStatus;
@@ -232,6 +240,18 @@ class TodoDetails {
       QuerySnapshot querySnapshot = await todoDetailsCollection.where("todoId", isEqualTo: id).get();
       for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
         await docSnapshot.reference.update({'dueDate': duedate});
+      }
+      print('cardTitle update');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
+
+  static Future<void> updateCardTime({required String id, required String dueTime}) async {
+    try {
+      QuerySnapshot querySnapshot = await todoDetailsCollection.where("todoId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'dueTime': dueTime});
       }
       print('cardTitle update');
     } catch (error) {

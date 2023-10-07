@@ -27,7 +27,7 @@ class _CountryCodeModelState extends State<CountryCodeModel> {
     return Dialog(
       child: Container(
         width: 550,
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,11 +35,11 @@ class _CountryCodeModelState extends State<CountryCodeModel> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(
-                  width: 470,
-                  child: TextField(
+                Expanded(
+                  child: TextFormField(
                     onChanged: (value) => filterCountries(value),
                     decoration: const InputDecoration(
+                      isDense: true,
                       hintText: 'Search for a country',
                     ),
                   ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/constants/user_role.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/riverpodstate/add_member_state.dart';
 import 'package:yes_broker/screens/account_screens/Teams/team_screen.dart';
@@ -39,19 +40,21 @@ class MobileMemberCard extends ConsumerWidget {
                   ),
                   Row(
                     children: [
-                      Container(
-                        decoration: BoxDecoration(color: AppColor.secondary, borderRadius: BorderRadius.circular(7)),
-                        child: IconButton(
-                          tooltip: "Edit",
-                          iconSize: 14,
-                          onPressed: () {
-                            showAddMemberAlertDailogBox(context);
-                            ref.read(editAddMemberState.notifier).isEdit(true);
-                            ref.read(userForEditScreen.notifier).setUserForEdit(user);
-                          },
-                          icon: const Icon(Icons.edit),
-                        ),
-                      ),
+                      user.role == UserRole.broker
+                          ? const SizedBox()
+                          : InkWell(
+                              onTap: () {
+                                showAddMemberAlertDailogBox(context);
+                                ref.read(editAddMemberState.notifier).isEdit(true);
+                                ref.read(userForEditScreen.notifier).setUserForEdit(user);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                margin: const EdgeInsets.only(right: 5),
+                                decoration: BoxDecoration(color: AppColor.secondary, borderRadius: BorderRadius.circular(7)),
+                                child: const Icon(Icons.edit),
+                              ),
+                            ),
                       const SizedBox(width: 3),
                       const Text("200"),
                     ],
@@ -61,7 +64,7 @@ class MobileMemberCard extends ConsumerWidget {
               const SizedBox(height: 4),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [Text("Role - ${user.role}"), Text("Manager - ${user.managerName}")],
+                children: [Text("Role - ${user.role}"), Text("Manager - ${user.managerName ?? ""}")],
               )
             ],
           ),

@@ -18,6 +18,7 @@ import '../../../Customs/custom_fields.dart';
 import '../../../Customs/dropdown_field.dart';
 import '../../../constants/utils/constants.dart';
 import '../../../constants/utils/image_constants.dart';
+import '../../../routes/routes.dart';
 import '../../../widgets/auth/details_header.dart';
 import 'package:http/http.dart' as http;
 
@@ -281,7 +282,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                   onChanged: (value) {
                                     getPlaces(value).then((places) {
                                       // print(places);
-                                      final descriptions = places.data?.predictions?.map((prediction) => prediction.description) ?? [];
+                                      final descriptions = places.predictions?.map((prediction) => prediction.description) ?? [];
                                       setState(() {
                                         placesList = descriptions.toList();
                                       });
@@ -290,7 +291,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                 ),
                                 if (placesList.isNotEmpty)
                                   Container(
-                                    height: 200,
+                                    constraints: BoxConstraints(maxHeight: 200),
                                     decoration: BoxDecoration(border: Border.all(color: Colors.grey, width: 0.8), borderRadius: BorderRadius.circular(8)),
                                     margin: const EdgeInsets.symmetric(horizontal: 7),
                                     child: ListView.builder(
@@ -360,7 +361,6 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                               address1controller.text = "";
                                               address2controller.text = "";
                                             }
-                                            FocusScope.of(context).unfocus();
                                           },
                                         );
                                       },
@@ -427,22 +427,16 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
   }
 }
 
-Future<GooglePlacesModel> getPlaces(String text) async {
+Future<GooglePlaces> getPlaces(String text) async {
   // final uri = Uri.parse("https://api.greencenteral.com/api/v1/user/locations?name=${text}");
-  final uri = Uri.parse("http://142.93.234.216:44210/api/v1/user/locations?name=${text}");
-  // final uri = Uri.parse("https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${text}&key=AIzaSyD7KtQoq29-5TqELLdPBSQoqCD376-qGjA&components=country:in");
-
-  final response = await http.get(
-    uri,
-    // headers: <String, String>{
-    //   "Access-Control-Allow-Origin": "*",
-    //   "Access-Control-Allow-Methods": "GET,POST,PUT,OPTIONS",
-    //   "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
-    // },
-  );
-  var responseData = json.decode(response.body.toString());
+  // final uri = Uri.parse("http://142.93.234.216:44210/api/v1/user/locations?name=${text}");
+  final uri = Uri.parse("https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$text&components=country:IN&key=AIzaSyB3VnuKk-JNAcGUrdN1eD5KlRPYEGc4QPU");
+  final response = await http.get(uri, headers: {
+    "Content-Type": "application/json",
+  });
+  var responseData = json.decode(response.body);
   if (response.statusCode == 200) {
-    return GooglePlacesModel.fromJson(responseData);
+    return GooglePlaces.fromJson(responseData);
   } else {
     throw Exception('Failed to load data');
   }

@@ -373,7 +373,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
         {"id": 28, "item": data.preferredlocality?.addressline1},
         {"id": 29, "item": data.preferredlocality?.addressline2},
         {"id": 30, "item": data.preferredlocality?.prefferedfloornumber},
-        {"id": 31, "item": data.propertylocation},
+        {"id": 31, "item": data.preferredlocation},
         {"id": 32, "item": convertStringRangeToRangeValues(startValue: data.propertypricerange!.arearangestart!, endValue: data.propertypricerange!.arearangeend!)},
         {"id": 33, "item": data.propertypricerange?.unit},
         {"id": 34, "item": data.preferredpropertyfacing},

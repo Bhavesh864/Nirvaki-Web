@@ -6,8 +6,8 @@ import '../userModel/user_info.dart';
 Future<String?> signinMethod({required email, required password}) async {
   String res = 'Something went wrong';
   try {
-    await auth.signInWithEmailAndPassword(email: email, password: password);
-    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final authResult = await auth.signInWithEmailAndPassword(email: email, password: password);
+    final uid = authResult.user?.uid;
     UserHiveMethods.addData(key: "token", data: uid);
     AppConst.setAccessToken(uid);
     res = "success";

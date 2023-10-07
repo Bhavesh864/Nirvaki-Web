@@ -73,6 +73,7 @@ class _TodoFilterViewState extends State<TodoFilterView> {
                     child: Row(
                       children: [
                         CustomChip(
+                          paddingVertical: 6,
                           onPressed: () {
                             if (selectedList.contains('task')) {
                               selectedList.remove('task');
@@ -89,6 +90,7 @@ class _TodoFilterViewState extends State<TodoFilterView> {
                           color: selectedList.contains('task') ? AppColor.primary : AppColor.chipGreyColor,
                         ),
                         CustomChip(
+                          paddingVertical: 6,
                           onPressed: () {
                             if (selectedList.contains('follow up')) {
                               selectedList.remove('follow up');
@@ -105,6 +107,7 @@ class _TodoFilterViewState extends State<TodoFilterView> {
                           color: selectedList.contains('follow up') ? AppColor.primary : AppColor.chipGreyColor,
                         ),
                         CustomChip(
+                          paddingVertical: 6,
                           onPressed: () {
                             if (selectedList.contains('reminder')) {
                               selectedList.remove('reminder');
@@ -139,6 +142,7 @@ class _TodoFilterViewState extends State<TodoFilterView> {
                     child: Row(
                       children: [
                         CustomChip(
+                          paddingVertical: 6,
                           onPressed: () {
                             if (selectedList.contains('inventory')) {
                               selectedList.remove('inventory');
@@ -155,6 +159,7 @@ class _TodoFilterViewState extends State<TodoFilterView> {
                           color: selectedList.contains('inventory') ? AppColor.primary : AppColor.chipGreyColor,
                         ),
                         CustomChip(
+                          paddingVertical: 6,
                           onPressed: () {
                             if (selectedList.contains('lead')) {
                               selectedList.remove('lead');
@@ -194,6 +199,7 @@ class _TodoFilterViewState extends State<TodoFilterView> {
                             (e) => Padding(
                               padding: const EdgeInsets.only(right: 8.0, top: 8),
                               child: CustomChip(
+                                paddingVertical: 6,
                                 onPressed: () {
                                   if (selectedList.contains(e.toString().toLowerCase())) {
                                     selectedList.remove(e.toString().toLowerCase());

@@ -20,6 +20,7 @@ Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
   final dueDate = getDataById(state, 4);
   final cardDetail = getDataById(state, 6);
   final List<User> assignto = getDataById(state, 12);
+  final dueDataTime = getDataById(state, 13);
 
   final List<cards.Assignedto> assignedToList = assignto.map((user) {
     return cards.Assignedto(
@@ -73,6 +74,7 @@ Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
     dueDate: dueDate,
     todoName: todoTitle,
     todoDescription: todoDescription,
+    dueTime: dueDataTime,
     customerinfo: cardDetail != null
         ? Customerinfo(
             email: cardDetail.customerinfo?.email,

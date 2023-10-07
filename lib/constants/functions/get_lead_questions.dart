@@ -42,11 +42,13 @@ Widget buildLeadQuestions(
             if (isRentSelected && option == "Plot") {
               return const SizedBox();
             }
-            if (option == "Rent" || option == "Buy") {
-              final indexToRemove = selectedValues.indexWhere((map) => map['id'] == 32);
-              if (indexToRemove != -1) {
-                selectedValues.removeAt(indexToRemove);
-                selectedValues = selectedValues;
+            if (!isEdit) {
+              if (option == "Rent" || option == "Buy") {
+                final indexToRemove = selectedValues.indexWhere((map) => map['id'] == 32);
+                if (indexToRemove != -1) {
+                  selectedValues.removeAt(indexToRemove);
+                  selectedValues = selectedValues;
+                }
               }
             }
             return ChipButton(
@@ -420,7 +422,7 @@ Widget buildLeadQuestions(
               validator: (value) => !isEdit ? validateForNormalFeild(value: value, props: "Search Location") : null,
               onChanged: (value) {
                 getPlaces(value).then((places) {
-                  final descriptions = places.data?.predictions?.map((prediction) => prediction.description) ?? [];
+                  final descriptions = places.predictions?.map((prediction) => prediction.description) ?? [];
                   setState(() {
                     placesList = descriptions.toList();
                   });
@@ -497,47 +499,29 @@ Widget buildLeadQuestions(
                 ),
               ),
             LabelTextInputField(
-              onChanged: (newvalue) {
-                notify.add({"id": 26, "item": newvalue.trim()});
-              },
-              inputController: statecontroller,
-              isMandatory: true,
-              labelText: "State",
-              validator: (value) {
-                if (!isChecked && value!.isEmpty) {
-                  return "Please enter ${question.questionTitle}";
-                }
-                return null;
-              },
-            ),
+                onChanged: (newvalue) {
+                  notify.add({"id": 26, "item": newvalue.trim()});
+                },
+                inputController: statecontroller,
+                isMandatory: true,
+                labelText: "State",
+                validator: (value) => validateForNormalFeild(value: value, props: "State")),
             LabelTextInputField(
-              onChanged: (newvalue) {
-                notify.add({"id": 27, "item": newvalue.trim()});
-              },
-              inputController: citycontroller,
-              isMandatory: true,
-              labelText: "City",
-              validator: (value) {
-                if (!isChecked && value!.isEmpty) {
-                  return "Please enter ${question.questionTitle}";
-                }
-                return null;
-              },
-            ),
+                onChanged: (newvalue) {
+                  notify.add({"id": 27, "item": newvalue.trim()});
+                },
+                inputController: citycontroller,
+                isMandatory: true,
+                labelText: "City",
+                validator: (value) => validateForNormalFeild(value: value, props: "City")),
             LabelTextInputField(
-              onChanged: (newvalue) {
-                notify.add({"id": 54, "item": newvalue.trim()});
-              },
-              inputController: localitycontroller,
-              isMandatory: true,
-              labelText: "Locality",
-              validator: (value) {
-                if (!isChecked && value!.isEmpty) {
-                  return "Please enter ${question.questionTitle}";
-                }
-                return null;
-              },
-            ),
+                onChanged: (newvalue) {
+                  notify.add({"id": 54, "item": newvalue.trim()});
+                },
+                inputController: localitycontroller,
+                isMandatory: true,
+                labelText: "Locality",
+                validator: (value) => validateForNormalFeild(value: value, props: "Locality")),
             LabelTextInputField(
               onChanged: (newvalue) {
                 notify.add({"id": 28, "item": newvalue.trim()});
@@ -668,11 +652,11 @@ Widget buildLeadQuestions(
       ),
     );
   } else if (question.questionOptionType == 'map') {
-    // List? defaultValue;
+    List? defaultValue;
 
-    // if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
-    //   defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
-    // }
+    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+      defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
+    }
     final state = getDataById(selectedValues, 26);
     final city = getDataById(selectedValues, 27);
     final address1 = getDataById(selectedValues, 28);
@@ -680,19 +664,21 @@ Widget buildLeadQuestions(
     final locality = getDataById(selectedValues, 54);
 
     return CustomGoogleMap(
-        isEdit: isEdit,
-        selectedValues: selectedValues,
-        onLatLngSelected: (latLng) {
-          notify.add({
-            "id": question.questionId,
-            "item": [latLng.latitude, latLng.longitude]
-          });
-        },
-        cityName: city,
-        stateName: state,
-        address1: address1,
-        address2: address2,
-        locality: locality);
+      isEdit: isEdit,
+      latLng: isEdit ? LatLng(defaultValue![0], defaultValue[1]) : null,
+      selectedValues: selectedValues,
+      onLatLngSelected: (latLng) {
+        notify.add({
+          "id": question.questionId,
+          "item": [latLng.latitude, latLng.longitude]
+        });
+      },
+      cityName: city,
+      stateName: state,
+      address1: address1,
+      address2: address2,
+      locality: locality,
+    );
   } else if (question.questionOptionType == 'photo') {
     return PhotosViewForm(
       notify: notify,
@@ -738,9 +724,20 @@ Widget buildLeadQuestions(
     RangeValues rentRangeValues = const RangeValues(0, 1000000);
     RangeValues defaultBuyRangeValues = stateValue ?? buyRangeValues;
     RangeValues defaultRentRangeValues = stateValue ?? rentRangeValues;
-    // if (selectedValues.any((element) => element["id"] != 32)) {
-    //   print("object");
-    // }
+
+    if (selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 32)) {
+      if (isRentSelected) {
+        stateValue = const RangeValues(0, 1000000);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          notify.add({"id": 32, "item": stateValue});
+        });
+      } else if (!isRentSelected) {
+        stateValue = const RangeValues(500000, 50000000);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          notify.add({"id": 32, "item": stateValue});
+        });
+      }
+    }
     if (isRentSelected) {
       double divisionValue = 5000;
       return StatefulBuilder(

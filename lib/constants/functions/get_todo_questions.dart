@@ -13,6 +13,7 @@ import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
 import '../firebase/questionModels/todo_question.dart';
 import '../utils/colors.dart';
+import 'calendar/calendar_functions.dart';
 
 Widget buildTodoQuestions(
   Question question,
@@ -52,43 +53,85 @@ Widget buildTodoQuestions(
       ],
     );
   } else if (question.questionOptionType == 'textfield') {
+    String? dueTime = "";
+    final existingTime = selectedValues.any((element) => element["id"] == 13);
+    if (existingTime) {
+      dueTime = selectedValues.firstWhere((element) => element["id"] == 13)["item"];
+    }
     final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
     TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
+    TextEditingController timeController = TextEditingController(text: dueTime);
 
     if (question.questionTitle == 'Due date') {
-      return GestureDetector(
-        onTap: () {
-          showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime.now(),
-            lastDate: DateTime(DateTime.now().year + 1),
-          ).then(
-            (pickedDate) {
-              if (pickedDate == null) {
-                return;
-              }
-              DateFormat formatter = DateFormat('dd-MM-yyyy');
-              controller.text = formatter.format(pickedDate);
-              notify.add({"id": question.questionId, "item": controller.text});
+      return Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime.now(),
+                lastDate: DateTime(DateTime.now().year + 1),
+              ).then(
+                (pickedDate) {
+                  if (pickedDate == null) {
+                    return;
+                  }
+                  DateFormat formatter = DateFormat('dd-MM-yyyy');
+                  controller.text = formatter.format(pickedDate);
+                  notify.add({"id": question.questionId, "item": controller.text});
+                },
+              );
             },
-          );
-        },
-        child: LabelTextInputField(
-          isDatePicker: true,
-          onChanged: (newvalue) {
-            notify.add({"id": question.questionId, "item": newvalue.trim()});
-          },
-          hintText: 'DD/MM/YYYY',
-          inputController: controller,
-          labelText: question.questionTitle,
-          validator: (value) {
-            if (value!.isEmpty) {
-              return "Please enter ${question.questionTitle}";
-            }
-            return null;
-          },
-        ),
+            child: LabelTextInputField(
+              isDatePicker: true,
+              onChanged: (newvalue) {
+                notify.add({"id": question.questionId, "item": newvalue.trim()});
+              },
+              hintText: 'DD/MM/YYYY',
+              inputController: controller,
+              labelText: question.questionTitle,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return "Please enter ${question.questionTitle}";
+                }
+                return null;
+              },
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          GestureDetector(
+            onTap: () {
+              pickFromDateTime(
+                pickDate: false,
+                pickedDate: DateTime.now(),
+                context: context,
+                dateController: controller,
+                timeController: timeController,
+              ).then((value) => {
+                    notify.add({"id": 13, "item": timeController.text})
+                  });
+            },
+            child: LabelTextInputField(
+              isDatePicker: true,
+              onChanged: (newvalue) {
+                notify.add({"id": 13, "item": newvalue.trim()});
+              },
+              hintText: 'HH:MM',
+              rightIcon: Icons.schedule,
+              inputController: timeController,
+              labelText: 'Due time',
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return "Please enter due time";
+                }
+                return null;
+              },
+            ),
+          ),
+        ],
       );
     }
     return LabelTextInputField(

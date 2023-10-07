@@ -1,6 +1,6 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 
@@ -38,7 +38,6 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
   var isloading = false;
   void navigateTopage(SelectedSignupItems notify) {
     final isvalid = key.currentState?.validate();
-
     if (mobilenumbercontroller.text == "") {
       setState(() {
         isMobileEmpty = true;
@@ -176,7 +175,6 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
                             //   },
                             //   leftIcon: Icons.abc_sharp,
                             // ),
-
                             MobileNumberInputField(
                               controller: mobilenumbercontroller,
                               hintText: 'Mobile Number',
