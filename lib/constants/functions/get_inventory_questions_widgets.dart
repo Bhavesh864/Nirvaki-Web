@@ -3,11 +3,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'package:number_to_words/number_to_words.dart';
+
+import 'package:google_places_flutter/google_places_flutter.dart';
+import 'package:google_places_flutter/model/prediction.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/constants/utils/image_constants.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/questionaries/questions_form_photos_view.dart';
@@ -35,6 +40,10 @@ Widget buildInventoryQuestions(
   bool isEdit,
   List<Map<String, dynamic>> selectedValues,
   List<States> stateList,
+  bool isMobileNoEmpty,
+  bool iswhatsappMobileNoEmpty,
+  bool isChecked,
+  Function(bool) isCheckedUpdate,
 ) {
   if (isPlotSelected) {
     selectedValues.removeWhere((element) => element["id"] == 14);
@@ -169,11 +178,9 @@ Widget buildInventoryQuestions(
     String textResult = '';
     final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
     TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
-    bool isChecked = true;
+    // bool isChecked = true;
     String mobileCountryCode = '+91';
     String whatsappCountryCode = '+91';
-    bool isMobileNoEmpty = false;
-    bool iswhatsappMobileNoEmpty = false;
 
     if (question.questionTitle == 'Mobile' && value.isNotEmpty) {
       List<String> splitString = value[0]["item"].split(' ');
@@ -183,7 +190,6 @@ Widget buildInventoryQuestions(
       }
     }
     if (question.questionTitle == 'Whatsapp Number' && value.isNotEmpty) {
-      isChecked = false;
       List<String> splitString = value[0]["item"].split(' ');
       if (splitString.length == 2) {
         whatsappCountryCode = splitString[0];
@@ -216,20 +222,76 @@ Widget buildInventoryQuestions(
     // if (question.questionId == 27) {
     //   controller.text = selectedValues.isNotEmpty ? selectedValues.firstWhere((element) => element["id"] == 27)["item"] : "";
     // }
-    if (question.questionId == 8) {
+    if (question.questionTitle == 'Mobile') {
+      return StatefulBuilder(builder: (context, setState) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: RichText(
+                text: const TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Mobile',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '*',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            MobileNumberInputField(
+              controller: controller,
+              hintText: 'Type here..',
+              isEmpty: isMobileNoEmpty,
+              openModal: () {
+                openModal(context: context, setState: setState);
+              },
+              countryCode: mobileCountryCode,
+              onChange: (value) {
+                notify.add({"id": question.questionId, "item": "$mobileCountryCode ${value.trim()}"});
+              },
+            ),
+            if (isMobileNoEmpty)
+              const Padding(
+                padding: EdgeInsets.only(left: 15.0, bottom: 5),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: AppText(
+                    text: 'Please enter Mobile Number',
+                    textColor: Colors.red,
+                    fontsize: 12,
+                  ),
+                ),
+              ),
+          ],
+        );
+      });
+    }
+    if (question.questionTitle == 'Whatsapp Number') {
       return StatefulBuilder(
         builder: (context, setState) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (question.questionId == 8)
+              if (question.questionTitle == 'Whatsapp Number')
                 CustomCheckbox(
                   value: isChecked,
                   label: 'Use this as whatsapp number',
                   onChanged: (value) {
-                    setState(() {
-                      isChecked = value;
-                    });
+                    isCheckedUpdate(value);
                   },
                 ),
               if (!isChecked) ...[
@@ -270,6 +332,18 @@ Widget buildInventoryQuestions(
                     notify.add({"id": question.questionId, "item": "$whatsappCountryCode ${value.trim()}"});
                   },
                 ),
+                if (!isChecked && iswhatsappMobileNoEmpty)
+                  const Padding(
+                    padding: EdgeInsets.only(left: 15.0, bottom: 5),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: AppText(
+                        text: 'Please enter Whatsapp Number',
+                        textColor: Colors.red,
+                        fontsize: 12,
+                      ),
+                    ),
+                  ),
               ],
               // LabelTextInputField(
               //   keyboardType: TextInputType.number,
@@ -335,18 +409,16 @@ Widget buildInventoryQuestions(
               validator: (value) => !isEdit ? validateForNormalFeild(value: value, props: "Search Location") : null,
               onChanged: (value) {
                 getPlaces(value).then((places) {
-                  print(places.predictions?.length);
                   final descriptions = places.predictions?.map((prediction) => prediction.description) ?? [];
                   setState(() {
                     placesList = descriptions.toList();
-                    print("places============${descriptions}");
                   });
                 });
               },
             ),
             if (placesList.isNotEmpty)
               Container(
-                constraints: BoxConstraints(maxHeight: 200),
+                height: 200,
                 decoration: BoxDecoration(border: Border.all(color: Colors.grey, width: 0.8), borderRadius: BorderRadius.circular(8)),
                 margin: const EdgeInsets.symmetric(horizontal: 7),
                 child: ListView.builder(
@@ -419,8 +491,13 @@ Widget buildInventoryQuestions(
               },
               inputController: statecontroller,
               isMandatory: true,
-              validator: (value) => validateForNormalFeild(value: value, props: "State"),
               labelText: "State",
+              validator: (value) {
+                if (!isChecked && value!.isEmpty) {
+                  return "Please enter ${question.questionTitle}";
+                }
+                return null;
+              },
             ),
             LabelTextInputField(
               onChanged: (newvalue) {
@@ -429,7 +506,12 @@ Widget buildInventoryQuestions(
               inputController: citycontroller,
               isMandatory: true,
               labelText: "City",
-              validator: (value) => validateForNormalFeild(value: value, props: "City"),
+              validator: (value) {
+                if (!isChecked && value!.isEmpty) {
+                  return "Please enter ${question.questionTitle}";
+                }
+                return null;
+              },
             ),
             LabelTextInputField(
               onChanged: (newvalue) {
@@ -438,7 +520,12 @@ Widget buildInventoryQuestions(
               inputController: localitycontroller,
               isMandatory: true,
               labelText: "Locality",
-              validator: (value) => validateForNormalFeild(value: value, props: "Locality"),
+              validator: (value) {
+                if (!isChecked && value!.isEmpty) {
+                  return "Please enter ${question.questionTitle}";
+                }
+                return null;
+              },
             ),
             LabelTextInputField(
               onChanged: (newvalue) {
@@ -447,6 +534,12 @@ Widget buildInventoryQuestions(
               inputController: address1controller,
               isMandatory: true,
               labelText: "Address1",
+              validator: (value) {
+                if (!isChecked && value!.isEmpty) {
+                  return "Please enter ${question.questionTitle}";
+                }
+                return null;
+              },
             ),
             LabelTextInputField(
               onChanged: (newvalue) {
@@ -455,6 +548,12 @@ Widget buildInventoryQuestions(
               inputController: address2controller,
               isMandatory: true,
               labelText: "Address2",
+              validator: (value) {
+                if (!isChecked && value!.isEmpty) {
+                  return "Please enter ${question.questionTitle}";
+                }
+                return null;
+              },
             ),
           ],
         );
@@ -463,8 +562,6 @@ Widget buildInventoryQuestions(
     return StatefulBuilder(
       builder: (context, setState) {
         final isPriceField = question.questionId == 46 || question.questionId == 48 || question.questionId == 50;
-        final isVideoField = question.questionId == 34;
-
         final isDigitsOnly = question.questionTitle.contains('Mobile') ||
             question.questionTitle == 'Rent' ||
             question.questionTitle == 'Listing Price' ||
@@ -513,25 +610,8 @@ Widget buildInventoryQuestions(
                         }
                       : null,
             ),
-            isVideoField
-                ? Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 7),
-                    child: AppText(
-                      text: '(Enter youtube link of the video)',
-                      textColor: Colors.grey.shade500,
-                      fontsize: 14,
-                    ),
-                  )
-                : const SizedBox.shrink(),
             isPriceField
-                ? Container(
-                    margin: const EdgeInsets.all(7),
-                    child: AppText(
-                      text: textResult.toUpperCase(),
-                      textColor: AppColor.grey,
-                      fontsize: 16,
-                    ),
-                  )
+                ? Container(margin: const EdgeInsets.all(7), child: AppText(text: textResult.toUpperCase(), textColor: AppColor.grey, fontsize: 16))
                 : const SizedBox.shrink(),
           ],
         );
@@ -619,8 +699,6 @@ Widget buildInventoryQuestions(
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
-    print('alsdkjfalsdjf ---${defaultValue}');
-
     final state = getDataById(selectedValues, 26);
     final city = getDataById(selectedValues, 27);
     final address1 = getDataById(selectedValues, 28);
@@ -629,7 +707,6 @@ Widget buildInventoryQuestions(
 
     return CustomGoogleMap(
       isEdit: isEdit,
-      latLng: LatLng(defaultValue[0], defaultValue[1]),
       selectedValues: selectedValues,
       onLatLngSelected: (latLng) {
         notify.add({

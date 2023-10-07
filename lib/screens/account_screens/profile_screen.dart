@@ -582,7 +582,7 @@ Widget mobileInfoFields(String fieldName, String fieldDetail, bool isEditing, Te
           height: 50,
           width: Responsive.isDesktop(context) ? 300 : 160,
           child: MobileNumberInputField(
-            bottomMargin: const EdgeInsets.only(bottom: 8.5),
+            bottomMargin: kIsWeb ? const EdgeInsets.only(bottom: 8.5) : const EdgeInsets.only(bottom: 1.5),
             fontsize: 13.0,
             controller: textController,
             hintText: 'Phone',
@@ -590,6 +590,52 @@ Widget mobileInfoFields(String fieldName, String fieldDetail, bool isEditing, Te
             openModal: openModal,
             countryCode: countryCode,
             onChange: (value) {},
+          ),
+        ),
+      ] else ...[
+        const SizedBox(height: 3),
+        Text(
+          fieldDetail,
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ]
+    ],
+  );
+}
+
+Widget serachLocationInfoFields(
+  String fieldName,
+  String fieldDetail,
+  bool isEditing,
+  TextEditingController textController,
+  BuildContext context,
+  Function(String) onChange,
+) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        fieldName,
+        style: const TextStyle(
+          fontSize: 14,
+          color: Color(0xFF818181),
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      if (isEditing) ...[
+        SizedBox(
+          height: 50,
+          width: Responsive.isDesktop(context) ? 300 : 335,
+          child: CustomTextInput(
+            hintText: "Type here...",
+            controller: textController,
+            onFieldSubmitted: (newValue) {},
+            onChanged: (p) {
+              onChange(p);
+            },
           ),
         ),
       ] else ...[
