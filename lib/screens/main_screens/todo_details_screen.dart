@@ -342,7 +342,12 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                   GestureDetector(
                                     onTap: () => updateDate(data.todoId),
                                     child: CustomChip(
-                                      label: Text(data.dueDate!),
+                                      paddingVertical: 6,
+                                      label: Text(
+                                        DateFormat('dd MMM yyyy').format(
+                                          DateFormat('dd-MM-yy').parse(data.dueDate!),
+                                        ),
+                                      ),
                                       avatar: const Icon(
                                         Icons.calendar_month_outlined,
                                       ),

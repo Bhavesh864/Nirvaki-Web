@@ -1,5 +1,3 @@
-import '../../app_constant.dart';
-import '../Hive/hive_methods.dart';
 import '../userModel/broker_info.dart';
 import '../userModel/user_info.dart';
 
