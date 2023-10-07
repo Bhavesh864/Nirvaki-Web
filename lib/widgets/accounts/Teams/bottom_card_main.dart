@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/text_utility.dart';
+import 'package:yes_broker/constants/user_role.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/riverpodstate/add_member_state.dart';
@@ -52,26 +53,28 @@ class _BottomCardMainState extends ConsumerState<BottomCardMain> {
                         TableCell(
                           child: user.managerName != null ? AppText(text: user.managerName!, fontsize: 12, fontWeight: FontWeight.w400) : const SizedBox(),
                         ),
-                        TableCell(
-                          child: Container(
-                            width: 20, // Set the desired width for the edit container
-                            height: 20, // Set the desired height for the edit container
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10), // Set the desired border radius
-                            ),
-                            child: IconButton(
-                              tooltip: "Edit",
-                              iconSize: 12,
-                              padding: EdgeInsets.zero,
-                              onPressed: () {
-                                ref.read(editAddMemberState.notifier).isEdit(true);
-                                showAddMemberScreen(ref);
-                                ref.read(userForEditScreen.notifier).setUserForEdit(user);
-                              },
-                              icon: const Icon(Icons.edit),
-                            ),
-                          ),
-                        )
+                        user.role == UserRole.broker
+                            ? const SizedBox()
+                            : TableCell(
+                                child: Container(
+                                  width: 20, // Set the desired width for the edit container
+                                  height: 20, // Set the desired height for the edit container
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10), // Set the desired border radius
+                                  ),
+                                  child: IconButton(
+                                    tooltip: "Edit",
+                                    iconSize: 12,
+                                    padding: EdgeInsets.zero,
+                                    onPressed: () {
+                                      ref.read(editAddMemberState.notifier).isEdit(true);
+                                      showAddMemberScreen(ref);
+                                      ref.read(userForEditScreen.notifier).setUserForEdit(user);
+                                    },
+                                    icon: const Icon(Icons.edit),
+                                  ),
+                                ),
+                              )
                       ])
                     ],
                   ),
