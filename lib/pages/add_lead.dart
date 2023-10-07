@@ -39,6 +39,9 @@ class _AddLeadState extends ConsumerState<AddLead> {
   PageController? pageController;
   int currentScreenIndex = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool isMobileNoEmpty = false;
+  bool iswhatsappMobileNoEmpty = false;
+  bool isChecked = true;
 
   @override
   void initState() {
@@ -67,6 +70,55 @@ class _AddLeadState extends ConsumerState<AddLead> {
   }
 
   nextQuestion({List<Screen>? screensDataList, required String option}) {
+    if (currentScreenIndex == 3) {
+      final List<Map<String, dynamic>> selectedValues = ref.read(myArrayProvider);
+      final mobileNoValue = selectedValues.where((e) => e["id"] == 7).toList();
+      final whatsappNoValue = selectedValues.where((e) => e["id"] == 8).toList();
+
+      if (mobileNoValue.isEmpty) {
+        setState(() {
+          isMobileNoEmpty = true;
+        });
+        if (isChecked) {
+          return;
+        }
+      } else {
+        List<String> itemValue = mobileNoValue[0]["item"].split(' ');
+        if (itemValue[1] == "") {
+          setState(() {
+            isMobileNoEmpty = true;
+          });
+          return;
+        }
+        setState(() {
+          isMobileNoEmpty = false;
+        });
+      }
+
+      if (!isChecked) {
+        if (whatsappNoValue.isEmpty) {
+          setState(() {
+            iswhatsappMobileNoEmpty = true;
+          });
+          return;
+        } else {
+          List<String> itemValue = whatsappNoValue[0]["item"].split(' ');
+          if (itemValue[1] == "") {
+            setState(() {
+              iswhatsappMobileNoEmpty = true;
+            });
+            return;
+          }
+          setState(() {
+            iswhatsappMobileNoEmpty = false;
+          });
+        }
+      } else {
+        setState(() {
+          iswhatsappMobileNoEmpty = false;
+        });
+      }
+    }
     updateLeadListInventory(ref, option, screensDataList);
     if (currentScreenIndex < screensDataList!.length - 1) {
       setState(() {
@@ -77,6 +129,12 @@ class _AddLeadState extends ConsumerState<AddLead> {
         );
       });
     } else {}
+  }
+
+  void isCheckedUpdate(bool value) {
+    setState(() {
+      isChecked = value;
+    });
   }
 
   bool backButtonEnabled = true;
@@ -237,6 +295,10 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                       isEdit,
                                                       isPlotSelected,
                                                       selectedValues,
+                                                      isMobileNoEmpty,
+                                                      iswhatsappMobileNoEmpty,
+                                                      isChecked,
+                                                      isCheckedUpdate,
                                                     ),
                                                     SizedBox(height: currentScreenList[index].questions[i].questionOptionType != 'textfield' ? 10 : 0),
                                                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
