@@ -159,6 +159,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
                 mainAxisExtent: 145,
               ),
               itemCount: roomImages.length + 1,
+              // itemCount: 3,
               itemBuilder: (context, index) {
                 if (index < roomImages.length) {
                   return Stack(
@@ -296,6 +297,135 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
                       ],
                     ),
                   );
+                  // return Row(
+                  //   children: [
+                  //     Stack(
+                  //       children: [
+                  //         Draggable(
+                  //           childWhenDragging: Container(
+                  //             width: constraints.maxWidth / crossAxisCount - 20,
+                  //             height: constraints.maxWidth / crossAxisCount - 45,
+                  //             decoration: BoxDecoration(
+                  //               color: Colors.grey.withOpacity(0.4),
+                  //               borderRadius: BorderRadius.circular(10),
+                  //             ),
+                  //           ),
+                  //           feedback: Material(
+                  //             child: Column(
+                  //               children: [
+                  //                 Card(
+                  //                   clipBehavior: Clip.antiAlias,
+                  //                   elevation: 2,
+                  //                   shadowColor: Colors.grey[300],
+                  //                   child: SizedBox(
+                  //                     width: constraints.maxWidth / crossAxisCount - 20,
+                  //                     height: constraints.maxWidth / crossAxisCount - 45,
+                  //                     child: Image.network(
+                  //                       noImg,
+                  //                       fit: BoxFit.fill,
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //                 const SizedBox(height: 4),
+                  //                 const Wrap(
+                  //                   runSpacing: 10,
+                  //                   children: [
+                  //                     Row(
+                  //                       mainAxisAlignment: MainAxisAlignment.center,
+                  //                       crossAxisAlignment: CrossAxisAlignment.center,
+                  //                       children: [
+                  //                         CustomText(
+                  //                           title: "roomImages[index]",
+                  //                           size: 14,
+                  //                         ),
+                  //                         SizedBox(
+                  //                           width: 2,
+                  //                         ),
+                  //                         Icon(
+                  //                           Icons.edit,
+                  //                           size: 18,
+                  //                           color: Colors.black,
+                  //                         )
+                  //                       ],
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //               ],
+                  //             ),
+                  //           ),
+                  //           child: Column(
+                  //             children: [
+                  //               Card(
+                  //                 clipBehavior: Clip.antiAlias,
+                  //                 elevation: 2,
+                  //                 shadowColor: Colors.grey[300],
+                  //                 child: SizedBox(
+                  //                     width: constraints.maxWidth / crossAxisCount - 20,
+                  //                     height: constraints.maxWidth / crossAxisCount - 45,
+                  //                     child: Image.network(
+                  //                       noImg,
+                  //                       fit: BoxFit.fill,
+                  //                     )),
+                  //               ),
+                  //               const SizedBox(height: 4),
+                  //               const Row(
+                  //                 mainAxisAlignment: MainAxisAlignment.center,
+                  //                 crossAxisAlignment: CrossAxisAlignment.center,
+                  //                 children: [
+                  //                   CustomText(
+                  //                     title: "title ",
+                  //                     size: 14,
+                  //                   ),
+                  //                   SizedBox(
+                  //                     width: 2,
+                  //                   ),
+                  //                   Icon(
+                  //                     Icons.edit,
+                  //                     size: 18,
+                  //                     color: Colors.black,
+                  //                   )
+                  //                 ],
+                  //               ),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //         Positioned(
+                  //           top: 0,
+                  //           right: 0,
+                  //           child: Container(
+                  //             decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),
+                  //             child: const Icon(
+                  //               Icons.close,
+                  //               size: 18,
+                  //               color: Colors.white,
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //     if (index == 2)
+                  //       DragTarget(
+                  //         builder: (
+                  //           context,
+                  //           candidateData,
+                  //           rejectedData,
+                  //         ) {
+                  //           return Center(
+                  //             child: Container(
+                  //               decoration: BoxDecoration(
+                  //                 color: Colors.grey.withOpacity(0.5),
+                  //                 border: Border.all(
+                  //                   color: Colors.white,
+                  //                   style: BorderStyle.solid,
+                  //                 ),
+                  //               ),
+                  //               child: const Text('Set Here..'),
+                  //             ),
+                  //           );
+                  //         },
+                  //       )
+                  //   ],
+                  // );
                 }
               },
             );

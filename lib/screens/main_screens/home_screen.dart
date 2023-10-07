@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:beamer/beamer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ import '../../constants/functions/filterdataAccordingRole/data_according_role.da
 import '../../riverpodstate/user_data.dart';
 import '../../widgets/app/speed_dial_button.dart';
 import '../../widgets/chat_modal_view.dart';
+import '../account_screens/common_screen.dart';
 import 'chat_list_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -41,7 +43,12 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    print("init");
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (Beamer.of(context).currentBeamLocation.state.routeInformation.location != '/profile') {
+        ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null);
+      }
+    });
+
     final token = UserHiveMethods.getdata("token");
     if (token != null) {
       AppConst.setAccessToken(token);
@@ -58,7 +65,6 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   getUserData(token) async {
-    print("getdetaiils");
     final User? user = await User.getUser(token);
     ref.read(userDataProvider.notifier).storeUserData(user!);
     AppConst.setRole(user.role);
