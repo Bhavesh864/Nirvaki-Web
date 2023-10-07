@@ -582,7 +582,7 @@ Widget mobileInfoFields(String fieldName, String fieldDetail, bool isEditing, Te
           height: 50,
           width: Responsive.isDesktop(context) ? 300 : 160,
           child: MobileNumberInputField(
-            bottomMargin: const EdgeInsets.only(bottom: 8.5),
+            bottomMargin: kIsWeb ? const EdgeInsets.only(bottom: 8.5) : const EdgeInsets.only(bottom: 1.5),
             fontsize: 13.0,
             controller: textController,
             hintText: 'Phone',

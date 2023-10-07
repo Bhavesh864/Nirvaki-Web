@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/customs/responsive.dart';
 
 import '../customs/text_utility.dart';
 
@@ -487,7 +488,7 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
         ),
         borderRadius: BorderRadius.circular(10.0),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: EdgeInsets.symmetric(horizontal: Responsive.isMobile(context) ? 4 : 10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

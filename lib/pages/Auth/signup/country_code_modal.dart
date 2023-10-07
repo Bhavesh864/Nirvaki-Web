@@ -27,7 +27,7 @@ class _CountryCodeModelState extends State<CountryCodeModel> {
     return Dialog(
       child: Container(
         width: 550,
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.only(top: 16, left: 16, right: 5, bottom: 5),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
