@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/constants/firebase/Methods/submit_inventory.dart';
@@ -18,13 +19,17 @@ class AllChipSelectedAnwers extends StateNotifier<List<Map<String, dynamic>>> {
     } else {
       state = [...currentValue, selectedValue];
     }
-    print('state, $state');
+    if (kDebugMode) {
+      print('state, $state');
+    }
   }
 
   void remove(List<int> ids) {
     final currentValue = state;
     state = currentValue.where((item) => !ids.contains(item['id'])).toList();
-    print('state: $state');
+    if (kDebugMode) {
+      print('state: $state');
+    }
   }
 
   void resetState() {

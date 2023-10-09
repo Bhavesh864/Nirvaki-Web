@@ -38,6 +38,8 @@ Widget buildLeadQuestions(
   bool isChecked,
   Function(bool) isCheckedUpdate,
 ) {
+  RangeValues areaRange = const RangeValues(500, 10000);
+  RangeValues defaultAreaRangeValues = areaRange;
   if (question.questionOptionType == 'chip') {
     return Column(
       children: [
@@ -118,11 +120,15 @@ Widget buildLeadQuestions(
                         bgcolor: selectedOption == option ? AppColor.primary : AppColor.primary.withOpacity(0.05),
                         onSelected: (selectedItem) {
                           setState(() {
-                            if (selectedOption == option) {
-                              selectedOption = '';
-                            } else {
-                              selectedOption = option;
+                            selectedOption = option;
+                            if (option == "Sq ft") {
+                              areaRange = const RangeValues(500, 10000);
+                            } else if (option == "Sq yard") {
+                              areaRange = const RangeValues(600, 5000);
+                            } else if (option == "Acre") {
+                              areaRange = const RangeValues(700, 7000);
                             }
+                            defaultAreaRangeValues = areaRange;
                           });
                           notify.add({"id": question.questionId, "item": selectedOption});
                         },
@@ -782,8 +788,7 @@ Widget buildLeadQuestions(
         });
       }
     }
-    RangeValues areaRange = const RangeValues(500, 10000);
-    RangeValues defaultAreaRangeValues = stateValue ?? areaRange;
+    defaultAreaRangeValues = stateValue ?? areaRange;
     double divisionValue = 50;
     return StatefulBuilder(
       builder: (context, setState) {
@@ -795,8 +800,8 @@ Widget buildLeadQuestions(
             ),
             RangeSlider(
               values: defaultAreaRangeValues,
-              min: 500,
-              max: 10000,
+              min: areaRange.start,
+              max: areaRange.end,
               labels: RangeLabels(
                 formatValueforOnlyNumbers(defaultAreaRangeValues.start),
                 formatValueforOnlyNumbers(defaultAreaRangeValues.end),
