@@ -111,8 +111,6 @@ class _DetailsTabViewState extends State<DetailsTabView> {
       );
     }
 
-    print('===================----> $videoUrl');
-
     if (!widget.isLeadView) {
       final inventoryData = widget.data as InventoryDetails;
       if (inventoryData.propertyphotos != null) {
