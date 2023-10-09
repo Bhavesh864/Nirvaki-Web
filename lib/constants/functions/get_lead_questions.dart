@@ -41,12 +41,6 @@ Widget buildLeadQuestions(
   Function(bool) isCheckedUpdate,
   WidgetRef ref,
 ) {
-  // RangeValues areaRange = const RangeValues(500, 10000);
-
-  // final areaRange = ref.watch(areaRangeSelectorState);
-  // // RangeValues defaultAreaRangeValues = areaRange;
-  // String selectedOption = 'Sq ft';
-
   final areaRange = ref.watch(areaRangeSelectorState);
   final selectedOption = ref.watch(selectedOptionNotifier);
   final defaultAreaRangeValues = ref.watch(defaultAreaRangeValuesNotifier);
@@ -60,7 +54,6 @@ Widget buildLeadQuestions(
               return const SizedBox();
             }
             if (screensDataList.any((element) => element.screenId == "S2")) {
-              // if (!isEdit) {
               if (option == "Rent" || option == "Buy") {
                 final indexToRemove = selectedValues.indexWhere((map) => map['id'] == 32);
                 if (indexToRemove != -1) {
@@ -68,15 +61,6 @@ Widget buildLeadQuestions(
                   selectedValues = selectedValues;
                 }
               }
-              // } else {
-              // if (selectedValues.firstWhere((element) => element["id"] == 2)["item"] = option) {
-              //   final indexToRemove = selectedValues.indexWhere((map) => map['id'] == 32);
-              //   if (indexToRemove != -1) {
-              //     selectedValues.removeAt(indexToRemove);
-              //     selectedValues = selectedValues;
-              //   }
-              // } else {}
-              // }
             }
             return ChipButton(
               text: option,
@@ -96,7 +80,7 @@ Widget buildLeadQuestions(
       ],
     );
   } else if (question.questionOptionType == 'smallchip') {
-    // String selectedOption = '';
+    String selectedchipOption = '';
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       // selectedOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
@@ -131,20 +115,29 @@ Widget buildLeadQuestions(
                         bgcolor: selectedOption == option ? AppColor.primary : AppColor.primary.withOpacity(0.05),
                         onSelected: (selectedItem) {
                           setState(() {
-                            if (selectedOption == option) {
-                            } else {
-                              ref.read(selectedOptionNotifier.notifier).setRange(option);
-                              if (option == "Sq ft") {
-                                ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(500, 10000));
-                              } else if (option == "Sq yard") {
-                                ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(600, 5000));
-                              } else if (option == "Acre") {
-                                ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(700, 7000));
+                            if (question.questionId == 23) {
+                              if (selectedOption == option) {
+                              } else {
+                                ref.read(selectedOptionNotifier.notifier).setRange(option);
+                                notify.add({"id": question.questionId, "item": option});
+                                if (option == "Sq ft") {
+                                  ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(500, 10000));
+                                } else if (option == "Sq yard") {
+                                  ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(600, 5000));
+                                } else if (option == "Acre") {
+                                  ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(700, 7000));
+                                }
+                                final range = ref.watch(areaRangeSelectorState);
+                                ref.read(defaultAreaRangeValuesNotifier.notifier).setRange(range);
+                                notify.add({"id": question.questionId + 1, "item": range});
                               }
-                              final range = ref.watch(areaRangeSelectorState);
-                              ref.read(defaultAreaRangeValuesNotifier.notifier).setRange(range);
-                              // defaultAreaRangeValues = areaRange;
-                              // ref.read(defaultAreaRangeValues.notifier).setRange(const RangeValues(500, 10000));
+                            } else {
+                              // selectedchipOption
+                              if (selectedchipOption == option) {
+                              } else {
+                                selectedchipOption = option;
+                                notify.add({"id": question.questionId, "item": option});
+                              }
                             }
                           });
                           // setState(() {
@@ -154,7 +147,6 @@ Widget buildLeadQuestions(
                           //     selectedOption = option;
                           //   }
                           // });
-                          notify.add({"id": question.questionId, "item": selectedOption});
                         },
                         labelColor: selectedOption == option ? Colors.white : Colors.black,
                       ),
@@ -818,50 +810,10 @@ Widget buildLeadQuestions(
     // ref.read(defaultAreaRangeValuesNotifier.notifier).setRange(stateValue ?? areaRange);
     double divisionValue = 50;
 
-    List<String> questionOption = ['Sq ft', 'Sq yard', 'Acre'];
-
     return StatefulBuilder(
       builder: (context, setState) {
         return Column(
           children: [
-            // if (question.questionId == 24) ...[
-            //   Align(
-            //     alignment: Alignment.centerLeft,
-            //     child: Wrap(
-            //       alignment: WrapAlignment.start,
-            //       children: [
-            //         for (var option in questionOption)
-            //           Padding(
-            //             padding: const EdgeInsets.only(right: 10, bottom: 10),
-            //             child: CustomChoiceChip(
-            //               label: option,
-            //               selected: selectedOption == option,
-            //               bgcolor: selectedOption == option ? AppColor.primary : AppColor.primary.withOpacity(0.05),
-            //               onSelected: (selectedItem) {
-            //                 // setState(() {
-            //                 //   if (selectedOption == option) {
-            //                 //   } else {
-            //                 //     selectedOption = option;
-            //                 //     if (option == "Sq ft") {
-            //                 //       areaRange = const RangeValues(500, 10000);
-            //                 //     } else if (option == "Sq yard") {
-            //                 //       areaRange = const RangeValues(600, 5000);
-            //                 //     } else if (option == "Acre") {
-            //                 //       areaRange = const RangeValues(700, 7000);
-            //                 //     }
-            //                 //     defaultAreaRangeValues = areaRange;
-            //                 //   }
-            //                 // });
-            //                 notify.add({"id": question.questionId, "item": selectedOption});
-            //               },
-            //               labelColor: selectedOption == option ? Colors.white : Colors.black,
-            //             ),
-            //           ),
-            //       ],
-            //     ),
-            //   ),
-            // ],
-            //
             CustomText(
               title: 'Area: ${formatValueforOnlyNumbers(defaultAreaRangeValues.start)} - ${formatValueforOnlyNumbers(defaultAreaRangeValues.end)}',
               size: 14,
