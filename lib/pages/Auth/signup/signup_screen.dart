@@ -31,12 +31,12 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
   var isloading = false;
 
   String? validateReenteredPassword(String? value) {
-    if (value == null || value.isEmpty) {
+    if (value == null || value.trim().isEmpty) {
       return 'Please enter your password';
     }
     if (value.length < 6) {
       return 'Password must be at least 6 characters long';
-    } else if (value != passwordcontroller.text) {
+    } else if (value != passwordcontroller.text.trim()) {
       return "Password do not match";
     }
     return null;
@@ -122,14 +122,15 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                           Container(margin: const EdgeInsets.only(left: 8), child: const Text('Use a minimum of 6 characters with at-least one-special symbol and one number. ')),
                           const SizedBox(height: 15),
                           CustomTextInput(
-                              controller: reenteredpasswordcontroller,
-                              labelText: 'Re-enter Password',
-                              obscureText: true,
-                              onChanged: (value) {
-                                notify.add({"id": 2, "item": value.trim()});
-                              },
-                              rightIcon: Icons.remove_red_eye,
-                              validator: validateReenteredPassword),
+                            controller: reenteredpasswordcontroller,
+                            labelText: 'Re-enter Password',
+                            obscureText: true,
+                            onChanged: (value) {
+                              notify.add({"id": 2, "item": value.trim()});
+                            },
+                            rightIcon: Icons.remove_red_eye,
+                            validator: validateReenteredPassword,
+                          ),
                           const SizedBox(height: 10),
                           isloading
                               ? const Center(child: CircularProgressIndicator.adaptive())

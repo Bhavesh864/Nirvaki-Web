@@ -46,7 +46,8 @@ Widget buildLeadQuestions(
             if (isRentSelected && option == "Plot") {
               return const SizedBox();
             }
-            if (!isEdit) {
+            if (screensDataList.any((element) => element.screenId == "S2")) {
+              // if (!isEdit) {
               if (option == "Rent" || option == "Buy") {
                 final indexToRemove = selectedValues.indexWhere((map) => map['id'] == 32);
                 if (indexToRemove != -1) {
@@ -54,6 +55,15 @@ Widget buildLeadQuestions(
                   selectedValues = selectedValues;
                 }
               }
+              // } else {
+              // if (selectedValues.firstWhere((element) => element["id"] == 2)["item"] = option) {
+              //   final indexToRemove = selectedValues.indexWhere((map) => map['id'] == 32);
+              //   if (indexToRemove != -1) {
+              //     selectedValues.removeAt(indexToRemove);
+              //     selectedValues = selectedValues;
+              //   }
+              // } else {}
+              // }
             }
             return ChipButton(
               text: option,
@@ -346,63 +356,12 @@ Widget buildLeadQuestions(
                     ),
                   ),
               ],
-              // LabelTextInputField(
-              //   keyboardType: TextInputType.number,
-              //   onlyDigits: true,
-              //   onChanged: (newvalue) {
-              //     notify.add({"id": question.questionId, "item": newvalue.trim()});
-              //   },
-              //   inputController: controller,
-              //   isMandatory: true,
-              //   labelText: question.questionTitle,
-              //   validator: (value) {
-              //     if (!isChecked && value!.isEmpty) {
-              //       return "Please enter ${question.questionTitle}";
-              //     }
-              //     return null;
-              //   },
-              // ),
             ],
           );
         },
       );
     }
 
-    // if (question.questionTitle == 'Whatsapp Number') {
-    //   return StatefulBuilder(
-    //     builder: (context, setState) {
-    //       return Column(
-    //         children: [
-    //           if (question.questionTitle == 'Whatsapp Number')
-    //             CustomCheckbox(
-    //               value: isChecked,
-    //               label: 'Use this as whatsapp number',
-    //               onChanged: (value) {
-    //                 setState(() {
-    //                   isChecked = value;
-    //                 });
-    //               },
-    //             ),
-    //           if (!isChecked)
-    //             LabelTextInputField(
-    //               onChanged: (newvalue) {
-    //                 notify.add({"id": question.questionId, "item": newvalue.trim()});
-    //               },
-    //               inputController: controller,
-    //               labelText: question.questionTitle,
-    //               isMandatory: true,
-    //               validator: (value) {
-    //                 if (!isChecked && value!.isEmpty) {
-    //                   return "Please enter ${question.questionTitle}";
-    //                 }
-    //                 return null;
-    //               },
-    //             ),
-    //         ],
-    //       );
-    //     },
-    //   );
-    // }
     if (question.questionId == 56) {
       String? statevalue = "";
       String? cityvalue = "";
@@ -487,15 +446,11 @@ Widget buildLeadQuestions(
                             statecontroller.text = stateName;
                             citycontroller.text = cityName;
                             localitycontroller.text = remainingWords;
-                            // address1controller.text = str;
-                            // address2controller.text = str;
+
                             notify.add({"id": 26, "item": stateName});
                             notify.add({"id": 27, "item": cityName});
                             notify.add({"id": 54, "item": remainingWords});
-                            // notify.add({"id": 26, "item": str});
-                            // notify.add({"id": 26, "item": str});
-                            // notify.add({"id": 26, "item": lastThreeWordsList[1]});
-                            // notify.add({"id": 56, "item": str});
+
                             setState(() {
                               placesList = [];
                             });
@@ -510,11 +465,7 @@ Widget buildLeadQuestions(
                         } catch (e) {
                           setState(() {
                             placesList = [];
-                            // controller.text = "";
-                            // controller.text = "";
                           });
-                          // controller.text = "";
-                          // controller.text = "";
                         }
                       },
                     );
@@ -743,85 +694,125 @@ Widget buildLeadQuestions(
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       stateValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
-    RangeValues buyRangeValues = const RangeValues(500000, 50000000);
-    RangeValues rentRangeValues = const RangeValues(0, 1000000);
-    RangeValues defaultBuyRangeValues = stateValue ?? buyRangeValues;
-    RangeValues defaultRentRangeValues = stateValue ?? rentRangeValues;
-
-    if (selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 32)) {
+    if (question.questionId == 32) {
+      RangeValues buyRangeValues = const RangeValues(500000, 50000000);
+      RangeValues rentRangeValues = const RangeValues(0, 1000000);
+      RangeValues defaultBuyRangeValues = stateValue ?? buyRangeValues;
+      RangeValues defaultRentRangeValues = stateValue ?? rentRangeValues;
+      if (selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 32)) {
+        if (isRentSelected) {
+          stateValue = const RangeValues(0, 1000000);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            notify.add({"id": 32, "item": stateValue});
+          });
+        } else if (!isRentSelected) {
+          stateValue = const RangeValues(500000, 50000000);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            notify.add({"id": 32, "item": stateValue});
+          });
+        }
+      }
       if (isRentSelected) {
-        stateValue = const RangeValues(0, 1000000);
+        double divisionValue = 5000;
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Column(
+              children: [
+                CustomText(
+                  title: 'Rent: ${formatValue(defaultRentRangeValues.start)} - ${formatValue(defaultRentRangeValues.end)}',
+                  size: 14,
+                ),
+                RangeSlider(
+                  values: defaultRentRangeValues,
+                  min: 0,
+                  max: 1000000,
+                  labels: RangeLabels(
+                    formatValue(defaultRentRangeValues.start),
+                    formatValue(defaultRentRangeValues.end),
+                  ),
+                  divisions: (100000000 - 1000) ~/ divisionValue,
+                  onChanged: (RangeValues newVal) {
+                    setState(() {
+                      defaultRentRangeValues = newVal;
+                    });
+                    notify.add({"id": question.questionId, "item": defaultRentRangeValues});
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        double divisionValue = 50000;
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Column(
+              children: [
+                CustomText(
+                  title: 'Buy: ${formatValue(defaultBuyRangeValues.start)} - ${formatValue(defaultBuyRangeValues.end)}',
+                  size: 14,
+                ),
+                RangeSlider(
+                  values: defaultBuyRangeValues,
+                  min: 500000,
+                  max: 500000000,
+                  labels: RangeLabels(
+                    formatValue(defaultBuyRangeValues.start),
+                    formatValue(defaultBuyRangeValues.end),
+                  ),
+                  divisions: (50000000 - 100000) ~/ divisionValue,
+                  onChanged: (RangeValues newVal) {
+                    setState(() {
+                      defaultBuyRangeValues = newVal;
+                    });
+                    notify.add({"id": question.questionId, "item": defaultBuyRangeValues});
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    }
+    if (selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 24) && !isEdit) {
+      if (question.questionId == 24) {
+        stateValue = const RangeValues(500, 10000);
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          notify.add({"id": 32, "item": stateValue});
-        });
-      } else if (!isRentSelected) {
-        stateValue = const RangeValues(500000, 50000000);
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          notify.add({"id": 32, "item": stateValue});
+          notify.add({"id": 24, "item": stateValue});
         });
       }
     }
-    if (isRentSelected) {
-      double divisionValue = 5000;
-      return StatefulBuilder(
-        builder: (context, setState) {
-          return Column(
-            children: [
-              CustomText(
-                title: 'Rent: ${formatValue(defaultRentRangeValues.start)} - ${formatValue(defaultRentRangeValues.end)}',
-                size: 14,
+    RangeValues areaRange = const RangeValues(500, 10000);
+    RangeValues defaultAreaRangeValues = stateValue ?? areaRange;
+    double divisionValue = 50;
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return Column(
+          children: [
+            CustomText(
+              title: 'Area: ${formatValueforOnlyNumbers(defaultAreaRangeValues.start)} - ${formatValueforOnlyNumbers(defaultAreaRangeValues.end)}',
+              size: 14,
+            ),
+            RangeSlider(
+              values: defaultAreaRangeValues,
+              min: 500,
+              max: 10000,
+              labels: RangeLabels(
+                formatValueforOnlyNumbers(defaultAreaRangeValues.start),
+                formatValueforOnlyNumbers(defaultAreaRangeValues.end),
               ),
-              RangeSlider(
-                values: defaultRentRangeValues,
-                min: 0,
-                max: 1000000,
-                labels: RangeLabels(
-                  formatValue(defaultRentRangeValues.start),
-                  formatValue(defaultRentRangeValues.end),
-                ),
-                divisions: (100000000 - 1000) ~/ divisionValue,
-                onChanged: (RangeValues newVal) {
-                  setState(() {
-                    defaultRentRangeValues = newVal;
-                  });
-                  notify.add({"id": question.questionId, "item": defaultRentRangeValues});
-                },
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      double divisionValue = 50000;
-      return StatefulBuilder(
-        builder: (context, setState) {
-          return Column(
-            children: [
-              CustomText(
-                title: 'Buy: ${formatValue(defaultBuyRangeValues.start)} - ${formatValue(defaultBuyRangeValues.end)}',
-                size: 14,
-              ),
-              RangeSlider(
-                values: defaultBuyRangeValues,
-                min: 500000,
-                max: 500000000,
-                labels: RangeLabels(
-                  formatValue(defaultBuyRangeValues.start),
-                  formatValue(defaultBuyRangeValues.end),
-                ),
-                divisions: (50000000 - 100000) ~/ divisionValue,
-                onChanged: (RangeValues newVal) {
-                  setState(() {
-                    defaultBuyRangeValues = newVal;
-                  });
-                  notify.add({"id": question.questionId, "item": defaultBuyRangeValues});
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
+              divisions: (10000 - 500) ~/ divisionValue,
+              onChanged: (RangeValues newVal) {
+                setState(() {
+                  defaultAreaRangeValues = newVal;
+                });
+                notify.add({"id": question.questionId, "item": defaultAreaRangeValues});
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   return const SizedBox.shrink();

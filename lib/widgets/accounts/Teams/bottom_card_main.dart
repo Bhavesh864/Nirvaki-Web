@@ -53,28 +53,26 @@ class _BottomCardMainState extends ConsumerState<BottomCardMain> {
                         TableCell(
                           child: user.managerName != null ? AppText(text: user.managerName!, fontsize: 12, fontWeight: FontWeight.w400) : const SizedBox(),
                         ),
-                        user.role == UserRole.broker
-                            ? const SizedBox()
-                            : TableCell(
-                                child: Container(
-                                  width: 20, // Set the desired width for the edit container
-                                  height: 20, // Set the desired height for the edit container
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10), // Set the desired border radius
-                                  ),
-                                  child: IconButton(
-                                    tooltip: "Edit",
-                                    iconSize: 12,
-                                    padding: EdgeInsets.zero,
-                                    onPressed: () {
-                                      ref.read(editAddMemberState.notifier).isEdit(true);
-                                      showAddMemberScreen(ref);
-                                      ref.read(userForEditScreen.notifier).setUserForEdit(user);
-                                    },
-                                    icon: const Icon(Icons.edit),
-                                  ),
-                                ),
-                              )
+                        TableCell(
+                          child: Container(
+                            width: 20, // Set the desired width for the edit container
+                            height: 20, // Set the desired height for the edit container
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10), // Set the desired border radius
+                            ),
+                            child: IconButton(
+                              tooltip: "Edit",
+                              iconSize: 12,
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                ref.read(editAddMemberState.notifier).isEdit(true);
+                                showAddMemberScreen(ref);
+                                ref.read(userForEditScreen.notifier).setUserForEdit(user);
+                              },
+                              icon: const Icon(Icons.edit),
+                            ),
+                          ),
+                        )
                       ])
                     ],
                   ),
