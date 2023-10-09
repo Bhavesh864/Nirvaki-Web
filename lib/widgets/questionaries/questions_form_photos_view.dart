@@ -2,15 +2,20 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/scheduler.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
-import 'package:yes_broker/Customs/text_utility.dart';
+import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
+
+import '../../constants/utils/constants.dart';
+import '../../customs/text_utility.dart';
 
 class PhotosViewForm extends ConsumerStatefulWidget {
   final Propertyphotos? propertyphotos;
@@ -25,14 +30,14 @@ class PhotosViewForm extends ConsumerStatefulWidget {
 }
 
 class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
-  String imageUrl = '';
   List roomImages = [];
   List<String> selectedImagesUrlList = [];
   List<String> selectedImagesTitleList = [];
-  int photosNo = 1;
   int isEditingTodoName = -1;
   TextEditingController todoNameEditingController = TextEditingController();
   FocusNode focusNode = FocusNode();
+  bool dragMode = false;
+  int? draggableItemIndex;
 
   void startEditingTodoName(String todoName, int index) {
     setState(() {
@@ -136,6 +141,32 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
     }
   }
 
+  void handleDrop(int targetIndex) {
+    setState(() {
+      if (draggableItemIndex != null) {
+        // Swap the items in roomImages and selectedImagesTitleList
+        final draggedItem = roomImages[draggableItemIndex!];
+        final draggedTitle = selectedImagesTitleList[draggableItemIndex!];
+
+        roomImages.removeAt(draggableItemIndex!);
+        selectedImagesTitleList.removeAt(draggableItemIndex!);
+
+        roomImages.insert(targetIndex, draggedItem);
+        selectedImagesTitleList.insert(targetIndex, draggedTitle);
+
+        draggableItemIndex = null;
+        dragMode = false;
+      }
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        Propertyphotos propertyphotos = Propertyphotos(imageTitle: selectedImagesTitleList, imageUrl: selectedImagesUrlList);
+        widget.notify!.add({
+          'id': widget.id,
+          'item': propertyphotos,
+        });
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -147,289 +178,311 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
             maxHeight: Responsive.isMobile(context) ? 450 : 600,
           ),
           padding: const EdgeInsets.all(10),
-          child: LayoutBuilder(builder: (context, constraints) {
-            int crossAxisCount = (constraints.maxWidth / 120).floor();
-            return GridView.builder(
-              shrinkWrap: true,
-              padding: EdgeInsets.zero,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: crossAxisCount,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                mainAxisExtent: 145,
-              ),
-              itemCount: roomImages.length + 1,
-              // itemCount: 3,
-              itemBuilder: (context, index) {
-                if (index < roomImages.length) {
-                  return Stack(
-                    children: [
-                      Column(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              int crossAxisCount = (constraints.maxWidth / 120).floor();
+
+              return GridView.builder(
+                // onReorder: (oldIndex, newIndex) {
+                //   setState(() {
+                //     // if (newIndex > oldIndex) newIndex--;
+                //     // final item = items.removeAt(oldIndex);
+                //     // items.insert(newIndex, item);
+                //   });
+                // },
+                shrinkWrap: true,
+                padding: EdgeInsets.zero,
+                // scrollDirection: Axis.horizontal,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: crossAxisCount,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  mainAxisExtent: 145,
+                ),
+                itemCount: roomImages.length + 1,
+                // itemCount: 3,
+                itemBuilder: (context, index) {
+                  if (index < roomImages.length) {
+                    return Stack(
+                      children: [
+                        Column(
+                          children: [
+                            Card(
+                              clipBehavior: Clip.antiAlias,
+                              elevation: 2,
+                              shadowColor: Colors.grey[300],
+                              child: SizedBox(
+                                width: constraints.maxWidth / crossAxisCount - 20,
+                                height: constraints.maxWidth / crossAxisCount - 45,
+                                child: widget.isEdit && roomImages[index]["webImageUrl"].contains("https")
+                                    ? Image.network(
+                                        roomImages[index]["webImageUrl"]!,
+                                        fit: BoxFit.fill,
+                                      )
+                                    : kIsWeb
+                                        ? Image.memory(
+                                            roomImages[index]["webImageUrl"]!,
+                                            fit: BoxFit.fill,
+                                          )
+                                        : Image.file(
+                                            roomImages[index]["imageUrl"]!,
+                                            fit: BoxFit.fill,
+                                          ),
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Wrap(
+                              runSpacing: 10,
+                              children: [
+                                isEditingTodoName == index
+                                    ? SizedBox(
+                                        height: 30,
+                                        width: constraints.maxWidth / crossAxisCount - 50,
+                                        child: CustomTextInput(
+                                          autofocus: true,
+                                          focusnode: focusNode,
+                                          controller: todoNameEditingController,
+                                          onFieldSubmitted: (newValue) {
+                                            todoNameEditingController.text = newValue;
+                                            FocusScope.of(context).requestFocus(focusNode);
+                                          },
+                                        ),
+                                      )
+                                    : GestureDetector(
+                                        onTap: () {
+                                          startEditingTodoName("${roomImages[index]["title"]}", index);
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            CustomText(
+                                              title: "${roomImages[index]["title"]} ",
+                                              size: 14,
+                                            ),
+                                            const SizedBox(
+                                              width: 2,
+                                            ),
+                                            const Icon(
+                                              Icons.edit,
+                                              size: 18,
+                                              color: Colors.black,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                roomImages.remove(roomImages[index]);
+                                selectedImagesTitleList.remove(selectedImagesTitleList[index]);
+                                selectedImagesUrlList.remove(selectedImagesUrlList[index]);
+                              });
+                              Future.delayed(const Duration(milliseconds: 1000), () {
+                                Propertyphotos propertyphotos = Propertyphotos(imageTitle: selectedImagesTitleList, imageUrl: selectedImagesUrlList);
+                                widget.notify!.add({
+                                  'id': widget.id,
+                                  'item': propertyphotos,
+                                });
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),
+                              child: const Icon(
+                                Icons.close,
+                                size: 18,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return GestureDetector(
+                      key: Key(index.toString()),
+                      onTap: () {
+                        selectImage();
+                      },
+                      child: Column(
                         children: [
                           Card(
                             clipBehavior: Clip.antiAlias,
                             elevation: 2,
                             shadowColor: Colors.grey[300],
                             child: SizedBox(
-                              width: constraints.maxWidth / crossAxisCount - 20,
-                              height: constraints.maxWidth / crossAxisCount - 45,
-                              child: widget.isEdit && roomImages[index]["webImageUrl"].contains("https")
-                                  ? Image.network(
-                                      roomImages[index]["webImageUrl"]!,
-                                      fit: BoxFit.fill,
-                                    )
-                                  : kIsWeb
-                                      ? Image.memory(
-                                          roomImages[index]["webImageUrl"]!,
-                                          fit: BoxFit.fill,
-                                        )
-                                      : Image.file(
-                                          roomImages[index]["imageUrl"]!,
-                                          fit: BoxFit.fill,
-                                        ),
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Wrap(
-                            runSpacing: 10,
-                            children: [
-                              isEditingTodoName == index
-                                  ? SizedBox(
-                                      height: 30,
-                                      width: constraints.maxWidth / crossAxisCount - 50,
-                                      child: CustomTextInput(
-                                        autofocus: true,
-                                        focusnode: focusNode,
-                                        controller: todoNameEditingController,
-                                        onFieldSubmitted: (newValue) {
-                                          todoNameEditingController.text = newValue;
-                                          FocusScope.of(context).requestFocus(focusNode);
-                                        },
-                                      ),
-                                    )
-                                  : GestureDetector(
-                                      onTap: () {
-                                        startEditingTodoName("${roomImages[index]["title"]}", index);
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          CustomText(
-                                            title: "${roomImages[index]["title"]} ",
-                                            size: 14,
-                                          ),
-                                          const SizedBox(
-                                            width: 2,
-                                          ),
-                                          const Icon(
-                                            Icons.edit,
-                                            size: 18,
-                                            color: Colors.black,
-                                          )
-                                        ],
-                                      ),
+                                width: constraints.maxWidth / crossAxisCount - 20,
+                                height: constraints.maxWidth / crossAxisCount - 45,
+                                child: const Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.add_circle_outline_outlined, size: 40, color: Colors.grey),
+                                    SizedBox(
+                                      height: 6,
                                     ),
-                            ],
+                                    AppText(
+                                      text: 'Add Photos',
+                                      fontsize: 15,
+                                      textColor: Colors.black,
+                                    )
+                                  ],
+                                )),
                           ),
                         ],
                       ),
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              roomImages.remove(roomImages[index]);
-                              selectedImagesTitleList.remove(selectedImagesTitleList[index]);
-                              selectedImagesUrlList.remove(selectedImagesUrlList[index]);
-                            });
-                            Future.delayed(const Duration(milliseconds: 1000), () {
-                              Propertyphotos propertyphotos = Propertyphotos(imageTitle: selectedImagesTitleList, imageUrl: selectedImagesUrlList);
-                              widget.notify!.add({
-                                'id': widget.id,
-                                'item': propertyphotos,
-                              });
-                            });
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),
-                            child: const Icon(
-                              Icons.close,
-                              size: 18,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                } else {
-                  return GestureDetector(
-                    onTap: () {
-                      selectImage();
-                    },
-                    child: Column(
-                      children: [
-                        Card(
-                          clipBehavior: Clip.antiAlias,
-                          elevation: 2,
-                          shadowColor: Colors.grey[300],
-                          child: SizedBox(
-                              width: constraints.maxWidth / crossAxisCount - 20,
-                              height: constraints.maxWidth / crossAxisCount - 45,
-                              child: const Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.add_circle_outline_outlined, size: 40, color: Colors.grey),
-                                  SizedBox(
-                                    height: 6,
-                                  ),
-                                  AppText(
-                                    text: 'Add Photos',
-                                    fontsize: 15,
-                                    textColor: Colors.black,
-                                  )
-                                ],
-                              )),
-                        ),
-                      ],
-                    ),
-                  );
-                  // return Row(
-                  //   children: [
-                  //     Stack(
-                  //       children: [
-                  //         Draggable(
-                  //           childWhenDragging: Container(
-                  //             width: constraints.maxWidth / crossAxisCount - 20,
-                  //             height: constraints.maxWidth / crossAxisCount - 45,
-                  //             decoration: BoxDecoration(
-                  //               color: Colors.grey.withOpacity(0.4),
-                  //               borderRadius: BorderRadius.circular(10),
-                  //             ),
-                  //           ),
-                  //           feedback: Material(
-                  //             child: Column(
-                  //               children: [
-                  //                 Card(
-                  //                   clipBehavior: Clip.antiAlias,
-                  //                   elevation: 2,
-                  //                   shadowColor: Colors.grey[300],
-                  //                   child: SizedBox(
-                  //                     width: constraints.maxWidth / crossAxisCount - 20,
-                  //                     height: constraints.maxWidth / crossAxisCount - 45,
-                  //                     child: Image.network(
-                  //                       noImg,
-                  //                       fit: BoxFit.fill,
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //                 const SizedBox(height: 4),
-                  //                 const Wrap(
-                  //                   runSpacing: 10,
-                  //                   children: [
-                  //                     Row(
-                  //                       mainAxisAlignment: MainAxisAlignment.center,
-                  //                       crossAxisAlignment: CrossAxisAlignment.center,
-                  //                       children: [
-                  //                         CustomText(
-                  //                           title: "roomImages[index]",
-                  //                           size: 14,
-                  //                         ),
-                  //                         SizedBox(
-                  //                           width: 2,
-                  //                         ),
-                  //                         Icon(
-                  //                           Icons.edit,
-                  //                           size: 18,
-                  //                           color: Colors.black,
-                  //                         )
-                  //                       ],
-                  //                     ),
-                  //                   ],
-                  //                 ),
-                  //               ],
-                  //             ),
-                  //           ),
-                  //           child: Column(
-                  //             children: [
-                  //               Card(
-                  //                 clipBehavior: Clip.antiAlias,
-                  //                 elevation: 2,
-                  //                 shadowColor: Colors.grey[300],
-                  //                 child: SizedBox(
-                  //                     width: constraints.maxWidth / crossAxisCount - 20,
-                  //                     height: constraints.maxWidth / crossAxisCount - 45,
-                  //                     child: Image.network(
-                  //                       noImg,
-                  //                       fit: BoxFit.fill,
-                  //                     )),
-                  //               ),
-                  //               const SizedBox(height: 4),
-                  //               const Row(
-                  //                 mainAxisAlignment: MainAxisAlignment.center,
-                  //                 crossAxisAlignment: CrossAxisAlignment.center,
-                  //                 children: [
-                  //                   CustomText(
-                  //                     title: "title ",
-                  //                     size: 14,
-                  //                   ),
-                  //                   SizedBox(
-                  //                     width: 2,
-                  //                   ),
-                  //                   Icon(
-                  //                     Icons.edit,
-                  //                     size: 18,
-                  //                     color: Colors.black,
-                  //                   )
-                  //                 ],
-                  //               ),
-                  //             ],
-                  //           ),
-                  //         ),
-                  //         Positioned(
-                  //           top: 0,
-                  //           right: 0,
-                  //           child: Container(
-                  //             decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),
-                  //             child: const Icon(
-                  //               Icons.close,
-                  //               size: 18,
-                  //               color: Colors.white,
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //     if (index == 2)
-                  //       DragTarget(
-                  //         builder: (
-                  //           context,
-                  //           candidateData,
-                  //           rejectedData,
-                  //         ) {
-                  //           return Center(
-                  //             child: Container(
-                  //               decoration: BoxDecoration(
-                  //                 color: Colors.grey.withOpacity(0.5),
-                  //                 border: Border.all(
-                  //                   color: Colors.white,
-                  //                   style: BorderStyle.solid,
-                  //                 ),
-                  //               ),
-                  //               child: const Text('Set Here..'),
-                  //             ),
-                  //           );
-                  //         },
-                  //       )
-                  //   ],
-                  // );
-                }
-              },
-            );
-          }),
+                    );
+                    // return Draggable(
+                    //   onDragStarted: () {
+                    //     setState(() {
+                    //       draggableItemIndex = index;
+                    //       dragMode = true;
+                    //     });
+                    //   },
+                    //   onDragEnd: (details) {
+                    //     setState(() {
+                    //       draggableItemIndex = null;
+                    //       dragMode = false;
+                    //     });
+                    //   },
+                    //   feedback: Material(
+                    //     child: Card(
+                    //       clipBehavior: Clip.antiAlias,
+                    //       elevation: 2,
+                    //       shadowColor: Colors.grey[300],
+                    //       child: SizedBox(
+                    //         width: constraints.maxWidth / crossAxisCount - 20,
+                    //         height: constraints.maxWidth / crossAxisCount - 45,
+                    //         child: Image.network(
+                    //           noImg,
+                    //           fit: BoxFit.fill,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    //   child: !dragMode && draggableItemIndex != index
+                    //       ? Stack(
+                    //           children: [
+                    //             Column(
+                    //               children: [
+                    //                 Card(
+                    //                   clipBehavior: Clip.antiAlias,
+                    //                   elevation: 2,
+                    //                   shadowColor: Colors.grey[300],
+                    //                   child: SizedBox(
+                    //                       width: constraints.maxWidth / crossAxisCount - 20,
+                    //                       height: constraints.maxWidth / crossAxisCount - 45,
+                    //                       child: Image.network(
+                    //                         noImg,
+                    //                         fit: BoxFit.fill,
+                    //                       )),
+                    //                 ),
+                    //                 const SizedBox(height: 4),
+                    //                 Row(
+                    //                   mainAxisAlignment: MainAxisAlignment.center,
+                    //                   crossAxisAlignment: CrossAxisAlignment.center,
+                    //                   children: [
+                    //                     CustomText(
+                    //                       title: "Drag this $index ",
+                    //                       size: 14,
+                    //                     ),
+                    //                     const SizedBox(
+                    //                       width: 2,
+                    //                     ),
+                    //                     const Icon(
+                    //                       Icons.edit,
+                    //                       size: 18,
+                    //                       color: Colors.black,
+                    //                     )
+                    //                   ],
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //             Positioned(
+                    //               top: 0,
+                    //               right: 0,
+                    //               child: Container(
+                    //                 decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),
+                    //                 child: const Icon(
+                    //                   Icons.close,
+                    //                   size: 18,
+                    //                   color: Colors.white,
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         )
+                    //       : DragTarget(
+                    //           onAccept: (int targetIndex) {
+                    //             handleDrop(targetIndex);
+                    //           },
+                    //           builder: (context, candidateData, rejectedData) {
+                    //             return Stack(
+                    //               children: [
+                    //                 Column(
+                    //                   children: [
+                    //                     Card(
+                    //                       clipBehavior: Clip.antiAlias,
+                    //                       elevation: 2,
+                    //                       shadowColor: Colors.grey[300],
+                    //                       child: SizedBox(
+                    //                           width: constraints.maxWidth / crossAxisCount - 20,
+                    //                           height: constraints.maxWidth / crossAxisCount - 45,
+                    //                           child: Image.network(
+                    //                             noImg,
+                    //                             fit: BoxFit.fill,
+                    //                           )),
+                    //                     ),
+                    //                     const SizedBox(height: 4),
+                    //                     Row(
+                    //                       mainAxisAlignment: MainAxisAlignment.center,
+                    //                       crossAxisAlignment: CrossAxisAlignment.center,
+                    //                       children: [
+                    //                         CustomText(
+                    //                           title: "Drag here $index",
+                    //                           size: 14,
+                    //                         ),
+                    //                         const SizedBox(
+                    //                           width: 2,
+                    //                         ),
+                    //                         const Icon(
+                    //                           Icons.edit,
+                    //                           size: 18,
+                    //                           color: Colors.black,
+                    //                         )
+                    //                       ],
+                    //                     ),
+                    //                   ],
+                    //                 ),
+                    //                 Positioned(
+                    //                   top: 0,
+                    //                   right: 0,
+                    //                   child: Container(
+                    //                     decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),
+                    //                     child: const Icon(
+                    //                       Icons.close,
+                    //                       size: 18,
+                    //                       color: Colors.white,
+                    //                     ),
+                    //                   ),
+                    //                 ),
+                    //               ],
+                    //             );
+                    //           },
+                    //         ),
+                    // );
+                  }
+                },
+              );
+            },
+          ),
         ),
       ),
     );
