@@ -41,12 +41,6 @@ Widget buildLeadQuestions(
   Function(bool) isCheckedUpdate,
   WidgetRef ref,
 ) {
-  // RangeValues areaRange = const RangeValues(500, 10000);
-
-  // final areaRange = ref.watch(areaRangeSelectorState);
-  // // RangeValues defaultAreaRangeValues = areaRange;
-  // String selectedOption = 'Sq ft';
-
   final areaRange = ref.watch(areaRangeSelectorState);
   final selectedOption = ref.watch(selectedOptionNotifier);
   final defaultAreaRangeValues = ref.watch(defaultAreaRangeValuesNotifier);
@@ -60,7 +54,6 @@ Widget buildLeadQuestions(
               return const SizedBox();
             }
             if (screensDataList.any((element) => element.screenId == "S2")) {
-              // if (!isEdit) {
               if (option == "Rent" || option == "Buy") {
                 final indexToRemove = selectedValues.indexWhere((map) => map['id'] == 32);
                 if (indexToRemove != -1) {
@@ -87,12 +80,13 @@ Widget buildLeadQuestions(
       ],
     );
   } else if (question.questionOptionType == 'smallchip') {
-    // String selectedOption = '';
+    String selectedchipOption = '';
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
-      // selectedOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
+      selectedchipOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
     if (selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 23)) {
       // selectedOption = "Sq ft";
+      selectedchipOption = "";
       WidgetsBinding.instance.addPostFrameCallback((_) {
         notify.add({"id": 23, "item": selectedOption});
       });
@@ -122,20 +116,29 @@ Widget buildLeadQuestions(
                         bgcolor: selectedOption == option ? AppColor.primary : AppColor.primary.withOpacity(0.05),
                         onSelected: (selectedItem) {
                           setState(() {
-                            if (selectedOption == option) {
-                            } else {
-                              ref.read(selectedOptionNotifier.notifier).setRange(option);
-                              if (option == "Sq ft") {
-                                ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(500, 10000));
-                              } else if (option == "Sq yard") {
-                                ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(600, 5000));
-                              } else if (option == "Acre") {
-                                ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(700, 7000));
+                            if (question.questionId == 23) {
+                              if (selectedOption == option) {
+                              } else {
+                                ref.read(selectedOptionNotifier.notifier).setRange(option);
+                                notify.add({"id": question.questionId, "item": option});
+                                if (option == "Sq ft") {
+                                  ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(500, 10000));
+                                } else if (option == "Sq yard") {
+                                  ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(600, 5000));
+                                } else if (option == "Acre") {
+                                  ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(700, 7000));
+                                }
+                                final range = ref.watch(areaRangeSelectorState);
+                                ref.read(defaultAreaRangeValuesNotifier.notifier).setRange(range);
+                                notify.add({"id": 24, "item": range});
                               }
-                              final range = ref.watch(areaRangeSelectorState);
-                              ref.read(defaultAreaRangeValuesNotifier.notifier).setRange(range);
-                              // defaultAreaRangeValues = areaRange;
-                              // ref.read(defaultAreaRangeValues.notifier).setRange(const RangeValues(500, 10000));
+                            } else {
+                              // selectedchipOption
+                              if (selectedchipOption == option) {
+                              } else {
+                                selectedchipOption = option;
+                                notify.add({"id": question.questionId, "item": option});
+                              }
                             }
                             //  defaultAreaRangeValues = areaRange;
                           });
@@ -146,7 +149,6 @@ Widget buildLeadQuestions(
                           //     selectedOption = option;
                           //   }
                           // });
-                          notify.add({"id": question.questionId, "item": selectedOption});
                         },
                         labelColor: selectedOption == option ? Colors.white : Colors.black,
                       ),
