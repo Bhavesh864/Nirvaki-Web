@@ -3,16 +3,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:number_to_words/number_to_words.dart';
 
-import 'package:google_places_flutter/google_places_flutter.dart';
-import 'package:google_places_flutter/model/prediction.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
-import 'package:yes_broker/constants/utils/image_constants.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/questionaries/questions_form_photos_view.dart';
@@ -690,10 +686,10 @@ Widget buildInventoryQuestions(
       ),
     );
   } else if (question.questionOptionType == 'map') {
-    List<double> defaultValue = [];
-    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
-      defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
-    }
+    // List<double> defaultValue = [];
+    // if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+    //   defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
+    // }
     final state = getDataById(selectedValues, 26);
     final city = getDataById(selectedValues, 27);
     final address1 = getDataById(selectedValues, 28);

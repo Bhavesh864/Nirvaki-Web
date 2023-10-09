@@ -17,7 +17,10 @@ import '../../table_view/table_view_widgets.dart';
 
 class TodoTabView extends ConsumerStatefulWidget {
   final String id;
-  const TodoTabView({super.key, required this.id});
+  const TodoTabView({
+    super.key,
+    required this.id,
+  });
 
   @override
   TodoTabViewState createState() => TodoTabViewState();
@@ -173,7 +176,11 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: Responsive.isMobile(context) ? 1 : 2, mainAxisSpacing: 10.0, crossAxisSpacing: 10.0, mainAxisExtent: 170),
+                              crossAxisCount: Responsive.isMobile(context) ? 1 : 2,
+                              mainAxisSpacing: 10.0,
+                              crossAxisSpacing: 10.0,
+                              mainAxisExtent: 170,
+                            ),
                             itemCount: filteredList.length,
                             itemBuilder: (context, index) => GestureDetector(
                               onTap: () {

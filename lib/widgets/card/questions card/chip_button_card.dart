@@ -64,14 +64,10 @@ class ChipButtonCard extends StatelessWidget {
                 height: 10,
               ),
               data.length == currentIndex + 1
-                  ? Consumer(
-                      builder: (context, ref, child) {
-                        return CustomButton(
-                          text: 'Save',
-                          onPressed: () {},
-                          height: 40,
-                        );
-                      },
+                  ? CustomButton(
+                      text: 'Save',
+                      onPressed: () {},
+                      height: 40,
                     )
                   : Container(),
             ],

@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/constants/app_constant.dart';
+import 'package:yes_broker/screens/main_screens/full_view_map_screen.dart';
 
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
@@ -36,10 +37,9 @@ class _MapViewWidgetState extends State<MapViewWidget> {
   void openFullScreenMap() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => CustomGoogleMap(
+        builder: (context) => FullViewGoogleScreen(
           onLatLngSelected: (k) {},
           isReadOnly: true,
-          isFullView: true,
           latLng: widget.latLng,
         ),
       ),
