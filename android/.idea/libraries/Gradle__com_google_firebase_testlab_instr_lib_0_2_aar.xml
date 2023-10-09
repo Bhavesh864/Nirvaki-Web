@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.firebase:testlab-instr-lib:0.2@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/9c9c70c2f2206bbbf95a4790f476d2d3/transformed/jetified-testlab-instr-lib-0.2/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/9c9c70c2f2206bbbf95a4790f476d2d3/transformed/jetified-testlab-instr-lib-0.2/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/2435197b06d5fa7dd4f6488006ffe6c4/transformed/jetified-testlab-instr-lib-0.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/2435197b06d5fa7dd4f6488006ffe6c4/transformed/jetified-testlab-instr-lib-0.2/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
