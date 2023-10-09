@@ -115,13 +115,11 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                           CustomTextInput(
                             controller: passwordcontroller,
                             labelText: 'Password',
-                            validator: validatePassword,
+                            validator: validateSignupPassword,
                             obscureText: true,
                             // rightIcon: Icons.remove_red_eye,
                           ),
-                          Container(
-                              margin: const EdgeInsets.only(left: 8),
-                              child: const Text('Use a minimum of 10 characters with at-least one-special symbol and one upper case letter. ')),
+                          Container(margin: const EdgeInsets.only(left: 8), child: const Text('Use a minimum of 6 characters with at-least one-special symbol and one number. ')),
                           const SizedBox(height: 15),
                           CustomTextInput(
                             controller: reenteredpasswordcontroller,

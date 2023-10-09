@@ -139,7 +139,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                             textAlign: TextAlign.center,
                                             title: data.propertypricerange?.arearangestart != null
                                                 ? '${data.propertypricerange?.arearangestart} ${data.propertypricerange?.arearangeend}'
-                                                : '50k/month',
+                                                : '',
                                             color: AppColor.primary,
                                           ),
                                         ),
@@ -366,7 +366,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
         {"id": 21, "item": data.amenities},
         {"id": 22, "item": data.reservedparking?.covered},
         {"id": 23, "item": data.propertyarea?.unit},
-        {"id": 24, "item": data.propertyarea?.superarea},
+        {"id": 24, "item": convertStringRangeToRangeValues(startValue: data.propertyarearange!.arearangestart!, endValue: data.propertyarearange!.arearangeend!)},
         {"id": 25, "item": data.propertyarea?.carpetarea},
         {"id": 26, "item": data.preferredlocality?.state},
         {"id": 27, "item": data.preferredlocality?.city},
