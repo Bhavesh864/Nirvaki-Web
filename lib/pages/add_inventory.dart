@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/Customs/text_utility.dart';
 
 import 'package:yes_broker/constants/firebase/statesModel/state_c_ity_model.dart';
 import 'package:yes_broker/customs/custom_text.dart';
@@ -336,6 +337,21 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                               SizedBox(height: question.questionOptionType != 'textfield' ? 10 : 0),
                                                               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                                                                 const SizedBox(),
+                                                                // index == 0 && i == currentScreenList[index].questions.length - 1
+                                                                // ? const SizedBox()
+                                                                // : ElevatedButton(
+                                                                //     onPressed: () {
+                                                                //       final currentScreenQuestions = screensDataList[currentScreenIndex].questions;
+                                                                //       final ids = currentScreenQuestions.map((q) => q.questionId).toList();
+                                                                //       final allquestion = currentScreenQuestions.map((q) => q.questionOptionType).toList();
+                                                                //       final questiontype = allquestion.any((element) => element == "textfield" || element == "photo");
+                                                                //       goBack(ids, questiontype);
+                                                                //     },
+                                                                //     child: const AppText(
+                                                                //       text: 'Previous',
+                                                                //       textColor: Colors.white,
+                                                                //     ),
+                                                                //   ),
                                                                 if (i == currentScreenList[index].questions.length - 1 && question.questionOptionType != 'chip') ...[
                                                                   Container(
                                                                     // alignment: Alignment.centerRight,

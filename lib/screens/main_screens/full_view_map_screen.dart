@@ -4,10 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:yes_broker/constants/functions/lat_lng_get.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
 
-import '../../constants/utils/colors.dart';
-
-class CustomGoogleMap extends ConsumerStatefulWidget {
+class FullViewGoogleScreen extends ConsumerStatefulWidget {
   final bool isEdit;
   final String? stateName;
   final String? cityName;
@@ -16,15 +15,13 @@ class CustomGoogleMap extends ConsumerStatefulWidget {
   final String? address2;
   final String? locality;
   final bool isReadOnly;
-  final bool isFullView;
 
   final LatLng? latLng;
   final void Function(LatLng) onLatLngSelected;
 
-  const CustomGoogleMap({
+  const FullViewGoogleScreen({
     Key? key,
     this.isEdit = false,
-    this.isFullView = false,
     this.stateName,
     this.cityName,
     this.selectedValues,
@@ -37,26 +34,13 @@ class CustomGoogleMap extends ConsumerStatefulWidget {
   }) : super(key: key);
 
   @override
-  ConsumerState<CustomGoogleMap> createState() => _CustomGoogleMapState();
+  ConsumerState<FullViewGoogleScreen> createState() => FullViewGoogleScreenState();
 }
 
-class _CustomGoogleMapState extends ConsumerState<CustomGoogleMap> {
+class FullViewGoogleScreenState extends ConsumerState<FullViewGoogleScreen> {
   GoogleMapController? mapController;
   bool showMaps = true;
   LatLng? location;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   if (widget.isReadOnly || widget.isEdit) {
-  //     // print('asldkjfasfd${widget.latLng!.latitude}');
-  //     print('ReadOnly');
-  //     _loadMap();
-  //   } else {
-  //     loadMap();
-  //     print('NotReadOnly');
-  //   }
-  // }
 
   Future<void> _loadMap() async {
     location = LatLng(widget.latLng!.latitude, widget.latLng!.longitude);
@@ -88,10 +72,8 @@ class _CustomGoogleMapState extends ConsumerState<CustomGoogleMap> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 307,
-      width: 795,
-      child: Stack(
+    return Scaffold(
+      body: Stack(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
@@ -127,38 +109,37 @@ class _CustomGoogleMapState extends ConsumerState<CustomGoogleMap> {
               mapType: MapType.normal,
             ),
           ),
-          if (widget.isFullView)
-            Positioned(
-              top: 20,
-              left: 10,
-              child: InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColor.primary,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
-                        blurRadius: 5,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
+          Positioned(
+            top: 20,
+            left: 10,
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColor.primary,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
                     ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
+                  ],
+                ),
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
                   ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                 ),
               ),
             ),
+          ),
         ],
       ),
     );

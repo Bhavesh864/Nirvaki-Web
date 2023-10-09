@@ -1,8 +1,10 @@
 // ignore_for_file: invalid_use_of_protected_member
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:number_to_words/number_to_words.dart';
+import 'package:yes_broker/riverpodstate/arearange_state.dart';
 import '../../Customs/snackbar.dart';
 import '../../Customs/text_utility.dart';
 import '../../pages/Auth/signup/company_details.dart';
@@ -37,7 +39,18 @@ Widget buildLeadQuestions(
   bool iswhatsappMobileNoEmpty,
   bool isChecked,
   Function(bool) isCheckedUpdate,
+  WidgetRef ref,
 ) {
+  // RangeValues areaRange = const RangeValues(500, 10000);
+
+  // final areaRange = ref.watch(areaRangeSelectorState);
+  // // RangeValues defaultAreaRangeValues = areaRange;
+  // String selectedOption = 'Sq ft';
+
+  final areaRange = ref.watch(areaRangeSelectorState);
+  final selectedOption = ref.watch(selectedOptionNotifier);
+  final defaultAreaRangeValues = ref.watch(defaultAreaRangeValuesNotifier);
+
   if (question.questionOptionType == 'chip') {
     return Column(
       children: [
@@ -83,12 +96,12 @@ Widget buildLeadQuestions(
       ],
     );
   } else if (question.questionOptionType == 'smallchip') {
-    String selectedOption = '';
+    // String selectedOption = '';
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
-      selectedOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
+      // selectedOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
     if (selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 23)) {
-      selectedOption = "Sq ft";
+      // selectedOption = "Sq ft";
       WidgetsBinding.instance.addPostFrameCallback((_) {
         notify.add({"id": 23, "item": selectedOption});
       });
@@ -119,11 +132,28 @@ Widget buildLeadQuestions(
                         onSelected: (selectedItem) {
                           setState(() {
                             if (selectedOption == option) {
-                              selectedOption = '';
                             } else {
-                              selectedOption = option;
+                              ref.read(selectedOptionNotifier.notifier).setRange(option);
+                              if (option == "Sq ft") {
+                                ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(500, 10000));
+                              } else if (option == "Sq yard") {
+                                ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(600, 5000));
+                              } else if (option == "Acre") {
+                                ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(700, 7000));
+                              }
+                              final range = ref.watch(areaRangeSelectorState);
+                              ref.read(defaultAreaRangeValuesNotifier.notifier).setRange(range);
+                              // defaultAreaRangeValues = areaRange;
+                              // ref.read(defaultAreaRangeValues.notifier).setRange(const RangeValues(500, 10000));
                             }
                           });
+                          // setState(() {
+                          //   if (selectedOption == option) {
+                          //     selectedOption = '';
+                          //   } else {
+                          //     selectedOption = option;
+                          //   }
+                          // });
                           notify.add({"id": question.questionId, "item": selectedOption});
                         },
                         labelColor: selectedOption == option ? Colors.white : Colors.black,
@@ -782,21 +812,64 @@ Widget buildLeadQuestions(
         });
       }
     }
-    RangeValues areaRange = const RangeValues(500, 10000);
-    RangeValues defaultAreaRangeValues = stateValue ?? areaRange;
+    // RangeValues areaRange = const RangeValues(500, 10000);
+    // RangeValues defaultAreaRangeValues = stateValue ?? areaRange;
+    // defaultAreaRangeValues = stateValue ?? areaRange;
+    // ref.read(defaultAreaRangeValuesNotifier.notifier).setRange(stateValue ?? areaRange);
     double divisionValue = 50;
+
+    List<String> questionOption = ['Sq ft', 'Sq yard', 'Acre'];
+
     return StatefulBuilder(
       builder: (context, setState) {
         return Column(
           children: [
+            // if (question.questionId == 24) ...[
+            //   Align(
+            //     alignment: Alignment.centerLeft,
+            //     child: Wrap(
+            //       alignment: WrapAlignment.start,
+            //       children: [
+            //         for (var option in questionOption)
+            //           Padding(
+            //             padding: const EdgeInsets.only(right: 10, bottom: 10),
+            //             child: CustomChoiceChip(
+            //               label: option,
+            //               selected: selectedOption == option,
+            //               bgcolor: selectedOption == option ? AppColor.primary : AppColor.primary.withOpacity(0.05),
+            //               onSelected: (selectedItem) {
+            //                 // setState(() {
+            //                 //   if (selectedOption == option) {
+            //                 //   } else {
+            //                 //     selectedOption = option;
+            //                 //     if (option == "Sq ft") {
+            //                 //       areaRange = const RangeValues(500, 10000);
+            //                 //     } else if (option == "Sq yard") {
+            //                 //       areaRange = const RangeValues(600, 5000);
+            //                 //     } else if (option == "Acre") {
+            //                 //       areaRange = const RangeValues(700, 7000);
+            //                 //     }
+            //                 //     defaultAreaRangeValues = areaRange;
+            //                 //   }
+            //                 // });
+            //                 notify.add({"id": question.questionId, "item": selectedOption});
+            //               },
+            //               labelColor: selectedOption == option ? Colors.white : Colors.black,
+            //             ),
+            //           ),
+            //       ],
+            //     ),
+            //   ),
+            // ],
+            //
             CustomText(
               title: 'Area: ${formatValueforOnlyNumbers(defaultAreaRangeValues.start)} - ${formatValueforOnlyNumbers(defaultAreaRangeValues.end)}',
               size: 14,
             ),
             RangeSlider(
               values: defaultAreaRangeValues,
-              min: 500,
-              max: 10000,
+              min: areaRange.start,
+              max: areaRange.end,
               labels: RangeLabels(
                 formatValueforOnlyNumbers(defaultAreaRangeValues.start),
                 formatValueforOnlyNumbers(defaultAreaRangeValues.end),
@@ -804,7 +877,8 @@ Widget buildLeadQuestions(
               divisions: (10000 - 500) ~/ divisionValue,
               onChanged: (RangeValues newVal) {
                 setState(() {
-                  defaultAreaRangeValues = newVal;
+                  // defaultAreaRangeValues = newVal;
+                  ref.read(defaultAreaRangeValuesNotifier.notifier).setRange(newVal);
                 });
                 notify.add({"id": question.questionId, "item": defaultAreaRangeValues});
               },
