@@ -16,7 +16,7 @@ void userLogout(WidgetRef ref, BuildContext context) {
         (value) => {
           ref.read(chatControllerProvider).setUserState(false),
           ref.read(currentIndexProvider.notifier).update((state) => 0),
-          // context.beamToReplacementNamed(AppRoutes.loginScreen),
+          // context.beamToReplacementNamed('/'),
           Navigator.of(context).pop(),
           User.updateFcmToken(fcmtoken: null, userid: AppConst.getAccessToken()!),
           UserHiveMethods.deleteData(AppConst.getAccessToken()),
