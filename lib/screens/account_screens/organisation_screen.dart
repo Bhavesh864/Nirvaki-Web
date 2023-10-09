@@ -15,7 +15,6 @@ import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/screens/account_screens/profile_screen.dart';
 
 import '../../Customs/custom_fields.dart';
-import '../../Customs/label_text_field.dart';
 import '../../Customs/responsive.dart';
 import '../../Customs/snackbar.dart';
 import '../../Customs/text_utility.dart';
@@ -32,6 +31,8 @@ class OrganisationScreen extends ConsumerStatefulWidget {
 
 class _OrganisationScreenState extends ConsumerState<OrganisationScreen> {
   late Stream<DocumentSnapshot<Map<String, dynamic>>> brokerInfo;
+  ScrollController scrlcontroller = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -59,6 +60,7 @@ class _OrganisationScreenState extends ConsumerState<OrganisationScreen> {
                   final dataList = snapshot.data;
                   BrokerInfo broker = BrokerInfo.fromSnapshot(dataList!);
                   return SingleChildScrollView(
+                    controller: scrlcontroller,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,11 +89,17 @@ class _OrganisationScreenState extends ConsumerState<OrganisationScreen> {
                         ),
                         SizedBox(height: Responsive.isMobile(context) ? 20 : 40),
                         CustomCompanyDetailsCard(
-                          title: 'Company Address',
-                          brokerData: broker,
-                          isPersonalDetails: false,
-                          isAdressDetails: true,
-                        ),
+                            title: 'Company Address',
+                            brokerData: broker,
+                            isPersonalDetails: false,
+                            isAdressDetails: true,
+                            onScroll: () {
+                              scrlcontroller.animateTo(
+                                scrlcontroller.offset + 190.0,
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.easeInOut,
+                              );
+                            }),
                       ],
                     ),
                   );
@@ -109,6 +117,7 @@ class CustomCompanyDetailsCard extends ConsumerStatefulWidget {
   final bool isPersonalDetails;
   final bool isAdressDetails;
   final BrokerInfo brokerData;
+  final void Function()? onScroll;
 
   const CustomCompanyDetailsCard({
     Key? key,
@@ -116,6 +125,7 @@ class CustomCompanyDetailsCard extends ConsumerStatefulWidget {
     required this.isPersonalDetails,
     required this.brokerData,
     required this.isAdressDetails,
+    this.onScroll,
   }) : super(key: key);
 
   @override
@@ -272,6 +282,9 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
   }
 
   void onChange(String value) {
+    if (value.length > 3 && value.length < 5) {
+      widget.onScroll!();
+    }
     getPlaces(value).then((places) {
       final descriptions = places.predictions?.map((prediction) => prediction.description) ?? [];
       setState(() {
@@ -616,7 +629,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                     context,
                     onChange,
                   ),
-                  if (placesList.isNotEmpty)
+                  if (searchController.text != "" && placesList.isNotEmpty)
                     Container(
                       height: 200,
                       decoration: BoxDecoration(border: Border.all(color: Colors.grey, width: 0.8), borderRadius: BorderRadius.circular(8)),
