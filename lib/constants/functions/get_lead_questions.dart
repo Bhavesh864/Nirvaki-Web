@@ -774,30 +774,39 @@ Widget buildLeadQuestions(
         );
       }
     }
+    if (selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 24) && !isEdit) {
+      if (question.questionId == 24) {
+        stateValue = const RangeValues(500, 10000);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          notify.add({"id": 24, "item": stateValue});
+        });
+      }
+    }
     RangeValues areaRange = const RangeValues(500, 10000);
+    RangeValues defaultAreaRangeValues = stateValue ?? areaRange;
     double divisionValue = 50;
     return StatefulBuilder(
       builder: (context, setState) {
         return Column(
           children: [
             CustomText(
-              title: 'Area: ${formatValueforOnlyNumbers(areaRange.start)} - ${formatValueforOnlyNumbers(areaRange.end)}',
+              title: 'Area: ${formatValueforOnlyNumbers(defaultAreaRangeValues.start)} - ${formatValueforOnlyNumbers(defaultAreaRangeValues.end)}',
               size: 14,
             ),
             RangeSlider(
-              values: areaRange,
+              values: defaultAreaRangeValues,
               min: 500,
               max: 10000,
               labels: RangeLabels(
-                formatValueforOnlyNumbers(areaRange.start),
-                formatValueforOnlyNumbers(areaRange.end),
+                formatValueforOnlyNumbers(defaultAreaRangeValues.start),
+                formatValueforOnlyNumbers(defaultAreaRangeValues.end),
               ),
               divisions: (10000 - 500) ~/ divisionValue,
               onChanged: (RangeValues newVal) {
                 setState(() {
-                  areaRange = newVal;
+                  defaultAreaRangeValues = newVal;
                 });
-                notify.add({"id": question.questionId, "item": areaRange});
+                notify.add({"id": question.questionId, "item": defaultAreaRangeValues});
               },
             ),
           ],

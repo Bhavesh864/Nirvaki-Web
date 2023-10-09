@@ -42,7 +42,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
   final coveredparking = getDataById(state, 22);
   final areaUnit = getDataById(state, 23);
   final superArea = getDataById(state, 24);
-  final carpetArea = getDataById(state, 25);
+  // final carpetArea = getDataById(state, 25);
   final propertyState = getDataById(state, 26);
   final propertyCity = getDataById(state, 27);
   final addressLine1 = getDataById(state, 28);
@@ -87,7 +87,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       brokerid: currentUserdata?.brokerId,
       cardType: "LD",
       cardTitle: "$propertyCategory $propertyKind-$propertyCity",
-      cardDescription: "Want to $leadCategory her $bedrooms BHK for ${formatValue(budgetPrice!.start)}-${formatValue(budgetPrice.end)} rupees",
+      cardDescription: "Want to $leadCategory her $bedrooms BHK for ${formatValue(budgetPrice?.start)}-${formatValue(budgetPrice?.end)} rupees",
       customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
       cardStatus: "New",
       assignedto: assignedToList,
@@ -95,7 +95,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
           userfirstname: currentUserdata?.userfirstname, userid: currentUserdata?.userId, userlastname: currentUserdata?.userlastname, userimage: currentUserdata?.image),
       createdate: Timestamp.now(),
       managerid: currentUserdata?.managerid,
-      propertyarearange: cards.Propertyarearange(arearangestart: carpetArea, unit: areaUnit),
+      propertyarearange: cards.Propertyarearange(arearangestart: "${formatValueforOnlyNumbers(superArea.start)}-${formatValueforOnlyNumbers(superArea.end)}", unit: areaUnit),
       roomconfig: cards.Roomconfig(bedroom: bedrooms, additionalroom: additionalRoom),
       propertypricerange: cards.Propertypricerange(arearangestart: "${formatValue(budgetPrice.start)}-${formatValue(budgetPrice.end)}"));
   final List<Assignedto> assignedListInLead = assignto.map((user) {
@@ -140,10 +140,10 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       possessiondate: possession,
       plotdetails: Plotdetails(boundarywall: boundaryWall, opensides: openSides),
       amenities: amenities ?? [],
-      propertyarea: Propertyarea(carpetarea: carpetArea, superarea: superArea, unit: areaUnit),
+      propertyarea: Propertyarea(unit: areaUnit),
       preferredlocality: Preferredlocality(
           state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, prefferedfloornumber: floorNumber, locality: locality),
-      propertyarearange: Propertyarearange(unit: areaUnit, arearangestart: carpetArea),
+      propertyarearange: Propertyarearange(unit: areaUnit, arearangestart: formatValueforOnlyNumbers(superArea.start), arearangeend: formatValueforOnlyNumbers(superArea.end)),
       propertypricerange: Propertypricerange(arearangestart: formatValue(budgetPrice.start), arearangeend: formatValue(budgetPrice.end)),
       reservedparking: Reservedparking(covered: coveredparking),
       customerinfo: Customerinfo(email: email, firstname: firstName, lastname: lastName, companyname: companyNamecustomer, mobile: mobileNo, whatsapp: whatsAppNo ?? mobileNo),

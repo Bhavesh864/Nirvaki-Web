@@ -4,6 +4,7 @@
 
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,6 +15,7 @@ import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
+import '../../Customs/snackbar.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
@@ -62,13 +64,13 @@ class InventoryDetailsHeader extends ConsumerWidget {
       required this.setState});
 
   Future<void> shareUrl(BuildContext context) async {
-    // try {
-    //   final currentUrl = window.location.href;
-    //   await Clipboard.setData(ClipboardData(text: currentUrl));
-    //   customSnackBar(context: context, text: 'URL copied to clipboard');
-    // } catch (e) {
-    //   print('Error sharing URL: $e');
-    // }
+    try {
+      // final currentUrl = window.location.href;
+      // await Clipboard.setData(ClipboardData(text: currentUrl));
+      // customSnackBar(context: context, text: 'URL copied to clipboard');
+    } catch (e) {
+      print('Error sharing URL: $e');
+    }
   }
 
   @override

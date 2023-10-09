@@ -467,18 +467,13 @@ Widget buildInventoryQuestions(
                             setState(() {
                               placesList = [];
                             });
-                            // controller.text = "";
-                            // controller.text = "";
+
                             customSnackBar(context: context, text: 'Choose a proper address');
                           }
                         } catch (e) {
                           setState(() {
                             placesList = [];
-                            // controller.text = "";
-                            // controller.text = "";
                           });
-                          // controller.text = "";
-                          // controller.text = "";
                         }
                       },
                     );
