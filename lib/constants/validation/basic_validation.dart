@@ -20,6 +20,23 @@ String? validatePassword(String? value) {
   return null;
 }
 
+String? validateSignupPassword(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Please enter your password';
+  }
+  if (value.length < 6) {
+    return 'Password must be at least 6 characters long';
+  }
+  if (!value.contains(RegExp(r'[0-9]'))) {
+    return 'Password must contain at least one number';
+  }
+
+  if (!value.contains(RegExp(r'[!@#\$%^&*()_+{}|:;<>,.?~\-]'))) {
+    return 'Password must contain at least one symbol';
+  }
+  return null;
+}
+
 String? validateForNormalFeild({required String? value, required String? props}) {
   if (value == null || value.isEmpty) {
     return 'Please enter your $props';

@@ -6,16 +6,13 @@ import 'package:flutter_offline/flutter_offline.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:yes_broker/chat/controller/chat_controller.dart';
-
 import 'package:yes_broker/constants/app_constant.dart';
-
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/pages/Auth/login/login_screen.dart';
 import 'package:yes_broker/pages/largescreen_dashboard.dart';
 import 'package:yes_broker/pages/smallscreen_dashboard.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
-
 import 'package:yes_broker/screens/main_screens/public_view_screen/public_inventory_details.dart';
 import 'package:yes_broker/screens/main_screens/public_view_screen/public_lead_details.dart';
 import 'constants/firebase/Hive/hive_methods.dart';

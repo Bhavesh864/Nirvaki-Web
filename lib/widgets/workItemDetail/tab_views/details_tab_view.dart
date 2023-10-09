@@ -360,6 +360,12 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                 "${widget.data.commericialtype}",
                 context,
               ),
+            if (checkNotNUllItem(widget.data.propertyarearange) && checkNotNUllItem(widget.data.propertyarea.unit))
+              buildInfoFields(
+                'Area',
+                "${widget.data.propertyarearange.arearangestart}-${widget.data.propertyarearange.arearangeend} ${widget.data.propertyarea.unit}",
+                context,
+              ),
             if (checkNotNUllItem(widget.data.typeofoffice))
               buildInfoFields(
                 'Type of office',
@@ -421,10 +427,10 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                       context,
                     ),
                 ],
-                if (checkNotNUllItem(widget.data.propertyarea.superarea) && checkNotNUllItem(widget.data.propertyarea.unit))
+                if (checkNotNUllItem(widget.data.propertyarearange) && checkNotNUllItem(widget.data.propertyarea.unit))
                   buildInfoFields(
                     'Area',
-                    "${widget.data.propertyarea.superarea} ${widget.data.propertyarea.unit}",
+                    "${widget.data.propertyarearange.arearangestart}-${widget.data.propertyarearange.arearangeend} ${widget.data.propertyarea.unit}",
                     context,
                   ),
                 if (checkNotNUllItem(widget.data.transactiontype))
@@ -624,11 +630,11 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                       size: 18,
                                     ),
                                     onTap: () async {
-                                      // if (kIsWeb) {
-                                      //   AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                      //   anchorElement.download = 'Attachment file';
-                                      //   anchorElement.click();
-                                      // }
+                                      if (kIsWeb) {
+                                        // AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                        // anchorElement.download = 'Attachment file';
+                                        // anchorElement.click();
+                                      }
                                     },
                                   ),
                                   GestureDetector(
