@@ -37,7 +37,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
   late Future<List<LeadQuestions>> getQuestions;
   List<Screen> currentScreenList = [];
   PageController? pageController;
-  int currentScreenIndex = 0;
+  int currentScreenIndex = 13;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isMobileNoEmpty = false;
   bool iswhatsappMobileNoEmpty = false;

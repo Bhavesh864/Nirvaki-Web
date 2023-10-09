@@ -8,7 +8,7 @@
     ],
     "headers": [
       {
-        "source": "**",
+        "source": "/maps/api/place/**",
         "headers": [
           {
             "key": "Access-Control-Allow-Origin",

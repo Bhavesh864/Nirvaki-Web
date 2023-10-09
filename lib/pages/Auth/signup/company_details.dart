@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
+import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/google_places_model.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/customs/snackbar.dart';
@@ -334,12 +335,10 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                                 address2controller.text = lastThreeWords;
                                                 notify.add({"id": 10, "item": remainingWords});
                                                 notify.add({"id": 15, "item": lastThreeWords});
-                                                final cityName = lastThreeWordsList[0].endsWith(',')
-                                                    ? lastThreeWordsList[0].replaceFirst(RegExp(r',\s*$'), '')
-                                                    : lastThreeWordsList[0];
-                                                final stateName = lastThreeWordsList[1].endsWith(',')
-                                                    ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '')
-                                                    : lastThreeWordsList[1];
+                                                final cityName =
+                                                    lastThreeWordsList[0].endsWith(',') ? lastThreeWordsList[0].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[0];
+                                                final stateName =
+                                                    lastThreeWordsList[1].endsWith(',') ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[1];
                                                 notify.add({"id": 12, "item": cityName});
                                                 notify.add({"id": 11, "item": stateName});
                                                 setState(() {
@@ -431,7 +430,9 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
 Future<GooglePlaces> getPlaces(String text) async {
   // final uri = Uri.parse("https://api.greencenteral.com/api/v1/user/locations?name=${text}");
   // final uri = Uri.parse("http://142.93.234.216:44210/api/v1/user/locations?name=${text}");
-  final uri = Uri.parse("https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$text&components=country:IN&key=AIzaSyB3VnuKk-JNAcGUrdN1eD5KlRPYEGc4QPU");
+  final uri = Uri.parse(kIsWeb
+      ? "https://proxy.cors.sh/https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$text&components=country:IN&key=${AppConst.googlemapkey}"
+      : "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$text&components=country:IN&key=${AppConst.googlemapkey}");
   final response = await http.get(uri, headers: {
     "Content-Type": "application/json",
   });

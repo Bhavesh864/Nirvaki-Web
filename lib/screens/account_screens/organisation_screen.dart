@@ -282,7 +282,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
   }
 
   void onChange(String value) {
-    if (value.length > 3 && value.length < 5) {
+    if (value.length > 3 && value.length < 5 && placesList.isNotEmpty) {
       widget.onScroll!();
     }
     getPlaces(value).then((places) {

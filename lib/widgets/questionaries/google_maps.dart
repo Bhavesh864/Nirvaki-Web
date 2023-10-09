@@ -127,38 +127,6 @@ class _CustomGoogleMapState extends ConsumerState<CustomGoogleMap> {
               mapType: MapType.normal,
             ),
           ),
-          if (widget.isFullView)
-            Positioned(
-              top: 20,
-              left: 10,
-              child: InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColor.primary,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
-                        blurRadius: 5,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ),
-              ),
-            ),
         ],
       ),
     );
