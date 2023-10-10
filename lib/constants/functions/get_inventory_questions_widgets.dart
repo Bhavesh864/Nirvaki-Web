@@ -1,18 +1,11 @@
-// ignore_for_file: invalid_use_of_protected_member
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:number_to_words/number_to_words.dart';
-
-import 'package:google_places_flutter/google_places_flutter.dart';
-import 'package:google_places_flutter/model/prediction.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
-import 'package:yes_broker/constants/utils/image_constants.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/questionaries/questions_form_photos_view.dart';
@@ -699,7 +692,6 @@ Widget buildInventoryQuestions(
     final address1 = getDataById(selectedValues, 28);
     final address2 = getDataById(selectedValues, 29);
     final locality = getDataById(selectedValues, 54);
-
     return CustomGoogleMap(
       isEdit: isEdit,
       selectedValues: selectedValues,
@@ -743,3 +735,18 @@ LatLng convertListToLatLng(List<double> doubles) {
 
   return LatLng(latitude, longitude);
 }
+
+
+
+// login screen m email and password dono hai                         
+// logo thoda upper krna hai login m
+// on time re-enter password is not same show error when user enter passwrod in signup page
+// title add on personal details page and add mandatory textfield sign and set caps title is welcome to brokr
+//let us know you better shi kro design dekh  
+// whats up number center kro center nhi hai
+// alignment shi kro tell us title 
+// make mandaotory field sign in company details page
+// sign up k baad phela login screen pr jana chaiye 
+// first login m loading ho rhi h first tym load shi se hona chaiye
+// autospace nhi aana chaiye email autofillup m 
+// 
