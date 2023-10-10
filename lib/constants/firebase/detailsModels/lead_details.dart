@@ -47,53 +47,56 @@ class LeadDetails {
   String? typeofschool;
   String? hospitalrooms;
   String? preferredroadwidth;
+  String? preferredroadwidthAreaUnit;
   String? furnishedStatus;
 
-  LeadDetails(
-      {this.leadStatus,
-      this.brokerid,
-      this.plotdetails,
-      this.leadTitle,
-      this.leadDescription,
-      this.leadId,
-      this.assignedto,
-      this.managerid,
-      this.createdby,
-      this.createdate,
-      this.propertylocation,
-      this.updatedby,
-      this.updatedate,
-      this.customerinfo,
-      this.comments,
-      this.leadcategory,
-      this.leadType,
-      this.leadsource,
-      this.furnishedStatus,
-      this.propertycategory,
-      this.propertykind,
-      this.transactiontype,
-      this.attachments,
-      this.availability,
-      this.villatype,
-      this.roomconfig,
-      this.possessiondate,
-      this.amenities,
-      this.reservedparking,
-      this.propertyarearange,
-      this.propertypricerange,
-      this.preferredlocality,
-      this.preferredlocation,
-      this.preferredpropertyfacing,
-      this.commericialtype,
-      this.typeofoffice,
-      this.typeofretail,
-      this.typeofhospitality,
-      this.typeofhealthcare,
-      this.approvedbeds,
-      this.propertyarea,
-      this.typeofschool,
-      this.hospitalrooms,
-      this.preferredroadwidth});
+  LeadDetails({
+    this.leadStatus,
+    this.brokerid,
+    this.plotdetails,
+    this.leadTitle,
+    this.leadDescription,
+    this.leadId,
+    this.assignedto,
+    this.managerid,
+    this.createdby,
+    this.createdate,
+    this.propertylocation,
+    this.updatedby,
+    this.updatedate,
+    this.customerinfo,
+    this.comments,
+    this.leadcategory,
+    this.leadType,
+    this.leadsource,
+    this.furnishedStatus,
+    this.propertycategory,
+    this.propertykind,
+    this.transactiontype,
+    this.attachments,
+    this.availability,
+    this.villatype,
+    this.roomconfig,
+    this.possessiondate,
+    this.amenities,
+    this.reservedparking,
+    this.propertyarearange,
+    this.propertypricerange,
+    this.preferredlocality,
+    this.preferredlocation,
+    this.preferredpropertyfacing,
+    this.commericialtype,
+    this.typeofoffice,
+    this.typeofretail,
+    this.typeofhospitality,
+    this.typeofhealthcare,
+    this.approvedbeds,
+    this.propertyarea,
+    this.typeofschool,
+    this.hospitalrooms,
+    this.preferredroadwidth,
+    this.preferredroadwidthAreaUnit,
+  });
 
   factory LeadDetails.fromSnapshot(DocumentSnapshot snapshot) {
     final json = snapshot.data() as Map<String, dynamic>;
@@ -134,6 +137,7 @@ class LeadDetails {
       propertylocation: json["propertylocation"] == null ? null : List<double>.from(json["propertylocation"]),
       preferredpropertyfacing: json["preferredpropertyfacing"],
       preferredroadwidth: json["preferredroadwidth"],
+      preferredroadwidthAreaUnit: json["preferredroadwidthAreaUnit"],
       commericialtype: json["commericialtype"],
       typeofoffice: json["typeofoffice"],
       typeofretail: json["typeofretail"],
@@ -278,6 +282,9 @@ class LeadDetails {
     if (json["preferredroadwidth"] is String) {
       preferredroadwidth = json["preferredroadwidth"];
     }
+    if (json["preferredroadwidthAreaUnit"] is String) {
+      preferredroadwidthAreaUnit = json["preferredroadwidthAreaUnit"];
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -351,6 +358,7 @@ class LeadDetails {
     data["typeofschool"] = typeofschool;
     data["hospitalrooms"] = hospitalrooms;
     data["preferredroadwidth"] = preferredroadwidth;
+    data["preferredroadwidthAreaUnit"] = preferredroadwidthAreaUnit;
     return data;
   }
 
