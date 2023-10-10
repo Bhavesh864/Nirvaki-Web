@@ -90,13 +90,7 @@ Widget buildLeadQuestions(
         ref.read(selectedOptionNotifier.notifier).setRange(selectedchipOption);
       });
     }
-    // if (!isEdit && selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 23)) {
-    //   // selectedOption = "Sq ft";
-    //   selectedchipOption = "";
-    //   WidgetsBinding.instance.addPostFrameCallback((_) {
-    //     notify.add({"id": 23, "item": selectedOption});
-    //   });
-    // }
+
     return StatefulBuilder(builder: (context, setState) {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 7),
@@ -263,31 +257,31 @@ Widget buildLeadQuestions(
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Padding(
-            //   padding: const EdgeInsets.only(left: 8.0),
-            //   child: RichText(
-            //     text: const TextSpan(
-            //       children: [
-            //         TextSpan(
-            //           text: 'Mobile',
-            //           style: TextStyle(
-            //             color: Colors.black,
-            //             fontSize: 16,
-            //             fontWeight: FontWeight.w500,
-            //           ),
-            //         ),
-            //         TextSpan(
-            //           text: '*',
-            //           style: TextStyle(
-            //             fontSize: 12,
-            //             fontWeight: FontWeight.w500,
-            //             color: Colors.red,
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: RichText(
+                text: const TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Mobile',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '*',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             MobileNumberInputField(
               controller: controller,
               hintText: 'Type here..',
@@ -326,37 +320,37 @@ Widget buildLeadQuestions(
               if (question.questionTitle == 'Whatsapp Number')
                 CustomCheckbox(
                   value: isChecked,
-                  label: 'Use Same Number For Whatsapp',
+                  label: 'Use this as whatsapp number',
                   onChanged: (value) {
                     isCheckedUpdate(value);
                   },
                 ),
               if (!isChecked) ...[
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 8.0, top: 3),
-                //   child: RichText(
-                //     text: const TextSpan(
-                //       children: [
-                //         TextSpan(
-                //           text: 'Whatsapp Number',
-                //           style: TextStyle(
-                //             color: Colors.black,
-                //             fontSize: 16,
-                //             fontWeight: FontWeight.w500,
-                //           ),
-                //         ),
-                //         TextSpan(
-                //           text: '*',
-                //           style: TextStyle(
-                //             fontSize: 12,
-                //             fontWeight: FontWeight.w500,
-                //             color: Colors.red,
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, top: 3),
+                  child: RichText(
+                    text: const TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Whatsapp Number',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        TextSpan(
+                          text: '*',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 MobileNumberInputField(
                   controller: controller,
                   hintText: 'Type here..',
@@ -427,7 +421,7 @@ Widget buildLeadQuestions(
               labelText: 'Search your location',
               inputController: controller,
               isMandatory: true,
-              // validator: (value) => !isEdit ? validateForNormalFeild(value: value, props: "Search Location") : null,
+              validator: (value) => !isEdit ? validateForNormalFeild(value: value, props: "Search Location") : null,
               onChanged: (value) {
                 getPlaces(value).then((places) {
                   final descriptions = places.predictions?.map((prediction) => prediction.description) ?? [];
