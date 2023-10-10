@@ -85,7 +85,7 @@ Widget buildLeadQuestions(
       selectedchipOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
 
-    if (isEdit) {
+    if (isEdit && question.questionId == 23) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.read(selectedOptionNotifier.notifier).setRange(selectedchipOption);
       });
@@ -93,11 +93,9 @@ Widget buildLeadQuestions(
     // if (!isEdit && selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 23)) {
     //   // selectedOption = "Sq ft";
     //   selectedchipOption = "";
-    //   // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   //   notify.add({"id": 23, "item": selectedOption});
-    //   //   ref.read(selectedOptionNotifier.notifier).setRange("Sq ft");
-
-    //   // });
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     notify.add({"id": 23, "item": selectedOption});
+    //   });
     // }
     return StatefulBuilder(builder: (context, setState) {
       return Container(
@@ -117,49 +115,46 @@ Widget buildLeadQuestions(
                 children: [
                   for (var option in question.questionOption)
                     Padding(
-                      padding: const EdgeInsets.only(right: 10, bottom: 10),
-                      child: CustomChoiceChip(
-                        label: option,
-                        selected: selectedOption == option,
-                        bgcolor: selectedOption == option ? AppColor.primary : AppColor.primary.withOpacity(0.05),
-                        onSelected: (selectedItem) {
-                          setState(() {
-                            if (question.questionId == 23) {
-                              if (selectedOption == option) {
-                              } else {
-                                ref.read(selectedOptionNotifier.notifier).setRange(option);
-                                notify.add({"id": question.questionId, "item": option});
-                                if (option == "Sq ft") {
-                                  ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(100, 10000));
-                                } else if (option == "Sq yard") {
-                                  ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(50, 5000));
-                                } else if (option == "Acre") {
-                                  ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(0.25, 50));
-                                }
-                                final range = ref.watch(areaRangeSelectorState);
-                                ref.read(defaultAreaRangeValuesNotifier.notifier).setRange(range);
-                                notify.add({"id": 24, "item": range});
-                              }
-                            } else {
-                              if (selectedchipOption == option) {
-                              } else {
-                                selectedchipOption = option;
-                                notify.add({"id": question.questionId, "item": option});
-                              }
-                            }
-                            //  defaultAreaRangeValues = areaRange;
-                          });
-                          // setState(() {
-                          //   if (selectedOption == option) {
-                          //     selectedOption = '';
-                          //   } else {
-                          //     selectedOption = option;
-                          //   }
-                          // });
-                        },
-                        labelColor: selectedOption == option ? Colors.white : Colors.black,
-                      ),
-                    ),
+                        padding: const EdgeInsets.only(right: 10, bottom: 10),
+                        child: question.questionId == 23
+                            ? CustomChoiceChip(
+                                label: option,
+                                selected: selectedOption == option,
+                                bgcolor: selectedOption == option ? AppColor.primary : AppColor.primary.withOpacity(0.05),
+                                onSelected: (selectedItem) {
+                                  setState(() {
+                                    if (selectedOption != option) {
+                                      ref.read(selectedOptionNotifier.notifier).setRange(option);
+                                      notify.add({"id": question.questionId, "item": option});
+                                      if (option == "Sq ft") {
+                                        ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(100, 10000));
+                                      } else if (option == "Sq yard") {
+                                        ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(50, 5000));
+                                      } else if (option == "Acre") {
+                                        ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(0.25, 50));
+                                      }
+                                      final range = ref.watch(areaRangeSelectorState);
+                                      ref.read(defaultAreaRangeValuesNotifier.notifier).setRange(range);
+                                      notify.add({"id": 24, "item": range});
+                                    }
+                                  });
+                                },
+                                labelColor: selectedOption == option ? Colors.white : Colors.black,
+                              )
+                            : CustomChoiceChip(
+                                label: option,
+                                selected: selectedchipOption == option,
+                                bgcolor: selectedchipOption == option ? AppColor.primary : AppColor.primary.withOpacity(0.05),
+                                onSelected: (selectedItem) {
+                                  setState(() {
+                                    if (selectedchipOption != option) {
+                                      selectedchipOption = option;
+                                      notify.add({"id": question.questionId, "item": option});
+                                    }
+                                  });
+                                },
+                                labelColor: selectedchipOption == option ? Colors.white : Colors.black,
+                              )),
                 ],
               ),
             ),
@@ -432,7 +427,7 @@ Widget buildLeadQuestions(
               labelText: 'Search your location',
               inputController: controller,
               isMandatory: true,
-              validator: (value) => !isEdit ? validateForNormalFeild(value: value, props: "Search Location") : null,
+              // validator: (value) => !isEdit ? validateForNormalFeild(value: value, props: "Search Location") : null,
               onChanged: (value) {
                 getPlaces(value).then((places) {
                   final descriptions = places.predictions?.map((prediction) => prediction.description) ?? [];
