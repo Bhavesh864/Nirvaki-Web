@@ -19,7 +19,10 @@ import '../../table_view/table_view_widgets.dart';
 
 class TodoTabView extends ConsumerStatefulWidget {
   final String id;
-  const TodoTabView({super.key, required this.id});
+  const TodoTabView({
+    super.key,
+    required this.id,
+  });
 
   @override
   TodoTabViewState createState() => TodoTabViewState();

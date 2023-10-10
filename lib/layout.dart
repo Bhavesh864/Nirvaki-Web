@@ -102,7 +102,7 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
                 );
               }
               return ScreenTypeLayout.builder(
-                breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
+                breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 850, watch: 400),
                 mobile: (p0) => _buildMobileLayout(snapshot.hasData),
                 tablet: (p0) => _buildTabletLayout(snapshot.hasData),
                 desktop: (p0) => _buildDesktopLayout(snapshot.hasData),
