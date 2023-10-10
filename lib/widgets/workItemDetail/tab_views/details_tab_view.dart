@@ -240,7 +240,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                 ),
               if (checkNotNUllItem(widget.data.typeofhealthcare))
                 buildInfoFields(
-                  'Type of Helathcare',
+                  'Type of Healthcare',
                   widget.data.typeofhealthcare,
                   context,
                 ),
@@ -386,7 +386,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
               ),
             if (checkNotNUllItem(widget.data.typeofhealthcare))
               buildInfoFields(
-                'Type of Helathcare',
+                'Type of Healthcare',
                 widget.data.typeofhealthcare,
                 context,
               ),
