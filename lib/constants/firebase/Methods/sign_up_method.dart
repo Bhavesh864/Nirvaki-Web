@@ -30,10 +30,10 @@ Future<String> signUpMethod({required state}) async {
       brokercompanyemail: email,
       brokerlogo: companyLogo ?? "",
       brokercompanyaddress: {
-        "Addressline1": companyAddress1,
-        "Addressline2": companyAddress2,
-        "city": companyCity,
-        "state": companyState,
+        "Addressline1": companyAddress1 ?? "",
+        "Addressline2": companyAddress2 ?? "",
+        "city": companyCity ?? "",
+        "state": companyState ?? "",
       },
     );
     final User items = User(
