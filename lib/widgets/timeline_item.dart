@@ -33,7 +33,7 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
       padding: const EdgeInsets.only(top: 20, left: 5),
       // height: 100,
       width: 100,
-      margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+      margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(color: Colors.grey),
@@ -75,7 +75,7 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
               Padding(
                 padding: const EdgeInsets.only(left: 8),
                 child: Container(
-                  width: Responsive.isDesktop(context) ? 230 : 190,
+                  width: Responsive.isDesktop(context) ? 250 : 210,
                   padding: const EdgeInsets.only(bottom: 5, left: 5),
                   child: AppText(
                     text: capitalizeFirstLetter(timeLine.activitybody!.activitytitle!),
