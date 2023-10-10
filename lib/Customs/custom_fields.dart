@@ -553,10 +553,10 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
                     controller: widget.controller,
                     keyboardType: TextInputType.phone,
                     validator: widget.validator,
-                    decoration: InputDecoration(
-                        hintText: widget.hintText,
+                    decoration: const InputDecoration(
+                        hintText: "Type here...",
                         counterText: "",
-                        hintStyle: const TextStyle(color: Colors.grey),
+                        hintStyle: TextStyle(color: Colors.grey),
                         border: InputBorder.none,
                         focusedBorder: InputBorder.none,
                         errorBorder: InputBorder.none),

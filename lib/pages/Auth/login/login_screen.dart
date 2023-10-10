@@ -149,7 +149,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             textInputAction: TextInputAction.next,
                             onFieldSubmitted: (_) {
                               FocusScope.of(context).requestFocus(passwordFocusNode);
-                              getAllCategoryItems(emailcontroller.text);
                             },
                           ),
                         ),

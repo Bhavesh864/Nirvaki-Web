@@ -26,21 +26,21 @@ import '../firebase/detailsModels/lead_details.dart';
 import '../utils/colors.dart';
 
 Widget buildLeadQuestions(
-  Question question,
-  List<Screen> screensDataList,
-  int currentScreenIndex,
-  AllChipSelectedAnwers notify,
-  Function nextQuestion,
-  bool isRentSelected,
-  bool isEdit,
-  bool isPlotSelected,
-  List<Map<String, dynamic>> selectedValues,
-  bool isMobileNoEmpty,
-  bool iswhatsappMobileNoEmpty,
-  bool isChecked,
-  Function(bool) isCheckedUpdate,
-  WidgetRef ref,
-) {
+    Question question,
+    List<Screen> screensDataList,
+    int currentScreenIndex,
+    AllChipSelectedAnwers notify,
+    Function nextQuestion,
+    bool isRentSelected,
+    bool isEdit,
+    bool isPlotSelected,
+    List<Map<String, dynamic>> selectedValues,
+    bool isMobileNoEmpty,
+    bool iswhatsappMobileNoEmpty,
+    bool isChecked,
+    Function(bool) isCheckedUpdate,
+    WidgetRef ref,
+    bool isBuy) {
   final areaRange = ref.watch(areaRangeSelectorState);
   final selectedOption = ref.watch(selectedOptionNotifier);
   final defaultAreaRangeValues = ref.watch(defaultAreaRangeValuesNotifier);
@@ -53,15 +53,23 @@ Widget buildLeadQuestions(
             if (isRentSelected && option == "Plot") {
               return const SizedBox();
             }
-            // if (screensDataList.any((element) => element.screenId == "S2")) {
-            //   if (option == "Rent" || option == "Buy") {
-            //     final indexToRemove = selectedValues.indexWhere((map) => map['id'] == 32);
-            //     if (indexToRemove != -1) {
-            //       selectedValues.removeAt(indexToRemove);
-            //       selectedValues = selectedValues;
-            //     }
-            //   }
-            // }
+            if (screensDataList.any((element) => element.screenId == "S2")) {
+              if (isEdit) {
+                if (isBuy && isRentSelected) {
+                  final indexToRemove = selectedValues.indexWhere((map) => map['id'] == 32);
+                  if (indexToRemove != -1) {
+                    selectedValues.removeAt(indexToRemove);
+                    selectedValues = selectedValues;
+                  }
+                }
+              } else if (option == "Rent" || option == "Buy" && !isEdit) {
+                final indexToRemove = selectedValues.indexWhere((map) => map['id'] == 32);
+                if (indexToRemove != -1) {
+                  selectedValues.removeAt(indexToRemove);
+                  selectedValues = selectedValues;
+                }
+              }
+            }
             return ChipButton(
               text: option,
               bgColor: selectedValues.any((answer) => answer["id"] == question.questionId && answer["item"] == option)
@@ -90,13 +98,7 @@ Widget buildLeadQuestions(
         ref.read(selectedOptionNotifier.notifier).setRange(selectedchipOption);
       });
     }
-    // if (!isEdit && selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 23)) {
-    //   // selectedOption = "Sq ft";
-    //   selectedchipOption = "";
-    //   WidgetsBinding.instance.addPostFrameCallback((_) {
-    //     notify.add({"id": 23, "item": selectedOption});
-    //   });
-    // }
+
     return StatefulBuilder(builder: (context, setState) {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 7),
@@ -290,7 +292,7 @@ Widget buildLeadQuestions(
             // ),
             MobileNumberInputField(
               controller: controller,
-              hintText: 'Type here..',
+              hintText: question.questionTitle,
               isEmpty: isMobileNoEmpty,
               openModal: () {
                 openModal(context: context, setState: setState);
@@ -359,7 +361,7 @@ Widget buildLeadQuestions(
                 // ),
                 MobileNumberInputField(
                   controller: controller,
-                  hintText: 'Type here..',
+                  hintText: question.questionTitle,
                   isEmpty: iswhatsappMobileNoEmpty,
                   openModal: () {
                     openModal(context: context, setState: setState, forMobile: false);
@@ -427,7 +429,6 @@ Widget buildLeadQuestions(
               labelText: 'Search your location',
               inputController: controller,
               isMandatory: true,
-              // validator: (value) => !isEdit ? validateForNormalFeild(value: value, props: "Search Location") : null,
               onChanged: (value) {
                 getPlaces(value).then((places) {
                   final descriptions = places.predictions?.map((prediction) => prediction.description) ?? [];
@@ -727,6 +728,7 @@ Widget buildLeadQuestions(
       RangeValues defaultRentRangeValues = stateValue ?? rentRangeValues;
       if (selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 32)) {
         if (isRentSelected) {
+          print("objec-------------t");
           stateValue = const RangeValues(0, 1000000);
           WidgetsBinding.instance.addPostFrameCallback((_) {
             notify.add({"id": 32, "item": stateValue});
