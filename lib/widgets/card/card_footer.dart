@@ -24,12 +24,12 @@ class CardFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     final cardData = cardDetails[index];
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SizedBox(
           height: 25,
-          width: 260,
+          width: 220,
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: [
@@ -68,7 +68,7 @@ class CardFooter extends StatelessWidget {
                       )
                     : const SizedBox(),
               ] else ...[
-                const SizedBox()
+                const SizedBox.shrink()
               ],
               // GestureDetector(
               //   onTap: () {
@@ -119,19 +119,20 @@ class CardFooter extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: cardData.assignedto!
                     .sublist(
-                        0,
-                        cardData.assignedto!.length < 2
-                            ? 1
-                            : cardData.assignedto!.length < 3
-                                ? 2
-                                : 3)
+                      0,
+                      cardData.assignedto!.length < 2
+                          ? 1
+                          : cardData.assignedto!.length < 3
+                              ? 2
+                              : 3,
+                    )
                     .asMap()
                     .entries
                     .map((entry) {
                   final index = entry.key;
                   final user = entry.value;
                   return Transform.translate(
-                    offset: Offset(index * -8.0, 0),
+                    offset: Offset(index * -10.0, 0),
                     child: Container(
                       margin: EdgeInsets.zero,
                       width: 24,
