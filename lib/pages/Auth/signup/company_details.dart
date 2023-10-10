@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:yes_broker/Customs/label_text_field.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/google_places_model.dart';
 import 'package:yes_broker/customs/responsive.dart';
@@ -57,7 +58,8 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                 setState(() {
                   isloading = false;
                 }),
-                context.beamToReplacementNamed('/'),
+                Beamer.of(context).beamToReplacementNamed('/login'),
+                // context.beamToReplacementNamed('/'),
                 customSnackBar(context: context, text: "Verification email sent. Please check your inbox to verify your email"),
               }
             else
@@ -173,23 +175,26 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                             child: Column(
                               children: [
                                 const DetailsHeaderWidget(isPersonalDetails: false),
-                                const Padding(
-                                  padding: EdgeInsets.only(top: 10),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10),
                                   child: Text(
-                                    "Tell us about your company...",
+                                    "Tell Us About Your Company",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 24,
+                                      fontSize: Responsive.isMobile(context) ? 18 : 24,
                                     ),
+                                    textAlign: TextAlign.center,
                                   ),
                                 ),
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                CustomTextInput(
-                                  margin: const EdgeInsets.all(7),
+                                LabelTextInputField(
+                                  // margin: const EdgeInsets.all(7),
                                   labelText: 'Company Name',
-                                  controller: companynamecontroller,
+                                  isMandatory: true,
+
+                                  inputController: companynamecontroller,
                                   validator: (value) => validateForNormalFeild(value: value, props: "Company Name"),
                                   onChanged: (value) {
                                     notify.add({"id": 7, "item": value.trim()});
@@ -211,12 +216,13 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                             {customSnackBar(context: context, text: value.toString())}
                                         });
                                   },
-                                  child: CustomTextInput(
-                                    controller: uploadLogocontroller,
-                                    readonly: true,
-                                    enabled: false,
+                                  child: LabelTextInputField(
+                                    inputController: uploadLogocontroller,
+                                    isMandatory: true,
+                                    readyOnly: true,
                                     labelText: "Upload Logo",
                                     rightIcon: Icons.publish,
+                                    isDatePicker: true,
                                   ),
                                 ),
                                 // CustomTextInput(
@@ -255,7 +261,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                   padding: const EdgeInsets.only(bottom: 8.0),
                                   child: CustomCheckbox(
                                     value: isChecked,
-                                    label: 'Use this as whatsapp number',
+                                    label: 'Use Same Number For Whatsapp',
                                     onChanged: (value) {
                                       setState(() {
                                         isChecked = value;
@@ -264,19 +270,22 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                   ),
                                 ),
                                 if (!isChecked)
-                                  CustomTextInput(
-                                    margin: const EdgeInsets.all(7),
+                                  LabelTextInputField(
+                                    // margin: const EdgeInsets.all(7),
                                     labelText: 'Whatsapp Number',
-                                    controller: whatsupnumbercontroller,
+                                    isMandatory: true,
+
+                                    inputController: whatsupnumbercontroller,
                                     validator: !isChecked ? (value) => validateForMobileNumberFeild(value: value, props: "Whatsapp Number") : null,
                                     onChanged: (value) {
                                       notify.add({"id": 9, "item": value.trim()});
                                     },
                                   ),
-                                CustomTextInput(
+                                LabelTextInputField(
                                   labelText: 'Search your location',
-                                  margin: const EdgeInsets.all(7),
-                                  controller: statecontroller,
+                                  // margin: const EdgeInsets.all(7),
+                                  inputController: statecontroller,
+                                  isMandatory: true,
                                   validator: (value) => validateForNormalFeild(value: value, props: "Search Location"),
                                   onChanged: (value) {
                                     getPlaces(value).then((places) {
@@ -367,19 +376,21 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                       },
                                     ),
                                   ),
-                                CustomTextInput(
+                                LabelTextInputField(
                                   labelText: 'Address 1',
-                                  margin: const EdgeInsets.all(7),
-                                  controller: address1controller,
+                                  // margin: const EdgeInsets.all(7),
+                                  isMandatory: true,
+
+                                  inputController: address1controller,
                                   validator: (value) => validateForNormalFeild(value: value, props: "Addressline 1"),
                                   onChanged: (value) {
                                     notify.add({"id": 10, "item": value.trim()});
                                   },
                                 ),
-                                CustomTextInput(
+                                LabelTextInputField(
                                   labelText: 'Address 2',
-                                  margin: const EdgeInsets.all(7),
-                                  controller: address2controller,
+                                  isMandatory: true,
+                                  inputController: address2controller,
                                   validator: (value) => validateForNormalFeild(value: value, props: "Addressline 2"),
                                   onChanged: (value) {
                                     notify.add({"id": 15, "item": value.trim()});
@@ -391,7 +402,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                     children: [
                                       DropDownField(
                                           title: "Register As",
-                                          defaultValues: "",
+                                          defaultValues: "Broker",
                                           optionsList: dropdownitem,
                                           onchanged: (value) {
                                             notify.add({"id": 13, "item": value});

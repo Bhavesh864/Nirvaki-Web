@@ -19,6 +19,7 @@ class CustomTimeLineView extends ConsumerStatefulWidget {
   final bool fromHome;
   final bool isScrollable;
   final List<dynamic>? itemIds;
+
   const CustomTimeLineView({
     this.itemIds = const [],
     super.key,
@@ -35,6 +36,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
   Widget build(BuildContext context) {
     final workitemId = ref.watch(selectedWorkItemId);
     final User? user = ref.watch(userDataProvider);
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10),
       decoration: !widget.fromHome

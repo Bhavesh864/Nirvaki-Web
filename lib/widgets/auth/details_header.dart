@@ -17,13 +17,14 @@ class DetailsHeaderWidget extends StatelessWidget {
           children: [
             CircleAvatar(
               backgroundColor: isPersonalDetails ? AppColor.primary : AppColor.secondary,
-              radius: 30,
+              radius: Responsive.isMobile(context) ? 20 : 30,
               child: Icon(
                 Icons.person_outline,
                 color: isPersonalDetails ? Colors.white : const Color(0xFF444444),
-                size: 32,
+                size: Responsive.isMobile(context) ? 24 : 32,
               ),
             ),
+            const SizedBox(height: 3),
             CustomText(
               title: 'Personal Details',
               size: 14,
@@ -35,7 +36,7 @@ class DetailsHeaderWidget extends StatelessWidget {
           width: 10,
         ),
         SizedBox(
-            width: Responsive.isMobile(context) ? 30 : 80,
+            width: Responsive.isMobile(context) ? 40 : 80,
             child: const Divider(
               color: Colors.grey,
               thickness: 1,
@@ -47,13 +48,14 @@ class DetailsHeaderWidget extends StatelessWidget {
           children: [
             CircleAvatar(
               backgroundColor: !isPersonalDetails ? AppColor.primary : AppColor.secondary,
-              radius: 30,
+              radius: Responsive.isMobile(context) ? 20 : 30,
               child: Icon(
                 Icons.home_work_outlined,
                 color: !isPersonalDetails ? Colors.white : const Color(0xFF444444),
-                size: 32,
+                size: Responsive.isMobile(context) ? 24 : 32,
               ),
             ),
+            const SizedBox(height: 3),
             CustomText(
               title: 'Company Details',
               size: 14,
