@@ -2,6 +2,7 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:yes_broker/riverpodstate/arearange_state.dart';
 
 import 'package:yes_broker/routes/routes.dart';
 import '../../constants/app_constant.dart';
@@ -52,6 +53,9 @@ class CustomSpeedDialButtonState extends ConsumerState<CustomSpeedDialButton> {
           onTap: () {
             AppConst.getOuterContext()!.beamToNamed(AppRoutes.addLead);
             ref.read(lead.myArrayProvider.notifier).resetState();
+            ref.read(defaultAreaRangeValuesNotifier.notifier).setRange(const RangeValues(500, 10000));
+            ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(500, 10000));
+            ref.read(selectedOptionNotifier.notifier).setRange("Sq ft");
           },
           labelShadow: [
             const BoxShadow(

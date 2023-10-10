@@ -389,6 +389,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
         {"id": 44, "item": data.typeofschool},
         {"id": 45, "item": data.hospitalrooms},
         {"id": 46, "item": data.preferredroadwidth},
+        {"id": 47, "item": data.preferredroadwidthAreaUnit},
         {"id": 100, "item": data.attachments},
         {"id": 101, "item": data.leadId},
         {"id": 54, "item": data.preferredlocality?.locality},
