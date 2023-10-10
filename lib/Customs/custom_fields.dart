@@ -342,6 +342,7 @@ class CustomCheckboxState extends State<CustomCheckbox> {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Checkbox(
           checkColor: Colors.white,
@@ -461,12 +462,16 @@ class MobileNumberInputField extends StatefulWidget {
     required this.hintText,
     this.validator,
     this.fontsize = 16.0,
+    this.isMandatory = true,
+    this.showLabel = true,
     this.bottomMargin = const EdgeInsets.only(bottom: 0),
   });
   final bool isEmpty;
   final String countryCode;
   final String hintText;
   final double? fontsize;
+  final bool? isMandatory;
+  final bool? showLabel;
   final EdgeInsets? bottomMargin;
   final TextEditingController controller;
   final void Function() openModal;
@@ -479,56 +484,89 @@ class MobileNumberInputField extends StatefulWidget {
 class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: !widget.isEmpty ? Colors.grey : Colors.red,
-          width: 1.0,
-        ),
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      padding: EdgeInsets.symmetric(horizontal: Responsive.isMobile(context) ? 4 : 10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          InkWell(
-            onTap: widget.openModal,
+    return Column(
+      children: [
+        if (widget.showLabel == true)
+          Align(
+            alignment: Alignment.centerLeft,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-              child: AppText(text: widget.countryCode, fontsize: widget.fontsize!),
-            ),
-          ),
-          const SizedBox(width: 10.0),
-          Expanded(
-            child: Container(
-              margin: widget.bottomMargin,
-              child: TextFormField(
-                maxLength: 10,
-                onChanged: (value) {
-                  widget.onChange(value);
-                },
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400,
+              padding: const EdgeInsets.only(left: 8.0, top: 2),
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: widget.hintText,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const TextSpan(
+                      text: '*',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
                 ),
-                controller: widget.controller,
-                keyboardType: TextInputType.phone,
-                validator: widget.validator,
-                decoration: InputDecoration(
-                    hintText: widget.hintText,
-                    counterText: "",
-                    hintStyle: const TextStyle(color: Colors.grey),
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    errorBorder: InputBorder.none),
               ),
             ),
           ),
-        ],
-      ),
+        Container(
+          margin: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: !widget.isEmpty ? Colors.grey : Colors.red,
+              width: 1.0,
+            ),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          padding: EdgeInsets.symmetric(horizontal: Responsive.isMobile(context) ? 4 : 10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              InkWell(
+                onTap: widget.openModal,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  child: AppText(text: widget.countryCode, fontsize: widget.fontsize!),
+                ),
+              ),
+              const SizedBox(width: 10.0),
+              Expanded(
+                child: Container(
+                  margin: widget.bottomMargin,
+                  child: TextFormField(
+                    maxLength: 10,
+                    onChanged: (value) {
+                      widget.onChange(value);
+                    },
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    controller: widget.controller,
+                    keyboardType: TextInputType.phone,
+                    validator: widget.validator,
+                    decoration: InputDecoration(
+                        hintText: widget.hintText,
+                        counterText: "",
+                        hintStyle: const TextStyle(color: Colors.grey),
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        errorBorder: InputBorder.none),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
