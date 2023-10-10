@@ -90,13 +90,15 @@ Widget buildLeadQuestions(
         ref.read(selectedOptionNotifier.notifier).setRange(selectedchipOption);
       });
     }
-    if (!isEdit && selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 23)) {
-      // selectedOption = "Sq ft";
-      selectedchipOption = "";
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        notify.add({"id": 23, "item": selectedOption});
-      });
-    }
+    // if (!isEdit && selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 23)) {
+    //   // selectedOption = "Sq ft";
+    //   selectedchipOption = "";
+    //   // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   //   notify.add({"id": 23, "item": selectedOption});
+    //   //   ref.read(selectedOptionNotifier.notifier).setRange("Sq ft");
+
+    //   // });
+    // }
     return StatefulBuilder(builder: (context, setState) {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 7),
