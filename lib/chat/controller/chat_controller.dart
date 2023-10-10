@@ -141,7 +141,6 @@ class ChatController {
   }
 
   void setUserState(bool isOnline) {
-    print('user set to online -------< $isOnline');
     User.setUserOnlineStatus(isOnline);
   }
 }

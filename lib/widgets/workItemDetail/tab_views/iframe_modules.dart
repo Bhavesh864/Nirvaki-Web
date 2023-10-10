@@ -25,7 +25,7 @@ class Controls extends StatelessWidget {
     );
   }
 
-  Widget get _space => const SizedBox(height: 10);
+  Widget get space => const SizedBox(height: 10);
 }
 
 ///
