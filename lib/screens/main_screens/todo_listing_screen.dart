@@ -192,7 +192,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
-                                    if (Responsive.isMobile(context)) ...[
+                                    if (Responsive.isMobile(context) || width! < 850) ...[
                                       Column(
                                         children: [
                                           const CustomCalendarView(),

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/screens/main_screens/caledar_screen.dart';
 import '../constants/firebase/calenderModel/calender_model.dart';
@@ -102,7 +103,7 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(top: 10),
+                    margin: const EdgeInsets.only(top: 10, bottom: 10),
                     height: 175,
                     child: SfCalendar(
                       headerHeight: 0,

@@ -132,7 +132,7 @@
 //               if (question.questionTitle == 'Whatsapp Number')
 //                 CustomCheckbox(
 //                   value: isChecked,
-//                   label: 'Use this as whatsapp number',
+//                   label: 'Use Same Number For Whatsapp',
 //                   onChanged: (value) {
 //                     setState(() {
 //                       isChecked = value;
