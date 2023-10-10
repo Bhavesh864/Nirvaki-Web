@@ -1,3 +1,5 @@
+import '../../app_constant.dart';
+import '../Hive/hive_methods.dart';
 import '../userModel/broker_info.dart';
 import '../userModel/user_info.dart';
 
@@ -30,10 +32,10 @@ Future<String> signUpMethod({required state}) async {
       brokercompanyemail: email,
       brokerlogo: companyLogo ?? "",
       brokercompanyaddress: {
-        "Addressline1": companyAddress1,
-        "Addressline2": companyAddress2,
-        "city": companyCity,
-        "state": companyState,
+        "Addressline1": companyAddress1 ?? "",
+        "Addressline2": companyAddress2 ?? "",
+        "city": companyCity ?? "",
+        "state": companyState ?? "",
       },
     );
     final User items = User(
@@ -53,9 +55,9 @@ Future<String> signUpMethod({required state}) async {
 
     await User.addUser(items);
     await BrokerInfo.addBrokerInfo(item);
-    // final uid = authResult.user!.uid;
-    // UserHiveMethods.addData(key: "token", data: uid);
-    // AppConst.setAccessToken(uid);
+    final uid = authResult.user!.uid;
+    UserHiveMethods.addData(key: "token", data: uid);
+    AppConst.setAccessToken(uid);
     await authResult.user?.sendEmailVerification();
     res = "success";
     return res;

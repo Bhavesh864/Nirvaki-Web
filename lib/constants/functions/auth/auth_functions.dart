@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,7 +17,8 @@ void userLogout(WidgetRef ref, BuildContext context) {
         (value) => {
           ref.read(chatControllerProvider).setUserState(false),
           ref.read(currentIndexProvider.notifier).update((state) => 0),
-          // context.beamToReplacementNamed('/'),
+          // context.beamToReplacementNamed('/login'),
+          Beamer.of(context).beamToReplacementNamed('/'),
           Navigator.of(context).pop(),
           User.updateFcmToken(fcmtoken: null, userid: AppConst.getAccessToken()!),
           UserHiveMethods.deleteData(AppConst.getAccessToken()),
@@ -24,7 +26,7 @@ void userLogout(WidgetRef ref, BuildContext context) {
           ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null),
           ref.read(userDataProvider.notifier).resetState(),
           AppConst.setAccessToken(null),
-          AppConst.setRole("")
+          AppConst.setRole(""),
         },
       );
 }
