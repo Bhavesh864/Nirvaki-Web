@@ -53,15 +53,15 @@ Widget buildLeadQuestions(
             if (isRentSelected && option == "Plot") {
               return const SizedBox();
             }
-            if (screensDataList.any((element) => element.screenId == "S2")) {
-              if (option == "Rent" || option == "Buy") {
-                final indexToRemove = selectedValues.indexWhere((map) => map['id'] == 32);
-                if (indexToRemove != -1) {
-                  selectedValues.removeAt(indexToRemove);
-                  selectedValues = selectedValues;
-                }
-              }
-            }
+            // if (screensDataList.any((element) => element.screenId == "S2")) {
+            //   if (option == "Rent" || option == "Buy") {
+            //     final indexToRemove = selectedValues.indexWhere((map) => map['id'] == 32);
+            //     if (indexToRemove != -1) {
+            //       selectedValues.removeAt(indexToRemove);
+            //       selectedValues = selectedValues;
+            //     }
+            //   }
+            // }
             return ChipButton(
               text: option,
               bgColor: selectedValues.any((answer) => answer["id"] == question.questionId && answer["item"] == option)
@@ -84,7 +84,13 @@ Widget buildLeadQuestions(
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       selectedchipOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
-    if (selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 23)) {
+
+    if (isEdit) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(selectedOptionNotifier.notifier).setRange(selectedchipOption);
+      });
+    }
+    if (!isEdit && selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 23)) {
       // selectedOption = "Sq ft";
       selectedchipOption = "";
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -122,18 +128,17 @@ Widget buildLeadQuestions(
                                 ref.read(selectedOptionNotifier.notifier).setRange(option);
                                 notify.add({"id": question.questionId, "item": option});
                                 if (option == "Sq ft") {
-                                  ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(500, 10000));
+                                  ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(100, 10000));
                                 } else if (option == "Sq yard") {
-                                  ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(600, 5000));
+                                  ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(50, 5000));
                                 } else if (option == "Acre") {
-                                  ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(700, 7000));
+                                  ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(0.25, 50));
                                 }
                                 final range = ref.watch(areaRangeSelectorState);
                                 ref.read(defaultAreaRangeValuesNotifier.notifier).setRange(range);
                                 notify.add({"id": 24, "item": range});
                               }
                             } else {
-                              // selectedchipOption
                               if (selectedchipOption == option) {
                               } else {
                                 selectedchipOption = option;
@@ -806,25 +811,23 @@ Widget buildLeadQuestions(
         });
       }
     }
-    // RangeValues areaRange = const RangeValues(500, 10000);
-    // RangeValues defaultAreaRangeValues = stateValue ?? areaRange;
-    // defaultAreaRangeValues = stateValue ?? areaRange;
     double divisionValue = 50;
     return StatefulBuilder(
       builder: (context, setState) {
         return Column(
           children: [
             CustomText(
-              title: 'Area: ${formatValueforOnlyNumbers(defaultAreaRangeValues.start)} - ${formatValueforOnlyNumbers(defaultAreaRangeValues.end)}',
+              title:
+                  'Area: ${formatValueforOnlyNumbers(stateValue?.start ?? defaultAreaRangeValues.start)} - ${formatValueforOnlyNumbers(stateValue?.end ?? defaultAreaRangeValues.end)}',
               size: 14,
             ),
             RangeSlider(
-              values: defaultAreaRangeValues,
+              values: stateValue ?? defaultAreaRangeValues,
               min: areaRange.start,
               max: areaRange.end,
               labels: RangeLabels(
-                formatValueforOnlyNumbers(defaultAreaRangeValues.start),
-                formatValueforOnlyNumbers(defaultAreaRangeValues.end),
+                formatValueforOnlyNumbers(stateValue?.start ?? defaultAreaRangeValues.start),
+                formatValueforOnlyNumbers(stateValue?.end ?? defaultAreaRangeValues.end),
               ),
               divisions: (10000 - 500) ~/ divisionValue,
               onChanged: (RangeValues newVal) {
