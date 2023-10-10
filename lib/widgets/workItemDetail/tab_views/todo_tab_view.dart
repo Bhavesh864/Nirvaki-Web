@@ -118,7 +118,6 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
                   final searchTerm = searchController.text.toLowerCase();
                   return card.cardTitle!.toLowerCase().contains(searchTerm) || card.cardType!.toLowerCase().contains(searchTerm);
                 }).toList();
-
                 if (showTableView) {
                   final tableRowList = filteredList.map((e) {
                     return buildWorkItemRowTile(

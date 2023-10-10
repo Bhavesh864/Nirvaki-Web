@@ -90,8 +90,7 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
               height: 20,
               width: 20,
               decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: NetworkImage(timeLine.userImageUrl == null || timeLine.userImageUrl!.isEmpty ? noImg : timeLine.userImageUrl!), fit: BoxFit.fill),
+                image: DecorationImage(image: NetworkImage(timeLine.userImageUrl == null || timeLine.userImageUrl!.isEmpty ? noImg : timeLine.userImageUrl!), fit: BoxFit.fill),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),

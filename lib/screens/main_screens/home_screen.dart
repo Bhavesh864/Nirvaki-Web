@@ -109,10 +109,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             }
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
 
-            final List<CardDetails> todoItems = filterItem!
-                .map((doc) => CardDetails.fromSnapshot(doc))
-                .where((item) => item.cardType != "IN" && item.cardType != "LD" && item.status != "Closed")
-                .toList();
+            final List<CardDetails> todoItems =
+                filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD" && item.status != "Closed").toList();
 
             int compareDueDates(CardDetails a, CardDetails b) {
               DateTime aDueDate = DateFormat('dd-MM-yy').parse(a.duedate!);
@@ -122,8 +120,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
 
             todoItems.sort(compareDueDates);
 
-            final List<CardDetails> workItems =
-                filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
+            final List<CardDetails> workItems = filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
             bool isDataEmpty = workItems.isEmpty && todoItems.isEmpty;
             return Row(
               children: [
@@ -158,11 +155,11 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                 ],
                 size.width >= 850
                     ? Expanded(
-                        flex: size.width > 1340 ? 3 : 5,
+                        flex: size.width > 1340 ? 4 : 6,
                         child: Column(
                           children: [
                             const Expanded(
-                              flex: 2,
+                              flex: 3,
                               child: Padding(
                                 padding: EdgeInsets.only(top: 10),
                                 child: CustomCalendarView(),
@@ -172,7 +169,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                               height: 10,
                             ),
                             Expanded(
-                              flex: 4,
+                              flex: 5,
                               child: Container(
                                 margin: const EdgeInsets.all(5),
                                 decoration: BoxDecoration(
