@@ -265,31 +265,31 @@ Widget buildLeadQuestions(
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Padding(
-            //   padding: const EdgeInsets.only(left: 8.0),
-            //   child: RichText(
-            //     text: const TextSpan(
-            //       children: [
-            //         TextSpan(
-            //           text: 'Mobile',
-            //           style: TextStyle(
-            //             color: Colors.black,
-            //             fontSize: 16,
-            //             fontWeight: FontWeight.w500,
-            //           ),
-            //         ),
-            //         TextSpan(
-            //           text: '*',
-            //           style: TextStyle(
-            //             fontSize: 12,
-            //             fontWeight: FontWeight.w500,
-            //             color: Colors.red,
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: RichText(
+                text: const TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Mobile',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '*',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             MobileNumberInputField(
               controller: controller,
               hintText: question.questionTitle,
@@ -328,37 +328,37 @@ Widget buildLeadQuestions(
               if (question.questionTitle == 'Whatsapp Number')
                 CustomCheckbox(
                   value: isChecked,
-                  label: 'Use Same Number For Whatsapp',
+                  label: 'Use this as whatsapp number',
                   onChanged: (value) {
                     isCheckedUpdate(value);
                   },
                 ),
               if (!isChecked) ...[
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 8.0, top: 3),
-                //   child: RichText(
-                //     text: const TextSpan(
-                //       children: [
-                //         TextSpan(
-                //           text: 'Whatsapp Number',
-                //           style: TextStyle(
-                //             color: Colors.black,
-                //             fontSize: 16,
-                //             fontWeight: FontWeight.w500,
-                //           ),
-                //         ),
-                //         TextSpan(
-                //           text: '*',
-                //           style: TextStyle(
-                //             fontSize: 12,
-                //             fontWeight: FontWeight.w500,
-                //             color: Colors.red,
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, top: 3),
+                  child: RichText(
+                    text: const TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Whatsapp Number',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        TextSpan(
+                          text: '*',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 MobileNumberInputField(
                   controller: controller,
                   hintText: question.questionTitle,
