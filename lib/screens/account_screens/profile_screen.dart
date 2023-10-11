@@ -196,7 +196,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
     updateTeamMember(
             email: userData.email,
             firstname: userData.userfirstname,
-            lastname: userData.userfirstname,
+            lastname: userData.userlastname,
             mobile: userData.mobile,
             managerName: userData.managerName,
             managerid: userData.managerid,
