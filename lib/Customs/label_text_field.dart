@@ -67,6 +67,10 @@ class LabelTextInputField extends StatelessWidget {
                 ),
                 if (isMandatory)
                   const TextSpan(
+                    text: ' ',
+                  ),
+                if (isMandatory)
+                  const TextSpan(
                     text: '*',
                     style: TextStyle(
                       fontSize: 12,

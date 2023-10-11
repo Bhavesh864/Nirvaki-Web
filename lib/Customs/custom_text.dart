@@ -9,6 +9,7 @@ class CustomText extends StatelessWidget {
   final FontWeight? fontWeight;
   final TextAlign? textAlign;
   final bool? softWrap;
+  final double? letterSpacing;
 
   const CustomText({
     Key? key,
@@ -18,6 +19,7 @@ class CustomText extends StatelessWidget {
     this.fontWeight,
     this.textAlign,
     this.softWrap = false,
+    this.letterSpacing = 0,
   }) : super(key: key);
 
   @override
@@ -30,6 +32,7 @@ class CustomText extends StatelessWidget {
         color: color ?? Colors.black,
         fontSize: size ?? 16,
         height: 0,
+        letterSpacing: letterSpacing,
         fontWeight: fontWeight ?? FontWeight.normal,
         fontFamily: GoogleFonts.dmSans().fontFamily,
       ),

@@ -2,6 +2,7 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/custom_chip.dart';
+import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
@@ -52,13 +53,17 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
               SizedBox(
                 width: Responsive.isMobile(context) ? MediaQuery.of(context).size.width * 0.55 : MediaQuery.of(context).size.width * 0.3,
                 child: TextField(
+                  controller: searchController,
                   onChanged: (value) {
                     setState(() {});
                   },
-                  controller: searchController,
                   decoration: const InputDecoration(
                     hintText: 'Search',
-                    prefixIcon: Icon(Icons.search),
+                    isDense: true,
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),
@@ -80,20 +85,15 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
                   const SizedBox(
                     width: 8,
                   ),
-                  ElevatedButton(
+                  CustomButton(
+                    height: Responsive.isMobile(context) ? 45 : 40,
                     onPressed: () {
                       AppConst.getOuterContext()?.beamToNamed(AppRoutes.addTodo);
                     },
-                    child: const Row(
-                      children: [
-                        Icon(Icons.add),
-                        CustomText(
-                          title: 'Add new',
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ],
-                    ),
+                    leftIcon: Icons.add,
+                    text: 'Add',
+                    textColor: Colors.white,
+                    fontWeight: FontWeight.w500,
                   )
                 ],
               ),

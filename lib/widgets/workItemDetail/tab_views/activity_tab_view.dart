@@ -48,16 +48,22 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
                 Container(
                   margin: const EdgeInsets.only(right: 10),
                   width: Responsive.isMobile(context) ? width! * 0.6 : 400,
-                  child: CustomTextInput(
+                  child: TextField(
                     controller: controller,
-                    hintText: "Type note here...",
-                    indense: true,
+                    decoration: const InputDecoration(
+                      hintText: 'Type note here...',
+                      isDense: true,
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: Colors.black,
+                      ),
+                    ),
                   ),
                 ),
                 CustomButton(
                   text: 'Add Note',
                   onPressed: () {
-                    if (controller.text.isNotEmpty) {
+                    if (controller.text.trim().isNotEmpty) {
                       submitActivity(itemid: workItemId, activitytitle: controller.text.trim(), user: user!);
                       notifyToUser(
                           currentuserdata: user, assignedto: widget.details.assignedto, content: "$workItemId added new Activity", title: controller.text, itemid: workItemId);
@@ -66,7 +72,7 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
                       customSnackBar(context: context, text: 'Please enter note to submit');
                     }
                   },
-                  height: 45,
+                  height: Responsive.isMobile(context) ? 45 : 40,
                 ),
               ],
             ),
