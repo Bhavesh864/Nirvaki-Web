@@ -14,7 +14,7 @@ class CustomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 18),
+      margin: const EdgeInsets.symmetric(vertical: 9),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
         alignment: Alignment.topCenter,
@@ -29,6 +29,7 @@ class CustomCard extends StatelessWidget {
               cardDetails[index].cardTitle!,
               style: const TextStyle(
                 fontSize: 14,
+                letterSpacing: 0.5,
                 color: Colors.black,
                 fontWeight: FontWeight.w600,
               ),

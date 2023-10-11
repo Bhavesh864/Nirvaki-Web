@@ -7,6 +7,7 @@ import 'package:yes_broker/constants/utils/colors.dart';
 class TAppTheme {
   static ThemeData lightTheme = ThemeData(
       fontFamily: GoogleFonts.dmSans().fontFamily,
+      // fontFamily: GoogleFonts.montserrat().fontFamily,
       pageTransitionsTheme: PageTransitionsTheme(builders: {
         TargetPlatform.iOS: CustomPageTransitionBuilder(),
         TargetPlatform.macOS: CustomPageTransitionBuilder(),

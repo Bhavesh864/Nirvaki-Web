@@ -52,7 +52,7 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
             child: Container(
               decoration: BoxDecoration(
                 color: AppColor.secondary,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(20),
               ),
               margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -71,40 +71,43 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                         );
                       }
                     },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const CustomText(
-                          title: 'Calendar',
-                          fontWeight: FontWeight.w600,
-                          size: 14,
-                        ),
-                        Row(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                showAddCalendarModal(
-                                  context: context,
-                                  isEdit: false,
-                                  ref: ref,
-                                );
-                              },
-                              child: const Icon(
-                                Icons.add,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const CustomText(
+                            title: 'Calendar',
+                            fontWeight: FontWeight.w600,
+                            size: 15,
+                          ),
+                          Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  showAddCalendarModal(
+                                    context: context,
+                                    isEdit: false,
+                                    ref: ref,
+                                  );
+                                },
+                                child: const Icon(
+                                  Icons.add,
+                                  size: 24,
+                                ),
+                              ),
+                              const Icon(
+                                Icons.more_horiz,
                                 size: 24,
                               ),
-                            ),
-                            // const Icon(
-                            //   Icons.more_horiz,
-                            //   size: 24,
-                            // ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(top: 10, bottom: 10),
+                    margin: const EdgeInsets.only(top: 10, bottom: 6),
                     height: 175,
                     child: SfCalendar(
                       headerHeight: 0,
