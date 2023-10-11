@@ -107,6 +107,7 @@ PopupMenuItem appBarPopupMenuItem(String title, void Function(String) onOptionSe
     padding: const EdgeInsets.symmetric(vertical: 2),
     child: Center(
       child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 2),
         width: 200,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(
