@@ -48,11 +48,10 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
                 Container(
                   margin: const EdgeInsets.only(right: 10),
                   width: Responsive.isMobile(context) ? width! * 0.6 : 400,
-                  child: TextField(
+                  child: CustomTextInput(
                     controller: controller,
-                    decoration: const InputDecoration(
-                      hintText: 'Type note here',
-                    ),
+                    hintText: "Type note here...",
+                    indense: true,
                   ),
                 ),
                 CustomButton(
@@ -67,7 +66,7 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
                       customSnackBar(context: context, text: 'Please enter note to submit');
                     }
                   },
-                  height: 40,
+                  height: 45,
                 ),
               ],
             ),

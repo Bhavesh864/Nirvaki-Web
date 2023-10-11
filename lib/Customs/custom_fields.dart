@@ -506,6 +506,7 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
+                    const TextSpan(text: " "),
                     const TextSpan(
                       text: '*',
                       style: TextStyle(
