@@ -152,6 +152,7 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
               child: CircularProgressIndicator.adaptive(),
             )
           : Container(
+              height: Responsive.isMobile(context) ? 500 : double.infinity,
               padding: const EdgeInsets.all(16),
               child: Padding(
                 padding: const EdgeInsets.all(8),
@@ -177,9 +178,8 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                           ),
                           LabelTextInputField(
                             labelText: "Last Name",
-                            isMandatory: true,
                             inputController: _lastNameController,
-                            validator: (value) => validateForNormalFeild(value: value, props: "Last Name"),
+                            // validator: (value) => validateForNormalFeild(value: value, props: "Last Name"),
                           ),
                           LabelTextInputField(
                               isMandatory: true,
