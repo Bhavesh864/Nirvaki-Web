@@ -36,7 +36,7 @@ class CardFooter extends StatelessWidget {
               if (cardData.customerinfo != null) ...[
                 Center(
                   child: Container(
-                    margin: const EdgeInsets.only(right: 3),
+                    margin: const EdgeInsets.only(right: 5),
                     child: Text(
                       "${checkNotNUllItem(cardData.customerinfo?.firstname) ? cardData.customerinfo!.firstname! : ""} ${checkNotNUllItem(cardData.customerinfo?.lastname) ? cardData.customerinfo!.lastname! : ""}",
                       style: const TextStyle(
