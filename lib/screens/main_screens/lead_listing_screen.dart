@@ -257,7 +257,9 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                                  margin: Responsive.isMobile(context) ? null : const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                  margin: Responsive.isMobile(context)
+                                      ? const EdgeInsets.symmetric(horizontal: 0, vertical: 0)
+                                      : const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                                   child: filteredleadList.isNotEmpty
                                       ? GridView.builder(
                                           shrinkWrap: true,
@@ -270,7 +272,7 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
                                                     : 3,
                                             // mainAxisSpacing: 5.0,
                                             crossAxisSpacing: 10.0,
-                                            mainAxisExtent: 140,
+                                            mainAxisExtent: 165,
                                           ),
                                           itemCount: filteredleadList.length,
                                           itemBuilder: (context, index) => GestureDetector(

@@ -66,7 +66,6 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
         child: SingleChildScrollView(
           child: Container(
             height: MediaQuery.of(context).size.height,
-            padding: const EdgeInsets.symmetric(vertical: 60),
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(authBgImage),
@@ -82,7 +81,7 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                 child: SingleChildScrollView(
                   child: Container(
                     width: Responsive.isMobile(context) ? w * 0.9 : 500,
-                    padding: const EdgeInsets.all(25),
+                    padding: EdgeInsets.symmetric(horizontal: Responsive.isMobile(context) ? 10 : 20, vertical: 15),
                     child: Form(
                       key: key,
                       child: Column(
@@ -112,6 +111,9 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                                   notify.add({"id": 1, "item": value.trim()});
                                 }),
                           ),
+                          const SizedBox(
+                            height: 10,
+                          ),
                           CustomTextInput(
                             controller: passwordcontroller,
                             labelText: 'Password',
@@ -119,7 +121,12 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                             obscureText: true,
                             // rightIcon: Icons.remove_red_eye,
                           ),
-                          Container(margin: const EdgeInsets.only(left: 8), child: const Text('Use a minimum of 6 characters with at-least one-special symbol and one number. ')),
+                          Container(
+                            margin: const EdgeInsets.only(left: 8),
+                            child: const Text(
+                              'Use a minimum of 6 characters with at-least one-special symbol and one number. ',
+                            ),
+                          ),
                           const SizedBox(height: 15),
                           CustomTextInput(
                             controller: reenteredpasswordcontroller,
@@ -134,7 +141,8 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                           const SizedBox(height: 10),
                           isloading
                               ? const Center(child: CircularProgressIndicator.adaptive())
-                              : SizedBox(
+                              : Container(
+                                  margin: const EdgeInsets.symmetric(horizontal: 7),
                                   width: w,
                                   child: CustomButton(
                                     text: 'Sign up',
@@ -142,32 +150,31 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                                     height: 40.0,
                                   ),
                                 ),
-                          const SizedBox(height: 10),
-                          Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const CustomText(
-                                  title: 'Already Have an account?',
-                                  color: Colors.grey,
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    // if (Responsive.isMobile(context)) {
-                                    //   Navigator.pushReplacementNamed(context, AppRoutes.loginScreen);
-                                    // } else {
-                                    context.beamToReplacementNamed(AppRoutes.loginScreen);
-                                    // }
-                                  },
-                                  child: const CustomText(
-                                    title: 'Login',
-                                    color: AppColor.primary,
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20.0, bottom: 5),
+                            child: Center(
+                              child: Wrap(
+                                alignment: WrapAlignment.center,
+                                children: [
+                                  const CustomText(
+                                    title: 'Already Have an account? ',
+                                    color: Colors.grey,
                                   ),
-                                ),
-                              ],
+                                  GestureDetector(
+                                    onTap: () {
+                                      // if (Responsive.isMobile(context)) {
+                                      //   Navigator.pushReplacementNamed(context, AppRoutes.loginScreen);
+                                      // } else {
+                                      context.beamToReplacementNamed(AppRoutes.loginScreen);
+                                      // }
+                                    },
+                                    child: const CustomText(
+                                      title: 'Login',
+                                      color: AppColor.primary,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           )
                         ],

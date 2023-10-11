@@ -269,7 +269,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                                                             ? 2
                                                             : 3,
                                                     crossAxisSpacing: 10.0,
-                                                    mainAxisExtent: 140,
+                                                    mainAxisExtent: 165,
                                                   ),
                                                   itemCount: filterTodoList.length,
                                                   itemBuilder: (context, index) => GestureDetector(

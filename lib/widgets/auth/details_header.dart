@@ -21,13 +21,13 @@ class DetailsHeaderWidget extends StatelessWidget {
               child: Icon(
                 Icons.person_outline,
                 color: isPersonalDetails ? Colors.white : const Color(0xFF444444),
-                size: Responsive.isMobile(context) ? 24 : 32,
+                size: Responsive.isMobile(context) ? 18 : 32,
               ),
             ),
             const SizedBox(height: 3),
             CustomText(
               title: 'Personal Details',
-              size: 14,
+              size: 12,
               color: isPersonalDetails ? AppColor.primary : Colors.black,
             ),
           ],
@@ -52,13 +52,13 @@ class DetailsHeaderWidget extends StatelessWidget {
               child: Icon(
                 Icons.home_work_outlined,
                 color: !isPersonalDetails ? Colors.white : const Color(0xFF444444),
-                size: Responsive.isMobile(context) ? 24 : 32,
+                size: Responsive.isMobile(context) ? 18 : 32,
               ),
             ),
             const SizedBox(height: 3),
             CustomText(
               title: 'Company Details',
-              size: 14,
+              size: 12,
               color: !isPersonalDetails ? AppColor.primary : Colors.black,
             ),
           ],
