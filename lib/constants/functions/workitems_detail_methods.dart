@@ -345,6 +345,7 @@ void showOwnerDetailsAndAssignToBottomSheet(BuildContext context, String title, 
     ),
     builder: (BuildContext context) {
       return Container(
+        height: 400,
         padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -402,7 +403,7 @@ void showAddCalendarModal({
             child: Container(
               padding: const EdgeInsets.all(15),
               height: 550,
-              width: Responsive.isMobile(context) ? width : 650,
+              width: Responsive.isMobile(context) ? 0 : 650,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
               ),
@@ -419,7 +420,7 @@ void showAddCalendarModal({
                           softWrap: true,
                           textAlign: TextAlign.center,
                           size: Responsive.isMobile(context) ? 20 : 30,
-                          title: 'Add Calendar Item',
+                          title: 'Add Calendar I',
                           fontWeight: FontWeight.bold,
                         ),
                         GestureDetector(
@@ -456,7 +457,7 @@ void showAddCalendarModal({
                               );
                             },
                             child: LabelTextInputField(
-                              labelText: 'Date ',
+                              labelText: 'Date',
                               isMandatory: true,
                               inputController: dateController,
                               isDatePicker: true,
@@ -505,7 +506,7 @@ void showAddCalendarModal({
                                 );
                               },
                               child: LabelTextInputField(
-                                labelText: 'Date ',
+                                labelText: 'Date',
                                 isMandatory: true,
                                 inputController: dateController,
                                 isDatePicker: true,

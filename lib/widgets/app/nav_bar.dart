@@ -193,6 +193,7 @@ PopupMenuItem popupMenuItem(
     child: Center(
       child: Container(
         width: 200,
+        margin: const EdgeInsets.symmetric(vertical: 2),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(
           color: AppColor.secondary,
@@ -357,8 +358,7 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                                   },
                                   titleAlignment: ListTileTitleAlignment.top,
                                   leading: CircleAvatar(
-                                    backgroundImage:
-                                        NetworkImage(notificationData.imageUrl!.isNotEmpty && notificationData.imageUrl != null ? notificationData.imageUrl! : noImg),
+                                    backgroundImage: NetworkImage(notificationData.imageUrl!.isNotEmpty && notificationData.imageUrl != null ? notificationData.imageUrl! : noImg),
                                   ),
                                   title: SizedBox(
                                     height: 80,

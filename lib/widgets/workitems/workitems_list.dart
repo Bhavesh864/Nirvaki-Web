@@ -42,10 +42,13 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
               if (widget.headerShow)
                 Container(
                   decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
                     color: AppColor.secondary,
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                  padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
                   height: 50,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,17 +56,18 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                       CustomText(
                         title: widget.title,
                         fontWeight: FontWeight.w600,
+                        size: 15,
                       ),
                       const Icon(
                         Icons.more_horiz,
-                        size: 24,
+                        size: 22,
                       ),
                     ],
                   ),
                 ),
               if (widget.getCardDetails.isNotEmpty) ...[
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 0),
                   decoration: const BoxDecoration(
                     color: AppColor.secondary,
                     borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
@@ -113,10 +117,8 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                       borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
                       color: AppColor.secondary,
                     ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                    ),
-                    height: 50,
+                    padding: const EdgeInsets.only(left: 10, right: 10, top: 15),
+                    height: Responsive.isMobile(context) ? 50 : 45,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -157,7 +159,13 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                                 );
                             navigateBasedOnId(context, id!, ref);
                           },
-                          child: CustomCard(index: index, cardDetails: widget.getCardDetails),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: CustomCard(
+                              index: index,
+                              cardDetails: widget.getCardDetails,
+                            ),
+                          ),
                         );
                       },
                     ),

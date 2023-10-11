@@ -101,9 +101,7 @@ class _TopSerachBarState extends State<TopSerachBar> {
                           width: 5,
                         ),
                         InkWell(
-                          onTap: () {
-                            widget.onFilterOpen();
-                          },
+                          onTap: () {},
                           child: const Icon(
                             Icons.more_horiz,
                             size: 20,

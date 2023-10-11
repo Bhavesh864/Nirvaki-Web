@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/constants/firebase/Methods/add_member_send_email.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import '../../Customs/custom_fields.dart';
 import '../../Customs/loader.dart';
@@ -115,7 +116,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
   bool isPersonalDetailsEditing = false;
   bool isAddressEditing = false;
   bool isPhotoUploading = false;
-
+  final formKey = GlobalKey<FormState>();
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController fullNameController = TextEditingController();
@@ -433,24 +434,26 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                           borderColor: AppColor.primary,
                           height: 39,
                           onPressed: () {
-                            updateTeamMember(
-                                    email: emailController.text.trim(),
-                                    firstname: firstNameController.text.trim(),
-                                    lastname: lastNameController.text.trim(),
-                                    mobile: '$countryCode ${phoneController.text.trim()}',
-                                    managerName: userData.managerName,
-                                    managerid: userData.managerid,
-                                    role: userData.role,
-                                    brokerId: userData.brokerId,
-                                    userId: userData.userId,
-                                    fcmToken: userData.fcmToken,
-                                    imageUrl: userData.image,
-                                    status: userData.status,
-                                    isOnline: userData.isOnline,
-                                    ref: ref)
-                                .then((value) => {
-                                      cancelEditingPersonalDetails(),
-                                    });
+                            if (formKey.currentState!.validate()) {
+                              updateTeamMember(
+                                      email: emailController.text.trim(),
+                                      firstname: firstNameController.text.trim(),
+                                      lastname: lastNameController.text.trim(),
+                                      mobile: '$countryCode ${phoneController.text.trim()}',
+                                      managerName: userData.managerName,
+                                      managerid: userData.managerid,
+                                      role: userData.role,
+                                      brokerId: userData.brokerId,
+                                      userId: userData.userId,
+                                      fcmToken: userData.fcmToken,
+                                      imageUrl: userData.image,
+                                      status: userData.status,
+                                      isOnline: userData.isOnline,
+                                      ref: ref)
+                                  .then((value) => {
+                                        cancelEditingPersonalDetails(),
+                                      });
+                            }
                           },
                         ),
                       ],
@@ -471,15 +474,24 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                 ],
               ),
               if (widget.isPersonalDetails) ...[
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Table(
+                Form(
+                  key: formKey,
+                  child: Column(
                     children: [
-                      TableRow(children: [
-                        buildInfoFields('First name', userData.userfirstname, isPersonalDetailsEditing, firstNameController, context),
-                        buildInfoFields('Last Name ', userData.userlastname, isPersonalDetailsEditing, lastNameController, context),
-                        if (Responsive.isDesktop(context)) ...[const SizedBox()],
-                      ])
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15.0),
+                        child: Table(
+                          children: [
+                            TableRow(children: [
+                              buildInfoFields('First name', userData.userfirstname, isPersonalDetailsEditing, firstNameController, context,
+                                  (value) => validateForNormalFeild(props: "First name", value: value)),
+                              buildInfoFields('Last Name ', userData.userlastname, isPersonalDetailsEditing, lastNameController, context,
+                                  (value) => validateForNormalFeild(props: "First name", value: value)),
+                              if (Responsive.isDesktop(context)) ...[const SizedBox()],
+                            ])
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -488,14 +500,18 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                   child: Table(
                     children: [
                       TableRow(children: [
-                        buildInfoFields('Email address', userData.email, isPersonalDetailsEditing, emailController, context),
+                        buildInfoFields('Email address', userData.email, isPersonalDetailsEditing, emailController, context,
+                            (value) => validateForNormalFeild(props: "First name", value: value)),
                         mobileInfoFields('Phone ', userData.mobile, isPersonalDetailsEditing, phoneController, context, countryCode, openModal),
-                        if (!Responsive.isMobile(context)) buildInfoFields('Employee ID', userData.userId, false, TextEditingController(), context),
+                        if (!Responsive.isMobile(context))
+                          buildInfoFields(
+                              'Employee ID', userData.userId, false, TextEditingController(), context, (value) => validateForNormalFeild(props: "First name", value: value)),
                       ])
                     ],
                   ),
                 ),
-                if (Responsive.isMobile(context)) buildInfoFields('Employee ID', userData.userId, false, TextEditingController(), context),
+                if (Responsive.isMobile(context))
+                  buildInfoFields('Employee ID', userData.userId, false, TextEditingController(), context, (value) => validateForNormalFeild(props: "First name", value: value)),
               ] else ...[
                 // Padding(
                 //   padding: const EdgeInsets.symmetric(vertical: 15.0),
@@ -530,7 +546,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
   }
 }
 
-Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, TextEditingController textController, BuildContext context) {
+Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, TextEditingController textController, BuildContext context, FormFieldValidator<String>? validator) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -549,6 +565,7 @@ Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, Tex
           child: CustomTextInput(
             controller: textController,
             onFieldSubmitted: (newValue) {},
+            validator: validator,
           ),
         ),
       ] else ...[
@@ -631,7 +648,7 @@ Widget serachLocationInfoFields(
       ),
       if (isEditing) ...[
         SizedBox(
-          // height: 50,`
+          height: 50,
           width: Responsive.isDesktop(context) ? 300 : 335,
           child: CustomTextInput(
             hintText: "Type here...",
