@@ -1,6 +1,8 @@
 import 'package:beamer/beamer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/Customs/text_utility.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
@@ -20,6 +22,7 @@ class LargeScreen extends ConsumerStatefulWidget {
 }
 
 class LargeScreenState extends ConsumerState<LargeScreen> {
+  int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     int currentIndex = 0;
@@ -64,6 +67,7 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                   onDestinationSelected: (index) {
                     setstate(
                       () {
+                        selectedIndex = index;
                         beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[index].nav);
                       },
                     );
@@ -71,16 +75,37 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                   destinations: sideBarItems
                       .sublist(0, 5)
                       .map(
-                        (e) => NavigationRailDestination(
-                          icon: Icon(e.iconData),
-                          selectedIcon: Icon(e.iconData, color: AppColor.primary),
-                          label: Text(
-                            e.label,
-                            style: const TextStyle(
-                              fontSize: 10,
-                            ),
-                          ),
-                        ),
+                        (
+                          e,
+                        ) =>
+                            NavigationRailDestination(
+                                label: const AppText(text: '', fontsize: 0),
+                                icon: Container(
+                                    width: 45,
+                                    padding: const EdgeInsets.symmetric(vertical: 2),
+                                    // padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6),
+                                      color: currentIndex == sideBarItems.indexOf(e) ? Color.fromRGBO(68, 96, 239, 0.1) : Colors.transparent,
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Icon(e.iconData),
+                                        AppText(
+                                          text: e.label,
+                                          fontsize: 9,
+                                        )
+                                      ],
+                                    ))
+                                // icon: Icon(e.iconData),
+                                // selectedIcon: Icon(e.iconData, color: AppColor.primary),
+                                // label: Text(
+                                //   e.label,
+                                //   style: const TextStyle(
+                                //     fontSize: 10,
+                                //   ),
+                                // ),
+                                ),
                       )
                       .toList(),
                 ),

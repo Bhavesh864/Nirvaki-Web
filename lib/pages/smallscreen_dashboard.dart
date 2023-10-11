@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 
 import 'package:yes_broker/riverpodstate/user_data.dart';
@@ -109,19 +110,40 @@ class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingOb
           ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null),
         },
         currentIndex: currentIndex,
+        selectedFontSize: 0,
+        unselectedFontSize: 0,
         items: List.generate(
           bottomBarItems.length,
           (index) => BottomNavigationBarItem(
-            backgroundColor: Colors.pink,
-            icon: Icon(
-              bottomBarItems[index].iconData,
-              color: index == currentIndex ? AppColor.primary : Colors.black,
-              size: 20,
+            icon: Container(
+              margin: const EdgeInsets.symmetric(vertical: 5),
+              width: 70,
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              // padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+                color: index == currentIndex ? AppColor.secondary : Colors.transparent,
+              ),
+              child: Column(
+                children: [
+                  Icon(
+                    bottomBarItems[index].iconData,
+                    color: index == currentIndex ? AppColor.primary : Colors.black,
+                    size: 20,
+                  ),
+                  AppText(
+                    text: bottomBarItems[index].label,
+                    fontsize: 12,
+                    textColor: index == currentIndex ? AppColor.primary : Colors.black,
+                  )
+                ],
+              ),
             ),
-            label: bottomBarItems[index].label,
+            label: '',
           ),
         ),
       ),
+
       floatingActionButton: const CustomSpeedDialButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
