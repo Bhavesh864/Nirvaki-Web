@@ -1,5 +1,6 @@
 const String profileImage = 'assets/images/profile.png';
 const String authBgImage = 'assets/images/tree.jpg';
+// const String appLogo = 'assets/svg/applogo.svg';
 const String appLogo = 'assets/images/image1.png';
 const String illustration3 = 'assets/images/illustration3.png';
 const String google = 'assets/images/google.png';

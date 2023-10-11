@@ -94,20 +94,3 @@ Future<void> setNotificationTOfirestore(String title, String content, String ite
     }
   }
 }
-
-
-// correct the day on calender title day 
-// center karo timing ko
-// make rounded corner in popup menu item and change color and font-family
-// icons use krna in profile cancel and save button
-// correct karo profile screen m sidha save krne pr default name save ho rha h
-// edit shi krna hai profile m 
-// activity tab m textinput ki height shi karo
-// card k bich m space karo height m
-// user name set calendar k uppr homescreen pr mobile m 
-// pop menu shi krna h calendar item add krne ka 
-// remove kardo team price item 
-// add icon add krna hai team screen add team member m 
-// lastname required nhi hai add team member m 
-// performance sdk add krna hai firebase m 
-// 

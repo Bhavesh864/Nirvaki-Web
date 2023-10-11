@@ -51,7 +51,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     //   minHeight: 0,
                     //   maxHeight: double.infinity,
                     // ),
-                    padding: const EdgeInsets.all(25),
+                    padding: EdgeInsets.all(Responsive.isMobile(context) ? 10 : 20),
                     child: Form(
                       key: formkey,
                       child: Column(
@@ -60,7 +60,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                           const Padding(
                             padding: EdgeInsets.only(top: 10),
                             child: Text(
-                              "Log In",
+                              "Reset Password",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20,
@@ -108,8 +108,9 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                               validator: validateEmail,
                             ),
                           ),
-                          const SizedBox(height: 15),
-                          SizedBox(
+                          // const SizedBox(height: 15),
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 15),
                             width: screenHeight,
                             child: CustomButton(
                               text: 'Reset',

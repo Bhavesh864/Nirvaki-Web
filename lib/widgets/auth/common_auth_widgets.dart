@@ -110,15 +110,14 @@ class CustomSignUpNow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Wrap(
+        // mainAxisAlignment: MainAxisAlignment.center,
+        alignment: WrapAlignment.center,
         children: [
           const CustomText(
-            title: 'Don’t Have an account?',
+            title: 'Don’t Have an account?  ',
             color: Colors.grey,
-          ),
-          const SizedBox(
-            width: 10,
+            size: 14,
           ),
           GestureDetector(
             onTap: () {
@@ -127,6 +126,7 @@ class CustomSignUpNow extends StatelessWidget {
             child: const CustomText(
               title: 'Signup Now.',
               color: AppColor.primary,
+              size: 14,
             ),
           ),
         ],
