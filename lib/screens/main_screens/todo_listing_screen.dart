@@ -5,10 +5,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/functions/navigation/navigation_functions.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
+import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/widgets/todo/todo_filter_view.dart';
 import '../../Customs/loader.dart';
 import '../../chat/controller/chat_controller.dart';
@@ -193,7 +195,17 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                                   children: [
                                     if (Responsive.isMobile(context) || width! < 850) ...[
                                       Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
+                                          Container(
+                                              margin: const EdgeInsets.only(left: 17, bottom: 4),
+                                              color: Colors.white,
+                                              child: AppText(
+                                                text: "Welcome, ${capitalizeFirstLetter(user.userfirstname)}",
+                                                fontWeight: FontWeight.w500,
+                                                fontsize: 20,
+                                              )),
                                           const CustomCalendarView(),
                                           WorkItemsList(
                                             title: 'To do',
@@ -257,7 +269,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                                                             ? 2
                                                             : 3,
                                                     crossAxisSpacing: 10.0,
-                                                    mainAxisExtent: 140,
+                                                    mainAxisExtent: 165,
                                                   ),
                                                   itemCount: filterTodoList.length,
                                                   itemBuilder: (context, index) => GestureDetector(
@@ -320,3 +332,21 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
         });
   }
 }
+
+
+// String getGreeting() {
+//   final now = DateTime.now();
+//   final currentTime = now.hour;
+
+//   String greeting;
+
+//   if (currentTime >= 5 && currentTime < 12) {
+//     greeting = 'Good morning';
+//   } else if (currentTime >= 12 && currentTime < 17) {
+//     greeting = 'Good afternoon';
+//   } else {
+//     greeting = 'Good evening';
+//   }
+
+//   return greeting;
+// }

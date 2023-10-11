@@ -122,7 +122,7 @@ class CustomTextInputState extends State<CustomTextInput> {
           hintText: widget.hintText,
           hintStyle: widget.hintstyle,
 
-          prefixIcon: widget.leftIcon != null ? Icon(widget.leftIcon) : null,
+          prefixIcon: widget.leftIcon != null ? Icon(widget.leftIcon, color: Colors.black) : null,
           suffixIcon: widget.rightIcon != null
               ? IconButton(
                   icon: Icon(widget.rightIcon),
@@ -182,6 +182,8 @@ class CustomButton extends StatefulWidget {
   final TextStyle? textStyle;
   final Color? borderColor;
   final EdgeInsets? padding;
+  final FontWeight fontWeight;
+  final double letterSpacing;
 
   const CustomButton(
       {Key? key,
@@ -201,6 +203,8 @@ class CustomButton extends StatefulWidget {
       this.isBorder = true,
       this.borderColor = Colors.grey,
       this.titleLeft = false,
+      this.fontWeight = FontWeight.w500,
+      this.letterSpacing = 0,
       this.padding = const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8)})
       : super(key: key);
 
@@ -259,6 +263,8 @@ class _CustomButtonState extends State<CustomButton> {
                 title: widget.text,
                 color: widget.textColor,
                 size: widget.fontsize!,
+                letterSpacing: widget.letterSpacing,
+                fontWeight: widget.fontWeight,
               ),
               if (widget.titleLeft)
                 const SizedBox(
@@ -360,7 +366,7 @@ class CustomCheckboxState extends State<CustomCheckbox> {
         if (widget.label != null)
           CustomText(
             title: widget.label!,
-            size: 16,
+            size: Responsive.isMobile(context) ? 14 : 16,
           ),
       ],
     );
@@ -510,6 +516,7 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
+                    const TextSpan(text: " "),
                     const TextSpan(
                       text: '*',
                       style: TextStyle(

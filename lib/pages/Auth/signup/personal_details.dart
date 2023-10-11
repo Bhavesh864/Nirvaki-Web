@@ -133,7 +133,7 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
                   const SizedBox(height: 20),
                   Card(
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                       constraints: BoxConstraints(
                         minHeight: 0,
                         maxHeight: Responsive.isMobile(context) ? height! * 0.8 : height! * 0.88,
@@ -149,7 +149,7 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
                               children: [
                                 const DetailsHeaderWidget(isPersonalDetails: true),
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 10),
+                                  padding: const EdgeInsets.symmetric(vertical: 15),
                                   child: Text(
                                     "Let Us Know You Better",
                                     style: TextStyle(
@@ -257,10 +257,14 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
                                 //   },
                                 // ),
                                 Container(
-                                  margin: const EdgeInsets.only(top: 10, bottom: 10),
+                                  margin: const EdgeInsets.only(
+                                    top: 10,
+                                  ),
                                   alignment: Alignment.centerRight,
                                   child: CustomButton(
                                     text: 'Next',
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 1,
                                     onPressed: () => navigateTopage(notify),
                                     width: 73,
                                     height: 39,

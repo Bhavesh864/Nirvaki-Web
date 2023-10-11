@@ -21,9 +21,9 @@ AppBar mobileAppBar(User? user, BuildContext context, void Function(String) onOp
         ScreenTypeLayout.builder(
           breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
           mobile: (p0) => const CustomText(
-            title: 'YesBroker',
-            fontWeight: FontWeight.bold,
-            size: 16,
+            title: 'YesBrokr',
+            fontWeight: FontWeight.w700,
+            size: 18,
           ),
         ),
       ],
@@ -107,6 +107,7 @@ PopupMenuItem appBarPopupMenuItem(String title, void Function(String) onOptionSe
     padding: const EdgeInsets.symmetric(vertical: 2),
     child: Center(
       child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 2),
         width: 200,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(

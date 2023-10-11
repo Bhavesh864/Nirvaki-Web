@@ -135,7 +135,23 @@ class TeamScreen extends ConsumerWidget {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      const AppText(text: "Team", fontWeight: FontWeight.w700, fontsize: 16),
+                      Row(
+                        children: [
+                          const AppText(text: "Team", fontWeight: FontWeight.w700, fontsize: 16),
+                          const SizedBox(width: 5),
+                          InkWell(
+                            onTap: () {
+                              showAddMemberAlertDailogBox(context);
+                              ref.read(editAddMemberState.notifier).isEdit(false);
+                              ref.read(userForEditScreen.notifier).setUserForEdit(null);
+                            },
+                            child: const Icon(
+                              Icons.add_circle_outline,
+                              size: 17,
+                            ),
+                          )
+                        ],
+                      ),
                       ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),

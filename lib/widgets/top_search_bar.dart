@@ -44,7 +44,11 @@ class _TopSerachBarState extends State<TopSerachBar> {
                   onChanged: widget.onChanged,
                   decoration: const InputDecoration(
                     hintText: 'Search',
-                    prefixIcon: Icon(Icons.search),
+                    isDense: true,
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),
@@ -77,7 +81,7 @@ class _TopSerachBarState extends State<TopSerachBar> {
           )
         : widget.title != 'Todo'
             ? Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         isloading = true;
       });
-      signinMethod(email: emailcontroller.text, password: passwordcontroller.text).then((value) => {
+      signinMethod(email: emailcontroller.text.trim(), password: passwordcontroller.text.trim()).then((value) => {
             if (value == 'success')
               {
                 // if (auth.currentUser?.emailVerified == true)
@@ -84,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: SingleChildScrollView(
                 child: Container(
                   width: Responsive.isMobile(context) ? w * 0.9 : 500,
-                  padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                  padding: EdgeInsets.symmetric(horizontal: Responsive.isMobile(context) ? 10 : 20, vertical: 15),
                   child: Form(
                     key: key,
                     child: Column(
@@ -134,25 +134,23 @@ class _LoginScreenState extends State<LoginScreen> {
                         // const SizedBox(height: 10),
                         // const CustomOrDivider(),
                         const SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 5),
-                          child: CustomTextInput(
-                            focusnode: emailFocusNode,
-                            // key: const Key('usernameField'),
-                            controller: emailcontroller,
-                            labelText: 'Email address',
-                            validator: validateEmail,
-                            autofillHints: const [AutofillHints.email],
-                            textInputAction: TextInputAction.next,
-                            onFieldSubmitted: (_) {
-                              FocusScope.of(context).requestFocus(passwordFocusNode);
-                            },
-                          ),
+                          height: 15,
                         ),
                         CustomTextInput(
-                          // key: const Key('passwordField'),
+                          focusnode: emailFocusNode,
+                          controller: emailcontroller,
+                          labelText: 'Email Address',
+                          validator: (val) => validateEmail(val?.trim()),
+                          autofillHints: const [AutofillHints.email],
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (_) {
+                            FocusScope.of(context).requestFocus(passwordFocusNode);
+                          },
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        CustomTextInput(
                           focusnode: passwordFocusNode,
                           controller: passwordcontroller,
                           labelText: 'Password',
@@ -161,10 +159,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           validator: validatePassword,
                           onFieldSubmitted: (_) => loginwithemailpassword(context),
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 15),
                         isloading
                             ? const Center(child: CircularProgressIndicator.adaptive())
-                            : SizedBox(
+                            : Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 7),
                                 width: w,
                                 child: CustomButton(
                                   key: const Key("loginButton"),
@@ -175,15 +174,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                   height: 40.0,
                                 ),
                               ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 20),
                         const CustomForgetPassword(),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 15),
                         CustomSignUpNow(
                           onPressSignUp: () {
                             context.beamToNamed(AppRoutes.singupscreen);
                           },
                         ),
-                        const SizedBox(height: 15),
+                        const SizedBox(height: 10),
                       ],
                     ),
                   ),

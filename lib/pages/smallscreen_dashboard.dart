@@ -112,9 +112,11 @@ class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingOb
         items: List.generate(
           bottomBarItems.length,
           (index) => BottomNavigationBarItem(
+            backgroundColor: Colors.pink,
             icon: Icon(
               bottomBarItems[index].iconData,
               color: index == currentIndex ? AppColor.primary : Colors.black,
+              size: 20,
             ),
             label: bottomBarItems[index].label,
           ),
