@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/Methods/update_broker_info.dart';
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
+import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/screens/account_screens/profile_screen.dart';
 
@@ -598,7 +599,8 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                   child: Table(
                     children: [
                       TableRow(children: [
-                        buildInfoFields('Email address', broker.brokercompanyemail!, isPersonalDetailsEditing, emailController, context),
+                        buildInfoFields('Email address', broker.brokercompanyemail!, isPersonalDetailsEditing, emailController, context,
+                            (value) => validateForNormalFeild(value: value, props: "props")),
                         // buildInfoFields('Phone ', broker.brokercompanynumber!, isPersonalDetailsEditing, phoneController, context),
                         mobileInfoFields('Phone ', broker.brokercompanynumber!, isPersonalDetailsEditing, phoneController, context, countryCode, openModal),
                         if (Responsive.isDesktop(context)) const SizedBox(),
@@ -706,8 +708,10 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                   child: Table(
                     children: [
                       TableRow(children: [
-                        buildInfoFields('Address 1', broker.brokercompanyaddress['Addressline1'] ?? "", isAddressEditing, address1Controller, context),
-                        buildInfoFields('Address 2', broker.brokercompanyaddress['Addressline2'] ?? "", isAddressEditing, address2Controller, context),
+                        buildInfoFields('Address 1', broker.brokercompanyaddress['Addressline1'] ?? "", isAddressEditing, address1Controller, context,
+                            (value) => validateForNormalFeild(value: value, props: "props")),
+                        buildInfoFields('Address 2', broker.brokercompanyaddress['Addressline2'] ?? "", isAddressEditing, address2Controller, context,
+                            (value) => validateForNormalFeild(value: value, props: "props")),
                         if (Responsive.isDesktop(context)) const SizedBox(),
                       ])
                     ],
@@ -718,8 +722,10 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                   child: Table(
                     children: [
                       TableRow(children: [
-                        buildInfoFields('City', broker.brokercompanyaddress['city'], isAddressEditing, cityController, context),
-                        buildInfoFields('State', broker.brokercompanyaddress['state'], isAddressEditing, stateController, context),
+                        buildInfoFields('City', broker.brokercompanyaddress['city'], isAddressEditing, cityController, context,
+                            (value) => validateForNormalFeild(value: value, props: "props")),
+                        buildInfoFields('State', broker.brokercompanyaddress['state'], isAddressEditing, stateController, context,
+                            (value) => validateForNormalFeild(value: value, props: "props")),
                         if (Responsive.isDesktop(context)) const SizedBox(),
                       ])
                     ],
