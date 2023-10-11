@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/constants/firebase/Methods/add_member_send_email.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import '../../Customs/custom_fields.dart';
 import '../../Customs/loader.dart';
@@ -115,7 +116,8 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
   bool isPersonalDetailsEditing = false;
   bool isAddressEditing = false;
   bool isPhotoUploading = false;
-
+  bool isMobileNoEmpty = false;
+  final formKey = GlobalKey<FormState>();
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController fullNameController = TextEditingController();
@@ -204,7 +206,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
             brokerId: userData.brokerId,
             userId: userData.userId,
             fcmToken: userData.fcmToken,
-            imageUrl: uploadProfile.value,
+            imageUrl: uploadProfile.value != '' ? uploadProfile.value : userData.image,
             status: userData.status,
             isOnline: userData.isOnline,
             ref: ref)
@@ -422,6 +424,9 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                           text: "cancel",
                           borderColor: AppColor.primary,
                           onPressed: () {
+                            setState(() {
+                              isMobileNoEmpty = false;
+                            });
                             cancelEditingPersonalDetails();
                           },
                           buttonColor: Colors.white,
@@ -433,24 +438,36 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                           borderColor: AppColor.primary,
                           height: 39,
                           onPressed: () {
-                            updateTeamMember(
-                                    email: emailController.text.trim(),
-                                    firstname: firstNameController.text.trim(),
-                                    lastname: lastNameController.text.trim(),
-                                    mobile: '$countryCode ${phoneController.text.trim()}',
-                                    managerName: userData.managerName,
-                                    managerid: userData.managerid,
-                                    role: userData.role,
-                                    brokerId: userData.brokerId,
-                                    userId: userData.userId,
-                                    fcmToken: userData.fcmToken,
-                                    imageUrl: userData.image,
-                                    status: userData.status,
-                                    isOnline: userData.isOnline,
-                                    ref: ref)
-                                .then((value) => {
-                                      cancelEditingPersonalDetails(),
-                                    });
+                            if (phoneController.text.trim() == "") {
+                              setState(() {
+                                isMobileNoEmpty = true;
+                              });
+                              return;
+                            } else {
+                              setState(() {
+                                isMobileNoEmpty = false;
+                              });
+                            }
+                            if (formKey.currentState!.validate()) {
+                              updateTeamMember(
+                                      email: emailController.text.trim(),
+                                      firstname: firstNameController.text.trim(),
+                                      lastname: lastNameController.text.trim(),
+                                      mobile: '$countryCode ${phoneController.text.trim()}',
+                                      managerName: userData.managerName,
+                                      managerid: userData.managerid,
+                                      role: userData.role,
+                                      brokerId: userData.brokerId,
+                                      userId: userData.userId,
+                                      fcmToken: userData.fcmToken,
+                                      imageUrl: userData.image,
+                                      status: userData.status,
+                                      isOnline: userData.isOnline,
+                                      ref: ref)
+                                  .then((value) => {
+                                        cancelEditingPersonalDetails(),
+                                      });
+                            }
                           },
                         ),
                       ],
@@ -471,56 +488,99 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                 ],
               ),
               if (widget.isPersonalDetails) ...[
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Table(
+                Form(
+                  key: formKey,
+                  child: Column(
                     children: [
-                      TableRow(children: [
-                        buildInfoFields('First name', userData.userfirstname, isPersonalDetailsEditing, firstNameController, context),
-                        buildInfoFields('Last Name ', userData.userlastname, isPersonalDetailsEditing, lastNameController, context),
-                        if (Responsive.isDesktop(context)) ...[const SizedBox()],
-                      ])
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15.0),
+                        child: Table(
+                          children: [
+                            TableRow(children: [
+                              buildInfoFields('First name', userData.userfirstname, isPersonalDetailsEditing, firstNameController, context,
+                                  (value) => validateForNormalFeild(props: "First name", value: value)),
+                              buildInfoFields('Last Name ', userData.userlastname, isPersonalDetailsEditing, lastNameController, context,
+                                  (value) => validateForNormalFeild(props: "Last name", value: value)),
+                              if (Responsive.isDesktop(context)) ...[const SizedBox()],
+                            ])
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15.0),
+                        child: Table(
+                          children: [
+                            TableRow(children: [
+                              buildInfoFields(
+                                'Email address',
+                                userData.email,
+                                isPersonalDetailsEditing,
+                                emailController,
+                                context,
+                                validateEmail,
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  mobileInfoFields(
+                                    'Phone ',
+                                    userData.mobile,
+                                    isPersonalDetailsEditing,
+                                    phoneController,
+                                    context,
+                                    countryCode,
+                                    openModal,
+                                    isMobileNoEmpty,
+                                  ),
+                                  if (isMobileNoEmpty)
+                                    const Padding(
+                                      padding: EdgeInsets.only(left: 8.0),
+                                      child: AppText(
+                                        text: 'Please enter your Phone number',
+                                        fontsize: 12,
+                                        textColor: Colors.red,
+                                      ),
+                                    )
+                                ],
+                              ),
+                              if (!Responsive.isMobile(context))
+                                buildInfoFields('Employee ID', userData.userId, false, TextEditingController(), context,
+                                    (value) => validateForNormalFeild(props: "Employee Id", value: value)),
+                            ])
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Table(
-                    children: [
-                      TableRow(children: [
-                        buildInfoFields('Email address', userData.email, isPersonalDetailsEditing, emailController, context),
-                        mobileInfoFields('Phone ', userData.mobile, isPersonalDetailsEditing, phoneController, context, countryCode, openModal),
-                        if (!Responsive.isMobile(context)) buildInfoFields('Employee ID', userData.userId, false, TextEditingController(), context),
-                      ])
-                    ],
-                  ),
-                ),
-                if (Responsive.isMobile(context)) buildInfoFields('Employee ID', userData.userId, false, TextEditingController(), context),
+                if (Responsive.isMobile(context))
+                  buildInfoFields('Employee ID', userData.userId, false, TextEditingController(), context, (value) => validateForNormalFeild(props: "First name", value: value)),
               ] else ...[
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Table(
-                    children: [
-                      TableRow(children: [
-                        buildInfoFields('City', 'New Delhi', false, TextEditingController(), context),
-                        buildInfoFields('State ', 'Delhi', false, TextEditingController(), context),
-                        const SizedBox()
-                      ])
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Table(
-                    children: [
-                      TableRow(children: [
-                        buildInfoFields('Country', 'India', false, TextEditingController(), context),
-                        buildInfoFields('Pin Code ', '110077', false, TextEditingController(), context),
-                        const SizedBox(),
-                      ])
-                    ],
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(vertical: 15.0),
+                //   child: Table(
+                //     children: [
+                //       TableRow(children: [
+                //         buildInfoFields('City', 'New Delhi', false, TextEditingController(), context),
+                //         buildInfoFields('State ', 'Delhi', false, TextEditingController(), context),
+                //         const SizedBox()
+                //       ])
+                //     ],
+                //   ),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(vertical: 15.0),
+                //   child: Table(
+                //     children: [
+                //       TableRow(children: [
+                //         buildInfoFields('Country', 'India', false, TextEditingController(), context),
+                //         buildInfoFields('Pin Code ', '110077', false, TextEditingController(), context),
+                //         const SizedBox(),
+                //       ])
+                //     ],
+                //   ),
+                // ),
               ]
             ],
           ),
@@ -530,7 +590,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
   }
 }
 
-Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, TextEditingController textController, BuildContext context) {
+Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, TextEditingController textController, BuildContext context, FormFieldValidator<String>? validator) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -544,11 +604,15 @@ Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, Tex
       ),
       if (isEditing) ...[
         SizedBox(
-          height: 50,
+          // constraints: const BoxConstraints(
+          //   minHeight: 40.0,
+          // ),
+          // height: 50,
           width: Responsive.isDesktop(context) ? 300 : 160,
           child: CustomTextInput(
             controller: textController,
             onFieldSubmitted: (newValue) {},
+            validator: validator,
           ),
         ),
       ] else ...[
@@ -557,7 +621,7 @@ Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, Tex
           fieldDetail,
           style: const TextStyle(
             fontSize: 13,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ]
@@ -565,7 +629,8 @@ Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, Tex
   );
 }
 
-Widget mobileInfoFields(String fieldName, String fieldDetail, bool isEditing, TextEditingController textController, BuildContext context, String countryCode, openModal) {
+Widget mobileInfoFields(
+    String fieldName, String fieldDetail, bool isEditing, TextEditingController textController, BuildContext context, String countryCode, openModal, bool isEmpty) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -579,17 +644,22 @@ Widget mobileInfoFields(String fieldName, String fieldDetail, bool isEditing, Te
       ),
       if (isEditing) ...[
         SizedBox(
-          height: 50,
+          // height: 50,
           width: Responsive.isDesktop(context) ? 300 : 160,
           child: MobileNumberInputField(
-            bottomMargin: kIsWeb ? const EdgeInsets.only(bottom: 8.5) : const EdgeInsets.only(bottom: 1.5),
+            // bottomMargin: kIsWeb ? const EdgeInsets.only(bottom: 8.5) : const EdgeInsets.only(bottom: 1.5),
             fontsize: 13.0,
             controller: textController,
             hintText: 'Phone',
-            isEmpty: false,
+            isMandatory: false,
+            isEmpty: isEmpty,
+            showLabel: false,
+            isdense: true,
+            contentpadding: const EdgeInsets.symmetric(vertical: 8.5),
             openModal: openModal,
             countryCode: countryCode,
             onChange: (value) {},
+            // validator: validator,
           ),
         ),
       ] else ...[
@@ -598,7 +668,7 @@ Widget mobileInfoFields(String fieldName, String fieldDetail, bool isEditing, Te
           fieldDetail,
           style: const TextStyle(
             fontSize: 13,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ]
@@ -627,7 +697,7 @@ Widget serachLocationInfoFields(
       ),
       if (isEditing) ...[
         SizedBox(
-          height: 50,
+          // height: 50,
           width: Responsive.isDesktop(context) ? 300 : 335,
           child: CustomTextInput(
             hintText: "Type here...",
@@ -644,7 +714,7 @@ Widget serachLocationInfoFields(
           fieldDetail,
           style: const TextStyle(
             fontSize: 13,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ]
@@ -677,26 +747,17 @@ class EditBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: const Color(0xff898989).withOpacity(0.5),
+    return InkWell(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(3),
+          // color: const Color(0xff898989).withOpacity(0.1),
+          color: const Color.fromRGBO(248, 248, 248, 1),
         ),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5),
-        child: Row(
-          children: [
-            Icon(
-              Icons.edit_outlined,
-            ),
-            SizedBox(
-              width: 5,
-            ),
-            Text('Edit'),
-          ],
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+        child: Icon(
+          Icons.edit_outlined,
+          size: Responsive.isMobile(context) ? 16 : 19,
         ),
       ),
     );

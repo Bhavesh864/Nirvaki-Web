@@ -464,9 +464,14 @@ class MobileNumberInputField extends StatefulWidget {
     this.fontsize = 16.0,
     this.isMandatory = true,
     this.showLabel = true,
+    this.isdense = false,
+    this.contentpadding = EdgeInsets.zero,
     this.bottomMargin = const EdgeInsets.only(bottom: 0),
+    this.fromProfile = false,
+    this.innnerContainerPadding = const EdgeInsets.symmetric(vertical: 5),
   });
   final bool isEmpty;
+  final bool isdense;
   final String countryCode;
   final String hintText;
   final double? fontsize;
@@ -477,6 +482,9 @@ class MobileNumberInputField extends StatefulWidget {
   final void Function() openModal;
   final void Function(String) onChange;
   final FormFieldValidator<String>? validator;
+  final EdgeInsetsGeometry contentpadding;
+  final bool? fromProfile;
+  final EdgeInsets? innnerContainerPadding;
   @override
   State<MobileNumberInputField> createState() => _MobileNumberInputFieldState();
 }
@@ -532,13 +540,24 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
               InkWell(
                 onTap: widget.openModal,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                  child: AppText(text: widget.countryCode, fontsize: widget.fontsize!),
+                  // padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                  padding: widget.fromProfile == true
+                      ? const EdgeInsets.symmetric(horizontal: 5, vertical: 0)
+                      : EdgeInsets.symmetric(horizontal: 5, vertical: Responsive.isMobile(context) ? 8 : 14),
+                  child: Row(
+                    children: [
+                      AppText(text: widget.countryCode, fontsize: widget.fontsize!),
+                      const Icon(
+                        Icons.arrow_drop_down_outlined,
+                      )
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(width: 10.0),
+              if (widget.fromProfile == true) const SizedBox(width: 5),
               Expanded(
                 child: Container(
+                  padding: widget.fromProfile == true ? null : const EdgeInsets.symmetric(vertical: 5),
                   margin: widget.bottomMargin,
                   child: TextFormField(
                     maxLength: 10,
@@ -554,9 +573,11 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
                     keyboardType: TextInputType.phone,
                     validator: widget.validator,
                     decoration: InputDecoration(
-                        hintText: widget.hintText,
+                        isDense: widget.isdense,
+                        hintText: "Type here...",
                         counterText: "",
                         hintStyle: const TextStyle(color: Colors.grey),
+                        contentPadding: widget.contentpadding,
                         border: InputBorder.none,
                         focusedBorder: InputBorder.none,
                         errorBorder: InputBorder.none),

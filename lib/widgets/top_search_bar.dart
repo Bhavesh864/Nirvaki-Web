@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/customs/responsive.dart';
 
 class TopSerachBar extends StatefulWidget {
   final String title;
   final Function(String) onChanged;
   final Function onToggleShowTable;
   final bool showTableView;
-  final bool isMobile;
   final TextEditingController searchController;
   final bool isFilterOpen;
   final VoidCallback onFilterClose;
@@ -15,7 +15,6 @@ class TopSerachBar extends StatefulWidget {
 
   const TopSerachBar({
     super.key,
-    required this.isMobile,
     required this.isFilterOpen,
     required this.onFilterClose,
     required this.onFilterOpen,
@@ -33,7 +32,7 @@ class TopSerachBar extends StatefulWidget {
 class _TopSerachBarState extends State<TopSerachBar> {
   @override
   Widget build(BuildContext context) {
-    return !widget.isMobile
+    return !Responsive.isMobile(context)
         ? Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -77,34 +76,43 @@ class _TopSerachBarState extends State<TopSerachBar> {
             ],
           )
         : widget.title != 'Todo'
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: CustomText(
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomText(
                       title: widget.title,
                       fontWeight: FontWeight.w600,
                       size: 18,
                     ),
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          widget.onFilterOpen();
-                        },
-                        icon: const Icon(Icons.filter_list),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          widget.onFilterOpen();
-                        },
-                        icon: const Icon(Icons.more_horiz),
-                      ),
-                    ],
-                  )
-                ],
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            widget.onFilterOpen();
+                          },
+                          child: const Icon(
+                            Icons.filter_list,
+                            size: 20,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            widget.onFilterOpen();
+                          },
+                          child: const Icon(
+                            Icons.more_horiz,
+                            size: 20,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               )
             : Container();
   }
