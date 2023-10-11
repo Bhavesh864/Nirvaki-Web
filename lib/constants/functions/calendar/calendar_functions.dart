@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -21,6 +23,27 @@ Color getColorForTaskType(String taskType) {
   // You can add more cases for other task types
   // or provide a default color if needed.
   return AppColor.primary;
+}
+
+Color getRandomColorForTaskType(String taskType) {
+  // Define a list of predefined colors
+  List<Color> colors = [
+    Colors.orange,
+    Colors.green,
+    Colors.red,
+    Colors.blue,
+    Colors.purple,
+    Colors.teal,
+    Colors.pink,
+    Colors.cyan,
+    Colors.indigo,
+  ];
+
+  // Generate a random index to select a color from the list
+  int randomIndex = Random().nextInt(colors.length);
+
+  // Return the randomly selected color
+  return colors[randomIndex];
 }
 
 String toDate(DateTime dateTime) {

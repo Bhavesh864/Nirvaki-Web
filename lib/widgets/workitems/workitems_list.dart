@@ -48,8 +48,8 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                     ),
                     color: AppColor.secondary,
                   ),
-                  padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
-                  height: 50,
+                  padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
+                  height: 40,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -70,7 +70,10 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                   padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 0),
                   decoration: const BoxDecoration(
                     color: AppColor.secondary,
-                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                    ),
                   ),
                   child: ScrollConfiguration(
                     behavior: const ScrollBehavior().copyWith(overscroll: false),
@@ -118,7 +121,7 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                       color: AppColor.secondary,
                     ),
                     padding: const EdgeInsets.only(left: 10, right: 10, top: 15),
-                    height: Responsive.isMobile(context) ? 50 : 45,
+                    height: 40,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
