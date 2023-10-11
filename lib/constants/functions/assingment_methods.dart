@@ -91,40 +91,43 @@ void assginUserToTodo(BuildContext context, Function assign, List<dynamic> assig
       return ClipRRect(
         borderRadius: BorderRadius.circular(15),
         child: Dialog(
+          insetPadding: const EdgeInsets.all(10),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           child: Container(
             padding: const EdgeInsets.all(15),
-            height: 200,
+            constraints: const BoxConstraints(minHeight: 200, maxHeight: 400),
             width: 500,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                AssignUser(
-                  status: true,
-                  addUser: (user) {
-                    assign(user);
-                    FocusScope.of(context).unfocus();
-                  },
-                  assignedUserIds: assignto.map((item) => item.userid).toList(),
-                ),
-                const SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      submitAssignUser(id, context, user!, currentuserdata);
-                      Navigator.of(context).pop();
-                      if (Responsive.isMobile(context)) {
-                        popBottomSheet();
-                      }
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  AssignUser(
+                    status: true,
+                    addUser: (user) {
+                      assign(user);
+                      FocusScope.of(context).unfocus();
                     },
-                    child: const Text("Add"),
+                    assignedUserIds: assignto.map((item) => item.userid).toList(),
                   ),
-                )
-              ],
+                  // const SizedBox(height: 10),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        submitAssignUser(id, context, user!, currentuserdata);
+                        Navigator.of(context).pop();
+                        if (Responsive.isMobile(context)) {
+                          popBottomSheet();
+                        }
+                      },
+                      child: const Text("Add"),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

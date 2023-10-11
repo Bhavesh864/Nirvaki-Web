@@ -345,7 +345,7 @@ void showOwnerDetailsAndAssignToBottomSheet(BuildContext context, String title, 
     ),
     builder: (BuildContext context) {
       return Container(
-        height: 400,
+        constraints: BoxConstraints(minHeight: 400),
         padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
