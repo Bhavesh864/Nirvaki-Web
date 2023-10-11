@@ -130,7 +130,6 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                           showTableView: showTableView,
                           searchController: searchController,
                           title: 'Inventory',
-                          isMobile: Responsive.isMobile(context),
                           isFilterOpen: isFilterOpen,
                           onFilterClose: () {
                             setState(() {

@@ -165,7 +165,6 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                             showTableView: showTableView,
                             searchController: searchController,
                             title: 'Todo',
-                            isMobile: Responsive.isMobile(context),
                             isFilterOpen: isFilterOpen,
                             onFilterClose: () {
                               setState(() {

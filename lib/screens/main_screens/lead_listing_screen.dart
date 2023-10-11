@@ -185,7 +185,6 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
                             showTableView: showTableView,
                             searchController: searchController,
                             title: 'Lead',
-                            isMobile: Responsive.isMobile(context),
                             isFilterOpen: isFilterOpen,
                             onFilterClose: () {
                               setState(() {
