@@ -457,7 +457,7 @@ void showAddCalendarModal({
                               );
                             },
                             child: LabelTextInputField(
-                              labelText: 'Date ',
+                              labelText: 'Date',
                               isMandatory: true,
                               inputController: dateController,
                               isDatePicker: true,
@@ -506,7 +506,7 @@ void showAddCalendarModal({
                                 );
                               },
                               child: LabelTextInputField(
-                                labelText: 'Date ',
+                                labelText: 'Date',
                                 isMandatory: true,
                                 inputController: dateController,
                                 isDatePicker: true,

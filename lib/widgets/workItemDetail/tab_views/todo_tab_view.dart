@@ -178,7 +178,11 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: Responsive.isMobile(context) ? 1 : 2, mainAxisSpacing: 10.0, crossAxisSpacing: 10.0, mainAxisExtent: 150),
+                              crossAxisCount: Responsive.isMobile(context) ? 1 : 2,
+                              mainAxisSpacing: 10.0,
+                              crossAxisSpacing: 10.0,
+                              mainAxisExtent: 170,
+                            ),
                             itemCount: filteredList.length,
                             itemBuilder: (context, index) => GestureDetector(
                               onTap: () {

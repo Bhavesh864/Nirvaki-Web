@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
+import 'package:yes_broker/widgets/app/nav_bar.dart';
 import '../../Customs/custom_chip.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/functions/make_call_function.dart';
@@ -38,9 +39,9 @@ class CardFooter extends StatelessWidget {
                   child: Container(
                     margin: const EdgeInsets.only(right: 5),
                     child: Text(
-                      "${checkNotNUllItem(cardData.customerinfo?.firstname) ? cardData.customerinfo!.firstname! : ""} ${checkNotNUllItem(cardData.customerinfo?.lastname) ? cardData.customerinfo!.lastname! : ""}",
+                      "${checkNotNUllItem(cardData.customerinfo?.firstname) ? capitalizeFirstLetter(cardData.customerinfo!.firstname!) : ""} ${checkNotNUllItem(cardData.customerinfo?.lastname) ? capitalizeFirstLetter(cardData.customerinfo!.lastname!) : ""}",
                       style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 13,
                         color: Colors.black,
                         fontWeight: FontWeight.w600,
                       ),
