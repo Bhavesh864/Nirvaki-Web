@@ -11,6 +11,7 @@ import 'package:yes_broker/Customs/loader.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/activity_details.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/timeline_item.dart';
 import '../riverpodstate/user_data.dart';
@@ -38,7 +39,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
     final User? user = ref.watch(userDataProvider);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 10),
       decoration: !widget.fromHome
           ? null
           : BoxDecoration(
@@ -48,28 +49,34 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CustomChip(
-                paddingVertical: 8,
-                paddingHorizontal: 0,
-                avatar: Icon(Icons.calendar_view_week_outlined),
-                label: CustomText(
-                  title: 'This Week',
-                  size: 10,
+              Padding(
+                padding: EdgeInsets.only(left: Responsive.isDesktop(context) ? 10.0 : 0),
+                child: const CustomChip(
+                  paddingVertical: 8,
+                  paddingHorizontal: 0,
+                  avatar: Icon(Icons.calendar_view_week_outlined),
+                  label: CustomText(
+                    title: 'This Week',
+                    size: 10,
+                  ),
                 ),
               ),
-              CustomChip(
-                paddingVertical: 8,
-                label: Row(
-                  children: [
-                    CustomText(
-                      title: 'Filter By',
-                      size: 10,
-                    ),
-                    Icon(Icons.arrow_downward_outlined),
-                  ],
+              Padding(
+                padding: EdgeInsets.only(right: Responsive.isDesktop(context) ? 5.0 : 0),
+                child: const CustomChip(
+                  paddingVertical: 8,
+                  label: Row(
+                    children: [
+                      CustomText(
+                        title: 'Filter By',
+                        size: 10,
+                      ),
+                      Icon(Icons.arrow_downward_outlined),
+                    ],
+                  ),
                 ),
               ),
             ],
