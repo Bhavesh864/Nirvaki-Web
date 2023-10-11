@@ -209,7 +209,7 @@ List<WorkItemModal> workItemData = [
 Color taskStatusColor(String title) {
   switch (title) {
     case 'New':
-      return Colors.green;
+      return const Color(0xFF268E15);
     case 'In Progress':
       return AppColor.locationfinalizedstatuscolor;
     case 'Location Finalised':

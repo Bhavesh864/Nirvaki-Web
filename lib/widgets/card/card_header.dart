@@ -10,6 +10,7 @@ import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
 import 'package:yes_broker/constants/firebase/send_notification.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../Customs/text_utility.dart';
@@ -49,7 +50,7 @@ class CardHeaderState extends ConsumerState<CardHeader> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SizedBox(
-          height: 25,
+          height: Responsive.isMobile(context) ? 27 : 25,
           width: cardData.workitemId!.contains('TD') ? 180 : 250,
           child: ListView(
             scrollDirection: Axis.horizontal,
@@ -179,7 +180,7 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                   children: [
                     Icon(
                       Icons.calendar_month_outlined,
-                      size: 15,
+                      size: 12,
                       color: cardData.duedate != null && DateFormat('dd-MM-yy').parse(cardData.duedate!).isBefore(DateTime.now()) ? Colors.red : Colors.black,
                     ),
                     const SizedBox(width: 2),
