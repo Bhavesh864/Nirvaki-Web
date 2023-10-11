@@ -94,8 +94,8 @@ void assginUserToTodo(BuildContext context, Function assign, List<dynamic> assig
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           child: Container(
             padding: const EdgeInsets.all(15),
-            height: 200,
-            width: 500,
+            // height: 500,
+            // width: 500,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
             ),
