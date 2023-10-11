@@ -464,9 +464,12 @@ class MobileNumberInputField extends StatefulWidget {
     this.fontsize = 16.0,
     this.isMandatory = true,
     this.showLabel = true,
+    this.isdense = false,
+    this.contentpadding = EdgeInsets.zero,
     this.bottomMargin = const EdgeInsets.only(bottom: 0),
   });
   final bool isEmpty;
+  final bool isdense;
   final String countryCode;
   final String hintText;
   final double? fontsize;
@@ -477,6 +480,7 @@ class MobileNumberInputField extends StatefulWidget {
   final void Function() openModal;
   final void Function(String) onChange;
   final FormFieldValidator<String>? validator;
+  final EdgeInsetsGeometry contentpadding;
   @override
   State<MobileNumberInputField> createState() => _MobileNumberInputFieldState();
 }
@@ -553,10 +557,12 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
                     controller: widget.controller,
                     keyboardType: TextInputType.phone,
                     validator: widget.validator,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
+                        isDense: widget.isdense,
                         hintText: "Type here...",
                         counterText: "",
-                        hintStyle: TextStyle(color: Colors.grey),
+                        hintStyle: const TextStyle(color: Colors.grey),
+                        contentPadding: widget.contentpadding,
                         border: InputBorder.none,
                         focusedBorder: InputBorder.none,
                         errorBorder: InputBorder.none),

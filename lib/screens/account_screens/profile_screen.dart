@@ -196,7 +196,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
     updateTeamMember(
             email: userData.email,
             firstname: userData.userfirstname,
-            lastname: userData.userfirstname,
+            lastname: userData.userlastname,
             mobile: userData.mobile,
             managerName: userData.managerName,
             managerid: userData.managerid,
@@ -497,30 +497,30 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                 ),
                 if (Responsive.isMobile(context)) buildInfoFields('Employee ID', userData.userId, false, TextEditingController(), context),
               ] else ...[
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Table(
-                    children: [
-                      TableRow(children: [
-                        buildInfoFields('City', 'New Delhi', false, TextEditingController(), context),
-                        buildInfoFields('State ', 'Delhi', false, TextEditingController(), context),
-                        const SizedBox()
-                      ])
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Table(
-                    children: [
-                      TableRow(children: [
-                        buildInfoFields('Country', 'India', false, TextEditingController(), context),
-                        buildInfoFields('Pin Code ', '110077', false, TextEditingController(), context),
-                        const SizedBox(),
-                      ])
-                    ],
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(vertical: 15.0),
+                //   child: Table(
+                //     children: [
+                //       TableRow(children: [
+                //         buildInfoFields('City', 'New Delhi', false, TextEditingController(), context),
+                //         buildInfoFields('State ', 'Delhi', false, TextEditingController(), context),
+                //         const SizedBox()
+                //       ])
+                //     ],
+                //   ),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(vertical: 15.0),
+                //   child: Table(
+                //     children: [
+                //       TableRow(children: [
+                //         buildInfoFields('Country', 'India', false, TextEditingController(), context),
+                //         buildInfoFields('Pin Code ', '110077', false, TextEditingController(), context),
+                //         const SizedBox(),
+                //       ])
+                //     ],
+                //   ),
+                // ),
               ]
             ],
           ),
@@ -579,14 +579,18 @@ Widget mobileInfoFields(String fieldName, String fieldDetail, bool isEditing, Te
       ),
       if (isEditing) ...[
         SizedBox(
-          height: 50,
+          // height: 65,
           width: Responsive.isDesktop(context) ? 300 : 160,
           child: MobileNumberInputField(
             bottomMargin: kIsWeb ? const EdgeInsets.only(bottom: 8.5) : const EdgeInsets.only(bottom: 1.5),
             fontsize: 13.0,
             controller: textController,
             hintText: 'Phone',
+            isMandatory: false,
             isEmpty: false,
+            showLabel: false,
+            isdense: true,
+            contentpadding: const EdgeInsets.all(9),
             openModal: openModal,
             countryCode: countryCode,
             onChange: (value) {},
@@ -627,7 +631,7 @@ Widget serachLocationInfoFields(
       ),
       if (isEditing) ...[
         SizedBox(
-          height: 50,
+          // height: 50,`
           width: Responsive.isDesktop(context) ? 300 : 335,
           child: CustomTextInput(
             hintText: "Type here...",
