@@ -49,7 +49,7 @@ class EventDataSource extends CalendarDataSource {
     DateFormat customTimeFormat = DateFormat('hh:mm aa');
 
     try {
-      DateTime customDateTime = customTimeFormat.parse(customTime).add(const Duration(hours: 1));
+      DateTime customDateTime = customTimeFormat.parse(customTime).add(const Duration(hours: 3));
 
       date = DateTime(
         date.year,

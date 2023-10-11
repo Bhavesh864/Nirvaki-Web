@@ -58,6 +58,7 @@ class _TopSerachBarState extends State<TopSerachBar> {
                 child: Row(
                   children: [
                     CustomChip(
+                      paddingVertical: 5,
                       onPressed: () {
                         widget.onFilterOpen();
                       },
@@ -66,11 +67,12 @@ class _TopSerachBarState extends State<TopSerachBar> {
                         size: 24,
                       ),
                     ),
-                    IconButton(
+                    CustomChip(
+                      paddingVertical: 5,
                       onPressed: () {
                         widget.onToggleShowTable();
                       },
-                      icon: Icon(
+                      label: Icon(
                         !widget.showTableView ? Icons.view_agenda_outlined : Icons.view_module_outlined,
                         size: 24,
                       ),
