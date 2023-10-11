@@ -173,18 +173,6 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                   children: [
                                     Row(
                                       children: [
-                                        // CustomButton(
-                                        //   text: 'Owner Details',
-                                        //   onPressed: () {
-                                        //     showOwnerDetailsAndAssignToBottomSheet(
-                                        //       context,
-                                        //       'Owner Details',
-                                        //       ContactInformation(customerinfo: data.customerinfo!),
-                                        //     );
-                                        //   },
-                                        //   height: 35,
-                                        //   width: 135,
-                                        // ),
                                         ElevatedButton(
                                           onPressed: () {
                                             showOwnerDetailsAndAssignToBottomSheet(
@@ -195,7 +183,6 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                           },
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: AppColor.primary, // Set the button's background color
-                                            // minimumSize: const Size(100, 20),
                                             padding: const EdgeInsets.all(8), // Set the button's size
                                           ),
                                           child: const Text(
@@ -219,30 +206,6 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                               ),
                                             );
                                           },
-                                          // child: Row(
-                                          //   mainAxisAlignment: MainAxisAlignment.end,
-                                          //   children: data.assignedto!.asMap().entries.map((entry) {
-                                          //     final index = entry.key;
-                                          //     final user = entry.value;
-                                          //     return Transform.translate(
-                                          //       offset: Offset(index * -8.0, 0),
-                                          //       child: Container(
-                                          //         width: 24,
-                                          //         height: 24,
-                                          //         decoration: BoxDecoration(
-                                          //           border: Border.all(color: Colors.white),
-                                          //           image: DecorationImage(
-                                          //             image: NetworkImage(
-                                          //               user.image!.isEmpty ? noImg : user.image!,
-                                          //             ),
-                                          //             fit: BoxFit.fill,
-                                          //           ),
-                                          //           borderRadius: BorderRadius.circular(40),
-                                          //         ),
-                                          //       ),
-                                          //     );
-                                          //   }).toList(),
-                                          // ),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             mainAxisAlignment: MainAxisAlignment.end,
