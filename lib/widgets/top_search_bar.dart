@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/customs/custom_chip.dart';
 import 'package:yes_broker/customs/responsive.dart';
 
 class TopSerachBar extends StatefulWidget {
@@ -52,11 +53,11 @@ class _TopSerachBarState extends State<TopSerachBar> {
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Row(
                   children: [
-                    IconButton(
+                    CustomChip(
                       onPressed: () {
                         widget.onFilterOpen();
                       },
-                      icon: const Icon(
+                      label: const Icon(
                         Icons.filter_alt_outlined,
                         size: 24,
                       ),
