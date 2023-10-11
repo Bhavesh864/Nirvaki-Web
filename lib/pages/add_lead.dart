@@ -33,7 +33,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
   String? response;
   bool allQuestionFinishes = false;
   bool isEdit = false;
-
+  bool isBuy = true;
   late Future<List<LeadQuestions>> getQuestions;
   List<Screen> currentScreenList = [];
   PageController? pageController;
@@ -52,6 +52,12 @@ class _AddLeadState extends ConsumerState<AddLead> {
     answers.isNotEmpty ? isEdit = true : isEdit = false;
     try {
       if (isEdit) {
+        if (answers[1]["item"] == "Buy") {
+          isBuy = true;
+        } else {
+          isBuy = false;
+        }
+
         if (answers[0]["item"] == "Residential") {
           ref.read(leadFilterCommercialQuestion.notifier).toggleCommericalQuestionary(false);
         }
@@ -184,7 +190,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
     final allLeadQuestions = ref.read(allLeadQuestion);
     // final isVillaSelected = ref.read(leadFilterVillaQuestion);
     // final isCommericalSelected = ref.read(leadFilterCommercialQuestion);
-
+    print("isBuy---> $isBuy");
     return GestureDetector(
       onTap: () {
         if (!kIsWeb) FocusScope.of(context).unfocus();
@@ -252,14 +258,9 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                       ),
                                       child: SingleChildScrollView(
                                         child: Container(
-                                          // constraints: BoxConstraints(
-                                          //   minHeight: 0,
-                                          //   maxHeight: double.infinity,
-                                          // ),
                                           width: Responsive.isMobile(context) ? width! * 0.9 : 650,
                                           padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
                                           child: Column(
-                                            // mainAxisSize: MainAxisSize.min,
                                             children: [
                                               if (currentScreenList[index].title != null)
                                                 Padding(
@@ -286,20 +287,22 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                             fontWeight: FontWeight.bold),
                                                       ),
                                                     buildLeadQuestions(
-                                                        currentScreenList[index].questions[i],
-                                                        currentScreenList,
-                                                        currentScreenIndex,
-                                                        notify,
-                                                        nextQuestion,
-                                                        isRentSelected,
-                                                        isEdit,
-                                                        isPlotSelected,
-                                                        selectedValues,
-                                                        isMobileNoEmpty,
-                                                        iswhatsappMobileNoEmpty,
-                                                        isChecked,
-                                                        isCheckedUpdate,
-                                                        ref),
+                                                      currentScreenList[index].questions[i],
+                                                      currentScreenList,
+                                                      currentScreenIndex,
+                                                      notify,
+                                                      nextQuestion,
+                                                      isRentSelected,
+                                                      isEdit,
+                                                      isPlotSelected,
+                                                      selectedValues,
+                                                      isMobileNoEmpty,
+                                                      iswhatsappMobileNoEmpty,
+                                                      isChecked,
+                                                      isCheckedUpdate,
+                                                      ref,
+                                                      isBuy,
+                                                    ),
                                                     SizedBox(height: currentScreenList[index].questions[i].questionOptionType != 'textfield' ? 10 : 0),
                                                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                                                       const SizedBox(),

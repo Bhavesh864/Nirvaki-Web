@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/Methods/update_broker_info.dart';
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
+import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/screens/account_screens/profile_screen.dart';
 
@@ -137,7 +139,10 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
   bool isPersonalDetailsEditing = false;
   bool isAddressEditing = false;
   bool isPhotoUploading = false;
+  bool isMobileNoEmpty = false;
+  bool isWhatasppNoEmpty = false;
 
+  final formKey = GlobalKey<FormState>();
   final TextEditingController companyNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -523,6 +528,10 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                           text: "cancel",
                           borderColor: AppColor.primary,
                           onPressed: () {
+                            setState(() {
+                              isWhatasppNoEmpty = false;
+                              isMobileNoEmpty = false;
+                            });
                             searchController.text = "";
                             cancelEditingPersonalDetails();
                             cancelEditingAddressDetail();
@@ -538,32 +547,56 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                           onPressed: () {
                             searchController.text = "";
                             if (widget.isPersonalDetails) {
-                              updateBrokerInfo(
-                                      brokerId: broker.brokerid,
-                                      role: broker.role,
-                                      companyName: broker.companyname,
-                                      mobile: "$countryCode ${phoneController.text}",
-                                      // whatsapp: broker.brokercompanywhatsapp,
-                                      whatsapp: "$whatsappCountryCode ${whatsappPhoneController.text}",
-                                      email: emailController.text,
-                                      image: broker.brokerlogo,
-                                      companyAddress: broker.brokercompanyaddress)
-                                  .then((value) => {cancelEditingPersonalDetails()});
+                              if (formKey.currentState!.validate()) {
+                                if (phoneController.text.trim() == "") {
+                                  setState(() {
+                                    isMobileNoEmpty = true;
+                                  });
+                                  return;
+                                } else {
+                                  setState(() {
+                                    isMobileNoEmpty = false;
+                                  });
+                                }
+                                if (whatsappPhoneController.text.trim() == "") {
+                                  setState(() {
+                                    isWhatasppNoEmpty = true;
+                                  });
+                                  return;
+                                } else {
+                                  setState(() {
+                                    isWhatasppNoEmpty = false;
+                                  });
+                                }
+                                updateBrokerInfo(
+                                        brokerId: broker.brokerid,
+                                        role: broker.role,
+                                        companyName: broker.companyname,
+                                        mobile: "$countryCode ${phoneController.text}",
+                                        // whatsapp: broker.brokercompanywhatsapp,
+                                        whatsapp: "$whatsappCountryCode ${whatsappPhoneController.text}",
+                                        email: emailController.text,
+                                        image: broker.brokerlogo,
+                                        companyAddress: broker.brokercompanyaddress)
+                                    .then((value) => {cancelEditingPersonalDetails()});
+                              }
                             } else if (widget.isAdressDetails) {
-                              updateBrokerInfo(
-                                  brokerId: broker.brokerid,
-                                  role: broker.role,
-                                  companyName: broker.companyname,
-                                  mobile: broker.brokercompanynumber,
-                                  whatsapp: broker.brokercompanywhatsapp,
-                                  email: broker.brokercompanyemail,
-                                  image: broker.brokerlogo,
-                                  companyAddress: {
-                                    "city": cityController.text,
-                                    "state": stateController.text,
-                                    "Addressline1": address1Controller.text,
-                                    "Addressline2": address2Controller.text
-                                  }).then((value) => {cancelEditingAddressDetail()});
+                              if (formKey.currentState!.validate()) {
+                                updateBrokerInfo(
+                                    brokerId: broker.brokerid,
+                                    role: broker.role,
+                                    companyName: broker.companyname,
+                                    mobile: broker.brokercompanynumber,
+                                    whatsapp: broker.brokercompanywhatsapp,
+                                    email: broker.brokercompanyemail,
+                                    image: broker.brokerlogo,
+                                    companyAddress: {
+                                      "city": cityController.text,
+                                      "state": stateController.text,
+                                      "Addressline1": address1Controller.text,
+                                      "Addressline2": address2Controller.text
+                                    }).then((value) => {cancelEditingAddressDetail()});
+                              }
                             }
                           },
                         ),
@@ -592,140 +625,208 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                   ]
                 ],
               ),
-              if (widget.isPersonalDetails) ...[
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Table(
-                    children: [
-                      TableRow(children: [
-                        buildInfoFields('Email address', broker.brokercompanyemail!, isPersonalDetailsEditing, emailController, context),
-                        // buildInfoFields('Phone ', broker.brokercompanynumber!, isPersonalDetailsEditing, phoneController, context),
-                        mobileInfoFields('Phone ', broker.brokercompanynumber!, isPersonalDetailsEditing, phoneController, context, countryCode, openModal),
-                        if (Responsive.isDesktop(context)) const SizedBox(),
-                      ])
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Table(
-                    children: [
-                      TableRow(children: [
-                        // buildInfoFields('Whatsapp Number ', broker.brokercompanywhatsapp!, isPersonalDetailsEditing, phoneController, context),
-                        mobileInfoFields('Whatsapp Number ', broker.brokercompanywhatsapp!, isPersonalDetailsEditing, whatsappPhoneController, context, whatsappCountryCode,
-                            openModalForWhatapp),
-                        if (Responsive.isDesktop(context)) const SizedBox(),
-                      ])
-                    ],
-                  ),
-                ),
-              ] else ...[
-                if (isAddressEditing) ...[
-                  serachLocationInfoFields(
-                    'Search your Location',
-                    "",
-                    isAddressEditing,
-                    searchController,
-                    context,
-                    onChange,
-                  ),
-                  if (searchController.text != "" && placesList.isNotEmpty)
-                    Container(
-                      height: 200,
-                      decoration: BoxDecoration(border: Border.all(color: Colors.grey, width: 0.8), borderRadius: BorderRadius.circular(8)),
-                      margin: const EdgeInsets.symmetric(horizontal: 7),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: placesList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            title: AppText(
-                              fontsize: 13,
-                              text: placesList[index],
-                              textColor: Colors.black,
-                            ),
-                            onTap: () {
-                              final str = placesList[index];
-                              searchController.text = str;
-
-                              try {
-                                List<String> words = str.split(' ');
-                                if (words.length > 3) {
-                                  String lastThreeWords = words.contains("India") ? words.sublist(words.length - 3).join(' ') : words.sublist(words.length - 2).join(' ');
-                                  String remainingWords = words.contains("India") ? words.sublist(0, words.length - 3).join(' ') : words.sublist(0, words.length - 2).join(' ');
-                                  if (remainingWords.endsWith(',')) {
-                                    remainingWords = remainingWords.replaceFirst(RegExp(r',\s*$'), '');
-                                  }
-                                  if (lastThreeWords.endsWith(',')) {
-                                    lastThreeWords = lastThreeWords.replaceFirst(RegExp(r',\s*$'), '');
-                                  }
-                                  List<String> lastThreeWordsList = lastThreeWords.split(' ');
-                                  if (lastThreeWordsList.isNotEmpty) {
-                                    if (lastThreeWordsList.contains('India')) {
-                                      lastThreeWordsList.removeLast();
-                                    }
-                                    lastThreeWords = lastThreeWordsList.join(' ');
-                                  }
-                                  if (lastThreeWords.endsWith(',')) {
-                                    lastThreeWords = lastThreeWords.replaceFirst(RegExp(r',\s*$'), '');
-                                  }
-                                  address1Controller.text = remainingWords;
-                                  address2Controller.text = lastThreeWords;
-                                  final cityName = lastThreeWordsList[0].endsWith(',') ? lastThreeWordsList[0].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[0];
-                                  final stateName = lastThreeWordsList[1].endsWith(',') ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[1];
-                                  cityController.text = cityName;
-                                  stateController.text = stateName;
-                                  setState(() {
-                                    placesList = [];
-                                  });
-                                } else {
-                                  setState(() {
-                                    placesList = [];
-                                  });
-                                  address1Controller.text = "";
-                                  address2Controller.text = "";
-                                  customSnackBar(context: context, text: 'Choose a proper address');
-                                }
-                              } catch (e) {
-                                setState(() {
-                                  placesList = [];
-                                  address1Controller.text = "";
-                                  address2Controller.text = "";
-                                });
-                                address1Controller.text = "";
-                                address2Controller.text = "";
-                              }
-                            },
-                          );
-                        },
+              Form(
+                key: formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (widget.isPersonalDetails) ...[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15.0),
+                        child: Table(
+                          children: [
+                            TableRow(children: [
+                              buildInfoFields(
+                                'Email address',
+                                broker.brokercompanyemail!,
+                                isPersonalDetailsEditing,
+                                emailController,
+                                context,
+                                validateEmail,
+                              ),
+                              // buildInfoFields('Phone ', broker.brokercompanynumber!, isPersonalDetailsEditing, phoneController, context),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  mobileInfoFields(
+                                    'Phone ',
+                                    broker.brokercompanynumber!,
+                                    isPersonalDetailsEditing,
+                                    phoneController,
+                                    context,
+                                    countryCode,
+                                    openModal,
+                                    isMobileNoEmpty,
+                                  ),
+                                  if (isMobileNoEmpty)
+                                    const Padding(
+                                      padding: EdgeInsets.only(left: 8.0),
+                                      child: AppText(
+                                        text: 'Please enter your Phone number',
+                                        fontsize: 12,
+                                        textColor: Colors.red,
+                                      ),
+                                    )
+                                ],
+                              ),
+                              if (Responsive.isDesktop(context)) const SizedBox(),
+                            ])
+                          ],
+                        ),
                       ),
-                    ),
-                ],
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Table(
-                    children: [
-                      TableRow(children: [
-                        buildInfoFields('Address 1', broker.brokercompanyaddress['Addressline1'] ?? "", isAddressEditing, address1Controller, context),
-                        buildInfoFields('Address 2', broker.brokercompanyaddress['Addressline2'] ?? "", isAddressEditing, address2Controller, context),
-                        if (Responsive.isDesktop(context)) const SizedBox(),
-                      ])
-                    ],
-                  ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15.0),
+                        child: Table(
+                          children: [
+                            TableRow(children: [
+                              // buildInfoFields('Whatsapp Number ', broker.brokercompanywhatsapp!, isPersonalDetailsEditing, phoneController, context),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  mobileInfoFields(
+                                    'Whatsapp Number ',
+                                    broker.brokercompanywhatsapp!,
+                                    isPersonalDetailsEditing,
+                                    whatsappPhoneController,
+                                    context,
+                                    whatsappCountryCode,
+                                    openModalForWhatapp,
+                                    isWhatasppNoEmpty,
+                                  ),
+                                  if (isWhatasppNoEmpty)
+                                    const Padding(
+                                      padding: EdgeInsets.only(left: 8.0),
+                                      child: AppText(
+                                        text: 'Please enter your Whatsapp number',
+                                        fontsize: 12,
+                                        textColor: Colors.red,
+                                      ),
+                                    )
+                                ],
+                              ),
+                              if (Responsive.isDesktop(context)) const SizedBox(),
+                            ])
+                          ],
+                        ),
+                      ),
+                    ] else ...[
+                      if (isAddressEditing) ...[
+                        serachLocationInfoFields(
+                          'Search your Location',
+                          "",
+                          isAddressEditing,
+                          searchController,
+                          context,
+                          onChange,
+                        ),
+                        if (searchController.text != "" && placesList.isNotEmpty)
+                          Container(
+                            height: 200,
+                            decoration: BoxDecoration(border: Border.all(color: Colors.grey, width: 0.8), borderRadius: BorderRadius.circular(8)),
+                            margin: const EdgeInsets.symmetric(horizontal: 7),
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: placesList.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ListTile(
+                                  title: AppText(
+                                    fontsize: 13,
+                                    text: placesList[index],
+                                    textColor: Colors.black,
+                                  ),
+                                  onTap: () {
+                                    final str = placesList[index];
+                                    searchController.text = str;
+
+                                    try {
+                                      List<String> words = str.split(' ');
+                                      if (words.length > 3) {
+                                        String lastThreeWords = words.contains("India") ? words.sublist(words.length - 3).join(' ') : words.sublist(words.length - 2).join(' ');
+                                        String remainingWords =
+                                            words.contains("India") ? words.sublist(0, words.length - 3).join(' ') : words.sublist(0, words.length - 2).join(' ');
+                                        if (remainingWords.endsWith(',')) {
+                                          remainingWords = remainingWords.replaceFirst(RegExp(r',\s*$'), '');
+                                        }
+                                        if (lastThreeWords.endsWith(',')) {
+                                          lastThreeWords = lastThreeWords.replaceFirst(RegExp(r',\s*$'), '');
+                                        }
+                                        List<String> lastThreeWordsList = lastThreeWords.split(' ');
+                                        if (lastThreeWordsList.isNotEmpty) {
+                                          if (lastThreeWordsList.contains('India')) {
+                                            lastThreeWordsList.removeLast();
+                                          }
+                                          lastThreeWords = lastThreeWordsList.join(' ');
+                                        }
+                                        if (lastThreeWords.endsWith(',')) {
+                                          lastThreeWords = lastThreeWords.replaceFirst(RegExp(r',\s*$'), '');
+                                        }
+                                        address1Controller.text = remainingWords;
+                                        address2Controller.text = lastThreeWords;
+                                        final cityName = lastThreeWordsList[0].endsWith(',') ? lastThreeWordsList[0].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[0];
+                                        final stateName = lastThreeWordsList[1].endsWith(',') ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[1];
+                                        cityController.text = cityName;
+                                        stateController.text = stateName;
+                                        setState(() {
+                                          placesList = [];
+                                        });
+                                      } else {
+                                        setState(() {
+                                          placesList = [];
+                                        });
+                                        address1Controller.text = "";
+                                        address2Controller.text = "";
+                                        customSnackBar(context: context, text: 'Choose a proper address');
+                                      }
+                                    } catch (e) {
+                                      setState(() {
+                                        placesList = [];
+                                        address1Controller.text = "";
+                                        address2Controller.text = "";
+                                      });
+                                      address1Controller.text = "";
+                                      address2Controller.text = "";
+                                    }
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                      ],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15.0),
+                        child: Table(
+                          children: [
+                            TableRow(children: [
+                              buildInfoFields('Address 1', broker.brokercompanyaddress['Addressline1'] ?? "", isAddressEditing, address1Controller, context,
+                                  (value) => validateForNormalFeild(props: "Addressline 1", value: value)),
+                              buildInfoFields('Address 2', broker.brokercompanyaddress['Addressline2'] ?? "", isAddressEditing, address2Controller, context,
+                                  (value) => validateForNormalFeild(props: "Addressline 2", value: value)),
+                              if (Responsive.isDesktop(context)) const SizedBox(),
+                            ])
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15.0),
+                        child: Table(
+                          children: [
+                            TableRow(children: [
+                              buildInfoFields('City', broker.brokercompanyaddress['city'], isAddressEditing, cityController, context,
+                                  (value) => validateForNormalFeild(value: value, props: "City")),
+                              buildInfoFields('State', broker.brokercompanyaddress['state'], isAddressEditing, stateController, context,
+                                  (value) => validateForNormalFeild(value: value, props: "State")),
+                              if (Responsive.isDesktop(context)) const SizedBox(),
+                            ])
+                          ],
+                        ),
+                      ),
+                    ]
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Table(
-                    children: [
-                      TableRow(children: [
-                        buildInfoFields('City', broker.brokercompanyaddress['city'], isAddressEditing, cityController, context),
-                        buildInfoFields('State', broker.brokercompanyaddress['state'], isAddressEditing, stateController, context),
-                        if (Responsive.isDesktop(context)) const SizedBox(),
-                      ])
-                    ],
-                  ),
-                ),
-              ]
+              ),
             ],
           ),
         ),

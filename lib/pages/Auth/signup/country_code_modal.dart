@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 
 import '../../../constants/country_code_list.dart';
+import 'package:country_flags/country_flags.dart';
 
 class CountryCodeModel extends StatefulWidget {
   const CountryCodeModel({super.key, required this.onCountrySelected});
@@ -16,18 +17,19 @@ class _CountryCodeModelState extends State<CountryCodeModel> {
 
   void filterCountries(String query) {
     setState(() {
-      filteredCountries = countries
-          .where((country) => country["name"]!.toLowerCase().contains(query.toLowerCase()) || country["dial_code"]!.toLowerCase().contains(query.toLowerCase()))
-          .toList();
+      filteredCountries =
+          countries.where((country) => country["name"]!.toLowerCase().contains(query.toLowerCase()) || country["dial_code"]!.toLowerCase().contains(query.toLowerCase())).toList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Container(
         width: 550,
         padding: const EdgeInsets.only(top: 16, left: 16, right: 5, bottom: 5),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,10 +70,38 @@ class _CountryCodeModelState extends State<CountryCodeModel> {
                 itemBuilder: (context, index) {
                   final country = filteredCountries[index];
                   return ListTile(
-                    leading: Text(country["dial_code"]),
-                    title: AppText(
-                      text: country["name"],
+                    contentPadding: const EdgeInsets.all(0),
+                    // trailing: Container(
+                    //   margin: const EdgeInsets.only(right: 10),
+                    //   child: CountryFlag.fromCountryCode(
+                    //     country["code"],
+                    //     height: 26,
+                    //     width: 26,
+                    //   ),
+                    // ),
+                    // leading: AppText(text: country["dial_code"]),
+                    // title: AppText(
+                    //   text: country["name"],
+                    // ),
+                    //  trailing: Container(
+                    //   margin: const EdgeInsets.only(right: 10),
+                    //   child: CountryFlag.fromCountryCode(
+                    //     country["code"],
+                    //     height: 26,
+                    //     width: 26,
+                    //   ),
+                    // ),
+                    leading: CountryFlag.fromCountryCode(
+                      country["code"],
+                      height: 26,
+                      width: 26,
                     ),
+                    title: AppText(text: "${country["name"]}"),
+                    trailing: Container(
+                      margin: const EdgeInsets.only(right: 10),
+                      child: AppText(text: "${country["dial_code"]}"),
+                    ),
+                    horizontalTitleGap: 5,
                     onTap: () {
                       widget.onCountrySelected(country["dial_code"]);
                       Navigator.of(context).pop();
@@ -85,6 +115,16 @@ class _CountryCodeModelState extends State<CountryCodeModel> {
       ),
     );
   }
+}
+
+String getFlagEmojiFromCountryCode(String countrycode) {
+  // Ensure the country code is in uppercase
+  countrycode = countrycode.toUpperCase();
+
+  // Replace each letter in the country code with the corresponding flag emoji
+  String flag = countrycode.replaceAllMapped(RegExp(r'[A-Z]'), (match) => String.fromCharCode(match.group(0)!.codeUnitAt(0) + 127397));
+
+  return flag;
 }
 
 class Country {

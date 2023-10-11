@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/riverpodstate/add_member_state.dart';
 import 'package:yes_broker/screens/account_screens/Teams/team_screen.dart';
+import 'package:yes_broker/screens/account_screens/profile_screen.dart';
 
 import '../../../constants/firebase/userModel/user_info.dart';
 import '../../../constants/utils/colors.dart';
@@ -45,14 +46,15 @@ class MobileMemberCard extends ConsumerWidget {
                           ref.read(editAddMemberState.notifier).isEdit(true);
                           ref.read(userForEditScreen.notifier).setUserForEdit(user);
                         },
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          margin: const EdgeInsets.only(right: 5),
-                          decoration: BoxDecoration(color: AppColor.secondary, borderRadius: BorderRadius.circular(7)),
-                          child: const Icon(Icons.edit),
-                        ),
+                        child: const EditBlock(),
+                        // child: Container(
+                        //   padding: const EdgeInsets.all(10),
+                        //   margin: const EdgeInsets.only(right: 5),
+                        //   decoration: BoxDecoration(color: AppColor.secondary, borderRadius: BorderRadius.circular(7)),
+                        //   child: const Icon(Icons.edit),
+                        // ),
                       ),
-                      const SizedBox(width: 3),
+                      const SizedBox(width: 6),
                       const Text("200"),
                     ],
                   ),

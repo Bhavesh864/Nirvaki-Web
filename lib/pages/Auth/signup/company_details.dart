@@ -49,6 +49,16 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
         isMobileEmpty = false;
       });
     }
+    if (whatsupnumbercontroller.text == "" && !isChecked) {
+      setState(() {
+        isWhatsappEmpty = true;
+      });
+      return;
+    } else {
+      setState(() {
+        isWhatsappEmpty = false;
+      });
+    }
     if (isvalid!) {
       setState(() {
         isloading = true;
@@ -119,19 +129,28 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
   final TextEditingController uploadLogocontroller = TextEditingController();
   List placesList = [];
   String selectedCountryCode = '+91';
+  String selectedwhatsappCountryCode = '+91';
   bool isMobileEmpty = false;
+  bool isWhatsappEmpty = false;
 
-  void openModal() {
+  void openModal(bool isMobile) {
     final notify = ref.read(selectedItemForsignup.notifier);
     showDialog(
       context: context,
       builder: (context) {
         return CountryCodeModel(onCountrySelected: (data) {
           if (data.isNotEmpty) {
-            setState(() {
-              selectedCountryCode = data;
-            });
-            notify.add({"id": 8, "item": "$data ${mobilenumbercontroller.text}"});
+            if (isMobile) {
+              setState(() {
+                selectedCountryCode = data;
+              });
+              notify.add({"id": 8, "item": "$data ${mobilenumbercontroller.text}"});
+            } else {
+              setState(() {
+                selectedwhatsappCountryCode = data;
+              });
+              notify.add({"id": 9, "item": "$data ${whatsupnumbercontroller.text}"});
+            }
           }
         });
       },
@@ -237,10 +256,11 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                 //   },
                                 // ),
                                 MobileNumberInputField(
+                                  fromProfile: true,
                                   controller: mobilenumbercontroller,
                                   hintText: 'Mobile Number',
                                   isEmpty: isMobileEmpty,
-                                  openModal: openModal,
+                                  openModal: () => openModal(true),
                                   countryCode: selectedCountryCode,
                                   onChange: (value) {
                                     notify.add({"id": 8, "item": "$selectedCountryCode ${value.trim()}"});
@@ -267,20 +287,37 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                       setState(() {
                                         isChecked = value;
                                       });
+                                      if (!value) {
+                                        whatsupnumbercontroller.text = "";
+                                      }
                                     },
                                   ),
                                 ),
                                 if (!isChecked)
-                                  LabelTextInputField(
+                                  MobileNumberInputField(
                                     // margin: const EdgeInsets.all(7),
-                                    labelText: 'Whatsapp Number',
+                                    fromProfile: true,
+                                    hintText: 'Whatsapp Number',
                                     isMandatory: true,
-
-                                    inputController: whatsupnumbercontroller,
-                                    validator: !isChecked ? (value) => validateForMobileNumberFeild(value: value, props: "Whatsapp Number") : null,
-                                    onChanged: (value) {
+                                    openModal: () => openModal(false),
+                                    countryCode: selectedCountryCode,
+                                    controller: whatsupnumbercontroller,
+                                    onChange: (value) {
                                       notify.add({"id": 9, "item": value.trim()});
                                     },
+                                    isEmpty: isWhatsappEmpty,
+                                  ),
+                                if (isWhatsappEmpty && !isChecked)
+                                  const Padding(
+                                    padding: EdgeInsets.only(left: 15.0, bottom: 5),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: AppText(
+                                        text: 'Please enter Whatsapp Number',
+                                        textColor: Colors.red,
+                                        fontsize: 12,
+                                      ),
+                                    ),
                                   ),
                                 LabelTextInputField(
                                   labelText: 'Search your location',
@@ -303,77 +340,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                     constraints: const BoxConstraints(maxHeight: 200),
                                     decoration: BoxDecoration(border: Border.all(color: Colors.grey, width: 0.8), borderRadius: BorderRadius.circular(8)),
                                     margin: const EdgeInsets.symmetric(horizontal: 7),
-                                    child: ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: placesList.length,
-                                      itemBuilder: (BuildContext context, int index) {
-                                        return ListTile(
-                                          title: AppText(
-                                            fontsize: 13,
-                                            text: placesList[index],
-                                            textColor: Colors.black,
-                                          ),
-                                          onTap: () {
-                                            final str = placesList[index];
-
-                                            try {
-                                              List<String> words = str.split(' ');
-                                              if (words.length > 3) {
-                                                String lastThreeWords =
-                                                    words.contains("India") ? words.sublist(words.length - 3).join(' ') : words.sublist(words.length - 2).join(' ');
-                                                String remainingWords =
-                                                    words.contains("India") ? words.sublist(0, words.length - 3).join(' ') : words.sublist(0, words.length - 2).join(' ');
-                                                if (remainingWords.endsWith(',')) {
-                                                  remainingWords = remainingWords.replaceFirst(RegExp(r',\s*$'), '');
-                                                }
-                                                if (lastThreeWords.endsWith(',')) {
-                                                  lastThreeWords = lastThreeWords.replaceFirst(RegExp(r',\s*$'), '');
-                                                }
-                                                List<String> lastThreeWordsList = lastThreeWords.split(' ');
-                                                if (lastThreeWordsList.isNotEmpty) {
-                                                  if (lastThreeWordsList.contains('India')) {
-                                                    lastThreeWordsList.removeLast();
-                                                  }
-                                                  lastThreeWords = lastThreeWordsList.join(' ');
-                                                }
-                                                if (lastThreeWords.endsWith(',')) {
-                                                  lastThreeWords = lastThreeWords.replaceFirst(RegExp(r',\s*$'), '');
-                                                }
-                                                statecontroller.text = placesList[index] ?? "";
-                                                address1controller.text = remainingWords;
-                                                address2controller.text = lastThreeWords;
-                                                notify.add({"id": 10, "item": remainingWords});
-                                                notify.add({"id": 15, "item": lastThreeWords});
-                                                final cityName =
-                                                    lastThreeWordsList[0].endsWith(',') ? lastThreeWordsList[0].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[0];
-                                                final stateName =
-                                                    lastThreeWordsList[1].endsWith(',') ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[1];
-                                                notify.add({"id": 12, "item": cityName});
-                                                notify.add({"id": 11, "item": stateName});
-                                                setState(() {
-                                                  placesList = [];
-                                                });
-                                              } else {
-                                                setState(() {
-                                                  placesList = [];
-                                                });
-                                                address1controller.text = "";
-                                                address2controller.text = "";
-                                                customSnackBar(context: context, text: 'Choose a proper address');
-                                              }
-                                            } catch (e) {
-                                              setState(() {
-                                                placesList = [];
-                                                address1controller.text = "";
-                                                address2controller.text = "";
-                                              });
-                                              address1controller.text = "";
-                                              address2controller.text = "";
-                                            }
-                                          },
-                                        );
-                                      },
-                                    ),
+                                    child: _buildPlacesList(notify),
                                   ),
                                 LabelTextInputField(
                                   labelText: 'Address 1',
@@ -434,6 +401,76 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
           ),
         ),
       ),
+    );
+  }
+
+  ListView _buildPlacesList(SelectedSignupItems notify) {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: placesList.length,
+      itemBuilder: (BuildContext context, int index) {
+        return ListTile(
+          title: AppText(
+            fontsize: 13,
+            text: placesList[index],
+            textColor: Colors.black,
+          ),
+          onTap: () {
+            final str = placesList[index];
+
+            try {
+              List<String> words = str.split(' ');
+              if (words.length > 3) {
+                String lastThreeWords = words.contains("India") ? words.sublist(words.length - 3).join(' ') : words.sublist(words.length - 2).join(' ');
+                String remainingWords = words.contains("India") ? words.sublist(0, words.length - 3).join(' ') : words.sublist(0, words.length - 2).join(' ');
+                if (remainingWords.endsWith(',')) {
+                  remainingWords = remainingWords.replaceFirst(RegExp(r',\s*$'), '');
+                }
+                if (lastThreeWords.endsWith(',')) {
+                  lastThreeWords = lastThreeWords.replaceFirst(RegExp(r',\s*$'), '');
+                }
+                List<String> lastThreeWordsList = lastThreeWords.split(' ');
+                if (lastThreeWordsList.isNotEmpty) {
+                  if (lastThreeWordsList.contains('India')) {
+                    lastThreeWordsList.removeLast();
+                  }
+                  lastThreeWords = lastThreeWordsList.join(' ');
+                }
+                if (lastThreeWords.endsWith(',')) {
+                  lastThreeWords = lastThreeWords.replaceFirst(RegExp(r',\s*$'), '');
+                }
+                statecontroller.text = placesList[index] ?? "";
+                address1controller.text = remainingWords;
+                address2controller.text = lastThreeWords;
+                notify.add({"id": 10, "item": remainingWords});
+                notify.add({"id": 15, "item": lastThreeWords});
+                final cityName = lastThreeWordsList[0].endsWith(',') ? lastThreeWordsList[0].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[0];
+                final stateName = lastThreeWordsList[1].endsWith(',') ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[1];
+                notify.add({"id": 12, "item": cityName});
+                notify.add({"id": 11, "item": stateName});
+                setState(() {
+                  placesList = [];
+                });
+              } else {
+                setState(() {
+                  placesList = [];
+                });
+                address1controller.text = "";
+                address2controller.text = "";
+                customSnackBar(context: context, text: 'Choose a proper address');
+              }
+            } catch (e) {
+              setState(() {
+                placesList = [];
+                address1controller.text = "";
+                address2controller.text = "";
+              });
+              address1controller.text = "";
+              address2controller.text = "";
+            }
+          },
+        );
+      },
     );
   }
 }

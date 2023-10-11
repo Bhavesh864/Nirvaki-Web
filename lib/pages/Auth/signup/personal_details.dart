@@ -190,6 +190,7 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
                                 //   leftIcon: Icons.abc_sharp,
                                 // ),
                                 MobileNumberInputField(
+                                  fromProfile: true,
                                   controller: mobilenumbercontroller,
                                   hintText: 'Mobile Number',
                                   isEmpty: isMobileEmpty,
@@ -222,6 +223,7 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
                                 ),
                                 if (!isChecked) ...[
                                   MobileNumberInputField(
+                                    fromProfile: true,
                                     controller: whatsupnumbercontroller,
                                     hintText: 'Whatsapp Number',
                                     isEmpty: isWhatsEmpty,
