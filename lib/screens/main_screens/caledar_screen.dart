@@ -112,7 +112,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                             height: calendarAppointmentDetails.bounds.height,
                             width: calendarAppointmentDetails.bounds.width,
                             decoration: BoxDecoration(
-                              color: getColorForTaskType('').withOpacity(0.1),
+                              color: getRandomColorForTaskType('Appointment').withOpacity(0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Center(
