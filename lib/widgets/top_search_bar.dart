@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
@@ -79,7 +77,7 @@ class _TopSerachBarState extends State<TopSerachBar> {
           )
         : widget.title != 'Todo'
             ? Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

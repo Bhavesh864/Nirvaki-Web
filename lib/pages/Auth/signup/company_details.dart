@@ -181,7 +181,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                 child: Center(
                   child: Card(
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                       constraints: BoxConstraints(
                         minHeight: 0,
                         maxHeight: Responsive.isMobile(context) ? height! * 0.8 : height! * 1,
@@ -194,9 +194,12 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                           child: SingleChildScrollView(
                             child: Column(
                               children: [
-                                const DetailsHeaderWidget(isPersonalDetails: false),
+                                const Padding(
+                                  padding: EdgeInsets.only(top: 20.0),
+                                  child: DetailsHeaderWidget(isPersonalDetails: false),
+                                ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  padding: const EdgeInsets.symmetric(vertical: 20),
                                   child: Text(
                                     "Tell Us About Your Company",
                                     style: TextStyle(
@@ -206,9 +209,9 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
+                                // const SizedBox(
+                                //   height: 10,
+                                // ),
                                 LabelTextInputField(
                                   // margin: const EdgeInsets.all(7),
                                   labelText: 'Company Name',
@@ -375,12 +378,15 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                   ),
                                 ),
                                 Container(
-                                  margin: const EdgeInsets.only(top: 10, bottom: 10),
+                                  padding: const EdgeInsets.only(bottom: 10.0),
+                                  margin: const EdgeInsets.only(top: 20),
                                   alignment: Alignment.centerRight,
                                   child: isloading
                                       ? const Center(child: CircularProgressIndicator.adaptive())
                                       : CustomButton(
                                           text: 'Save',
+                                          letterSpacing: 0.5,
+                                          fontWeight: FontWeight.w700,
                                           onPressed: () => submitSignupForm(notify),
                                           width: 73,
                                           height: 39,

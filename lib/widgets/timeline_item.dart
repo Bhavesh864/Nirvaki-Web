@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart';
+import 'package:yes_broker/Customs/text_utility.dart';
 
 import 'package:yes_broker/constants/firebase/detailsModels/activity_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/customs/responsive.dart';
 
 import '../constants/functions/navigation/navigation_functions.dart';
 import '../constants/functions/time_formatter.dart';
@@ -27,10 +30,10 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
     final formattedTime = TimeFormatter.formatFirestoreTimestamp(timeLine.createdate);
 
     return Container(
-      padding: const EdgeInsets.only(top: 0, left: 5),
-      height: 100,
+      padding: const EdgeInsets.only(top: 20, left: 5),
+      // height: 100,
       width: 100,
-      margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+      margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(color: Colors.grey),
@@ -41,8 +44,8 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // if (!timeLine.itemid!.contains('TD'))
               InkWell(
                 onTap: () {
                   ref.read(detailsPageIndexTabProvider.notifier).state = 1;
@@ -71,9 +74,14 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 8),
-                child: CustomText(
-                  title: capitalizeFirstLetter(timeLine.activitybody!.activitytitle!),
-                  size: 14,
+                child: Container(
+                  width: Responsive.isDesktop(context) ? 250 : 210,
+                  padding: const EdgeInsets.only(bottom: 5, left: 5),
+                  child: AppText(
+                    text: capitalizeFirstLetter(timeLine.activitybody!.activitytitle!),
+                    fontsize: 14,
+                    softwrap: true,
+                  ),
                 ),
               )
             ],

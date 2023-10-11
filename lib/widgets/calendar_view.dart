@@ -77,6 +77,7 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                         const CustomText(
                           title: 'Calendar',
                           fontWeight: FontWeight.w600,
+                          size: 14,
                         ),
                         Row(
                           children: [
