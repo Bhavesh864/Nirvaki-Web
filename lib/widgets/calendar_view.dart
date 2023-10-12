@@ -95,7 +95,7 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                 color: AppColor.secondary,
                 borderRadius: BorderRadius.circular(20),
               ),
-              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+              margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 5),
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
               child: Column(
                 children: [
@@ -149,15 +149,15 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                   ),
                   Container(
                     margin: const EdgeInsets.only(top: 10, bottom: 6),
-                    height: Responsive.isMobile(context) ? 180 : 150,
+                    height: Responsive.isMobile(context) ? 180 : 160,
                     child: SfCalendar(
                         headerHeight: 0,
                         dataSource: EventDataSource(calenderList),
                         view: CalendarView.timelineDay,
-                        timeSlotViewSettings: const TimeSlotViewSettings(
+                        timeSlotViewSettings: TimeSlotViewSettings(
                           startHour: 9,
                           endHour: 24,
-                          timelineAppointmentHeight: 80,
+                          timelineAppointmentHeight: Responsive.isMobile(context) ? 70 : 60,
                         ),
                         backgroundColor: Colors.white,
                         allowAppointmentResize: true,

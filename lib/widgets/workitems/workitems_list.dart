@@ -120,8 +120,8 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                       borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
                       color: AppColor.secondary,
                     ),
-                    padding: const EdgeInsets.only(left: 10, right: 10, top: 15),
-                    height: 40,
+                    padding: const EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
+                    height: 45,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
