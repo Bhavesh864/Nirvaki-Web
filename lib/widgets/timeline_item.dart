@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 
 import 'package:yes_broker/constants/firebase/detailsModels/activity_details.dart';
@@ -98,7 +97,8 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
               height: 20,
               width: 20,
               decoration: BoxDecoration(
-                image: DecorationImage(image: NetworkImage(timeLine.userImageUrl == null || timeLine.userImageUrl!.isEmpty ? noImg : timeLine.userImageUrl!), fit: BoxFit.fill),
+                image: DecorationImage(
+                    image: NetworkImage(timeLine.userImageUrl == null || timeLine.userImageUrl!.isEmpty ? noImg : timeLine.userImageUrl!), fit: BoxFit.fill),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
