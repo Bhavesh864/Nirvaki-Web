@@ -108,6 +108,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                         appointmentBuilder: (context, calendarAppointmentDetails) {
                           final event = calendarAppointmentDetails.appointments.first;
                           return Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
                             margin: EdgeInsets.symmetric(horizontal: Responsive.isMobile(context) ? 0 : 8),
                             height: calendarAppointmentDetails.bounds.height,
                             width: calendarAppointmentDetails.bounds.width,
