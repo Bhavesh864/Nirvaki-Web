@@ -135,38 +135,29 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                 ] else ...[
                   Expanded(
                     flex: size.width > 1340 ? 3 : 5,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: WorkItemsList(
-                        title: "To do",
-                        getCardDetails: todoItems,
-                      ),
+                    child: WorkItemsList(
+                      title: "To do",
+                      getCardDetails: todoItems,
                     ),
                   ),
                   size.width > 1200
                       ? Expanded(
                           flex: size.width > 1340 ? 3 : 5,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: WorkItemsList(
-                              title: "Work Items",
-                              getCardDetails: workItems,
-                            ),
+                          child: WorkItemsList(
+                            title: "Work Items",
+                            getCardDetails: workItems,
                           ),
                         )
                       : Container(),
                 ],
                 size.width >= 850
                     ? Expanded(
-                        flex: size.width > 1340 ? 4 : 6,
+                        flex: size.width > 1340 ? 3 : 5,
                         child: Column(
                           children: [
                             const Expanded(
                               flex: 3,
-                              child: Padding(
-                                padding: EdgeInsets.only(top: 10),
-                                child: CustomCalendarView(),
-                              ),
+                              child: CustomCalendarView(),
                             ),
                             const SizedBox(
                               height: 10,

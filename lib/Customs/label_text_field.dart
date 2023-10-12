@@ -3,7 +3,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/phone_number.dart';
 
@@ -223,6 +222,7 @@ class LabelTextAreaField extends StatelessWidget {
             keyboardType: TextInputType.multiline,
             maxLines: 5,
             controller: inputController,
+            onChanged: onChanged,
             style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w400,
