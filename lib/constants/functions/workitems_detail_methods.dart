@@ -400,102 +400,54 @@ void showAddCalendarModal({
           borderRadius: BorderRadius.circular(15),
           child: Dialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            child: Container(
-              padding: const EdgeInsets.all(15),
-              height: 550,
-              width: Responsive.isMobile(context) ? width : 650,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Form(
-                key: formkey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const SizedBox(),
-                        CustomText(
-                          softWrap: true,
-                          textAlign: TextAlign.center,
-                          size: Responsive.isMobile(context) ? 20 : 30,
-                          title: 'Add Calendar Item',
-                          fontWeight: FontWeight.bold,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Icon(
-                            Icons.close,
-                            size: 25,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    LabelTextInputField(
-                      labelText: 'Title',
-                      isMandatory: true,
-                      inputController: titleController,
-                      validator: (value) => validateForNormalFeild(props: "Title", value: value),
-                    ),
-                    if (Responsive.isMobile(context)) ...[
-                      Wrap(
+            child: SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.all(15),
+                height: 550,
+                width: Responsive.isMobile(context) ? width : 650,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Form(
+                  key: formkey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          GestureDetector(
-                            onTap: () {
-                              pickFromDateTime(
-                                pickDate: true,
-                                pickedDate: pickedDate,
-                                context: context,
-                                dateController: dateController,
-                                timeController: timeController,
-                              );
-                            },
-                            child: LabelTextInputField(
-                              labelText: 'Date ',
-                              isMandatory: true,
-                              inputController: dateController,
-                              isDatePicker: true,
-                              validator: (value) => validateForNormalFeild(props: "Title", value: value),
-                              hintText: 'DD/MM/YYYY',
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 15,
+                          const SizedBox(),
+                          CustomText(
+                            softWrap: true,
+                            textAlign: TextAlign.center,
+                            size: Responsive.isMobile(context) ? 20 : 30,
+                            title: 'Add Calendar Item',
+                            fontWeight: FontWeight.bold,
                           ),
                           GestureDetector(
                             onTap: () {
-                              pickFromDateTime(
-                                pickDate: false,
-                                pickedDate: pickedDate,
-                                context: context,
-                                dateController: dateController,
-                                timeController: timeController,
-                              );
+                              Navigator.of(context).pop();
                             },
-                            child: LabelTextInputField(
-                              labelText: 'Time',
-                              isMandatory: true,
-                              isDatePicker: true,
-                              inputController: timeController,
-                              rightIcon: Icons.schedule,
-                              validator: (value) => validateForNormalFeild(props: "Title", value: value),
-                              hintText: 'Select Time',
+                            child: const Icon(
+                              Icons.close,
+                              size: 25,
                             ),
                           ),
                         ],
                       ),
-                    ] else ...[
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: GestureDetector(
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      LabelTextInputField(
+                        labelText: 'Title',
+                        isMandatory: true,
+                        inputController: titleController,
+                        validator: (value) => validateForNormalFeild(props: "Title", value: value),
+                      ),
+                      if (Responsive.isMobile(context)) ...[
+                        Wrap(
+                          children: [
+                            GestureDetector(
                               onTap: () {
                                 pickFromDateTime(
                                   pickDate: true,
@@ -514,12 +466,10 @@ void showAddCalendarModal({
                                 hintText: 'DD/MM/YYYY',
                               ),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Expanded(
-                            child: GestureDetector(
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            GestureDetector(
                               onTap: () {
                                 pickFromDateTime(
                                   pickDate: false,
@@ -539,73 +489,80 @@ void showAddCalendarModal({
                                 hintText: 'Select Time',
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                    LabelTextAreaField(
-                      labelText: 'Details',
-                      onChanged: (p0) {
-                        // descriptionController.itext = p0;
-                      },
-                      inputController: descriptionController,
-                      validator: (value) => validateForNormalFeild(props: "Details", value: value),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        if (isEdit)
-                          if (Responsive.isMobile(context)) ...[
-                            GestureDetector(
-                              onTap: () {
-                                onDeleteTask(
-                                  context: context,
-                                  dateController: dateController,
-                                  timeController: timeController,
-                                  titleController: titleController,
-                                  descriptionController: descriptionController,
-                                  calendarModel: calendarModel!,
-                                );
-                                Navigator.of(context).pop();
-                              },
-                              child: const Icon(
-                                Icons.delete,
-                                color: Colors.red,
-                                size: 25,
+                          ],
+                        ),
+                      ] else ...[
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: GestureDetector(
+                                onTap: () {
+                                  pickFromDateTime(
+                                    pickDate: true,
+                                    pickedDate: pickedDate,
+                                    context: context,
+                                    dateController: dateController,
+                                    timeController: timeController,
+                                  );
+                                },
+                                child: LabelTextInputField(
+                                  labelText: 'Date ',
+                                  isMandatory: true,
+                                  inputController: dateController,
+                                  isDatePicker: true,
+                                  validator: (value) => validateForNormalFeild(props: "Title", value: value),
+                                  hintText: 'DD/MM/YYYY',
+                                ),
                               ),
                             ),
-                          ] else ...[
-                            CustomButton(
-                              buttonColor: Colors.red,
-                              text: 'Delete',
-                              onPressed: () {
-                                onDeleteTask(
-                                  context: context,
-                                  dateController: dateController,
-                                  timeController: timeController,
-                                  titleController: titleController,
-                                  descriptionController: descriptionController,
-                                  calendarModel: calendarModel!,
-                                );
-                                Navigator.of(context).pop();
-                              },
-                              width: 80,
-                              height: 39,
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  pickFromDateTime(
+                                    pickDate: false,
+                                    pickedDate: pickedDate,
+                                    context: context,
+                                    dateController: dateController,
+                                    timeController: timeController,
+                                  );
+                                },
+                                child: LabelTextInputField(
+                                  labelText: 'Time',
+                                  isMandatory: true,
+                                  isDatePicker: true,
+                                  inputController: timeController,
+                                  rightIcon: Icons.schedule,
+                                  validator: (value) => validateForNormalFeild(props: "Title", value: value),
+                                  hintText: 'Select Time',
+                                ),
+                              ),
                             ),
                           ],
-                        const SizedBox(),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: CustomButton(
-                            buttonColor: AppColor.primary,
-                            text: isEdit ? 'Update' : 'Save',
-                            onPressed: () {
-                              if (isEdit) {
-                                if (formkey.currentState!.validate()) {
-                                  onUpdateTask(
+                        ),
+                      ],
+                      LabelTextAreaField(
+                        labelText: 'Details',
+                        onChanged: (p0) {
+                          // descriptionController.itext = p0;
+                        },
+                        inputController: descriptionController,
+                        validator: (value) => validateForNormalFeild(props: "Details", value: value),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          if (isEdit)
+                            if (Responsive.isMobile(context)) ...[
+                              GestureDetector(
+                                onTap: () {
+                                  onDeleteTask(
                                     context: context,
                                     dateController: dateController,
                                     timeController: timeController,
@@ -614,28 +571,73 @@ void showAddCalendarModal({
                                     calendarModel: calendarModel!,
                                   );
                                   Navigator.of(context).pop();
-                                }
-                              } else {
-                                if (formkey.currentState!.validate()) {
-                                  onAddTask(
-                                    ref: ref,
+                                },
+                                child: const Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                  size: 25,
+                                ),
+                              ),
+                            ] else ...[
+                              CustomButton(
+                                buttonColor: Colors.red,
+                                text: 'Delete',
+                                onPressed: () {
+                                  onDeleteTask(
                                     context: context,
                                     dateController: dateController,
                                     timeController: timeController,
                                     titleController: titleController,
                                     descriptionController: descriptionController,
+                                    calendarModel: calendarModel!,
                                   );
                                   Navigator.of(context).pop();
+                                },
+                                width: 80,
+                                height: 39,
+                              ),
+                            ],
+                          const SizedBox(),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: CustomButton(
+                              buttonColor: AppColor.primary,
+                              text: isEdit ? 'Update' : 'Save',
+                              onPressed: () {
+                                if (isEdit) {
+                                  if (formkey.currentState!.validate()) {
+                                    onUpdateTask(
+                                      context: context,
+                                      dateController: dateController,
+                                      timeController: timeController,
+                                      titleController: titleController,
+                                      descriptionController: descriptionController,
+                                      calendarModel: calendarModel!,
+                                    );
+                                    Navigator.of(context).pop();
+                                  }
+                                } else {
+                                  if (formkey.currentState!.validate()) {
+                                    onAddTask(
+                                      ref: ref,
+                                      context: context,
+                                      dateController: dateController,
+                                      timeController: timeController,
+                                      titleController: titleController,
+                                      descriptionController: descriptionController,
+                                    );
+                                    Navigator.of(context).pop();
+                                  }
                                 }
-                              }
-                            },
-                            width: 85,
-                            height: 39,
+                              },
+                              width: 85,
+                              height: 39,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
