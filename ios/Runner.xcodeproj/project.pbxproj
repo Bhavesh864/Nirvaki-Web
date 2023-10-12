@@ -200,11 +200,7 @@
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				79B2A74AF8FC9FEB6AD65352 /* [CP] Embed Pods Frameworks */,
 				296E7CC10940E5D37EAEEC3A /* [CP] Copy Pods Resources */,
-<<<<<<< HEAD
 				9F5E10CB5FD050BAA4937785 /* [firebase_crashlytics] Crashlytics Upload Symbols */,
-=======
-				BDF3DC533ADB6549D9F24E42 /* [firebase_crashlytics] Crashlytics Upload Symbols */,
->>>>>>> 6d2a934de3a5e7708c1d1711622b851888321079
 			);
 			buildRules = (
 			);
