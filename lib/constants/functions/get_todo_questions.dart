@@ -147,54 +147,22 @@ Widget buildTodoQuestions(
   } else if (question.questionOptionType == 'textarea') {
     final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
     TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 4, right: 8, left: 2),
-          child: CustomText(
-            title: question.questionTitle,
-            fontWeight: FontWeight.w500,
-            textAlign: TextAlign.left,
-          ),
-        ),
-        TextFormField(
-          keyboardType: TextInputType.multiline,
-          maxLines: 5,
-          controller: controller,
-          onChanged: (newvalue) {
-            notify.add({"id": question.questionId, "item": newvalue.trim()});
-          },
-          decoration: InputDecoration(
-            hintText: 'Type here..',
-            hintStyle: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w400),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-              borderSide: const BorderSide(
-                color: AppColor.primary,
-              ),
-            ),
-          ),
-          validator: (value) {
-            if (value!.isEmpty) {
-              return "Please enter ${question.questionTitle}";
-            }
-            return null;
-          },
-        ),
-      ],
+    return LabelTextAreaField(
+      labelText: question.questionTitle,
+      inputController: controller,
+      onChanged: (newvalue) {
+        notify.add({"id": question.questionId, "item": newvalue.trim()});
+      },
+      validator: (value) => validateForNormalFeild(value: value, props: "Description"),
     );
   } else if (question.questionOptionType == "Assign") {
     return AssignUser(
       addUser: (user) {
         notify.add({"id": question.questionId, "item": user});
       },
+      assignedUserIds: const [],
     );
   } else if (question.questionOptionType == 'dropdown') {
-    print("object");
     // String? defaultValue;
     // if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
     //   defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
@@ -202,10 +170,16 @@ Widget buildTodoQuestions(
     return FutureBuilder(
         future: CardDetails.getCardDetails(),
         builder: (context, snapshot) {
+          // String defaultDropdownValue = defaultValue ?? "";
           final List options = [];
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator.adaptive(),
+            return Center(
+              child: DropDownField(
+                title: "",
+                optionsList: const [],
+                onchanged: (e) {},
+                defaultValues: "",
+              ),
             );
           } else if (snapshot.hasData) {
             List<CardDetails> listofCards = snapshot.data!.where((user) => user.workitemId!.contains("IN") || user.workitemId!.contains("LD")).toList();
@@ -220,7 +194,6 @@ Widget buildTodoQuestions(
             optionsList: options,
             isMultiValueOnDropdownlist: true,
             onchanged: (Object e) {
-              // CardDetails selectedUser = snapshot.data!.firstWhere((user) => user.workitemId == e);
               CardDetails selectedUser = snapshot.data!.firstWhere((user) => "${user.cardTitle} (${user.workitemId})" == e);
               notify.add({"id": question.questionId, "item": selectedUser});
             },

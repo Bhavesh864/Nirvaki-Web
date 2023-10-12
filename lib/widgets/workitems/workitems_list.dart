@@ -138,7 +138,7 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                   ),
                 // if (widget.getCardDetails.isNotEmpty) ...[
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 0),
                   constraints: BoxConstraints(
                     minHeight: height * 0.81,
                     maxHeight: height * 0.81,
