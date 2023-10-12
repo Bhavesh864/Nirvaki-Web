@@ -200,7 +200,7 @@ class TestList extends ConsumerWidget {
           final chatItems = snapshot.data!;
 
           return ScrollConfiguration(
-            behavior: const ScrollBehavior().copyWith(overscroll: false),
+            behavior: const ScrollBehavior().copyWith(scrollbars: false),
             child: ListView.builder(
               physics: const ClampingScrollPhysics(),
               itemCount: chatItems.length,
@@ -210,7 +210,7 @@ class TestList extends ConsumerWidget {
 
                 return Column(
                   children: [
-                    InkWell(
+                    GestureDetector(
                       onTap: () {
                         selectedUserIds.update(
                           (state) => chatItem.membersUid,

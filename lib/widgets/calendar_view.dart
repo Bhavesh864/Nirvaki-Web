@@ -149,7 +149,7 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                   ),
                   Container(
                     margin: const EdgeInsets.only(top: 10, bottom: 6),
-                    height: Responsive.isMobile(context) ? 180 : 160,
+                    height: Responsive.isMobile(context) ? 180 : 165,
                     child: SfCalendar(
                         headerHeight: 0,
                         dataSource: EventDataSource(calenderList),

@@ -34,6 +34,9 @@ AppBar mobileAppBar(User? user, BuildContext context, void Function(String) onOp
         onSelected: (value) {
           onOptionSelect(value);
         },
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
         color: Colors.white.withOpacity(1),
         offset: const Offset(200, 40),
         itemBuilder: (context) {
@@ -122,7 +125,14 @@ PopupMenuItem appBarPopupMenuItem(String title, void Function(String) onOptionSe
                 padding: const EdgeInsets.only(right: 5.0),
                 child: Icon(icon),
               ),
-            Text(title),
+            Text(
+              title,
+              style: const TextStyle(
+                letterSpacing: 0.4,
+                fontSize: 13,
+                color: Color(0xFF454545),
+              ),
+            ),
           ],
         ),
       ),
