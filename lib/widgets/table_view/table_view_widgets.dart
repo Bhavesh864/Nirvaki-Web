@@ -25,6 +25,8 @@ TableRow buildTableHeader() {
           'DESCRIPTION',
           style: TextStyle(
             color: AppColor.cardtitleColor,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),
@@ -33,6 +35,8 @@ TableRow buildTableHeader() {
           'DETAILS',
           style: TextStyle(
             color: AppColor.cardtitleColor,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),
@@ -41,6 +45,8 @@ TableRow buildTableHeader() {
           'STATUS',
           style: TextStyle(
             color: AppColor.cardtitleColor,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),
@@ -49,6 +55,8 @@ TableRow buildTableHeader() {
           'OWNER',
           style: TextStyle(
             color: AppColor.cardtitleColor,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),
@@ -56,6 +64,8 @@ TableRow buildTableHeader() {
         const Text(
           'ASSIGNED TO',
           style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
             color: AppColor.cardtitleColor,
           ),
         ),
