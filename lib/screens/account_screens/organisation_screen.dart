@@ -389,41 +389,41 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
               if (isNameEditing) ...[
                 Row(
                   children: [
-                    if (Responsive.isMobile(context)) ...[
-                      InkWell(
-                        onTap: () {
-                          cancelEditingFullName();
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.all(5),
-                          child: Icon(
-                            Icons.cancel_outlined,
-                            size: 25,
-                            color: Colors.black,
-                          ),
+                    // if (Responsive.isMobile(context)) ...[
+                    InkWell(
+                      onTap: () {
+                        cancelEditingFullName();
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.all(5),
+                        child: Icon(
+                          Icons.cancel_outlined,
+                          size: 25,
+                          color: Colors.black,
                         ),
-                      )
-                    ] else ...[
-                      CustomButton(
-                        height: 39,
-                        text: "cancel",
-                        borderColor: AppColor.primary,
-                        onPressed: () {
-                          updateBrokerInfo(
-                                  brokerId: broker.brokerid,
-                                  role: broker.role,
-                                  companyName: companyNameController.text,
-                                  mobile: broker.brokercompanynumber,
-                                  whatsapp: broker.brokercompanywhatsapp,
-                                  email: broker.brokercompanyemail,
-                                  image: broker.brokerlogo,
-                                  companyAddress: broker.brokercompanyaddress)
-                              .then((value) => {cancelEditingFullName()});
-                        },
-                        buttonColor: Colors.white,
-                        textColor: AppColor.primary,
                       ),
-                    ],
+                    ),
+                    // ] else ...[
+                    //   CustomButton(
+                    //     height: 39,
+                    //     text: "cancel",
+                    //     borderColor: AppColor.primary,
+                    //     onPressed: () {
+                    //     //   updateBrokerInfo(
+                    //     //           brokerId: broker.brokerid,
+                    //     //           role: broker.role,
+                    //     //           companyName: companyNameController.text,
+                    //     //           mobile: broker.brokercompanynumber,
+                    //     //           whatsapp: broker.brokercompanywhatsapp,
+                    //     //           email: broker.brokercompanyemail,
+                    //     //           image: broker.brokerlogo,
+                    //     //           companyAddress: broker.brokercompanyaddress)
+                    //     //       .then((value) => {cancelEditingFullName()});
+                    //     },
+                    //     buttonColor: Colors.white,
+                    //     textColor: AppColor.primary,
+                    //   ),
+                    // ],
                     SizedBox(width: Responsive.isDesktop(context) ? 10 : 4),
                     if (isPhotoUploading) ...[
                       Padding(
@@ -437,58 +437,58 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                             ))),
                       ),
                     ] else ...[
-                      if (Responsive.isMobile(context)) ...[
-                        InkWell(
-                          onTap: () {
-                            updateBrokerInfo(
-                                    brokerId: broker.brokerid,
-                                    role: broker.role,
-                                    companyName: companyNameController.text,
-                                    mobile: broker.brokercompanynumber,
-                                    whatsapp: broker.brokercompanywhatsapp,
-                                    email: broker.brokercompanyemail,
-                                    image: uploadProfile.value != '' ? uploadProfile.value : broker.brokerlogo,
-                                    companyAddress: broker.brokercompanyaddress)
-                                .then((value) => {
-                                      cancelEditingFullName(),
-                                      profilePhoto = null,
-                                      webProfile = null,
-                                      uploadProfile.value = '',
-                                    });
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.all(5),
-                            child: Icon(
-                              Icons.check,
-                              size: 25,
-                              color: AppColor.primary,
-                            ),
+                      // if (Responsive.isMobile(context)) ...[
+                      InkWell(
+                        onTap: () {
+                          updateBrokerInfo(
+                                  brokerId: broker.brokerid,
+                                  role: broker.role,
+                                  companyName: companyNameController.text,
+                                  mobile: broker.brokercompanynumber,
+                                  whatsapp: broker.brokercompanywhatsapp,
+                                  email: broker.brokercompanyemail,
+                                  image: uploadProfile.value != '' ? uploadProfile.value : broker.brokerlogo,
+                                  companyAddress: broker.brokercompanyaddress)
+                              .then((value) => {
+                                    cancelEditingFullName(),
+                                    profilePhoto = null,
+                                    webProfile = null,
+                                    uploadProfile.value = '',
+                                  });
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(5),
+                          child: Icon(
+                            Icons.check,
+                            size: 25,
+                            color: AppColor.primary,
                           ),
-                        )
-                      ] else ...[
-                        CustomButton(
-                          text: "Save",
-                          borderColor: AppColor.primary,
-                          height: 39,
-                          onPressed: () {
-                            updateBrokerInfo(
-                                    brokerId: broker.brokerid,
-                                    role: broker.role,
-                                    companyName: companyNameController.text,
-                                    mobile: broker.brokercompanynumber,
-                                    whatsapp: broker.brokercompanywhatsapp,
-                                    email: broker.brokercompanyemail,
-                                    image: uploadProfile.value != '' ? uploadProfile.value : broker.brokerlogo,
-                                    companyAddress: broker.brokercompanyaddress)
-                                .then((value) => {
-                                      cancelEditingFullName(),
-                                      profilePhoto = null,
-                                      webProfile = null,
-                                      uploadProfile.value = '',
-                                    });
-                          },
                         ),
-                      ],
+                      )
+                      //     ] else ...[
+                      //       CustomButton(
+                      //         text: "Save",
+                      //         borderColor: AppColor.primary,
+                      //         height: 39,
+                      //         onPressed: () {
+                      //           updateBrokerInfo(
+                      //                   brokerId: broker.brokerid,
+                      //                   role: broker.role,
+                      //                   companyName: companyNameController.text,
+                      //                   mobile: broker.brokercompanynumber,
+                      //                   whatsapp: broker.brokercompanywhatsapp,
+                      //                   email: broker.brokercompanyemail,
+                      //                   image: uploadProfile.value != '' ? uploadProfile.value : broker.brokerlogo,
+                      //                   companyAddress: broker.brokercompanyaddress)
+                      //               .then((value) => {
+                      //                     cancelEditingFullName(),
+                      //                     profilePhoto = null,
+                      //                     webProfile = null,
+                      //                     uploadProfile.value = '',
+                      //                   });
+                      //         },
+                      //       ),
+                      //     ],
                     ],
                   ],
                 ),
@@ -523,11 +523,8 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                   if (isPersonalDetailsEditing && widget.isPersonalDetails || isAddressEditing && widget.isAdressDetails) ...[
                     Row(
                       children: [
-                        CustomButton(
-                          height: 39,
-                          text: "cancel",
-                          borderColor: AppColor.primary,
-                          onPressed: () {
+                        InkWell(
+                          onTap: () {
                             setState(() {
                               isWhatasppNoEmpty = false;
                               isMobileNoEmpty = false;
@@ -536,15 +533,34 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                             cancelEditingPersonalDetails();
                             cancelEditingAddressDetail();
                           },
-                          buttonColor: Colors.white,
-                          textColor: AppColor.primary,
+                          child: const Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Icon(
+                              Icons.cancel_outlined,
+                              size: 25,
+                              color: Colors.black,
+                            ),
+                          ),
                         ),
+                        // CustomButton(
+                        //   height: 39,
+                        //   text: "cancel",
+                        //   borderColor: AppColor.primary,
+                        //   onPressed: () {
+                        //     setState(() {
+                        //       isWhatasppNoEmpty = false;
+                        //       isMobileNoEmpty = false;
+                        //     });
+                        //     searchController.text = "";
+                        //     cancelEditingPersonalDetails();
+                        //     cancelEditingAddressDetail();
+                        //   },
+                        //   buttonColor: Colors.white,
+                        //   textColor: AppColor.primary,
+                        // ),
                         SizedBox(width: Responsive.isDesktop(context) ? 10 : 7),
-                        CustomButton(
-                          text: "Save",
-                          borderColor: AppColor.primary,
-                          height: 39,
-                          onPressed: () {
+                        InkWell(
+                          onTap: () {
                             searchController.text = "";
                             if (widget.isPersonalDetails) {
                               if (formKey.currentState!.validate()) {
@@ -599,7 +615,75 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                               }
                             }
                           },
+                          child: const Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Icon(
+                              Icons.check,
+                              size: 25,
+                              color: AppColor.primary,
+                            ),
+                          ),
                         ),
+                        // CustomButton(
+                        //   text: "Save",
+                        //   borderColor: AppColor.primary,
+                        //   height: 39,
+                        //   onPressed: () {
+                        //     searchController.text = "";
+                        //     if (widget.isPersonalDetails) {
+                        //       if (formKey.currentState!.validate()) {
+                        //         if (phoneController.text.trim() == "") {
+                        //           setState(() {
+                        //             isMobileNoEmpty = true;
+                        //           });
+                        //           return;
+                        //         } else {
+                        //           setState(() {
+                        //             isMobileNoEmpty = false;
+                        //           });
+                        //         }
+                        //         if (whatsappPhoneController.text.trim() == "") {
+                        //           setState(() {
+                        //             isWhatasppNoEmpty = true;
+                        //           });
+                        //           return;
+                        //         } else {
+                        //           setState(() {
+                        //             isWhatasppNoEmpty = false;
+                        //           });
+                        //         }
+                        //         updateBrokerInfo(
+                        //                 brokerId: broker.brokerid,
+                        //                 role: broker.role,
+                        //                 companyName: broker.companyname,
+                        //                 mobile: "$countryCode ${phoneController.text}",
+                        //                 // whatsapp: broker.brokercompanywhatsapp,
+                        //                 whatsapp: "$whatsappCountryCode ${whatsappPhoneController.text}",
+                        //                 email: emailController.text,
+                        //                 image: broker.brokerlogo,
+                        //                 companyAddress: broker.brokercompanyaddress)
+                        //             .then((value) => {cancelEditingPersonalDetails()});
+                        //       }
+                        //     } else if (widget.isAdressDetails) {
+                        //       if (formKey.currentState!.validate()) {
+                        //         updateBrokerInfo(
+                        //             brokerId: broker.brokerid,
+                        //             role: broker.role,
+                        //             companyName: broker.companyname,
+                        //             mobile: broker.brokercompanynumber,
+                        //             whatsapp: broker.brokercompanywhatsapp,
+                        //             email: broker.brokercompanyemail,
+                        //             image: broker.brokerlogo,
+                        //             companyAddress: {
+                        //               "city": cityController.text,
+                        //               "state": stateController.text,
+                        //               "Addressline1": address1Controller.text,
+                        //               "Addressline2": address2Controller.text
+                        //             }).then((value) => {cancelEditingAddressDetail()});
+                        //       }
+                        //     }
+                        //   },
+                        // ),
                       ],
                     ),
                   ] else ...[

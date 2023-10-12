@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/phone_number.dart';
 
@@ -183,63 +184,71 @@ class LabelTextAreaField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: labelText,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              if (isMandatory)
-                const TextSpan(
-                  text: ' *',
-                  style: TextStyle(
-                    fontSize: 12,
+    return Container(
+      margin: const EdgeInsets.all(7),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: labelText,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: Colors.red,
                   ),
                 ),
-            ],
-          ),
-        ),
-        TextFormField(
-          textCapitalization: TextCapitalization.characters,
-          validator: validator,
-          keyboardType: TextInputType.multiline,
-          maxLines: 5,
-          controller: inputController,
-          style: const TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w400,
-          ),
-          decoration: InputDecoration(
-            hintText: 'Type here...',
-            hintStyle: const TextStyle(
-              color: Colors.grey,
+                if (isMandatory)
+                  const TextSpan(
+                    text: ' ',
+                  ),
+                if (isMandatory)
+                  const TextSpan(
+                    text: '*',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.red,
+                    ),
+                  ),
+              ],
             ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(
-                color: AppColor.inputFieldBorderColor,
+          ),
+          const SizedBox(height: 3),
+          TextFormField(
+            textCapitalization: TextCapitalization.characters,
+            validator: validator,
+            keyboardType: TextInputType.multiline,
+            maxLines: 5,
+            controller: inputController,
+            style: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w400,
+            ),
+            decoration: InputDecoration(
+              hintText: 'Type here...',
+              hintStyle: const TextStyle(
+                color: Colors.grey,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(
+                  color: AppColor.inputFieldBorderColor,
+                ),
+              ),
+              // isDense: true,
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(
+                  color: AppColor.primary,
+                ),
               ),
             ),
-            // isDense: true,
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(
-                color: AppColor.primary,
-              ),
-            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

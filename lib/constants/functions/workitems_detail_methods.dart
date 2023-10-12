@@ -169,6 +169,7 @@ void showUploadDocumentModal(
           return ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: Dialog(
+              insetPadding: const EdgeInsets.all(15),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               child: Container(
                 padding: const EdgeInsets.all(15),
@@ -282,10 +283,11 @@ void showConfirmDeleteAttachment(BuildContext context, Function onPressYes) {
     context: context,
     builder: (BuildContext context) {
       return Dialog(
+        insetPadding: const EdgeInsets.all(15),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Container(
           padding: const EdgeInsets.all(20),
-          height: 200,
+          height: 230,
           width: 500,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
@@ -345,7 +347,7 @@ void showOwnerDetailsAndAssignToBottomSheet(BuildContext context, String title, 
     ),
     builder: (BuildContext context) {
       return Container(
-        height: 400,
+        constraints: BoxConstraints(minHeight: 400),
         padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -399,6 +401,7 @@ void showAddCalendarModal({
         return ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: Dialog(
+            insetPadding: const EdgeInsets.all(15),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             child: SingleChildScrollView(
               child: Container(
@@ -458,7 +461,7 @@ void showAddCalendarModal({
                                 );
                               },
                               child: LabelTextInputField(
-                                labelText: 'Date ',
+                                labelText: 'Date',
                                 isMandatory: true,
                                 inputController: dateController,
                                 isDatePicker: true,
@@ -507,7 +510,7 @@ void showAddCalendarModal({
                                   );
                                 },
                                 child: LabelTextInputField(
-                                  labelText: 'Date ',
+                                  labelText: 'Date',
                                   isMandatory: true,
                                   inputController: dateController,
                                   isDatePicker: true,

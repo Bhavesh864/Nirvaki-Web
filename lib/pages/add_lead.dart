@@ -193,7 +193,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
     print("isBuy---> $isBuy");
     return GestureDetector(
       onTap: () {
-        if (!kIsWeb) FocusScope.of(context).unfocus();
+        if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
         body: FutureBuilder<List<LeadQuestions>>(
@@ -318,7 +318,6 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                               : CustomButton(
                                                                   text: currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next',
                                                                   onPressed: () {
-                                                                    if (!kIsWeb) FocusScope.of(context).unfocus();
                                                                     if (!allQuestionFinishes) {
                                                                       if (currentScreenList[index].title != "Assign to") {
                                                                         if (_formKey.currentState!.validate()) {
@@ -334,6 +333,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                                         addDataOnfirestore(notify);
                                                                       }
                                                                     }
+                                                                    if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
                                                                   },
                                                                   width: currentScreenList[index].title == "Assign to" ? 90 : 70,
                                                                   height: 39,

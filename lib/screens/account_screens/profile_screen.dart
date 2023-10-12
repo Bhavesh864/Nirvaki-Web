@@ -321,32 +321,20 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
               if (isNameEditing) ...[
                 Row(
                   children: [
-                    if (Responsive.isMobile(context)) ...[
-                      InkWell(
-                        onTap: () {
-                          cancelEditingFullName();
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.all(5),
-                          child: Icon(
-                            Icons.cancel_outlined,
-                            size: 25,
-                            color: Colors.black,
-                          ),
+                    InkWell(
+                      onTap: () {
+                        cancelEditingFullName();
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.all(5),
+                        child: Icon(
+                          Icons.cancel_outlined,
+                          size: 25,
+                          color: Colors.black,
                         ),
-                      )
-                    ] else ...[
-                      CustomButton(
-                        height: 39,
-                        text: "cancel",
-                        borderColor: AppColor.primary,
-                        onPressed: () {
-                          cancelEditingFullName();
-                        },
-                        buttonColor: Colors.white,
-                        textColor: AppColor.primary,
                       ),
-                    ],
+                    ),
+
                     const SizedBox(width: 7),
                     if (isPhotoUploading) ...[
                       Padding(
@@ -360,31 +348,21 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                             ))),
                       ),
                     ] else ...[
-                      if (Responsive.isDesktop(context)) ...[
-                        CustomButton(
-                          text: "Save",
-                          borderColor: AppColor.primary,
-                          height: 39,
-                          onPressed: () {
-                            submitPhoto();
-                          },
-                        ),
-                      ] else ...[
-                        InkWell(
-                          onTap: () {
-                            submitPhoto();
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.all(5),
-                            child: Icon(
-                              Icons.check,
-                              size: 25,
-                              color: AppColor.primary,
-                            ),
+                      InkWell(
+                        onTap: () {
+                          submitPhoto();
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(5),
+                          child: Icon(
+                            Icons.check,
+                            size: 25,
+                            color: AppColor.primary,
                           ),
-                        )
-                      ],
+                        ),
+                      )
                     ],
+                    // ],
                   ],
                 ),
               ] else ...[
@@ -419,25 +397,38 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                   if (isPersonalDetailsEditing && widget.isPersonalDetails) ...[
                     Row(
                       children: [
-                        CustomButton(
-                          height: 39,
-                          text: "cancel",
-                          borderColor: AppColor.primary,
-                          onPressed: () {
+                        // CustomButton(
+                        //   height: 39,
+                        //   text: "cancel",
+                        //   borderColor: AppColor.primary,
+                        //   onPressed: () {
+                        //     setState(() {
+                        //       isMobileNoEmpty = false;
+                        //     });
+                        //     cancelEditingPersonalDetails();
+                        //   },
+                        //   buttonColor: Colors.white,
+                        //   textColor: AppColor.primary,
+                        // ),
+                        InkWell(
+                          onTap: () {
                             setState(() {
                               isMobileNoEmpty = false;
                             });
                             cancelEditingPersonalDetails();
                           },
-                          buttonColor: Colors.white,
-                          textColor: AppColor.primary,
+                          child: const Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Icon(
+                              Icons.cancel_outlined,
+                              size: 25,
+                              color: Colors.black,
+                            ),
+                          ),
                         ),
                         const SizedBox(width: 7),
-                        CustomButton(
-                          text: "Save",
-                          borderColor: AppColor.primary,
-                          height: 39,
-                          onPressed: () {
+                        InkWell(
+                          onTap: () {
                             if (phoneController.text.trim() == "") {
                               setState(() {
                                 isMobileNoEmpty = true;
@@ -469,7 +460,52 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                                       });
                             }
                           },
-                        ),
+                          child: const Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Icon(
+                              Icons.check,
+                              size: 25,
+                              color: AppColor.primary,
+                            ),
+                          ),
+                        )
+                        // CustomButton(
+                        //   text: "Save",
+                        //   borderColor: AppColor.primary,
+                        //   height: 39,
+                        //   onPressed: () {
+                        //     if (phoneController.text.trim() == "") {
+                        //       setState(() {
+                        //         isMobileNoEmpty = true;
+                        //       });
+                        //       return;
+                        //     } else {
+                        //       setState(() {
+                        //         isMobileNoEmpty = false;
+                        //       });
+                        //     }
+                        //     if (formKey.currentState!.validate()) {
+                        //       updateTeamMember(
+                        //               email: emailController.text.trim(),
+                        //               firstname: firstNameController.text.trim(),
+                        //               lastname: lastNameController.text.trim(),
+                        //               mobile: '$countryCode ${phoneController.text.trim()}',
+                        //               managerName: userData.managerName,
+                        //               managerid: userData.managerid,
+                        //               role: userData.role,
+                        //               brokerId: userData.brokerId,
+                        //               userId: userData.userId,
+                        //               fcmToken: userData.fcmToken,
+                        //               imageUrl: userData.image,
+                        //               status: userData.status,
+                        //               isOnline: userData.isOnline,
+                        //               ref: ref)
+                        //           .then((value) => {
+                        //                 cancelEditingPersonalDetails(),
+                        //               });
+                        //     }
+                        //   },
+                        // ),
                       ],
                     ),
                   ] else ...[
@@ -556,32 +592,8 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                 ),
                 if (Responsive.isMobile(context))
                   buildInfoFields('Employee ID', userData.userId, false, TextEditingController(), context, (value) => validateForNormalFeild(props: "First name", value: value)),
-              ] else ...[
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                //   child: Table(
-                //     children: [
-                //       TableRow(children: [
-                //         buildInfoFields('City', 'New Delhi', false, TextEditingController(), context),
-                //         buildInfoFields('State ', 'Delhi', false, TextEditingController(), context),
-                //         const SizedBox()
-                //       ])
-                //     ],
-                //   ),
-                // ),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                //   child: Table(
-                //     children: [
-                //       TableRow(children: [
-                //         buildInfoFields('Country', 'India', false, TextEditingController(), context),
-                //         buildInfoFields('Pin Code ', '110077', false, TextEditingController(), context),
-                //         const SizedBox(),
-                //       ])
-                //     ],
-                //   ),
-                // ),
-              ]
+              ] else
+                ...[]
             ],
           ),
         ),

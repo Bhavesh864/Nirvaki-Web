@@ -52,7 +52,7 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
             child: Container(
               decoration: BoxDecoration(
                 color: AppColor.secondary,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(20),
               ),
               margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -71,77 +71,146 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                         );
                       }
                     },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const CustomText(
-                          title: 'Calendar',
-                          fontWeight: FontWeight.w600,
-                          size: 14,
-                        ),
-                        Row(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                showAddCalendarModal(
-                                  context: context,
-                                  isEdit: false,
-                                  ref: ref,
-                                );
-                              },
-                              child: const Icon(
-                                Icons.add,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: Responsive.isMobile(context) ? 0 : 6.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const CustomText(
+                            title: 'Calendar',
+                            fontWeight: FontWeight.w600,
+                            size: 15,
+                          ),
+                          Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  showAddCalendarModal(
+                                    context: context,
+                                    isEdit: false,
+                                    ref: ref,
+                                  );
+                                },
+                                child: const Icon(
+                                  Icons.add,
+                                  size: 24,
+                                ),
+                              ),
+                              const Icon(
+                                Icons.more_horiz,
                                 size: 24,
                               ),
-                            ),
-                            // const Icon(
-                            //   Icons.more_horiz,
-                            //   size: 24,
-                            // ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(top: 10, bottom: 10),
-                    height: 175,
+                    margin: const EdgeInsets.only(top: 10, bottom: 6),
+                    height: 190,
                     child: SfCalendar(
-                      headerHeight: 0,
-                      dataSource: EventDataSource(calenderList),
-                      view: CalendarView.timelineWeek,
-                      timeSlotViewSettings: const TimeSlotViewSettings(startHour: 9, endHour: 24),
-                      showTodayButton: true,
-                      showNavigationArrow: true,
-                      backgroundColor: Colors.white,
-                      allowAppointmentResize: true,
-                      appointmentBuilder: (context, calendarAppointmentDetails) {
-                        final event = calendarAppointmentDetails.appointments.first;
-                        return Container(
-                          margin: const EdgeInsets.symmetric(vertical: 4),
-                          height: calendarAppointmentDetails.bounds.height,
-                          width: 500,
-                          decoration: BoxDecoration(
-                            color: getColorForTaskType('').withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            child: Center(
-                              child: Text(
-                                event.calenderTitle,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                ),
+                        headerHeight: 0,
+                        dataSource: EventDataSource(calenderList),
+                        view: CalendarView.timelineWeek,
+                        timeSlotViewSettings: const TimeSlotViewSettings(startHour: 9, endHour: 24),
+                        showTodayButton: true,
+                        showNavigationArrow: true,
+                        backgroundColor: Colors.white,
+                        allowAppointmentResize: true,
+                        timeRegionBuilder: (context, timeRegionDetails) {
+                          // Customize the style for the 9 PM time slot
+                          return Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.blue, // Change the background color
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Text(
+                              '9 PM', // Change the label text
+                              style: TextStyle(
+                                color: Colors.white, // Change the text color
+                                fontWeight: FontWeight.bold, // Add additional styling if needed
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
+                          );
+                        },
+                        appointmentBuilder: (context, calendarAppointmentDetails) {
+                          final event = calendarAppointmentDetails.appointments.first;
+
+                          return Container(
+                            margin: const EdgeInsets.symmetric(vertical: 4),
+                            // height: calendarAppointmentDetails.bounds.height,
+                            // width: 500,
+                            decoration: BoxDecoration(
+                              color: AppColor.secondary.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: 4,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: getRandomColorForTaskType('Event'),
+                                    ),
+                                  ),
+                                  Text(
+                                    event.calenderTitle,
+                                    // maxLines: 2,
+                                    // overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
+                        // final maxAppointmentsToShow = 3; // Maximum number of appointments to show at the same time slot
+                        // if (events.length > maxAppointmentsToShow) {
+                        //   // Sort the appointments by a relevant criteria if needed
+                        //   events.sort((a, b) {
+                        //     // Implement your sorting logic here
+                        //     // For example, sort by start time:
+                        //     return a.startTime.compareTo(b.startTime);
+                        //   });
+                        //   // Filter and display only the first three appointments
+                        //   events = events.sublist(0, maxAppointmentsToShow);
+                        // }
+                        // return Container(
+                        //   margin: const EdgeInsets.symmetric(vertical: 4),
+                        //   decoration: BoxDecoration(
+                        //     color: AppColor.secondary.withOpacity(0.1),
+                        //     borderRadius: BorderRadius.circular(12),
+                        //   ),
+                        //   child: Padding(
+                        //     padding: const EdgeInsets.symmetric(horizontal: 15),
+                        //     child: Column(
+                        //       crossAxisAlignment: CrossAxisAlignment.start,
+                        //       mainAxisAlignment: MainAxisAlignment.center,
+                        //       children: [
+                        //         for (final event in events)
+                        //           Text(
+                        //             event.calenderTitle,
+                        //             style: const TextStyle(
+                        //               color: Colors.black,
+                        //               fontSize: 14,
+                        //             ),
+                        //           ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // );
+
+                        ),
                   ),
                 ],
               ),

@@ -110,7 +110,7 @@ class _AddTodoState extends ConsumerState<AddTodo> {
             }
             return GestureDetector(
               onTap: () {
-                if (!kIsWeb) FocusScope.of(context).unfocus();
+                if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
               },
               child: Stack(
                 children: [
@@ -169,10 +169,9 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                                                           size: Responsive.isDesktop(context) ? 26 : 20,
                                                           title: screensDataList[index].questions[i].questionTitle,
                                                           fontWeight: FontWeight.bold),
-                                                    buildTodoQuestions(screensDataList[index].questions[i], screensDataList, currentScreenIndex, notify, nextQuestion,
-                                                        context, selectedValues, linkState),
-                                                    if (i == screensDataList[index].questions.length - 1 &&
-                                                        screensDataList[index].questions[i].questionOptionType != 'chip')
+                                                    buildTodoQuestions(screensDataList[index].questions[i], screensDataList, currentScreenIndex, notify, nextQuestion, context,
+                                                        selectedValues, linkState),
+                                                    if (i == screensDataList[index].questions.length - 1 && screensDataList[index].questions[i].questionOptionType != 'chip')
                                                       Container(
                                                         margin: const EdgeInsets.only(top: 10),
                                                         alignment: Alignment.centerRight,
@@ -183,7 +182,7 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                                                             : CustomButton(
                                                                 text: screensDataList[index].title == "Assign to" ? 'Submit' : 'Next',
                                                                 onPressed: () {
-                                                                  if (!kIsWeb) FocusScope.of(context).unfocus();
+                                                                  if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
                                                                   if (!allQuestionFinishes) {
                                                                     if (screensDataList[index].title != "Assign to") {
                                                                       if (_formKey.currentState!.validate()) {
