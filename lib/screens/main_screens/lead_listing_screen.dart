@@ -258,7 +258,7 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
                                   ),
                                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                                   margin: Responsive.isMobile(context)
-                                      ? const EdgeInsets.symmetric(horizontal: 15, vertical: 5)
+                                      ? const EdgeInsets.symmetric(horizontal: 0, vertical: 5)
                                       : const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                                   child: filteredleadList.isNotEmpty
                                       ? GridView.builder(
