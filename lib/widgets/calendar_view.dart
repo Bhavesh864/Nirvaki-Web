@@ -118,23 +118,6 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                         showNavigationArrow: true,
                         backgroundColor: Colors.white,
                         allowAppointmentResize: true,
-                        timeRegionBuilder: (context, timeRegionDetails) {
-                          // Customize the style for the 9 PM time slot
-                          return Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: Colors.blue, // Change the background color
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: const Text(
-                              '9 PM', // Change the label text
-                              style: TextStyle(
-                                color: Colors.white, // Change the text color
-                                fontWeight: FontWeight.bold, // Add additional styling if needed
-                              ),
-                            ),
-                          );
-                        },
                         appointmentBuilder: (context, calendarAppointmentDetails) {
                           final event = calendarAppointmentDetails.appointments.first;
 
@@ -157,7 +140,7 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                                     width: 40,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
-                                      color: getRandomColorForTaskType('Event'),
+                                      color: getColorForTaskType('Event'),
                                     ),
                                   ),
                                   Text(
