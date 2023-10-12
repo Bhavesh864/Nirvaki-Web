@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 
 import 'package:yes_broker/Customs/snackbar.dart';
-import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart' as inventory;
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart' as lead;

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
@@ -47,6 +48,46 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
           final dataList = snapshot.data!.docs;
           List<CalendarModel> calenderList = dataList.map((doc) => CalendarModel.fromSnapshot(doc)).toList();
 
+          // Function to convert your string date and time into DateTime
+          DateTime parseDateTime(String date, String time) {
+            final DateTime parsedDate = DateFormat('E, MMM d, y').parse(date);
+            final DateTime parsedTime = DateFormat('hh:mm aa').parse(time);
+
+            return DateTime(
+              parsedDate.year,
+              parsedDate.month,
+              parsedDate.day,
+              parsedTime.hour,
+              parsedTime.minute,
+            );
+          }
+
+//           Map<DateTime, List<CalendarModel>> timeSlotMap = {};
+//           DateTime timeSlotKey = parseDateTime(event.dueDate!, event.time!);
+
+//           if (timeSlotMap[timeSlotKey] == null) {
+//             timeSlotMap[timeSlotKey] = [event];
+//           } else {
+//             timeSlotMap[timeSlotKey]!.add(event);
+//           }
+
+// // Limit each time slot to only two appointments
+//           for (var timeSlotKey in timeSlotMap.keys) {
+//             if (timeSlotMap[timeSlotKey]!.length > 2) {
+//               // Sort the appointments in this time slot based on your criteria
+//               timeSlotMap[timeSlotKey]!.sort((a, b) {
+//                 // Compare and sort your appointments here
+//                 // For example, by priority, date, or any other criteria
+//                 return (parseDateTime(a.dueDate!, a.time!)).compareTo(parseDateTime(b.dueDate!, b.time!));
+//               });
+
+//               // Keep only the top two appointments
+//               timeSlotMap[timeSlotKey] = timeSlotMap[timeSlotKey]!.sublist(0, 1);
+//             }
+//           }
+
+//           event = timeSlotMap.values.expand((appointments) => appointments).toList().first;
+
           return SingleChildScrollView(
             physics: const NeverScrollableScrollPhysics(),
             child: Container(
@@ -72,7 +113,7 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                       }
                     },
                     child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: Responsive.isMobile(context) ? 0 : 6.0),
+                      padding: EdgeInsets.symmetric(vertical: Responsive.isMobile(context) ? 0 : 2.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -108,29 +149,34 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                   ),
                   Container(
                     margin: const EdgeInsets.only(top: 10, bottom: 6),
-                    height: 190,
+                    height: Responsive.isMobile(context) ? 180 : 150,
                     child: SfCalendar(
                         headerHeight: 0,
                         dataSource: EventDataSource(calenderList),
-                        view: CalendarView.timelineWeek,
-                        timeSlotViewSettings: const TimeSlotViewSettings(startHour: 9, endHour: 24),
-                        showTodayButton: true,
-                        showNavigationArrow: true,
+                        view: CalendarView.timelineDay,
+                        timeSlotViewSettings: const TimeSlotViewSettings(
+                          startHour: 9,
+                          endHour: 24,
+                          timelineAppointmentHeight: 80,
+                        ),
                         backgroundColor: Colors.white,
                         allowAppointmentResize: true,
+                        showDatePickerButton: false,
+                        showCurrentTimeIndicator: false,
+                        viewHeaderHeight: 0,
+                        appointmentTimeTextFormat: Intl.defaultLocale,
                         appointmentBuilder: (context, calendarAppointmentDetails) {
                           final event = calendarAppointmentDetails.appointments.first;
 
                           return Container(
-                            margin: const EdgeInsets.symmetric(vertical: 4),
+                            margin: const EdgeInsets.symmetric(vertical: 10),
                             // height: calendarAppointmentDetails.bounds.height,
-                            // width: 500,
                             decoration: BoxDecoration(
                               color: AppColor.secondary.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(6),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -140,13 +186,16 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                                     width: 40,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
-                                      color: getColorForTaskType('Event'),
+                                      color: getColorForTaskType('Meeting'),
                                     ),
+                                  ),
+                                  const SizedBox(
+                                    height: 6,
                                   ),
                                   Text(
                                     event.calenderTitle,
                                     // maxLines: 2,
-                                    // overflow: TextOverflow.ellipsis,
+                                    overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
@@ -156,44 +205,7 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                               ),
                             ),
                           );
-                        }
-                        // final maxAppointmentsToShow = 3; // Maximum number of appointments to show at the same time slot
-                        // if (events.length > maxAppointmentsToShow) {
-                        //   // Sort the appointments by a relevant criteria if needed
-                        //   events.sort((a, b) {
-                        //     // Implement your sorting logic here
-                        //     // For example, sort by start time:
-                        //     return a.startTime.compareTo(b.startTime);
-                        //   });
-                        //   // Filter and display only the first three appointments
-                        //   events = events.sublist(0, maxAppointmentsToShow);
-                        // }
-                        // return Container(
-                        //   margin: const EdgeInsets.symmetric(vertical: 4),
-                        //   decoration: BoxDecoration(
-                        //     color: AppColor.secondary.withOpacity(0.1),
-                        //     borderRadius: BorderRadius.circular(12),
-                        //   ),
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.symmetric(horizontal: 15),
-                        //     child: Column(
-                        //       crossAxisAlignment: CrossAxisAlignment.start,
-                        //       mainAxisAlignment: MainAxisAlignment.center,
-                        //       children: [
-                        //         for (final event in events)
-                        //           Text(
-                        //             event.calenderTitle,
-                        //             style: const TextStyle(
-                        //               color: Colors.black,
-                        //               fontSize: 14,
-                        //             ),
-                        //           ),
-                        //       ],
-                        //     ),
-                        //   ),
-                        // );
-
-                        ),
+                        }),
                   ),
                 ],
               ),
