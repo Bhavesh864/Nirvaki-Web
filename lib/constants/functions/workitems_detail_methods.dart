@@ -407,7 +407,7 @@ void showAddCalendarModal({
               child: Container(
                 padding: const EdgeInsets.all(15),
                 height: 550,
-                width: Responsive.isMobile(context) ? width : 650,
+                width: Responsive.isMobile(context) ? width : 750,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -444,6 +444,7 @@ void showAddCalendarModal({
                       LabelTextInputField(
                         labelText: 'Title',
                         isMandatory: true,
+                        labelFontWeight: FontWeight.w600,
                         inputController: titleController,
                         validator: (value) => validateForNormalFeild(props: "Title", value: value),
                       ),
@@ -463,6 +464,7 @@ void showAddCalendarModal({
                               child: LabelTextInputField(
                                 labelText: 'Date',
                                 isMandatory: true,
+                                labelFontWeight: FontWeight.w600,
                                 inputController: dateController,
                                 isDatePicker: true,
                                 validator: (value) => validateForNormalFeild(props: "Title", value: value),
@@ -486,6 +488,7 @@ void showAddCalendarModal({
                                 labelText: 'Time',
                                 isMandatory: true,
                                 isDatePicker: true,
+                                labelFontWeight: FontWeight.w600,
                                 inputController: timeController,
                                 rightIcon: Icons.schedule,
                                 validator: (value) => validateForNormalFeild(props: "Title", value: value),
@@ -511,6 +514,7 @@ void showAddCalendarModal({
                                 },
                                 child: LabelTextInputField(
                                   labelText: 'Date',
+                                  labelFontWeight: FontWeight.w600,
                                   isMandatory: true,
                                   inputController: dateController,
                                   isDatePicker: true,
@@ -537,6 +541,7 @@ void showAddCalendarModal({
                                   labelText: 'Time',
                                   isMandatory: true,
                                   isDatePicker: true,
+                                  labelFontWeight: FontWeight.w600,
                                   inputController: timeController,
                                   rightIcon: Icons.schedule,
                                   validator: (value) => validateForNormalFeild(props: "Title", value: value),
