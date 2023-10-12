@@ -375,8 +375,7 @@ Widget buildInventoryQuestions(
             LabelTextInputField(
               labelText: 'Search your location',
               inputController: controller,
-              isMandatory: true,
-              validator: (value) => !isEdit ? validateForNormalFeild(value: value, props: "Search Location") : null,
+              hintText: "Search",
               onChanged: (value) {
                 getPlaces(value).then((places) {
                   final descriptions = places.predictions?.map((prediction) => prediction.description) ?? [];
@@ -457,12 +456,7 @@ Widget buildInventoryQuestions(
               inputController: statecontroller,
               isMandatory: true,
               labelText: "State",
-              validator: (value) {
-                if (!isChecked && value!.isEmpty) {
-                  return "Please enter ${question.questionTitle}";
-                }
-                return null;
-              },
+              validator: (value) => validateForNormalFeild(value: value, props: "State"),
             ),
             LabelTextInputField(
               onChanged: (newvalue) {
@@ -471,12 +465,7 @@ Widget buildInventoryQuestions(
               inputController: citycontroller,
               isMandatory: true,
               labelText: "City",
-              validator: (value) {
-                if (!isChecked && value!.isEmpty) {
-                  return "Please enter ${question.questionTitle}";
-                }
-                return null;
-              },
+              validator: (value) => validateForNormalFeild(value: value, props: "City"),
             ),
             LabelTextInputField(
               onChanged: (newvalue) {
@@ -485,40 +474,21 @@ Widget buildInventoryQuestions(
               inputController: localitycontroller,
               isMandatory: true,
               labelText: "Locality",
-              validator: (value) {
-                if (!isChecked && value!.isEmpty) {
-                  return "Please enter ${question.questionTitle}";
-                }
-                return null;
-              },
+              validator: (value) => validateForNormalFeild(value: value, props: "Locality"),
             ),
             LabelTextInputField(
               onChanged: (newvalue) {
                 notify.add({"id": 28, "item": newvalue.trim()});
               },
               inputController: address1controller,
-              isMandatory: true,
               labelText: "Address1",
-              validator: (value) {
-                if (!isChecked && value!.isEmpty) {
-                  return "Please enter ${question.questionTitle}";
-                }
-                return null;
-              },
             ),
             LabelTextInputField(
               onChanged: (newvalue) {
                 notify.add({"id": 29, "item": newvalue.trim()});
               },
               inputController: address2controller,
-              isMandatory: true,
               labelText: "Address2",
-              validator: (value) {
-                if (!isChecked && value!.isEmpty) {
-                  return "Please enter ${question.questionTitle}";
-                }
-                return null;
-              },
             ),
           ],
         );

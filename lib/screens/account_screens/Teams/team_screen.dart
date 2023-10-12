@@ -183,7 +183,14 @@ showAddMemberAlertDailogBox(BuildContext context) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return const AddMemberScreen();
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Dialog(
+          insetPadding: const EdgeInsets.all(10),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          child: AddMemberScreen(),
+        ),
+      );
     },
   );
 }
