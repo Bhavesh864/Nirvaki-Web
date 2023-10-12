@@ -30,7 +30,6 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
   Widget build(BuildContext context) {
     final workItemId = ref.watch(selectedWorkItemId);
     final User? user = ref.watch(userDataProvider);
-
     return Column(
       children: [
         Wrap(
