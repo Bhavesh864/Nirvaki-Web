@@ -152,7 +152,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                 ],
                 size.width >= 850
                     ? Expanded(
-                        flex: size.width > 1340 ? 3 : 5,
+                        flex: size.width > 1340 ? 4 : 6,
                         child: Column(
                           children: [
                             const Expanded(
