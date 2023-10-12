@@ -406,7 +406,7 @@ void showAddCalendarModal({
             child: SingleChildScrollView(
               child: Container(
                 padding: const EdgeInsets.all(15),
-                height: 550,
+                // height: 550,
                 width: Responsive.isMobile(context) ? width : 650,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),

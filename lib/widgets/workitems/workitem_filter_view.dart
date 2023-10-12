@@ -43,8 +43,46 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
     var selectedInventoryFilters = ref.read(selectedFilterInventory);
     var selectedInventoryFiltersProvider = ref.read(selectedFilterInventory.notifier);
 
+    Widget bottomButton() {
+      return Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          Container(
+            margin: Responsive.isMobile(context) ? null : const EdgeInsets.only(right: 25, bottom: 20, left: 15),
+            decoration: BoxDecoration(
+              color: Responsive.isMobile(context) ? Colors.white : Colors.transparent,
+              boxShadow: Responsive.isMobile(context)
+                  ? const [
+                      BoxShadow(
+                        color: Colors.grey,
+                        blurRadius: 10.0,
+                        offset: Offset(0, 2),
+                      ),
+                    ]
+                  : [],
+            ),
+            child: Padding(
+              padding: Responsive.isMobile(context) ? const EdgeInsets.symmetric(horizontal: 15, vertical: 8) : const EdgeInsets.all(0),
+              child: CustomButton(
+                text: 'Apply Filters',
+                onPressed: () {
+                  // widget.setFilters(selectedInventoryFilters, values);
+                  if (Responsive.isMobile(context)) {
+                    Navigator.of(context).pop();
+                  } else {
+                    widget.closeFilterView();
+                  }
+                },
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
+      bottomNavigationBar: bottomButton(),
       appBar: Responsive.isMobile(context)
           ? AppBar(
               toolbarHeight: 50,
@@ -167,16 +205,30 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
                     ],
                   ),
                 ),
-                CustomButton(
-                  text: 'Apply Filters',
-                  onPressed: () {
-                    widget.setFilters(selectedInventoryFilters, values);
-                  },
-                ),
+                // CustomButton(
+                //   text: 'Apply Filters',
+                //   onPressed: () {
+                //     widget.setFilters(selectedInventoryFilters, values);
+                //   },
+                // ),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class FilterBottomButton extends StatelessWidget {
+  const FilterBottomButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+        child: CustomButton(text: 'Apply Filter', onPressed: () {}),
       ),
     );
   }
