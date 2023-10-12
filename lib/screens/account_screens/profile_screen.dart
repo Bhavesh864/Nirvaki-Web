@@ -52,41 +52,43 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 }
                 if (snapshot.hasData) {
                   final dataList = snapshot.data;
-                  User userInfo = User.fromSnapshot(dataList!);
-                  return SingleChildScrollView(
-                    child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (Responsive.isMobile(context))
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
-                            // padding: EdgeInsets.only(left: 5.0, bottom: 10),
-                            child: AppText(
-                              text: "Profile",
-                              fontWeight: FontWeight.w700,
-                              fontsize: 16,
+                  if (dataList != null) {
+                    User userInfo = User.fromSnapshot(dataList);
+                    return SingleChildScrollView(
+                      child: Column(
+                        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (Responsive.isMobile(context))
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+                              // padding: EdgeInsets.only(left: 5.0, bottom: 10),
+                              child: AppText(
+                                text: "Profile",
+                                fontWeight: FontWeight.w700,
+                                fontsize: 16,
+                              ),
                             ),
+                          CustomAddressAndProfileCard(
+                            isPersonalDetails: false,
+                            userData: userInfo,
                           ),
-                        CustomAddressAndProfileCard(
-                          isPersonalDetails: false,
-                          userData: userInfo,
-                        ),
-                        SizedBox(height: Responsive.isMobile(context) ? 20 : 40),
-                        CustomAddressAndProfileCard(
-                          title: 'Personal Information',
-                          isPersonalDetails: true,
-                          userData: userInfo,
-                        ),
-                        // SizedBox(height: Responsive.isMobile(context) ? 20 : 40),
-                        // CustomAddressAndProfileCard(
-                        //   title: 'Address',
-                        //   isPersonalDetails: false,
-                        //   userData: userInfo,
-                        // ),
-                      ],
-                    ),
-                  );
+                          SizedBox(height: Responsive.isMobile(context) ? 20 : 40),
+                          CustomAddressAndProfileCard(
+                            title: 'Personal Information',
+                            isPersonalDetails: true,
+                            userData: userInfo,
+                          ),
+                          // SizedBox(height: Responsive.isMobile(context) ? 20 : 40),
+                          // CustomAddressAndProfileCard(
+                          //   title: 'Address',
+                          //   isPersonalDetails: false,
+                          //   userData: userInfo,
+                          // ),
+                        ],
+                      ),
+                    );
+                  }
                 }
                 return const SizedBox.shrink();
               }),
