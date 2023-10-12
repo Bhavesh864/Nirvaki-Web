@@ -67,6 +67,8 @@ Widget buildInventoryQuestions(
       ],
     );
   } else if (question.questionOptionType == 'smallchip') {
+    print("smalll------");
+
     String selectedOption = '';
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       selectedOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
@@ -129,11 +131,6 @@ Widget buildInventoryQuestions(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // CustomText(
-              //   fontWeight: FontWeight.w500,
-              //   size: 16,
-              //   title: question.questionTitle,
-              // ),
               SizedBox(
                 width: double.infinity,
                 child: Wrap(
@@ -148,10 +145,10 @@ Widget buildInventoryQuestions(
                           bgcolor: selectedOptions.contains(item) ? AppColor.primary : AppColor.primary.withOpacity(0.05),
                           onSelected: (selectedItem) {
                             setState(() {
-                              if (selectedOptions.contains(item)) {
-                                selectedOptions.remove(item);
-                              } else {
+                              if (selectedItem) {
                                 selectedOptions.add(item);
+                              } else {
+                                selectedOptions.remove(item);
                               }
                             });
                             notify.add({"id": question.questionId, "item": selectedOptions});
@@ -610,9 +607,7 @@ Widget buildInventoryQuestions(
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
-    bool isSetBedroomvalue = selectedValues.isNotEmpty && question.questionTitle.contains("Bedroom") && !selectedValues.any((element) => element["id"] == 14);
-
-    if (isSetBedroomvalue) {
+    if (selectedValues.isNotEmpty && question.questionTitle.contains("Bedroom") && !selectedValues.any((element) => element["id"] == 14)) {
       defaultValue = "1";
       WidgetsBinding.instance.addPostFrameCallback((_) {
         notify.add({"id": 14, "item": defaultValue});

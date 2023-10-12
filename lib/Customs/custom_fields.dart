@@ -127,11 +127,13 @@ class CustomTextInputState extends State<CustomTextInput> {
               ? IconButton(
                   icon: Icon(widget.rightIcon),
                   iconSize: 18,
-                  onPressed: () {
-                    setState(() {
-                      _obscureText = !_obscureText!;
-                    });
-                  },
+                  onPressed: widget.obscureText == true
+                      ? () {
+                          setState(() {
+                            _obscureText = !_obscureText!;
+                          });
+                        }
+                      : null,
                 )
               : null,
           border: OutlineInputBorder(

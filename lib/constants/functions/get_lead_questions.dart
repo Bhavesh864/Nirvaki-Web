@@ -178,11 +178,11 @@ Widget buildLeadQuestions(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CustomText(
-                fontWeight: FontWeight.w500,
-                size: 16,
-                title: question.questionTitle,
-              ),
+              // CustomText(
+              //   fontWeight: FontWeight.w500,
+              //   size: 16,
+              //   title: question.questionTitle,
+              // ),
               SizedBox(
                 width: double.infinity,
                 child: Wrap(
