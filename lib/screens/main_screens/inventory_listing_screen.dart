@@ -213,7 +213,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                                   ),
                                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                                   margin: Responsive.isMobile(context)
-                                      ? const EdgeInsets.symmetric(horizontal: 0, vertical: 0)
+                                      ? const EdgeInsets.symmetric(horizontal: 15, vertical: 5)
                                       : const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                                   child: filteredInventoryList.isNotEmpty
                                       ? GridView.builder(
