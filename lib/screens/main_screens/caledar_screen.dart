@@ -133,10 +133,9 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                     ),
                   ),
                   if (!Responsive.isMobile(context)) ...[
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                      width: 1,
-                      color: Colors.grey.withOpacity(0.5),
+                    const VerticalDivider(
+                      indent: 15,
+                      width: 30,
                     ),
                     Expanded(
                       flex: 1,
