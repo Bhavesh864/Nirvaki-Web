@@ -636,15 +636,7 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.24):
     - BoringSSL-GRPC/Interface (= 0.0.24)
   - BoringSSL-GRPC/Interface (0.0.24)
-<<<<<<< HEAD
-<<<<<<< HEAD
-  - cloud_firestore (4.9.1):
-=======
   - cloud_firestore (4.8.5):
->>>>>>> f1064164d7ed61c29321bf0a8aba590670a9fd5b
-=======
-  - cloud_firestore (4.8.2):
->>>>>>> 6d2a934de3a5e7708c1d1711622b851888321079
     - Firebase/Firestore (= 10.15.0)
     - firebase_core
     - Flutter
@@ -720,15 +712,7 @@ PODS:
     - Firebase/Analytics (= 10.15.0)
     - firebase_core
     - Flutter
-<<<<<<< HEAD
-<<<<<<< HEAD
-  - firebase_auth (4.9.0):
-=======
   - firebase_auth (4.7.3):
->>>>>>> f1064164d7ed61c29321bf0a8aba590670a9fd5b
-=======
-  - firebase_auth (4.8.0):
->>>>>>> 6d2a934de3a5e7708c1d1711622b851888321079
     - Firebase/Auth (= 10.15.0)
     - firebase_core
     - Flutter
@@ -743,31 +727,15 @@ PODS:
     - Firebase/Database (= 10.15.0)
     - firebase_core
     - Flutter
-<<<<<<< HEAD
   - firebase_dynamic_links (5.3.5):
     - Firebase/DynamicLinks (= 10.15.0)
     - firebase_core
     - Flutter
-<<<<<<< HEAD
-  - firebase_messaging (14.6.7):
-=======
   - firebase_messaging (14.6.6):
->>>>>>> f1064164d7ed61c29321bf0a8aba590670a9fd5b
     - Firebase/Messaging (= 10.15.0)
     - firebase_core
     - Flutter
   - firebase_storage (11.2.6):
-=======
-  - firebase_dynamic_links (5.3.4):
-    - Firebase/DynamicLinks (= 10.15.0)
-    - firebase_core
-    - Flutter
-  - firebase_messaging (14.6.6):
-    - Firebase/Messaging (= 10.15.0)
-    - firebase_core
-    - Flutter
-  - firebase_storage (11.2.5):
->>>>>>> 6d2a934de3a5e7708c1d1711622b851888321079
     - Firebase/Storage (= 10.15.0)
     - firebase_core
     - Flutter
@@ -981,16 +949,8 @@ PODS:
   - GTMSessionFetcher/Core (3.1.1)
   - image_picker_ios (0.0.1):
     - Flutter
-<<<<<<< HEAD
-<<<<<<< HEAD
   - integration_test (0.0.1):
     - Flutter
-=======
->>>>>>> f1064164d7ed61c29321bf0a8aba590670a9fd5b
-=======
-  - integration_test (0.0.1):
-    - Flutter
->>>>>>> 6d2a934de3a5e7708c1d1711622b851888321079
   - just_audio (0.0.1):
     - Flutter
   - leveldb-library (1.22.2)
@@ -1007,16 +967,8 @@ PODS:
     - Flutter
     - FlutterMacOS
   - PromisesObjC (2.3.1)
-<<<<<<< HEAD
-<<<<<<< HEAD
   - PromisesSwift (2.3.1):
     - PromisesObjC (= 2.3.1)
-=======
->>>>>>> f1064164d7ed61c29321bf0a8aba590670a9fd5b
-=======
-  - PromisesSwift (2.3.1):
-    - PromisesObjC (= 2.3.1)
->>>>>>> 6d2a934de3a5e7708c1d1711622b851888321079
   - ReachabilitySwift (5.0.0)
   - RecaptchaInterop (100.0.0)
   - SDWebImage (5.18.2):
@@ -1056,14 +1008,7 @@ DEPENDENCIES:
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - google_maps_flutter_ios (from `.symlinks/plugins/google_maps_flutter_ios/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
-<<<<<<< HEAD
-<<<<<<< HEAD
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
-=======
->>>>>>> f1064164d7ed61c29321bf0a8aba590670a9fd5b
-=======
-  - integration_test (from `.symlinks/plugins/integration_test/ios`)
->>>>>>> 6d2a934de3a5e7708c1d1711622b851888321079
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
   - network_info_plus (from `.symlinks/plugins/network_info_plus/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
@@ -1108,14 +1053,7 @@ SPEC REPOS:
     - leveldb-library
     - nanopb
     - PromisesObjC
-<<<<<<< HEAD
-<<<<<<< HEAD
     - PromisesSwift
-=======
->>>>>>> f1064164d7ed61c29321bf0a8aba590670a9fd5b
-=======
-    - PromisesSwift
->>>>>>> 6d2a934de3a5e7708c1d1711622b851888321079
     - ReachabilitySwift
     - RecaptchaInterop
     - SDWebImage
@@ -1156,16 +1094,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/google_maps_flutter_ios/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
-<<<<<<< HEAD
-<<<<<<< HEAD
   integration_test:
     :path: ".symlinks/plugins/integration_test/ios"
-=======
->>>>>>> f1064164d7ed61c29321bf0a8aba590670a9fd5b
-=======
-  integration_test:
-    :path: ".symlinks/plugins/integration_test/ios"
->>>>>>> 6d2a934de3a5e7708c1d1711622b851888321079
   just_audio:
     :path: ".symlinks/plugins/just_audio/ios"
   network_info_plus:
@@ -1191,15 +1121,7 @@ SPEC CHECKSUMS:
   abseil: 926fb7a82dc6d2b8e1f2ed7f3a718bce691d1e46
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
-<<<<<<< HEAD
-<<<<<<< HEAD
-  cloud_firestore: 46d2e46bc92e77ba5ab00151cba61e3b27e0ddd5
-=======
   cloud_firestore: 094365b1927477f45478886c68decec0080f51b7
->>>>>>> f1064164d7ed61c29321bf0a8aba590670a9fd5b
-=======
-  cloud_firestore: c9fc12b52872f5c24563a0977ec42b34f2a26207
->>>>>>> 6d2a934de3a5e7708c1d1711622b851888321079
   connectivity_plus: 07c49e96d7fc92bc9920617b83238c4d178b446a
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
@@ -1207,43 +1129,21 @@ SPEC CHECKSUMS:
   file_picker: ce3938a0df3cc1ef404671531facef740d03f920
   Firebase: 66043bd4579e5b73811f96829c694c7af8d67435
   firebase_analytics: 84fbf469b4964adb5410e25f3f45433dac480ccf
-<<<<<<< HEAD
-<<<<<<< HEAD
-  firebase_auth: fe628f773ffc4ccaf4a3c0d6cb45e9aae90c94bd
-=======
   firebase_auth: 416d2bf11e98a37c1d6a7427ff1973ed76c1f226
->>>>>>> f1064164d7ed61c29321bf0a8aba590670a9fd5b
   firebase_core: 77172d0a9d8d19d07606e24406e4c2fc14d3265b
   firebase_crashlytics: 4365238d33a7a43164f1049f892365de4aee999f
   firebase_database: a161e78aa8e77aa78b0bb99d9d1e6c5a7047f860
   firebase_dynamic_links: 0ccf044980c0d38baed798ffef3421c0a91f43ed
   firebase_messaging: 444654af705ed16db286f5570ce6083e25c41730
   firebase_storage: 9e849862a6dd01d841352474a14dbcfb3cecc1b8
-=======
-  firebase_auth: 9604f6a32ace09fc9402a0155f0c8454fcd0338f
-  firebase_core: 77172d0a9d8d19d07606e24406e4c2fc14d3265b
-  firebase_crashlytics: 4365238d33a7a43164f1049f892365de4aee999f
-  firebase_database: a161e78aa8e77aa78b0bb99d9d1e6c5a7047f860
-  firebase_dynamic_links: a70007a2e740f92b2d7c9ad6527a90ef3d2c9274
-  firebase_messaging: 444654af705ed16db286f5570ce6083e25c41730
-  firebase_storage: 84aa771fe597e8a54307dc5f05c428ea11da98df
->>>>>>> 6d2a934de3a5e7708c1d1711622b851888321079
   FirebaseAnalytics: 47cef43728f81a839cf1306576bdd77ffa2eac7e
   FirebaseAppCheckInterop: 82358cff9f33452dd44259e88eea5e562500b1cb
   FirebaseAuth: a55ec5f7f8a5b1c2dd750235c1bb419bfb642445
   FirebaseAuthInterop: b79fab8ce80e685145eee5f973d9ad5210e19d44
   FirebaseCore: 2cec518b43635f96afe7ac3a9c513e47558abd2e
-<<<<<<< HEAD
-  FirebaseCoreExtension: d3f1ea3725fb41f56e8fbfb29eeaff54e7ffb8f6
-  FirebaseCoreInternal: 2f4bee5ed00301b5e56da0849268797a2dd31fb4
-  FirebaseCrashlytics: a83f26fb922a3fe181eb738fb4dcf0c92bba6455
-<<<<<<< HEAD
-=======
   FirebaseCoreExtension: 2dbc745b337eb99d2026a7a309ae037bd873f45e
   FirebaseCoreInternal: 26233f705cc4531236818a07ac84d20c333e505a
->>>>>>> f1064164d7ed61c29321bf0a8aba590670a9fd5b
-=======
->>>>>>> 6d2a934de3a5e7708c1d1711622b851888321079
+  FirebaseCrashlytics: a83f26fb922a3fe181eb738fb4dcf0c92bba6455
   FirebaseDatabase: f93f1481c7e9e3d77af960cdff82a408d37693e6
   FirebaseDynamicLinks: 206d4ed3efd2b722822598017f3980d9fda89815
   FirebaseFirestore: b4c0eaaf24efda5732ec21d9e6c788d083118ca6
@@ -1263,31 +1163,15 @@ SPEC CHECKSUMS:
   gRPC-Core: 17108291d84332196d3c8466b48f016fc17d816d
   GTMSessionFetcher: e8647203b65cee28c5f73d0f473d096653945e72
   image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
-<<<<<<< HEAD
-<<<<<<< HEAD
   integration_test: 13825b8a9334a850581300559b8839134b124670
-=======
->>>>>>> f1064164d7ed61c29321bf0a8aba590670a9fd5b
-=======
-  integration_test: 13825b8a9334a850581300559b8839134b124670
->>>>>>> 6d2a934de3a5e7708c1d1711622b851888321079
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
   leveldb-library: f03246171cce0484482ec291f88b6d563699ee06
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   network_info_plus: 122280582fe2fa2bbb8681a4269745cd5c3a9b32
   package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
-<<<<<<< HEAD
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
-<<<<<<< HEAD
   PromisesSwift: 28dca69a9c40779916ac2d6985a0192a5cb4a265
-=======
->>>>>>> f1064164d7ed61c29321bf0a8aba590670a9fd5b
-=======
-  path_provider_foundation: eaf5b3e458fc0e5fbb9940fb09980e853fe058b8
-  PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
-  PromisesSwift: 28dca69a9c40779916ac2d6985a0192a5cb4a265
->>>>>>> 6d2a934de3a5e7708c1d1711622b851888321079
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   SDWebImage: c0de394d7cf7f9838aed1fd6bb6037654a4572e4
