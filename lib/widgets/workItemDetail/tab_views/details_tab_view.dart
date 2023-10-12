@@ -631,11 +631,11 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                       size: 18,
                                     ),
                                     onTap: () async {
-                                      if (kIsWeb) {
-                                        // AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                        // anchorElement.download = 'Attachment file';
-                                        // anchorElement.click();
-                                      }
+                                      // if (kIsWeb) {
+                                      //   AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                      //   anchorElement.download = 'Attachment file';
+                                      //   anchorElement.click();
+                                      // }
                                     },
                                   ),
                                   GestureDetector(

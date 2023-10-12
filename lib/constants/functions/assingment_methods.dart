@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 
 import 'package:yes_broker/Customs/snackbar.dart';
+import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart' as inventory;
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart' as lead;
@@ -91,41 +92,50 @@ void assginUserToTodo(BuildContext context, Function assign, List<dynamic> assig
       return ClipRRect(
         borderRadius: BorderRadius.circular(15),
         child: Dialog(
+          insetPadding: const EdgeInsets.all(10),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          child: Container(
-            padding: const EdgeInsets.all(15),
-            height: 200,
-            width: 500,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                AssignUser(
-                  status: true,
-                  addUser: (user) {
-                    assign(user);
-                    FocusScope.of(context).unfocus();
-                  },
-                  assignedUserIds: assignto.map((item) => item.userid).toList(),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(15),
+                // height: 200,
+                constraints: const BoxConstraints(maxHeight: 400, minHeight: 200),
+                width: 500,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                const SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      submitAssignUser(id, context, user!, currentuserdata);
-                      Navigator.of(context).pop();
-                      if (Responsive.isMobile(context)) {
-                        popBottomSheet();
-                      }
-                    },
-                    child: const Text("Add"),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      AssignUser(
+                        status: true,
+                        addUser: (user) {
+                          assign(user);
+                          FocusScope.of(context).unfocus();
+                        },
+                        assignedUserIds: assignto.map((item) => item.userid).toList(),
+                      ),
+                      const SizedBox(height: 35),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            submitAssignUser(id, context, user!, currentuserdata);
+                            Navigator.of(context).pop();
+                            if (Responsive.isMobile(context)) {
+                              popBottomSheet();
+                            }
+                          },
+                          child: const Text("Add"),
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
+                ),
+              ),
+            ],
           ),
         ),
       );
