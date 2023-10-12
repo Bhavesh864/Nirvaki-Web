@@ -11,6 +11,7 @@ import 'custom_fields.dart';
 
 class LabelTextInputField extends StatelessWidget {
   final String labelText;
+  final FontWeight labelFontWeight;
   final String hintText;
   final bool isDropDown;
   final IconData rightIcon;
@@ -30,6 +31,7 @@ class LabelTextInputField extends StatelessWidget {
   const LabelTextInputField({
     Key? key,
     required this.labelText,
+    this.labelFontWeight = FontWeight.w500,
     this.hintText = 'Type here..',
     this.isDropDown = false,
     this.rightIcon = Icons.calendar_month,
@@ -59,10 +61,10 @@ class LabelTextInputField extends StatelessWidget {
               children: [
                 TextSpan(
                   text: labelText,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.black,
                     fontSize: 16,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: labelFontWeight,
                   ),
                 ),
                 if (isMandatory)
@@ -196,7 +198,7 @@ class LabelTextAreaField extends StatelessWidget {
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 if (isMandatory)

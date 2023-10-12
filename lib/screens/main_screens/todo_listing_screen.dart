@@ -155,38 +155,39 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            TopSerachBar(
-                              onChanged: (value) {
-                                setState(() {
-                                  // searchController.text = value;
-                                });
-                              },
-                              onToggleShowTable: () {
-                                setState(() {
-                                  showTableView = !showTableView;
-                                });
-                              },
-                              showTableView: showTableView,
-                              searchController: searchController,
-                              title: 'Todo',
-                              isFilterOpen: isFilterOpen,
-                              onFilterClose: () {
-                                setState(() {
-                                  isFilterOpen = false;
-                                });
-                              },
-                              onFilterOpen: () {
-                                if (Responsive.isMobile(context)) {
-                                  Navigator.of(context).push(AppRoutes.createAnimatedRoute(const WorkItemFilterView(
-                                    originalCardList: [],
-                                  )));
-                                } else {
+                            if (width! >= 850)
+                              TopSerachBar(
+                                onChanged: (value) {
                                   setState(() {
-                                    isFilterOpen = true;
+                                    // searchController.text = value;
                                   });
-                                }
-                              },
-                            ),
+                                },
+                                onToggleShowTable: () {
+                                  setState(() {
+                                    showTableView = !showTableView;
+                                  });
+                                },
+                                showTableView: showTableView,
+                                searchController: searchController,
+                                title: 'Todo',
+                                isFilterOpen: isFilterOpen,
+                                onFilterClose: () {
+                                  setState(() {
+                                    isFilterOpen = false;
+                                  });
+                                },
+                                onFilterOpen: () {
+                                  if (Responsive.isMobile(context)) {
+                                    Navigator.of(context).push(AppRoutes.createAnimatedRoute(const WorkItemFilterView(
+                                      originalCardList: [],
+                                    )));
+                                  } else {
+                                    setState(() {
+                                      isFilterOpen = true;
+                                    });
+                                  }
+                                },
+                              ),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [

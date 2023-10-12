@@ -64,7 +64,7 @@ class _TopSerachBarState extends State<TopSerachBar> {
                       },
                       label: const Icon(
                         Icons.filter_alt_outlined,
-                        size: 24,
+                        size: 22,
                       ),
                     ),
                     CustomChip(
@@ -74,7 +74,7 @@ class _TopSerachBarState extends State<TopSerachBar> {
                       },
                       label: Icon(
                         !widget.showTableView ? Icons.view_agenda_outlined : Icons.view_module_outlined,
-                        size: 24,
+                        size: 22,
                       ),
                     ),
                   ],
