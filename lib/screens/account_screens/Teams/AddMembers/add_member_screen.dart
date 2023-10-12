@@ -145,17 +145,17 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
     final editUser = ref.read(userForEditScreen);
 
     return Card(
-      elevation: 5,
-      margin: const EdgeInsets.all(20),
+      elevation: Responsive.isMobile(context) ? 0 : 5,
+      // margin: const EdgeInsets.all(20),
       child: loading
           ? const Center(
               child: CircularProgressIndicator.adaptive(),
             )
           : Container(
-              height: Responsive.isMobile(context) ? 500 : double.infinity,
-              padding: const EdgeInsets.all(16),
+              height: Responsive.isMobile(context) ? 690 : double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 7),
               child: Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(4),
                 child: ScrollConfiguration(
                   behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                   child: SingleChildScrollView(
@@ -164,10 +164,13 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const AppText(
-                            text: "Add Team Member",
-                            fontsize: 18,
-                            fontWeight: FontWeight.w700,
+                          Container(
+                            margin: const EdgeInsets.all(12),
+                            child: const AppText(
+                              text: "Add Team Member",
+                              fontsize: 18,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                           SizedBox(height: height! * 0.04),
                           LabelTextInputField(
@@ -176,17 +179,20 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                             validator: (value) => validateForNormalFeild(value: value, props: "First Name"),
                             isMandatory: true,
                           ),
+                          const SizedBox(height: 4),
                           LabelTextInputField(
                             labelText: "Last Name",
                             inputController: _lastNameController,
                             // validator: (value) => validateForNormalFeild(value: value, props: "Last Name"),
                           ),
+                          const SizedBox(height: 4),
                           LabelTextInputField(
                               isMandatory: true,
                               onlyDigits: true,
                               labelText: "Mobile",
                               inputController: _mobileController,
                               validator: (value) => validateForMobileNumberFeild(value: value, props: "Mobile")),
+                          const SizedBox(height: 4),
                           LabelTextInputField(
                             isMandatory: true,
                             labelText: "Email",
@@ -236,6 +242,7 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               CustomButton(
+                                textStyle: const TextStyle(fontWeight: FontWeight.bold, letterSpacing: 0.5),
                                 height: 39,
                                 text: "cancel",
                                 borderColor: AppColor.primary,
@@ -245,6 +252,7 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                               ),
                               const SizedBox(width: 7),
                               CustomButton(
+                                textStyle: const TextStyle(fontWeight: FontWeight.bold, letterSpacing: 0.5),
                                 text: isEdit ? "Update" : "Send Invite",
                                 borderColor: AppColor.primary,
                                 height: 39,

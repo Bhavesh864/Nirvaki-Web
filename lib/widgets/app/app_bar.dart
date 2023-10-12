@@ -22,8 +22,9 @@ AppBar mobileAppBar(User? user, BuildContext context, void Function(String) onOp
           breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
           mobile: (p0) => const CustomText(
             title: 'YesBrokr',
+            letterSpacing: 0.4,
             fontWeight: FontWeight.w700,
-            size: 18,
+            size: 16,
           ),
         ),
       ],

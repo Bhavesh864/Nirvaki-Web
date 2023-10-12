@@ -197,9 +197,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
     // final assignIsselected = selectedValues.firstWhere((element) => element["id"] == 36)["item"];
     return GestureDetector(
         onTap: () {
-          if (!kIsWeb) {
-            FocusScope.of(context).unfocus();
-          }
+          if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
         },
         child: Scaffold(
           body: FutureBuilder<List<InventoryQuestions>>(
@@ -213,9 +211,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                   // if (selectedValues.isNotEmpty) {/
                   //   print(getWhichItemIsSelectedBYId(selectedValues, 1));
                   // }
-
                   final res = selectedValues.isNotEmpty ? getWhichItemIsSelectedBYId(selectedValues, 1) : "Residential";
-
                   InventoryQuestions? screenData = getcurrentInventory(snapshot, res);
 
                   List<Screen> screensDataList = screenData!.screens;
@@ -334,24 +330,8 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                               SizedBox(height: question.questionOptionType != 'textfield' ? 10 : 0),
                                                               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                                                                 const SizedBox(),
-                                                                // index == 0 && i == currentScreenList[index].questions.length - 1
-                                                                // ? const SizedBox()
-                                                                // : ElevatedButton(
-                                                                //     onPressed: () {
-                                                                //       final currentScreenQuestions = screensDataList[currentScreenIndex].questions;
-                                                                //       final ids = currentScreenQuestions.map((q) => q.questionId).toList();
-                                                                //       final allquestion = currentScreenQuestions.map((q) => q.questionOptionType).toList();
-                                                                //       final questiontype = allquestion.any((element) => element == "textfield" || element == "photo");
-                                                                //       goBack(ids, questiontype);
-                                                                //     },
-                                                                //     child: const AppText(
-                                                                //       text: 'Previous',
-                                                                //       textColor: Colors.white,
-                                                                //     ),
-                                                                //   ),
                                                                 if (i == currentScreenList[index].questions.length - 1 && question.questionOptionType != 'chip') ...[
                                                                   Container(
-                                                                    // alignment: Alignment.centerRight,
                                                                     child: allQuestionFinishes
                                                                         ? const Center(
                                                                             child: CircularProgressIndicator.adaptive(),
@@ -361,42 +341,19 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                                             child: CustomButton(
                                                                               text: currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next',
                                                                               onPressed: () {
-                                                                                if (!kIsWeb) {
-                                                                                  FocusScope.of(context).unfocus();
-                                                                                }
                                                                                 if (!allQuestionFinishes) {
                                                                                   if (currentScreenList[index].title != "Assign to") {
-                                                                                    // setState(() {
-                                                                                    //   errorMessage = "";
-                                                                                    // });
                                                                                     if (_formKey.currentState!.validate()) {
-                                                                                      // if (currentScreenList[index].screenId != "S14") {
                                                                                       nextQuestion(screensDataList: currentScreenList, option: "");
-                                                                                      // } else if (currentScreenList[index].screenId == "S14" ||
-                                                                                      //     currentScreenList[index].screenId == "S8") {
-                                                                                      //   if (selectedValues.isNotEmpty &&
-                                                                                      //       selectedValues
-                                                                                      //           .any((item) => item['id'] == 23 || item["id"] == 14 && item['item'].isNotEmpty)) {
-                                                                                      //     print("object");
-                                                                                      //     nextQuestion(screensDataList: currentScreenList, option: "");
-                                                                                      //   } else {
-                                                                                      //     setState(() {
-                                                                                      //       errorMessage = "Please select a valid item";
-                                                                                      //     });
-                                                                                      //   }
-                                                                                      // }
                                                                                     }
                                                                                   }
                                                                                   if (currentScreenList[index].title == "Assign to") {
-                                                                                    // if (assignIsselected.lenth > 0) {
                                                                                     setState(() {
                                                                                       allQuestionFinishes = true;
                                                                                     });
                                                                                     addDataOnfirestore(notify);
-                                                                                    // } else {
-                                                                                    //   customSnackBar(context: context, text: "Assign this inventory to Member");
-                                                                                    // }
                                                                                   }
+                                                                                  if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
                                                                                 }
                                                                               },
                                                                               width: currentScreenList[index].title == "Assign to" ? 90 : 70,

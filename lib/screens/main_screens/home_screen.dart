@@ -109,8 +109,10 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             }
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
 
-            final List<CardDetails> todoItems =
-                filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD" && item.status != "Closed").toList();
+            final List<CardDetails> todoItems = filterItem!
+                .map((doc) => CardDetails.fromSnapshot(doc))
+                .where((item) => item.cardType != "IN" && item.cardType != "LD" && item.status != "Closed")
+                .toList();
 
             int compareDueDates(CardDetails a, CardDetails b) {
               DateTime aDueDate = DateFormat('dd-MM-yy').parse(a.duedate!);
@@ -120,7 +122,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
 
             todoItems.sort(compareDueDates);
 
-            final List<CardDetails> workItems = filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
+            final List<CardDetails> workItems =
+                filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
             bool isDataEmpty = workItems.isEmpty && todoItems.isEmpty;
             return Row(
               children: [
@@ -174,16 +177,17 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                                 margin: const EdgeInsets.all(5),
                                 decoration: BoxDecoration(
                                   color: AppColor.secondary,
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Padding(
-                                      padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
+                                      padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
                                       child: CustomText(
                                         title: 'Timeline',
                                         fontWeight: FontWeight.w600,
+                                        size: 15,
                                       ),
                                     ),
                                     Expanded(

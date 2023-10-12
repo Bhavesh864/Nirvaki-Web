@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/customs/custom_chip.dart';
 import 'package:yes_broker/customs/responsive.dart';
 
 class TopSerachBar extends StatefulWidget {
@@ -56,20 +57,22 @@ class _TopSerachBarState extends State<TopSerachBar> {
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Row(
                   children: [
-                    IconButton(
+                    CustomChip(
+                      paddingVertical: 5,
                       onPressed: () {
                         widget.onFilterOpen();
                       },
-                      icon: const Icon(
+                      label: const Icon(
                         Icons.filter_alt_outlined,
                         size: 24,
                       ),
                     ),
-                    IconButton(
+                    CustomChip(
+                      paddingVertical: 5,
                       onPressed: () {
                         widget.onToggleShowTable();
                       },
-                      icon: Icon(
+                      label: Icon(
                         !widget.showTableView ? Icons.view_agenda_outlined : Icons.view_module_outlined,
                         size: 24,
                       ),
@@ -105,9 +108,7 @@ class _TopSerachBarState extends State<TopSerachBar> {
                           width: 5,
                         ),
                         InkWell(
-                          onTap: () {
-                            widget.onFilterOpen();
-                          },
+                          onTap: () {},
                           child: const Icon(
                             Icons.more_horiz,
                             size: 20,

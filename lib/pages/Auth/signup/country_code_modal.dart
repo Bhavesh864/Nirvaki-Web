@@ -25,6 +25,7 @@ class _CountryCodeModelState extends State<CountryCodeModel> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      insetPadding: const EdgeInsets.all(10),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Container(
         width: 550,
