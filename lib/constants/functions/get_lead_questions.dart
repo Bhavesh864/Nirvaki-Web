@@ -380,7 +380,7 @@ Widget buildLeadQuestions(
             LabelTextInputField(
               labelText: 'Search your location',
               inputController: controller,
-              isMandatory: true,
+              hintText: "Search",
               onChanged: (value) {
                 getPlaces(value).then((places) {
                   final descriptions = places.predictions?.map((prediction) => prediction.description) ?? [];
