@@ -53,7 +53,8 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
     currentSelectedTab = currentIndex;
     tabviewController = TabController(length: 3, vsync: this, initialIndex: currentIndex);
     final workItemId = ref.read(selectedWorkItemId);
-    inventoryDetails = FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId == '' ? widget.inventoryId : workItemId).snapshots();
+    inventoryDetails =
+        FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId == '' ? widget.inventoryId : workItemId).snapshots();
   }
 
   @override
@@ -201,7 +202,8 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                               AssignmentWidget(
                                                 id: data.inventoryId!,
                                                 assignto: data.assignedto!,
-                                                imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                imageUrlCreatedBy:
+                                                    data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                 createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                               ),
                                             );
@@ -315,11 +317,15 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                     ),
                   ),
                   if (Responsive.isDesktop(context))
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                      width: 1,
-                      color: Colors.grey.withOpacity(0.5),
+                    const VerticalDivider(
+                      indent: 15,
+                      width: 30,
                     ),
+                  // Container(
+                  //   margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                  //   width: 1,
+                  //   color: AppColor.dividerColor,
+                  // ),
                   if (Responsive.isDesktop(context))
                     Expanded(
                       flex: 1,

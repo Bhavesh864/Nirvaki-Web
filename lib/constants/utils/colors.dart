@@ -12,6 +12,8 @@ class AppColor {
   static const inventoryChipColor = Color(0x0DF72586);
   static const inventoryIconColor = Color(0xFFF72586);
 
+  static const dividerColor = Color(0xFFECECEC);
+
   static const leadChipColor = Color(0x0D7109B6);
   static const leadIconColor = Color(0xFF7109B6);
   static const mainColor = Color(0xFF000000);

@@ -76,6 +76,7 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
                         setState(() {});
                       },
                       child: const CustomChip(
+                        paddingVertical: 5,
                         label: Icon(
                           Icons.view_agenda_outlined,
                           size: 24,

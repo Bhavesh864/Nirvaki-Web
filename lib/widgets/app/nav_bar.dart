@@ -3,6 +3,7 @@
 
 import 'package:beamer/beamer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/custom_chip.dart';
@@ -113,11 +114,14 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
             width: 20,
           ),
           PopupMenuButton(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
             onSelected: (value) {
               widget.onOptionSelect(value);
             },
             color: Colors.white.withOpacity(1),
-            offset: const Offset(200, 40),
+            offset: const Offset(100, 40),
             itemBuilder: (contex) {
               addOrRemoveTeamAndOrganization(userData!);
               return profileMenuItems.map(
@@ -199,7 +203,14 @@ PopupMenuItem popupMenuItem(
           color: AppColor.secondary,
           borderRadius: BorderRadius.circular(5),
         ),
-        child: Text(title),
+        child: Text(
+          title,
+          style: const TextStyle(
+            letterSpacing: 0.4,
+            fontSize: 13,
+            color: Color(0xFF454545),
+          ),
+        ),
       ),
     ),
   );
@@ -226,11 +237,10 @@ Widget largeScreenView(String name, BuildContext context) {
         Center(
           child: Row(
             children: [
-              const InkWell(
-                child: Icon(
-                  Icons.home_outlined,
-                  size: 18,
-                ),
+              const Icon(
+                Icons.home_outlined,
+                weight: 100,
+                size: 18,
               ),
               GestureDetector(
                 onTap: () {
@@ -239,6 +249,7 @@ Widget largeScreenView(String name, BuildContext context) {
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 5),
                   child: CustomText(
+                    letterSpacing: 0.4,
                     title: AppConst.getPublicView() ? 'Login' : 'Home',
                     fontWeight: FontWeight.w600,
                     color: AppColor.primary,
@@ -358,7 +369,8 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                                   },
                                   titleAlignment: ListTileTitleAlignment.top,
                                   leading: CircleAvatar(
-                                    backgroundImage: NetworkImage(notificationData.imageUrl!.isNotEmpty && notificationData.imageUrl != null ? notificationData.imageUrl! : noImg),
+                                    backgroundImage:
+                                        NetworkImage(notificationData.imageUrl!.isNotEmpty && notificationData.imageUrl != null ? notificationData.imageUrl! : noImg),
                                   ),
                                   title: SizedBox(
                                     height: 80,

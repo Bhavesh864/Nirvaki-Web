@@ -72,6 +72,9 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
         width: 600,
         height: 600,
         child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           color: const Color(0xFFF5F9FE),
           child: Padding(
             padding: EdgeInsets.symmetric(
@@ -79,11 +82,10 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
               vertical: currentScreen == ChatModalScreenType.chatList ? 20 : 0,
             ),
             child: Column(
-              // mainAxisSize: MainAxisSize.min,
               children: [
                 if (currentScreen == ChatModalScreenType.chatList) ...[
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
+                    padding: const EdgeInsets.only(bottom: 15.0, left: 5),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -112,6 +114,7 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                               child: const Icon(
                                 Icons.close,
                                 size: 20,
+                                color: Colors.black87,
                               ),
                               onTap: () {
                                 Navigator.of(context).pop();
@@ -124,27 +127,25 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                   ),
                   Expanded(
                     // height: 470,
-                    child: Card(
-                      elevation: 0,
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                              ),
-                              child: TestList(
-                                selectedUserIds: selectedUserIds,
-                                onPressed: (c) {
-                                  currentScreen = ChatModalScreenType.chatScreen;
-                                  chatItem = c;
-                                  setState(() {});
-                                },
-                              ),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.white,
+                            ),
+                            child: TestList(
+                              selectedUserIds: selectedUserIds,
+                              onPressed: (c) {
+                                currentScreen = ChatModalScreenType.chatScreen;
+                                chatItem = c;
+                                setState(() {});
+                              },
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
