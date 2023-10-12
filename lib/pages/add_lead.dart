@@ -256,10 +256,10 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                       ),
-                                      child: SingleChildScrollView(
-                                        child: Container(
-                                          width: Responsive.isMobile(context) ? width! * 0.9 : 650,
-                                          padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
+                                      child: Container(
+                                        width: Responsive.isMobile(context) ? width! * 0.9 : 650,
+                                        padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
+                                        child: SingleChildScrollView(
                                           child: Column(
                                             children: [
                                               if (currentScreenList[index].title != null)
