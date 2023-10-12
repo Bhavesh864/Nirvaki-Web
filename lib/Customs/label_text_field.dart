@@ -223,6 +223,7 @@ class LabelTextAreaField extends StatelessWidget {
             keyboardType: TextInputType.multiline,
             maxLines: 5,
             controller: inputController,
+            onChanged: onChanged,
             style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w400,
