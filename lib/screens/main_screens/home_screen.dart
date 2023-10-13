@@ -58,15 +58,15 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void setCardDetails() async {
-    print("${AppConst.getBrokerId()}--------======");
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
+    final brokerid = UserHiveMethods.getdata("brokerId");
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("brokerid", isEqualTo: brokerid).snapshots();
   }
 
   getUserData(token) async {
     final User? user = await User.getUser(token);
     ref.read(userDataProvider.notifier).storeUserData(user!);
     AppConst.setRole(user.role);
-    AppConst.setBrokerId(user.brokerId);
+    UserHiveMethods.addData(key: "brokerId", data: user.brokerId);
   }
 
   showChatDialog() {
@@ -119,8 +119,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             }
 
             todoItems.sort(compareDueDates);
-
             final List<CardDetails> workItems = filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
+            workItems.sort((a, b) => b.createdate!.compareTo(a.createdate!));
             bool isDataEmpty = workItems.isEmpty && todoItems.isEmpty;
             return Row(
               children: [

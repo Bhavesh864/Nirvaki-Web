@@ -9,12 +9,10 @@ import 'package:yes_broker/Customs/custom_chip.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/loader.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/activity_details.dart';
-import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/timeline_item.dart';
-import '../riverpodstate/user_data.dart';
 
 class CustomTimeLineView extends ConsumerStatefulWidget {
   final bool fromHome;
@@ -43,7 +41,6 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
 
   void setactivity() {
     final workitemId = ref.read(selectedWorkItemId);
-    final brokerId = ref.read(userDataProvider);
     activityDetails = widget.fromHome
         ? FirebaseFirestore.instance.collection('activityDetails').snapshots()
         : FirebaseFirestore.instance.collection('activityDetails').where('itemid', isEqualTo: workitemId).snapshots();

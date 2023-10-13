@@ -315,9 +315,10 @@ void showConfirmDeleteAttachment(BuildContext context, Function onPressYes) {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              // const SizedBox(
+              //   height: 20,
+              // ),
+              const Spacer(),
               ChipButton(
                 text: 'Yes',
                 onSelect: () {

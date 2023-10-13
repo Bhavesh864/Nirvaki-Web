@@ -53,8 +53,8 @@ class CustomSpeedDialButtonState extends ConsumerState<CustomSpeedDialButton> {
           onTap: () {
             AppConst.getOuterContext()!.beamToNamed(AppRoutes.addLead);
             ref.read(lead.myArrayProvider.notifier).resetState();
-            ref.read(defaultAreaRangeValuesNotifier.notifier).setRange(const RangeValues(500, 10000));
-            ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(500, 10000));
+            ref.read(defaultAreaRangeValuesNotifier.notifier).setRange(const RangeValues(100, 10000));
+            ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(100, 10000));
             ref.read(selectedOptionNotifier.notifier).setRange("Sq ft");
           },
           labelShadow: [

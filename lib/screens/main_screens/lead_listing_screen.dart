@@ -9,6 +9,7 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/widgets/workitems/workitem_filter_view.dart';
 import '../../Customs/loader.dart';
+import '../../constants/firebase/Hive/hive_methods.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/filterdataAccordingRole/data_according_role.dart';
@@ -82,7 +83,8 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
   }
 
   void setCardDetails() {
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
+    final brokerid = UserHiveMethods.getdata("brokerId");
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("brokerid", isEqualTo: brokerid).snapshots();
   }
 
   void getDetails(User currentuser) async {
@@ -126,6 +128,7 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
             }
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
             final List<CardDetails> leadList = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "LD").toList();
+            leadList.sort((a, b) => b.createdate!.compareTo(a.createdate!));
             List<CardDetails> filteredleadList = leadList.where((item) {
               if (searchController.text.isEmpty) {
                 return true;
