@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Flutter Packages Imports
 import 'package:flutter_material_symbols/flutter_material_symbols.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:yes_broker/pages/Auth/login/login_screen.dart';
 import 'package:yes_broker/pages/Auth/signup/personal_details.dart';
 import 'package:yes_broker/pages/Auth/set_new_password.dart';
@@ -112,20 +113,24 @@ List<MenuItem> sideBarItems = [
 List<BottomBarItem> bottomBarItems = [
   BottomBarItem(
     label: homeScreenPageLabel,
+    nav: '/',
     iconData: homeIcon,
     screen: const TodoListingScreen(),
   ),
   BottomBarItem(
+    nav: '/inventory',
     label: inventoryPageLabel,
     iconData: inventoryIcon,
     screen: const InventoryListingScreen(),
   ),
   BottomBarItem(
+    nav: '/lead',
     label: leadPageLabel,
     iconData: leadIcon,
     screen: const LeadListingScreen(),
   ),
   BottomBarItem(
+    nav: '/chat',
     label: chatPageLabel,
     iconData: chatIcon,
     screen: const ChatListScreen(),

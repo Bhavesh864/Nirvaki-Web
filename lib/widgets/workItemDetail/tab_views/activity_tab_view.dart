@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/custom_text.dart';
@@ -49,10 +50,13 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
                   width: Responsive.isMobile(context) ? width! * 0.6 : 400,
                   child: TextField(
                     controller: controller,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: 'Type note here...',
+                      hintStyle: TextStyle(
+                        fontFamily: GoogleFonts.dmSans().fontFamily,
+                      ),
                       isDense: true,
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.search,
                         color: Colors.black,
                       ),
@@ -65,7 +69,11 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
                     if (controller.text.trim().isNotEmpty) {
                       submitActivity(itemid: workItemId, activitytitle: controller.text.trim(), user: user!);
                       notifyToUser(
-                          currentuserdata: user, assignedto: widget.details.assignedto, content: "$workItemId added new Activity", title: controller.text, itemid: workItemId);
+                          currentuserdata: user,
+                          assignedto: widget.details.assignedto,
+                          content: "$workItemId added new Activity",
+                          title: controller.text,
+                          itemid: workItemId);
                       controller.clear();
                     } else {
                       customSnackBar(context: context, text: 'Please enter note to submit');

@@ -5,6 +5,7 @@ import 'package:yes_broker/Customs/text_utility.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/pages/smallscreen_dashboard.dart';
 import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/screens/account_screens/common_screen.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
@@ -12,6 +13,10 @@ import '../constants/app_constant.dart';
 import '../constants/functions/auth/auth_functions.dart';
 import '../constants/functions/chat_group/group.dart';
 import '../screens/account_screens/Teams/team_screen.dart';
+
+final desktopSideBarIndexProvider = StateProvider<int>((ref) {
+  return 0;
+});
 
 class LargeScreen extends ConsumerStatefulWidget {
   const LargeScreen({Key? key}) : super(key: key);
@@ -24,6 +29,7 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
   @override
   Widget build(BuildContext context) {
     int currentIndex = 0;
+    final sideBarIndex = ref.read(mobileBottomIndexProvider.notifier);
     final beamerKey = GlobalKey<BeamerState>();
     AppConst.setOuterContext(context);
 
@@ -66,6 +72,12 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                     setstate(
                       () {
                         beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[index].nav);
+
+                        if (index != 0) {
+                          ref.read(mobileBottomIndexProvider.notifier).state = index == 4 ? 0 : index - 1;
+                        } else {
+                          ref.read(mobileBottomIndexProvider.notifier).state = index;
+                        }
                       },
                     );
                   },
@@ -78,7 +90,7 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                             NavigationRailDestination(
                                 label: const AppText(text: '', fontsize: 0),
                                 icon: Container(
-                                    width: 45,
+                                    width: 40,
                                     padding: const EdgeInsets.symmetric(vertical: 2),
                                     // padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                                     decoration: BoxDecoration(
@@ -87,10 +99,13 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                                     ),
                                     child: Column(
                                       children: [
-                                        Icon(e.iconData),
+                                        Icon(
+                                          e.iconData,
+                                        ),
                                         AppText(
                                           text: e.label,
                                           fontsize: 9,
+                                          textColor: currentIndex == sideBarItems.indexOf(e) ? AppColor.primary : Colors.black,
                                         )
                                       ],
                                     ))
