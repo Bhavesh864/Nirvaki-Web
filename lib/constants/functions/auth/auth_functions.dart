@@ -16,7 +16,7 @@ void userLogout(WidgetRef ref, BuildContext context) {
   authentication.signOut().then(
         (value) => {
           ref.read(chatControllerProvider).setUserState(false),
-          ref.read(currentIndexProvider.notifier).update((state) => 0),
+          ref.read(mobileBottomIndexProvider.notifier).update((state) => 0),
           // context.beamToReplacementNamed('/login'),
           Beamer.of(context).beamToReplacementNamed('/'),
           Navigator.of(context).pop(),

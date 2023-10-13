@@ -40,6 +40,7 @@ class AppText extends StatelessWidget {
         color: textColor,
         fontSize: fontsize,
         decoration: textdecoration,
+        // fontFamily: GoogleFonts.dmSans().fontFamily,
         fontFamily: GoogleFonts.dmSans().fontFamily,
         wordSpacing: wordspacing,
         textBaseline: textBaseline,

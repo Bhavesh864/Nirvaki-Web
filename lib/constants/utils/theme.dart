@@ -6,8 +6,9 @@ import 'package:yes_broker/constants/utils/colors.dart';
 
 class TAppTheme {
   static ThemeData lightTheme = ThemeData(
+
+      // fontFamily: GoogleFonts.dmSans().fontFamily,
       fontFamily: GoogleFonts.dmSans().fontFamily,
-      // fontFamily: GoogleFonts.montserrat().fontFamily,
       pageTransitionsTheme: PageTransitionsTheme(builders: {
         TargetPlatform.iOS: CustomPageTransitionBuilder(),
         TargetPlatform.macOS: CustomPageTransitionBuilder(),
@@ -50,14 +51,16 @@ class TAppTheme {
         color: Colors.black,
         size: 14,
       ),
-      textTheme: const TextTheme(
+      textTheme: TextTheme(
         titleMedium: TextStyle(
-          color: Color(0xFF000000),
+          fontFamily: GoogleFonts.montserrat().fontFamily,
+          color: const Color(0xFF000000),
           fontSize: 14,
           fontWeight: FontWeight.w600,
         ),
         titleSmall: TextStyle(
-          color: Color(0xFF797979),
+          fontFamily: GoogleFonts.montserrat().fontFamily,
+          color: const Color(0xFF797979),
           fontSize: 10,
           fontWeight: FontWeight.w400,
         ),
