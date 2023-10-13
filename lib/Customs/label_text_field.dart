@@ -35,7 +35,7 @@ class LabelTextInputField extends StatelessWidget {
     this.labelFontWeight = FontWeight.w500,
     this.hintText = 'Type here..',
     this.isDropDown = false,
-    this.rightIcon = Icons.calendar_month,
+    this.rightIcon = Icons.calendar_month_outlined,
     this.isDatePicker = false,
     this.isMandatory = false,
     this.maxLines,

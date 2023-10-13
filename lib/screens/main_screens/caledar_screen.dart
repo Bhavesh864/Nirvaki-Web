@@ -54,6 +54,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
     final User? user = ref.read(userDataProvider);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: Responsive.isMobile(context)
           ? AppBar(
               iconTheme: const IconThemeData(
@@ -94,7 +95,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                         showDatePickerButton: true,
                         timeSlotViewSettings: const TimeSlotViewSettings(startHour: 8, endHour: 24),
                         initialDisplayDate: selectedDate,
-                        viewHeaderHeight: 0,
+                        viewHeaderHeight: Responsive.isMobile(context) ? 0 : -1,
                         showTodayButton: Responsive.isMobile(context) ? false : true,
                         showNavigationArrow: Responsive.isMobile(context) ? false : true,
                         backgroundColor: Colors.white,
@@ -147,68 +148,75 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                       width: 30,
                     ),
                     Expanded(
-                      flex: 1,
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.arrow_back_ios,
-                                  color: AppColor.primary,
+                      flex: Responsive.isTablet(context) ? 2 : 1,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.arrow_back_ios,
+                                    color: AppColor.primary,
+                                  ),
+                                  onPressed: _previousMonth,
                                 ),
-                                onPressed: _previousMonth,
-                              ),
-                              Text(
-                                DateFormat.yMMMM().format(selectedDate),
-                                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: AppColor.primary,
+                                Text(
+                                  DateFormat.yMMMM().format(selectedDate),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF989898),
+                                  ),
                                 ),
-                                onPressed: _nextMonth,
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            width: 240,
-                            child: Center(
-                              child: SfCalendar(
-                                onTap: (calendarLongPressDetails) {
-                                  selectedDate = calendarLongPressDetails.date!;
-                                  setState(() {});
-                                },
-                                headerHeight: 0,
-                                initialDisplayDate: selectedDate,
-                                initialSelectedDate: selectedDate,
-                                dataSource: EventDataSource(calenderList),
-                                cellBorderColor: Colors.transparent,
-                                view: CalendarView.month,
-                                controller: CalendarController(),
-                                backgroundColor: Colors.white,
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: AppColor.primary,
+                                  ),
+                                  onPressed: _nextMonth,
+                                ),
+                              ],
+                            ),
+                            Container(
+                              // width: 240,
+                              child: Center(
+                                child: SfCalendar(
+                                  onTap: (calendarLongPressDetails) {
+                                    selectedDate = calendarLongPressDetails.date!;
+                                    setState(() {});
+                                  },
+                                  headerHeight: 0,
+                                  initialDisplayDate: selectedDate,
+                                  initialSelectedDate: selectedDate,
+                                  dataSource: EventDataSource(calenderList),
+                                  cellBorderColor: Colors.transparent,
+                                  view: CalendarView.month,
+                                  controller: CalendarController(),
+                                  backgroundColor: Colors.white,
+                                ),
                               ),
                             ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Divider(),
-                          ),
-                          CustomButton(
-                            height: 40,
-                            width: 160,
-                            text: 'Create new +',
-                            onPressed: () {
-                              showAddCalendarModal(
-                                context: context,
-                                isEdit: false,
-                                ref: ref,
-                              );
-                            },
-                          )
-                        ],
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Divider(),
+                            ),
+                            CustomButton(
+                              height: 40,
+                              width: 160,
+                              text: 'Create new +',
+                              onPressed: () {
+                                showAddCalendarModal(
+                                  context: context,
+                                  isEdit: false,
+                                  ref: ref,
+                                );
+                              },
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ]

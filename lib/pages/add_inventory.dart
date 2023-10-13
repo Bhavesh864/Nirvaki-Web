@@ -15,6 +15,7 @@ import '../constants/functions/filterQuestions/filter_inventory_question.dart';
 import '../customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
 import '../riverpodstate/all_selected_ansers_provider.dart';
+import 'largescreen_dashboard.dart';
 
 final myArrayProvider = StateNotifierProvider<AllChipSelectedAnwers, List<Map<String, dynamic>>>(
   (ref) => AllChipSelectedAnwers(),
@@ -415,6 +416,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                 buttonColor: Colors.transparent,
                 borderColor: Colors.transparent,
                 onPressed: () {
+                  ref.watch(desktopSideBarIndexProvider.notifier).update((state) => 0);
                   Navigator.of(context).pop();
                 },
                 leftIcon: Icons.home_outlined,

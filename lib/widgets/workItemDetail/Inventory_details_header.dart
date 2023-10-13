@@ -1,5 +1,6 @@
 // import 'dart:html';
 import 'package:beamer/beamer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -13,7 +14,6 @@ import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 
-import '../../Customs/snackbar.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
@@ -148,11 +148,16 @@ class InventoryDetailsHeader extends ConsumerWidget {
                           }, showicon: true, icon: e['icon']),
                         )
                         .toList(),
-                child: const Chip(
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  padding: EdgeInsets.zero,
-                  label: Icon(
-                    Icons.more_vert,
+                child: IntrinsicWidth(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: kIsWeb ? 4.5 : 7),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      color: AppColor.chipGreyColor,
+                    ),
+                    child: const Icon(
+                      Icons.more_vert,
+                    ),
                   ),
                 ),
               ),
