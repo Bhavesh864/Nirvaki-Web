@@ -37,6 +37,14 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
   var isloading = false;
   TextEditingController controller = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setUserRole();
+    });
+  }
+
   void submitSignupForm(SelectedSignupItems notify) {
     final isvalid = key.currentState?.validate();
     if (mobilenumbercontroller.text == "") {
@@ -132,6 +140,11 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
   String selectedwhatsappCountryCode = '+91';
   bool isMobileEmpty = false;
   bool isWhatsappEmpty = false;
+
+  void setUserRole() {
+    final notify = ref.read(selectedItemForsignup.notifier);
+    notify.add({"id": 13, "item": 'Broker'});
+  }
 
   void openModal(bool isMobile) {
     final notify = ref.read(selectedItemForsignup.notifier);

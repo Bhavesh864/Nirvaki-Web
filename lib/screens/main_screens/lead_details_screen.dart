@@ -54,6 +54,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
     tabviewController = TabController(length: 3, vsync: this, initialIndex: currentIndex);
     final workItemId = ref.read(selectedWorkItemId);
     leadDetails = FirebaseFirestore.instance.collection('leadDetails').where('leadId', isEqualTo: workItemId == '' ? widget.leadId : workItemId).snapshots();
+    AppConst.setPublicView(false);
   }
 
   @override
