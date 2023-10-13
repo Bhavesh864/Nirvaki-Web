@@ -2,6 +2,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/Customs/loader.dart';
 
 import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/customs/responsive.dart';
@@ -190,7 +191,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
     final allLeadQuestions = ref.read(allLeadQuestion);
     // final isVillaSelected = ref.read(leadFilterVillaQuestion);
     // final isCommericalSelected = ref.read(leadFilterCommercialQuestion);
-    print("isBuy---> $isBuy");
+
     return GestureDetector(
       onTap: () {
         if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
@@ -200,7 +201,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
           future: getQuestions,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator.adaptive());
+              return const Center(child: Loader());
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else {

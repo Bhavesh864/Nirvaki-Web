@@ -110,7 +110,6 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
               }
 
               todoItemsList.sort(compareDueDates);
-
               List<CardDetails> filterTodoList = todoItemsList.where((item) {
                 if (searchController.text.isEmpty) {
                   return true;

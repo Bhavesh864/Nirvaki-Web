@@ -19,6 +19,9 @@ class CustomStatusDropDown extends StatelessWidget {
   @override
   PopupMenuButton build(BuildContext context) {
     return PopupMenuButton(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
       initialValue: status,
       tooltip: '',
       padding: EdgeInsets.zero,

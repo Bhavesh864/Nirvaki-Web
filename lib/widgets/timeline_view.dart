@@ -33,11 +33,24 @@ class CustomTimeLineView extends ConsumerStatefulWidget {
 }
 
 class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
+  late Stream<QuerySnapshot<Map<String, dynamic>>> activityDetails;
+
+  @override
+  void initState() {
+    super.initState();
+    setactivity();
+  }
+
+  void setactivity() {
+    final workitemId = ref.read(selectedWorkItemId);
+    final brokerId = ref.read(userDataProvider);
+    activityDetails = widget.fromHome
+        ? FirebaseFirestore.instance.collection('activityDetails').snapshots()
+        : FirebaseFirestore.instance.collection('activityDetails').where('itemid', isEqualTo: workitemId).snapshots();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final workitemId = ref.watch(selectedWorkItemId);
-    final User? user = ref.watch(userDataProvider);
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 10),
       decoration: !widget.fromHome
@@ -85,9 +98,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
             height: 10,
           ),
           StreamBuilder(
-            stream: widget.fromHome
-                ? FirebaseFirestore.instance.collection('activityDetails').where("brokerid", isEqualTo: user?.brokerId ?? "").snapshots()
-                : FirebaseFirestore.instance.collection('activityDetails').where('itemid', isEqualTo: workitemId).snapshots(),
+            stream: activityDetails,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Loader();

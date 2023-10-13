@@ -12,7 +12,7 @@ class TodoDetails {
   String? dueDate;
   String? dueTime;
   Timestamp? createdate;
-  String? createdBy;
+  Createdby? createdby;
   String? todoStatus;
   Customerinfo? customerinfo;
   List<Assignedto>? assignedto;
@@ -29,7 +29,7 @@ class TodoDetails {
     this.dueDate,
     this.dueTime,
     this.createdate,
-    this.createdBy,
+    this.createdby,
     this.todoStatus,
     this.customerinfo,
     this.assignedto,
@@ -47,7 +47,7 @@ class TodoDetails {
       brokerId: json["brokerId"],
       assignedto: (json["assignedto"] as List<dynamic>?)?.map((e) => Assignedto.fromJson(e)).toList(),
       managerId: json["managerId"],
-      createdBy: json["createdBy"],
+      createdby: Createdby.fromJson(json["createdby"]),
       createdate: json["createdate"],
       todoType: json["todoType"],
       dueDate: json["dueDate"],
@@ -86,8 +86,8 @@ class TodoDetails {
     if (json["createdate"] is Timestamp) {
       createdate = json["createdate"];
     }
-    if (json["createdBy"] is String) {
-      createdBy = json["createdBy"];
+    if (json["createdby"] is Map) {
+      createdby = json["createdby"] == null ? null : Createdby.fromJson(json["createdby"]);
     }
     if (json["todoStatus"] is String) {
       todoStatus = json["todoStatus"];
@@ -117,7 +117,9 @@ class TodoDetails {
     data["dueDate"] = dueDate;
     data["dueTime"] = dueTime;
     data["createdate"] = createdate;
-    data["createdBy"] = createdBy;
+    if (createdby != null) {
+      data["createdby"] = createdby?.toJson();
+    }
     data["todoStatus"] = todoStatus;
     if (customerinfo != null) {
       data["customerinfo"] = customerinfo?.toJson();
@@ -429,6 +431,39 @@ class Assignedto {
     data["image"] = image;
     data["assignedon"] = assignedon;
     data["assignedby"] = assignedby;
+    return data;
+  }
+}
+
+class Createdby {
+  String? userid;
+  String? userfirstname;
+  String? userlastname;
+  String? userimage;
+
+  Createdby({this.userid, this.userfirstname, this.userlastname, this.userimage});
+
+  Createdby.fromJson(Map<String, dynamic> json) {
+    if (json["userid"] is String) {
+      userid = json["userid"];
+    }
+    if (json["userfirstname"] is String) {
+      userfirstname = json["userfirstname"];
+    }
+    if (json["userlastname"] is String) {
+      userlastname = json["userlastname"];
+    }
+    if (json["userimage"] is String) {
+      userimage = json["userimage"];
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["userid"] = userid;
+    data["userfirstname"] = userfirstname;
+    data["userlastname"] = userlastname;
+    data["userimage"] = userimage;
     return data;
   }
 }

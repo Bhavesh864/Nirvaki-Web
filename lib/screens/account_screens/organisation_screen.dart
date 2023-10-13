@@ -374,11 +374,16 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                           ),
                         ),
                       ] else ...[
-                        Text(
-                          broker.companyname!,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                        SizedBox(
+                          width: Responsive.isMobile(context) ? 140 : 350,
+                          child: Text(
+                            maxLines: 3,
+                            softWrap: true,
+                            broker.companyname!,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ],
