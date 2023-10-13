@@ -41,6 +41,9 @@ class _AddTodoState extends ConsumerState<AddTodo> {
     super.initState();
     getQuestions = TodoQuestion.getAllQuestionssFromFirestore();
     pageController = PageController(initialPage: currentScreenIndex);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(myArrayProvider.notifier).resetState();
+    });
   }
 
   addDataOnfirestore(AllChipSelectedAnwers notify) {

@@ -107,7 +107,12 @@ class _ChatInputState extends ConsumerState<ChatInput> {
       children: [
         Container(
           decoration: BoxDecoration(
-            borderRadius: Responsive.isMobile(context) ? BorderRadius.circular(0) : BorderRadius.circular(0),
+            borderRadius: Responsive.isDesktop(context)
+                ? const BorderRadius.only(
+                    bottomLeft: Radius.circular(20.0),
+                    bottomRight: Radius.circular(20.0),
+                  )
+                : null,
             color: Colors.white,
           ),
           padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 6),
