@@ -687,7 +687,6 @@ Widget buildLeadQuestions(
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       stateValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
-
     if (question.questionId == 32) {
       RangeValues buyRangeValues = const RangeValues(500000, 50000000);
       RangeValues rentRangeValues = const RangeValues(0, 1000000);
@@ -769,7 +768,6 @@ Widget buildLeadQuestions(
         );
       }
     }
-
     if (selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 24) && !isEdit) {
       if (question.questionId == 24) {
         stateValue = const RangeValues(100, 10000);
@@ -778,7 +776,6 @@ Widget buildLeadQuestions(
         });
       }
     }
-
     double divisionValue = 50;
     return StatefulBuilder(
       builder: (context, setState) {
