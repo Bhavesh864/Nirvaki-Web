@@ -119,7 +119,6 @@ class InventoryDetailsHeader extends ConsumerWidget {
                 padding: EdgeInsets.zero,
                 color: Colors.white.withOpacity(1),
                 offset: const Offset(10, 40),
-<<<<<<< HEAD
                 itemBuilder: (context) => AppConst.getPublicView()
                     ? dropDownDetailsList2
                         .map(
@@ -154,42 +153,6 @@ class InventoryDetailsHeader extends ConsumerWidget {
                   padding: EdgeInsets.zero,
                   label: Icon(
                     Icons.more_vert,
-=======
-                itemBuilder: (context) => dropDownDetailsList
-                    .map(
-                      (e) => appBarPopupMenuItem(e['title'].toString(), (e) {
-                        if (e.contains('Public')) {
-                          AppConst.setPublicView(!AppConst.getPublicView());
-                          setState();
-                        } else if (e.contains("Edit")) {
-                          Future.delayed(const Duration(milliseconds: 400)).then(
-                            (value) => AppConst.getOuterContext()!.beamToNamed(id.contains("IN") ? AppRoutes.addInventory : AppRoutes.addLead, data: true),
-                          );
-                        }
-                      }, showicon: true, icon: e['icon']),
-                    )
-                    .toList(),
-                // child: const Chip(
-                //   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                //   padding: EdgeInsets.zero,
-                //   labelPadding: EdgeInsets.zero,
-                //   label: Icon(
-                //     Icons.more_vert,
-                //   ),
-                // ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    color: AppColor.chipGreyColor,
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                  child: const Row(
-                    children: [
-                      Icon(
-                        Icons.more_vert,
-                      ),
-                    ],
->>>>>>> 03449122e75285ed19abfbf96919245719419f88
                   ),
                 ),
               ),
