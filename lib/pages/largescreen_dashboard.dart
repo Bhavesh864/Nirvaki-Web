@@ -29,7 +29,6 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
   @override
   Widget build(BuildContext context) {
     int currentIndex = 0;
-    final sideBarIndex = ref.read(mobileBottomIndexProvider.notifier);
     final beamerKey = GlobalKey<BeamerState>();
     AppConst.setOuterContext(context);
 
@@ -40,6 +39,7 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
         children: [
           StatefulBuilder(builder: (context, setstate) {
             final path = (context.currentBeamLocation.state as BeamState).uri.path;
+            final sideBarIndex = ref.watch(desktopSideBarIndexProvider.notifier);
 
             if (path.contains('/ ')) {
               currentIndex = 0;
@@ -56,7 +56,9 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
             } else {
               currentIndex = 0;
             }
-
+            if (currentIndex != sideBarIndex.state) {
+              currentIndex = sideBarIndex.state;
+            }
             return SingleChildScrollView(
               child: Container(
                 color: Colors.white,
@@ -72,7 +74,7 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                     setstate(
                       () {
                         beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[index].nav);
-
+                        ref.read(desktopSideBarIndexProvider.notifier).update((state) => index);
                         if (index != 0) {
                           ref.read(mobileBottomIndexProvider.notifier).state = index == 4 ? 0 : index - 1;
                         } else {

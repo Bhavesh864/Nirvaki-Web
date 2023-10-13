@@ -25,42 +25,22 @@ void navigateBasedOnId(BuildContext context, String id, WidgetRef ref) {
   }
 
   if (Responsive.isMobile(context)) {
-    if (kIsWeb) {
-      context.beamToNamed(route);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            if (routePrefix == 'IN') {
-              return InventoryDetailsScreen(inventoryId: id);
-            } else if (routePrefix == 'LD') {
-              return LeadDetailsScreen(leadId: id);
-            } else if (routePrefix == 'TD') {
-              return TodoDetailsScreen(todoId: id);
-            } else {
-              return const HomeScreen();
-            }
-          },
-        ),
-      );
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            if (routePrefix == 'IN') {
-              return InventoryDetailsScreen(inventoryId: id);
-            } else if (routePrefix == 'LD') {
-              return LeadDetailsScreen(leadId: id);
-            } else if (routePrefix == 'TD') {
-              return TodoDetailsScreen(todoId: id);
-            } else {
-              return const HomeScreen();
-            }
-          },
-        ),
-      );
-    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          if (routePrefix == 'IN') {
+            return InventoryDetailsScreen(inventoryId: id);
+          } else if (routePrefix == 'LD') {
+            return LeadDetailsScreen(leadId: id);
+          } else if (routePrefix == 'TD') {
+            return TodoDetailsScreen(todoId: id);
+          } else {
+            return const HomeScreen();
+          }
+        },
+      ),
+    );
   } else {
     context.beamToNamed(route);
   }

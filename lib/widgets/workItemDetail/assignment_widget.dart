@@ -142,7 +142,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                 children: [
                   Icon(Icons.person_add_alt_outlined),
                   Padding(
-                    padding: EdgeInsets.only(left: 6),
+                    padding: EdgeInsets.only(left: 6, top: 4),
                     child: Text(
                       "Assigned to",
                       overflow: TextOverflow.ellipsis,

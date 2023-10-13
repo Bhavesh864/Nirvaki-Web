@@ -124,11 +124,13 @@ class CustomTextInputState extends State<CustomTextInput> {
           labelText: widget.labelText,
           hintText: widget.hintText,
           hintStyle: widget.hintstyle,
-
           prefixIcon: widget.leftIcon != null ? Icon(widget.leftIcon, color: Colors.black) : null,
           suffixIcon: widget.rightIcon != null
               ? IconButton(
-                  icon: Icon(widget.rightIcon),
+                  icon: Icon(
+                    widget.rightIcon,
+                    color: Colors.black,
+                  ),
                   iconSize: 18,
                   onPressed: widget.obscureText == true
                       ? () {
