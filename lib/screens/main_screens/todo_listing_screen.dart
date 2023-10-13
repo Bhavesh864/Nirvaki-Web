@@ -46,11 +46,13 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
 
   @override
   void initState() {
+    // if (!kIsWeb) {
     final token = UserHiveMethods.getdata("token");
     if (token != null) {
       AppConst.setAccessToken(token);
       getUserData(token);
     }
+    // }
     setCardDetails();
     if (!kIsWeb) {
       ref.read(chatControllerProvider).setUserState(true);
@@ -62,10 +64,12 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
     final User? user = await User.getUser(token);
     ref.read(userDataProvider.notifier).storeUserData(user!);
     AppConst.setRole(user.role);
+    UserHiveMethods.addData(key: "brokerId", data: user.brokerId);
   }
 
   void setCardDetails() {
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
+    final brokerid = UserHiveMethods.getdata("brokerId");
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("brokerid", isEqualTo: brokerid).snapshots();
   }
 
   void getDetails(User currentuser) async {

@@ -636,7 +636,11 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.24):
     - BoringSSL-GRPC/Interface (= 0.0.24)
   - BoringSSL-GRPC/Interface (0.0.24)
+<<<<<<< HEAD
   - cloud_firestore (4.9.1):
+=======
+  - cloud_firestore (4.8.5):
+>>>>>>> e3f599f46110fe13d58171ceaf0aab39155dba69
     - Firebase/Firestore (= 10.15.0)
     - firebase_core
     - Flutter
@@ -712,7 +716,11 @@ PODS:
     - Firebase/Analytics (= 10.15.0)
     - firebase_core
     - Flutter
+<<<<<<< HEAD
   - firebase_auth (4.9.0):
+=======
+  - firebase_auth (4.7.3):
+>>>>>>> e3f599f46110fe13d58171ceaf0aab39155dba69
     - Firebase/Auth (= 10.15.0)
     - firebase_core
     - Flutter
@@ -731,7 +739,11 @@ PODS:
     - Firebase/DynamicLinks (= 10.15.0)
     - firebase_core
     - Flutter
+<<<<<<< HEAD
   - firebase_messaging (14.6.7):
+=======
+  - firebase_messaging (14.6.6):
+>>>>>>> e3f599f46110fe13d58171ceaf0aab39155dba69
     - Firebase/Messaging (= 10.15.0)
     - firebase_core
     - Flutter
@@ -1121,7 +1133,11 @@ SPEC CHECKSUMS:
   abseil: 926fb7a82dc6d2b8e1f2ed7f3a718bce691d1e46
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
+<<<<<<< HEAD
   cloud_firestore: 46d2e46bc92e77ba5ab00151cba61e3b27e0ddd5
+=======
+  cloud_firestore: 094365b1927477f45478886c68decec0080f51b7
+>>>>>>> e3f599f46110fe13d58171ceaf0aab39155dba69
   connectivity_plus: 07c49e96d7fc92bc9920617b83238c4d178b446a
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
@@ -1129,7 +1145,11 @@ SPEC CHECKSUMS:
   file_picker: ce3938a0df3cc1ef404671531facef740d03f920
   Firebase: 66043bd4579e5b73811f96829c694c7af8d67435
   firebase_analytics: 84fbf469b4964adb5410e25f3f45433dac480ccf
+<<<<<<< HEAD
   firebase_auth: fe628f773ffc4ccaf4a3c0d6cb45e9aae90c94bd
+=======
+  firebase_auth: 416d2bf11e98a37c1d6a7427ff1973ed76c1f226
+>>>>>>> e3f599f46110fe13d58171ceaf0aab39155dba69
   firebase_core: 77172d0a9d8d19d07606e24406e4c2fc14d3265b
   firebase_crashlytics: 4365238d33a7a43164f1049f892365de4aee999f
   firebase_database: a161e78aa8e77aa78b0bb99d9d1e6c5a7047f860

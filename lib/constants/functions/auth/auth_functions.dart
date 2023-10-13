@@ -23,6 +23,7 @@ void userLogout(WidgetRef ref, BuildContext context) {
           User.updateFcmToken(fcmtoken: null, userid: AppConst.getAccessToken()!),
           UserHiveMethods.deleteData(AppConst.getAccessToken()),
           UserHiveMethods.deleteData("token"),
+          UserHiveMethods.deleteData("brokerId"),
           ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null),
           ref.read(userDataProvider.notifier).resetState(),
           AppConst.setAccessToken(null),

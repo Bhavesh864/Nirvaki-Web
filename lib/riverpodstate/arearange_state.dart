@@ -6,7 +6,7 @@ final areaRangeSelectorState = StateNotifierProvider<AreaRangeSelectorState, Ran
 });
 
 class AreaRangeSelectorState extends StateNotifier<RangeValues> {
-  AreaRangeSelectorState() : super(const RangeValues(500, 10000));
+  AreaRangeSelectorState() : super(const RangeValues(100, 10000));
 
   void setRange(RangeValues rangeValues) {
     state = rangeValues;
@@ -18,7 +18,7 @@ final defaultAreaRangeValuesNotifier = StateNotifierProvider<DefaultAreaRangeSel
 });
 
 class DefaultAreaRangeSelectorState extends StateNotifier<RangeValues> {
-  DefaultAreaRangeSelectorState() : super(const RangeValues(500, 10000));
+  DefaultAreaRangeSelectorState() : super(const RangeValues(100, 10000));
 
   void setRange(RangeValues rangeValues) {
     state = rangeValues;
