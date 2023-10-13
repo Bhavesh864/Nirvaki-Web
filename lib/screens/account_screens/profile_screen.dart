@@ -300,11 +300,16 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "${userData.userfirstname} ${userData.userlastname}",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                      SizedBox(
+                        width: Responsive.isMobile(context) ? 140 : 350,
+                        child: Text(
+                          maxLines: 3,
+                          softWrap: true,
+                          "${userData.userfirstname} ${userData.userlastname}",
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                       // ],

@@ -71,6 +71,15 @@ class AppConst {
     role = val;
   }
 
+  static String brokerId = "";
+  static String getBrokerId() {
+    return brokerId;
+  }
+
+  static setBrokerId(String val) {
+    brokerId = val;
+  }
+
   static showConsoleLog(message) {
     if (kDebugMode) {
       print(message);

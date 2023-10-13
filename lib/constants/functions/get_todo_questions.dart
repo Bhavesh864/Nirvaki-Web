@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
@@ -12,8 +13,10 @@ import '../../Customs/dropdown_field.dart';
 import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
 import '../firebase/questionModels/todo_question.dart';
+import '../firebase/userModel/user_info.dart';
 import '../utils/colors.dart';
 import 'calendar/calendar_functions.dart';
+import 'filterdataAccordingRole/data_according_role.dart';
 
 Widget buildTodoQuestions(
   Question question,
@@ -24,6 +27,8 @@ Widget buildTodoQuestions(
   BuildContext context,
   List<Map<String, dynamic>> selectedValues,
   Function(bool value) linkState,
+  WidgetRef ref,
+  User currentUser,
 ) {
   if (question.questionOptionType == 'chip') {
     return Column(
@@ -163,6 +168,7 @@ Widget buildTodoQuestions(
       assignedUserIds: const [],
     );
   } else if (question.questionOptionType == 'dropdown') {
+    List<User> userList = [];
     // String? defaultValue;
     // if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
     //   defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
@@ -170,19 +176,14 @@ Widget buildTodoQuestions(
     return FutureBuilder(
         future: CardDetails.getCardDetails(),
         builder: (context, snapshot) {
-          // String defaultDropdownValue = defaultValue ?? "";
           final List options = [];
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: DropDownField(
-                title: "",
-                optionsList: const [],
-                onchanged: (e) {},
-                defaultValues: "",
-              ),
+            return const Center(
+              child: CircularProgressIndicator.adaptive(),
             );
           } else if (snapshot.hasData) {
-            List<CardDetails> listofCards = snapshot.data!.where((user) => user.workitemId!.contains("IN") || user.workitemId!.contains("LD")).toList();
+            final filterItem = filterCardsAccordingToRoleInFutureBuilder(snapshot: snapshot, ref: ref, userList: userList, currentUser: currentUser);
+            List<CardDetails> listofCards = filterItem!.where((user) => user.workitemId!.contains("IN") || user.workitemId!.contains("LD")).toList();
             for (var data in listofCards) {
               final newData = "${data.cardTitle} (${data.workitemId})";
               options.add(newData);
@@ -194,6 +195,7 @@ Widget buildTodoQuestions(
             optionsList: options,
             isMultiValueOnDropdownlist: true,
             onchanged: (Object e) {
+              // CardDetails selectedUser = snapshot.data!.firstWhere((user) => user.workitemId == e);
               CardDetails selectedUser = snapshot.data!.firstWhere((user) => "${user.cardTitle} (${user.workitemId})" == e);
               notify.add({"id": question.questionId, "item": selectedUser});
             },

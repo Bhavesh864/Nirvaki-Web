@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:lottie/lottie.dart';
 import 'package:yes_broker/customs/responsive.dart';
 

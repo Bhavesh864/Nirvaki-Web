@@ -21,7 +21,6 @@ class LargeScreen extends ConsumerStatefulWidget {
 }
 
 class LargeScreenState extends ConsumerState<LargeScreen> {
-  int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     int currentIndex = 0;
@@ -66,7 +65,6 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                   onDestinationSelected: (index) {
                     setstate(
                       () {
-                        selectedIndex = index;
                         beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[index].nav);
                       },
                     );

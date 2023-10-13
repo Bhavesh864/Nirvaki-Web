@@ -82,7 +82,12 @@ Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
             whatsapp: cardDetail.customerinfo?.whatsapp)
         : Customerinfo(),
     assignedto: assignedListTodo,
-    createdBy: AppConst.getAccessToken(),
+    createdby: Createdby(
+      userfirstname: currentUserdata?.userfirstname,
+      userid: currentUserdata?.userId,
+      userlastname: currentUserdata?.userlastname,
+      userimage: currentUserdata?.image,
+    ),
     attachments: [],
     createdate: Timestamp.now(),
     linkedWorkItem: [
