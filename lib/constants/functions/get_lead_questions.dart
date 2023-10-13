@@ -90,14 +90,25 @@ Widget buildLeadQuestions(
     );
   } else if (question.questionOptionType == 'smallchip') {
     String selectedchipOption = '';
+
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       selectedchipOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
-
     if (isEdit && question.questionId == 23) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.read(selectedOptionNotifier.notifier).setRange(selectedchipOption);
       });
+    }
+    if (!isEdit && question.questionId == 23) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // ref.read(selectedOptionNotifier.notifier).setRange(selectedchipOption);
+        notify.add({"id": question.questionId, "item": "Sq ft"});
+      });
+    }
+
+    if (!isEdit && question.questionId == 47) {
+      selectedchipOption = 'Ft';
+      Future.delayed(const Duration(seconds: 1)).then((value) => notify.add({"id": 47, "item": "Ft"}));
     }
 
     return StatefulBuilder(builder: (context, setState) {
@@ -759,7 +770,7 @@ Widget buildLeadQuestions(
     }
     if (selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 24) && !isEdit) {
       if (question.questionId == 24) {
-        stateValue = const RangeValues(500, 10000);
+        stateValue = const RangeValues(100, 10000);
         WidgetsBinding.instance.addPostFrameCallback((_) {
           notify.add({"id": 24, "item": stateValue});
         });
