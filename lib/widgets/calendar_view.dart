@@ -50,8 +50,6 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
         if (snapshot.hasData) {
           final dataList = snapshot.data!.docs;
           List<CalendarModel> calenderList = dataList.map((doc) => CalendarModel.fromSnapshot(doc)).toList();
-
-          // Function to convert your string date and time into DateTime
           DateTime parseDateTime(String date, String time) {
             final DateTime parsedDate = DateFormat('E, MMM d, y').parse(date);
             final DateTime parsedTime = DateFormat('hh:mm aa').parse(time);

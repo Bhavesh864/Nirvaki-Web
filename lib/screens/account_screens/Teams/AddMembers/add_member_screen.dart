@@ -244,7 +244,7 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                               CustomButton(
                                 textStyle: const TextStyle(fontWeight: FontWeight.bold, letterSpacing: 0.5),
                                 height: 39,
-                                text: "cancel",
+                                text: "Cancel",
                                 borderColor: AppColor.primary,
                                 onPressed: backToTeamScreen,
                                 buttonColor: Colors.white,

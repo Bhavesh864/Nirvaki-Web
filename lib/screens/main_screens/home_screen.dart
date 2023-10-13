@@ -1,23 +1,19 @@
 import 'dart:async';
 import 'dart:ui';
-
 import 'package:beamer/beamer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/customs/loader.dart';
-
 import 'package:yes_broker/widgets/calendar_view.dart';
 import 'package:yes_broker/widgets/timeline_view.dart';
 import 'package:yes_broker/widgets/workitems/empty_work_item_list.dart';
 import 'package:yes_broker/widgets/workitems/workitems_list.dart';
-
 import '../../chat/controller/chat_controller.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/Hive/hive_methods.dart';
@@ -56,20 +52,22 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
       AppConst.setAccessToken(token);
       getUserData(token);
     }
-    setCardDetails();
     if (kIsWeb) {
       ref.read(chatControllerProvider).setUserState(true);
     }
+    setCardDetails();
   }
 
-  void setCardDetails() {
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
+  void setCardDetails() async {
+    final brokerid = UserHiveMethods.getdata("brokerId");
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("brokerid", isEqualTo: brokerid).snapshots();
   }
 
   getUserData(token) async {
     final User? user = await User.getUser(token);
     ref.read(userDataProvider.notifier).storeUserData(user!);
     AppConst.setRole(user.role);
+    UserHiveMethods.addData(key: "brokerId", data: user.brokerId);
   }
 
   showChatDialog() {
@@ -92,8 +90,6 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  void setData() async {}
-
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userDataProvider);
@@ -114,10 +110,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             }
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
 
-            final List<CardDetails> todoItems = filterItem!
-                .map((doc) => CardDetails.fromSnapshot(doc))
-                .where((item) => item.cardType != "IN" && item.cardType != "LD" && item.status != "Closed")
-                .toList();
+            final List<CardDetails> todoItems =
+                filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD" && item.status != "Closed").toList();
 
             int compareDueDates(CardDetails a, CardDetails b) {
               DateTime aDueDate = DateFormat('dd-MM-yy').parse(a.duedate!);
@@ -126,9 +120,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             }
 
             todoItems.sort(compareDueDates);
-
-            final List<CardDetails> workItems =
-                filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
+            final List<CardDetails> workItems = filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
+            workItems.sort((a, b) => b.createdate!.compareTo(a.createdate!));
             bool isDataEmpty = workItems.isEmpty && todoItems.isEmpty;
             return Row(
               children: [

@@ -148,7 +148,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                       width: 30,
                     ),
                     Expanded(
-                      flex: 1,
+                      flex: Responsive.isTablet(context) ? 2 : 1,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
                         child: Column(

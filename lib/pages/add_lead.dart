@@ -2,6 +2,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/Customs/loader.dart';
 
 import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/customs/responsive.dart';
@@ -190,17 +191,17 @@ class _AddLeadState extends ConsumerState<AddLead> {
     final allLeadQuestions = ref.read(allLeadQuestion);
     // final isVillaSelected = ref.read(leadFilterVillaQuestion);
     // final isCommericalSelected = ref.read(leadFilterCommercialQuestion);
-    print("isBuy---> $isBuy");
+
     return GestureDetector(
       onTap: () {
-        if (!kIsWeb) FocusScope.of(context).unfocus();
+        if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
         body: FutureBuilder<List<LeadQuestions>>(
           future: getQuestions,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator.adaptive());
+              return const Center(child: Loader());
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else {
@@ -256,10 +257,10 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                       ),
-                                      child: SingleChildScrollView(
-                                        child: Container(
-                                          width: Responsive.isMobile(context) ? width! * 0.9 : 650,
-                                          padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
+                                      child: Container(
+                                        width: Responsive.isMobile(context) ? width! * 0.9 : 650,
+                                        padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
+                                        child: SingleChildScrollView(
                                           child: Column(
                                             children: [
                                               if (currentScreenList[index].title != null)
@@ -318,7 +319,6 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                               : CustomButton(
                                                                   text: currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next',
                                                                   onPressed: () {
-                                                                    if (!kIsWeb) FocusScope.of(context).unfocus();
                                                                     if (!allQuestionFinishes) {
                                                                       if (currentScreenList[index].title != "Assign to") {
                                                                         if (_formKey.currentState!.validate()) {
@@ -334,6 +334,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                                         addDataOnfirestore(notify);
                                                                       }
                                                                     }
+                                                                    if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
                                                                   },
                                                                   width: currentScreenList[index].title == "Assign to" ? 90 : 70,
                                                                   height: 39,

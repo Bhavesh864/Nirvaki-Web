@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/label_text_field.dart';
 import 'package:yes_broker/constants/firebase/calenderModel/calender_model.dart';
@@ -315,9 +316,10 @@ void showConfirmDeleteAttachment(BuildContext context, Function onPressYes) {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              // const SizedBox(
+              //   height: 20,
+              // ),
+              const Spacer(),
               ChipButton(
                 text: 'Yes',
                 onSelect: () {
@@ -347,7 +349,7 @@ void showOwnerDetailsAndAssignToBottomSheet(BuildContext context, String title, 
     ),
     builder: (BuildContext context) {
       return Container(
-        constraints: BoxConstraints(minHeight: 400),
+        constraints: const BoxConstraints(minHeight: 400),
         padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -406,8 +408,8 @@ void showAddCalendarModal({
             child: SingleChildScrollView(
               child: Container(
                 padding: const EdgeInsets.all(15),
-                height: 550,
-                width: Responsive.isMobile(context) ? width : 750,
+                // height: 550,
+                width: Responsive.isMobile(context) ? width : 650,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -490,7 +492,7 @@ void showAddCalendarModal({
                                 isDatePicker: true,
                                 labelFontWeight: FontWeight.w600,
                                 inputController: timeController,
-                                rightIcon: Icons.schedule,
+                                rightIcon: MaterialSymbols.acute,
                                 validator: (value) => validateForNormalFeild(props: "Title", value: value),
                                 hintText: 'Select Time',
                               ),

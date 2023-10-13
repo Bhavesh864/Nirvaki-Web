@@ -14,7 +14,7 @@ import '../../constants/utils/constants.dart';
 import '../../riverpodstate/user_data.dart';
 
 class AssignmentWidget extends ConsumerStatefulWidget {
-  final List<dynamic> assignto;
+  final List assignto;
   final String createdBy;
   final String imageUrlCreatedBy;
   final String id;
@@ -142,7 +142,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                 children: [
                   Icon(Icons.person_add_alt_outlined),
                   Padding(
-                    padding: EdgeInsets.only(left: 6),
+                    padding: EdgeInsets.only(left: 6, top: 4),
                     child: Text(
                       "Assigned to",
                       overflow: TextOverflow.ellipsis,
@@ -166,43 +166,45 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: widget.assignto.map((item) {
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 7),
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(color: AppColor.secondary, borderRadius: BorderRadius.circular(12)),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SmallCustomCircularImage(imageUrl: item.image!.isNotEmpty ? item.image! : noImg),
-                              Text(
-                                "${item.firstname!} ${item.lastname}",
-                                // "${item.firstname!} /${item.lastname}",
-                                overflow: TextOverflow.ellipsis,
-                                // textAlign: TextAlign.left,
-                                style: const TextStyle(
-                                  color: AppColor.primary,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
+                      children: widget.assignto.isNotEmpty
+                          ? widget.assignto.map((item) {
+                              return Container(
+                                margin: const EdgeInsets.only(bottom: 7),
+                                padding: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(color: AppColor.secondary, borderRadius: BorderRadius.circular(12)),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SmallCustomCircularImage(imageUrl: item.image!.isNotEmpty ? item.image! : noImg),
+                                    Text(
+                                      "${item.firstname!} ${item.lastname}",
+                                      // "${item.firstname!} /${item.lastname}",
+                                      overflow: TextOverflow.ellipsis,
+                                      // textAlign: TextAlign.left,
+                                      style: const TextStyle(
+                                        color: AppColor.primary,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 3),
+                                    if (widget.assignto.length > 1)
+                                      user?.role != "Employee"
+                                          ? GestureDetector(
+                                              onTap: () {
+                                                deleteassignUser(item.userid, widget.id);
+                                                if (Responsive.isMobile(context)) {
+                                                  Navigator.of(context).pop();
+                                                }
+                                              },
+                                              child: const Icon(Icons.close),
+                                            )
+                                          : const SizedBox.shrink(),
+                                  ],
                                 ),
-                              ),
-                              const SizedBox(width: 3),
-                              if (widget.assignto.length > 1)
-                                user?.role != "Employee"
-                                    ? GestureDetector(
-                                        onTap: () {
-                                          deleteassignUser(item.userid, widget.id);
-                                          if (Responsive.isMobile(context)) {
-                                            Navigator.of(context).pop();
-                                          }
-                                        },
-                                        child: const Icon(Icons.close),
-                                      )
-                                    : const SizedBox.shrink(),
-                            ],
-                          ),
-                        );
-                      }).toList(),
+                              );
+                            }).toList()
+                          : [const SizedBox()],
                     ),
                     user?.role != "Employee"
                         ? InkWell(

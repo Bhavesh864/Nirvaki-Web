@@ -2,10 +2,10 @@ import 'package:beamer/beamer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'package:hive_flutter/adapters.dart';
 import 'firebase_options.dart';
@@ -22,12 +22,17 @@ void main() async {
     persistenceEnabled: true,
     cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   );
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
 
   try {
     await firestore.enablePersistence();
   } catch (e) {
-    // Handle any errors that occur during persistence setup
-    print('Error enabling Firestore persistence: $e');
+    if (kDebugMode) {
+      print('Error enabling Firestore persistence: $e');
+    }
   }
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   getToken();
@@ -36,7 +41,7 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(TimestampAdapter());
   await Hive.openBox("users");
-  // await Hive.openBox<CardDetails>("carddetails");/
+  // await Hive.openBox<CardDetails>("carddetails");
   runApp(
     const ProviderScope(
       child: MyApp(),

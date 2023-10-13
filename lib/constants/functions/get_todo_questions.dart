@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
@@ -12,8 +13,10 @@ import '../../Customs/dropdown_field.dart';
 import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
 import '../firebase/questionModels/todo_question.dart';
+import '../firebase/userModel/user_info.dart';
 import '../utils/colors.dart';
 import 'calendar/calendar_functions.dart';
+import 'filterdataAccordingRole/data_according_role.dart';
 
 Widget buildTodoQuestions(
   Question question,
@@ -24,6 +27,8 @@ Widget buildTodoQuestions(
   BuildContext context,
   List<Map<String, dynamic>> selectedValues,
   Function(bool value) linkState,
+  WidgetRef ref,
+  User currentUser,
 ) {
   if (question.questionOptionType == 'chip') {
     return Column(
@@ -147,53 +152,23 @@ Widget buildTodoQuestions(
   } else if (question.questionOptionType == 'textarea') {
     final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
     TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 4, right: 8, left: 2),
-          child: CustomText(
-            title: question.questionTitle,
-            fontWeight: FontWeight.w500,
-            textAlign: TextAlign.left,
-          ),
-        ),
-        TextFormField(
-          keyboardType: TextInputType.multiline,
-          maxLines: 5,
-          controller: controller,
-          onChanged: (newvalue) {
-            notify.add({"id": question.questionId, "item": newvalue.trim()});
-          },
-          decoration: InputDecoration(
-            hintText: 'Type here..',
-            hintStyle: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w400),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-              borderSide: const BorderSide(
-                color: AppColor.primary,
-              ),
-            ),
-          ),
-          validator: (value) {
-            if (value!.isEmpty) {
-              return "Please enter ${question.questionTitle}";
-            }
-            return null;
-          },
-        ),
-      ],
+    return LabelTextAreaField(
+      labelText: question.questionTitle,
+      inputController: controller,
+      onChanged: (newvalue) {
+        notify.add({"id": question.questionId, "item": newvalue.trim()});
+      },
+      validator: (value) => validateForNormalFeild(value: value, props: "Description"),
     );
   } else if (question.questionOptionType == "Assign") {
     return AssignUser(
       addUser: (user) {
         notify.add({"id": question.questionId, "item": user});
       },
+      assignedUserIds: const [],
     );
   } else if (question.questionOptionType == 'dropdown') {
+    List<User> userList = [];
     // String? defaultValue;
     // if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
     //   defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
@@ -207,7 +182,8 @@ Widget buildTodoQuestions(
               child: CircularProgressIndicator.adaptive(),
             );
           } else if (snapshot.hasData) {
-            List<CardDetails> listofCards = snapshot.data!.where((user) => user.workitemId!.contains("IN") || user.workitemId!.contains("LD")).toList();
+            final filterItem = filterCardsAccordingToRoleInFutureBuilder(snapshot: snapshot, ref: ref, userList: userList, currentUser: currentUser);
+            List<CardDetails> listofCards = filterItem!.where((user) => user.workitemId!.contains("IN") || user.workitemId!.contains("LD")).toList();
             for (var data in listofCards) {
               final newData = "${data.cardTitle} (${data.workitemId})";
               options.add(newData);

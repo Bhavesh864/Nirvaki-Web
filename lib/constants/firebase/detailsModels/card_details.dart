@@ -255,10 +255,10 @@ class CardDetails {
         final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         return CardDetails.fromJson(data);
       }).toList();
-      final item = inventoryItems.where((item) {
-        return item.assignedto!.any((user) => user.userid == AppConst.getAccessToken());
-      }).toList();
-      return item;
+      // final item = inventoryItems.where((item) {
+      //   return item.assignedto!.any((user) => user.userid == AppConst.getAccessToken());
+      // }).toList();
+      return inventoryItems;
     } catch (error) {
       if (kDebugMode) {
         print('Failed to get Inventory items: $error');

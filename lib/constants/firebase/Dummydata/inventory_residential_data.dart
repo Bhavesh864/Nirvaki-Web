@@ -250,7 +250,7 @@
 //               Question(
 //                 questionId: 22,
 //                 questionOptionType: "textfield",
-//                 questionTitle: "No of Reserved Parkings?",
+//                 questionTitle: "",
 //                 questionOption: "",
 //               ),
 //             ],
@@ -271,7 +271,7 @@
 //               Question(
 //                 questionId: 24,
 //                 questionOptionType: "textfield",
-//                 questionTitle: "Property Area",
+//                 questionTitle: "",
 //                 questionOption: "",
 //               ),
 //             ],

@@ -6,7 +6,9 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
@@ -169,9 +171,9 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
             if (snapshot.hasData) {
               final dataList = snapshot.data!.docs;
               List<TodoDetails> todoList = dataList.map((doc) => TodoDetails.fromSnapshot(doc)).toList();
-
               for (var data in todoList) {
                 final attachments = data.attachments;
+                print(data.assignedto);
                 return GestureDetector(
                   onTap: () {
                     if (isEditingTodoName) {
@@ -294,62 +296,64 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                               AssignmentWidget(
                                                 assignto: data.assignedto!,
                                                 id: data.todoId!,
-                                                imageUrlCreatedBy: data.createdBy == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
-                                                createdBy: '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
+                                                imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
                                                 data: data,
                                               ),
                                             );
                                           },
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.end,
-                                            children: data.assignedto!
-                                                .sublist(
-                                                    0,
-                                                    data.assignedto!.length < 2
-                                                        ? 1
-                                                        : data.assignedto!.length < 3
-                                                            ? 2
-                                                            : 3)
-                                                .asMap()
-                                                .entries
-                                                .map((entry) {
-                                              final index = entry.key;
-                                              final user = entry.value;
-                                              return Transform.translate(
-                                                offset: Offset(index * -9.0, 0),
-                                                child: Container(
-                                                  width: 24,
-                                                  height: 24,
-                                                  decoration: index > 1
-                                                      ? BoxDecoration(
-                                                          border: Border.all(color: Colors.white),
-                                                          color: index > 1 ? Colors.grey.shade300 : null,
-                                                          borderRadius: BorderRadius.circular(40),
-                                                        )
-                                                      : BoxDecoration(
-                                                          border: Border.all(color: Colors.white),
-                                                          image: DecorationImage(
-                                                            image: NetworkImage(
-                                                              user.image!.isEmpty ? noImg : user.image!,
-                                                            ),
-                                                            fit: BoxFit.fill,
-                                                          ),
-                                                          borderRadius: BorderRadius.circular(40),
-                                                        ),
-                                                  child: index > 1
-                                                      ? Center(
-                                                          child: CustomText(
-                                                            title: '+${data.assignedto!.length - 2}',
-                                                            color: Colors.black,
-                                                            size: 9,
-                                                            fontWeight: FontWeight.w600,
-                                                          ),
-                                                        )
-                                                      : null,
-                                                ),
-                                              );
-                                            }).toList(),
-                                          ),
+                                          child: checkNotNUllItem(data.assignedto) && data.assignedto!.isNotEmpty
+                                              ? Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: data.assignedto!
+                                                      .sublist(
+                                                          0,
+                                                          data.assignedto!.length < 2
+                                                              ? 1
+                                                              : data.assignedto!.length < 3
+                                                                  ? 2
+                                                                  : 3)
+                                                      .asMap()
+                                                      .entries
+                                                      .map((entry) {
+                                                    final index = entry.key;
+                                                    final user = entry.value;
+                                                    return Transform.translate(
+                                                      offset: Offset(index * -9.0, 0),
+                                                      child: Container(
+                                                        width: 24,
+                                                        height: 24,
+                                                        decoration: index > 1
+                                                            ? BoxDecoration(
+                                                                border: Border.all(color: Colors.white),
+                                                                color: index > 1 ? Colors.grey.shade300 : null,
+                                                                borderRadius: BorderRadius.circular(40),
+                                                              )
+                                                            : BoxDecoration(
+                                                                border: Border.all(color: Colors.white),
+                                                                image: DecorationImage(
+                                                                  image: NetworkImage(
+                                                                    user.image!.isEmpty ? noImg : user.image!,
+                                                                  ),
+                                                                  fit: BoxFit.fill,
+                                                                ),
+                                                                borderRadius: BorderRadius.circular(40),
+                                                              ),
+                                                        child: index > 1
+                                                            ? Center(
+                                                                child: CustomText(
+                                                                  title: '+${data.assignedto!.length - 2}',
+                                                                  color: Colors.black,
+                                                                  size: 9,
+                                                                  fontWeight: FontWeight.w600,
+                                                                ),
+                                                              )
+                                                            : null,
+                                                      ),
+                                                    );
+                                                  }).toList(),
+                                                )
+                                              : const SizedBox(),
                                         ),
                                       ],
                                     ),
@@ -670,13 +674,14 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                         height: 40,
                                       )
                                     : const SizedBox.shrink(),
-                                AssignmentWidget(
-                                  assignto: data.assignedto!,
-                                  id: data.todoId!,
-                                  imageUrlCreatedBy: data.createdBy == null || data.assignedto![0].image!.isEmpty ? noImg : data.assignedto![0].image!,
-                                  createdBy: '${data.assignedto![0].firstname!} ${data.assignedto![0].lastname!}',
-                                  data: data,
-                                ),
+                                if (Responsive.isDesktop(context))
+                                  AssignmentWidget(
+                                    assignto: data.assignedto!,
+                                    id: data.todoId!,
+                                    imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                    createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
+                                    data: data,
+                                  ),
                               ],
                             ),
                           ),

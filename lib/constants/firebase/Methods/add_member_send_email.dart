@@ -22,7 +22,7 @@ Future<String> sendInvitationEmail({
     await FirebaseAuth.instance.sendPasswordResetEmail(
       email: email,
       actionCodeSettings: ActionCodeSettings(
-        url: 'https://brokr-in.web.app/#/login_screen', // Replace with your dynamic link URL
+        url: 'https://brokr-in.web.app/#/login_screen',
         handleCodeInApp: true,
         iOSBundleId: 'com.example.yesBroker',
         androidPackageName: 'com.example.yes_broker',

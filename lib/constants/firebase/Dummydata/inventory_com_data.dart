@@ -320,13 +320,13 @@
 //               Question(
 //                 questionId: 23,
 //                 questionOptionType: "smallchip",
-//                 questionTitle: "Property Area",
+//                 questionTitle: "",
 //                 questionOption: ["Sq ft", "Sq yard", "Acre"],
 //               ),
 //               Question(
 //                 questionId: 24,
 //                 questionOptionType: "textfield",
-//                 questionTitle: "Property Area",
+//                 questionTitle: "",
 //                 questionOption: "",
 //               ),
 //             ],
@@ -334,6 +334,7 @@
 //             previousScreenId: "S17",
 //             screenId: "S18",
 //             nextScreenId: "S19",
+//              title:"Property Area",
 //           ),
 //           Screen(
 //             questions: [

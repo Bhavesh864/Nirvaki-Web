@@ -252,6 +252,11 @@ List<Map<String, dynamic>> dropDownDetailsList = [
   {'title': 'Preview Public View', 'icon': Icons.remove_red_eye_rounded}
 ];
 
+List<Map<String, dynamic>> dropDownDetailsList2 = [
+  {'title': 'Edit', 'icon': Icons.edit},
+  {'title': 'Disable Public View', 'icon': Icons.visibility_off}
+];
+
 String defaultValue = "New";
 String selectedOption = "New";
 
