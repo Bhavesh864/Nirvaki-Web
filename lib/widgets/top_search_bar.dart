@@ -33,7 +33,7 @@ class TopSerachBar extends StatefulWidget {
 class _TopSerachBarState extends State<TopSerachBar> {
   @override
   Widget build(BuildContext context) {
-    return !Responsive.isMobile(context)
+    return Responsive.isDesktop(context)
         ? Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -92,6 +92,7 @@ class _TopSerachBarState extends State<TopSerachBar> {
                       title: widget.title,
                       fontWeight: FontWeight.w600,
                       size: 18,
+                      letterSpacing: 0.3,
                     ),
                     Row(
                       children: [

@@ -80,19 +80,22 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                             NavigationRailDestination(
                                 label: const AppText(text: '', fontsize: 0),
                                 icon: Container(
-                                    width: 45,
+                                    width: 40,
                                     padding: const EdgeInsets.symmetric(vertical: 2),
                                     // padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(6),
-                                      color: currentIndex == sideBarItems.indexOf(e) ? Color.fromRGBO(68, 96, 239, 0.1) : Colors.transparent,
+                                      color: currentIndex == sideBarItems.indexOf(e) ? const Color.fromRGBO(68, 96, 239, 0.1) : Colors.transparent,
                                     ),
                                     child: Column(
                                       children: [
-                                        Icon(e.iconData),
+                                        Icon(
+                                          e.iconData,
+                                        ),
                                         AppText(
                                           text: e.label,
                                           fontsize: 9,
+                                          textColor: currentIndex == sideBarItems.indexOf(e) ? AppColor.primary : Colors.black,
                                         )
                                       ],
                                     ))

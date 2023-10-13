@@ -142,7 +142,11 @@ class _ChatInputState extends ConsumerState<ChatInput> {
                       border: InputBorder.none,
                       focusedBorder: InputBorder.none,
                       hintText: 'Start typing...',
-                      hintStyle: TextStyle(fontSize: 12),
+                      hintStyle: TextStyle(
+                        fontSize: 12,
+                        letterSpacing: 0.3,
+                        color: Color(0xFF666668),
+                      ),
                     ),
                     onSubmitted: (_) {
                       sendTextMessage();
@@ -182,7 +186,7 @@ class _ChatInputState extends ConsumerState<ChatInput> {
                 child: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 12),
                   child: Icon(
-                    Icons.send,
+                    Icons.send_outlined,
                     size: 16,
                   ),
                 ),

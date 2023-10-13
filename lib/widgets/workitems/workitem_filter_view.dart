@@ -52,7 +52,7 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
               title: const CustomText(
                 title: 'Filter your search',
                 fontWeight: FontWeight.w700,
-                size: 18,
+                size: 16,
               ),
               iconTheme: const IconThemeData(color: Colors.black, size: 24),
             )

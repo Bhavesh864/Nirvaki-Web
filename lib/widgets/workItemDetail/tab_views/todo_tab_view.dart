@@ -140,10 +140,10 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
                             return Table(
                               columnWidths: {
                                 0: FixedColumnWidth(availableWidth * 0.25),
-                                1: FixedColumnWidth(availableWidth * 0.18),
+                                1: FixedColumnWidth(availableWidth * 0.15),
                                 2: FixedColumnWidth(availableWidth * 0.15),
-                                3: FixedColumnWidth(availableWidth * 0.20),
-                                4: FixedColumnWidth(availableWidth * 0.1),
+                                3: FixedColumnWidth(availableWidth * 0.15),
+                                4: FixedColumnWidth(availableWidth * 0.20),
                                 5: FixedColumnWidth(availableWidth * 0.1),
                               },
                               border: TableBorder(
@@ -151,7 +151,7 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
                                 horizontalInside: BorderSide(color: Colors.grey.withOpacity(.5), width: 1.5),
                               ),
                               children: [
-                                buildTableHeader(),
+                                buildTableHeader(isTodo: true),
                                 ...tableRowList,
                               ],
                             );

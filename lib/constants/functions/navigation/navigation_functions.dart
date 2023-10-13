@@ -1,4 +1,5 @@
 import 'package:beamer/beamer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -24,22 +25,42 @@ void navigateBasedOnId(BuildContext context, String id, WidgetRef ref) {
   }
 
   if (Responsive.isMobile(context)) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          if (routePrefix == 'IN') {
-            return InventoryDetailsScreen(inventoryId: id);
-          } else if (routePrefix == 'LD') {
-            return LeadDetailsScreen(leadId: id);
-          } else if (routePrefix == 'TD') {
-            return TodoDetailsScreen(todoId: id);
-          } else {
-            return const HomeScreen();
-          }
-        },
-      ),
-    );
+    if (kIsWeb) {
+      context.beamToNamed(route);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            if (routePrefix == 'IN') {
+              return InventoryDetailsScreen(inventoryId: id);
+            } else if (routePrefix == 'LD') {
+              return LeadDetailsScreen(leadId: id);
+            } else if (routePrefix == 'TD') {
+              return TodoDetailsScreen(todoId: id);
+            } else {
+              return const HomeScreen();
+            }
+          },
+        ),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            if (routePrefix == 'IN') {
+              return InventoryDetailsScreen(inventoryId: id);
+            } else if (routePrefix == 'LD') {
+              return LeadDetailsScreen(leadId: id);
+            } else if (routePrefix == 'TD') {
+              return TodoDetailsScreen(todoId: id);
+            } else {
+              return const HomeScreen();
+            }
+          },
+        ),
+      );
+    }
   } else {
     context.beamToNamed(route);
   }
