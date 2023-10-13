@@ -58,9 +58,15 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
           ? AppBar(
               iconTheme: const IconThemeData(
                 color: Colors.black,
+                size: 24,
               ),
+              centerTitle: false,
+              titleSpacing: 0,
               title: const CustomText(
                 title: 'Calendar',
+                fontWeight: FontWeight.w600,
+                size: 18,
+                letterSpacing: 0.5,
               ),
             )
           : null,
@@ -88,13 +94,16 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                         showDatePickerButton: true,
                         timeSlotViewSettings: const TimeSlotViewSettings(startHour: 8, endHour: 24),
                         initialDisplayDate: selectedDate,
-                        showTodayButton: true,
-                        showNavigationArrow: true,
+                        viewHeaderHeight: 0,
+                        showTodayButton: Responsive.isMobile(context) ? false : true,
+                        showNavigationArrow: Responsive.isMobile(context) ? false : true,
                         backgroundColor: Colors.white,
-                        allowedViews: const [
-                          CalendarView.day,
-                          CalendarView.week,
-                        ],
+                        allowedViews: Responsive.isMobile(context)
+                            ? null
+                            : [
+                                CalendarView.day,
+                                CalendarView.week,
+                              ],
                         onTap: (details) {
                           if (details.appointments == null) return;
                           final CalendarModel event = details.appointments!.first;

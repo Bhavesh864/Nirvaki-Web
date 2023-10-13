@@ -175,10 +175,9 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                                               columnWidths: {
                                                 0: FixedColumnWidth(availableWidth * 0.25),
                                                 1: FixedColumnWidth(availableWidth * 0.18),
-                                                2: FixedColumnWidth(availableWidth * 0.15),
-                                                3: FixedColumnWidth(availableWidth * 0.15),
-                                                4: FixedColumnWidth(availableWidth * 0.1),
-                                                5: FixedColumnWidth(availableWidth * 0.1),
+                                                2: FixedColumnWidth(availableWidth * 0.10),
+                                                3: FixedColumnWidth(availableWidth * 0.20),
+                                                4: FixedColumnWidth(availableWidth * 0.15),
                                               },
                                               border: TableBorder(
                                                 bottom: BorderSide(color: Colors.grey.withOpacity(.5), width: 1.5),

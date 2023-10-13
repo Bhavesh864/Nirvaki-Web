@@ -33,7 +33,7 @@ class TopSerachBar extends StatefulWidget {
 class _TopSerachBarState extends State<TopSerachBar> {
   @override
   Widget build(BuildContext context) {
-    return Responsive.isDesktop(context)
+    return !Responsive.isMobile(context)
         ? Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

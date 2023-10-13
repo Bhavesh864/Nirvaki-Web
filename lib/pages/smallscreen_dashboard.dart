@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
@@ -16,7 +17,7 @@ import '../screens/account_screens/Teams/team_screen.dart';
 import '../screens/account_screens/common_screen.dart';
 import '../widgets/app/speed_dial_button.dart';
 
-final currentIndexProvider = StateProvider<int>((ref) {
+final mobileBottomIndexProvider = StateProvider<int>((ref) {
   return 0;
 });
 
@@ -30,7 +31,7 @@ class SmallScreen extends ConsumerStatefulWidget {
 class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
-    final currentIndex = ref.watch(currentIndexProvider);
+    final currentIndex = ref.watch(mobileBottomIndexProvider);
     final selectedItem = ref.watch(selectedProfileItemProvider);
     final User? user = ref.watch(userDataProvider);
     AppConst.setOuterContext(context);
@@ -65,7 +66,7 @@ class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingOb
         unselectedItemColor: Colors.grey,
         showUnselectedLabels: true,
         onTap: (value) => {
-          ref.read(currentIndexProvider.notifier).update((state) => value),
+          ref.read(mobileBottomIndexProvider.notifier).update((state) => value),
           ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null),
         },
         currentIndex: currentIndex,

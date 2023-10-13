@@ -132,8 +132,13 @@ TableRow buildWorkItemRowTile(
     // key: ValueKey(cardItem.workitemId),
     children: [
       buildWorkItemTableItem(
-        Text(
-          cardItem.cardTitle!,
+        Padding(
+          padding: const EdgeInsets.only(right: 5.0),
+          child: Text(
+            cardItem.cardTitle!,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
         id: id,
         context: context,
@@ -239,40 +244,43 @@ TableRow buildWorkItemRowTile(
         ),
 
       buildWorkItemTableItem(
-        Row(
-          // scrollDirection: Axis.horizontal,
-          children: [
-            Center(
-              child: Container(
-                margin: const EdgeInsets.only(right: 3),
-                child: Text(
-                  "${cardItem.customerinfo?.firstname} ${cardItem.customerinfo?.lastname ?? ""}",
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
+        ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context!).copyWith(scrollbars: false),
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: [
+              Center(
+                child: Container(
+                  margin: const EdgeInsets.only(right: 3),
+                  child: Text(
+                    "${cardItem.customerinfo?.firstname} ${cardItem.customerinfo?.lastname ?? ""}",
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),
-            ),
-            CustomChip2(
-              onPressed: () => makePhoneCall(cardItem.customerinfo!.mobile!),
-              label: const Icon(
-                Icons.call_outlined,
-              ),
-              paddingHorizontal: 3,
-            ),
-            InkWell(
-              onTap: () {},
-              child: CustomChip2(
-                onPressed: () => launchWhatsapp(cardItem.customerinfo?.whatsapp, context),
-                label: const FaIcon(
-                  FontAwesomeIcons.whatsapp,
+              CustomChip2(
+                onPressed: () => makePhoneCall(cardItem.customerinfo!.mobile!),
+                label: const Icon(
+                  Icons.call_outlined,
                 ),
                 paddingHorizontal: 3,
               ),
-            ),
-          ],
+              InkWell(
+                onTap: () {},
+                child: CustomChip2(
+                  onPressed: () => launchWhatsapp(cardItem.customerinfo?.whatsapp, context),
+                  label: const FaIcon(
+                    FontAwesomeIcons.whatsapp,
+                  ),
+                  paddingHorizontal: 3,
+                ),
+              ),
+            ],
+          ),
         ),
         id: id,
         context: context,

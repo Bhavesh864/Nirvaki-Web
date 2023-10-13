@@ -229,10 +229,10 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                                                     return Table(
                                                       columnWidths: {
                                                         0: FixedColumnWidth(availableWidth * 0.25),
-                                                        1: FixedColumnWidth(availableWidth * 0.18),
+                                                        1: FixedColumnWidth(availableWidth * 0.10),
                                                         2: FixedColumnWidth(availableWidth * 0.15),
                                                         3: FixedColumnWidth(availableWidth * 0.15),
-                                                        4: FixedColumnWidth(availableWidth * 0.15),
+                                                        4: FixedColumnWidth(availableWidth * 0.20),
                                                         5: FixedColumnWidth(availableWidth * 0.1),
                                                       },
                                                       border: const TableBorder(
