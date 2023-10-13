@@ -61,6 +61,7 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
     final userinfo.User? user = await userinfo.User.getUser(token);
     ref.read(userDataProvider.notifier).storeUserData(user!);
     AppConst.setRole(user.role);
+    UserHiveMethods.addData(key: "brokerId", data: user.brokerId);
   }
 
   @override
@@ -71,6 +72,8 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
+    final token = UserHiveMethods.getdata("brokerId");
+    print("========tokenbroker=====$token");
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
 

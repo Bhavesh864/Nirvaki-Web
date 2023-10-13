@@ -123,17 +123,21 @@ class CustomTextInputState extends State<CustomTextInput> {
           labelText: widget.labelText,
           hintText: widget.hintText,
           hintStyle: widget.hintstyle,
-
           prefixIcon: widget.leftIcon != null ? Icon(widget.leftIcon, color: Colors.black) : null,
           suffixIcon: widget.rightIcon != null
               ? IconButton(
-                  icon: Icon(widget.rightIcon),
+                  icon: Icon(
+                    widget.rightIcon,
+                    color: Colors.black,
+                  ),
                   iconSize: 18,
-                  onPressed: () {
-                    setState(() {
-                      _obscureText = !_obscureText!;
-                    });
-                  },
+                  onPressed: widget.obscureText == true
+                      ? () {
+                          setState(() {
+                            _obscureText = !_obscureText!;
+                          });
+                        }
+                      : null,
                 )
               : null,
           border: OutlineInputBorder(
@@ -205,7 +209,7 @@ class CustomButton extends StatefulWidget {
       this.isBorder = true,
       this.borderColor = Colors.grey,
       this.titleLeft = false,
-      this.fontWeight = FontWeight.w500,
+      this.fontWeight = FontWeight.w600,
       this.letterSpacing = 0,
       this.padding = const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8)})
       : super(key: key);
@@ -246,7 +250,7 @@ class _CustomButtonState extends State<CustomButton> {
             border: widget.isBorder! ? Border.all(color: widget.borderColor!) : null,
             color: widget.buttonColor,
             // color: widget.buttonColor.withOpacity(isPressed ? 0.8 : 1.0),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(8),
           ),
           child: Row(
             mainAxisAlignment: widget.titleLeft ? MainAxisAlignment.start : MainAxisAlignment.center,

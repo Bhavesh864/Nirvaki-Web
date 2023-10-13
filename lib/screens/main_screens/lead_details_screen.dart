@@ -54,6 +54,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
     tabviewController = TabController(length: 3, vsync: this, initialIndex: currentIndex);
     final workItemId = ref.read(selectedWorkItemId);
     leadDetails = FirebaseFirestore.instance.collection('leadDetails').where('leadId', isEqualTo: workItemId == '' ? widget.leadId : workItemId).snapshots();
+    AppConst.setPublicView(false);
   }
 
   @override
@@ -202,7 +203,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                                     assignto: data.assignedto!,
                                                     imageUrlCreatedBy:
                                                         data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                                    createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
+                                                    createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
                                                   ),
                                                 );
                                               },

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/Customs/loader.dart';
 
 import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/customs/responsive.dart';
@@ -9,6 +10,7 @@ import 'package:yes_broker/constants/firebase/questionModels/todo_question.dart'
 
 import 'package:yes_broker/constants/functions/get_todo_questions.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/widgets/questionaries/workitem_success.dart';
 import '../customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
@@ -93,7 +95,7 @@ class _AddTodoState extends ConsumerState<AddTodo> {
   Widget build(BuildContext context) {
     final notify = ref.read(myArrayProvider.notifier);
     final List<Map<String, dynamic>> selectedValues = ref.read(myArrayProvider);
-
+    final user = ref.watch(userDataProvider);
     return Scaffold(
       body: FutureBuilder<List<TodoQuestion>>(
         future: getQuestions,
@@ -110,7 +112,7 @@ class _AddTodoState extends ConsumerState<AddTodo> {
             }
             return GestureDetector(
               onTap: () {
-                if (!kIsWeb) FocusScope.of(context).unfocus();
+                if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
               },
               child: Stack(
                 children: [
@@ -169,10 +171,19 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                                                           size: Responsive.isDesktop(context) ? 26 : 20,
                                                           title: screensDataList[index].questions[i].questionTitle,
                                                           fontWeight: FontWeight.bold),
-                                                    buildTodoQuestions(screensDataList[index].questions[i], screensDataList, currentScreenIndex, notify, nextQuestion,
-                                                        context, selectedValues, linkState),
-                                                    if (i == screensDataList[index].questions.length - 1 &&
-                                                        screensDataList[index].questions[i].questionOptionType != 'chip')
+                                                    buildTodoQuestions(
+                                                      screensDataList[index].questions[i],
+                                                      screensDataList,
+                                                      currentScreenIndex,
+                                                      notify,
+                                                      nextQuestion,
+                                                      context,
+                                                      selectedValues,
+                                                      linkState,
+                                                      ref,
+                                                      user!,
+                                                    ),
+                                                    if (i == screensDataList[index].questions.length - 1 && screensDataList[index].questions[i].questionOptionType != 'chip')
                                                       Container(
                                                         margin: const EdgeInsets.only(top: 10),
                                                         alignment: Alignment.centerRight,
@@ -183,7 +194,7 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                                                             : CustomButton(
                                                                 text: screensDataList[index].title == "Assign to" ? 'Submit' : 'Next',
                                                                 onPressed: () {
-                                                                  if (!kIsWeb) FocusScope.of(context).unfocus();
+                                                                  if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
                                                                   if (!allQuestionFinishes) {
                                                                     if (screensDataList[index].title != "Assign to") {
                                                                       if (_formKey.currentState!.validate()) {

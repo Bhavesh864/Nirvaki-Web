@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:random_string/random_string.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
-
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' as cards;
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
@@ -85,7 +82,12 @@ Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
             whatsapp: cardDetail.customerinfo?.whatsapp)
         : Customerinfo(),
     assignedto: assignedListTodo,
-    createdBy: AppConst.getAccessToken(),
+    createdby: Createdby(
+      userfirstname: currentUserdata?.userfirstname,
+      userid: currentUserdata?.userId,
+      userlastname: currentUserdata?.userlastname,
+      userimage: currentUserdata?.image,
+    ),
     attachments: [],
     createdate: Timestamp.now(),
     linkedWorkItem: [

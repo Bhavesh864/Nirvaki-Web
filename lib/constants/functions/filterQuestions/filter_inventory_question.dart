@@ -40,7 +40,9 @@ void updateListInventory(WidgetRef ref, String option) {
   }
 
   // Commercial flow--------->
+  print(isCommercial);
   if (option.contains("Rent") && isCommercial) {
+    print("rent selected");
     questionNotifier.updateScreenIsActive(setTrueInScreens: ["S20"], setFalseInScreens: ["S19", "S15"]);
     isRentNotifier.toggleRentQuestionary(true);
   } else if (option.contains("Sell") && isCommercial) {

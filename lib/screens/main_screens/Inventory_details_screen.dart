@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 
@@ -55,6 +56,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
     final workItemId = ref.read(selectedWorkItemId);
     inventoryDetails =
         FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId == '' ? widget.inventoryId : workItemId).snapshots();
+    AppConst.setPublicView(false);
   }
 
   @override
@@ -204,7 +206,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                                 assignto: data.assignedto!,
                                                 imageUrlCreatedBy:
                                                     data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                                createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
+                                                createdBy: '${data.createdby!.userfirstname!}  ${data.createdby!.userlastname!}',
                                               ),
                                             );
                                           },

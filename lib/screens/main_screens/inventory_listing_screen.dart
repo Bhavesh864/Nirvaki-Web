@@ -11,6 +11,7 @@ import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/widgets/top_search_bar.dart';
 import 'package:yes_broker/widgets/workitems/workitem_filter_view.dart';
 import '../../Customs/loader.dart';
+import '../../constants/firebase/Hive/hive_methods.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/utils/constants.dart';
@@ -45,7 +46,8 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
   }
 
   void setCardDetails() {
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
+    final brokerid = UserHiveMethods.getdata("brokerId");
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("brokerid", isEqualTo: brokerid).snapshots();
   }
 
   getDetails(User currentuser) async {
@@ -87,6 +89,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
             }
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
             final List<CardDetails> inventoryList = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN").toList();
+            inventoryList.sort((a, b) => b.createdate!.compareTo(a.createdate!));
             List<CardDetails> filteredInventoryList = inventoryList.where((item) {
               if (searchController.text.isEmpty) {
                 return true;
@@ -212,7 +215,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                                   ),
                                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                                   margin: Responsive.isMobile(context)
-                                      ? const EdgeInsets.symmetric(horizontal: 0, vertical: 0)
+                                      ? const EdgeInsets.symmetric(horizontal: 0, vertical: 5)
                                       : const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                                   child: filteredInventoryList.isNotEmpty
                                       ? GridView.builder(

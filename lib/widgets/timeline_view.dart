@@ -9,12 +9,10 @@ import 'package:yes_broker/Customs/custom_chip.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/loader.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/activity_details.dart';
-import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/timeline_item.dart';
-import '../riverpodstate/user_data.dart';
 
 class CustomTimeLineView extends ConsumerStatefulWidget {
   final bool fromHome;
@@ -33,11 +31,23 @@ class CustomTimeLineView extends ConsumerStatefulWidget {
 }
 
 class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
+  late Stream<QuerySnapshot<Map<String, dynamic>>> activityDetails;
+
+  @override
+  void initState() {
+    super.initState();
+    setactivity();
+  }
+
+  void setactivity() {
+    final workitemId = ref.read(selectedWorkItemId);
+    activityDetails = widget.fromHome
+        ? FirebaseFirestore.instance.collection('activityDetails').snapshots()
+        : FirebaseFirestore.instance.collection('activityDetails').where('itemid', isEqualTo: workitemId).snapshots();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final workitemId = ref.watch(selectedWorkItemId);
-    final User? user = ref.watch(userDataProvider);
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 10),
       decoration: !widget.fromHome
@@ -55,9 +65,13 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
               Padding(
                 padding: EdgeInsets.only(left: Responsive.isDesktop(context) ? 10.0 : 0),
                 child: const CustomChip(
-                  paddingVertical: 8,
+                  paddingVertical: 4,
                   paddingHorizontal: 0,
-                  avatar: Icon(Icons.calendar_view_week_outlined),
+                  avatar: Icon(
+                    Icons.calendar_view_week_outlined,
+                    weight: 1000,
+                    size: 20,
+                  ),
                   label: CustomText(
                     title: 'This Week',
                     size: 10,
@@ -67,14 +81,18 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
               Padding(
                 padding: EdgeInsets.only(right: Responsive.isDesktop(context) ? 5.0 : 0),
                 child: const CustomChip(
-                  paddingVertical: 8,
+                  paddingVertical: 4,
                   label: Row(
                     children: [
                       CustomText(
                         title: 'Filter By',
                         size: 10,
                       ),
-                      Icon(Icons.arrow_downward_outlined),
+                      Icon(
+                        Icons.arrow_downward_outlined,
+                        weight: 1000,
+                        size: 20,
+                      ),
                     ],
                   ),
                 ),
@@ -85,9 +103,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
             height: 10,
           ),
           StreamBuilder(
-            stream: widget.fromHome
-                ? FirebaseFirestore.instance.collection('activityDetails').where("brokerid", isEqualTo: user?.brokerId ?? "").snapshots()
-                : FirebaseFirestore.instance.collection('activityDetails').where('itemid', isEqualTo: workitemId).snapshots(),
+            stream: activityDetails,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Loader();

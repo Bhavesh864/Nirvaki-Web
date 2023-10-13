@@ -122,9 +122,12 @@ void assginUserToTodo(BuildContext context, Function assign, List<dynamic> assig
                         child: ElevatedButton(
                           onPressed: () {
                             submitAssignUser(id, context, user!, currentuserdata);
-                            Navigator.of(context).pop();
-                            if (Responsive.isMobile(context)) {
-                              popBottomSheet();
+                            if (user!.isNotEmpty) {
+                              Navigator.of(context).pop();
+                              if (Responsive.isMobile(context)) {
+                                popBottomSheet();
+                              }
+                              user = [];
                             }
                           },
                           child: const Text("Add"),

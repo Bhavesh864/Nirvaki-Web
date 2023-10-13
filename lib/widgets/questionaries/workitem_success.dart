@@ -2,6 +2,7 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:yes_broker/customs/responsive.dart';
 
 import '../../customs/custom_fields.dart';
 import '../../customs/custom_text.dart';
@@ -31,9 +32,10 @@ class WorkItemSuccessWidget extends StatelessWidget {
         ),
         CustomText(
           title: ' ${isInventory == 'IN' ? 'Inventory' : isInventory == 'Todo' ? 'Todo' : 'Lead'} has been \n  ${isEdit ? 'Edited' : 'Created'} Successfully',
-          size: 48,
+          size: Responsive.isMobile(context) ? 30 : 48,
           fontWeight: FontWeight.w700,
           color: Colors.white,
+          textAlign: TextAlign.center,
         ),
         Padding(
           padding: const EdgeInsets.all(15.0),
