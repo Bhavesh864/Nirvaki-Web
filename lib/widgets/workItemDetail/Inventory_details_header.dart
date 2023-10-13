@@ -117,20 +117,35 @@ class InventoryDetailsHeader extends ConsumerWidget {
                 padding: EdgeInsets.zero,
                 color: Colors.white.withOpacity(1),
                 offset: const Offset(10, 40),
-                itemBuilder: (context) => dropDownDetailsList
-                    .map(
-                      (e) => appBarPopupMenuItem(e['title'].toString(), (e) {
-                        if (e.contains('Public')) {
-                          AppConst.setPublicView(!AppConst.getPublicView());
-                          setState();
-                        } else if (e.contains("Edit")) {
-                          Future.delayed(const Duration(milliseconds: 400)).then(
-                            (value) => AppConst.getOuterContext()!.beamToNamed(id.contains("IN") ? AppRoutes.addInventory : AppRoutes.addLead, data: true),
-                          );
-                        }
-                      }, showicon: true, icon: e['icon']),
-                    )
-                    .toList(),
+                itemBuilder: (context) => AppConst.getPublicView()
+                    ? dropDownDetailsList2
+                        .map(
+                          (e) => appBarPopupMenuItem(e['title'].toString(), (e) {
+                            if (e.contains('Public')) {
+                              AppConst.setPublicView(!AppConst.getPublicView());
+                              setState();
+                            } else if (e.contains("Edit")) {
+                              Future.delayed(const Duration(milliseconds: 400)).then(
+                                (value) => AppConst.getOuterContext()!.beamToNamed(id.contains("IN") ? AppRoutes.addInventory : AppRoutes.addLead, data: true),
+                              );
+                            }
+                          }, showicon: true, icon: e['icon']),
+                        )
+                        .toList()
+                    : dropDownDetailsList
+                        .map(
+                          (e) => appBarPopupMenuItem(e['title'].toString(), (e) {
+                            if (e.contains('Public')) {
+                              AppConst.setPublicView(!AppConst.getPublicView());
+                              setState();
+                            } else if (e.contains("Edit")) {
+                              Future.delayed(const Duration(milliseconds: 400)).then(
+                                (value) => AppConst.getOuterContext()!.beamToNamed(id.contains("IN") ? AppRoutes.addInventory : AppRoutes.addLead, data: true),
+                              );
+                            }
+                          }, showicon: true, icon: e['icon']),
+                        )
+                        .toList(),
                 child: const Chip(
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   padding: EdgeInsets.zero,
