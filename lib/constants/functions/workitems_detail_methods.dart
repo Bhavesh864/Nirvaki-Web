@@ -226,6 +226,8 @@ void showUploadDocumentModal(
                       ),
                     ],
                     CustomButton(
+                      textAlign: TextAlign.left,
+                      isAttachments: true,
                       text: selectedFile == null ? 'Upload Document' : selectedFile!.name.toString(),
                       rightIcon: Icons.publish_outlined,
                       buttonColor: AppColor.secondary,

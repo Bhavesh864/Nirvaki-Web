@@ -5,6 +5,7 @@ import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/customs/responsive.dart';
 
+import '../constants/utils/constants.dart';
 import '../customs/text_utility.dart';
 
 //-------------------------------------------TextformField-------------------------------------->
@@ -186,29 +187,33 @@ class CustomButton extends StatefulWidget {
   final EdgeInsets? padding;
   final FontWeight fontWeight;
   final double letterSpacing;
+  final TextAlign textAlign;
+  final bool? isAttachments;
 
-  const CustomButton(
-      {Key? key,
-      required this.text,
-      required this.onPressed,
-      this.fontsize = 16,
-      this.buttonColor = AppColor.primary,
-      this.textColor = Colors.white,
-      this.rightIcon,
-      this.leftIcon,
-      this.opacity = 1,
-      this.righticonColor = Colors.white,
-      this.lefticonColor = Colors.white,
-      this.height = 50.0,
-      this.textStyle,
-      this.width,
-      this.isBorder = true,
-      this.borderColor = Colors.grey,
-      this.titleLeft = false,
-      this.fontWeight = FontWeight.w600,
-      this.letterSpacing = 0,
-      this.padding = const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8)})
-      : super(key: key);
+  const CustomButton({
+    Key? key,
+    required this.text,
+    required this.onPressed,
+    this.fontsize = 16,
+    this.buttonColor = AppColor.primary,
+    this.textColor = Colors.white,
+    this.rightIcon,
+    this.leftIcon,
+    this.opacity = 1,
+    this.righticonColor = Colors.white,
+    this.lefticonColor = Colors.white,
+    this.height = 50.0,
+    this.textStyle,
+    this.width,
+    this.isBorder = true,
+    this.borderColor = Colors.grey,
+    this.titleLeft = false,
+    this.fontWeight = FontWeight.w600,
+    this.letterSpacing = 0,
+    this.padding = const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
+    this.textAlign = TextAlign.center,
+    this.isAttachments = false,
+  }) : super(key: key);
 
   @override
   State<CustomButton> createState() => _CustomButtonState();
@@ -260,14 +265,32 @@ class _CustomButtonState extends State<CustomButton> {
                     size: 24,
                   ),
                 ),
-              CustomText(
-                textAlign: TextAlign.center,
-                title: widget.text,
-                color: widget.textColor,
-                size: widget.fontsize!,
-                letterSpacing: widget.letterSpacing,
-                fontWeight: widget.fontWeight,
-              ),
+              if (widget.isAttachments == false) ...[
+                CustomText(
+                  textAlign: TextAlign.center,
+                  title: widget.text,
+                  color: widget.textColor,
+                  size: widget.fontsize!,
+                  letterSpacing: widget.letterSpacing,
+                  fontWeight: widget.fontWeight,
+                ),
+              ] else ...[
+                SizedBox(
+                  width: Responsive.isMobile(context) ? width! - 120 : 412,
+                  child: Text(
+                    widget.text,
+                    textAlign: widget.textAlign,
+                    style: TextStyle(
+                      color: widget.textColor,
+                      fontSize: widget.fontsize,
+                      letterSpacing: widget.letterSpacing,
+                      fontWeight: widget.fontWeight,
+                    ),
+                    softWrap: true,
+                    maxLines: 1,
+                  ),
+                ),
+              ],
               if (widget.titleLeft)
                 const SizedBox(
                   width: 10,
