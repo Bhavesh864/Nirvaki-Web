@@ -29,13 +29,13 @@ class CustomText extends StatelessWidget {
       textAlign: textAlign ?? TextAlign.start,
       softWrap: softWrap,
       style: TextStyle(
-        color: color ?? Colors.black,
-        fontSize: size ?? 16,
-        height: 0,
-        letterSpacing: letterSpacing,
-        fontWeight: fontWeight ?? FontWeight.normal,
-        fontFamily: GoogleFonts.dmSans().fontFamily,
-      ),
+          color: color ?? Colors.black,
+          fontSize: size ?? 16,
+          height: 0,
+          letterSpacing: letterSpacing,
+          fontWeight: fontWeight ?? FontWeight.normal,
+          // fontFamily: GoogleFonts.dmSans().fontFamily,
+          fontFamily: GoogleFonts.dmSans().fontFamily),
     );
   }
 }

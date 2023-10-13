@@ -33,7 +33,7 @@ class CustomStatusDropDown extends StatelessWidget {
       },
       child: IntrinsicWidth(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: kIsWeb ? 5.5 : 7),
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: kIsWeb ? 4.5 : 7),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),
             color: taskStatusColor(status).withOpacity(0.1),

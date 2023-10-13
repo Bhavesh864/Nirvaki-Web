@@ -15,6 +15,7 @@ import 'package:yes_broker/chat/models/chat_group.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/screens/main_screens/chat_screen.dart';
 import 'package:yes_broker/screens/main_screens/create_group_screen.dart';
@@ -242,11 +243,9 @@ class TestList extends ConsumerWidget {
                           child: ListTile(
                             title: Row(
                               children: [
-                                Text(
-                                  capitalizeFirstLetter(chatItem.name),
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                  ),
+                                CustomText(
+                                  title: capitalizeFirstLetter(chatItem.name),
+                                  size: 15,
                                 ),
                                 SizedBox(
                                   width: 10,

@@ -39,6 +39,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   void initState() {
+    print("home");
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (Beamer.of(context).currentBeamLocation.state.routeInformation.location != '/profile') {

@@ -164,7 +164,6 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
 
   Widget _buildDesktopLayout(bool isAuthenticated) {
     if (isAuthenticated) {
-      print(' ------==>>>Largescreen');
       return const LargeScreen();
     } else {
       final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;

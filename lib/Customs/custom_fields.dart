@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
@@ -100,9 +101,10 @@ class CustomTextInputState extends State<CustomTextInput> {
         enabled: widget.enabled,
         onTap: widget.ontap,
         onFieldSubmitted: widget.onFieldSubmitted,
-        style: const TextStyle(
+        style: TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.w400,
+          fontFamily: GoogleFonts.dmSans().fontFamily,
         ),
         controller: widget.controller,
         decoration: InputDecoration(
