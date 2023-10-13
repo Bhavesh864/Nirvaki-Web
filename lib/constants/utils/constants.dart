@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
@@ -39,11 +40,13 @@ class ProfileMenuItems {
 
 class BottomBarItem {
   final String label;
+  final String nav;
   final IconData? iconData;
   final Widget screen;
 
   BottomBarItem({
     required this.label,
+    required this.nav,
     this.iconData,
     required this.screen,
   });

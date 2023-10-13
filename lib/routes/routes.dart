@@ -112,20 +112,24 @@ List<MenuItem> sideBarItems = [
 List<BottomBarItem> bottomBarItems = [
   BottomBarItem(
     label: homeScreenPageLabel,
+    nav: '/',
     iconData: homeIcon,
     screen: const TodoListingScreen(),
   ),
   BottomBarItem(
+    nav: '/inventory',
     label: inventoryPageLabel,
     iconData: inventoryIcon,
     screen: const InventoryListingScreen(),
   ),
   BottomBarItem(
+    nav: '/lead',
     label: leadPageLabel,
     iconData: leadIcon,
     screen: const LeadListingScreen(),
   ),
   BottomBarItem(
+    nav: '/chat',
     label: chatPageLabel,
     iconData: chatIcon,
     screen: const ChatListScreen(),

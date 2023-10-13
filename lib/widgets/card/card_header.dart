@@ -69,16 +69,28 @@ class CardHeaderState extends ConsumerState<CardHeader> {
               //     // weight: 10.12,
               //   ),
               // ),
-              CustomChip(
-                paddingHorizontal: 0,
-                label: Icon(
-                  checkIconByCategory(cardData),
-                  color: checkIconColorByCategory(cardData),
-                  size: 14,
-                  // weight: 10.12,
+              if (cardData.workitemId!.contains('TD') && cardData.linkedItemId!.isNotEmpty)
+                CustomChip(
+                  paddingHorizontal: 0,
+                  label: Icon(
+                    checkIconByCategory(cardData),
+                    color: checkIconColorByCategory(cardData),
+                    size: 14,
+                    // weight: 10.12,
+                  ),
+                  color: checkChipColorByCategory(cardData),
                 ),
-                color: checkChipColorByCategory(cardData),
-              ),
+              if (!cardData.workitemId!.contains('TD'))
+                CustomChip(
+                  paddingHorizontal: 0,
+                  label: Icon(
+                    checkIconByCategory(cardData),
+                    color: checkIconColorByCategory(cardData),
+                    size: 14,
+                    // weight: 10.12,
+                  ),
+                  color: checkChipColorByCategory(cardData),
+                ),
               Container(
                 margin: const EdgeInsets.only(right: 5),
                 child: CustomStatusDropDown(
@@ -175,7 +187,7 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                       ? const Color.fromARGB(255, 249, 145, 137).withOpacity(0.2)
                       : AppColor.chipGreyColor,
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                 child: Row(
                   children: [
                     Icon(

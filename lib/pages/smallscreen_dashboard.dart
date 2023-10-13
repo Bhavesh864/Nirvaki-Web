@@ -59,47 +59,6 @@ class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingOb
           ],
         ],
       ),
-      // body: OfflineBuilder(
-      //   connectivityBuilder: (
-      //     BuildContext context,
-      //     ConnectivityResult connectivity,
-      //     Widget child,
-      //   ) {
-      //     final bool connected = connectivity != ConnectivityResult.none;
-      //     return Stack(
-      //       fit: StackFit.expand,
-      //       children: [
-      //         Positioned(
-      //           height: 24.0,
-      //           left: 0.0,
-      //           right: 0.0,
-      //           child: Container(
-      //             color: connected ? const Color(0xFF00EE44) : const Color(0xFFEE4400),
-      //             child: Center(
-      //               child: Text("${connected ? 'ONLINE' : 'OFFLINE'}"),
-      //             ),
-      //           ),
-      //         ),
-      //         Stack(
-      //           children: [
-      //             if (selectedItem == null) ...[
-      //               bottomBarItems[currentIndex].screen,
-      //             ],
-      //             if (selectedItem != null) ...[
-      //               selectedItem.screen,
-      //             ],
-      //           ],
-      //         ),
-      //       ],
-      //     );
-      //   },
-      //   child: const Center(
-      //     child: Text(
-      //       'laksdjflajksdf;ladjsk;flgjasdf',
-      //       style: TextStyle(color: Colors.black),
-      //     ),
-      //   ),
-      // ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedItemColor: AppColor.primary,
@@ -143,7 +102,6 @@ class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingOb
           ),
         ),
       ),
-
       floatingActionButton: const CustomSpeedDialButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );

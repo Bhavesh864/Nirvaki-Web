@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 
 import '../../Customs/custom_text.dart';
+import '../../Customs/text_utility.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
@@ -17,26 +19,37 @@ import '../../riverpodstate/common_index_state.dart';
 import '../app/dropdown_menu.dart';
 import '../app/nav_bar.dart';
 
-TableRow buildTableHeader() {
+TableRow buildTableHeader({bool isTodo = false}) {
   return TableRow(
     children: [
       buildWorkItemTableItem(
-        const Text(
-          'DESCRIPTION',
-          style: TextStyle(
-            color: AppColor.cardtitleColor,
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-          ),
+        const Row(
+          children: [
+            Text(
+              'DESCRIPTION',
+              style: TextStyle(
+                color: AppColor.cardtitleColor,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.5,
+              ),
+            ),
+            Icon(
+              Icons.swap_vert,
+              color: Color(0xFF6A7587),
+              size: 16,
+            )
+          ],
         ),
       ),
       buildWorkItemTableItem(
-        const Text(
-          'DETAILS',
-          style: TextStyle(
+        Text(
+          isTodo ? 'TASK TYPE' : 'DETAILS',
+          style: const TextStyle(
             color: AppColor.cardtitleColor,
             fontSize: 14,
             fontWeight: FontWeight.w600,
+            letterSpacing: 0.5,
           ),
         ),
       ),
@@ -47,9 +60,32 @@ TableRow buildTableHeader() {
             color: AppColor.cardtitleColor,
             fontSize: 14,
             fontWeight: FontWeight.w600,
+            letterSpacing: 0.5,
           ),
         ),
       ),
+      if (isTodo)
+        buildWorkItemTableItem(
+          const Row(
+            children: [
+              Text(
+                'DUE DATE',
+                style: TextStyle(
+                  color: AppColor.cardtitleColor,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.5,
+                ),
+              ),
+              Icon(
+                Icons.swap_vert,
+                color: Color(0xFF6A7587),
+                size: 16,
+              )
+            ],
+          ),
+          align: Alignment.center,
+        ),
       buildWorkItemTableItem(
         const Text(
           'OWNER',
@@ -57,6 +93,7 @@ TableRow buildTableHeader() {
             color: AppColor.cardtitleColor,
             fontSize: 14,
             fontWeight: FontWeight.w600,
+            letterSpacing: 0.5,
           ),
         ),
       ),
@@ -67,10 +104,18 @@ TableRow buildTableHeader() {
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: AppColor.cardtitleColor,
+            letterSpacing: 0.5,
           ),
         ),
         align: Alignment.center,
       ),
+      // if (!isTodo)
+      //   buildWorkItemTableItem(
+      //     const Text(
+      //       '',
+      //     ),
+      //     align: Alignment.center,
+      //   ),
     ],
   );
 }
@@ -183,9 +228,19 @@ TableRow buildWorkItemRowTile(
         ref: ref,
       ),
 
+      if (id!.contains('TD'))
+        buildWorkItemTableItem(
+          AppText(
+            text: DateFormat('dd MMM yyyy').format(DateFormat('dd-MM-yy').parse(cardItem.duedate!)),
+            fontsize: 12,
+            textColor: Colors.black,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+
       buildWorkItemTableItem(
-        ListView(
-          scrollDirection: Axis.horizontal,
+        Row(
+          // scrollDirection: Axis.horizontal,
           children: [
             Center(
               child: Container(
@@ -286,18 +341,19 @@ TableRow buildWorkItemRowTile(
         ref: ref,
       ),
 
-      // buildWorkItemTableItem(
-      //   Container(),
-      //   align: Alignment.center,
-      // ),
-      // buildWorkItemTableItem(
-      //   Container(),
-      //   align: Alignment.center,
-      // ),
-      // buildWorkItemTableItem(
-      //   Container(),
-      //   align: Alignment.center,
-      // ),
+      // if (!id!.contains('TD'))
+      //   buildWorkItemTableItem(
+      //     InkWell(
+      //       onTap: () {
+      //         AppConst.getOuterContext()!.beamToNamed(id.contains("IN") ? AppRoutes.addInventory : AppRoutes.addLead, data: true);
+      //       },
+      //       child: const CustomChip(
+      //         label: Icon(Icons.edit_outlined),
+      //         paddingVertical: 6,
+      //       ),
+      //     ),
+      //     align: Alignment.centerRight,
+      //   ),
     ],
   );
 }
