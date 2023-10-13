@@ -16,6 +16,7 @@ import '../../../constants/firebase/userModel/user_info.dart';
 import '../../../constants/functions/filterdataAccordingRole/data_according_role.dart';
 import '../../../constants/utils/colors.dart';
 import '../../../constants/utils/constants.dart';
+import '../../../pages/add_inventory.dart';
 import '../../table_view/table_view_widgets.dart';
 
 class TodoTabView extends ConsumerStatefulWidget {
@@ -90,6 +91,7 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
                     height: Responsive.isMobile(context) ? 45 : 40,
                     onPressed: () {
                       AppConst.getOuterContext()?.beamToNamed(AppRoutes.addTodo);
+                      ref.read(myArrayProvider.notifier).resetState();
                     },
                     leftIcon: Icons.add,
                     text: 'Add',
