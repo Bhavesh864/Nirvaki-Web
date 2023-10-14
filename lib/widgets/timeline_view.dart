@@ -65,9 +65,13 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
               Padding(
                 padding: EdgeInsets.only(left: Responsive.isDesktop(context) ? 10.0 : 0),
                 child: const CustomChip(
-                  paddingVertical: 8,
+                  paddingVertical: 4,
                   paddingHorizontal: 0,
-                  avatar: Icon(Icons.calendar_view_week_outlined),
+                  avatar: Icon(
+                    Icons.calendar_view_week_outlined,
+                    weight: 1000,
+                    size: 20,
+                  ),
                   label: CustomText(
                     title: 'This Week',
                     size: 10,
@@ -77,14 +81,18 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
               Padding(
                 padding: EdgeInsets.only(right: Responsive.isDesktop(context) ? 5.0 : 0),
                 child: const CustomChip(
-                  paddingVertical: 8,
+                  paddingVertical: 4,
                   label: Row(
                     children: [
                       CustomText(
                         title: 'Filter By',
                         size: 10,
                       ),
-                      Icon(Icons.arrow_downward_outlined),
+                      Icon(
+                        Icons.arrow_downward_outlined,
+                        weight: 1000,
+                        size: 20,
+                      ),
                     ],
                   ),
                 ),

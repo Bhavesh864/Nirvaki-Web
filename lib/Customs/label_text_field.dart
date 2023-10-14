@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/phone_number.dart';
 
@@ -34,7 +35,7 @@ class LabelTextInputField extends StatelessWidget {
     this.labelFontWeight = FontWeight.w500,
     this.hintText = 'Type here..',
     this.isDropDown = false,
-    this.rightIcon = Icons.calendar_month,
+    this.rightIcon = Icons.calendar_month_outlined,
     this.isDatePicker = false,
     this.isMandatory = false,
     this.maxLines,
@@ -62,6 +63,7 @@ class LabelTextInputField extends StatelessWidget {
                 TextSpan(
                   text: labelText,
                   style: TextStyle(
+                    fontFamily: GoogleFonts.dmSans().fontFamily,
                     color: Colors.black,
                     fontSize: 16,
                     fontWeight: labelFontWeight,
@@ -168,6 +170,7 @@ class LabelTextAreaField extends StatelessWidget {
   final Function(String)? onChanged;
   final FormFieldValidator<String>? validator;
   final String? initialvalue;
+  final FontWeight fontWeight;
 
   const LabelTextAreaField({
     Key? key,
@@ -181,6 +184,7 @@ class LabelTextAreaField extends StatelessWidget {
     this.onChanged,
     this.validator,
     this.initialvalue,
+    this.fontWeight = FontWeight.w600,
   }) : super(key: key);
 
   @override
@@ -195,10 +199,10 @@ class LabelTextAreaField extends StatelessWidget {
               children: [
                 TextSpan(
                   text: labelText,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.black,
                     fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: fontWeight,
                   ),
                 ),
                 if (isMandatory)

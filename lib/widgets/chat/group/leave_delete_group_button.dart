@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:yes_broker/Customs/text_utility.dart';
+import 'package:yes_broker/customs/custom_text.dart';
 
 import '../../../constants/app_constant.dart';
 import '../../../constants/functions/chat_group/group.dart';
@@ -37,7 +39,7 @@ class LeaveDeleteGroupPopupButton extends StatelessWidget {
             value: 'leave_group',
             child: Row(
               children: [
-                Text('Leave Group'),
+                CustomText(title: 'Leave Group'),
                 SizedBox(
                   width: 5,
                 ),
@@ -53,7 +55,7 @@ class LeaveDeleteGroupPopupButton extends StatelessWidget {
               value: 'delete_group',
               child: Row(
                 children: [
-                  Text('Delete Group'),
+                  CustomText(title: 'Delete Group'),
                   SizedBox(
                     width: 5,
                   ),

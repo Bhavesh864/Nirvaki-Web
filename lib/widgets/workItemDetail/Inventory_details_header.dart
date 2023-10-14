@@ -1,5 +1,6 @@
 // import 'dart:html';
 import 'package:beamer/beamer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -13,13 +14,13 @@ import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 
-import '../../Customs/snackbar.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
+import '../../riverpodstate/common_index_state.dart';
 import '../../routes/routes.dart';
 import '../app/app_bar.dart';
 import '../app/nav_bar.dart';
@@ -71,6 +72,15 @@ class InventoryDetailsHeader extends ConsumerWidget {
     }
   }
 
+  void navigateToEditPage(BuildContext context) {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      AppConst.getOuterContext()?.beamToNamed(
+        id.contains("IN") ? AppRoutes.addInventory : AppRoutes.addLead,
+        data: true,
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
@@ -104,7 +114,7 @@ class InventoryDetailsHeader extends ConsumerWidget {
                 id: id,
               ),
             CustomChip(
-              paddingVertical: 8,
+              paddingVertical: 5,
               onPressed: () {
                 shareUrl(context);
               },
@@ -124,12 +134,13 @@ class InventoryDetailsHeader extends ConsumerWidget {
                         .map(
                           (e) => appBarPopupMenuItem(e['title'].toString(), (e) {
                             if (e.contains('Public')) {
+                              // ref.read(detailsPageIndexTabProvider.notifier).update(
+                              //       (state) => 0,
+                              //     );
                               AppConst.setPublicView(!AppConst.getPublicView());
                               setState();
                             } else if (e.contains("Edit")) {
-                              Future.delayed(const Duration(milliseconds: 400)).then(
-                                (value) => AppConst.getOuterContext()!.beamToNamed(id.contains("IN") ? AppRoutes.addInventory : AppRoutes.addLead, data: true),
-                              );
+                              navigateToEditPage(context);
                             }
                           }, showicon: true, icon: e['icon']),
                         )
@@ -138,21 +149,27 @@ class InventoryDetailsHeader extends ConsumerWidget {
                         .map(
                           (e) => appBarPopupMenuItem(e['title'].toString(), (e) {
                             if (e.contains('Public')) {
+                              // ref.read(detailsPageIndexTabProvider.notifier).update(
+                              //       (state) => 0,
+                              //     );
                               AppConst.setPublicView(!AppConst.getPublicView());
                               setState();
                             } else if (e.contains("Edit")) {
-                              Future.delayed(const Duration(milliseconds: 400)).then(
-                                (value) => AppConst.getOuterContext()!.beamToNamed(id.contains("IN") ? AppRoutes.addInventory : AppRoutes.addLead, data: true),
-                              );
+                              navigateToEditPage(context);
                             }
                           }, showicon: true, icon: e['icon']),
                         )
                         .toList(),
-                child: const Chip(
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  padding: EdgeInsets.zero,
-                  label: Icon(
-                    Icons.more_vert,
+                child: IntrinsicWidth(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: kIsWeb ? 4.5 : 7),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      color: AppColor.chipGreyColor,
+                    ),
+                    child: const Icon(
+                      Icons.more_vert,
+                    ),
                   ),
                 ),
               ),
@@ -200,7 +217,7 @@ class _HeaderChipsState extends ConsumerState<HeaderChips> {
     return Wrap(
       children: [
         CustomChip(
-          paddingVertical: 8,
+          paddingVertical: 6,
           color: AppColor.primary.withOpacity(0.1),
           label: CustomText(
             title: widget.category,
@@ -210,7 +227,7 @@ class _HeaderChipsState extends ConsumerState<HeaderChips> {
         ),
         if (!AppConst.getPublicView())
           CustomChip(
-            paddingVertical: 8,
+            paddingVertical: 6,
             color: AppColor.primary.withOpacity(0.1),
             label: CustomText(
               title: widget.type,
@@ -219,7 +236,7 @@ class _HeaderChipsState extends ConsumerState<HeaderChips> {
             ),
           ),
         CustomChip(
-          paddingVertical: 8,
+          paddingVertical: 6,
           color: AppColor.primary.withOpacity(0.1),
           label: CustomText(
             title: widget.propertyCategory,

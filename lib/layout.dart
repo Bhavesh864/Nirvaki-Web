@@ -72,8 +72,6 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
-    final token = UserHiveMethods.getdata("brokerId");
-    print("========tokenbroker=====$token");
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
 
@@ -164,7 +162,6 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
 
   Widget _buildDesktopLayout(bool isAuthenticated) {
     if (isAuthenticated) {
-      print(' ------==>>>Largescreen');
       return const LargeScreen();
     } else {
       final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;

@@ -29,7 +29,7 @@ class CustomCard extends StatelessWidget {
               cardDetails[index].cardTitle!,
               style: const TextStyle(
                 fontSize: 14,
-                letterSpacing: 0.5,
+                letterSpacing: 0.3,
                 color: Colors.black,
                 fontWeight: FontWeight.w600,
               ),

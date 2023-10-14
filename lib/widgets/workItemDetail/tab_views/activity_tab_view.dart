@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/custom_text.dart';
@@ -25,11 +26,21 @@ class ActivityTabView extends ConsumerStatefulWidget {
 }
 
 class ActivityTabViewState extends ConsumerState<ActivityTabView> {
+  void submitTodo() {
+    final workItemId = ref.read(selectedWorkItemId);
+    final User? user = ref.read(userDataProvider);
+    if (controller.text.trim().isNotEmpty) {
+      submitActivity(itemid: workItemId, activitytitle: controller.text.trim(), user: user!);
+      notifyToUser(currentuserdata: user, assignedto: widget.details.assignedto, content: "$workItemId added new Activity", title: controller.text, itemid: workItemId);
+      controller.clear();
+    } else {
+      customSnackBar(context: context, text: 'Please enter note to submit');
+    }
+  }
+
   final TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final workItemId = ref.watch(selectedWorkItemId);
-    final User? user = ref.watch(userDataProvider);
     return Column(
       children: [
         Wrap(
@@ -47,30 +58,25 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
                 Container(
                   margin: const EdgeInsets.only(right: 10),
                   width: Responsive.isMobile(context) ? width! * 0.6 : 400,
-                  child: TextField(
+                  child: TextFormField(
                     controller: controller,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: 'Type note here...',
+                      hintStyle: TextStyle(
+                        fontFamily: GoogleFonts.dmSans().fontFamily,
+                      ),
                       isDense: true,
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.search,
                         color: Colors.black,
                       ),
                     ),
+                    onFieldSubmitted: (_) => submitTodo(),
                   ),
                 ),
                 CustomButton(
                   text: 'Add Note',
-                  onPressed: () {
-                    if (controller.text.trim().isNotEmpty) {
-                      submitActivity(itemid: workItemId, activitytitle: controller.text.trim(), user: user!);
-                      notifyToUser(
-                          currentuserdata: user, assignedto: widget.details.assignedto, content: "$workItemId added new Activity", title: controller.text, itemid: workItemId);
-                      controller.clear();
-                    } else {
-                      customSnackBar(context: context, text: 'Please enter note to submit');
-                    }
-                  },
+                  onPressed: submitTodo,
                   height: Responsive.isMobile(context) ? 45 : 40,
                 ),
               ],

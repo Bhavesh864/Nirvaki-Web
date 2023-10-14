@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:yes_broker/Customs/custom_chip.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/userModel/notification_model.dart';
@@ -205,10 +206,11 @@ PopupMenuItem popupMenuItem(
         ),
         child: Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
+            fontFamily: GoogleFonts.dmSans().fontFamily,
             letterSpacing: 0.4,
             fontSize: 13,
-            color: Color(0xFF454545),
+            color: const Color(0xFF454545),
           ),
         ),
       ),

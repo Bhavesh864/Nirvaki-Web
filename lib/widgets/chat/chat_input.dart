@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 
@@ -143,11 +144,16 @@ class _ChatInputState extends ConsumerState<ChatInput> {
                     maxLines: 7,
                     textCapitalization: TextCapitalization.sentences,
                     autocorrect: true,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       border: InputBorder.none,
                       focusedBorder: InputBorder.none,
                       hintText: 'Start typing...',
-                      hintStyle: TextStyle(fontSize: 12),
+                      hintStyle: TextStyle(
+                        fontFamily: GoogleFonts.dmSans().fontFamily,
+                        fontSize: 12,
+                        letterSpacing: 0.3,
+                        color: const Color(0xFF666668),
+                      ),
                     ),
                     onSubmitted: (_) {
                       sendTextMessage();
@@ -187,7 +193,7 @@ class _ChatInputState extends ConsumerState<ChatInput> {
                 child: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 12),
                   child: Icon(
-                    Icons.send,
+                    Icons.send_outlined,
                     size: 16,
                   ),
                 ),

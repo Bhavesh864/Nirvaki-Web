@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
@@ -122,11 +123,13 @@ class CustomTextInputState extends State<CustomTextInput> {
           labelText: widget.labelText,
           hintText: widget.hintText,
           hintStyle: widget.hintstyle,
-
           prefixIcon: widget.leftIcon != null ? Icon(widget.leftIcon, color: Colors.black) : null,
           suffixIcon: widget.rightIcon != null
               ? IconButton(
-                  icon: Icon(widget.rightIcon),
+                  icon: Icon(
+                    widget.rightIcon,
+                    color: Colors.black,
+                  ),
                   iconSize: 18,
                   onPressed: widget.obscureText == true
                       ? () {

@@ -15,6 +15,7 @@ import '../constants/functions/filterQuestions/filter_inventory_question.dart';
 import '../customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
 import '../riverpodstate/all_selected_ansers_provider.dart';
+import 'largescreen_dashboard.dart';
 
 final myArrayProvider = StateNotifierProvider<AllChipSelectedAnwers, List<Map<String, dynamic>>>(
   (ref) => AllChipSelectedAnwers(),
@@ -238,6 +239,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                   }
 
                   return Stack(
+                    fit: StackFit.expand,
                     children: [
                       Container(
                           decoration: const BoxDecoration(
@@ -266,6 +268,9 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                             borderRadius: BorderRadius.circular(10),
                                           ),
                                           child: Container(
+                                            constraints: BoxConstraints(
+                                              maxHeight: MediaQuery.of(context).size.height * 0.85,
+                                            ),
                                             width: Responsive.isMobile(context) ? width! * 0.9 : 650,
                                             padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
                                             child: SingleChildScrollView(
@@ -415,6 +420,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                 buttonColor: Colors.transparent,
                 borderColor: Colors.transparent,
                 onPressed: () {
+                  ref.watch(desktopSideBarIndexProvider.notifier).update((state) => 0);
                   Navigator.of(context).pop();
                 },
                 leftIcon: Icons.home_outlined,
