@@ -15,6 +15,7 @@ import '../../constants/firebase/Hive/hive_methods.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/utils/constants.dart';
+import '../../riverpodstate/common_index_state.dart';
 import '../../riverpodstate/user_data.dart';
 import '../../widgets/card/custom_card.dart';
 import '../../widgets/table_view/table_view_widgets.dart';
@@ -235,6 +236,9 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                                             final id = filteredInventoryList[index].workitemId!;
                                             return GestureDetector(
                                               onTap: () {
+                                                ref.read(detailsPageIndexTabProvider.notifier).update(
+                                                      (state) => 0,
+                                                    );
                                                 navigateBasedOnId(context, id, ref);
                                               },
                                               child: CustomCard(

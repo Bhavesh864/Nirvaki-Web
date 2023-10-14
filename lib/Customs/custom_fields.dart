@@ -6,6 +6,7 @@ import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/customs/responsive.dart';
 
+import '../constants/utils/constants.dart';
 import '../customs/text_utility.dart';
 
 //-------------------------------------------TextformField-------------------------------------->
@@ -23,7 +24,7 @@ class CustomTextInput extends StatefulWidget {
   final bool? readonly;
   final bool? autofocus;
   final IconData? rightIcon;
-  final bool? indense;
+  final bool isDense;
   final String? initialvalue;
   final TextInputType? keyboardType;
   final int? maxLength;
@@ -43,7 +44,7 @@ class CustomTextInput extends StatefulWidget {
       required this.controller,
       this.labelText,
       this.hintText,
-      this.indense,
+      this.isDense = true,
       this.leftIcon,
       this.focusnode,
       this.ontap,
@@ -105,9 +106,11 @@ class CustomTextInputState extends State<CustomTextInput> {
           color: Colors.black,
           fontWeight: FontWeight.w400,
           fontFamily: GoogleFonts.dmSans().fontFamily,
+          fontSize: 12,
         ),
         controller: widget.controller,
         decoration: InputDecoration(
+          isDense: widget.isDense,
           disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(
@@ -139,7 +142,10 @@ class CustomTextInputState extends State<CustomTextInput> {
                         }
                       : null,
                 )
-              : null,
+              : const Icon(
+                  Icons.account_circle_outlined,
+                  color: Colors.transparent,
+                ),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(
@@ -190,29 +196,33 @@ class CustomButton extends StatefulWidget {
   final EdgeInsets? padding;
   final FontWeight fontWeight;
   final double letterSpacing;
+  final TextAlign textAlign;
+  final bool? isAttachments;
 
-  const CustomButton(
-      {Key? key,
-      required this.text,
-      required this.onPressed,
-      this.fontsize = 16,
-      this.buttonColor = AppColor.primary,
-      this.textColor = Colors.white,
-      this.rightIcon,
-      this.leftIcon,
-      this.opacity = 1,
-      this.righticonColor = Colors.white,
-      this.lefticonColor = Colors.white,
-      this.height = 50.0,
-      this.textStyle,
-      this.width,
-      this.isBorder = true,
-      this.borderColor = Colors.grey,
-      this.titleLeft = false,
-      this.fontWeight = FontWeight.w600,
-      this.letterSpacing = 0,
-      this.padding = const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8)})
-      : super(key: key);
+  const CustomButton({
+    Key? key,
+    required this.text,
+    required this.onPressed,
+    this.fontsize = 16,
+    this.buttonColor = AppColor.primary,
+    this.textColor = Colors.white,
+    this.rightIcon,
+    this.leftIcon,
+    this.opacity = 1,
+    this.righticonColor = Colors.white,
+    this.lefticonColor = Colors.white,
+    this.height = 50.0,
+    this.textStyle,
+    this.width,
+    this.isBorder = true,
+    this.borderColor = Colors.grey,
+    this.titleLeft = false,
+    this.fontWeight = FontWeight.w600,
+    this.letterSpacing = 0,
+    this.padding = const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
+    this.textAlign = TextAlign.center,
+    this.isAttachments = false,
+  }) : super(key: key);
 
   @override
   State<CustomButton> createState() => _CustomButtonState();
@@ -264,14 +274,32 @@ class _CustomButtonState extends State<CustomButton> {
                     size: 24,
                   ),
                 ),
-              CustomText(
-                textAlign: TextAlign.center,
-                title: widget.text,
-                color: widget.textColor,
-                size: widget.fontsize!,
-                letterSpacing: widget.letterSpacing,
-                fontWeight: widget.fontWeight,
-              ),
+              if (widget.isAttachments == false) ...[
+                CustomText(
+                  textAlign: TextAlign.center,
+                  title: widget.text,
+                  color: widget.textColor,
+                  size: widget.fontsize!,
+                  letterSpacing: widget.letterSpacing,
+                  fontWeight: widget.fontWeight,
+                ),
+              ] else ...[
+                SizedBox(
+                  width: Responsive.isMobile(context) ? width! - 120 : 412,
+                  child: Text(
+                    widget.text,
+                    textAlign: widget.textAlign,
+                    style: TextStyle(
+                      color: widget.textColor,
+                      fontSize: widget.fontsize,
+                      letterSpacing: widget.letterSpacing,
+                      fontWeight: widget.fontWeight,
+                    ),
+                    softWrap: true,
+                    maxLines: 1,
+                  ),
+                ),
+              ],
               if (widget.titleLeft)
                 const SizedBox(
                   width: 10,
@@ -473,10 +501,10 @@ class MobileNumberInputField extends StatefulWidget {
     required this.controller,
     required this.hintText,
     this.validator,
-    this.fontsize = 16.0,
+    this.fontsize = 14.0,
     this.isMandatory = true,
     this.showLabel = true,
-    this.isdense = false,
+    this.isdense = true,
     this.contentpadding = EdgeInsets.zero,
     this.bottomMargin = const EdgeInsets.only(bottom: 0),
     this.fromProfile = false,
@@ -518,7 +546,7 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
                       text: widget.hintText,
                       style: const TextStyle(
                         color: Colors.black,
-                        fontSize: 16,
+                        fontSize: 15,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -547,8 +575,8 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
           ),
           padding: EdgeInsets.symmetric(horizontal: Responsive.isMobile(context) ? 4 : 10.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               InkWell(
                 onTap: widget.openModal,
@@ -556,10 +584,16 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
                   // padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
                   padding: widget.fromProfile == true
                       ? const EdgeInsets.symmetric(horizontal: 5, vertical: 0)
-                      : EdgeInsets.symmetric(horizontal: 5, vertical: Responsive.isMobile(context) ? 8 : 14),
+                      : EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: Responsive.isMobile(context) ? 8 : 0,
+                        ),
                   child: Row(
                     children: [
-                      AppText(text: widget.countryCode, fontsize: widget.fontsize!),
+                      AppText(
+                        text: widget.countryCode,
+                        fontsize: widget.fontsize!,
+                      ),
                       const Icon(
                         Icons.arrow_drop_down_outlined,
                       )
@@ -570,30 +604,38 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
               if (widget.fromProfile == true) const SizedBox(width: 5),
               Expanded(
                 child: Container(
+                  height: 38,
                   padding: widget.fromProfile == true ? null : const EdgeInsets.symmetric(vertical: 5),
                   margin: widget.bottomMargin,
-                  child: TextFormField(
-                    maxLength: 10,
-                    onChanged: (value) {
-                      widget.onChange(value);
-                    },
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    controller: widget.controller,
-                    keyboardType: TextInputType.phone,
-                    validator: widget.validator,
-                    decoration: InputDecoration(
-                        isDense: widget.isdense,
-                        hintText: "Type here...",
-                        counterText: "",
-                        hintStyle: const TextStyle(color: Colors.grey),
-                        contentPadding: widget.contentpadding,
-                        border: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        errorBorder: InputBorder.none),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      TextFormField(
+                        maxLength: 10,
+                        onChanged: (value) {
+                          widget.onChange(value);
+                        },
+                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 12),
+                        controller: widget.controller,
+                        keyboardType: TextInputType.phone,
+                        validator: widget.validator,
+                        decoration: InputDecoration(
+                            // suffixIcon: const Icon(
+                            //   Icons.abc,
+                            //   color: Colors.transparent,
+                            // ),
+                            isDense: widget.isdense,
+                            hintText: "Type here...",
+                            counterText: "",
+                            hintStyle: const TextStyle(color: Colors.grey, fontSize: 12),
+                            contentPadding: widget.contentpadding,
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            errorBorder: InputBorder.none),
+                      ),
+                    ],
                   ),
                 ),
               ),

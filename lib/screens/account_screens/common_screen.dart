@@ -74,25 +74,35 @@ class _CommonScreenState extends ConsumerState<CommonScreen> {
             if (MediaQuery.of(context).size.width >= 900)
               Expanded(
                 flex: 1,
-                child: ListView(
-                  children: [
-                    for (var item in profileMenuItems)
-                      ListTile(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        hoverColor: AppColor.selectedItemColor,
-                        selectedTileColor: selectedItem?.id == item.id ? AppColor.selectedItemColor : Colors.white,
-                        title: Text(item.title),
-                        onTap: () {
-                          item.id == 6
-                              ? customConfirmationAlertDialog(context, () {
-                                  userLogout(ref, context);
-                                  Navigator.of(AppConst.getOuterContext()!).pop();
-                                }, 'Logout', 'Are you sure you want to logout?')
-                              : onItemSelected(item);
-                        },
-                        selected: selectedItem?.id == item.id,
-                      ),
-                  ],
+                child: Container(
+                  margin: const EdgeInsets.only(top: 10, left: 10),
+                  child: ListView(
+                    children: [
+                      for (var item in profileMenuItems)
+                        Container(
+                          height: 45,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: selectedItem?.id == item.id ? AppColor.selectedItemColor : Colors.white,
+                          ),
+                          child: ListTile(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            hoverColor: AppColor.selectedItemColor,
+                            selectedTileColor: selectedItem?.id == item.id ? AppColor.selectedItemColor : Colors.white,
+                            title: Text(item.title),
+                            onTap: () {
+                              item.id == 6
+                                  ? customConfirmationAlertDialog(context, () {
+                                      userLogout(ref, context);
+                                      Navigator.of(AppConst.getOuterContext()!).pop();
+                                    }, 'Logout', 'Are you sure you want to logout?')
+                                  : onItemSelected(item);
+                            },
+                            selected: selectedItem?.id == item.id,
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
             const VerticalDivider(

@@ -27,12 +27,14 @@ class LabelTextInputField extends StatelessWidget {
   final bool onlyDigits;
   final bool readyOnly;
   final bool isPhoneNumberField;
+  final EdgeInsetsGeometry margin;
   final FutureOr<String?> Function(PhoneNumber?)? phonenumberValidator;
 
   const LabelTextInputField({
     Key? key,
     required this.labelText,
     this.labelFontWeight = FontWeight.w500,
+    this.margin = const EdgeInsets.symmetric(horizontal: 7, vertical: 0),
     this.hintText = 'Type here..',
     this.isDropDown = false,
     this.rightIcon = Icons.calendar_month_outlined,
@@ -52,109 +54,115 @@ class LabelTextInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 7),
-          child: RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: labelText,
-                  style: TextStyle(
-                    fontFamily: GoogleFonts.dmSans().fontFamily,
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: labelFontWeight,
-                  ),
-                ),
-                if (isMandatory)
-                  const TextSpan(
-                    text: ' ',
-                  ),
-                if (isMandatory)
-                  const TextSpan(
-                    text: '*',
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: margin,
+            padding: const EdgeInsets.only(bottom: 2),
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: labelText,
                     style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.red,
+                      fontFamily: GoogleFonts.dmSans().fontFamily,
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: labelFontWeight,
                     ),
                   ),
-              ],
+                  if (isMandatory)
+                    const TextSpan(
+                      text: ' ',
+                    ),
+                  if (isMandatory)
+                    const TextSpan(
+                      text: '*',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.red,
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
-        ),
-        isPhoneNumberField
-            ? Container(
-                margin: const EdgeInsets.only(
-                  right: 7,
-                  left: 7,
-                  top: 4,
-                ),
-                child: IntlPhoneField(
-                  inputFormatters: <TextInputFormatter>[
-                    // FilteringTextInputFormatter.digitsOnly,
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
-                    LengthLimitingTextInputFormatter(10),
-                  ],
-                  decoration: InputDecoration(
-                      disabledBorder: OutlineInputBorder(
+          isPhoneNumberField
+              ? Container(
+                  margin: const EdgeInsets.only(
+                    right: 7,
+                    left: 7,
+                    top: 20,
+                  ),
+                  child: IntlPhoneField(
+                    inputFormatters: <TextInputFormatter>[
+                      // FilteringTextInputFormatter.digitsOnly,
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                      LengthLimitingTextInputFormatter(10),
+                    ],
+                    decoration: InputDecoration(
+                        isDense: true,
+                        disabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                              color: AppColor.inputFieldBorderColor,
+                            )),
+                        errorStyle: const TextStyle(height: 0),
+                        errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                            color: AppColor.inputFieldBorderColor,
-                          )),
-                      errorStyle: const TextStyle(height: 0),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: Colors.red, width: 1),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                      hintText: hintText,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                            color: AppColor.inputFieldBorderColor,
-                          )),
-                      // isDense: true,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(
-                          color: AppColor.primary,
+                          borderSide: const BorderSide(color: Colors.red, width: 1),
                         ),
-                      ),
-                      errorMaxLines: 1,
-                      enabled: false),
-                  initialCountryCode: 'IN',
-                  validator: phonenumberValidator,
-                  onChanged: (phone) => onChanged!(phone.completeNumber),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                        hintText: hintText,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                              color: AppColor.inputFieldBorderColor,
+                            )),
+                        // isDense: true,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                            color: AppColor.primary,
+                          ),
+                        ),
+                        errorMaxLines: 1,
+                        enabled: false),
+                    initialCountryCode: 'IN',
+                    validator: phonenumberValidator,
+                    onChanged: (phone) => onChanged!(phone.completeNumber),
+                  ),
+                )
+              : CustomTextInput(
+                  onlyDigits: onlyDigits,
+                  margin: margin,
+                  enabled: isDropDown
+                      ? false
+                      : isDatePicker
+                          ? false
+                          : true,
+                  rightIcon: isDropDown
+                      ? Icons.arrow_drop_down_sharp
+                      : isDatePicker
+                          ? rightIcon
+                          : null,
+                  controller: inputController,
+                  hintText: hintText,
+                  onChanged: onChanged,
+                  readonly: readyOnly,
+                  keyboardType: keyboardType,
+                  validator: validator,
+                  maxLines: maxLines,
+                  initialvalue: initialvalue,
+                  isDense: true,
+                  contentPadding: 0,
                 ),
-              )
-            : CustomTextInput(
-                onlyDigits: onlyDigits,
-                enabled: isDropDown
-                    ? false
-                    : isDatePicker
-                        ? false
-                        : true,
-                rightIcon: isDropDown
-                    ? Icons.arrow_drop_down_sharp
-                    : isDatePicker
-                        ? rightIcon
-                        : null,
-                controller: inputController,
-                hintText: hintText,
-                onChanged: onChanged,
-                readonly: readyOnly,
-                keyboardType: keyboardType,
-                validator: validator,
-                maxLines: maxLines,
-                initialvalue: initialvalue,
-                indense: true,
-                contentPadding: 0,
-              ),
-      ],
+        ],
+      ),
     );
   }
 }
