@@ -262,7 +262,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                       ),
                                       child: Container(
                                         constraints: BoxConstraints(
-                                          maxHeight: MediaQuery.of(context).size.height * 0.85,
+                                          maxHeight: MediaQuery.of(context).size.height * 0.8,
                                         ),
                                         width: Responsive.isMobile(context) ? width! * 0.9 : 650,
                                         padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
