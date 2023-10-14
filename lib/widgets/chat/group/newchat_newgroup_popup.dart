@@ -16,9 +16,12 @@ class NewChatNewGroupPopupButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: const Icon(
         Icons.more_vert,
-        size: 22,
+        size: 18,
       ),
       onSelected: (value) {
         if (value == 'new_chat') {
