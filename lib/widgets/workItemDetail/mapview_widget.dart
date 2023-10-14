@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:yes_broker/Customs/snackbar.dart';
@@ -53,6 +54,7 @@ class _MapViewWidgetState extends State<MapViewWidget> {
 
   String getGoogleMapsLink(LatLng latLng) {
     String link = 'https://www.google.com/maps/search/?api=1&query=${latLng.latitude},${latLng.longitude}';
+    print(link);
     return link;
   }
 
@@ -77,8 +79,10 @@ class _MapViewWidgetState extends State<MapViewWidget> {
               CustomChip(
                 paddingVertical: 6,
                 onPressed: () {
-                  Clipboard.setData(ClipboardData(text: googleMapsLink)).then((_) {
+                  Clipboard.setData(ClipboardData(text: getGoogleMapsLink(widget.latLng))).then((_) {
                     customSnackBar(context: context, text: "Google link copied to clipboard");
+                  }).catchError((e) {
+                    print(e);
                   });
                 },
                 label: const Icon(
