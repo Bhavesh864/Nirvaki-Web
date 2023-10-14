@@ -10,6 +10,7 @@ import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart'
 import 'package:yes_broker/constants/functions/get_lead_questions.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/pages/add_inventory.dart';
+import 'package:yes_broker/pages/largescreen_dashboard.dart';
 import 'package:yes_broker/riverpodstate/filterQuestions/lead_all_question.dart';
 import 'package:yes_broker/riverpodstate/lead_filter_question.dart';
 import 'package:yes_broker/widgets/questionaries/workitem_success.dart';
@@ -383,6 +384,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                 final ids = currentScreenQuestions.map((q) => q.questionId).toList();
                 final allquestion = currentScreenQuestions.map((q) => q.questionOptionType).toList();
                 final questiontype = allquestion.any((element) => element == "textfield" || element == "rangeSlider");
+                ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
                 goBack(ids, questiontype);
               },
               icon: const Icon(
@@ -398,6 +400,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                 buttonColor: Colors.transparent,
                 borderColor: Colors.transparent,
                 onPressed: () {
+                  ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
                   Navigator.of(context).pop();
                 },
                 leftIcon: Icons.home_outlined,

@@ -273,6 +273,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                 // ),
                                 MobileNumberInputField(
                                   fromProfile: true,
+                                  fontsize: 14,
                                   controller: mobilenumbercontroller,
                                   hintText: 'Mobile Number',
                                   isEmpty: isMobileEmpty,

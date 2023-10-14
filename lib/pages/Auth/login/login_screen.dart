@@ -139,6 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         CustomTextInput(
                           focusnode: emailFocusNode,
                           controller: emailcontroller,
+                          isDense: true,
                           labelText: 'Email Address',
                           validator: (val) => validateEmail(val?.trim()),
                           autofillHints: const [AutofillHints.email],
@@ -153,6 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         CustomTextInput(
                           focusnode: passwordFocusNode,
                           controller: passwordcontroller,
+                          isDense: true,
                           labelText: 'Password',
                           obscureText: true,
                           rightIcon: Icons.remove_red_eye,

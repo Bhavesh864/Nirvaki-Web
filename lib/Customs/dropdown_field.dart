@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 
 import 'custom_text.dart';
@@ -10,12 +11,18 @@ class DropDownField extends StatefulWidget {
   final void Function(Object e) onchanged;
   final String? defaultValues;
   final bool isMultiValueOnDropdownlist;
+  final FontWeight labelFontWeight;
+  final bool isMandatory;
+  final double labelFontSize;
 
   const DropDownField({
     super.key,
     required this.title,
     required this.optionsList,
     required this.onchanged,
+    this.labelFontWeight = FontWeight.w500,
+    this.isMandatory = false,
+    this.labelFontSize = 16,
     this.defaultValues,
     this.isMultiValueOnDropdownlist = false,
     this.multipleValuesmap,
@@ -40,12 +47,40 @@ class _DropDownFieldState extends State<DropDownField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CustomText(
-          fontWeight: FontWeight.w500,
-          color: Colors.black,
-          size: 16,
-          title: widget.title,
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: widget.title,
+                style: TextStyle(
+                  fontFamily: GoogleFonts.dmSans().fontFamily,
+                  color: Colors.black,
+                  fontSize: widget.labelFontSize,
+                  fontWeight: widget.labelFontWeight,
+                ),
+              ),
+              if (widget.isMandatory)
+                const TextSpan(
+                  text: ' ',
+                ),
+              if (widget.isMandatory)
+                const TextSpan(
+                  text: '*',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.red,
+                  ),
+                ),
+            ],
+          ),
         ),
+        // CustomText(
+        //   fontWeight: FontWeight.w500,
+        //   color: Colors.black,
+        //   size: 16,
+        //   title: widget.title,
+        // ),
         const SizedBox(height: 4),
         DropdownButtonHideUnderline(
           child: InputDecorator(
@@ -58,10 +93,11 @@ class _DropDownFieldState extends State<DropDownField> {
             ),
             child: DropdownButton(
               // isDense: true,
+              enableFeedback: false,
               // itemHeight: null,
               focusColor: Colors.transparent,
               hint: const CustomText(
-                title: '--Select--',
+                title: '--select--',
                 color: Colors.grey,
               ),
               icon: const Icon(Icons.expand_more),

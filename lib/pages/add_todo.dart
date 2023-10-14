@@ -14,6 +14,7 @@ import 'package:yes_broker/widgets/questionaries/workitem_success.dart';
 import '../customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
 import '../riverpodstate/all_selected_ansers_provider.dart';
+import 'largescreen_dashboard.dart';
 
 final myArrayProvider = StateNotifierProvider<AllChipSelectedAnwers, List<Map<String, dynamic>>>(
   (ref) => AllChipSelectedAnwers(),
@@ -40,6 +41,9 @@ class _AddTodoState extends ConsumerState<AddTodo> {
     super.initState();
     getQuestions = TodoQuestion.getAllQuestionssFromFirestore();
     pageController = PageController(initialPage: currentScreenIndex);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(myArrayProvider.notifier).resetState();
+    });
   }
 
   addDataOnfirestore(AllChipSelectedAnwers notify) {
@@ -182,7 +186,8 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                                                       ref,
                                                       user!,
                                                     ),
-                                                    if (i == screensDataList[index].questions.length - 1 && screensDataList[index].questions[i].questionOptionType != 'chip')
+                                                    if (i == screensDataList[index].questions.length - 1 &&
+                                                        screensDataList[index].questions[i].questionOptionType != 'chip')
                                                       Container(
                                                         margin: const EdgeInsets.only(top: 10),
                                                         alignment: Alignment.centerRight,
@@ -252,6 +257,7 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                 final currentScreenQuestions = screensDataList[currentScreenIndex].questions;
                 final ids = currentScreenQuestions.map((q) => q.questionId).toList();
                 final questiontype = currentScreenQuestions.any((element) => element.questionTitle.contains("Link Work Item"));
+                ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
                 goBack(ids, questiontype);
               },
               icon: const Icon(
@@ -267,6 +273,7 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                 buttonColor: Colors.transparent,
                 borderColor: Colors.transparent,
                 onPressed: () {
+                  ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
                   Navigator.of(context).pop();
                 },
                 leftIcon: Icons.home_outlined,

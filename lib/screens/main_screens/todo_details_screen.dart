@@ -277,12 +277,30 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                     Row(
                                       children: [
                                         checkNotNUllItem(data.linkedWorkItem?[0].workItemTitle)
-                                            ? CustomButton(
-                                                text: data.linkedWorkItem![0].workItemId!.contains('LD') ? 'View Lead Details' : 'View Inventory Details',
+                                            // ? CustomButton(
+                                            //     text: data.linkedWorkItem![0].workItemId!.contains('LD') ? 'View Lead Detail' : 'View Inventory Detail',
+                                            //     onPressed: () {
+                                            //       navigateBasedOnId(context, data.linkedWorkItem![0].workItemId!, ref);
+                                            //     },
+                                            //     height: 40,
+                                            //   )
+                                            ? ElevatedButton(
                                                 onPressed: () {
                                                   navigateBasedOnId(context, data.linkedWorkItem![0].workItemId!, ref);
                                                 },
-                                                height: 40,
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: AppColor.primary,
+                                                  // minimumSize: const Size(100, 20),
+                                                  padding: const EdgeInsets.all(8),
+                                                ),
+                                                child: Text(
+                                                  data.linkedWorkItem![0].workItemId!.contains('LD') ? 'View Lead Detail' : 'View Inventory Detail',
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w600,
+                                                    letterSpacing: 0.3,
+                                                  ),
+                                                ),
                                               )
                                             : const SizedBox.shrink(),
                                         const SizedBox(
@@ -296,7 +314,8 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                               AssignmentWidget(
                                                 assignto: data.assignedto!,
                                                 id: data.todoId!,
-                                                imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                imageUrlCreatedBy:
+                                                    data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                 createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
                                                 data: data,
                                               ),
@@ -321,8 +340,8 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                     return Transform.translate(
                                                       offset: Offset(index * -9.0, 0),
                                                       child: Container(
-                                                        width: 24,
-                                                        height: 24,
+                                                        width: 28,
+                                                        height: 28,
                                                         decoration: index > 1
                                                             ? BoxDecoration(
                                                                 border: Border.all(color: Colors.white),
