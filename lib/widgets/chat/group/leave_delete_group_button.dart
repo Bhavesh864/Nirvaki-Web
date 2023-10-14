@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/customs/custom_text.dart';
 
 import '../../../constants/app_constant.dart';
@@ -19,8 +18,11 @@ class LeaveDeleteGroupPopupButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 12.0),
+        margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5),
         child: const Icon(
           Icons.more_vert,
           size: 16,
@@ -39,13 +41,16 @@ class LeaveDeleteGroupPopupButton extends StatelessWidget {
             value: 'leave_group',
             child: Row(
               children: [
-                CustomText(title: 'Leave Group'),
+                CustomText(
+                  title: 'Leave Group',
+                  size: 13,
+                ),
                 SizedBox(
                   width: 5,
                 ),
                 Icon(
                   Icons.exit_to_app,
-                  size: 16,
+                  size: 14,
                 ),
               ],
             ),
@@ -55,13 +60,16 @@ class LeaveDeleteGroupPopupButton extends StatelessWidget {
               value: 'delete_group',
               child: Row(
                 children: [
-                  CustomText(title: 'Delete Group'),
+                  CustomText(
+                    title: 'Delete Group',
+                    size: 13,
+                  ),
                   SizedBox(
                     width: 5,
                   ),
                   Icon(
                     Icons.delete_outline,
-                    size: 16,
+                    size: 14,
                   ),
                 ],
               ),

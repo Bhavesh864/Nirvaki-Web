@@ -485,7 +485,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
         ],
         // ],
         // if (!AppConst.getPublicView())
-        if (widget.data.amenities != null) ...[
+        if (widget.data.amenities != null && widget.data.amenities.isNotEmpty) ...[
           CustomText(
             title: !widget.isLeadView ? "Features" : 'Requirements',
             fontWeight: FontWeight.w700,
