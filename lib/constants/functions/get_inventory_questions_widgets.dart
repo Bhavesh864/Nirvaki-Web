@@ -67,8 +67,6 @@ Widget buildInventoryQuestions(
       ],
     );
   } else if (question.questionOptionType == 'smallchip') {
-    print("smalll------");
-
     String selectedOption = '';
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       selectedOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
@@ -472,7 +470,7 @@ Widget buildInventoryQuestions(
           children: [
             LabelTextInputField(
               onlyDigits: isDigitsOnly,
-              keyboardType: isPriceField ? TextInputType.number : TextInputType.name,
+              keyboardType: isPriceField || isDigitsOnly ? TextInputType.number : TextInputType.name,
               inputController: controller,
               labelText: question.questionTitle,
               isMandatory: isvalidationtrue,
@@ -540,14 +538,18 @@ Widget buildInventoryQuestions(
     );
   } else if (question.questionOptionType == "Assign") {
     try {
-      List<Assignedto> assignedusers = [];
+      var assignedusers = [];
       List<String> userids = [];
       if (isEdit) {
         if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
           assignedusers = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
         }
         for (var user in assignedusers) {
-          userids.add(user.userid!);
+          if (user is User) {
+            userids.add(user.userId);
+          } else {
+            userids.add(user.userid!);
+          }
         }
       }
       return AssignUser(
