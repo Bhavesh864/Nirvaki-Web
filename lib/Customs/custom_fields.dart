@@ -575,8 +575,6 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
           ),
           padding: EdgeInsets.symmetric(horizontal: Responsive.isMobile(context) ? 4 : 10.0),
           child: Row(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               InkWell(
                 onTap: widget.openModal,
