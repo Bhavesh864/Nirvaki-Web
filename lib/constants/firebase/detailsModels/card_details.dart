@@ -267,6 +267,24 @@ class CardDetails {
     }
   }
 
+  static Future<CardDetails?> getSingleCardByWorkItemId(String workItemId) async {
+    try {
+      final QuerySnapshot querySnapshot = await cardDetailsCollection.where('workitemId', isEqualTo: workItemId).get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final Map<String, dynamic> data = querySnapshot.docs.first.data() as Map<String, dynamic>;
+        return CardDetails.fromJson(data);
+      } else {
+        return null;
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to get CardDetails by workItemId: $error');
+      }
+      return null;
+    }
+  }
+
   static Future<List<CardDetails>> getcardByInventoryId(id) async {
     try {
       final QuerySnapshot querySnapshot = await cardDetailsCollection.where("linkedItemId", isEqualTo: id).get();

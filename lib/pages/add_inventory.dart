@@ -239,6 +239,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                   }
 
                   return Stack(
+                    fit: StackFit.expand,
                     children: [
                       Container(
                           decoration: const BoxDecoration(
@@ -267,6 +268,9 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                             borderRadius: BorderRadius.circular(10),
                                           ),
                                           child: Container(
+                                            constraints: BoxConstraints(
+                                              maxHeight: MediaQuery.of(context).size.height * 0.85,
+                                            ),
                                             width: Responsive.isMobile(context) ? width! * 0.9 : 650,
                                             padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
                                             child: SingleChildScrollView(

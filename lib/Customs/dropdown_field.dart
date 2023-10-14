@@ -78,7 +78,7 @@ class _DropDownFieldState extends State<DropDownField> {
               items: widget.optionsList.map((value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: CustomText(title: value),
+                  child: CustomText(title: value, softWrap: true),
                 );
               }).toList(),
             ),

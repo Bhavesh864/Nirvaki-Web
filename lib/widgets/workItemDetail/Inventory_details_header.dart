@@ -20,6 +20,7 @@ import '../../constants/firebase/detailsModels/inventory_details.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
+import '../../riverpodstate/common_index_state.dart';
 import '../../routes/routes.dart';
 import '../app/app_bar.dart';
 import '../app/nav_bar.dart';
@@ -69,6 +70,15 @@ class InventoryDetailsHeader extends ConsumerWidget {
     } catch (e) {
       print('Error sharing URL: $e');
     }
+  }
+
+  void navigateToEditPage(BuildContext context) {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      AppConst.getOuterContext()?.beamToNamed(
+        id.contains("IN") ? AppRoutes.addInventory : AppRoutes.addLead,
+        data: true,
+      );
+    });
   }
 
   @override
@@ -124,12 +134,13 @@ class InventoryDetailsHeader extends ConsumerWidget {
                         .map(
                           (e) => appBarPopupMenuItem(e['title'].toString(), (e) {
                             if (e.contains('Public')) {
+                              // ref.read(detailsPageIndexTabProvider.notifier).update(
+                              //       (state) => 0,
+                              //     );
                               AppConst.setPublicView(!AppConst.getPublicView());
                               setState();
                             } else if (e.contains("Edit")) {
-                              Future.delayed(const Duration(milliseconds: 400)).then(
-                                (value) => AppConst.getOuterContext()!.beamToNamed(id.contains("IN") ? AppRoutes.addInventory : AppRoutes.addLead, data: true),
-                              );
+                              navigateToEditPage(context);
                             }
                           }, showicon: true, icon: e['icon']),
                         )
@@ -138,12 +149,13 @@ class InventoryDetailsHeader extends ConsumerWidget {
                         .map(
                           (e) => appBarPopupMenuItem(e['title'].toString(), (e) {
                             if (e.contains('Public')) {
+                              // ref.read(detailsPageIndexTabProvider.notifier).update(
+                              //       (state) => 0,
+                              //     );
                               AppConst.setPublicView(!AppConst.getPublicView());
                               setState();
                             } else if (e.contains("Edit")) {
-                              Future.delayed(const Duration(milliseconds: 400)).then(
-                                (value) => AppConst.getOuterContext()!.beamToNamed(id.contains("IN") ? AppRoutes.addInventory : AppRoutes.addLead, data: true),
-                              );
+                              navigateToEditPage(context);
                             }
                           }, showicon: true, icon: e['icon']),
                         )

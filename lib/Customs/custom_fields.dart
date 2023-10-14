@@ -102,10 +102,9 @@ class CustomTextInputState extends State<CustomTextInput> {
         enabled: widget.enabled,
         onTap: widget.ontap,
         onFieldSubmitted: widget.onFieldSubmitted,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.w400,
-          fontFamily: GoogleFonts.dmSans().fontFamily,
         ),
         controller: widget.controller,
         decoration: InputDecoration(

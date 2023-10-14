@@ -54,8 +54,12 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
     currentSelectedTab = currentIndex;
     tabviewController = TabController(length: 3, vsync: this, initialIndex: currentIndex);
     final workItemId = ref.read(selectedWorkItemId);
-    inventoryDetails =
-        FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId == '' ? widget.inventoryId : workItemId).snapshots();
+    if (workItemId.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(selectedWorkItemId.notifier).addItemId(widget.inventoryId!);
+      });
+    }
+    inventoryDetails = FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId.isEmpty ? widget.inventoryId : workItemId).snapshots();
     AppConst.setPublicView(false);
   }
 
@@ -204,8 +208,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                               AssignmentWidget(
                                                 id: data.inventoryId!,
                                                 assignto: data.assignedto!,
-                                                imageUrlCreatedBy:
-                                                    data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                 createdBy: '${data.createdby!.userfirstname!}  ${data.createdby!.userlastname!}',
                                               ),
                                             );
