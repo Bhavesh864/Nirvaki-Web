@@ -219,7 +219,7 @@ class LabelTextAreaField extends StatelessWidget {
           ),
           const SizedBox(height: 3),
           TextFormField(
-            textCapitalization: TextCapitalization.characters,
+            textCapitalization: TextCapitalization.sentences,
             validator: validator,
             keyboardType: TextInputType.multiline,
             maxLines: 5,
