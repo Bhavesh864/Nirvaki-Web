@@ -405,6 +405,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                 final ids = currentScreenQuestions.map((q) => q.questionId).toList();
                 final allquestion = currentScreenQuestions.map((q) => q.questionOptionType).toList();
                 final questiontype = allquestion.any((element) => element == "textfield" || element == "photo");
+                ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
                 goBack(ids, questiontype);
               },
               icon: const Icon(
@@ -420,7 +421,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                 buttonColor: Colors.transparent,
                 borderColor: Colors.transparent,
                 onPressed: () {
-                  ref.watch(desktopSideBarIndexProvider.notifier).update((state) => 0);
+                  ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
                   Navigator.of(context).pop();
                 },
                 leftIcon: Icons.home_outlined,

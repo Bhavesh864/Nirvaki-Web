@@ -18,6 +18,7 @@ import '../customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
 import '../riverpodstate/all_selected_ansers_provider.dart';
 import '../riverpodstate/selected_workitem.dart';
+import 'largescreen_dashboard.dart';
 
 final myArrayProvider = StateNotifierProvider<AllChipSelectedAnwers, List<Map<String, dynamic>>>(
   (ref) => AllChipSelectedAnwers(),
@@ -275,6 +276,7 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                 final currentScreenQuestions = screensDataList[currentScreenIndex].questions;
                 final ids = currentScreenQuestions.map((q) => q.questionId).toList();
                 final questiontype = currentScreenQuestions.any((element) => element.questionTitle.contains("Link Work Item"));
+                ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
                 goBack(ids, questiontype);
               },
               icon: const Icon(
@@ -290,6 +292,7 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                 buttonColor: Colors.transparent,
                 borderColor: Colors.transparent,
                 onPressed: () {
+                  ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
                   Navigator.of(context).pop();
                 },
                 leftIcon: Icons.home_outlined,

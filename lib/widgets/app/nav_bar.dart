@@ -11,6 +11,7 @@ import 'package:yes_broker/Customs/custom_chip.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/userModel/notification_model.dart';
 import 'package:yes_broker/customs/loader.dart';
+import 'package:yes_broker/pages/largescreen_dashboard.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/firebase/userModel/user_info.dart';
@@ -59,7 +60,7 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          largeScreenView("${userData?.userfirstname ?? ""} ${userData?.userlastname ?? ""}", context),
+          largeScreenView("${userData?.userfirstname ?? ""} ${userData?.userlastname ?? ""}", context, ref: ref),
           const Spacer(),
           StreamBuilder(
               stream: notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).where('isRead', isEqualTo: false).snapshots(),
@@ -225,7 +226,7 @@ String capitalizeFirstLetter(String input) {
   return input[0].toUpperCase() + input.substring(1);
 }
 
-Widget largeScreenView(String name, BuildContext context) {
+Widget largeScreenView(String name, BuildContext context, {WidgetRef? ref}) {
   return Container(
     padding: const EdgeInsets.only(left: 10),
     child: Column(
@@ -236,30 +237,33 @@ Widget largeScreenView(String name, BuildContext context) {
           title: capitalizeFirstLetter(name) != 'Public View' ? 'Welcome, ${capitalizeFirstLetter(name)}' : capitalizeFirstLetter(name),
           fontWeight: FontWeight.bold,
         ),
-        Center(
-          child: Row(
-            children: [
-              const Icon(
-                Icons.home_outlined,
-                weight: 100,
-                size: 18,
-              ),
-              GestureDetector(
-                onTap: () {
-                  context.beamToNamed('/');
-                },
-                child: Container(
+        InkWell(
+          onTap: () {
+            context.beamToNamed('/');
+            if (!AppConst.getPublicView() && AppConst.getIsAuthenticated()) {
+              ref!.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
+            }
+          },
+          child: Center(
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.home_outlined,
+                  weight: 100,
+                  size: 18,
+                ),
+                Container(
                   margin: const EdgeInsets.symmetric(horizontal: 5),
                   child: CustomText(
                     letterSpacing: 0.4,
-                    title: AppConst.getPublicView() ? 'Login' : 'Home',
+                    title: AppConst.getPublicView() && !AppConst.getIsAuthenticated() ? 'Login' : 'Home',
                     fontWeight: FontWeight.w600,
                     color: AppColor.primary,
                     size: 13,
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],

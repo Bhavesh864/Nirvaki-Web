@@ -20,7 +20,7 @@ class CustomStatusDropDown extends StatelessWidget {
   PopupMenuButton build(BuildContext context) {
     return PopupMenuButton(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(10),
       ),
       initialValue: status,
       tooltip: '',
@@ -33,7 +33,7 @@ class CustomStatusDropDown extends StatelessWidget {
       },
       child: IntrinsicWidth(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: kIsWeb ? 4.5 : 7),
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: kIsWeb ? 4.5 : 4.5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),
             color: taskStatusColor(status).withOpacity(0.1),

@@ -70,7 +70,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                   avatar: Icon(
                     Icons.calendar_view_week_outlined,
                     weight: 1000,
-                    size: 20,
+                    size: 18,
                   ),
                   label: CustomText(
                     title: 'This Week',
@@ -91,7 +91,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                       Icon(
                         Icons.arrow_downward_outlined,
                         weight: 1000,
-                        size: 20,
+                        size: 18,
                       ),
                     ],
                   ),

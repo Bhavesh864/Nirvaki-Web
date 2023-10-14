@@ -165,6 +165,13 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                         showDatePickerButton: false,
                         showCurrentTimeIndicator: false,
                         viewHeaderHeight: 0,
+                        // headerStyle: const CalendarHeaderStyle(
+                        //   textAlign: TextAlign.center,
+                        //   backgroundColor: Colors.amber,
+                        // ),
+                        timeRegionBuilder: (context, timeRegionDetails) {
+                          return const Text('data');
+                        },
                         appointmentTimeTextFormat: Intl.defaultLocale,
                         appointmentBuilder: (context, calendarAppointmentDetails) {
                           final event = calendarAppointmentDetails.appointments.first;
