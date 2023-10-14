@@ -157,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           isDense: true,
                           labelText: 'Password',
                           obscureText: true,
-                          rightIcon: Icons.remove_red_eye,
+                          rightIcon: Icons.remove_red_eye_outlined,
                           validator: validatePassword,
                           onFieldSubmitted: (_) => loginwithemailpassword(context),
                         ),
