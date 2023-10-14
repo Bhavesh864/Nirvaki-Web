@@ -44,13 +44,11 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
   PlatformFile? selectedImageName;
   List<PlatformFile> pickedDocuments = [];
   List<String> selectedDocsName = [];
-  int currentSelectedTab = 0;
 
   @override
   void initState() {
     super.initState();
     final currentIndex = ref.read(detailsPageIndexTabProvider);
-    currentSelectedTab = currentIndex;
     tabviewController = TabController(length: 3, vsync: this, initialIndex: currentIndex);
     final workItemId = ref.read(selectedWorkItemId);
     if (workItemId.isEmpty) {
@@ -65,6 +63,8 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(myArrayProvider.notifier);
+    final currentSelectedTab = ref.watch(detailsPageIndexTabProvider);
+
     return Scaffold(
       appBar: Responsive.isMobile(context)
           ? AppBar(
@@ -114,6 +114,10 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                   setState: () {
                                     setState(() {});
                                   },
+                                  setCurrentIndex: (p0) {
+                                    ref.read(detailsPageIndexTabProvider.notifier).update((state) => 0);
+                                    tabviewController.animateTo(0);
+                                  },
                                   id: data.leadId!,
                                   inventoryDetails: data,
                                   title: data.leadTitle!,
@@ -126,8 +130,11 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                 if (Responsive.isMobile(context))
                                   Padding(
                                     padding: const EdgeInsets.only(top: 10),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    child: Wrap(
+                                      runSpacing: 10,
+                                      crossAxisAlignment: WrapCrossAlignment.center,
+                                      alignment: WrapAlignment.spaceBetween,
+                                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         HeaderChips(
                                           id: data.leadId!,
@@ -137,17 +144,14 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                           status: data.leadStatus!,
                                           inventoryDetails: data,
                                         ),
-                                        SizedBox(
-                                          width: 120,
-                                          child: CustomText(
-                                            size: 14,
-                                            softWrap: true,
-                                            textAlign: TextAlign.center,
-                                            title: data.propertypricerange?.arearangestart != null
-                                                ? '${data.propertypricerange?.arearangestart} ${data.propertypricerange?.arearangeend}'
-                                                : '',
-                                            color: AppColor.primary,
-                                          ),
+                                        CustomText(
+                                          size: 14,
+                                          softWrap: true,
+                                          textAlign: TextAlign.start,
+                                          title: data.propertypricerange?.arearangestart != null
+                                              ? '${data.propertypricerange?.arearangestart} - ${data.propertypricerange?.arearangeend}'
+                                              : '',
+                                          color: AppColor.primary,
                                         ),
                                       ],
                                     ),
@@ -186,13 +190,17 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                                 );
                                               },
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor: AppColor.primary, // Set the button's background color
+                                                backgroundColor: AppColor.primary,
                                                 // minimumSize: const Size(100, 20),
-                                                padding: const EdgeInsets.all(8), // Set the button's size
+                                                padding: const EdgeInsets.all(8),
                                               ),
                                               child: const Text(
                                                 'Owner Details',
-                                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600,
+                                                  letterSpacing: 0.3,
+                                                ),
                                               ),
                                             ),
                                             const SizedBox(
@@ -220,8 +228,8 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                                   return Transform.translate(
                                                     offset: Offset(index * -8.0, 0),
                                                     child: Container(
-                                                      width: 24,
-                                                      height: 24,
+                                                      width: 28,
+                                                      height: 28,
                                                       decoration: BoxDecoration(
                                                         border: Border.all(color: Colors.white),
                                                         image: DecorationImage(
@@ -272,9 +280,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                   TabBarWidget(
                                     tabviewController: tabviewController,
                                     onTabChanged: (e) {
-                                      setState(() {
-                                        currentSelectedTab = e;
-                                      });
+                                      ref.read(detailsPageIndexTabProvider.notifier).update((state) => e);
                                     },
                                   ),
                                 const SizedBox(
