@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../constants/utils/colors.dart';
 
@@ -44,22 +45,25 @@ class TabBarWidget extends StatelessWidget {
           color: AppColor.primary,
           borderRadius: BorderRadius.circular(8),
         ),
-        tabs: const [
+        tabs: [
           Tab(
             child: Text(
               "Details",
+              style: TextStyle(fontFamily: GoogleFonts.dmSans().fontFamily),
               overflow: TextOverflow.ellipsis,
             ),
           ),
           Tab(
             child: Text(
               "Activity",
+              style: TextStyle(fontFamily: GoogleFonts.dmSans().fontFamily),
               overflow: TextOverflow.ellipsis,
             ),
           ),
           Tab(
             child: Text(
               "To-Do",
+              style: TextStyle(fontFamily: GoogleFonts.dmSans().fontFamily),
               overflow: TextOverflow.ellipsis,
             ),
           ),

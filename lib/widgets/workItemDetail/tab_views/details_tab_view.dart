@@ -780,11 +780,11 @@ class _DetailsTabViewState extends State<DetailsTabView> {
           if (widget.isLeadView) ...[
             MapViewWidget(
               latLng: widget.isLeadView
-                  ? LatLng(widget.data.preferredlocation[0], widget.data.preferredlocation[1])
-                  : LatLng(widget.data.propertylocation[0], widget.data.propertylocation[0]),
+                  ? LatLng(widget.data.preferredlocation![0], widget.data.preferredlocation![1])
+                  : LatLng(widget.data.propertylocation[0], widget.data.propertylocation[1]),
               state: widget.data.preferredlocality!.state!,
               city: widget.data.preferredlocality!.city!,
-              addressline1: widget.data.preferredlocality!.addressline1!,
+              addressline1: widget.data.preferredlocality?.addressline1,
               addressline2: widget.data.preferredlocality?.addressline2,
               locality: widget.data.preferredlocality!.locality!,
             ),

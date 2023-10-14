@@ -125,13 +125,11 @@ PopupMenuItem appBarPopupMenuItem(String title, void Function(String) onOptionSe
                 padding: const EdgeInsets.only(right: 5.0),
                 child: Icon(icon),
               ),
-            Text(
-              title,
-              style: const TextStyle(
-                letterSpacing: 0.4,
-                fontSize: 13,
-                color: Color(0xFF454545),
-              ),
+            CustomText(
+              title: title,
+              letterSpacing: 0.4,
+              size: 13,
+              color: const Color(0xFF454545),
             ),
           ],
         ),

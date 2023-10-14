@@ -33,6 +33,7 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
 
   void getCalenderDetailsfunc() {
     final User? user = ref.read(userDataProvider);
+    print(user?.brokerId);
     calenderDetails = FirebaseFirestore.instance.collection('calenderDetails').where('brokerId', isEqualTo: user?.brokerId).snapshots();
   }
 
@@ -42,7 +43,9 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
       stream: calenderDetails,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Loader();
+          return const SizedBox(
+            height: 180,
+          );
         }
         if (snapshot.hasData) {
           final dataList = snapshot.data!.docs;

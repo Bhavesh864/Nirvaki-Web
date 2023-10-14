@@ -16,6 +16,8 @@ import '../../../constants/firebase/userModel/user_info.dart';
 import '../../../constants/functions/filterdataAccordingRole/data_according_role.dart';
 import '../../../constants/utils/colors.dart';
 import '../../../constants/utils/constants.dart';
+import '../../../pages/add_inventory.dart';
+import '../../../riverpodstate/todo/linked_with_workItem.dart';
 import '../../table_view/table_view_widgets.dart';
 
 class TodoTabView extends ConsumerStatefulWidget {
@@ -90,6 +92,8 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
                     height: Responsive.isMobile(context) ? 45 : 40,
                     onPressed: () {
                       AppConst.getOuterContext()?.beamToNamed(AppRoutes.addTodo);
+                      ref.read(myArrayProvider.notifier).resetState();
+                      ref.read(linkedWithWorkItem.notifier).setgotToDetailsScreenState(true);
                     },
                     leftIcon: Icons.add,
                     text: 'Add',
@@ -140,10 +144,10 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
                             return Table(
                               columnWidths: {
                                 0: FixedColumnWidth(availableWidth * 0.25),
-                                1: FixedColumnWidth(availableWidth * 0.18),
+                                1: FixedColumnWidth(availableWidth * 0.15),
                                 2: FixedColumnWidth(availableWidth * 0.15),
-                                3: FixedColumnWidth(availableWidth * 0.20),
-                                4: FixedColumnWidth(availableWidth * 0.1),
+                                3: FixedColumnWidth(availableWidth * 0.15),
+                                4: FixedColumnWidth(availableWidth * 0.20),
                                 5: FixedColumnWidth(availableWidth * 0.1),
                               },
                               border: TableBorder(
@@ -151,7 +155,7 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
                                 horizontalInside: BorderSide(color: Colors.grey.withOpacity(.5), width: 1.5),
                               ),
                               children: [
-                                buildTableHeader(),
+                                buildTableHeader(isTodo: true),
                                 ...tableRowList,
                               ],
                             );

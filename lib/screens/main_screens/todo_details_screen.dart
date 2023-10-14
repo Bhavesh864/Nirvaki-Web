@@ -61,7 +61,12 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
     super.initState();
     tabviewController = TabController(length: 4, vsync: this);
     final workItemId = ref.read(selectedWorkItemId);
-    todoDetails = FirebaseFirestore.instance.collection('todoDetails').where('todoId', isEqualTo: workItemId == '' ? widget.todoId : workItemId).snapshots();
+    if (workItemId.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(selectedWorkItemId.notifier).addItemId(widget.todoId);
+      });
+    }
+    todoDetails = FirebaseFirestore.instance.collection('todoDetails').where('todoId', isEqualTo: workItemId.isEmpty ? widget.todoId : workItemId).snapshots();
   }
 
   void startEditingTodoName(String todoName) {
@@ -243,7 +248,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                       Padding(
                                         padding: const EdgeInsets.only(left: 8.0),
                                         child: CustomChip(
-                                          paddingVertical: 8,
+                                          paddingVertical: 6,
                                           color: AppColor.primary.withOpacity(0.1),
                                           label: CustomText(
                                             title: data.todoType!,
@@ -641,14 +646,14 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                           ),
                         ),
                       ),
-                      if (Responsive.isDesktop(context))
+                      if (!Responsive.isMobile(context)) ...[
                         const VerticalDivider(
                           indent: 15,
                           width: 30,
                         ),
-                      if (Responsive.isDesktop(context))
-                        Expanded(
-                          flex: 1,
+                        SizedBox(
+                          // flex: 1,
+                          width: 350,
                           child: Container(
                             padding: const EdgeInsets.all(10),
                             child: Column(
@@ -686,6 +691,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                             ),
                           ),
                         ),
+                      ],
                     ],
                   ),
                 );

@@ -46,18 +46,16 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
 
   @override
   void initState() {
-    // if (!kIsWeb) {
+    super.initState();
     final token = UserHiveMethods.getdata("token");
     if (token != null) {
       AppConst.setAccessToken(token);
       getUserData(token);
     }
-    // }
     setCardDetails();
     if (!kIsWeb) {
       ref.read(chatControllerProvider).setUserState(true);
     }
-    super.initState();
   }
 
   getUserData(token) async {
@@ -224,24 +222,24 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                                         if (showTableView) ...[
                                           filterTodoList.isNotEmpty
                                               ? Container(
-                                                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                                                  margin: const EdgeInsets.symmetric(horizontal: 30),
                                                   child: LayoutBuilder(builder: (context, constraints) {
                                                     final availableWidth = constraints.maxWidth;
                                                     return Table(
                                                       columnWidths: {
                                                         0: FixedColumnWidth(availableWidth * 0.25),
-                                                        1: FixedColumnWidth(availableWidth * 0.18),
+                                                        1: FixedColumnWidth(availableWidth * 0.10),
                                                         2: FixedColumnWidth(availableWidth * 0.15),
                                                         3: FixedColumnWidth(availableWidth * 0.15),
-                                                        4: FixedColumnWidth(availableWidth * 0.1),
+                                                        4: FixedColumnWidth(availableWidth * 0.20),
                                                         5: FixedColumnWidth(availableWidth * 0.1),
                                                       },
-                                                      border: TableBorder(
-                                                        bottom: BorderSide(color: Colors.grey.withOpacity(.5), width: 1.5),
-                                                        horizontalInside: BorderSide(color: Colors.grey.withOpacity(.5), width: 1.5),
+                                                      border: const TableBorder(
+                                                        bottom: BorderSide(color: Color(0xFFCED4DA), width: 1.5),
+                                                        horizontalInside: BorderSide(color: Color(0xFFCED4DA), width: 1.5),
                                                       ),
                                                       children: [
-                                                        buildTableHeader(),
+                                                        buildTableHeader(isTodo: true),
                                                         ...tableRowList,
                                                       ],
                                                     );
@@ -311,10 +309,10 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                       flex: 2,
                       child: Row(
                         children: [
-                          Container(
-                            margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                            width: 1,
-                            color: Colors.grey.withOpacity(0.5),
+                          const VerticalDivider(
+                            indent: 20,
+                            width: 20,
+                            endIndent: 20,
                           ),
                           Expanded(
                             child: TodoFilterView(

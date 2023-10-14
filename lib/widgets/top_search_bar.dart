@@ -92,6 +92,7 @@ class _TopSerachBarState extends State<TopSerachBar> {
                       title: widget.title,
                       fontWeight: FontWeight.w600,
                       size: 18,
+                      letterSpacing: 0.3,
                     ),
                     Row(
                       children: [

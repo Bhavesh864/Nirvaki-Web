@@ -54,7 +54,12 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
     currentSelectedTab = currentIndex;
     tabviewController = TabController(length: 3, vsync: this, initialIndex: currentIndex);
     final workItemId = ref.read(selectedWorkItemId);
-    inventoryDetails = FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId == '' ? widget.inventoryId : workItemId).snapshots();
+    if (workItemId.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(selectedWorkItemId.notifier).addItemId(widget.inventoryId!);
+      });
+    }
+    inventoryDetails = FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId.isEmpty ? widget.inventoryId : workItemId).snapshots();
     AppConst.setPublicView(false);
   }
 
@@ -204,7 +209,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                                 id: data.inventoryId!,
                                                 assignto: data.assignedto!,
                                                 imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                                createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
+                                                createdBy: '${data.createdby!.userfirstname!}  ${data.createdby!.userlastname!}',
                                               ),
                                             );
                                           },
@@ -316,49 +321,48 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                       ),
                     ),
                   ),
-                  if (Responsive.isDesktop(context))
+                  if (!Responsive.isMobile(context)) ...[
                     const VerticalDivider(
                       indent: 15,
                       width: 30,
                     ),
-                  // Container(
-                  //   margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                  //   width: 1,
-                  //   color: AppColor.dividerColor,
-                  // ),
-                  if (Responsive.isDesktop(context))
-                    Expanded(
-                      flex: 1,
-                      child: SingleChildScrollView(
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          child: Column(
-                            children: [
-                              ContactInformation(
-                                customerinfo: data.customerinfo!,
-                              ),
-                              if (Responsive.isDesktop(context))
-                                AssignmentWidget(
-                                  id: data.inventoryId!,
-                                  assignto: data.assignedto!,
-                                  imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                  createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
-                                  data: data,
+                    SizedBox(
+                      // flex: 1,
+                      width: 340,
+                      child: ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                        child: SingleChildScrollView(
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              children: [
+                                ContactInformation(
+                                  customerinfo: data.customerinfo!,
                                 ),
-                              if (Responsive.isDesktop(context))
-                                MapViewWidget(
-                                  latLng: LatLng(data.propertylocation![0], data.propertylocation![1]),
-                                  state: data.propertyaddress!.state!,
-                                  city: data.propertyaddress!.city!,
-                                  addressline1: data.propertyaddress!.addressline1,
-                                  addressline2: data.propertyaddress?.addressline2,
-                                  locality: data.propertyaddress!.locality!,
-                                ),
-                            ],
+                                if (Responsive.isDesktop(context))
+                                  AssignmentWidget(
+                                    id: data.inventoryId!,
+                                    assignto: data.assignedto!,
+                                    imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                    createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
+                                    data: data,
+                                  ),
+                                if (Responsive.isDesktop(context))
+                                  MapViewWidget(
+                                    latLng: LatLng(data.propertylocation![0], data.propertylocation![1]),
+                                    state: data.propertyaddress!.state!,
+                                    city: data.propertyaddress!.city!,
+                                    addressline1: data.propertyaddress!.addressline1,
+                                    addressline2: data.propertyaddress?.addressline2,
+                                    locality: data.propertyaddress!.locality!,
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
+                  ]
                 ],
               );
             }
