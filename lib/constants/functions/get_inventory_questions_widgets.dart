@@ -261,31 +261,6 @@ Widget buildInventoryQuestions(
                   },
                 ),
               if (!isChecked) ...[
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 8.0, top: 3),
-                //   child: RichText(
-                //     text: const TextSpan(
-                //       children: [
-                //         TextSpan(
-                //           text: 'Whatsapp Number',
-                //           style: TextStyle(
-                //             color: Colors.black,
-                //             fontSize: 16,
-                //             fontWeight: FontWeight.w500,
-                //           ),
-                //         ),
-                //         TextSpan(
-                //           text: '*',
-                //           style: TextStyle(
-                //             fontSize: 12,
-                //             fontWeight: FontWeight.w500,
-                //             color: Colors.red,
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
                 MobileNumberInputField(
                   fromProfile: true,
                   controller: controller,
@@ -312,22 +287,6 @@ Widget buildInventoryQuestions(
                     ),
                   ),
               ],
-              // LabelTextInputField(
-              //   keyboardType: TextInputType.number,
-              //   onlyDigits: true,
-              //   onChanged: (newvalue) {
-              //     notify.add({"id": question.questionId, "item": newvalue.trim()});
-              //   },
-              //   inputController: controller,
-              //   isMandatory: true,
-              //   labelText: question.questionTitle,
-              //   validator: (value) {
-              //     if (!isChecked && value!.isEmpty) {
-              //       return "Please enter ${question.questionTitle}";
-              //     }
-              //     return null;
-              //   },
-              // ),
             ],
           );
         },
