@@ -118,10 +118,10 @@ class _DetailsTabViewState extends State<DetailsTabView> {
         allImages.addAll(inventoryData.propertyphotos!.imageUrl!);
         allTitles.addAll(inventoryData.propertyphotos!.imageTitle!);
 
-        if (AppConst.getPublicView()) {
-          allImages.removeAt(0);
-          allTitles.removeAt(0);
-        }
+        // if (AppConst.getPublicView()) {
+        //   allImages.removeAt(0);
+        //   allTitles.removeAt(0);
+        // }
       }
     }
     return Column(
