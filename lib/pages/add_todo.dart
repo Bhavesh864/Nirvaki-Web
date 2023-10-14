@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/loader.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 
 import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/customs/responsive.dart';
@@ -10,11 +11,13 @@ import 'package:yes_broker/constants/firebase/questionModels/todo_question.dart'
 
 import 'package:yes_broker/constants/functions/get_todo_questions.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/riverpodstate/todo/linked_with_workItem.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/widgets/questionaries/workitem_success.dart';
 import '../customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
 import '../riverpodstate/all_selected_ansers_provider.dart';
+import '../riverpodstate/selected_workitem.dart';
 
 final myArrayProvider = StateNotifierProvider<AllChipSelectedAnwers, List<Map<String, dynamic>>>(
   (ref) => AllChipSelectedAnwers(),
@@ -44,6 +47,7 @@ class _AddTodoState extends ConsumerState<AddTodo> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(myArrayProvider.notifier).resetState();
     });
+    setLinkedItemInRiverpod();
   }
 
   addDataOnfirestore(AllChipSelectedAnwers notify) {
@@ -94,9 +98,20 @@ class _AddTodoState extends ConsumerState<AddTodo> {
     return null;
   }
 
+  setLinkedItemInRiverpod() async {
+    final notify = ref.read(myArrayProvider.notifier);
+    final workItemId = ref.read(selectedWorkItemId);
+    final linkedWithItem = ref.read(linkedWithWorkItem);
+    if (linkedWithItem && workItemId.isNotEmpty) {
+      final CardDetails? cardDetail = await CardDetails.getSingleCardByWorkItemId(workItemId);
+      notify.add({"id": 6, "item": cardDetail});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(myArrayProvider.notifier);
+    final linkedWithItem = ref.read(linkedWithWorkItem);
     final List<Map<String, dynamic>> selectedValues = ref.read(myArrayProvider);
     final user = ref.watch(userDataProvider);
     return Scaffold(
@@ -112,6 +127,10 @@ class _AddTodoState extends ConsumerState<AddTodo> {
             List<Screen> screensDataList = screenData![0].screens;
             if (!isLinkItem) {
               screensDataList = screensDataList.where((element) => element.screenId != "S5").toList();
+            }
+            if (linkedWithItem) {
+              final arr = ["S5", "S4"];
+              screensDataList = screensDataList.where((element) => !arr.contains(element.screenId)).toList();
             }
             return GestureDetector(
               onTap: () {

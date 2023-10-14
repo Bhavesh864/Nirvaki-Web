@@ -170,6 +170,7 @@ class LabelTextAreaField extends StatelessWidget {
   final Function(String)? onChanged;
   final FormFieldValidator<String>? validator;
   final String? initialvalue;
+  final FontWeight fontWeight;
 
   const LabelTextAreaField({
     Key? key,
@@ -183,6 +184,7 @@ class LabelTextAreaField extends StatelessWidget {
     this.onChanged,
     this.validator,
     this.initialvalue,
+    this.fontWeight = FontWeight.w600,
   }) : super(key: key);
 
   @override
@@ -197,10 +199,10 @@ class LabelTextAreaField extends StatelessWidget {
               children: [
                 TextSpan(
                   text: labelText,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.black,
                     fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: fontWeight,
                   ),
                 ),
                 if (isMandatory)
@@ -221,7 +223,7 @@ class LabelTextAreaField extends StatelessWidget {
           ),
           const SizedBox(height: 3),
           TextFormField(
-            textCapitalization: TextCapitalization.characters,
+            textCapitalization: TextCapitalization.sentences,
             validator: validator,
             keyboardType: TextInputType.multiline,
             maxLines: 5,

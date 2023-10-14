@@ -53,7 +53,12 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
     currentSelectedTab = currentIndex;
     tabviewController = TabController(length: 3, vsync: this, initialIndex: currentIndex);
     final workItemId = ref.read(selectedWorkItemId);
-    leadDetails = FirebaseFirestore.instance.collection('leadDetails').where('leadId', isEqualTo: workItemId == '' ? widget.leadId : workItemId).snapshots();
+    if (workItemId.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(selectedWorkItemId.notifier).addItemId(widget.leadId);
+      });
+    }
+    leadDetails = FirebaseFirestore.instance.collection('leadDetails').where('leadId', isEqualTo: workItemId.isEmpty ? widget.leadId : workItemId).snapshots();
     AppConst.setPublicView(false);
   }
 

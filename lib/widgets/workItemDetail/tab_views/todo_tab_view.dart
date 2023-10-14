@@ -17,6 +17,7 @@ import '../../../constants/functions/filterdataAccordingRole/data_according_role
 import '../../../constants/utils/colors.dart';
 import '../../../constants/utils/constants.dart';
 import '../../../pages/add_inventory.dart';
+import '../../../riverpodstate/todo/linked_with_workItem.dart';
 import '../../table_view/table_view_widgets.dart';
 
 class TodoTabView extends ConsumerStatefulWidget {
@@ -92,6 +93,7 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
                     onPressed: () {
                       AppConst.getOuterContext()?.beamToNamed(AppRoutes.addTodo);
                       ref.read(myArrayProvider.notifier).resetState();
+                      ref.read(linkedWithWorkItem.notifier).setgotToDetailsScreenState(true);
                     },
                     leftIcon: Icons.add,
                     text: 'Add',
