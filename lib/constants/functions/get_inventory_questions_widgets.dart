@@ -67,8 +67,6 @@ Widget buildInventoryQuestions(
       ],
     );
   } else if (question.questionOptionType == 'smallchip') {
-    print("smalll------");
-
     String selectedOption = '';
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       selectedOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
@@ -261,31 +259,6 @@ Widget buildInventoryQuestions(
                   },
                 ),
               if (!isChecked) ...[
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 8.0, top: 3),
-                //   child: RichText(
-                //     text: const TextSpan(
-                //       children: [
-                //         TextSpan(
-                //           text: 'Whatsapp Number',
-                //           style: TextStyle(
-                //             color: Colors.black,
-                //             fontSize: 16,
-                //             fontWeight: FontWeight.w500,
-                //           ),
-                //         ),
-                //         TextSpan(
-                //           text: '*',
-                //           style: TextStyle(
-                //             fontSize: 12,
-                //             fontWeight: FontWeight.w500,
-                //             color: Colors.red,
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
                 MobileNumberInputField(
                   fromProfile: true,
                   controller: controller,
@@ -312,22 +285,6 @@ Widget buildInventoryQuestions(
                     ),
                   ),
               ],
-              // LabelTextInputField(
-              //   keyboardType: TextInputType.number,
-              //   onlyDigits: true,
-              //   onChanged: (newvalue) {
-              //     notify.add({"id": question.questionId, "item": newvalue.trim()});
-              //   },
-              //   inputController: controller,
-              //   isMandatory: true,
-              //   labelText: question.questionTitle,
-              //   validator: (value) {
-              //     if (!isChecked && value!.isEmpty) {
-              //       return "Please enter ${question.questionTitle}";
-              //     }
-              //     return null;
-              //   },
-              // ),
             ],
           );
         },
@@ -513,7 +470,7 @@ Widget buildInventoryQuestions(
           children: [
             LabelTextInputField(
               onlyDigits: isDigitsOnly,
-              keyboardType: isPriceField ? TextInputType.number : TextInputType.name,
+              keyboardType: isPriceField || isDigitsOnly ? TextInputType.number : TextInputType.name,
               inputController: controller,
               labelText: question.questionTitle,
               isMandatory: isvalidationtrue,
@@ -581,14 +538,18 @@ Widget buildInventoryQuestions(
     );
   } else if (question.questionOptionType == "Assign") {
     try {
-      List<Assignedto> assignedusers = [];
+      var assignedusers = [];
       List<String> userids = [];
       if (isEdit) {
         if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
           assignedusers = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
         }
         for (var user in assignedusers) {
-          userids.add(user.userid!);
+          if (user is User) {
+            userids.add(user.userId);
+          } else {
+            userids.add(user.userid!);
+          }
         }
       }
       return AssignUser(
