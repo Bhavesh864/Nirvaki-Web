@@ -164,9 +164,9 @@ Widget buildInventoryQuestions(
     );
   } else if (question.questionOptionType == 'textfield') {
     String textResult = '';
+
     final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
     TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
-    // bool isChecked = true;
     String mobileCountryCode = '+91';
     String whatsappCountryCode = '+91';
 
@@ -464,6 +464,7 @@ Widget buildInventoryQuestions(
             question.questionTitle == 'Rent' ||
             question.questionTitle == 'Listing Price';
         final isEmail = question.questionTitle.contains("Email");
+
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -475,6 +476,8 @@ Widget buildInventoryQuestions(
               labelText: question.questionTitle,
               isMandatory: isvalidationtrue,
               onChanged: (newvalue) {
+                print('object ==-----$newvalue ');
+
                 try {
                   int number = int.parse(newvalue);
                   String words = NumberToWord().convert("en-in", number);
@@ -485,6 +488,7 @@ Widget buildInventoryQuestions(
                   setState(() {
                     textResult = '';
                   });
+                  print('object == $e');
                 }
                 notify.add({"id": question.questionId, "item": newvalue.trim()});
               },

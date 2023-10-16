@@ -9,6 +9,7 @@ import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
 import 'package:yes_broker/constants/functions/get_lead_questions.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/pages/add_inventory.dart' as imp;
 import 'package:yes_broker/pages/add_inventory.dart';
 import 'package:yes_broker/pages/largescreen_dashboard.dart';
 import 'package:yes_broker/riverpodstate/filterQuestions/lead_all_question.dart';
@@ -85,7 +86,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
       final mobileNoValue = selectedValues.where((e) => e["id"] == 7).toList();
       final whatsappNoValue = selectedValues.where((e) => e["id"] == 8).toList();
 
-      if (mobileNoValue.isEmpty || mobileNoValue.length < 10) {
+      if (mobileNoValue.isEmpty || mobileNoValue[0]['item'].split(' ')[1].length < 10) {
         setState(() {
           isMobileNoEmpty = true;
         });
@@ -106,7 +107,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
       }
 
       if (!isChecked) {
-        if (whatsappNoValue.isEmpty || whatsappNoValue.length < 10) {
+        if (whatsappNoValue.isEmpty || whatsappNoValue[0]['item'].split(' ')[1].length < 10) {
           setState(() {
             iswhatsappMobileNoEmpty = true;
           });
