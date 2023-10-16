@@ -161,12 +161,6 @@ class CustomDropdownFormField<T> extends StatefulWidget {
 }
 
 class _CustomDropdownFormFieldState<T> extends State<CustomDropdownFormField<T>> {
-  // T ? selectedValue;
-  //  @override
-  // void initState() {
-  //   super.initState();
-  //   selectedValues = widget.value;
-  // }
   @override
   Widget build(BuildContext context) {
     return Column(
