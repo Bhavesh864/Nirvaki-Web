@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:yes_broker/Customs/dropdown_field.dart';
 import 'package:yes_broker/Customs/label_text_field.dart';
 import 'package:yes_broker/constants/firebase/calenderModel/calender_model.dart';
 import 'package:yes_broker/customs/responsive.dart';
@@ -18,7 +19,7 @@ import 'package:yes_broker/constants/firebase/random_uid.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import '../../Customs/custom_text.dart';
 import '../../customs/custom_fields.dart';
-import '../../customs/dropdown_field.dart';
+
 import '../../widgets/card/questions card/chip_button.dart';
 import '../firebase/detailsModels/todo_details.dart';
 import '../utils/colors.dart';
@@ -161,7 +162,7 @@ void showUploadDocumentModal(
   Function(bool) setIsUploading,
 ) {
   String docName = '';
-
+  String? name;
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -208,15 +209,16 @@ void showUploadDocumentModal(
                     const SizedBox(
                       height: 2,
                     ),
-                    DropDownField(
+                    CustomDropdownFormField(
                       isMandatory: true,
                       labelFontWeight: FontWeight.w500,
-                      title: 'Document Type',
+                      label: 'Document Type',
                       labelFontSize: 15,
-                      defaultValues: "",
-                      optionsList: const ['Adhaar card', 'Agreement', 'Insurance', 'Other'],
-                      onchanged: (value) {
-                        docName = value.toString();
+                      value: name,
+                      items: const ['Adhaar card', 'Agreement', 'Insurance', 'Other'],
+                      onChanged: (value) {
+                        docName = value!;
+                        name = value;
                         innerSetState(
                           () {},
                         );

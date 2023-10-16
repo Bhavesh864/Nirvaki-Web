@@ -126,7 +126,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
   List<String> citiesList = [];
   String selectedCity = '';
   String selectedState = '';
-
+  String? registerAs;
   final TextEditingController companynamecontroller = TextEditingController();
   final TextEditingController mobilenumbercontroller = TextEditingController();
   final TextEditingController whatsupnumbercontroller = TextEditingController();
@@ -383,13 +383,31 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                   margin: const EdgeInsets.symmetric(horizontal: 6),
                                   child: Column(
                                     children: [
-                                      DropDownField(
-                                          title: "Register As",
-                                          defaultValues: "Broker",
-                                          optionsList: dropdownitem,
-                                          onchanged: (value) {
-                                            notify.add({"id": 13, "item": value});
-                                          }),
+                                      CustomDropdownFormField<String>(
+                                        label: "Register As",
+                                        value: registerAs,
+                                        isMandatory: true,
+                                        items: dropdownitem,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            registerAs = value;
+                                          });
+                                          notify.add({"id": 13, "item": value});
+                                        },
+                                        validator: (value) {
+                                          if (value == null) {
+                                            return 'Please select role';
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                      // DropDownField(
+                                      //     title: "Register As",
+                                      //     defaultValues: "Broker",
+                                      //     optionsList: dropdownitem,
+                                      //     onchanged: (value) {
+                                      //       notify.add({"id": 13, "item": value});
+                                      //     }),
                                     ],
                                   ),
                                 ),
