@@ -101,7 +101,7 @@ class _DropDownFieldState extends State<DropDownField> {
                 color: Colors.grey,
               ),
               icon: const Icon(Icons.expand_more),
-              isExpanded: true,
+              // isExpanded: true,
               borderRadius: BorderRadius.circular(10),
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3.5),
               value: selectedValues!.isEmpty ? null : selectedValues!,

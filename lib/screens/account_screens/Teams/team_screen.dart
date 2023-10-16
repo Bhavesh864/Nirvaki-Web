@@ -188,7 +188,7 @@ showAddMemberAlertDailogBox(BuildContext context) {
         child: Dialog(
           insetPadding: const EdgeInsets.all(10),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          child: AddMemberScreen(),
+          child: const AddMemberScreen(),
         ),
       );
     },

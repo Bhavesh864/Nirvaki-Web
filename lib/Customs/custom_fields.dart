@@ -40,6 +40,11 @@ class CustomTextInput extends StatefulWidget {
   final TextInputAction? textInputAction;
   final bool onlyDigits;
 
+  final bool? isDropdown; // Flag to determine if it's a dropdown or text input field
+  final List<String>? dropdownItems; // List of items for the dropdown
+  final String? selectedDropdownItem;
+  final void Function(String?)? dropdownOnchanged;
+
   const CustomTextInput(
       {Key? key,
       required this.controller,
@@ -49,6 +54,9 @@ class CustomTextInput extends StatefulWidget {
       this.leftIcon,
       this.focusnode,
       this.ontap,
+      this.isDropdown = false,
+      this.dropdownItems,
+      this.selectedDropdownItem,
       this.hintstyle = const TextStyle(color: Colors.grey),
       this.rightIcon,
       this.obscureText = false,
@@ -68,6 +76,7 @@ class CustomTextInput extends StatefulWidget {
       this.onFieldSubmitted,
       this.autofillHints,
       this.onlyDigits = false,
+      this.dropdownOnchanged,
       this.margin = const EdgeInsets.all(5)})
       : super(key: key);
 
@@ -86,92 +95,110 @@ class CustomTextInputState extends State<CustomTextInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: widget.margin,
-      child: TextFormField(
-        inputFormatters: widget.onlyDigits
-            ? <TextInputFormatter>[
-                // FilteringTextInputFormatter.digitsOnly,
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
-                LengthLimitingTextInputFormatter(10),
-              ]
-            : null,
-        autofocus: widget.autofocus!,
-        textInputAction: widget.textInputAction ?? TextInputAction.done,
-        focusNode: widget.focusnode,
-        autofillHints: widget.autofillHints,
-        enabled: widget.enabled,
-        onTap: widget.ontap,
-        onFieldSubmitted: widget.onFieldSubmitted,
-        style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.w400,
-          fontFamily: GoogleFonts.dmSans().fontFamily,
-          fontSize: 12,
+    if (widget.isDropdown == true) {
+      Container(
+        margin: widget.margin,
+        child: DropdownButtonFormField<String>(
+          value: widget.selectedDropdownItem,
+          onChanged: widget.dropdownOnchanged,
+          items: widget.dropdownItems?.map((item) {
+            return DropdownMenuItem<String>(
+              value: item,
+              child: Text(item),
+            );
+          }).toList(),
+          // ... (other dropdown-specific properties)
         ),
-        controller: widget.controller,
-        decoration: InputDecoration(
-          isDense: widget.isDense,
-          disabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(
-                color: AppColor.inputFieldBorderColor,
-              )),
-          errorStyle: const TextStyle(height: 0),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: Colors.red, width: 1),
+      );
+    } else {
+      return Container(
+        margin: widget.margin,
+        child: TextFormField(
+          inputFormatters: widget.onlyDigits
+              ? <TextInputFormatter>[
+                  // FilteringTextInputFormatter.digitsOnly,
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                  LengthLimitingTextInputFormatter(10),
+                ]
+              : null,
+          autofocus: widget.autofocus!,
+          textInputAction: widget.textInputAction ?? TextInputAction.done,
+          focusNode: widget.focusnode,
+          autofillHints: widget.autofillHints,
+          enabled: widget.enabled,
+          onTap: widget.ontap,
+          onFieldSubmitted: widget.onFieldSubmitted,
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w400,
+            fontFamily: GoogleFonts.dmSans().fontFamily,
+            fontSize: 12,
           ),
-          label: widget.label,
-          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-          labelText: widget.labelText,
-          hintText: widget.hintText,
-          hintStyle: widget.hintstyle,
-          prefixIcon: widget.leftIcon != null ? Icon(widget.leftIcon, color: Colors.black) : null,
-          suffixIcon: widget.rightIcon != null
-              ? IconButton(
-                  icon: Icon(
-                    widget.rightIcon,
-                    color: Colors.black,
-                  ),
-                  iconSize: 18,
-                  onPressed: widget.obscureText == true
-                      ? () {
-                          setState(() {
-                            _obscureText = !_obscureText!;
-                          });
-                        }
-                      : null,
-                )
-              : const Icon(
-                  Icons.account_circle_outlined,
-                  color: Colors.transparent,
-                ),
-          border: OutlineInputBorder(
+          controller: widget.controller,
+          decoration: InputDecoration(
+            isDense: widget.isDense,
+            disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(
+                  color: AppColor.inputFieldBorderColor,
+                )),
+            errorStyle: const TextStyle(height: 0),
+            errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(
-                color: AppColor.inputFieldBorderColor,
-              )),
-          // isDense: true,
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(
-              color: AppColor.primary,
+              borderSide: const BorderSide(color: Colors.red, width: 1),
             ),
+            label: widget.label,
+            contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+            labelText: widget.labelText,
+            hintText: widget.hintText,
+            hintStyle: widget.hintstyle,
+            prefixIcon: widget.leftIcon != null ? Icon(widget.leftIcon, color: Colors.black) : null,
+            suffixIcon: widget.rightIcon != null
+                ? IconButton(
+                    icon: Icon(
+                      widget.rightIcon,
+                      color: Colors.black,
+                    ),
+                    iconSize: 18,
+                    onPressed: widget.obscureText == true
+                        ? () {
+                            setState(() {
+                              _obscureText = !_obscureText!;
+                            });
+                          }
+                        : null,
+                  )
+                : const Icon(
+                    Icons.account_circle_outlined,
+                    color: Colors.transparent,
+                  ),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(
+                  color: AppColor.inputFieldBorderColor,
+                )),
+            // isDense: true,
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                color: AppColor.primary,
+              ),
+            ),
+            errorMaxLines: 1,
           ),
-          errorMaxLines: 1,
+          obscureText: _obscureText!,
+          maxLength: widget.maxLength,
+          keyboardType: widget.keyboardType,
+          onChanged: widget.onChanged,
+          validator: widget.validator,
+          readOnly: widget.readonly!,
+          initialValue: widget.initialvalue,
+          maxLines: widget.maxLines,
+          minLines: widget.minLines,
         ),
-        obscureText: _obscureText!,
-        maxLength: widget.maxLength,
-        keyboardType: widget.keyboardType,
-        onChanged: widget.onChanged,
-        validator: widget.validator,
-        readOnly: widget.readonly!,
-        initialValue: widget.initialvalue,
-        maxLines: widget.maxLines,
-        minLines: widget.minLines,
-      ),
-    );
+      );
+    }
+    return SizedBox();
   }
 }
 
@@ -607,7 +634,7 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
               Expanded(
                 child: Container(
                   height: 38,
-                  padding: widget.fromProfile == true ? null : const EdgeInsets.symmetric(vertical: 5),
+                  // padding: widget.fromProfile == true ? null : const EdgeInsets.symmetric(vertical: 5),
                   margin: widget.bottomMargin,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
