@@ -196,25 +196,31 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
                                       if (Responsive.isMobile(context) || width! < 850) ...[
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                                margin: const EdgeInsets.only(left: 17, bottom: 4),
-                                                color: Colors.white,
-                                                child: AppText(
-                                                  letterspacing: 0.4,
-                                                  text: "Welcome, ${capitalizeFirstLetter(user.userfirstname)}",
-                                                  fontWeight: FontWeight.w600,
-                                                  fontsize: 16,
-                                                )),
-                                            const CustomCalendarView(),
-                                            WorkItemsList(
-                                              title: 'To do',
-                                              getCardDetails: filterTodoList,
-                                            ),
-                                          ],
+                                        Container(
+                                          margin: const EdgeInsets.symmetric(horizontal: 6),
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                  margin: const EdgeInsets.only(left: 10, bottom: 6),
+                                                  color: Colors.white,
+                                                  child: AppText(
+                                                    letterspacing: 0.4,
+                                                    text: "Welcome, ${capitalizeFirstLetter(user.userfirstname)}",
+                                                    fontWeight: FontWeight.w600,
+                                                    fontsize: 16,
+                                                  )),
+                                              const CustomCalendarView(),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              WorkItemsList(
+                                                title: 'To do',
+                                                getCardDetails: filterTodoList,
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ] else ...[
                                         if (showTableView) ...[

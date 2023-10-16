@@ -89,7 +89,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
       final mobileNoValue = selectedValues.where((e) => e["id"] == 7).toList();
       final whatsappNoValue = selectedValues.where((e) => e["id"] == 8).toList();
 
-      if (mobileNoValue.isEmpty) {
+      if (mobileNoValue.isEmpty || mobileNoValue[0]['item'].split(' ')[1].length < 10) {
         setState(() {
           isMobileNoEmpty = true;
         });
@@ -110,7 +110,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
       }
 
       if (!isChecked) {
-        if (whatsappNoValue.isEmpty) {
+        if (whatsappNoValue.isEmpty || whatsappNoValue[0]['item'].split(' ')[1].length < 10) {
           setState(() {
             iswhatsappMobileNoEmpty = true;
           });
@@ -239,7 +239,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                   }
 
                   return Stack(
-                    fit: StackFit.expand,
+                    // fit: StackFit.expand,
                     children: [
                       Container(
                           decoration: const BoxDecoration(
@@ -275,8 +275,6 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                             padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
                                             child: SingleChildScrollView(
                                               child: Column(
-                                                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                // mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   if (currentScreenList[index].title != null)
                                                     Padding(
@@ -289,86 +287,157 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                         fontWeight: FontWeight.bold,
                                                       ),
                                                     ),
-                                                  ListView.builder(
-                                                    shrinkWrap: true,
-                                                    physics: const NeverScrollableScrollPhysics(),
-                                                    itemCount: currentScreenList[index].questions.length,
-                                                    itemBuilder: (context, i) {
-                                                      final question = currentScreenList[index].questions[i];
-                                                      return Column(
-                                                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                        children: [
-                                                          if (currentScreenList[index].title == null) ...[
-                                                            Padding(
-                                                              padding: const EdgeInsets.only(bottom: 20.0),
-                                                              child: CustomText(
+                                                  for (var i = 0; i < currentScreenList[index].questions.length; i++)
+                                                    Column(
+                                                      children: [
+                                                        if (currentScreenList[index].title == null)
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(bottom: 20.0),
+                                                            child: CustomText(
                                                                 softWrap: true,
                                                                 textAlign: TextAlign.center,
                                                                 size: Responsive.isDesktop(context) ? 26 : 20,
-                                                                title: question.questionTitle,
-                                                                fontWeight: FontWeight.bold,
-                                                              ),
-                                                            ),
-                                                            // const SizedBox(height: 20),
-                                                          ],
-                                                          buildInventoryQuestions(
-                                                            question,
-                                                            currentScreenList,
-                                                            currentScreenIndex,
-                                                            notify,
-                                                            nextQuestion,
-                                                            isRentSelected,
-                                                            isPlotSelected,
-                                                            isEdit,
-                                                            selectedValues,
-                                                            stateList,
-                                                            isMobileNoEmpty,
-                                                            iswhatsappMobileNoEmpty,
-                                                            isChecked,
-                                                            isCheckedUpdate,
+                                                                title: currentScreenList[index].questions[i].questionTitle,
+                                                                fontWeight: FontWeight.bold),
                                                           ),
-                                                          SizedBox(height: question.questionOptionType != 'textfield' ? 10 : 0),
-                                                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                                                            const SizedBox(),
-                                                            if (i == currentScreenList[index].questions.length - 1 && question.questionOptionType != 'chip') ...[
-                                                              Container(
-                                                                child: allQuestionFinishes
-                                                                    ? const Center(
-                                                                        child: CircularProgressIndicator.adaptive(),
-                                                                      )
-                                                                    : Padding(
-                                                                        padding: const EdgeInsets.only(right: 5.0, top: 20),
-                                                                        child: CustomButton(
-                                                                          text: currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next',
-                                                                          onPressed: () {
-                                                                            if (!allQuestionFinishes) {
-                                                                              if (currentScreenList[index].title != "Assign to") {
-                                                                                if (_formKey.currentState!.validate()) {
-                                                                                  nextQuestion(screensDataList: currentScreenList, option: "");
-                                                                                }
-                                                                              }
-                                                                              if (currentScreenList[index].title == "Assign to") {
-                                                                                setState(() {
-                                                                                  allQuestionFinishes = true;
-                                                                                });
-                                                                                addDataOnfirestore(notify);
-                                                                              }
-                                                                              if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
+                                                        buildInventoryQuestions(
+                                                          currentScreenList[index].questions[i],
+                                                          currentScreenList,
+                                                          currentScreenIndex,
+                                                          notify,
+                                                          nextQuestion,
+                                                          isRentSelected,
+                                                          isPlotSelected,
+                                                          isEdit,
+                                                          selectedValues,
+                                                          stateList,
+                                                          isMobileNoEmpty,
+                                                          iswhatsappMobileNoEmpty,
+                                                          isChecked,
+                                                          isCheckedUpdate,
+                                                        ),
+                                                        SizedBox(height: currentScreenList[index].questions[i].questionOptionType != 'textfield' ? 10 : 0),
+                                                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                                          const SizedBox(),
+                                                          if (i == currentScreenList[index].questions.length - 1 &&
+                                                              currentScreenList[index].questions[i].questionOptionType != 'chip') ...[
+                                                            Container(
+                                                              margin: const EdgeInsets.only(top: 10),
+                                                              alignment: Alignment.centerRight,
+                                                              child: allQuestionFinishes
+                                                                  ? const Center(
+                                                                      child: CircularProgressIndicator.adaptive(),
+                                                                    )
+                                                                  : CustomButton(
+                                                                      text: currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next',
+                                                                      onPressed: () {
+                                                                        if (!allQuestionFinishes) {
+                                                                          if (currentScreenList[index].title != "Assign to") {
+                                                                            if (_formKey.currentState!.validate()) {
+                                                                              nextQuestion(screensDataList: screensDataList, option: "");
                                                                             }
-                                                                          },
-                                                                          width: currentScreenList[index].title == "Assign to" ? 90 : 70,
-                                                                          height: 39,
-                                                                        ),
-                                                                      ),
-                                                              ),
-                                                            ] else ...[
-                                                              const SizedBox()
-                                                            ]
-                                                          ]),
-                                                        ],
-                                                      );
-                                                    },
-                                                  )
+                                                                          }
+                                                                          // final hasvalues = selectedValues.any((element) => element["id"] == 36);
+                                                                          // final assignFieldValue = selectedValues.firstWhere((element) => element["id"] == 36);
+                                                                          if (currentScreenList[index].title == "Assign to") {
+                                                                            setState(() {
+                                                                              allQuestionFinishes = true;
+                                                                            });
+                                                                            addDataOnfirestore(notify);
+                                                                          }
+                                                                        }
+                                                                        if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
+                                                                      },
+                                                                      width: currentScreenList[index].title == "Assign to" ? 90 : 70,
+                                                                      height: 39,
+                                                                    ),
+                                                            ),
+                                                          ] else ...[
+                                                            const SizedBox()
+                                                          ]
+                                                        ]),
+                                                      ],
+                                                    ),
+                                                  // ListView.builder(
+                                                  //   shrinkWrap: true,
+                                                  //   physics: const NeverScrollableScrollPhysics(),
+                                                  //   itemCount: currentScreenList[index].questions.length,
+                                                  //   itemBuilder: (context, i) {
+                                                  //     final question = currentScreenList[index].questions[i];
+                                                  //     return Column(
+                                                  //       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  //       children: [
+                                                  //         if (currentScreenList[index].title == null) ...[
+                                                  //           Padding(
+                                                  //             padding: const EdgeInsets.only(bottom: 20.0),
+                                                  //             child: CustomText(
+                                                  //               softWrap: true,
+                                                  //               textAlign: TextAlign.center,
+                                                  //               size: Responsive.isDesktop(context) ? 26 : 20,
+                                                  //               title: question.questionTitle,
+                                                  //               fontWeight: FontWeight.bold,
+                                                  //             ),
+                                                  //           ),
+                                                  //           // const SizedBox(height: 20),
+                                                  //         ],
+                                                  //         buildInventoryQuestions(
+                                                  //           question,
+                                                  //           currentScreenList,
+                                                  //           currentScreenIndex,
+                                                  //           notify,
+                                                  //           nextQuestion,
+                                                  //           isRentSelected,
+                                                  //           isPlotSelected,
+                                                  //           isEdit,
+                                                  //           selectedValues,
+                                                  //           stateList,
+                                                  //           isMobileNoEmpty,
+                                                  //           iswhatsappMobileNoEmpty,
+                                                  //           isChecked,
+                                                  //           isCheckedUpdate,
+                                                  //         ),
+                                                  //         SizedBox(height: question.questionOptionType != 'textfield' ? 10 : 0),
+                                                  //         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                                  //           const SizedBox(),
+                                                  //           if (i == currentScreenList[index].questions.length - 1 && question.questionOptionType != 'chip') ...[
+                                                  //             Container(
+                                                  //               child: allQuestionFinishes
+                                                  //                   ? const Center(
+                                                  //                       child: CircularProgressIndicator.adaptive(),
+                                                  //                     )
+                                                  //                   : Padding(
+                                                  //                       padding: const EdgeInsets.only(right: 5.0, top: 20),
+                                                  //                       child: CustomButton(
+                                                  //                         text: currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next',
+                                                  //                         onPressed: () {
+                                                  //                           if (!allQuestionFinishes) {
+                                                  //                             if (currentScreenList[index].title != "Assign to") {
+                                                  //                               if (_formKey.currentState!.validate()) {
+                                                  //                                 nextQuestion(screensDataList: currentScreenList, option: "");
+                                                  //                               }
+                                                  //                             }
+                                                  //                             if (currentScreenList[index].title == "Assign to") {
+                                                  //                               setState(() {
+                                                  //                                 allQuestionFinishes = true;
+                                                  //                               });
+                                                  //                               addDataOnfirestore(notify);
+                                                  //                             }
+                                                  //                             if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
+                                                  //                           }
+                                                  //                         },
+                                                  //                         width: currentScreenList[index].title == "Assign to" ? 90 : 70,
+                                                  //                         height: 39,
+                                                  //                       ),
+                                                  //                     ),
+                                                  //             ),
+                                                  //           ] else ...[
+                                                  //             const SizedBox()
+                                                  //           ]
+                                                  //         ]),
+                                                  //       ],
+                                                  //     );
+                                                  //   },
+                                                  // )
                                                 ],
                                               ),
                                             ),

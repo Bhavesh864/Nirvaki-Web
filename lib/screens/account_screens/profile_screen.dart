@@ -436,7 +436,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                         const SizedBox(width: 7),
                         InkWell(
                           onTap: () {
-                            if (phoneController.text.trim() == "") {
+                            if (phoneController.text.trim() == "" || phoneController.text.trim().length < 10) {
                               setState(() {
                                 isMobileNoEmpty = true;
                               });
@@ -598,7 +598,8 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                   ),
                 ),
                 if (Responsive.isMobile(context))
-                  buildInfoFields('Employee ID', userData.userId, false, TextEditingController(), context, (value) => validateForNormalFeild(props: "First name", value: value)),
+                  buildInfoFields(
+                      'Employee ID', userData.userId, false, TextEditingController(), context, (value) => validateForNormalFeild(props: "First name", value: value)),
               ] else
                 ...[]
             ],
@@ -609,7 +610,8 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
   }
 }
 
-Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, TextEditingController textController, BuildContext context, FormFieldValidator<String>? validator) {
+Widget buildInfoFields(
+    String fieldName, String fieldDetail, bool isEditing, TextEditingController textController, BuildContext context, FormFieldValidator<String>? validator) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -650,7 +652,15 @@ Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, Tex
 }
 
 Widget mobileInfoFields(
-    String fieldName, String fieldDetail, bool isEditing, TextEditingController textController, BuildContext context, String countryCode, openModal, bool isEmpty) {
+  String fieldName,
+  String fieldDetail,
+  bool isEditing,
+  TextEditingController textController,
+  BuildContext context,
+  String countryCode,
+  openModal,
+  bool isEmpty,
+) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
