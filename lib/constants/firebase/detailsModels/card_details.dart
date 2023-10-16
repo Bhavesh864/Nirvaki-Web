@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
-import 'package:yes_broker/constants/app_constant.dart';
 
 final CollectionReference cardDetailsCollection = FirebaseFirestore.instance.collection('cardDetails');
 
