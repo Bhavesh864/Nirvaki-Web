@@ -170,7 +170,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                               );
                             },
                             loadingBuilder: (context, child, loadingProgress) {
-                              return loadingProgress == null ? child : const Center(child: CircularProgressIndicator.adaptive());
+                              return loadingProgress == null ? child : const Loader();
                             },
                           ),
                         ),
@@ -180,7 +180,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                         child: CustomText(
                           title: widget.data.propertyphotos == null ? 'Front Elevation' : allTitles[index],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 );
