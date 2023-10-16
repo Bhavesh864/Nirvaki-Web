@@ -1,14 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../app_constant.dart';
 import '../Hive/hive_methods.dart';
-import '../userModel/user_info.dart';
+import '../userModel/user_info.dart' as userinfo;
 
 Future<String?> signinMethod({required email, required password}) async {
   String res = 'Something went wrong';
   try {
-    final authResult = await auth.signInWithEmailAndPassword(email: email, password: password);
+    final authResult = await userinfo.auth.signInWithEmailAndPassword(email: email, password: password);
     final uid = authResult.user?.uid;
     UserHiveMethods.addData(key: "token", data: uid);
+    final userinfo.User? user = await userinfo.User.getUser(uid!);
+    UserHiveMethods.addData(key: "brokerId", data: user?.brokerId);
+    print("+++++++++++++++++++++++++${UserHiveMethods.getdata("brokerId")}");
     AppConst.setAccessToken(uid);
     res = "success";
     return res;

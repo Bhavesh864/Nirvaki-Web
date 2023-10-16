@@ -45,7 +45,6 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
         ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null);
       }
     });
-
     final token = UserHiveMethods.getdata("token");
     if (token != null) {
       AppConst.setAccessToken(token);
@@ -58,8 +57,9 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void setCardDetails() async {
-    final brokerid = UserHiveMethods.getdata("brokerId");
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("brokerid", isEqualTo: brokerid).snapshots();
+    //   final brokerid = UserHiveMethods.getdata("brokerId");
+    //   print("$brokerid===================================");
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
   }
 
   getUserData(token) async {

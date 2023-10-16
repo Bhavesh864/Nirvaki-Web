@@ -536,7 +536,7 @@ Widget buildLeadQuestions(
           children: [
             LabelTextInputField(
               onlyDigits: isDigitsOnly,
-              keyboardType: isPriceField ? TextInputType.number : TextInputType.name,
+              keyboardType: isPriceField || isDigitsOnly ? TextInputType.number : TextInputType.name,
               inputController: controller,
               labelText: question.questionTitle,
               isMandatory: isvalidationtrue,
@@ -575,14 +575,18 @@ Widget buildLeadQuestions(
     );
   } else if (question.questionOptionType == "Assign") {
     try {
-      List<Assignedto> assignedusers = [];
+      var assignedusers = [];
       List<String> userids = [];
       if (isEdit) {
         if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
           assignedusers = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
         }
         for (var user in assignedusers) {
-          userids.add(user.userid!);
+          if (user is User) {
+            userids.add(user.userId);
+          } else {
+            userids.add(user.userid!);
+          }
         }
       }
       return AssignUser(

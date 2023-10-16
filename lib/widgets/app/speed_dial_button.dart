@@ -11,6 +11,7 @@ import '../../constants/utils/colors.dart';
 import '../../pages/add_inventory.dart' as inventory;
 import '../../pages/add_lead.dart' as lead;
 import '../../pages/add_todo.dart';
+import '../../riverpodstate/todo/linked_with_workItem.dart';
 
 class CustomSpeedDialButton extends ConsumerStatefulWidget {
   const CustomSpeedDialButton({super.key});
@@ -77,6 +78,7 @@ class CustomSpeedDialButtonState extends ConsumerState<CustomSpeedDialButton> {
           onTap: () {
             AppConst.getOuterContext()!.beamToNamed(AppRoutes.addTodo);
             ref.read(myArrayProvider.notifier).resetState();
+            ref.read(linkedWithWorkItem.notifier).setgotToDetailsScreenState(false);
           },
           labelShadow: [
             const BoxShadow(

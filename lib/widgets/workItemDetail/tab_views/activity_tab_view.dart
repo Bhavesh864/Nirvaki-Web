@@ -26,16 +26,26 @@ class ActivityTabView extends ConsumerStatefulWidget {
 }
 
 class ActivityTabViewState extends ConsumerState<ActivityTabView> {
+  void submitTodo() {
+    final workItemId = ref.read(selectedWorkItemId);
+    final User? user = ref.read(userDataProvider);
+    if (controller.text.trim().isNotEmpty) {
+      submitActivity(itemid: workItemId, activitytitle: controller.text.trim(), user: user!);
+      notifyToUser(currentuserdata: user, assignedto: widget.details.assignedto, content: "$workItemId added new Activity", title: controller.text, itemid: workItemId);
+      controller.clear();
+    } else {
+      customSnackBar(context: context, text: 'Please enter note to submit');
+    }
+  }
+
   final TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final workItemId = ref.watch(selectedWorkItemId);
-    final User? user = ref.watch(userDataProvider);
     return Column(
       children: [
-        Row(
-          // runSpacing: 20,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Wrap(
+          runSpacing: 20,
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const CustomText(
               title: 'Activity',
@@ -48,7 +58,7 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
                 Container(
                   margin: const EdgeInsets.only(right: 10),
                   width: Responsive.isMobile(context) ? width! * 0.6 : 400,
-                  child: TextField(
+                  child: TextFormField(
                     controller: controller,
                     decoration: InputDecoration(
                       hintText: 'Type note here...',
@@ -61,24 +71,12 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
                         color: Colors.black,
                       ),
                     ),
+                    onFieldSubmitted: (_) => submitTodo(),
                   ),
                 ),
                 CustomButton(
                   text: 'Add Note',
-                  onPressed: () {
-                    if (controller.text.trim().isNotEmpty) {
-                      submitActivity(itemid: workItemId, activitytitle: controller.text.trim(), user: user!);
-                      notifyToUser(
-                          currentuserdata: user,
-                          assignedto: widget.details.assignedto,
-                          content: "$workItemId added new Activity",
-                          title: controller.text,
-                          itemid: workItemId);
-                      controller.clear();
-                    } else {
-                      customSnackBar(context: context, text: 'Please enter note to submit');
-                    }
-                  },
+                  onPressed: submitTodo,
                   height: Responsive.isMobile(context) ? 45 : 40,
                 ),
               ],

@@ -153,6 +153,7 @@ Widget buildTodoQuestions(
     TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
     return LabelTextAreaField(
       labelText: question.questionTitle,
+      fontWeight: FontWeight.normal,
       inputController: controller,
       onChanged: (newvalue) {
         notify.add({"id": question.questionId, "item": newvalue.trim()});
