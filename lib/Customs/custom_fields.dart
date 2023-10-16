@@ -528,7 +528,7 @@ class MobileNumberInputField extends StatefulWidget {
     required this.onChange,
     required this.controller,
     required this.hintText,
-    this.margin = const EdgeInsets.all(5),
+    this.margin = const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
     this.validator,
     this.fontsize = 14.0,
     this.isMandatory = true,
@@ -568,7 +568,10 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
-              padding: const EdgeInsets.only(left: 8.0, top: 2),
+              padding: const EdgeInsets.only(
+                left: 8.0,
+                top: 2,
+              ),
               child: RichText(
                 text: TextSpan(
                   children: [
@@ -577,7 +580,7 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 15,
-                        fontWeight: FontWeight.w500,
+                        // fontWeight: FontWeight.w500//
                       ),
                     ),
                     const TextSpan(text: " "),
@@ -633,8 +636,8 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
               if (widget.fromProfile == true) const SizedBox(width: 5),
               Expanded(
                 child: Container(
-                  height: 38,
-                  // padding: widget.fromProfile == true ? null : const EdgeInsets.symmetric(vertical: 5),
+                  height: kIsWeb ? 38 : 45,
+                  padding: widget.fromProfile == true ? null : const EdgeInsets.symmetric(vertical: 5),
                   margin: widget.bottomMargin,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -651,18 +654,19 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
                         keyboardType: TextInputType.phone,
                         validator: widget.validator,
                         decoration: InputDecoration(
-                            // suffixIcon: const Icon(
-                            //   Icons.abc,
-                            //   color: Colors.transparent,
-                            // ),
-                            isDense: widget.isdense,
-                            hintText: "Type here...",
-                            counterText: "",
-                            hintStyle: const TextStyle(color: Colors.grey, fontSize: 12),
-                            contentPadding: widget.contentpadding,
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            errorBorder: InputBorder.none),
+                          // suffixIcon: const Icon(
+                          //   Icons.abc,
+                          //   color: Colors.transparent,
+                          // ),
+                          isDense: widget.isdense,
+                          hintText: "Type here..",
+                          counterText: "",
+                          hintStyle: const TextStyle(color: Colors.grey, fontSize: 12),
+                          contentPadding: widget.contentpadding,
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                        ),
                       ),
                     ],
                   ),
