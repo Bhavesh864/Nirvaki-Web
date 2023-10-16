@@ -85,7 +85,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
       final mobileNoValue = selectedValues.where((e) => e["id"] == 7).toList();
       final whatsappNoValue = selectedValues.where((e) => e["id"] == 8).toList();
 
-      if (mobileNoValue.isEmpty) {
+      if (mobileNoValue.isEmpty || mobileNoValue.length < 10) {
         setState(() {
           isMobileNoEmpty = true;
         });
@@ -106,7 +106,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
       }
 
       if (!isChecked) {
-        if (whatsappNoValue.isEmpty) {
+        if (whatsappNoValue.isEmpty || whatsappNoValue.length < 10) {
           setState(() {
             iswhatsappMobileNoEmpty = true;
           });

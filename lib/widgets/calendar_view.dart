@@ -183,13 +183,13 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                         //   textAlign: TextAlign.center,
                         //   backgroundColor: Colors.amber,
                         // ),
-                        appointmentTimeTextFormat: Intl.defaultLocale,
+                        // appointmentTimeTextFormat: Intl.defaultLocale,
                         appointmentBuilder: (context, calendarAppointmentDetails) {
                           final event = calendarAppointmentDetails.appointments.first;
 
                           return Container(
                             margin: const EdgeInsets.symmetric(vertical: 10),
-                            // height: calendarAppointmentDetails.bounds.height,
+                            height: calendarAppointmentDetails.bounds.height,
                             decoration: BoxDecoration(
                               color: AppColor.secondary.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(6),
