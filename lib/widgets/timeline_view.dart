@@ -49,7 +49,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: !widget.fromHome
           ? null
           : BoxDecoration(
