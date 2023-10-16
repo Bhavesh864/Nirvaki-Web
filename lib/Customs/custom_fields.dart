@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -538,7 +539,10 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
-              padding: const EdgeInsets.only(left: 8.0, top: 2),
+              padding: const EdgeInsets.only(
+                left: 8.0,
+                top: 2,
+              ),
               child: RichText(
                 text: TextSpan(
                   children: [
@@ -547,7 +551,7 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 15,
-                        fontWeight: FontWeight.w500,
+                        // fontWeight: FontWeight.w500//
                       ),
                     ),
                     const TextSpan(text: " "),
@@ -565,7 +569,7 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
             ),
           ),
         Container(
-          margin: const EdgeInsets.all(5),
+          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
             border: Border.all(
               color: !widget.isEmpty ? Colors.grey : Colors.red,
@@ -602,7 +606,7 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
               if (widget.fromProfile == true) const SizedBox(width: 5),
               Expanded(
                 child: Container(
-                  height: 38,
+                  height: kIsWeb ? 38 : 45,
                   padding: widget.fromProfile == true ? null : const EdgeInsets.symmetric(vertical: 5),
                   margin: widget.bottomMargin,
                   child: Column(
@@ -620,18 +624,19 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
                         keyboardType: TextInputType.phone,
                         validator: widget.validator,
                         decoration: InputDecoration(
-                            // suffixIcon: const Icon(
-                            //   Icons.abc,
-                            //   color: Colors.transparent,
-                            // ),
-                            isDense: widget.isdense,
-                            hintText: "Type here...",
-                            counterText: "",
-                            hintStyle: const TextStyle(color: Colors.grey, fontSize: 12),
-                            contentPadding: widget.contentpadding,
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            errorBorder: InputBorder.none),
+                          // suffixIcon: const Icon(
+                          //   Icons.abc,
+                          //   color: Colors.transparent,
+                          // ),
+                          isDense: widget.isdense,
+                          hintText: "Type here..",
+                          counterText: "",
+                          hintStyle: const TextStyle(color: Colors.grey, fontSize: 12),
+                          contentPadding: widget.contentpadding,
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                        ),
                       ),
                     ],
                   ),
