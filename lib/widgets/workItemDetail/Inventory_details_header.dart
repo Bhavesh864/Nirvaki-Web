@@ -27,17 +27,17 @@ import '../app/app_bar.dart';
 import '../app/nav_bar.dart';
 
 Future<void> shareUrl(BuildContext context, {String textToCombine = ''}) async {
-  // try {
-  //   final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
-  //   print(location);
+  try {
+    // final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
+    // print(location);
 
-  //   final currentUrl = window.location.href;
-  //   Clipboard.setData(ClipboardData(text: currentUrl + textToCombine)).then((_) {
-  //     customSnackBar(context: context, text: 'URL copied to clipboard');
-  //   });
-  // } catch (e) {
-  //   print('Error sharing URL: $e');
-  // }
+    // final currentUrl = window.location.href;
+    // Clipboard.setData(ClipboardData(text: currentUrl + textToCombine)).then((_) {
+    //   customSnackBar(context: context, text: 'URL copied to clipboard');
+    // });
+  } catch (e) {
+    print('Error sharing URL: $e');
+  }
 }
 
 class InventoryDetailsHeader extends ConsumerWidget {
@@ -68,13 +68,13 @@ class InventoryDetailsHeader extends ConsumerWidget {
   static void defaultFunc(e) {}
 
   Future<void> shareUrl(BuildContext context) async {
-    // try {
-    //   final currentUrl = window.location.href;
-    //   await Clipboard.setData(ClipboardData(text: currentUrl));
-    //   customSnackBar(context: context, text: 'URL copied to clipboard');
-    // } catch (e) {
-    //   print('Error sharing URL: $e');
-    // }
+    try {
+      // final currentUrl = window.location.href;
+      // await Clipboard.setData(ClipboardData(text: currentUrl));
+      // customSnackBar(context: context, text: 'URL copied to clipboard');
+    } catch (e) {
+      print('Error sharing URL: $e');
+    }
   }
 
   void navigateToEditPage(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -500,6 +501,7 @@ class MobileNumberInputField extends StatefulWidget {
     required this.onChange,
     required this.controller,
     required this.hintText,
+    this.margin = const EdgeInsets.all(5),
     this.validator,
     this.fontsize = 14.0,
     this.isMandatory = true,
@@ -525,6 +527,7 @@ class MobileNumberInputField extends StatefulWidget {
   final EdgeInsetsGeometry contentpadding;
   final bool? fromProfile;
   final EdgeInsets? innnerContainerPadding;
+  final EdgeInsetsGeometry margin;
   @override
   State<MobileNumberInputField> createState() => _MobileNumberInputFieldState();
 }
@@ -565,7 +568,7 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
             ),
           ),
         Container(
-          margin: const EdgeInsets.all(5),
+          margin: widget.margin,
           decoration: BoxDecoration(
             border: Border.all(
               color: !widget.isEmpty ? Colors.grey : Colors.red,
@@ -581,7 +584,7 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
                 child: Padding(
                   // padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
                   padding: widget.fromProfile == true
-                      ? const EdgeInsets.symmetric(horizontal: 5, vertical: 0)
+                      ? const EdgeInsets.symmetric(horizontal: 5, vertical: 4)
                       : EdgeInsets.symmetric(
                           horizontal: 5,
                           vertical: Responsive.isMobile(context) ? 8 : 0,
@@ -590,7 +593,8 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
                     children: [
                       AppText(
                         text: widget.countryCode,
-                        fontsize: widget.fontsize!,
+                        fontsize: kIsWeb ? 14 : 12,
+                        // fontsize: widget.fontsize!,
                       ),
                       const Icon(
                         Icons.arrow_drop_down_outlined,

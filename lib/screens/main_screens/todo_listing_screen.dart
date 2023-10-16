@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
@@ -66,8 +65,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   }
 
   void setCardDetails() {
-    final brokerid = UserHiveMethods.getdata("brokerId");
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("brokerid", isEqualTo: brokerid).snapshots();
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
   }
 
   void getDetails(User currentuser) async {
@@ -338,7 +336,6 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
     );
   }
 }
-
 
 // String getGreeting() {
 //   final now = DateTime.now();

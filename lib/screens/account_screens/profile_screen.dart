@@ -629,6 +629,7 @@ Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, Tex
           // height: 50,
           width: Responsive.isDesktop(context) ? 300 : 160,
           child: CustomTextInput(
+            margin: const EdgeInsets.symmetric(vertical: 5),
             controller: textController,
             onFieldSubmitted: (newValue) {},
             validator: validator,
@@ -667,6 +668,7 @@ Widget mobileInfoFields(
           width: Responsive.isDesktop(context) ? 300 : 160,
           child: MobileNumberInputField(
             // bottomMargin: kIsWeb ? const EdgeInsets.only(bottom: 8.5) : const EdgeInsets.only(bottom: 1.5),
+            margin: const EdgeInsets.symmetric(vertical: 5),
             fontsize: 13.0,
             controller: textController,
             hintText: 'Phone',
@@ -719,6 +721,7 @@ Widget serachLocationInfoFields(
           // height: 50,
           width: Responsive.isDesktop(context) ? 300 : 335,
           child: CustomTextInput(
+            margin: const EdgeInsets.symmetric(vertical: 5),
             hintText: "Type here...",
             controller: textController,
             onFieldSubmitted: (newValue) {},
