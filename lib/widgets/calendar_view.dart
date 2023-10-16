@@ -12,7 +12,6 @@ import '../constants/firebase/calenderModel/calender_model.dart';
 import '../constants/firebase/userModel/user_info.dart';
 import '../constants/functions/calendar/calendar_functions.dart';
 import '../constants/functions/workitems_detail_methods.dart';
-import '../customs/loader.dart';
 import '../riverpodstate/user_data.dart';
 import 'calendar/event_data.dart';
 
@@ -149,71 +148,79 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                     ),
                   ),
                   Container(
+                    decoration: BoxDecoration(
+                      color: AppColor.secondary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                     margin: const EdgeInsets.only(top: 10, bottom: 6),
                     height: Responsive.isMobile(context) ? 180 : 165,
                     child: SfCalendar(
-                        headerHeight: 0,
-                        dataSource: EventDataSource(calenderList),
-                        view: CalendarView.timelineDay,
-                        timeSlotViewSettings: TimeSlotViewSettings(
-                          startHour: 9,
-                          endHour: 24,
-                          timelineAppointmentHeight: Responsive.isMobile(context) ? 70 : 60,
+                      headerHeight: 0,
+                      dataSource: EventDataSource(calenderList),
+                      view: CalendarView.timelineDay,
+                      timeSlotViewSettings: TimeSlotViewSettings(
+                        startHour: 9,
+                        endHour: 24,
+                        timeTextStyle: TextStyle(
+                          color: Colors.black,
+                          fontSize: 10,
+                          fontWeight: FontWeight.lerp(FontWeight.w400, FontWeight.w600, 0.7),
                         ),
-                        backgroundColor: Colors.white,
-                        allowAppointmentResize: true,
-                        showDatePickerButton: false,
-                        showCurrentTimeIndicator: false,
-                        viewHeaderHeight: 0,
-                        // headerStyle: const CalendarHeaderStyle(
-                        //   textAlign: TextAlign.center,
-                        //   backgroundColor: Colors.amber,
-                        // ),
-                        timeRegionBuilder: (context, timeRegionDetails) {
-                          return const Text('data');
-                        },
-                        appointmentTimeTextFormat: Intl.defaultLocale,
-                        appointmentBuilder: (context, calendarAppointmentDetails) {
-                          final event = calendarAppointmentDetails.appointments.first;
+                        timelineAppointmentHeight: Responsive.isMobile(context) ? 70 : 60,
+                      ),
 
-                          return Container(
-                            margin: const EdgeInsets.symmetric(vertical: 10),
-                            // height: calendarAppointmentDetails.bounds.height,
-                            decoration: BoxDecoration(
-                              color: AppColor.secondary.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(6),
+                      backgroundColor: Colors.white,
+                      allowAppointmentResize: true,
+                      showDatePickerButton: false,
+                      viewHeaderHeight: 0,
+
+                      // headerStyle: const CalendarHeaderStyle(
+                      //   textAlign: TextAlign.center,
+                      //   backgroundColor: Colors.amber,
+                      // ),
+                      appointmentTimeTextFormat: Intl.defaultLocale,
+                      appointmentBuilder: (context, calendarAppointmentDetails) {
+                        final event = calendarAppointmentDetails.appointments.first;
+
+                        return Container(
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          // height: calendarAppointmentDetails.bounds.height,
+                          decoration: BoxDecoration(
+                            color: AppColor.secondary.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: 4,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: getColorForTaskType('Meeting'),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 6,
+                                ),
+                                Text(
+                                  event.calenderTitle,
+                                  // maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    height: 4,
-                                    width: 40,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: getColorForTaskType('Meeting'),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 6,
-                                  ),
-                                  Text(
-                                    event.calenderTitle,
-                                    // maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        }),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),

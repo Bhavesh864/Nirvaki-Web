@@ -1,4 +1,5 @@
 import 'package:beamer/beamer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,6 +17,7 @@ import 'package:yes_broker/widgets/auth/details_header.dart';
 import '../../../Customs/custom_fields.dart';
 import '../../../constants/utils/constants.dart';
 import '../../../constants/utils/image_constants.dart';
+import 'company_details.dart';
 import 'country_code_modal.dart';
 
 class PersonalDetailsAuthScreen extends ConsumerStatefulWidget {
@@ -69,11 +71,18 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
       });
     }
     if (isvalid!) {
-      // if (Responsive.isMobile(context)) {
-      //   Navigator.pushNamed(context, AppRoutes.companyDetailsScreen);
-      // } else {
-      context.beamToNamed(AppRoutes.companyDetailsScreen);
-      // }
+      if (kIsWeb) {
+        context.beamToNamed(AppRoutes.companyDetailsScreen);
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return const CompanyDetailsAuthScreen();
+            },
+          ),
+        );
+      }
     }
   }
 
