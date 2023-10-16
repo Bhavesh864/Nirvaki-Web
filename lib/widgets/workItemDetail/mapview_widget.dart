@@ -53,7 +53,6 @@ class _MapViewWidgetState extends State<MapViewWidget> {
 
   String getGoogleMapsLink(LatLng latLng) {
     String link = 'https://www.google.com/maps/search/?api=1&query=${latLng.latitude},${latLng.longitude}';
-    print(link);
     return link;
   }
 
