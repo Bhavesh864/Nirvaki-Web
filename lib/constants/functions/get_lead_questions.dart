@@ -23,7 +23,6 @@ import '../../Customs/custom_text.dart';
 import '../../Customs/dropdown_field.dart';
 import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
-import '../firebase/detailsModels/lead_details.dart';
 import '../utils/colors.dart';
 
 Widget buildLeadQuestions(

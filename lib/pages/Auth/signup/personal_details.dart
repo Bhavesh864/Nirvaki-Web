@@ -35,13 +35,14 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
   String whatsappCountryCode = '+91';
   bool isMobileEmpty = false;
   bool isWhatsEmpty = false;
-
   bool isChecked = true;
+
   final key = GlobalKey<FormState>();
   var isloading = false;
+
   void navigateTopage(SelectedSignupItems notify) {
     final isvalid = key.currentState?.validate();
-    if (mobilenumbercontroller.text == "") {
+    if (mobilenumbercontroller.text.trim() == "" || mobilenumbercontroller.text.length < 10) {
       setState(() {
         isMobileEmpty = true;
       });
@@ -55,7 +56,7 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
     }
 
     if (!isChecked) {
-      if (whatsupnumbercontroller.text == "") {
+      if (whatsupnumbercontroller.text.trim() == "" || whatsupnumbercontroller.text.trim().length < 10) {
         setState(() {
           isWhatsEmpty = true;
         });

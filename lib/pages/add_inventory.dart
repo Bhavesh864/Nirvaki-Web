@@ -89,7 +89,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
       final mobileNoValue = selectedValues.where((e) => e["id"] == 7).toList();
       final whatsappNoValue = selectedValues.where((e) => e["id"] == 8).toList();
 
-      if (mobileNoValue.isEmpty) {
+      if (mobileNoValue.isEmpty || mobileNoValue.length < 10) {
         setState(() {
           isMobileNoEmpty = true;
         });
@@ -110,7 +110,7 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
       }
 
       if (!isChecked) {
-        if (whatsappNoValue.isEmpty) {
+        if (whatsappNoValue.isEmpty || whatsappNoValue.length < 10) {
           setState(() {
             iswhatsappMobileNoEmpty = true;
           });

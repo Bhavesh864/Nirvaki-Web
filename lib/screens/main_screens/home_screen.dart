@@ -161,49 +161,51 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                   size.width >= 850
                       ? Expanded(
                           flex: size.width > 1340 ? 4 : 6,
-                          // flex: 4,
-                          child: Column(
-                            children: [
-                              const Expanded(
-                                flex: 3,
-                                child: CustomCalendarView(),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Expanded(
-                                flex: 5,
-                                child: Container(
-                                  padding: const EdgeInsets.only(bottom: 8),
-                                  decoration: BoxDecoration(
-                                    color: AppColor.secondary,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      const Padding(
-                                        padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
-                                        child: CustomText(
-                                          title: 'Timeline',
-                                          fontWeight: FontWeight.w600,
-                                          size: 15,
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Container(
-                                          margin: const EdgeInsets.symmetric(horizontal: 10),
-                                          child: CustomTimeLineView(
-                                            itemIds: filterItem.map((card) => card["workitemId"]).toList(),
-                                            fromHome: true,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 6.0),
+                            child: Column(
+                              children: [
+                                const Expanded(
+                                  flex: 3,
+                                  child: CustomCalendarView(),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Expanded(
+                                  flex: 5,
+                                  child: Container(
+                                    padding: const EdgeInsets.only(bottom: 8),
+                                    decoration: BoxDecoration(
+                                      color: AppColor.secondary,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const Padding(
+                                          padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
+                                          child: CustomText(
+                                            title: 'Timeline',
+                                            fontWeight: FontWeight.w600,
+                                            size: 15,
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                        Expanded(
+                                          child: Container(
+                                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                                            child: CustomTimeLineView(
+                                              itemIds: filterItem.map((card) => card["workitemId"]).toList(),
+                                              fromHome: true,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         )
                       : const SizedBox.shrink(),

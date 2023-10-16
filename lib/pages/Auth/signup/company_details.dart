@@ -47,7 +47,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
 
   void submitSignupForm(SelectedSignupItems notify) {
     final isvalid = key.currentState?.validate();
-    if (mobilenumbercontroller.text == "") {
+    if (mobilenumbercontroller.text.trim() == "" || mobilenumbercontroller.text.trim().length < 10) {
       setState(() {
         isMobileEmpty = true;
       });
@@ -57,7 +57,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
         isMobileEmpty = false;
       });
     }
-    if (whatsupnumbercontroller.text == "" && !isChecked) {
+    if (whatsupnumbercontroller.text == "" && !isChecked || whatsupnumbercontroller.text.trim().length < 10) {
       setState(() {
         isWhatsappEmpty = true;
       });
