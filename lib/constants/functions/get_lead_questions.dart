@@ -602,25 +602,28 @@ Widget buildLeadQuestions(
     }
   } else if (question.questionOptionType == 'dropdown') {
     String? defaultValue;
+    String? selectedvalue;
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
-    if (selectedValues.isNotEmpty && question.questionTitle.contains("Bedroom") && !selectedValues.any((element) => element["id"] == 14)) {
-      defaultValue = "1";
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        notify.add({"id": 14, "item": defaultValue});
-      });
-    }
+    final isvalidationtrue = question.questionId == 14;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 7),
-      child: DropDownField(
-        title: question.questionTitle,
-        defaultValues: defaultValue ?? "",
-        optionsList: question.questionOption,
-        onchanged: (Object e) {
-          notify.add({"id": question.questionId, "item": e});
-        },
-      ),
+      child: StatefulBuilder(builder: (context, setState) {
+        return CustomDropdownFormField<String>(
+          label: question.questionTitle,
+          value: defaultValue ?? selectedvalue,
+          isMandatory: true,
+          items: question.questionOption,
+          onChanged: (value) {
+            setState(() {
+              selectedvalue = value;
+            });
+            notify.add({"id": question.questionId, "item": value});
+          },
+          validator: isvalidationtrue ? (p0) => validateForNormalFeild(value: p0, props: question.questionTitle) : null,
+        );
+      }),
     );
   } else if (question.questionOptionType == 'map') {
     List? defaultValue;

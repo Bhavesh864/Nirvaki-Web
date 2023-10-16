@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/user_role.dart';
 
 import 'package:yes_broker/customs/custom_fields.dart';
-import 'package:yes_broker/customs/dropdown_field.dart';
 import 'package:yes_broker/customs/label_text_field.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/customs/snackbar.dart';
@@ -14,6 +13,7 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/riverpodstate/add_member_state.dart';
 
+import '../../../../Customs/dropdown_field.dart';
 import '../../../../constants/utils/constants.dart';
 import '../../../../riverpodstate/user_data.dart';
 import '../team_screen.dart';
@@ -80,35 +80,30 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                     }
                 });
       } else {
-        if (manager != null && role != null) {
-          sendInvitationEmail(
-                  email: _emailController.text,
-                  firstname: _firstNameController.text,
-                  lastname: _lastNameController.text,
-                  mobile: _mobileController.text,
-                  managerName: '${manager?.userfirstname} ${manager?.userlastname}',
-                  managerid: manager?.userId,
-                  role: role)
-              .then((value) => {
-                    if (value == "success")
-                      {
-                        backToTeamScreen(),
-                        // customSnackBar(context: context, text: "Add Member successfully"),
-                        setState(() {
-                          loading = false;
-                        })
-                      }
-                    else
-                      {
-                        customSnackBar(context: context, text: value),
-                        setState(() {
-                          loading = false;
-                        })
-                      }
-                  });
-        } else {
-          customSnackBar(context: context, text: "Please Fill All Details");
-        }
+        sendInvitationEmail(
+                email: _emailController.text,
+                firstname: _firstNameController.text,
+                lastname: _lastNameController.text,
+                mobile: _mobileController.text,
+                managerName: '${manager?.userfirstname} ${manager?.userlastname}',
+                managerid: manager?.userId,
+                role: role)
+            .then((value) => {
+                  if (value == "success")
+                    {
+                      backToTeamScreen(),
+                      setState(() {
+                        loading = false;
+                      })
+                    }
+                  else
+                    {
+                      customSnackBar(context: context, text: value),
+                      setState(() {
+                        loading = false;
+                      })
+                    }
+                });
       }
     }
   }
@@ -208,33 +203,52 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                                   final List<String> userNames = filter!.map((user) => "${user.userfirstname} ${user.userlastname}").toList();
                                   return Container(
                                     margin: const EdgeInsets.all(5),
-                                    child: DropDownField(
-                                        defaultValues: isEdit ? editUser?.managerName : "",
-                                        title: "Manager",
-                                        optionsList: userNames,
-                                        onchanged: (e) {
-                                          setState(() {
-                                            User selectedUser = snapshot.data!.firstWhere((user) => '${user.userfirstname} ${user.userlastname}' == e);
-                                            manager = selectedUser;
-                                          });
-                                        }),
+                                    child: CustomDropdownFormField<String>(
+                                      label: "Manager",
+                                      value: isEdit ? editUser?.managerName : editManagerName,
+                                      isMandatory: true,
+                                      items: userNames,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          editManagerName = value;
+                                          User selectedUser = snapshot.data!.firstWhere((user) => '${user.userfirstname} ${user.userlastname}' == value);
+                                          manager = selectedUser;
+                                        });
+                                      },
+                                      validator: (value) {
+                                        if (value == null) {
+                                          return 'Please select Manager';
+                                        }
+                                        return null;
+                                      },
+                                    ),
                                   );
                                 }
                                 return Container(
-                                    margin: const EdgeInsets.all(5),
-                                    child: DropDownField(title: "Manager", defaultValues: isEdit ? editUser?.managerName : "", optionsList: const [], onchanged: (e) {}));
+                                  margin: const EdgeInsets.all(5),
+                                  child: CustomDropdownFormField<String>(
+                                      label: "Manager", value: isEdit ? editUser?.managerName : editManagerName, isMandatory: true, items: const [], onChanged: (e) {}),
+                                );
                               }),
                           Container(
                             margin: const EdgeInsets.all(5),
-                            child: DropDownField(
-                                title: "Role",
-                                defaultValues: isEdit ? editUser?.role : "",
-                                optionsList: const ["Employee", "Manager"],
-                                onchanged: (e) {
-                                  setState(() {
-                                    role = e as String?;
-                                  });
-                                }),
+                            child: CustomDropdownFormField<String>(
+                              label: "Role",
+                              value: isEdit ? editUser?.role : role,
+                              isMandatory: true,
+                              items: const ["Employee", "Manager"],
+                              onChanged: (value) {
+                                setState(() {
+                                  role = value;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null) {
+                                  return 'Please select role';
+                                }
+                                return null;
+                              },
+                            ),
                           ),
                           const SizedBox(height: 20),
                           Row(
