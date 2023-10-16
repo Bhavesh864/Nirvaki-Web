@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yes_broker/Customs/loader.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 
 import 'package:yes_broker/customs/custom_text.dart';
@@ -205,7 +204,8 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                                                       ref,
                                                       user!,
                                                     ),
-                                                    if (i == screensDataList[index].questions.length - 1 && screensDataList[index].questions[i].questionOptionType != 'chip')
+                                                    if (i == screensDataList[index].questions.length - 1 &&
+                                                        screensDataList[index].questions[i].questionOptionType != 'chip')
                                                       Container(
                                                         margin: const EdgeInsets.only(top: 10),
                                                         alignment: Alignment.centerRight,

@@ -109,8 +109,10 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             }
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
 
-            final List<CardDetails> todoItems =
-                filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD" && item.status != "Closed").toList();
+            final List<CardDetails> todoItems = filterItem!
+                .map((doc) => CardDetails.fromSnapshot(doc))
+                .where((item) => item.cardType != "IN" && item.cardType != "LD" && item.status != "Closed")
+                .toList();
 
             int compareDueDates(CardDetails a, CardDetails b) {
               DateTime aDueDate = DateFormat('dd-MM-yy').parse(a.duedate!);
@@ -119,83 +121,96 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             }
 
             todoItems.sort(compareDueDates);
-            final List<CardDetails> workItems = filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
+            final List<CardDetails> workItems =
+                filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
             workItems.sort((a, b) => b.createdate!.compareTo(a.createdate!));
             bool isDataEmpty = workItems.isEmpty && todoItems.isEmpty;
-            return Row(
-              children: [
-                if (isDataEmpty) ...[
-                  Expanded(
-                    flex: size.width > 1340 ? 5 : 6,
-                    child: const EmptyWorkItemList(),
-                  ),
-                ] else ...[
-                  Expanded(
-                    flex: size.width > 1340 ? 3 : 5,
-                    child: WorkItemsList(
-                      title: "To do",
-                      getCardDetails: todoItems,
+            return Container(
+              margin: const EdgeInsets.only(top: 10, left: 8),
+              child: Row(
+                children: [
+                  if (isDataEmpty) ...[
+                    Expanded(
+                      flex: size.width > 1340 ? 5 : 6,
+                      child: const EmptyWorkItemList(),
                     ),
-                  ),
-                  size.width > 1200
-                      ? Expanded(
-                          flex: size.width > 1340 ? 3 : 5,
-                          child: WorkItemsList(
-                            title: "Work Items",
-                            getCardDetails: workItems,
-                          ),
-                        )
-                      : Container(),
-                ],
-                size.width >= 850
-                    ? Expanded(
-                        flex: size.width > 1340 ? 4 : 6,
-                        child: Column(
-                          children: [
-                            const Expanded(
-                              flex: 3,
-                              child: CustomCalendarView(),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Expanded(
-                              flex: 5,
-                              child: Container(
-                                margin: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  color: AppColor.secondary,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
-                                      child: CustomText(
-                                        title: 'Timeline',
-                                        fontWeight: FontWeight.w600,
-                                        size: 15,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Container(
-                                        margin: const EdgeInsets.symmetric(horizontal: 10),
-                                        child: CustomTimeLineView(
-                                          itemIds: filterItem.map((card) => card["workitemId"]).toList(),
-                                          fromHome: true,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                  ] else ...[
+                    Expanded(
+                      flex: size.width > 1340 ? 3 : 5,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: WorkItemsList(
+                          title: "To do",
+                          getCardDetails: todoItems,
+                        ),
+                      ),
+                    ),
+                    size.width > 1200
+                        ? Expanded(
+                            flex: size.width > 1340 ? 3 : 5,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: WorkItemsList(
+                                title: "Work Items",
+                                getCardDetails: workItems,
                               ),
                             ),
-                          ],
-                        ),
-                      )
-                    : const SizedBox.shrink(),
-              ],
+                          )
+                        : Container(),
+                  ],
+                  size.width >= 850
+                      ? Expanded(
+                          flex: size.width > 1340 ? 4 : 6,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 6.0),
+                            child: Column(
+                              children: [
+                                const Expanded(
+                                  flex: 3,
+                                  child: CustomCalendarView(),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Expanded(
+                                  flex: 5,
+                                  child: Container(
+                                    padding: const EdgeInsets.only(bottom: 8),
+                                    decoration: BoxDecoration(
+                                      color: AppColor.secondary,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const Padding(
+                                          padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
+                                          child: CustomText(
+                                            title: 'Timeline',
+                                            fontWeight: FontWeight.w600,
+                                            size: 15,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Container(
+                                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                                            child: CustomTimeLineView(
+                                              itemIds: filterItem.map((card) => card["workitemId"]).toList(),
+                                              fromHome: true,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                ],
+              ),
             );
           }
           return const SizedBox();
