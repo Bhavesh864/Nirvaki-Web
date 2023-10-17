@@ -1,4 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 
 final CollectionReference leadDetailsCollection = FirebaseFirestore.instance.collection('leadDetails');
@@ -832,7 +834,14 @@ class Attachments {
   String? createdby;
   Timestamp? createddate;
 
-  Attachments({this.title, this.type, this.path, this.createdby, this.createddate, this.id});
+  Attachments({
+    this.id,
+    this.title,
+    this.type,
+    this.path,
+    this.createdby,
+    this.createddate,
+  });
 
   Attachments.fromJson(Map<String, dynamic> json) {
     if (json["title"] is String) {

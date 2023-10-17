@@ -9,7 +9,6 @@ import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
 import 'package:yes_broker/constants/functions/get_lead_questions.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
-import 'package:yes_broker/pages/add_inventory.dart' as imp;
 import 'package:yes_broker/pages/add_inventory.dart';
 import 'package:yes_broker/pages/largescreen_dashboard.dart';
 import 'package:yes_broker/riverpodstate/filterQuestions/lead_all_question.dart';
