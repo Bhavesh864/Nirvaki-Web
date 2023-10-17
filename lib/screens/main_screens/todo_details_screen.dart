@@ -609,9 +609,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                   showUploadDocumentModal(
                                                     context,
                                                     () {},
-                                                    selectedDocsName,
                                                     selectedImageName,
-                                                    pickedDocuments,
                                                     () {
                                                       setState(() {});
                                                     },

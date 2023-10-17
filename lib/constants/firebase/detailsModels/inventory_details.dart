@@ -1,4 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 final CollectionReference inventoryDetailsCollection = FirebaseFirestore.instance.collection('inventoryDetails');
 
@@ -906,12 +908,12 @@ class Attachments {
   Timestamp? createddate;
 
   Attachments({
+    this.id,
     this.title,
     this.type,
     this.path,
     this.createdby,
     this.createddate,
-    this.id,
   });
 
   Attachments.fromJson(Map<String, dynamic> json) {
