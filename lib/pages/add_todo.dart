@@ -38,7 +38,6 @@ class _AddTodoState extends ConsumerState<AddTodo> {
   PageController? pageController;
   int currentScreenIndex = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   @override
   void initState() {
     super.initState();
@@ -204,8 +203,7 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                                                       ref,
                                                       user!,
                                                     ),
-                                                    if (i == screensDataList[index].questions.length - 1 &&
-                                                        screensDataList[index].questions[i].questionOptionType != 'chip')
+                                                    if (i == screensDataList[index].questions.length - 1 && screensDataList[index].questions[i].questionOptionType != 'chip')
                                                       Container(
                                                         margin: const EdgeInsets.only(top: 10),
                                                         alignment: Alignment.centerRight,

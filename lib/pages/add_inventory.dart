@@ -25,11 +25,10 @@ class AddInventory extends ConsumerStatefulWidget {
   const AddInventory({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _AddInventoryState createState() => _AddInventoryState();
+  AddInventoryState createState() => AddInventoryState();
 }
 
-class _AddInventoryState extends ConsumerState<AddInventory> {
+class AddInventoryState extends ConsumerState<AddInventory> {
   String? response;
   bool allQuestionFinishes = false;
   bool isEdit = false;
@@ -358,86 +357,6 @@ class _AddInventoryState extends ConsumerState<AddInventory> {
                                                         ]),
                                                       ],
                                                     ),
-                                                  // ListView.builder(
-                                                  //   shrinkWrap: true,
-                                                  //   physics: const NeverScrollableScrollPhysics(),
-                                                  //   itemCount: currentScreenList[index].questions.length,
-                                                  //   itemBuilder: (context, i) {
-                                                  //     final question = currentScreenList[index].questions[i];
-                                                  //     return Column(
-                                                  //       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  //       children: [
-                                                  //         if (currentScreenList[index].title == null) ...[
-                                                  //           Padding(
-                                                  //             padding: const EdgeInsets.only(bottom: 20.0),
-                                                  //             child: CustomText(
-                                                  //               softWrap: true,
-                                                  //               textAlign: TextAlign.center,
-                                                  //               size: Responsive.isDesktop(context) ? 26 : 20,
-                                                  //               title: question.questionTitle,
-                                                  //               fontWeight: FontWeight.bold,
-                                                  //             ),
-                                                  //           ),
-                                                  //           // const SizedBox(height: 20),
-                                                  //         ],
-                                                  //         buildInventoryQuestions(
-                                                  //           question,
-                                                  //           currentScreenList,
-                                                  //           currentScreenIndex,
-                                                  //           notify,
-                                                  //           nextQuestion,
-                                                  //           isRentSelected,
-                                                  //           isPlotSelected,
-                                                  //           isEdit,
-                                                  //           selectedValues,
-                                                  //           stateList,
-                                                  //           isMobileNoEmpty,
-                                                  //           iswhatsappMobileNoEmpty,
-                                                  //           isChecked,
-                                                  //           isCheckedUpdate,
-                                                  //         ),
-                                                  //         SizedBox(height: question.questionOptionType != 'textfield' ? 10 : 0),
-                                                  //         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                                                  //           const SizedBox(),
-                                                  //           if (i == currentScreenList[index].questions.length - 1 && question.questionOptionType != 'chip') ...[
-                                                  //             Container(
-                                                  //               child: allQuestionFinishes
-                                                  //                   ? const Center(
-                                                  //                       child: CircularProgressIndicator.adaptive(),
-                                                  //                     )
-                                                  //                   : Padding(
-                                                  //                       padding: const EdgeInsets.only(right: 5.0, top: 20),
-                                                  //                       child: CustomButton(
-                                                  //                         text: currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next',
-                                                  //                         onPressed: () {
-                                                  //                           if (!allQuestionFinishes) {
-                                                  //                             if (currentScreenList[index].title != "Assign to") {
-                                                  //                               if (_formKey.currentState!.validate()) {
-                                                  //                                 nextQuestion(screensDataList: currentScreenList, option: "");
-                                                  //                               }
-                                                  //                             }
-                                                  //                             if (currentScreenList[index].title == "Assign to") {
-                                                  //                               setState(() {
-                                                  //                                 allQuestionFinishes = true;
-                                                  //                               });
-                                                  //                               addDataOnfirestore(notify);
-                                                  //                             }
-                                                  //                             if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
-                                                  //                           }
-                                                  //                         },
-                                                  //                         width: currentScreenList[index].title == "Assign to" ? 90 : 70,
-                                                  //                         height: 39,
-                                                  //                       ),
-                                                  //                     ),
-                                                  //             ),
-                                                  //           ] else ...[
-                                                  //             const SizedBox()
-                                                  //           ]
-                                                  //         ]),
-                                                  //       ],
-                                                  //     );
-                                                  //   },
-                                                  // )
                                                 ],
                                               ),
                                             ),
