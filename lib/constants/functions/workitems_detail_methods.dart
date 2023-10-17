@@ -274,7 +274,7 @@ void showUploadDocumentModal(
                       righticonColor: Colors.black,
                       titleLeft: true,
                       onPressed: () async {
-                        FilePickerResult? result = await FilePicker.platform.pickFiles();
+                        FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
                         if (result != null) {
                           innerSetState(() {
                             selectedFile = result.files[0];

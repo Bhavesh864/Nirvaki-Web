@@ -477,8 +477,6 @@ Widget buildInventoryQuestions(
               labelText: question.questionTitle,
               isMandatory: isvalidationtrue,
               onChanged: (newvalue) {
-                print('object ==-----$newvalue ');
-
                 try {
                   int number = int.parse(newvalue);
                   String words = NumberToWord().convert("en-in", number);
@@ -489,7 +487,6 @@ Widget buildInventoryQuestions(
                   setState(() {
                     textResult = '';
                   });
-                  print('object == $e');
                 }
                 notify.add({"id": question.questionId, "item": newvalue.trim()});
               },

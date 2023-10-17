@@ -8,7 +8,7 @@ import '../../firebase/userModel/user_info.dart';
 import '../../user_role.dart';
 
 // this function use filter User According to role and show data according to role in stream builder
-// stream builder----------------_>
+// <----------------------------Stream builder--------------------------->
 Iterable<QueryDocumentSnapshot<Map<String, dynamic>>>? filterCardsAccordingToRole(
     {required AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot, required WidgetRef ref, required List<User> userList, required User currentUser}) {
   final userRole = currentUser.role;
@@ -23,12 +23,10 @@ Iterable<QueryDocumentSnapshot<Map<String, dynamic>>>? filterCardsAccordingToRol
         return hasAssignedToManager;
       case UserRole.employee:
         return assignedTo?.any((user) => user["userid"] == currentUserId) ?? false;
-
       default:
         return false;
     }
   });
-
   return filterItem;
 }
 
