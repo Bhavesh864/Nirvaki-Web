@@ -189,11 +189,6 @@ Widget buildLeadQuestions(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // CustomText(
-              //   fontWeight: FontWeight.w500,
-              //   size: 16,
-              //   title: question.questionTitle,
-              // ),
               SizedBox(
                 width: double.infinity,
                 child: Wrap(
@@ -564,10 +559,12 @@ Widget buildLeadQuestions(
                         }
                       : null,
             ),
-            isPriceField ? Text(textResult) : const SizedBox.shrink(),
-            const SizedBox(
-              height: 6,
-            ),
+            isPriceField
+                ? Container(margin: const EdgeInsets.all(7), child: AppText(text: textResult.toUpperCase(), textColor: AppColor.grey, fontsize: 16))
+                : const SizedBox.shrink(),
+            // const SizedBox(
+            //   height: 6,
+            // ),
           ],
         );
       },

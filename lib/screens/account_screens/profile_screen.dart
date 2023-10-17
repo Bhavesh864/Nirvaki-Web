@@ -598,8 +598,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                   ),
                 ),
                 if (Responsive.isMobile(context))
-                  buildInfoFields(
-                      'Employee ID', userData.userId, false, TextEditingController(), context, (value) => validateForNormalFeild(props: "First name", value: value)),
+                  buildInfoFields('Employee ID', userData.userId, false, TextEditingController(), context, (value) => validateForNormalFeild(props: "First name", value: value)),
               ] else
                 ...[]
             ],
@@ -610,8 +609,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
   }
 }
 
-Widget buildInfoFields(
-    String fieldName, String fieldDetail, bool isEditing, TextEditingController textController, BuildContext context, FormFieldValidator<String>? validator) {
+Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, TextEditingController textController, BuildContext context, FormFieldValidator<String>? validator) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -685,8 +683,7 @@ Widget mobileInfoFields(
             isMandatory: false,
             isEmpty: isEmpty,
             showLabel: false,
-            isdense: true,
-            contentpadding: const EdgeInsets.symmetric(vertical: 8.5),
+            isDense: true,
             openModal: openModal,
             countryCode: countryCode,
             onChange: (value) {},

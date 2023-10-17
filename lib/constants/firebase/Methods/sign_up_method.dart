@@ -4,6 +4,7 @@ import '../userModel/broker_info.dart';
 import '../userModel/user_info.dart';
 
 Future<String> signUpMethod({required state}) async {
+  print("signup method");
   String res = 'Something went wrong';
   final email = getDataById(state, 1);
   final password = getDataById(state, 2);
