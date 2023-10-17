@@ -197,6 +197,7 @@ class _CustomDropdownFormFieldState<T> extends State<CustomDropdownFormField<T>>
         const SizedBox(height: 4),
         DropdownButtonFormField<T>(
           value: widget.value,
+          isExpanded: true,
           borderRadius: BorderRadius.circular(10),
           isDense: true,
           padding: const EdgeInsets.all(0),
@@ -205,10 +206,11 @@ class _CustomDropdownFormFieldState<T> extends State<CustomDropdownFormField<T>>
           items: widget.items.map((item) {
             return DropdownMenuItem<T>(
               value: item,
-              child: CustomText(
-                title: '$item',
+              child: Text(
+                '$item',
                 softWrap: true,
-                size: 12,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
               ),
             );
           }).toList(),
