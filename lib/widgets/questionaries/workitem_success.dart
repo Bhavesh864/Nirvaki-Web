@@ -1,13 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:yes_broker/customs/responsive.dart';
+import 'package:yes_broker/pages/largescreen_dashboard.dart';
 
 import '../../customs/custom_fields.dart';
 import '../../customs/custom_text.dart';
 
-class WorkItemSuccessWidget extends StatelessWidget {
+class WorkItemSuccessWidget extends ConsumerWidget {
   final String isInventory;
   final bool isEdit;
 
@@ -18,7 +20,7 @@ class WorkItemSuccessWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -48,6 +50,7 @@ class WorkItemSuccessWidget extends StatelessWidget {
               // if (Responsive.isMobile(context)) {
               //   Navigator.of(context).pushNamed(AppRoutes.homeScreen);
               // } else {
+              ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
               context.beamToNamed('/');
               // }
             },

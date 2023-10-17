@@ -13,14 +13,12 @@ import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
-
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
-import '../../riverpodstate/common_index_state.dart';
 import '../../routes/routes.dart';
 import '../app/app_bar.dart';
 import '../app/nav_bar.dart';
@@ -48,6 +46,7 @@ class InventoryDetailsHeader extends ConsumerWidget {
   final String type;
   final String? price;
   final Function setState;
+  final Function(int) setCurrentIndex;
   final dynamic inventoryDetails;
 
   const InventoryDetailsHeader(
@@ -56,11 +55,14 @@ class InventoryDetailsHeader extends ConsumerWidget {
       required this.id,
       this.inventoryDetails,
       required this.category,
+      this.setCurrentIndex = defaultFunc,
       required this.propertyCategory,
       required this.status,
       required this.type,
       required this.price,
       required this.setState});
+
+  static void defaultFunc(e) {}
 
   Future<void> shareUrl(BuildContext context) async {
     try {
@@ -87,7 +89,7 @@ class InventoryDetailsHeader extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
@@ -113,72 +115,80 @@ class InventoryDetailsHeader extends ConsumerWidget {
                 status: status,
                 id: id,
               ),
-            CustomChip(
-              paddingVertical: 5,
-              onPressed: () {
-                shareUrl(context);
-              },
-              label: const Icon(
-                Icons.share_outlined,
-              ),
-              paddingHorizontal: 3,
-            ),
-            if (!AppConst.getPublicView() || AppConst.getIsAuthenticated())
-              PopupMenuButton(
-                // tooltip: '',
-                padding: EdgeInsets.zero,
-                color: Colors.white.withOpacity(1),
-                offset: const Offset(10, 40),
-                itemBuilder: (context) => AppConst.getPublicView()
-                    ? dropDownDetailsList2
-                        .map(
-                          (e) => appBarPopupMenuItem(e['title'].toString(), (e) {
-                            if (e.contains('Public')) {
-                              // ref.read(detailsPageIndexTabProvider.notifier).update(
-                              //       (state) => 0,
-                              //     );
-                              AppConst.setPublicView(!AppConst.getPublicView());
-                              setState();
-                            } else if (e.contains("Edit")) {
-                              navigateToEditPage(context);
-                            }
-                          }, showicon: true, icon: e['icon']),
-                        )
-                        .toList()
-                    : dropDownDetailsList
-                        .map(
-                          (e) => appBarPopupMenuItem(e['title'].toString(), (e) {
-                            if (e.contains('Public')) {
-                              // ref.read(detailsPageIndexTabProvider.notifier).update(
-                              //       (state) => 0,
-                              //     );
-                              AppConst.setPublicView(!AppConst.getPublicView());
-                              setState();
-                            } else if (e.contains("Edit")) {
-                              navigateToEditPage(context);
-                            }
-                          }, showicon: true, icon: e['icon']),
-                        )
-                        .toList(),
-                child: IntrinsicWidth(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: kIsWeb ? 4.5 : 7),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      color: AppColor.chipGreyColor,
+            Row(
+              children: [
+                CustomChip(
+                  paddingVertical: 5,
+                  onPressed: () {
+                    shareUrl(context);
+                  },
+                  label: const Icon(
+                    Icons.share_outlined,
+                  ),
+                  paddingHorizontal: 3,
+                ),
+                if (!AppConst.getPublicView() || AppConst.getIsAuthenticated())
+                  PopupMenuButton(
+                    // tooltip: '',
+                    padding: EdgeInsets.zero,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(
-                      Icons.more_vert,
+                    color: Colors.white.withOpacity(1),
+                    offset: const Offset(10, 40),
+                    itemBuilder: (context) => AppConst.getPublicView()
+                        ? dropDownDetailsList2
+                            .map(
+                              (e) => appBarPopupMenuItem(e['title'].toString(), (e) {
+                                if (e.contains('Public')) {
+                                  AppConst.setPublicView(!AppConst.getPublicView());
+                                  setState();
+                                } else if (e.contains("Edit")) {
+                                  Future.delayed(const Duration(milliseconds: 400)).then(
+                                    (value) => AppConst.getOuterContext()!.beamToNamed(id.contains("IN") ? AppRoutes.addInventory : AppRoutes.addLead, data: true),
+                                  );
+                                }
+                              }, showicon: true, icon: e['icon']),
+                            )
+                            .toList()
+                        : dropDownDetailsList
+                            .map(
+                              (e) => appBarPopupMenuItem(e['title'].toString(), (e) {
+                                if (e.contains('Public')) {
+                                  AppConst.setPublicView(!AppConst.getPublicView());
+                                  setCurrentIndex(0);
+
+                                  setState();
+                                } else if (e.contains("Edit")) {
+                                  Future.delayed(const Duration(milliseconds: 400)).then(
+                                    (value) => AppConst.getOuterContext()!.beamToNamed(id.contains("IN") ? AppRoutes.addInventory : AppRoutes.addLead, data: true),
+                                  );
+                                }
+                              }, showicon: true, icon: e['icon']),
+                            )
+                            .toList(),
+                    child: IntrinsicWidth(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: kIsWeb ? 4.5 : 4.5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          color: AppColor.chipGreyColor,
+                        ),
+                        child: const Icon(
+                          Icons.more_vert,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-            const Spacer(),
-            if (!Responsive.isMobile(context))
+              ],
+            ),
+            if (!Responsive.isMobile(context)) ...[
+              const Spacer(),
               CustomText(
                 title: price!.contains('₹') ? price! : '₹$price',
                 color: AppColor.primary,
               ),
+            ]
           ],
         ),
       ],

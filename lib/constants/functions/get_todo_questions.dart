@@ -8,7 +8,6 @@ import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 
 import 'package:yes_broker/widgets/questionaries/assign_user.dart';
 
-import '../../Customs/custom_text.dart';
 import '../../Customs/dropdown_field.dart';
 import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
@@ -171,6 +170,8 @@ Widget buildTodoQuestions(
   } else if (question.questionOptionType == 'dropdown') {
     List<User> userList = [];
     // String? defaultValue;
+    String? selectedvalue;
+
     // if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
     //   defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     // }
@@ -190,17 +191,35 @@ Widget buildTodoQuestions(
               options.add(newData);
             }
           }
-          return DropDownField(
-            defaultValues: "",
-            title: question.questionTitle,
-            optionsList: options,
-            isMultiValueOnDropdownlist: true,
-            onchanged: (Object e) {
-              // CardDetails selectedUser = snapshot.data!.firstWhere((user) => user.workitemId == e);
-              CardDetails selectedUser = snapshot.data!.firstWhere((user) => "${user.cardTitle} (${user.workitemId})" == e);
-              notify.add({"id": question.questionId, "item": selectedUser});
-            },
-          );
+          return StatefulBuilder(builder: (context, setState) {
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: 7),
+              child: CustomDropdownFormField<String>(
+                label: question.questionTitle,
+                value: selectedvalue,
+                isMandatory: true,
+                items: options,
+                onChanged: (value) {
+                  setState(() {
+                    selectedvalue = value;
+                  });
+                  notify.add({"id": question.questionId, "item": value});
+                },
+                validator: (p0) => validateForNormalFeild(value: p0, props: question.questionTitle),
+              ),
+            );
+          });
+          // return DropDownField(
+          //   defaultValues: "",
+          //   title: question.questionTitle,
+          //   optionsList: options,
+          //   isMultiValueOnDropdownlist: true,
+          //   onchanged: (Object e) {
+          //     // CardDetails selectedUser = snapshot.data!.firstWhere((user) => user.workitemId == e);
+          //     CardDetails selectedUser = snapshot.data!.firstWhere((user) => "${user.cardTitle} (${user.workitemId})" == e);
+          //     notify.add({"id": question.questionId, "item": selectedUser});
+          //   },
+          // );
         });
   }
   return const SizedBox.shrink();

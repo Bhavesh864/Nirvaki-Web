@@ -77,8 +77,10 @@ class _MapViewWidgetState extends State<MapViewWidget> {
               CustomChip(
                 paddingVertical: 6,
                 onPressed: () {
-                  Clipboard.setData(ClipboardData(text: googleMapsLink)).then((_) {
+                  Clipboard.setData(ClipboardData(text: getGoogleMapsLink(widget.latLng))).then((_) {
                     customSnackBar(context: context, text: "Google link copied to clipboard");
+                  }).catchError((e) {
+                    print(e);
                   });
                 },
                 label: const Icon(

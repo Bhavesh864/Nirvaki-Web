@@ -1,5 +1,6 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/customs/snackbar.dart';
@@ -11,13 +12,13 @@ import 'package:yes_broker/widgets/auth/common_auth_widgets.dart';
 import '../../../constants/firebase/Methods/sign_in_method.dart';
 import '../../../constants/utils/image_constants.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  LoginScreenState createState() => LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class LoginScreenState extends ConsumerState<LoginScreen> {
   final key = GlobalKey<FormState>();
   var isloading = false;
   final FocusNode emailFocusNode = FocusNode();
@@ -139,6 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         CustomTextInput(
                           focusnode: emailFocusNode,
                           controller: emailcontroller,
+                          isDense: true,
                           labelText: 'Email Address',
                           validator: (val) => validateEmail(val?.trim()),
                           autofillHints: const [AutofillHints.email],
@@ -153,9 +155,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         CustomTextInput(
                           focusnode: passwordFocusNode,
                           controller: passwordcontroller,
+                          isDense: true,
                           labelText: 'Password',
                           obscureText: true,
-                          rightIcon: Icons.remove_red_eye,
+                          rightIcon: Icons.remove_red_eye_outlined,
                           validator: validatePassword,
                           onFieldSubmitted: (_) => loginwithemailpassword(context),
                         ),

@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yes_broker/Customs/loader.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 
 import 'package:yes_broker/customs/custom_text.dart';
@@ -18,6 +17,7 @@ import '../customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
 import '../riverpodstate/all_selected_ansers_provider.dart';
 import '../riverpodstate/selected_workitem.dart';
+import 'largescreen_dashboard.dart';
 
 final myArrayProvider = StateNotifierProvider<AllChipSelectedAnwers, List<Map<String, dynamic>>>(
   (ref) => AllChipSelectedAnwers(),
@@ -164,14 +164,13 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                       ),
-                                      child: SingleChildScrollView(
-                                        child: Container(
-                                          // constraints: const BoxConstraints(
-                                          //   minHeight: 0,
-                                          //   maxHeight: double.infinity,
-                                          // ),
-                                          width: Responsive.isMobile(context) ? width! * 0.9 : 650,
-                                          padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
+                                      child: Container(
+                                        constraints: BoxConstraints(
+                                          maxHeight: MediaQuery.of(context).size.height * 0.8,
+                                        ),
+                                        width: Responsive.isMobile(context) ? width! * 0.9 : 650,
+                                        padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
+                                        child: SingleChildScrollView(
                                           child: Column(
                                             // mainAxisSize: MainAxisSize.min,
                                             children: [
@@ -205,7 +204,8 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                                                       ref,
                                                       user!,
                                                     ),
-                                                    if (i == screensDataList[index].questions.length - 1 && screensDataList[index].questions[i].questionOptionType != 'chip')
+                                                    if (i == screensDataList[index].questions.length - 1 &&
+                                                        screensDataList[index].questions[i].questionOptionType != 'chip')
                                                       Container(
                                                         margin: const EdgeInsets.only(top: 10),
                                                         alignment: Alignment.centerRight,
@@ -275,6 +275,7 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                 final currentScreenQuestions = screensDataList[currentScreenIndex].questions;
                 final ids = currentScreenQuestions.map((q) => q.questionId).toList();
                 final questiontype = currentScreenQuestions.any((element) => element.questionTitle.contains("Link Work Item"));
+                ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
                 goBack(ids, questiontype);
               },
               icon: const Icon(
@@ -290,6 +291,7 @@ class _AddTodoState extends ConsumerState<AddTodo> {
                 buttonColor: Colors.transparent,
                 borderColor: Colors.transparent,
                 onPressed: () {
+                  ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
                   Navigator.of(context).pop();
                 },
                 leftIcon: Icons.home_outlined,

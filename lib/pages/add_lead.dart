@@ -9,7 +9,9 @@ import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/questionModels/lead_question.dart';
 import 'package:yes_broker/constants/functions/get_lead_questions.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/pages/add_inventory.dart' as imp;
 import 'package:yes_broker/pages/add_inventory.dart';
+import 'package:yes_broker/pages/largescreen_dashboard.dart';
 import 'package:yes_broker/riverpodstate/filterQuestions/lead_all_question.dart';
 import 'package:yes_broker/riverpodstate/lead_filter_question.dart';
 import 'package:yes_broker/widgets/questionaries/workitem_success.dart';
@@ -84,7 +86,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
       final mobileNoValue = selectedValues.where((e) => e["id"] == 7).toList();
       final whatsappNoValue = selectedValues.where((e) => e["id"] == 8).toList();
 
-      if (mobileNoValue.isEmpty) {
+      if (mobileNoValue.isEmpty || mobileNoValue[0]['item'].split(' ')[1].length < 10) {
         setState(() {
           isMobileNoEmpty = true;
         });
@@ -105,7 +107,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
       }
 
       if (!isChecked) {
-        if (whatsappNoValue.isEmpty) {
+        if (whatsappNoValue.isEmpty || whatsappNoValue[0]['item'].split(' ')[1].length < 10) {
           setState(() {
             iswhatsappMobileNoEmpty = true;
           });
@@ -261,7 +263,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                       ),
                                       child: Container(
                                         constraints: BoxConstraints(
-                                          maxHeight: MediaQuery.of(context).size.height * 0.85,
+                                          maxHeight: MediaQuery.of(context).size.height * 0.8,
                                         ),
                                         width: Responsive.isMobile(context) ? width! * 0.9 : 650,
                                         padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
@@ -388,6 +390,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                 final ids = currentScreenQuestions.map((q) => q.questionId).toList();
                 final allquestion = currentScreenQuestions.map((q) => q.questionOptionType).toList();
                 final questiontype = allquestion.any((element) => element == "textfield" || element == "rangeSlider");
+                ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
                 goBack(ids, questiontype);
               },
               icon: const Icon(
@@ -403,6 +406,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                 buttonColor: Colors.transparent,
                 borderColor: Colors.transparent,
                 onPressed: () {
+                  ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
                   Navigator.of(context).pop();
                 },
                 leftIcon: Icons.home_outlined,

@@ -7,6 +7,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:yes_broker/Customs/dropdown_field.dart';
 import 'package:yes_broker/Customs/label_text_field.dart';
 import 'package:yes_broker/constants/firebase/calenderModel/calender_model.dart';
 import 'package:yes_broker/customs/responsive.dart';
@@ -17,7 +19,7 @@ import 'package:yes_broker/constants/firebase/random_uid.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import '../../Customs/custom_text.dart';
 import '../../customs/custom_fields.dart';
-import '../../customs/dropdown_field.dart';
+
 import '../../widgets/card/questions card/chip_button.dart';
 import '../firebase/detailsModels/todo_details.dart';
 import '../utils/colors.dart';
@@ -160,7 +162,7 @@ void showUploadDocumentModal(
   Function(bool) setIsUploading,
 ) {
   String docName = '';
-
+  String? name;
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -173,9 +175,9 @@ void showUploadDocumentModal(
               insetPadding: const EdgeInsets.all(15),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               child: Container(
-                padding: const EdgeInsets.all(15),
+                padding: Responsive.isMobile(context) ? const EdgeInsets.all(15) : const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                 height: docName == 'Other' ? 400 : 300,
-                width: Responsive.isMobile(context) ? width : 500,
+                width: Responsive.isMobile(context) ? width : 530,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -186,9 +188,14 @@ void showUploadDocumentModal(
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                        Text(
                           'Upload New Document',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontFamily: GoogleFonts.dmSans().fontFamily,
+                            fontSize: Responsive.isMobile(context) ? 18 : 24,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.4,
+                          ),
                         ),
                         IconButton(
                           icon: const Icon(Icons.close),
@@ -199,38 +206,57 @@ void showUploadDocumentModal(
                         ),
                       ],
                     ),
-                    DropDownField(
-                      title: 'Document Type',
-                      defaultValues: "",
-                      optionsList: const ['Adhaar card', 'Agreement', 'Insurance', 'Other'],
-                      onchanged: (value) {
-                        docName = value.toString();
+                    const SizedBox(
+                      height: 2,
+                    ),
+                    CustomDropdownFormField(
+                      isMandatory: true,
+                      labelFontWeight: FontWeight.w500,
+                      label: 'Document Type',
+                      labelFontSize: 15,
+                      value: name,
+                      items: const ['Adhaar card', 'Agreement', 'Insurance', 'Other'],
+                      onChanged: (value) {
+                        docName = value!;
+                        name = value;
                         innerSetState(
                           () {},
                         );
                       },
                     ),
                     if (docName == 'Other') ...[
-                      const Padding(
-                        padding: EdgeInsets.only(top: 3.0),
-                        child: CustomText(
-                          title: 'Title',
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 12.0),
-                        child: TextField(
-                          controller: titleController,
-                          decoration: const InputDecoration(hintText: 'Enter title'),
-                        ),
-                      ),
+                      LabelTextInputField(
+                        labelText: "Title",
+                        margin: const EdgeInsets.symmetric(horizontal: 2),
+                        inputController: titleController,
+                        // controller: titleController,
+                      )
+                      // const Padding(
+                      //   padding: EdgeInsets.only(top: 3.0),
+                      //   child: CustomText(
+                      //     title: 'Title',
+                      //     textAlign: TextAlign.start,
+                      //   ),
+                      // ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(bottom: 12.0),
+                      //   child: TextField(
+                      //     controller: titleController,
+                      //     decoration: const InputDecoration(hintText: 'Enter title'),
+                      //   ),
+                      // ),
                     ],
+                    const SizedBox(
+                      height: 2,
+                    ),
                     CustomButton(
+                      borderColor: AppColor.secondary,
                       textAlign: TextAlign.left,
                       isAttachments: true,
+                      fontWeight: FontWeight.w400,
+                      fontsize: 14,
                       text: selectedFile == null ? 'Upload Document' : selectedFile!.name.toString(),
-                      rightIcon: Icons.publish_outlined,
+                      rightIcon: MaterialSymbols.publish,
                       buttonColor: AppColor.secondary,
                       textColor: Colors.black,
                       righticonColor: Colors.black,
@@ -246,15 +272,18 @@ void showUploadDocumentModal(
                       },
                     ),
                     const SizedBox(
-                      height: 5,
+                      height: 2,
                     ),
                     CustomButton(
                       text: 'Done',
+                      fontsize: 12,
+                      fontWeight: FontWeight.w600,
+                      isBorder: false,
+                      height: 40,
                       onPressed: () {
                         if (docName != '' && selectedFile != null) {
                           selectedDocName.add(docName);
                           setIsUploading(true);
-                          print('true kr do -----');
 
                           uploadAttachmentsToFirebaseStorage(
                             selectedFile!,
@@ -287,32 +316,35 @@ void showConfirmDeleteAttachment(BuildContext context, Function onPressYes) {
     builder: (BuildContext context) {
       return Dialog(
         insetPadding: const EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
         child: Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
           height: 230,
-          width: 500,
+          width: 530,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
           ),
           child: Column(
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Flexible(
                     child: Text(
-                      'Are you sure you want to delete it',
-                      style: TextStyle(fontSize: Responsive.isMobile(context) ? 22 : 26, fontWeight: FontWeight.bold),
+                      'Are you sure you want to delete it?',
+                      style: TextStyle(
+                        fontSize: Responsive.isMobile(context) ? 22 : 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                  InkWell(
-                    child: const Icon(
-                      Icons.close,
-                      size: 22,
-                    ),
-                    onTap: () {
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    iconSize: 20,
+                    onPressed: () {
                       Navigator.of(context).pop();
                     },
                   ),
@@ -443,7 +475,7 @@ void showAddCalendarModal({
                         ],
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 30,
                       ),
                       LabelTextInputField(
                         labelText: 'Title',
@@ -452,8 +484,12 @@ void showAddCalendarModal({
                         inputController: titleController,
                         validator: (value) => validateForNormalFeild(props: "Title", value: value),
                       ),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       if (Responsive.isMobile(context)) ...[
                         Wrap(
+                          runSpacing: 10,
                           children: [
                             GestureDetector(
                               onTap: () {
@@ -476,7 +512,7 @@ void showAddCalendarModal({
                               ),
                             ),
                             const SizedBox(
-                              width: 15,
+                              height: 15,
                             ),
                             GestureDetector(
                               onTap: () {
@@ -505,7 +541,7 @@ void showAddCalendarModal({
                         Row(
                           children: [
                             Expanded(
-                              flex: 2,
+                              flex: 3,
                               child: GestureDetector(
                                 onTap: () {
                                   pickFromDateTime(
@@ -528,9 +564,10 @@ void showAddCalendarModal({
                               ),
                             ),
                             const SizedBox(
-                              width: 15,
+                              width: 8,
                             ),
                             Expanded(
+                              flex: 2,
                               child: GestureDetector(
                                 onTap: () {
                                   pickFromDateTime(
@@ -556,6 +593,9 @@ void showAddCalendarModal({
                           ],
                         ),
                       ],
+                      const SizedBox(
+                        height: 10,
+                      ),
                       LabelTextAreaField(
                         labelText: 'Details',
                         onChanged: (p0) {

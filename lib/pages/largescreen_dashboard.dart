@@ -28,7 +28,8 @@ class LargeScreen extends ConsumerStatefulWidget {
 class LargeScreenState extends ConsumerState<LargeScreen> {
   @override
   Widget build(BuildContext context) {
-    int currentIndex = 0;
+    // int currentIndex = 0;
+    final sideBarIndex = ref.watch(desktopSideBarIndexProvider);
     final beamerKey = GlobalKey<BeamerState>();
     AppConst.setOuterContext(context);
 
@@ -38,27 +39,8 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           StatefulBuilder(builder: (context, setstate) {
-            final path = (context.currentBeamLocation.state as BeamState).uri.path;
-            final sideBarIndex = ref.watch(desktopSideBarIndexProvider.notifier);
+            // final path = (context.currentBeamLocation.state as BeamState).uri.path;
 
-            if (path.contains('/ ')) {
-              currentIndex = 0;
-            } else if (path.contains('/todo')) {
-              currentIndex = 1;
-            } else if (path.contains('/inventory')) {
-              currentIndex = 2;
-            } else if (path.contains('/lead')) {
-              currentIndex = 3;
-            } else if (path.contains('/calendar')) {
-              currentIndex = 4;
-            } else if (path.contains('/profile')) {
-              currentIndex = 5;
-            } else {
-              currentIndex = 0;
-            }
-            if (currentIndex != sideBarIndex.state) {
-              currentIndex = sideBarIndex.state;
-            }
             return SingleChildScrollView(
               child: Container(
                 color: Colors.white,
@@ -69,17 +51,34 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                   labelType: NavigationRailLabelType.all,
                   minWidth: 60,
                   useIndicator: false,
-                  selectedIndex: currentIndex > 4 ? 0 : currentIndex,
+                  selectedIndex: sideBarIndex > 4 ? 0 : sideBarIndex,
                   onDestinationSelected: (index) {
                     setstate(
                       () {
                         beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[index].nav);
                         ref.read(desktopSideBarIndexProvider.notifier).update((state) => index);
+                        // currentIndex = sideBarIndex.state;
+
                         if (index != 0) {
                           ref.read(mobileBottomIndexProvider.notifier).state = index == 4 ? 0 : index - 1;
                         } else {
                           ref.read(mobileBottomIndexProvider.notifier).state = index;
                         }
+                        // if (path.contains('/ ')) {
+                        //   currentIndex = 0;
+                        // } else if (path.contains('/todo')) {
+                        //   currentIndex = 1;
+                        // } else if (path.contains('/inventory')) {
+                        //   currentIndex = 2;
+                        // } else if (path.contains('/lead')) {
+                        //   currentIndex = 3;
+                        // } else if (path.contains('/calendar')) {
+                        //   currentIndex = 4;
+                        // } else if (path.contains('/profile')) {
+                        //   currentIndex = 5;
+                        // } else {
+                        //   currentIndex = 0;
+                        // }
                       },
                     );
                   },
@@ -97,7 +96,7 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                                     // padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(6),
-                                      color: currentIndex == sideBarItems.indexOf(e) ? const Color.fromRGBO(68, 96, 239, 0.1) : Colors.transparent,
+                                      color: sideBarIndex == sideBarItems.indexOf(e) ? const Color.fromRGBO(68, 96, 239, 0.1) : Colors.transparent,
                                     ),
                                     child: Column(
                                       children: [
@@ -107,7 +106,7 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                                         AppText(
                                           text: e.label,
                                           fontsize: 9,
-                                          textColor: currentIndex == sideBarItems.indexOf(e) ? AppColor.primary : Colors.black,
+                                          textColor: sideBarIndex == sideBarItems.indexOf(e) ? AppColor.primary : Colors.black,
                                         )
                                       ],
                                     ))

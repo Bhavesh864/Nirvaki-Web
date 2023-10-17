@@ -118,10 +118,10 @@ class _DetailsTabViewState extends State<DetailsTabView> {
         allImages.addAll(inventoryData.propertyphotos!.imageUrl!);
         allTitles.addAll(inventoryData.propertyphotos!.imageTitle!);
 
-        if (AppConst.getPublicView()) {
-          allImages.removeAt(0);
-          allTitles.removeAt(0);
-        }
+        // if (AppConst.getPublicView()) {
+        //   allImages.removeAt(0);
+        //   allTitles.removeAt(0);
+        // }
       }
     }
     return Column(
@@ -170,7 +170,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                               );
                             },
                             loadingBuilder: (context, child, loadingProgress) {
-                              return loadingProgress == null ? child : const Center(child: CircularProgressIndicator.adaptive());
+                              return loadingProgress == null ? child : const Loader();
                             },
                           ),
                         ),
@@ -180,7 +180,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                         child: CustomText(
                           title: widget.data.propertyphotos == null ? 'Front Elevation' : allTitles[index],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 );
@@ -485,7 +485,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
         ],
         // ],
         // if (!AppConst.getPublicView())
-        if (widget.data.amenities != null) ...[
+        if (widget.data.amenities != null && widget.data.amenities.isNotEmpty) ...[
           CustomText(
             title: !widget.isLeadView ? "Features" : 'Requirements',
             fontWeight: FontWeight.w700,

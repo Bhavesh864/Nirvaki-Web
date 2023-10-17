@@ -11,6 +11,7 @@ import 'package:yes_broker/Customs/custom_chip.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/userModel/notification_model.dart';
 import 'package:yes_broker/customs/loader.dart';
+import 'package:yes_broker/pages/largescreen_dashboard.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/firebase/userModel/user_info.dart';
@@ -59,14 +60,13 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          largeScreenView("${userData?.userfirstname ?? ""} ${userData?.userlastname ?? ""}", context),
+          largeScreenView("${userData?.userfirstname ?? ""} ${userData?.userlastname ?? ""}", context, ref: ref),
           const Spacer(),
           StreamBuilder(
               stream: notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).where('isRead', isEqualTo: false).snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   final notificationCount = snapshot.data!.docs.length;
-
                   return Stack(
                     children: <Widget>[
                       InkWell(
@@ -225,7 +225,7 @@ String capitalizeFirstLetter(String input) {
   return input[0].toUpperCase() + input.substring(1);
 }
 
-Widget largeScreenView(String name, BuildContext context) {
+Widget largeScreenView(String name, BuildContext context, {WidgetRef? ref}) {
   return Container(
     padding: const EdgeInsets.only(left: 10),
     child: Column(
@@ -236,30 +236,33 @@ Widget largeScreenView(String name, BuildContext context) {
           title: capitalizeFirstLetter(name) != 'Public View' ? 'Welcome, ${capitalizeFirstLetter(name)}' : capitalizeFirstLetter(name),
           fontWeight: FontWeight.bold,
         ),
-        Center(
-          child: Row(
-            children: [
-              const Icon(
-                Icons.home_outlined,
-                weight: 100,
-                size: 18,
-              ),
-              GestureDetector(
-                onTap: () {
-                  context.beamToNamed('/');
-                },
-                child: Container(
+        InkWell(
+          onTap: () {
+            context.beamToNamed('/');
+            if (!AppConst.getPublicView() && AppConst.getIsAuthenticated()) {
+              ref!.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
+            }
+          },
+          child: Center(
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.home_outlined,
+                  weight: 100,
+                  size: 18,
+                ),
+                Container(
                   margin: const EdgeInsets.symmetric(horizontal: 5),
                   child: CustomText(
                     letterSpacing: 0.4,
-                    title: AppConst.getPublicView() ? 'Login' : 'Home',
+                    title: AppConst.getPublicView() && !AppConst.getIsAuthenticated() ? 'Login' : 'Home',
                     fontWeight: FontWeight.w600,
                     color: AppColor.primary,
                     size: 13,
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],
@@ -279,7 +282,7 @@ class NotificationDialogBox extends ConsumerStatefulWidget {
 class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
   final notificationcollection = FirebaseFirestore.instance.collection("notification");
   bool isChatOpen = false;
-
+  late Stream<QuerySnapshot<Object?>> notification;
   void markNotificationAsRead(NotificationModel notification) async {
     try {
       await notificationcollection
@@ -305,18 +308,31 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    notification = notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).snapshots();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Align(
       alignment: Alignment.topRight,
       child: Container(
-        padding: const EdgeInsets.only(top: 45, right: 80),
-        width: 500,
+        margin: const EdgeInsets.only(top: 45, right: 80),
+        height: size.height * 0.8,
+        width: 440,
         child: Card(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: StreamBuilder(
-              stream: notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).snapshots(),
+              stream: notification,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Loader();
+                  return SizedBox(
+                    height: size.height * 0.7,
+                    width: 440,
+                    child: const Loader(),
+                  );
                 }
                 if (snapshot.hasData) {
                   final dataList = snapshot.data!.docs;
@@ -349,72 +365,68 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                             ],
                           ),
                         ),
-                        SizedBox(
-                          height: 550,
-                          width: 440,
+                        Expanded(
                           child: ListView.separated(
+                            shrinkWrap: true,
                             itemCount: notificationList.length,
                             itemBuilder: (context, index) {
                               final firestoreTimestamp = notificationList[index].receiveDate;
                               final formattedTime = TimeFormatter.formatFirestoreTimestamp(firestoreTimestamp);
                               final notificationData = notificationList[index];
-
-                              return Container(
-                                color: notificationData.isRead! ? Colors.white : AppColor.secondary,
-                                child: ListTile(
-                                  onTap: () {
-                                    navigateBasedOnId(context, notificationData.linkedItemId!, ref);
-                                    if (!notificationData.isRead!) {
-                                      markNotificationAsRead(notificationData);
-                                    }
-                                    Navigator.of(context).pop();
-                                  },
-                                  titleAlignment: ListTileTitleAlignment.top,
-                                  leading: CircleAvatar(
-                                    backgroundImage:
-                                        NetworkImage(notificationData.imageUrl!.isNotEmpty && notificationData.imageUrl != null ? notificationData.imageUrl! : noImg),
-                                  ),
-                                  title: SizedBox(
-                                    height: 80,
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          notificationData.notificationContent!,
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        const Spacer(),
-                                        CustomText(
-                                          title: formattedTime,
-                                          color: const Color(0xFF9B9B9B),
-                                          size: 14,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  trailing: Column(
+                              return ListTile(
+                                tileColor: notificationData.isRead! ? Colors.transparent : AppColor.secondary,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                onTap: () {
+                                  navigateBasedOnId(context, notificationData.linkedItemId!, ref);
+                                  if (!notificationData.isRead!) {
+                                    markNotificationAsRead(notificationData);
+                                  }
+                                  Navigator.of(context).pop();
+                                },
+                                titleAlignment: ListTileTitleAlignment.top,
+                                leading: CircleAvatar(
+                                  backgroundImage: NetworkImage(notificationData.imageUrl!.isNotEmpty && notificationData.imageUrl != null ? notificationData.imageUrl! : noImg),
+                                ),
+                                title: SizedBox(
+                                  height: 80,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      CustomChip(
-                                        paddingHorizontal: 0,
-                                        label: CustomText(
-                                          title: notificationData.linkedItemId!,
-                                          size: 10,
-                                        ),
+                                      Text(
+                                        notificationData.notificationContent!,
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                       const Spacer(),
-                                      if (!notificationData.isRead!)
-                                        Container(
-                                          width: 10,
-                                          height: 10,
-                                          decoration: const BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: AppColor.primary,
-                                          ),
-                                        ),
+                                      CustomText(
+                                        title: formattedTime,
+                                        color: const Color(0xFF9B9B9B),
+                                        size: 14,
+                                      ),
                                     ],
                                   ),
+                                ),
+                                trailing: Column(
+                                  children: [
+                                    CustomChip(
+                                      paddingHorizontal: 0,
+                                      label: CustomText(
+                                        title: notificationData.linkedItemId!,
+                                        size: 10,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    if (!notificationData.isRead!)
+                                      Container(
+                                        width: 10,
+                                        height: 10,
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: AppColor.primary,
+                                        ),
+                                      ),
+                                  ],
                                 ),
                               );
                             },

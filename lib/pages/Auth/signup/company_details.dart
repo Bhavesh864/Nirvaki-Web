@@ -47,7 +47,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
 
   void submitSignupForm(SelectedSignupItems notify) {
     final isvalid = key.currentState?.validate();
-    if (mobilenumbercontroller.text == "") {
+    if (mobilenumbercontroller.text.trim() == "" || mobilenumbercontroller.text.trim().length < 10) {
       setState(() {
         isMobileEmpty = true;
       });
@@ -57,7 +57,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
         isMobileEmpty = false;
       });
     }
-    if (whatsupnumbercontroller.text == "" && !isChecked) {
+    if (whatsupnumbercontroller.text == "" && !isChecked || whatsupnumbercontroller.text.trim().length < 10) {
       setState(() {
         isWhatsappEmpty = true;
       });
@@ -126,7 +126,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
   List<String> citiesList = [];
   String selectedCity = '';
   String selectedState = '';
-
+  String? registerAs;
   final TextEditingController companynamecontroller = TextEditingController();
   final TextEditingController mobilenumbercontroller = TextEditingController();
   final TextEditingController whatsupnumbercontroller = TextEditingController();
@@ -273,6 +273,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                 // ),
                                 MobileNumberInputField(
                                   fromProfile: true,
+                                  fontsize: 14,
                                   controller: mobilenumbercontroller,
                                   hintText: 'Mobile Number',
                                   isEmpty: isMobileEmpty,
@@ -382,13 +383,31 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                   margin: const EdgeInsets.symmetric(horizontal: 6),
                                   child: Column(
                                     children: [
-                                      DropDownField(
-                                          title: "Register As",
-                                          defaultValues: "Broker",
-                                          optionsList: dropdownitem,
-                                          onchanged: (value) {
-                                            notify.add({"id": 13, "item": value});
-                                          }),
+                                      CustomDropdownFormField<String>(
+                                        label: "Register As",
+                                        value: registerAs,
+                                        isMandatory: true,
+                                        items: dropdownitem,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            registerAs = value;
+                                          });
+                                          notify.add({"id": 13, "item": value});
+                                        },
+                                        validator: (value) {
+                                          if (value == null) {
+                                            return 'Please select role';
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                      // DropDownField(
+                                      //     title: "Register As",
+                                      //     defaultValues: "Broker",
+                                      //     optionsList: dropdownitem,
+                                      //     onchanged: (value) {
+                                      //       notify.add({"id": 13, "item": value});
+                                      //     }),
                                     ],
                                   ),
                                 ),

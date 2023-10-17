@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
@@ -66,8 +65,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   }
 
   void setCardDetails() {
-    final brokerid = UserHiveMethods.getdata("brokerId");
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("brokerid", isEqualTo: brokerid).snapshots();
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
   }
 
   void getDetails(User currentuser) async {
@@ -198,25 +196,31 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
                                       if (Responsive.isMobile(context) || width! < 850) ...[
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                                margin: const EdgeInsets.only(left: 17, bottom: 4),
-                                                color: Colors.white,
-                                                child: AppText(
-                                                  letterspacing: 0.4,
-                                                  text: "Welcome, ${capitalizeFirstLetter(user.userfirstname)}",
-                                                  fontWeight: FontWeight.w600,
-                                                  fontsize: 16,
-                                                )),
-                                            const CustomCalendarView(),
-                                            WorkItemsList(
-                                              title: 'To do',
-                                              getCardDetails: filterTodoList,
-                                            ),
-                                          ],
+                                        Container(
+                                          margin: const EdgeInsets.symmetric(horizontal: 6),
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                  margin: const EdgeInsets.only(left: 10, bottom: 6),
+                                                  color: Colors.white,
+                                                  child: AppText(
+                                                    letterspacing: 0.4,
+                                                    text: "Welcome, ${capitalizeFirstLetter(user.userfirstname)}",
+                                                    fontWeight: FontWeight.w600,
+                                                    fontsize: 16,
+                                                  )),
+                                              const CustomCalendarView(),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              WorkItemsList(
+                                                title: 'To do',
+                                                getCardDetails: filterTodoList,
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ] else ...[
                                         if (showTableView) ...[
@@ -338,7 +342,6 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
     );
   }
 }
-
 
 // String getGreeting() {
 //   final now = DateTime.now();

@@ -23,7 +23,6 @@ import '../../Customs/custom_text.dart';
 import '../../Customs/dropdown_field.dart';
 import '../../Customs/label_text_field.dart';
 import '../../widgets/card/questions card/chip_button.dart';
-import '../firebase/detailsModels/lead_details.dart';
 import '../utils/colors.dart';
 
 Widget buildLeadQuestions(
@@ -536,7 +535,7 @@ Widget buildLeadQuestions(
           children: [
             LabelTextInputField(
               onlyDigits: isDigitsOnly,
-              keyboardType: isPriceField ? TextInputType.number : TextInputType.name,
+              keyboardType: isPriceField || isDigitsOnly ? TextInputType.number : TextInputType.name,
               inputController: controller,
               labelText: question.questionTitle,
               isMandatory: isvalidationtrue,
@@ -575,14 +574,18 @@ Widget buildLeadQuestions(
     );
   } else if (question.questionOptionType == "Assign") {
     try {
-      List<Assignedto> assignedusers = [];
+      var assignedusers = [];
       List<String> userids = [];
       if (isEdit) {
         if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
           assignedusers = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
         }
         for (var user in assignedusers) {
-          userids.add(user.userid!);
+          if (user is User) {
+            userids.add(user.userId);
+          } else {
+            userids.add(user.userid!);
+          }
         }
       }
       return AssignUser(
@@ -598,25 +601,28 @@ Widget buildLeadQuestions(
     }
   } else if (question.questionOptionType == 'dropdown') {
     String? defaultValue;
+    String? selectedvalue;
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
-    if (selectedValues.isNotEmpty && question.questionTitle.contains("Bedroom") && !selectedValues.any((element) => element["id"] == 14)) {
-      defaultValue = "1";
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        notify.add({"id": 14, "item": defaultValue});
-      });
-    }
+    final isvalidationtrue = question.questionId == 14;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 7),
-      child: DropDownField(
-        title: question.questionTitle,
-        defaultValues: defaultValue ?? "",
-        optionsList: question.questionOption,
-        onchanged: (Object e) {
-          notify.add({"id": question.questionId, "item": e});
-        },
-      ),
+      child: StatefulBuilder(builder: (context, setState) {
+        return CustomDropdownFormField<String>(
+          label: question.questionTitle,
+          value: defaultValue ?? selectedvalue,
+          isMandatory: true,
+          items: question.questionOption,
+          onChanged: (value) {
+            setState(() {
+              selectedvalue = value;
+            });
+            notify.add({"id": question.questionId, "item": value});
+          },
+          validator: isvalidationtrue ? (p0) => validateForNormalFeild(value: p0, props: question.questionTitle) : null,
+        );
+      }),
     );
   } else if (question.questionOptionType == 'map') {
     List? defaultValue;
