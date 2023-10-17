@@ -3,7 +3,6 @@
 export "FLUTTER_ROOT=/Users/saurabhmehra/flutterProject/fluttersdk/flutter"
 export "FLUTTER_APPLICATION_PATH=/Users/saurabhmehra/flutterProject/broker_webappV1"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
-<<<<<<< HEAD
 export "FLUTTER_TARGET=/Users/saurabhmehra/flutterProject/broker_webappV1/lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.0"
@@ -13,14 +12,3 @@ export "DART_OBFUSCATION=false"
 export "TRACK_WIDGET_CREATION=true"
 export "TREE_SHAKE_ICONS=false"
 export "PACKAGE_CONFIG=/Users/saurabhmehra/flutterProject/broker_webappV1/.dart_tool/package_config.json"
-=======
-export "FLUTTER_TARGET=/Users/saurabhmehra/Projects/flutterProjects/broker_webappV1/lib/main.dart"
-export "FLUTTER_BUILD_DIR=build"
-export "FLUTTER_BUILD_NAME=1.0.0"
-export "FLUTTER_BUILD_NUMBER=1"
-export "DART_DEFINES=RkxVVFRFUl9XRUJfQVVUT19ERVRFQ1Q9dHJ1ZQ==,RkxVVFRFUl9XRUJfQ0FOVkFTS0lUX1VSTD1odHRwczovL3d3dy5nc3RhdGljLmNvbS9mbHV0dGVyLWNhbnZhc2tpdC9jZGJlZGE3ODhhMjkzZmEyOTY2NWRjM2ZhM2Q2ZTYzYmQyMjFjYjBkLw=="
-export "DART_OBFUSCATION=false"
-export "TRACK_WIDGET_CREATION=true"
-export "TREE_SHAKE_ICONS=false"
-export "PACKAGE_CONFIG=/Users/saurabhmehra/Projects/flutterProjects/broker_webappV1/.dart_tool/package_config.json"
->>>>>>> e3f599f46110fe13d58171ceaf0aab39155dba69
