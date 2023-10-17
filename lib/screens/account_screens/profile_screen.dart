@@ -436,7 +436,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                         const SizedBox(width: 7),
                         InkWell(
                           onTap: () {
-                            if (phoneController.text.trim() == "") {
+                            if (phoneController.text.trim() == "" || phoneController.text.trim().length < 10) {
                               setState(() {
                                 isMobileNoEmpty = true;
                               });
@@ -598,7 +598,8 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                   ),
                 ),
                 if (Responsive.isMobile(context))
-                  buildInfoFields('Employee ID', userData.userId, false, TextEditingController(), context, (value) => validateForNormalFeild(props: "First name", value: value)),
+                  buildInfoFields(
+                      'Employee ID', userData.userId, false, TextEditingController(), context, (value) => validateForNormalFeild(props: "First name", value: value)),
               ] else
                 ...[]
             ],
@@ -609,7 +610,8 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
   }
 }
 
-Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, TextEditingController textController, BuildContext context, FormFieldValidator<String>? validator) {
+Widget buildInfoFields(
+    String fieldName, String fieldDetail, bool isEditing, TextEditingController textController, BuildContext context, FormFieldValidator<String>? validator) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -629,6 +631,7 @@ Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, Tex
           // height: 50,
           width: Responsive.isDesktop(context) ? 300 : 160,
           child: CustomTextInput(
+            margin: const EdgeInsets.symmetric(vertical: 5),
             controller: textController,
             onFieldSubmitted: (newValue) {},
             validator: validator,
@@ -649,7 +652,15 @@ Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, Tex
 }
 
 Widget mobileInfoFields(
-    String fieldName, String fieldDetail, bool isEditing, TextEditingController textController, BuildContext context, String countryCode, openModal, bool isEmpty) {
+  String fieldName,
+  String fieldDetail,
+  bool isEditing,
+  TextEditingController textController,
+  BuildContext context,
+  String countryCode,
+  openModal,
+  bool isEmpty,
+) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -667,6 +678,7 @@ Widget mobileInfoFields(
           width: Responsive.isDesktop(context) ? 300 : 160,
           child: MobileNumberInputField(
             // bottomMargin: kIsWeb ? const EdgeInsets.only(bottom: 8.5) : const EdgeInsets.only(bottom: 1.5),
+            margin: const EdgeInsets.symmetric(vertical: 5),
             fontsize: 13.0,
             controller: textController,
             hintText: 'Phone',
@@ -719,6 +731,7 @@ Widget serachLocationInfoFields(
           // height: 50,
           width: Responsive.isDesktop(context) ? 300 : 335,
           child: CustomTextInput(
+            margin: const EdgeInsets.symmetric(vertical: 5),
             hintText: "Type here...",
             controller: textController,
             onFieldSubmitted: (newValue) {},

@@ -569,7 +569,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                             searchController.text = "";
                             if (widget.isPersonalDetails) {
                               if (formKey.currentState!.validate()) {
-                                if (phoneController.text.trim() == "") {
+                                if (phoneController.text.trim() == "" || phoneController.text.trim().length < 10) {
                                   setState(() {
                                     isMobileNoEmpty = true;
                                   });
@@ -579,7 +579,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                                     isMobileNoEmpty = false;
                                   });
                                 }
-                                if (whatsappPhoneController.text.trim() == "") {
+                                if (whatsappPhoneController.text.trim() == "" || whatsappPhoneController.text.trim().length < 10) {
                                   setState(() {
                                     isWhatasppNoEmpty = true;
                                   });
@@ -833,7 +833,8 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                                     try {
                                       List<String> words = str.split(' ');
                                       if (words.length > 3) {
-                                        String lastThreeWords = words.contains("India") ? words.sublist(words.length - 3).join(' ') : words.sublist(words.length - 2).join(' ');
+                                        String lastThreeWords =
+                                            words.contains("India") ? words.sublist(words.length - 3).join(' ') : words.sublist(words.length - 2).join(' ');
                                         String remainingWords =
                                             words.contains("India") ? words.sublist(0, words.length - 3).join(' ') : words.sublist(0, words.length - 2).join(' ');
                                         if (remainingWords.endsWith(',')) {
@@ -854,8 +855,10 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                                         }
                                         address1Controller.text = remainingWords;
                                         address2Controller.text = lastThreeWords;
-                                        final cityName = lastThreeWordsList[0].endsWith(',') ? lastThreeWordsList[0].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[0];
-                                        final stateName = lastThreeWordsList[1].endsWith(',') ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[1];
+                                        final cityName =
+                                            lastThreeWordsList[0].endsWith(',') ? lastThreeWordsList[0].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[0];
+                                        final stateName =
+                                            lastThreeWordsList[1].endsWith(',') ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[1];
                                         cityController.text = cityName;
                                         stateController.text = stateName;
                                         setState(() {

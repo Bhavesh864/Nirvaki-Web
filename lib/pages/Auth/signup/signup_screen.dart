@@ -1,9 +1,11 @@
 import 'package:beamer/beamer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/responsive.dart';
+import 'package:yes_broker/pages/Auth/signup/personal_details.dart';
 
 import 'package:yes_broker/riverpodstate/sign_up_state.dart';
 
@@ -45,11 +47,18 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
   void navigateTopage(SelectedSignupItems notify) {
     final isvalid = key.currentState?.validate();
     if (isvalid!) {
-      // if (Responsive.isMobile(context)) {
-      //   Navigator.pushNamed(context, AppRoutes.personalDetailsScreen);
-      // } else {
-      context.beamToNamed(AppRoutes.personalDetailsScreen);
-      // }
+      if (kIsWeb) {
+        context.beamToNamed(AppRoutes.personalDetailsScreen);
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return const PersonalDetailsAuthScreen();
+            },
+          ),
+        );
+      }
     }
   }
 

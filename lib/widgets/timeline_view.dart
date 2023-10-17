@@ -49,7 +49,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: !widget.fromHome
           ? null
           : BoxDecoration(
@@ -70,7 +70,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                   avatar: Icon(
                     Icons.calendar_view_week_outlined,
                     weight: 1000,
-                    size: 20,
+                    size: 18,
                   ),
                   label: CustomText(
                     title: 'This Week',
@@ -91,7 +91,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                       Icon(
                         Icons.arrow_downward_outlined,
                         weight: 1000,
-                        size: 20,
+                        size: 18,
                       ),
                     ],
                   ),

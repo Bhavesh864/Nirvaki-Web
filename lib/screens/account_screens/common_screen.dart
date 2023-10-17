@@ -75,12 +75,16 @@ class _CommonScreenState extends ConsumerState<CommonScreen> {
               Expanded(
                 flex: 1,
                 child: Container(
-                  margin: const EdgeInsets.only(top: 10),
+                  margin: const EdgeInsets.only(top: 10, left: 10),
                   child: ListView(
                     children: [
                       for (var item in profileMenuItems)
                         Container(
-                          color: selectedItem?.id == item.id ? AppColor.selectedItemColor : Colors.white,
+                          height: 45,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: selectedItem?.id == item.id ? AppColor.selectedItemColor : Colors.white,
+                          ),
                           child: ListTile(
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             hoverColor: AppColor.selectedItemColor,

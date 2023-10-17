@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 
@@ -45,13 +46,13 @@ class InventoryDetailsScreen extends ConsumerStatefulWidget {
 class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> with TickerProviderStateMixin {
   late TabController tabviewController;
   late Stream<QuerySnapshot<Map<String, dynamic>>> inventoryDetails;
-  int currentSelectedTab = 0;
+  // int currentSelectedTab = 0;
 
   @override
   void initState() {
     super.initState();
     final currentIndex = ref.read(detailsPageIndexTabProvider);
-    currentSelectedTab = currentIndex;
+    // currentSelectedTab = currentIndex;
     tabviewController = TabController(length: 3, vsync: this, initialIndex: currentIndex);
     final workItemId = ref.read(selectedWorkItemId);
     if (workItemId.isEmpty) {
@@ -66,6 +67,8 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(myArrayProvider.notifier);
+    final currentSelectedTab = ref.watch(detailsPageIndexTabProvider);
+
     return Scaffold(
       appBar: Responsive.isMobile(context)
           ? AppBar(
@@ -115,6 +118,10 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                               InventoryDetailsHeader(
                                 setState: () {
                                   setState(() {});
+                                },
+                                setCurrentIndex: (p0) {
+                                  ref.read(detailsPageIndexTabProvider.notifier).update((state) => 0);
+                                  tabviewController.animateTo(0);
                                 },
                                 id: data.inventoryId!,
                                 title: data.inventoryTitle!,
@@ -192,9 +199,14 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                             backgroundColor: AppColor.primary, // Set the button's background color
                                             padding: const EdgeInsets.all(8), // Set the button's size
                                           ),
-                                          child: const Text(
+                                          child: Text(
                                             'Owner Details',
-                                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600,
+                                              letterSpacing: 0.3,
+                                              fontFamily: GoogleFonts.dmSans().fontFamily,
+                                            ),
                                           ),
                                         ),
                                         const SizedBox(
@@ -233,8 +245,8 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                                 offset: Offset(index * -8.0, 0),
                                                 child: Container(
                                                   margin: EdgeInsets.zero,
-                                                  width: 24,
-                                                  height: 24,
+                                                  width: 28,
+                                                  height: 28,
                                                   decoration: index > 1
                                                       ? BoxDecoration(
                                                           border: Border.all(color: Colors.white),
@@ -300,9 +312,9 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                 TabBarWidget(
                                   tabviewController: tabviewController,
                                   onTabChanged: (e) {
-                                    setState(() {
-                                      currentSelectedTab = e;
-                                    });
+                                    // setState(() {
+                                    ref.read(detailsPageIndexTabProvider.notifier).update((state) => e);
+                                    // });
                                   },
                                 ),
                               const SizedBox(
