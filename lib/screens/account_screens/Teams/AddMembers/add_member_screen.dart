@@ -13,8 +13,9 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/riverpodstate/add_member_state.dart';
 
+import '../../../../Customs/dropdown_field.dart';
 import '../../../../constants/utils/constants.dart';
-import '../../../../customs/dropdown_field.dart';
+import '../../../../pages/Auth/signup/country_code_modal.dart';
 import '../../../../riverpodstate/user_data.dart';
 import '../team_screen.dart';
 
@@ -36,12 +37,29 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
   String? editManagerName;
   String? editRoleName;
   String? role;
+  String mobileCountryCode = '+91';
+  String mobileNoValidation = '';
 
   void submitMemberRole() {
     final isEdit = ref.read(editAddMemberState);
     final editUser = ref.read(userForEditScreen);
 
     final isvalid = key.currentState?.validate();
+    if (_mobileController.text.isEmpty) {
+      setState(() {
+        mobileNoValidation = 'Please enter Mobile Number';
+      });
+      return;
+    } else if (_mobileController.text.trim().length < 10) {
+      setState(() {
+        mobileNoValidation = 'Please enter 10 digit Mobile Number';
+      });
+      return;
+    } else {
+      setState(() {
+        mobileNoValidation = '';
+      });
+    }
     if (isvalid!) {
       setState(() {
         loading = true;
@@ -51,7 +69,7 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                 email: _emailController.text,
                 firstname: _firstNameController.text,
                 lastname: _lastNameController.text,
-                mobile: _mobileController.text,
+                mobile: "$mobileCountryCode ${_mobileController.text}",
                 managerName: manager != null ? '${manager?.userfirstname} ${manager?.userlastname}' : editUser?.managerName,
                 managerid: manager != null ? manager?.userId : editUser?.managerid,
                 role: role ?? editUser?.role,
@@ -84,7 +102,7 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                 email: _emailController.text,
                 firstname: _firstNameController.text,
                 lastname: _lastNameController.text,
-                mobile: _mobileController.text,
+                mobile: "$mobileCountryCode ${_mobileController.text}",
                 managerName: '${manager?.userfirstname} ${manager?.userlastname}',
                 managerid: manager?.userId,
                 role: role)
@@ -122,9 +140,30 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
     if (isEdit) {
       _firstNameController.text = editUser?.userfirstname ?? '';
       _lastNameController.text = editUser?.userlastname ?? '';
-      _mobileController.text = editUser?.mobile ?? '';
       _emailController.text = editUser?.email ?? '';
+      // _mobileController.text = editUser?.mobile ?? '';
+
+      List<String>? splitString = editUser?.mobile.split(' ');
+      if (splitString!.length == 2) {
+        mobileCountryCode = splitString[0];
+        _mobileController.text = splitString[1];
+      }
     }
+  }
+
+  void openModal({BuildContext? context}) {
+    showDialog(
+      context: context!,
+      builder: (context) {
+        return CountryCodeModel(onCountrySelected: (data) {
+          if (data.isNotEmpty) {
+            setState(() {
+              mobileCountryCode = data;
+            });
+          }
+        });
+      },
+    );
   }
 
   @override
@@ -181,13 +220,38 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                             // validator: (value) => validateForNormalFeild(value: value, props: "Last Name"),
                           ),
                           const SizedBox(height: 4),
-                          LabelTextInputField(
-                              isMandatory: true,
-                              onlyDigits: true,
-                              labelText: "Mobile",
-                              inputController: _mobileController,
-                              validator: (value) => validateForMobileNumberFeild(value: value, props: "Mobile")),
-                          const SizedBox(height: 4),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              MobileNumberInputField(
+                                fromProfile: true,
+                                controller: _mobileController,
+                                hintText: "Mobile",
+                                isEmpty: mobileNoValidation == '' ? false : true,
+                                openModal: () {
+                                  openModal(
+                                    context: context,
+                                  );
+                                },
+                                countryCode: mobileCountryCode,
+                                onChange: (value) {
+                                  // _mobileController.text = value;
+                                },
+                              ),
+                              if (mobileNoValidation != '')
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 15.0, bottom: 5),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: AppText(
+                                      text: mobileNoValidation,
+                                      textColor: Colors.red,
+                                      fontsize: 12,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
                           LabelTextInputField(
                             isMandatory: true,
                             labelText: "Email",

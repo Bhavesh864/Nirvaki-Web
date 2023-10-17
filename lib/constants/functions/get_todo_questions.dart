@@ -139,7 +139,6 @@ Widget buildTodoQuestions(
       );
     }
     return LabelTextInputField(
-      keyboardType: TextInputType.name,
       inputController: controller,
       isMandatory: true,
       labelText: question.questionTitle,
@@ -171,7 +170,6 @@ Widget buildTodoQuestions(
     List<User> userList = [];
     // String? defaultValue;
     String? selectedvalue;
-
     // if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
     //   defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     // }
@@ -193,7 +191,6 @@ Widget buildTodoQuestions(
           }
           return StatefulBuilder(builder: (context, setState) {
             return Container(
-              margin: const EdgeInsets.symmetric(horizontal: 7),
               child: CustomDropdownFormField<String>(
                 label: question.questionTitle,
                 value: selectedvalue,

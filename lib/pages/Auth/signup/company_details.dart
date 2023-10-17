@@ -5,6 +5,7 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:yes_broker/Customs/label_text_field.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
@@ -37,17 +38,9 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
   var isloading = false;
   TextEditingController controller = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setUserRole();
-    });
-  }
-
   void submitSignupForm(SelectedSignupItems notify) {
     final isvalid = key.currentState?.validate();
-    if (mobilenumbercontroller.text.trim() == "" || mobilenumbercontroller.text.trim().length < 10) {
+    if (mobilenumbercontroller.text.trim().isEmpty && mobilenumbercontroller.text.trim().length < 10) {
       setState(() {
         isMobileEmpty = true;
       });
@@ -57,7 +50,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
         isMobileEmpty = false;
       });
     }
-    if (whatsupnumbercontroller.text == "" && !isChecked || whatsupnumbercontroller.text.trim().length < 10) {
+    if (whatsupnumbercontroller.text == "" && !isChecked && whatsupnumbercontroller.text.trim().length < 10) {
       setState(() {
         isWhatsappEmpty = true;
       });
@@ -72,6 +65,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
         isloading = true;
       });
       notify.signup().then((value) => {
+            prints("matcher"),
             if (value == 'success')
               {
                 setState(() {
@@ -140,11 +134,6 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
   String selectedwhatsappCountryCode = '+91';
   bool isMobileEmpty = false;
   bool isWhatsappEmpty = false;
-
-  void setUserRole() {
-    final notify = ref.read(selectedItemForsignup.notifier);
-    notify.add({"id": 13, "item": 'Broker'});
-  }
 
   void openModal(bool isMobile) {
     final notify = ref.read(selectedItemForsignup.notifier);
