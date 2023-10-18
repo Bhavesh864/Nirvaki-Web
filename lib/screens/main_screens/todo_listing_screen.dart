@@ -59,9 +59,11 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
 
   getUserData(token) async {
     final User? user = await User.getUser(token);
-    ref.read(userDataProvider.notifier).storeUserData(user!);
-    AppConst.setRole(user.role);
-    UserHiveMethods.addData(key: "brokerId", data: user.brokerId);
+    if (user != null) {
+      ref.read(userDataProvider.notifier).storeUserData(user);
+      AppConst.setRole(user.role);
+      UserHiveMethods.addData(key: "brokerId", data: user.brokerId);
+    }
   }
 
   void setCardDetails() {
