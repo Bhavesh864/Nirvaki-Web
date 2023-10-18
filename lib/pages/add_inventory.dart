@@ -191,7 +191,6 @@ class AddInventoryState extends ConsumerState<AddInventory> {
     final isPlotSelected = ref.read(filterPlotQuestion);
     final allInventoryQuestionsNotifier = ref.read(allInventoryQuestion.notifier);
     final allInventoryQuestions = ref.read(allInventoryQuestion);
-    // final assignIsselected = selectedValues.firstWhere((element) => element["id"] == 36)["item"];
     return GestureDetector(
         onTap: () {
           if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
