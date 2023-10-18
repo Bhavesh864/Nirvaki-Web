@@ -141,18 +141,20 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
       _firstNameController.text = editUser?.userfirstname ?? '';
       _lastNameController.text = editUser?.userlastname ?? '';
       _emailController.text = editUser?.email ?? '';
-      // _mobileController.text = editUser?.mobile ?? '';
       List<String>? splitString = editUser?.mobile.split(' ');
-      if (splitString!.length == 2) {
+      if (splitString!.length == 1) {
+        _mobileController.text = splitString[0];
+      }
+      if (splitString.length == 2) {
         mobileCountryCode = splitString[0];
         _mobileController.text = splitString[1];
       }
     }
   }
 
-  void openModal({BuildContext? context}) {
+  void openModal(BuildContext context) {
     showDialog(
-      context: context!,
+      context: context,
       builder: (context) {
         return CountryCodeModel(onCountrySelected: (data) {
           if (data.isNotEmpty) {
@@ -219,13 +221,6 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                             // validator: (value) => validateForNormalFeild(value: value, props: "Last Name"),
                           ),
                           const SizedBox(height: 4),
-                          // LabelTextInputField(
-                          //     isMandatory: true,
-                          //     onlyDigits: true,
-                          //     labelText: "Mobile",
-                          //     inputController: _mobileController,
-                          //     validator: (value) => validateForMobileNumberFeild(value: value, props: "Mobile")),
-                          // const SizedBox(height: 4),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -235,14 +230,10 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                                 hintText: "Mobile",
                                 isEmpty: mobileNoValidation == '' ? false : true,
                                 openModal: () {
-                                  openModal(
-                                    context: context,
-                                  );
+                                  openModal(context);
                                 },
                                 countryCode: mobileCountryCode,
-                                onChange: (value) {
-                                  // _mobileController.text = value;
-                                },
+                                onChange: (value) {},
                               ),
                               if (mobileNoValidation != '')
                                 Padding(
