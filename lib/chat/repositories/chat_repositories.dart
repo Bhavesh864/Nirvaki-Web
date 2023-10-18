@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:yes_broker/chat/models/chat_group.dart';
+
 import '../../Customs/snackbar.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/userModel/user_info.dart';
@@ -125,23 +126,9 @@ class ChatRepository {
     bool isSender,
   ) async {
     try {
-      await firestore
-          .collection('users')
-          .doc(AppConst.getAccessToken())
-          .collection('chats')
-          .doc(recieverUserId)
-          .collection('messages')
-          .doc(messageId)
-          .update({'isSeen': true});
+      await firestore.collection('users').doc(AppConst.getAccessToken()).collection('chats').doc(recieverUserId).collection('messages').doc(messageId).update({'isSeen': true});
 
-      await firestore
-          .collection('users')
-          .doc(recieverUserId)
-          .collection('chats')
-          .doc(AppConst.getAccessToken())
-          .collection('messages')
-          .doc(messageId)
-          .update({'isSeen': true});
+      await firestore.collection('users').doc(recieverUserId).collection('chats').doc(AppConst.getAccessToken()).collection('messages').doc(messageId).update({'isSeen': true});
     } catch (e) {
       customSnackBar(
         context: context,

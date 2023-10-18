@@ -42,6 +42,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       },
       child: Scaffold(
         resizeToAvoidBottomInset: true,
+        backgroundColor: Colors.white,
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: Responsive.isMobile(context) ? 0 : 10),
           child: StreamBuilder(

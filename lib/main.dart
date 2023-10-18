@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 
 import 'package:hive_flutter/adapters.dart';
 import 'firebase_options.dart';
@@ -26,15 +27,13 @@ void main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
-
-  try {
-    await firestore.enablePersistence();
-  } catch (e) {
-    if (kDebugMode) {
-      print('Error enabling Firestore persistence: $e');
-    }
-  }
-
+  // try {
+  //   await firestore.enablePersistence();
+  // } catch (e) {
+  //   if (kDebugMode) {
+  //     print('Error enabling Firestore persistence: $e');
+  //   }
+  // }
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   getToken();
   await setupFlutterNotifications();
@@ -48,6 +47,9 @@ void main() async {
       child: MyApp(),
     ),
   );
+  if (!kIsWeb) {
+    await GoogleMapsFlutterAndroid().initializeWithRenderer(AndroidMapRenderer.latest);
+  }
 }
 
 class MyApp extends StatelessWidget {
