@@ -5,6 +5,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -212,8 +213,8 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                     children: [
                                       isEditingTodoName
                                           ? SizedBox(
-                                              height: 35,
-                                              width: data.todoName!.length * 13,
+                                              // height: 35,
+                                              width: kIsWeb ? 300 : 190,
                                               child: CustomTextInput(
                                                 autofocus: true,
                                                 controller: todoNameEditingController,
@@ -317,8 +318,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                               AssignmentWidget(
                                                 assignto: data.assignedto!,
                                                 id: data.todoId!,
-                                                imageUrlCreatedBy:
-                                                    data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                 createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
                                                 data: data,
                                               ),

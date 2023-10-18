@@ -320,7 +320,7 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               CustomButton(
-                                textStyle: const TextStyle(fontWeight: FontWeight.bold, letterSpacing: 0.5),
+                                textStyle: const TextStyle(fontWeight: FontWeight.w700, letterSpacing: 1),
                                 height: 39,
                                 text: "Cancel",
                                 borderColor: AppColor.primary,
@@ -330,7 +330,7 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                               ),
                               const SizedBox(width: 7),
                               CustomButton(
-                                textStyle: const TextStyle(fontWeight: FontWeight.bold, letterSpacing: 0.5),
+                                textStyle: const TextStyle(fontWeight: FontWeight.w700, letterSpacing: 1),
                                 text: isEdit ? "Update" : "Send Invite",
                                 borderColor: AppColor.primary,
                                 height: 39,
