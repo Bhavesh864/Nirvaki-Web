@@ -474,6 +474,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:reorderables/reorderables.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
@@ -583,7 +584,12 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
 
     focusNode.addListener(() {
       if (!focusNode.hasFocus) {
-        cancelEditingTodoName();
+        if (todoNameEditingController.text != "") {
+          cancelEditingTodoName();
+        } else {
+          FocusScope.of(context).requestFocus(focusNode);
+          customSnackBar(context: context, text: 'Field cannot be empty');
+        }
       }
     });
 
@@ -688,15 +694,21 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
                                 children: [
                                   isEditingTodoName == index
                                       ? SizedBox(
-                                          height: 30,
-                                          width: constraints.maxWidth / crossAxisCount - 50,
+                                          // height: 45,
+                                          width: constraints.maxWidth / crossAxisCount - 40,
                                           child: CustomTextInput(
                                             autofocus: true,
                                             focusnode: focusNode,
                                             controller: todoNameEditingController,
                                             onFieldSubmitted: (newValue) {
                                               todoNameEditingController.text = newValue;
-                                              FocusScope.of(context).requestFocus(focusNode);
+                                              if (newValue != "") {
+                                                cancelEditingTodoName();
+                                                FocusScope.of(context).requestFocus(focusNode);
+                                              } else {
+                                                FocusScope.of(context).requestFocus(focusNode);
+                                                customSnackBar(context: context, text: 'Field cannot be empty');
+                                              }
                                             },
                                           ),
                                         )
@@ -708,10 +720,22 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
-                                              CustomText(
-                                                title: "${roomImages[index]["title"]} ",
-                                                size: 14,
-                                              ),
+                                              if (roomImages[index]["title"].length > 16) ...[
+                                                SizedBox(
+                                                  width: constraints.maxWidth / crossAxisCount - 30,
+                                                  child: CustomText(
+                                                    title: "${roomImages[index]["title"]} ",
+                                                    size: 14,
+                                                    softWrap: true,
+                                                  ),
+                                                ),
+                                              ] else ...[
+                                                CustomText(
+                                                  title: "${roomImages[index]["title"]} ",
+                                                  size: 14,
+                                                  softWrap: true,
+                                                ),
+                                              ],
                                               const SizedBox(
                                                 width: 2,
                                               ),
