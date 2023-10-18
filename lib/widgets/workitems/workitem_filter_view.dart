@@ -225,11 +225,9 @@ class FilterBottomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-        child: CustomButton(text: 'Apply Filter', onPressed: () {}),
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+      child: CustomButton(text: 'Apply Filter', onPressed: () {}),
     );
   }
 }

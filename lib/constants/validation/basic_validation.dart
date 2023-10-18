@@ -1,9 +1,9 @@
 String? validateEmail(String? value) {
-  if (value == null || value.isEmpty) {
+  if (value?.trim() == null || value!.trim().isEmpty) {
     return 'Please enter your email';
   }
   final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$');
-  if (!emailRegex.hasMatch(value)) {
+  if (!emailRegex.hasMatch(value.trim())) {
     return 'Please enter a valid email address';
   }
 

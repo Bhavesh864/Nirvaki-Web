@@ -3,10 +3,14 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:path_provider/path_provider.dart';
+
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/customs/loader.dart';
+import 'package:yes_broker/customs/snackbar.dart';
 import 'package:yes_broker/widgets/workItemDetail/tab_views/iframe_modules.dart';
 import '../../../Customs/custom_chip.dart';
 import '../../../Customs/custom_text.dart';
@@ -83,6 +87,20 @@ class _DetailsTabViewState extends State<DetailsTabView> {
         print('${isFullScreen ? 'Entered' : 'Exited'} Fullscreen.');
       },
     );
+  }
+
+  void downloadFile(String url, String name) async {
+    FileDownloader.downloadFile(
+      url: url,
+      onDownloadCompleted: (String path) {
+        customSnackBar(context: context, text: 'FILE DOWNLOADED TO PATH: $path');
+      },
+    );
+  }
+
+  Future<String> getFilePath(String filename) async {
+    final dir = await getApplicationDocumentsDirectory();
+    return "${dir.path}/$filename";
   }
 
   @override
@@ -636,6 +654,11 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                       //   anchorElement.download = 'Attachment file';
                                       //   anchorElement.click();
                                       // }
+
+                                      downloadFile(
+                                        attachment.path,
+                                        attachment.title,
+                                      );
                                     },
                                   ),
                                   GestureDetector(
@@ -671,9 +694,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                               showUploadDocumentModal(
                                 context,
                                 widget.updateData,
-                                selectedDocsNameList,
                                 selectedFile,
-                                pickedFilesList,
                                 () {
                                   setState(() {});
                                 },

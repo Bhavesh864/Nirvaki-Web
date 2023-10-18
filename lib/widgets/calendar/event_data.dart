@@ -141,26 +141,4 @@ class CustomEventDataSource extends CalendarDataSource {
 
   @override
   bool isAllDay(int index) => false;
-
-  @override
-  List<CalendarModel> getAppointments(DateTime startDate, DateTime endDate) {
-    List filteredAppointments = [];
-
-    for (var appointment in appointments!) {
-      if (appointment.startTime.isAfter(startDate) && appointment.startTime.isBefore(endDate)) {
-        // Filter appointments for each time slot to show only two
-        var sameTimeSlotAppointments = appointments!.where((a) => a.startTime == appointment.startTime && a.endTime == appointment.endTime);
-
-        if (sameTimeSlotAppointments.length <= 2) {
-          filteredAppointments.addAll(sameTimeSlotAppointments);
-        } else {
-          // If there are more than two appointments, add the top two based on your criteria
-          var topTwoAppointments = sameTimeSlotAppointments.take(2);
-          filteredAppointments.addAll(topTwoAppointments);
-        }
-      }
-    }
-
-    return filteredAppointments as List<CalendarModel>;
-  }
 }

@@ -471,6 +471,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:reorderables/reorderables.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
@@ -608,186 +609,195 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
       child: SingleChildScrollView(
         physics: Responsive.isMobile(context) ? const ScrollPhysics() : const NeverScrollableScrollPhysics(),
         child: Container(
-          constraints: BoxConstraints(
+          alignment: Alignment.topLeft,
+          constraints: const BoxConstraints(
             minHeight: 0,
-            maxHeight: Responsive.isMobile(context) ? 450 : 600,
+            // maxHeight: Responsive.isMobile(context) ? 450 : 600,
           ),
           padding: const EdgeInsets.all(10),
           child: LayoutBuilder(
             builder: (context, constraints) {
               int crossAxisCount = (constraints.maxWidth / 120).floor();
+              return ReorderableWrap(
+                onReorder: (oldIndex, newIndex) {
+                  setState(() {
+                    // if (newIndex > oldIndex) {
+                    //   newIndex -= 1;
+                    // }
 
-              // return ReorderableWrap(
-              //   children: [],
-              //   onReorder: (oldIndex, newIndex) {},
-              // );
+                    final item = roomImages.removeAt(oldIndex);
+                    roomImages.insert(newIndex, item);
 
-              return GridView.builder(
-                // onReorder: (oldIndex, newIndex) {
-                //   setState(() {
-                //     // if (newIndex > oldIndex) newIndex--;
+                    final titleItem = selectedImagesTitleList.removeAt(oldIndex);
+                    selectedImagesTitleList.insert(newIndex, titleItem);
+                    final urlItem = selectedImagesUrlList.removeAt(oldIndex);
+                    selectedImagesUrlList.insert(newIndex, urlItem);
+                  });
 
-                //     final item = roomImages.removeAt(oldIndex);
-                //     roomImages.insert(newIndex, item);
-
-                //     // final item1 = selectedImagesUrlList.removeAt(oldIndex);
-
-                //     // selectedImagesUrlList.insert(newIndex, item1);
-                //   });
-                // },
-                shrinkWrap: true,
-                padding: EdgeInsets.zero,
-                // scrollDirection: Axis.horizontal,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: crossAxisCount,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  mainAxisExtent: 145,
-                ),
-                itemCount: roomImages.length + 1,
-                // itemCount: 3,
-                itemBuilder: (context, index) {
-                  if (index < roomImages.length) {
-                    return Stack(
-                      key: Key(index.toString()),
-                      children: [
-                        Column(
-                          children: [
-                            Card(
-                              clipBehavior: Clip.antiAlias,
-                              elevation: 2,
-                              shadowColor: Colors.grey[300],
-                              child: SizedBox(
-                                width: constraints.maxWidth / crossAxisCount - 20,
-                                height: constraints.maxWidth / crossAxisCount - 45,
-                                child: widget.isEdit && roomImages[index]["webImageUrl"].contains("https")
-                                    ? Image.network(
-                                        roomImages[index]["webImageUrl"]!,
-                                        fit: BoxFit.fill,
-                                      )
-                                    : kIsWeb
-                                        ? Image.memory(
-                                            roomImages[index]["webImageUrl"]!,
-                                            fit: BoxFit.fill,
-                                          )
-                                        : Image.file(
-                                            roomImages[index]["imageUrl"]!,
-                                            fit: BoxFit.fill,
-                                          ),
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Wrap(
-                              runSpacing: 10,
-                              children: [
-                                isEditingTodoName == index
-                                    ? SizedBox(
-                                        height: 30,
-                                        width: constraints.maxWidth / crossAxisCount - 50,
-                                        child: CustomTextInput(
-                                          autofocus: true,
-                                          focusnode: focusNode,
-                                          controller: todoNameEditingController,
-                                          onFieldSubmitted: (newValue) {
-                                            todoNameEditingController.text = newValue;
-                                            FocusScope.of(context).requestFocus(focusNode);
-                                          },
-                                        ),
-                                      )
-                                    : GestureDetector(
-                                        onTap: () {
-                                          startEditingTodoName("${roomImages[index]["title"]}", index);
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            CustomText(
-                                              title: "${roomImages[index]["title"]} ",
-                                              size: 14,
-                                            ),
-                                            const SizedBox(
-                                              width: 2,
-                                            ),
-                                            const Icon(
-                                              Icons.edit,
-                                              size: 18,
-                                              color: Colors.black,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                roomImages.remove(roomImages[index]);
-                                selectedImagesTitleList.remove(selectedImagesTitleList[index]);
-                                selectedImagesUrlList.remove(selectedImagesUrlList[index]);
-                              });
-                              Future.delayed(const Duration(milliseconds: 1000), () {
-                                Propertyphotos propertyphotos = Propertyphotos(imageTitle: selectedImagesTitleList, imageUrl: selectedImagesUrlList);
-                                print("propertyphotos---> ${propertyphotos}");
-                                widget.notify!.add({
-                                  'id': widget.id,
-                                  'item': propertyphotos,
-                                });
-                              });
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),
-                              child: const Icon(
-                                Icons.close,
-                                size: 18,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  } else {
-                    return GestureDetector(
-                      key: Key(index.toString()),
-                      onTap: () {
-                        selectImage();
-                      },
-                      child: Column(
+                  Future.delayed(const Duration(milliseconds: 500), () {
+                    Propertyphotos propertyphotos = Propertyphotos(imageTitle: selectedImagesTitleList, imageUrl: selectedImagesUrlList);
+                    widget.notify!.add({
+                      'id': widget.id,
+                      'item': propertyphotos,
+                    });
+                  });
+                },
+                needsLongPressDraggable: false,
+                maxMainAxisCount: crossAxisCount,
+                scrollDirection: Axis.horizontal,
+                alignment: WrapAlignment.start,
+                runAlignment: WrapAlignment.start,
+                crossAxisAlignment: WrapCrossAlignment.start,
+                spacing: 10,
+                runSpacing: 10,
+                children: List.generate(
+                  roomImages.length + 1,
+                  (index) {
+                    if (index < roomImages.length) {
+                      return Stack(
+                        key: const ValueKey('Enable drag'),
                         children: [
-                          Card(
-                            clipBehavior: Clip.antiAlias,
-                            elevation: 2,
-                            shadowColor: Colors.grey[300],
-                            child: SizedBox(
-                                width: constraints.maxWidth / crossAxisCount - 20,
-                                height: constraints.maxWidth / crossAxisCount - 45,
-                                child: const Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.add_circle_outline_outlined, size: 40, color: Colors.grey),
-                                    SizedBox(
-                                      height: 6,
-                                    ),
-                                    AppText(
-                                      text: 'Add Photos',
-                                      fontsize: 15,
-                                      textColor: Colors.black,
-                                    )
-                                  ],
-                                )),
+                          Column(
+                            children: [
+                              Card(
+                                clipBehavior: Clip.antiAlias,
+                                elevation: 2,
+                                shadowColor: Colors.grey[300],
+                                child: SizedBox(
+                                  width: constraints.maxWidth / crossAxisCount - 20,
+                                  height: constraints.maxWidth / crossAxisCount - 45,
+                                  child: widget.isEdit && roomImages[index]["webImageUrl"].contains("https")
+                                      ? Image.network(
+                                          roomImages[index]["webImageUrl"]!,
+                                          fit: BoxFit.fill,
+                                        )
+                                      : kIsWeb
+                                          ? Image.memory(
+                                              roomImages[index]["webImageUrl"]!,
+                                              fit: BoxFit.fill,
+                                            )
+                                          : Image.file(
+                                              roomImages[index]["imageUrl"]!,
+                                              fit: BoxFit.fill,
+                                            ),
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Wrap(
+                                runSpacing: 10,
+                                children: [
+                                  isEditingTodoName == index
+                                      ? SizedBox(
+                                          height: 30,
+                                          width: constraints.maxWidth / crossAxisCount - 50,
+                                          child: CustomTextInput(
+                                            autofocus: true,
+                                            focusnode: focusNode,
+                                            controller: todoNameEditingController,
+                                            onFieldSubmitted: (newValue) {
+                                              todoNameEditingController.text = newValue;
+                                              FocusScope.of(context).requestFocus(focusNode);
+                                            },
+                                          ),
+                                        )
+                                      : GestureDetector(
+                                          onTap: () {
+                                            startEditingTodoName("${roomImages[index]["title"]}", index);
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              CustomText(
+                                                title: "${roomImages[index]["title"]} ",
+                                                size: 14,
+                                              ),
+                                              const SizedBox(
+                                                width: 2,
+                                              ),
+                                              const Icon(
+                                                Icons.edit,
+                                                size: 18,
+                                                color: Colors.black,
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  roomImages.remove(roomImages[index]);
+                                  selectedImagesTitleList.remove(selectedImagesTitleList[index]);
+                                  selectedImagesUrlList.remove(selectedImagesUrlList[index]);
+                                });
+                                Future.delayed(const Duration(milliseconds: 1000), () {
+                                  Propertyphotos propertyphotos = Propertyphotos(imageTitle: selectedImagesTitleList, imageUrl: selectedImagesUrlList);
+                                  widget.notify!.add({
+                                    'id': widget.id,
+                                    'item': propertyphotos,
+                                  });
+                                });
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),
+                                child: const Icon(
+                                  Icons.close,
+                                  size: 18,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
                           ),
                         ],
-                      ),
-                    );
-                  }
-                },
+                      );
+                    } else {
+                      return ReorderableWidget(
+                        key: const ValueKey('Disable drag'),
+                        reorderable: false,
+                        child: GestureDetector(
+                          onLongPress: () {},
+                          onTap: () {
+                            selectImage();
+                          },
+                          child: Column(
+                            children: [
+                              Card(
+                                clipBehavior: Clip.antiAlias,
+                                elevation: 2,
+                                shadowColor: Colors.grey[300],
+                                child: SizedBox(
+                                    width: constraints.maxWidth / crossAxisCount - 20,
+                                    height: constraints.maxWidth / crossAxisCount - 45,
+                                    child: const Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.add_circle_outline_outlined, size: 40, color: Colors.grey),
+                                        SizedBox(
+                                          height: 6,
+                                        ),
+                                        AppText(
+                                          text: 'Add Photos',
+                                          fontsize: 15,
+                                          textColor: Colors.black,
+                                        )
+                                      ],
+                                    )),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                ),
               );
             },
           ),

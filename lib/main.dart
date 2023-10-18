@@ -34,6 +34,7 @@ void main() async {
       print('Error enabling Firestore persistence: $e');
     }
   }
+
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   getToken();
   await setupFlutterNotifications();
