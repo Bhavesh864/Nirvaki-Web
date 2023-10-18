@@ -7,7 +7,7 @@ abstract class AppEnvironment {
       case Environment.dev:
         {
           headerKey = 'Authorization';
-          baseApiUrl = 'https://api-todo-flutter.herokuapp.com';
+          baseApiUrl = "";
           appname = "Yes broker";
           break;
         }
