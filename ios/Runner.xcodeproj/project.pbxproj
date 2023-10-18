@@ -200,11 +200,7 @@
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				79B2A74AF8FC9FEB6AD65352 /* [CP] Embed Pods Frameworks */,
 				296E7CC10940E5D37EAEEC3A /* [CP] Copy Pods Resources */,
-<<<<<<< HEAD
-				9F5E10CB5FD050BAA4937785 /* [firebase_crashlytics] Crashlytics Upload Symbols */,
-=======
-				813CCE9A42F5835F8ECBC74C /* [firebase_crashlytics] Crashlytics Upload Symbols */,
->>>>>>> e3f599f46110fe13d58171ceaf0aab39155dba69
+				81F8A97D356F51515635905A /* [firebase_crashlytics] Crashlytics Upload Symbols */,
 			);
 			buildRules = (
 			);
@@ -325,7 +321,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		813CCE9A42F5835F8ECBC74C /* [firebase_crashlytics] Crashlytics Upload Symbols */ = {
+		81F8A97D356F51515635905A /* [firebase_crashlytics] Crashlytics Upload Symbols */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (

@@ -63,9 +63,11 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
 
   getUserData(token) async {
     final User? user = await User.getUser(token);
-    ref.read(userDataProvider.notifier).storeUserData(user!);
-    AppConst.setRole(user.role);
-    UserHiveMethods.addData(key: "brokerId", data: user.brokerId);
+    if (user != null) {
+      ref.read(userDataProvider.notifier).storeUserData(user);
+      AppConst.setRole(user.role);
+      UserHiveMethods.addData(key: "brokerId", data: user.brokerId);
+    }
   }
 
   showChatDialog() {
@@ -83,8 +85,11 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   getDetails(User currentuser) async {
     final List<User> user = await User.getUserAllRelatedToBrokerId(currentuser);
     if (userList.isEmpty) {
-      userList = user;
-      setState(() {});
+      if (mounted) {
+        setState(() {
+          userList = user;
+        });
+      }
     }
   }
 

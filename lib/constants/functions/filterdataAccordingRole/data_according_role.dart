@@ -31,7 +31,7 @@ Iterable<QueryDocumentSnapshot<Map<String, dynamic>>>? filterCardsAccordingToRol
 }
 
 // this function use filter User According to role and show data according to role in future builder
-// ----------------------FUTURE BUILDER----------------->
+// ---------------------------------FUTURE BUILDER----------------------------->
 Iterable<CardDetails>? filterCardsAccordingToRoleInFutureBuilder(
     {required AsyncSnapshot<List<CardDetails>> snapshot, required WidgetRef ref, required List<User> userList, required User currentUser}) {
   final userRole = currentUser.role;
