@@ -14,7 +14,7 @@ import '../customs/text_utility.dart';
 class CustomTextInput extends StatefulWidget {
   final TextEditingController controller;
   final String? labelText;
-  final double contentPadding;
+  final EdgeInsetsGeometry contentPadding;
   final VoidCallback? ontap;
   final Widget? label;
   final bool enabled;
@@ -64,7 +64,7 @@ class CustomTextInput extends StatefulWidget {
       this.label,
       this.enabled = true,
       this.autofocus = false,
-      this.contentPadding = 0,
+      this.contentPadding = const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
       this.onFieldSubmitted,
       this.autofillHints,
       this.onlyDigits = false,
@@ -123,7 +123,7 @@ class CustomTextInputState extends State<CustomTextInput> {
             borderSide: const BorderSide(color: Colors.red, width: 1),
           ),
           label: widget.label,
-          contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+          contentPadding: widget.contentPadding,
           labelText: widget.labelText,
           hintText: widget.hintText,
           hintStyle: widget.hintstyle,

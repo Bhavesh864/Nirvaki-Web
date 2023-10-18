@@ -54,8 +54,11 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
   getDetails(User currentuser) async {
     final List<User> userList = await User.getUserAllRelatedToBrokerId(currentuser);
     if (usersids.isEmpty) {
-      usersids = userList;
-      setState(() {});
+      if (mounted) {
+        setState(() {
+          usersids = userList;
+        });
+      }
     }
   }
 

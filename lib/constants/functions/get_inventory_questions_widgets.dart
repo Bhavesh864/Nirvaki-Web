@@ -569,7 +569,7 @@ Widget buildInventoryQuestions(
     String? defaultValue;
     String? selectedvalue;
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
-      defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
+      defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
     }
     final isvalidationtrue = question.questionId == 14;
     return Container(
@@ -578,7 +578,7 @@ Widget buildInventoryQuestions(
         return CustomDropdownFormField<String>(
           label: question.questionTitle,
           value: defaultValue ?? selectedvalue,
-          isMandatory: true,
+          isMandatory: isvalidationtrue,
           items: question.questionOption,
           onChanged: (value) {
             setState(() {

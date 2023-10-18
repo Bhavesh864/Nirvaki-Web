@@ -108,6 +108,7 @@ class _CommonScreenState extends ConsumerState<CommonScreen> {
             const VerticalDivider(
               color: AppColor.verticalLineColor,
               thickness: 1,
+              width: 25,
             ),
             Expanded(
               flex: 5,

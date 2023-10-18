@@ -30,68 +30,65 @@ class TeamScreen extends ConsumerWidget {
       if (isAddMemberScreen) {
         return const AddMemberScreen();
       } else {
-        return Container(
-          margin: const EdgeInsets.all(15),
-          child: SingleChildScrollView(
-            child: StreamBuilder(
-                stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: currentUserdata?.brokerId).snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator.adaptive(),
-                    );
-                  }
-                  if (snapshot.hasData) {
-                    final usersListSnapshot = snapshot.data!.docs;
-                    List<User> listOfUser = usersListSnapshot.map((doc) => User.fromSnapshot(doc)).toList();
-                    List<User> usersList = listOfUser.where((element) => !element.role.contains("Broker")).toList();
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(width: 10),
-                            AppText(
-                              text: "Current Plan - Pro",
-                              fontWeight: FontWeight.w500,
-                              fontsize: 20,
-                            ),
-                            SizedBox(
-                              width: 7,
-                            ),
-                            AppText(
-                              text: "View All Plans",
-                              textdecoration: TextDecoration.underline,
-                              textColor: AppColor.blue,
-                              fontWeight: FontWeight.w400,
-                              fontsize: 12,
-                            ),
-                          ],
-                        ),
-                        const Row(
-                          children: [
-                            TitleCards(
-                              cardTitle: "TOTAL LICENSE ",
-                              cardSubtitle: "5",
-                            ),
-                            TitleCards(
-                              cardTitle: "USED LICENSE",
-                              cardSubtitle: "2",
-                            ),
-                            TitleCards(
-                              cardTitle: "REMAINING LICENSE ",
-                              cardSubtitle: "3",
-                            ),
-                          ],
-                        ),
-                        BottomCard(userList: usersList)
-                      ],
-                    );
-                  }
-                  return const SizedBox.shrink();
-                }),
-          ),
+        return SingleChildScrollView(
+          child: StreamBuilder(
+              stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: currentUserdata?.brokerId).snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  );
+                }
+                if (snapshot.hasData) {
+                  final usersListSnapshot = snapshot.data!.docs;
+                  List<User> listOfUser = usersListSnapshot.map((doc) => User.fromSnapshot(doc)).toList();
+                  List<User> usersList = listOfUser.where((element) => !element.role.contains("Broker")).toList();
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(width: 10),
+                          AppText(
+                            text: "Current Plan - Pro",
+                            fontWeight: FontWeight.w500,
+                            fontsize: 20,
+                          ),
+                          SizedBox(
+                            width: 7,
+                          ),
+                          AppText(
+                            text: "View All Plans",
+                            textdecoration: TextDecoration.underline,
+                            textColor: AppColor.blue,
+                            fontWeight: FontWeight.w400,
+                            fontsize: 12,
+                          ),
+                        ],
+                      ),
+                      const Row(
+                        children: [
+                          TitleCards(
+                            cardTitle: "TOTAL LICENSE ",
+                            cardSubtitle: "5",
+                          ),
+                          TitleCards(
+                            cardTitle: "USED LICENSE",
+                            cardSubtitle: "2",
+                          ),
+                          TitleCards(
+                            cardTitle: "REMAINING LICENSE ",
+                            cardSubtitle: "3",
+                          ),
+                        ],
+                      ),
+                      BottomCard(userList: usersList)
+                    ],
+                  );
+                }
+                return const SizedBox.shrink();
+              }),
         );
       }
     } else {
