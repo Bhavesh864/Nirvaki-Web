@@ -38,9 +38,7 @@ class LoginScreenState extends ConsumerState<LoginScreen> {
               {
                 // if (auth.currentUser?.emailVerified == true)
                 //   {
-                User.updateFcmToken(fcmtoken: AppConst.getFcmToken()!, userid: AppConst.getAccessToken()!),
-                AppConst.setAccessToken(auth.currentUser?.uid),
-                User.updateFcmToken(fcmtoken: AppConst.getFcmToken()!, userid: AppConst.getAccessToken()!),
+                User.updateFcmToken(fcmtoken: AppConst.getFcmToken(), userid: AppConst.getAccessToken()),
                 AppConst.setPublicView(false),
                 // }
                 // else
