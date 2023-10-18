@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// gnore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -199,8 +199,7 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                     AppText(
                       text: DateFormat('dd MMM yyyy').format(DateFormat('dd-MM-yy').parse(cardData.duedate!)),
                       fontsize: 10,
-                      textColor:
-                          cardData.duedate != null && DateFormat('dd-MM-yy').parse(cardData.duedate!).isBefore(DateTime.now()) ? Colors.red.shade500 : Colors.black,
+                      textColor: cardData.duedate != null && DateFormat('dd-MM-yy').parse(cardData.duedate!).isBefore(DateTime.now()) ? Colors.red.shade500 : Colors.black,
                     ),
                   ],
                 ),

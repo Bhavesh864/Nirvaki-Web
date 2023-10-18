@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/Customs/custom_fields.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
@@ -46,9 +47,9 @@ class _AssignUserState extends ConsumerState<AssignUser> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(top: 8, right: 8, left: 2, bottom: 3),
-          child: CustomText(
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 10),
+          child: const CustomText(
             title: 'Assign to',
             fontWeight: FontWeight.w600,
             textAlign: TextAlign.left,
@@ -85,55 +86,52 @@ class _AssignUserState extends ConsumerState<AssignUser> {
                   fieldViewBuilder: (context, textEditingController, focusNode, onFieldSubmitted) {
                     _textEditingController = textEditingController;
                     _focusNode = focusNode;
-                    return TextField(
+                    return CustomTextInput(
+                      hintText: "Type here...",
                       controller: _textEditingController,
-                      focusNode: focusNode,
-                      onTap: () {},
-                      decoration: InputDecoration(
-                        hintText: 'Type here...',
-                        hintStyle: const TextStyle(color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                      ),
+                      focusnode: focusNode,
+                      isDense: false,
+                      ontap: () {},
                     );
                   },
                   optionsViewBuilder: (context, onSelected, options) {
                     const itemHeight = 56.0;
                     final itemCount = options.length;
                     final dropdownHeight = itemHeight * itemCount;
-                    return SingleChildScrollView(
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: SizedBox(
-                          width: Responsive.isMobile(context) ? 310 : 450,
-                          height: dropdownHeight,
-                          child: Material(
-                            elevation: 4,
-                            child: ListView.separated(
-                              padding: const EdgeInsets.all(3.0),
-                              shrinkWrap: true,
-                              itemCount: itemCount,
-                              separatorBuilder: (context, index) => const Divider(),
-                              itemBuilder: (context, index) {
-                                final option = options.elementAt(index);
-                                return GestureDetector(
-                                  onTap: () {
-                                    onSelected(option);
-                                    User selectedUser = usersList.firstWhere((user) => '${user.userfirstname} ${user.userlastname}' == option);
-                                    setState(() {
-                                      assignUsers.add(selectedUser);
-                                    });
-                                    widget.addUser(assignUsers);
-                                    _textEditingController.clear();
-                                    _focusNode.unfocus();
-                                  },
-                                  child: ListTile(
-                                    title: Text(option),
-                                  ),
-                                );
-                              },
-                            ),
+                    return Align(
+                      alignment: Alignment.topLeft,
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 5),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                        clipBehavior: Clip.antiAlias,
+                        width: Responsive.isMobile(context) ? 350 : 460,
+                        height: dropdownHeight,
+                        child: Material(
+                          elevation: 4,
+                          child: ListView.separated(
+                            padding: const EdgeInsets.all(3.0),
+                            shrinkWrap: true,
+                            itemCount: itemCount,
+                            separatorBuilder: (context, index) => const Divider(),
+                            itemBuilder: (context, index) {
+                              final option = options.elementAt(index);
+                              return GestureDetector(
+                                onTap: () {
+                                  onSelected(option);
+                                  User selectedUser = usersList.firstWhere((user) => '${user.userfirstname} ${user.userlastname}' == option);
+                                  setState(() {
+                                    assignUsers.add(selectedUser);
+                                  });
+                                  widget.addUser(assignUsers);
+                                  _textEditingController.clear();
+                                  _focusNode.unfocus();
+                                },
+                                child: ListTile(
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                  title: Text(option),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ),

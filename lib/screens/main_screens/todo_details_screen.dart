@@ -319,8 +319,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                               AssignmentWidget(
                                                 assignto: data.assignedto!,
                                                 id: data.todoId!,
-                                                imageUrlCreatedBy:
-                                                    data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                 createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
                                                 data: data,
                                               ),

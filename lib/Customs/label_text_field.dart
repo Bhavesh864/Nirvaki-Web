@@ -107,7 +107,6 @@ class LabelTextInputField extends StatelessWidget {
             maxLines: maxLines,
             initialvalue: initialvalue,
             isDense: true,
-            contentPadding: 0,
           ),
         ],
       ),
