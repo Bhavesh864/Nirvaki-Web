@@ -90,9 +90,11 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
   void getDetails(User currentuser) async {
     final List<User> user = await User.getUserAllRelatedToBrokerId(currentuser);
     if (userList.isEmpty) {
-      setState(() {
-        userList = user;
-      });
+      if (mounted) {
+        setState(() {
+          userList = user;
+        });
+      }
     }
   }
 
