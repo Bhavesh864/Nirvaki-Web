@@ -42,7 +42,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final User? user = ref.watch(userDataProvider);
+    final User? userData = ref.watch(userDataProvider);
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -142,7 +142,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                 children: [
                   Icon(Icons.person_add_alt_outlined),
                   Padding(
-                    padding: EdgeInsets.only(left: 6, top: 4),
+                    padding: EdgeInsets.only(left: 6),
                     child: Text(
                       "Assigned to",
                       overflow: TextOverflow.ellipsis,
@@ -189,7 +189,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                                     ),
                                     const SizedBox(width: 3),
                                     if (widget.assignto.length > 1)
-                                      user?.role != "Employee"
+                                      userData?.role != "Employee"
                                           ? GestureDetector(
                                               onTap: () {
                                                 deleteassignUser(item.userid, widget.id);
@@ -206,14 +206,15 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                             }).toList()
                           : [const SizedBox()],
                     ),
-                    user?.role != "Employee"
+                    userData?.role != "Employee"
                         ? InkWell(
                             overlayColor: const MaterialStatePropertyAll(Colors.transparent),
                             hoverColor: Colors.transparent,
                             onTap: () {
                               assginUserToTodo(context, assign, widget.assignto, widget.id, () {
                                 Navigator.of(context).pop();
-                              }, user!);
+                              }, userData!);
+                              user = [];
                             },
                             child: const Padding(
                               padding: EdgeInsets.all(8.0),
