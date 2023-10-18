@@ -141,9 +141,11 @@ class User extends HiveObject {
   }
 
   static void setUserOnlineStatus(bool isOnline) async {
-    await usersCollection.doc(AppConst.getAccessToken()).update({
-      'isOnline': isOnline,
-    });
+    if (AppConst.getAccessToken() != null) {
+      await usersCollection.doc(AppConst.getAccessToken()).update({
+        'isOnline': isOnline,
+      });
+    }
   }
 
   static Future<String> resetPassword(String email) async {

@@ -165,12 +165,10 @@ Widget buildInventoryQuestions(
     );
   } else if (question.questionOptionType == 'textfield') {
     String textResult = '';
-
     final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
     TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
     String mobileCountryCode = '+91';
     String whatsappCountryCode = '+91';
-
     if (question.questionTitle == 'Mobile' && value.isNotEmpty) {
       List<String> splitString = value[0]["item"].split(' ');
       if (splitString.length == 2) {
@@ -208,9 +206,7 @@ Widget buildInventoryQuestions(
     if (isPlotSelected && question.questionId == 30) {
       return const SizedBox();
     }
-    // if (question.questionId == 27) {
-    //   controller.text = selectedValues.isNotEmpty ? selectedValues.firstWhere((element) => element["id"] == 27)["item"] : "";
-    // }
+
     if (question.questionTitle == 'Mobile') {
       return StatefulBuilder(builder: (context, setState) {
         return Column(

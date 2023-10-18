@@ -53,18 +53,6 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
         if (snapshot.hasData) {
           final dataList = snapshot.data!.docs;
           List<CalendarModel> calenderList = dataList.map((doc) => CalendarModel.fromSnapshot(doc)).toList();
-          DateTime parseDateTime(String date, String time) {
-            final DateTime parsedDate = DateFormat('E, MMM d, y').parse(date);
-            final DateTime parsedTime = DateFormat('hh:mm aa').parse(time);
-
-            return DateTime(
-              parsedDate.year,
-              parsedDate.month,
-              parsedDate.day,
-              parsedTime.hour,
-              parsedTime.minute,
-            );
-          }
 
 //           Map<DateTime, List<CalendarModel>> timeSlotMap = {};
 //           DateTime timeSlotKey = parseDateTime(event.dueDate!, event.time!);
@@ -185,7 +173,7 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                         // ),
                         // appointmentTimeTextFormat: Intl.defaultLocale,
                         appointmentBuilder: (context, calendarAppointmentDetails) {
-                          final event = calendarAppointmentDetails.appointments.first;
+                          final CalendarModel event = calendarAppointmentDetails.appointments.first;
 
                           return Container(
                             margin: const EdgeInsets.symmetric(vertical: 10),
@@ -212,7 +200,7 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                                     height: 6,
                                   ),
                                   Text(
-                                    event.calenderTitle,
+                                    event.calenderTitle.toString(),
                                     // maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
