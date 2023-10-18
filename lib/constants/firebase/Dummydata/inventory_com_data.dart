@@ -307,7 +307,7 @@
 //                 questionId: 20,
 //                 questionOptionType: "chip",
 //                 questionTitle: "Expected time possession ?",
-//                 questionOption: ["Within 3 months", "Within 3 months", "Within 1 Year", "Within 2 Year", "Within 3 Year"],
+//                 questionOption: ["Within 3 months", "Within 6 months", "Within 1 Year", "Within 2 Year", "Within 3 Year"],
 //               ),
 //             ],
 //             isActive: true,

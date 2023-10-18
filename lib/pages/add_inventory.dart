@@ -6,13 +6,13 @@ import 'package:yes_broker/constants/firebase/statesModel/state_c_ity_model.dart
 import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
-import 'package:yes_broker/constants/functions/get_inventory_questions_widgets.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/riverpodstate/filterQuestions/inventory_all_question.dart';
 import 'package:yes_broker/riverpodstate/inventory_res_filter_question.dart';
 import 'package:yes_broker/widgets/questionaries/workitem_success.dart';
 import '../Customs/loader.dart';
 import '../constants/functions/filterQuestions/filter_inventory_question.dart';
+import '../constants/functions/get_inventory_questions.dart';
 import '../customs/custom_fields.dart';
 import '../constants/utils/image_constants.dart';
 import '../riverpodstate/all_selected_ansers_provider.dart';
@@ -50,15 +50,10 @@ class AddInventoryState extends ConsumerState<AddInventory> {
   }
 
   void initializeData() async {
-    final answers = ref.read(myArrayProvider);
     getQuestions = InventoryQuestions.getAllQuestionssFromFirestore();
     pageController = PageController(initialPage: currentScreenIndex);
+    final answers = ref.read(myArrayProvider);
     answers.isNotEmpty ? isEdit = true : isEdit = false;
-    StateCItyModel.getAllStates().then((value) => {
-          setState(() {
-            stateList = value;
-          })
-        });
     try {
       if (isEdit) {
         if (answers[0]["item"] == "Residential") {
@@ -196,7 +191,6 @@ class AddInventoryState extends ConsumerState<AddInventory> {
     final isPlotSelected = ref.read(filterPlotQuestion);
     final allInventoryQuestionsNotifier = ref.read(allInventoryQuestion.notifier);
     final allInventoryQuestions = ref.read(allInventoryQuestion);
-    final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom;
     // final assignIsselected = selectedValues.firstWhere((element) => element["id"] == 36)["item"];
     return GestureDetector(
         onTap: () {
@@ -210,7 +204,7 @@ class AddInventoryState extends ConsumerState<AddInventory> {
                   return const Center(child: Loader());
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
-                } else if (snapshot.hasData) {
+                } else {
                   final res = selectedValues.isNotEmpty ? getWhichItemIsSelectedBYId(selectedValues, 1) : "Residential";
                   InventoryQuestions? screenData = getcurrentInventory(snapshot, res);
 
@@ -370,11 +364,10 @@ class AddInventoryState extends ConsumerState<AddInventory> {
                                   isInventory: "IN",
                                   isEdit: isEdit,
                                 )),
-                      isKeyboardOpen == 0 && !allQuestionFinishes ? inventoryAppBar(currentScreenList) : const SizedBox(),
+                      !allQuestionFinishes ? inventoryAppBar(currentScreenList) : const SizedBox(),
                     ],
                   );
                 }
-                return const SizedBox();
               }),
         ));
   }

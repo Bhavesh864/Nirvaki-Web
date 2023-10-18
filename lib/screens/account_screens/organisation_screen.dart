@@ -1,21 +1,17 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-
 import 'dart:async';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/Methods/update_broker_info.dart';
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/screens/account_screens/profile_screen.dart';
-
 import '../../Customs/custom_fields.dart';
 import '../../Customs/responsive.dart';
 import '../../Customs/snackbar.dart';
