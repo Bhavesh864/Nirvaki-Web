@@ -16,6 +16,7 @@ import '../../../Customs/custom_chip.dart';
 import '../../../Customs/custom_text.dart';
 import '../../../Customs/responsive.dart';
 import '../../../constants/app_constant.dart';
+import '../../../constants/functions/datetime/date_time.dart';
 import '../../../constants/functions/workitems_detail_methods.dart';
 import '../../../constants/utils/colors.dart';
 import '../../../constants/utils/constants.dart';
@@ -618,21 +619,32 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                 margin: const EdgeInsets.only(right: 15),
                                 width: 108,
                                 alignment: Alignment.center,
+                                padding: const EdgeInsets.symmetric(vertical: 10),
                                 decoration: BoxDecoration(
                                   border: Border.all(color: Colors.grey.withOpacity(0.5)),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Icon(
                                       Icons.image_outlined,
                                       size: 40,
                                     ),
-                                    CustomText(
-                                      title: widget.data.attachments[index].title,
-                                      size: 13,
-                                      fontWeight: FontWeight.w400,
+                                    Column(
+                                      children: [
+                                        CustomText(
+                                          title: attachment.title!,
+                                          size: 13,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                        CustomText(
+                                          title: 'Added ${formatMessageDate(attachment.createddate!.toDate())}',
+                                          size: 8,
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -710,12 +722,13 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                             height: 100,
                             width: 100,
                             alignment: Alignment.center,
+                            padding: const EdgeInsets.symmetric(vertical: 15),
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.withOpacity(0.5)),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 if (isUploading) ...[
                                   const Loader(),
@@ -725,8 +738,8 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                     size: 40,
                                   ),
                                   const CustomText(
-                                    title: 'Add more',
-                                    size: 8,
+                                    title: 'ADD MORE',
+                                    size: 10,
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ]

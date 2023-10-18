@@ -27,6 +27,31 @@ class LargeScreen extends ConsumerStatefulWidget {
 
 class LargeScreenState extends ConsumerState<LargeScreen> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // const path = '/lead';
+      final path = (context.currentBeamLocation.state as BeamState).uri.path;
+      final sideBarIndex = ref.read(desktopSideBarIndexProvider.notifier);
+      if (path.contains('/ ')) {
+        sideBarIndex.update((state) => 0);
+      } else if (path.contains('/todo')) {
+        sideBarIndex.state = 1;
+      } else if (path.contains('/inventory')) {
+        sideBarIndex.state = 2;
+      } else if (path.contains('/lead')) {
+        sideBarIndex.state = 3;
+      } else if (path.contains('/calendar')) {
+        sideBarIndex.state = 4;
+      } else if (path.contains('/profile')) {
+        sideBarIndex.state = 5;
+      } else {
+        sideBarIndex.state = 0;
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     // int currentIndex = 0;
     final sideBarIndex = ref.watch(desktopSideBarIndexProvider);
@@ -39,8 +64,6 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           StatefulBuilder(builder: (context, setstate) {
-            // final path = (context.currentBeamLocation.state as BeamState).uri.path;
-
             return SingleChildScrollView(
               child: Container(
                 color: Colors.white,
@@ -64,21 +87,6 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                         } else {
                           ref.read(mobileBottomIndexProvider.notifier).state = index;
                         }
-                        // if (path.contains('/ ')) {
-                        //   currentIndex = 0;
-                        // } else if (path.contains('/todo')) {
-                        //   currentIndex = 1;
-                        // } else if (path.contains('/inventory')) {
-                        //   currentIndex = 2;
-                        // } else if (path.contains('/lead')) {
-                        //   currentIndex = 3;
-                        // } else if (path.contains('/calendar')) {
-                        //   currentIndex = 4;
-                        // } else if (path.contains('/profile')) {
-                        //   currentIndex = 5;
-                        // } else {
-                        //   currentIndex = 0;
-                        // }
                       },
                     );
                   },
@@ -171,31 +179,6 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
           ),
         ],
       ),
-      // floatingActionButton: !AppConst.getPublicView()
-      //     ? Column(
-      //         mainAxisAlignment: MainAxisAlignment.end,
-      //         children: [
-      //           const CustomSpeedDialButton(),
-      //           const SizedBox(
-      //             height: 10,
-      //           ),
-      //           CircleAvatar(
-      //             radius: 28,
-      //             backgroundColor: AppColor.primary,
-      //             child: IconButton(
-      //               icon: const Icon(
-      //                 Icons.chat_outlined,
-      //                 color: Colors.white,
-      //                 size: 24,
-      //               ),
-      //               onPressed: () {
-      //                 showChatDialog();
-      //               },
-      //             ),
-      //           ),
-      //         ],
-      //       )
-      //     : null,
     );
   }
 }
