@@ -69,7 +69,7 @@ dependencies:
   emoji_picker_flutter: ^1.6.1
   cached_network_image: ^3.2.3
   url_launcher: ^6.1.14
-  flutter_file_downloader: ^1.1.2
+  flutter_file_downloader: ^1.1.4
   number_to_words: ^1.0.0
   flutter_test:
     sdk: flutter
@@ -85,7 +85,6 @@ dependencies:
   google_places_flutter: ^2.0.6
   reorderables: ^0.6.0
   country_flags: ^2.1.1
-  dio: ^4.0.6
   flutter_cached_pdfview: ^0.4.2
 
 dev_dependencies:

@@ -3,8 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../constants/utils/colors.dart';
 
-import 'custom_text.dart';
-
 // class DropDownField extends StatefulWidget {
 //   final String title;
 //   final List optionsList;

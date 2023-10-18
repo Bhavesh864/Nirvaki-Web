@@ -96,7 +96,7 @@ void uploadAttachmentsToFirebaseStorage(
 ) async {
   // print(fileToUpload);
   // return;
-  final extension = fileToUpload.name.split('.').last;
+  // final extension = fileToUpload.name.split('.').last;
 
   final uniqueKey = DateTime.now().microsecondsSinceEpoch.toString();
 
@@ -108,14 +108,11 @@ void uploadAttachmentsToFirebaseStorage(
   try {
     if (kIsWeb) {
       await referenceImagesToUpload.putData(
-          fileToUpload.bytes!,
-          SettableMetadata(
-            contentType: extension,
-          ));
+        fileToUpload.bytes!,
+      );
     } else {
       await referenceImagesToUpload.putFile(
         File(fileToUpload.path!),
-        SettableMetadata(contentType: extension),
       );
     }
     final downloadUrl = await referenceImagesToUpload.getDownloadURL();
