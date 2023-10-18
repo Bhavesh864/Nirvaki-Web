@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
 
 import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/custom_text.dart';
@@ -61,9 +62,24 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
                   child: TextFormField(
                     controller: controller,
                     decoration: InputDecoration(
-                      hintText: 'Type note here...',
+                      // enabledBorder: OutlineInputBorder(
+                      //   borderRadius: BorderRadius.circular(6),
+                      // ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6),
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      hintText: 'Type note here..',
                       hintStyle: TextStyle(
                         fontFamily: GoogleFonts.dmSans().fontFamily,
+                        color: const Color(0xFF828282),
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
                       ),
                       isDense: true,
                       prefixIcon: const Icon(
@@ -76,6 +92,7 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
                 ),
                 CustomButton(
                   text: 'Add Note',
+                  fontWeight: FontWeight.w500,
                   onPressed: submitTodo,
                   height: Responsive.isMobile(context) ? 45 : 40,
                 ),

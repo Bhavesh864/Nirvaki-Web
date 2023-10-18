@@ -15,6 +15,7 @@ import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
 import 'package:yes_broker/constants/firebase/send_notification.dart';
+import 'package:yes_broker/constants/functions/datetime/date_time.dart';
 import 'package:yes_broker/constants/functions/navigation/navigation_functions.dart';
 import 'package:yes_broker/customs/text_utility.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
@@ -176,7 +177,6 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
               List<TodoDetails> todoList = dataList.map((doc) => TodoDetails.fromSnapshot(doc)).toList();
               for (var data in todoList) {
                 final attachments = data.attachments;
-                print(data.assignedto);
                 return GestureDetector(
                   onTap: () {
                     if (isEditingTodoName) {
@@ -542,21 +542,32 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                             margin: const EdgeInsets.only(right: 15),
                                                             width: 108,
                                                             alignment: Alignment.center,
+                                                            padding: const EdgeInsets.symmetric(vertical: 10),
                                                             decoration: BoxDecoration(
                                                               border: Border.all(color: Colors.grey.withOpacity(0.5)),
                                                               borderRadius: BorderRadius.circular(10),
                                                             ),
                                                             child: Column(
-                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                               children: [
                                                                 const Icon(
                                                                   Icons.image_outlined,
                                                                   size: 40,
                                                                 ),
-                                                                CustomText(
-                                                                  title: attachment.title!,
-                                                                  size: 13,
-                                                                  fontWeight: FontWeight.w400,
+                                                                Column(
+                                                                  children: [
+                                                                    CustomText(
+                                                                      title: attachment.title!,
+                                                                      size: 13,
+                                                                      fontWeight: FontWeight.w400,
+                                                                    ),
+                                                                    CustomText(
+                                                                      title: 'Added ${formatMessageDate(attachment.createddate!.toDate())}',
+                                                                      size: 8,
+                                                                      color: Colors.grey,
+                                                                      fontWeight: FontWeight.w400,
+                                                                    ),
+                                                                  ],
                                                                 ),
                                                               ],
                                                             ),
@@ -619,20 +630,21 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                   height: 100,
                                                   width: 100,
                                                   alignment: Alignment.center,
+                                                  padding: const EdgeInsets.symmetric(vertical: 15),
                                                   decoration: BoxDecoration(
                                                     border: Border.all(color: Colors.grey.withOpacity(0.5)),
                                                     borderRadius: BorderRadius.circular(10),
                                                   ),
                                                   child: const Column(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
                                                       Icon(
                                                         Icons.add,
                                                         size: 40,
                                                       ),
                                                       CustomText(
-                                                        title: 'Add more',
-                                                        size: 8,
+                                                        title: 'ADD MORE',
+                                                        size: 10,
                                                         fontWeight: FontWeight.w400,
                                                       ),
                                                     ],

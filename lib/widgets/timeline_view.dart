@@ -65,7 +65,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
               Padding(
                 padding: EdgeInsets.only(left: Responsive.isDesktop(context) ? 10.0 : 0),
                 child: const CustomChip(
-                  paddingVertical: 4,
+                  paddingVertical: 3,
                   paddingHorizontal: 0,
                   avatar: Icon(
                     Icons.calendar_view_week_outlined,
@@ -81,7 +81,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
               Padding(
                 padding: EdgeInsets.only(right: Responsive.isDesktop(context) ? 5.0 : 0),
                 child: const CustomChip(
-                  paddingVertical: 4,
+                  paddingVertical: 3,
                   label: Row(
                     children: [
                       CustomText(
