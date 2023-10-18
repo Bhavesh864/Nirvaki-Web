@@ -58,9 +58,12 @@ Widget buildInventoryQuestions(
               onSelect: () {
                 nextQuestion(screensDataList: screensDataList, option: option);
                 if (currentScreenIndex < screensDataList.length - 1) {
+                  print('this is if part =========');
+
                   notify.add({"id": question.questionId, "item": option});
                 } else {
                   // Handle reaching the last question
+                  print('this is else part =========');
                 }
               },
             );
@@ -591,10 +594,11 @@ Widget buildInventoryQuestions(
       }),
     );
   } else if (question.questionOptionType == 'map') {
-    // List<double> defaultValue = [];
-    // if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
-    //   defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
-    // }
+    List<double> defaultValue = [];
+    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+      defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
+    }
+
     final state = getDataById(selectedValues, 26);
     final city = getDataById(selectedValues, 27);
     final address1 = getDataById(selectedValues, 28);
@@ -602,6 +606,7 @@ Widget buildInventoryQuestions(
     final locality = getDataById(selectedValues, 54);
     return CustomGoogleMap(
       isEdit: isEdit,
+      latLng: isEdit ? LatLng(defaultValue[0], defaultValue[1]) : null,
       selectedValues: selectedValues,
       onLatLngSelected: (latLng) {
         notify.add({
