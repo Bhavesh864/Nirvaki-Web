@@ -180,23 +180,20 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                                 ),
                               ],
                             ),
-                            Container(
-                              // width: 240,
-                              child: Center(
-                                child: SfCalendar(
-                                  onTap: (calendarLongPressDetails) {
-                                    selectedDate = calendarLongPressDetails.date!;
-                                    setState(() {});
-                                  },
-                                  headerHeight: 0,
-                                  initialDisplayDate: selectedDate,
-                                  initialSelectedDate: selectedDate,
-                                  dataSource: EventDataSource(calenderList),
-                                  cellBorderColor: Colors.transparent,
-                                  view: CalendarView.month,
-                                  controller: CalendarController(),
-                                  backgroundColor: Colors.white,
-                                ),
+                            Center(
+                              child: SfCalendar(
+                                onTap: (calendarLongPressDetails) {
+                                  selectedDate = calendarLongPressDetails.date!;
+                                  setState(() {});
+                                },
+                                headerHeight: 0,
+                                initialDisplayDate: selectedDate,
+                                initialSelectedDate: selectedDate,
+                                dataSource: EventDataSource(calenderList),
+                                cellBorderColor: Colors.transparent,
+                                view: CalendarView.month,
+                                controller: CalendarController(),
+                                backgroundColor: Colors.white,
                               ),
                             ),
                             const Padding(

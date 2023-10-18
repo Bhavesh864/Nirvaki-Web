@@ -1,14 +1,10 @@
 // import 'dart:html';
 
-import 'dart:io';
-
-import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:http/http.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
@@ -93,32 +89,13 @@ class _DetailsTabViewState extends State<DetailsTabView> {
     );
   }
 
-  // Future openFile({required String url, String? fileName}) async {
-  //   await downloadFile(url, fileName!);
-  // }
-
-  void downloadFile(String url) async {
-    Dio dio = Dio();
-
-    // const String url =
-    //     'https://firebasestorage.googleapis.com/v0/b/e-commerce-72247.appspot.com/o/195-1950216_led-tv-png-hd-transparent-png.png?alt=media&token=0f8a6dac-1129-4b76-8482-47a6dcc0cd3e';
-
-    const String fileName = "TV.jpg";
-
-    String path = await getFilePath(fileName);
-
-    await dio
-        .download(
-      url,
-      path,
-      onReceiveProgress: (recivedBytes, totalBytes) {},
-      deleteOnError: true,
-    )
-        .then((e) {
-      customSnackBar(context: context, text: e.statusMessage.toString());
-    }).catchError((e) {
-      print(e);
-    });
+  void downloadFile(String url, String name) async {
+    FileDownloader.downloadFile(
+      url: url,
+      onDownloadCompleted: (String path) {
+        customSnackBar(context: context, text: 'FILE DOWNLOADED TO PATH: $path');
+      },
+    );
   }
 
   Future<String> getFilePath(String filename) async {
@@ -680,6 +657,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
 
                                       downloadFile(
                                         attachment.path,
+                                        attachment.title,
                                       );
                                     },
                                   ),
