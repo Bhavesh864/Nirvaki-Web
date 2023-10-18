@@ -149,7 +149,7 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                   ),
                 ),
                 Expanded(
-                  flex: kIsWeb ? 1 : 0,
+                  flex: kIsWeb && !Responsive.isMobile(context) ? 1 : 0,
                   child: Container(
                     decoration: BoxDecoration(
                       color: AppColor.secondary.withOpacity(0.1),
