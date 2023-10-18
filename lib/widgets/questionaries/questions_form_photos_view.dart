@@ -733,6 +733,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
                               });
                               Future.delayed(const Duration(milliseconds: 1000), () {
                                 Propertyphotos propertyphotos = Propertyphotos(imageTitle: selectedImagesTitleList, imageUrl: selectedImagesUrlList);
+                                print("propertyphotos---> ${propertyphotos}");
                                 widget.notify!.add({
                                   'id': widget.id,
                                   'item': propertyphotos,
