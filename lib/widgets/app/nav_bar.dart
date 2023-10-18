@@ -3,7 +3,6 @@
 
 import 'package:beamer/beamer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -385,7 +384,8 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                                 },
                                 titleAlignment: ListTileTitleAlignment.top,
                                 leading: CircleAvatar(
-                                  backgroundImage: NetworkImage(notificationData.imageUrl!.isNotEmpty && notificationData.imageUrl != null ? notificationData.imageUrl! : noImg),
+                                  backgroundImage:
+                                      NetworkImage(notificationData.imageUrl!.isNotEmpty && notificationData.imageUrl != null ? notificationData.imageUrl! : noImg),
                                 ),
                                 title: SizedBox(
                                   height: 80,

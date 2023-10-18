@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'package:number_to_words/number_to_words.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
@@ -11,10 +12,10 @@ import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/questionaries/questions_form_photos_view.dart';
 import 'package:yes_broker/widgets/questionaries/assign_user.dart';
 import 'package:yes_broker/widgets/questionaries/google_maps.dart';
-import '../../Customs/dropdown_field.dart';
 import '../../Customs/snackbar.dart';
 import '../../customs/custom_fields.dart';
 import '../../customs/custom_text.dart';
+import '../../customs/dropdown_field.dart';
 import '../../customs/label_text_field.dart';
 import '../../pages/Auth/signup/company_details.dart';
 import '../../pages/Auth/signup/country_code_modal.dart';
@@ -486,7 +487,6 @@ Widget buildInventoryQuestions(
                   setState(() {
                     textResult = '';
                   });
-                  print('object == $e');
                 }
                 notify.add({"id": question.questionId, "item": newvalue.trim()});
               },

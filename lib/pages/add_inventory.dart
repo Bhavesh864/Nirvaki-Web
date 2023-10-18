@@ -41,7 +41,6 @@ class AddInventoryState extends ConsumerState<AddInventory> {
   bool isMobileNoEmpty = false;
   bool iswhatsappMobileNoEmpty = false;
   bool isChecked = true;
-
   String errorMessage = "";
   @override
   void initState() {

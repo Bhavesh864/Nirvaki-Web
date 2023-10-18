@@ -141,6 +141,8 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
       _firstNameController.text = editUser?.userfirstname ?? '';
       _lastNameController.text = editUser?.userlastname ?? '';
       _emailController.text = editUser?.email ?? '';
+      // _mobileController.text = editUser?.mobile ?? '';
+
       List<String>? splitString = editUser?.mobile.split(' ');
       if (splitString!.length == 1) {
         _mobileController.text = splitString[0];

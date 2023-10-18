@@ -5,14 +5,14 @@ import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/customs/text_utility.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
-import 'package:yes_broker/screens/account_screens/Teams/AddMembers/add_member_screen.dart';
+
 import 'package:yes_broker/widgets/accounts/Teams/bottom_card.dart';
 import 'package:yes_broker/widgets/accounts/Teams/mobile_member_card.dart';
 import 'package:yes_broker/widgets/accounts/Teams/title_cards.dart';
-
 import '../../../constants/firebase/userModel/user_info.dart';
 import '../../../riverpodstate/add_member_state.dart';
 import '../../../riverpodstate/user_data.dart';
+import 'AddMembers/add_member_screen.dart';
 
 final addMemberScreenStateProvider = StateNotifierProvider<AddMemberScreenStateNotifier, bool>((ref) {
   return AddMemberScreenStateNotifier();

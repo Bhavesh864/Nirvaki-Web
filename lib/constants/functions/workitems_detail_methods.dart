@@ -19,7 +19,6 @@ import 'package:yes_broker/constants/firebase/random_uid.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import '../../Customs/custom_text.dart';
 import '../../customs/custom_fields.dart';
-
 import '../../widgets/card/questions card/chip_button.dart';
 import '../firebase/detailsModels/todo_details.dart';
 import '../utils/colors.dart';
@@ -95,6 +94,10 @@ void uploadAttachmentsToFirebaseStorage(
   String titleName,
   Function(bool) setIsUploading,
 ) async {
+  // print(fileToUpload);
+  // return;
+  // final extension = fileToUpload.name.split('.').last;
+
   final uniqueKey = DateTime.now().microsecondsSinceEpoch.toString();
 
   Reference referenceRoot = FirebaseStorage.instance.ref();
@@ -104,14 +107,16 @@ void uploadAttachmentsToFirebaseStorage(
 
   try {
     if (kIsWeb) {
-      await referenceImagesToUpload.putData(fileToUpload.bytes!);
+      await referenceImagesToUpload.putData(
+        fileToUpload.bytes!,
+      );
     } else {
-      await referenceImagesToUpload.putFile(File(fileToUpload.path!));
+      await referenceImagesToUpload.putFile(
+        File(fileToUpload.path!),
+      );
     }
     final downloadUrl = await referenceImagesToUpload.getDownloadURL();
-    print('downloadurl.-------$downloadUrl');
     setIsUploading(false);
-    print('false kr do -----');
 
     if (id.contains(ItemCategory.isInventory)) {
       inventory.Attachments attachments = inventory.Attachments(
@@ -122,7 +127,9 @@ void uploadAttachmentsToFirebaseStorage(
         title: titleName == '' ? docname : titleName,
         type: docname,
       );
-      await inventory.InventoryDetails.addAttachmentToItems(itemid: id, newAttachment: attachments).then((value) => updateState());
+      await inventory.InventoryDetails.addAttachmentToItems(itemid: id, newAttachment: attachments).then(
+        (value) => updateState(),
+      );
     } else if (id.contains(ItemCategory.isLead)) {
       lead.Attachments attachments = lead.Attachments(
         id: generateUid(),
@@ -133,7 +140,9 @@ void uploadAttachmentsToFirebaseStorage(
         type: docname,
       );
 
-      await lead.LeadDetails.addAttachmentToItems(itemid: id, newAttachment: attachments).then((value) => updateState());
+      await lead.LeadDetails.addAttachmentToItems(itemid: id, newAttachment: attachments).then(
+        (value) => updateState(),
+      );
     } else if (id.contains(ItemCategory.isTodo)) {
       Attachments attachments = Attachments(
         id: generateUid(),
@@ -143,7 +152,9 @@ void uploadAttachmentsToFirebaseStorage(
         title: titleName == '' ? docname : titleName,
         type: docname,
       );
-      await TodoDetails.addAttachmentToItems(itemid: id, newAttachment: attachments).then((value) => updateState());
+      await TodoDetails.addAttachmentToItems(itemid: id, newAttachment: attachments).then(
+        (value) => updateState(),
+      );
     }
     // InventoryDetails.deleteAttachment(itemId: id, attachmentIdToDelete: "1");
   } catch (e) {
@@ -154,9 +165,7 @@ void uploadAttachmentsToFirebaseStorage(
 void showUploadDocumentModal(
   BuildContext context,
   Function updateState,
-  List<String> selectedDocName,
   PlatformFile? selectedFile,
-  List<PlatformFile> pickedDocuments,
   Function onPressed,
   String id,
   Function(bool) setIsUploading,
@@ -265,7 +274,6 @@ void showUploadDocumentModal(
                         FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
                         if (result != null) {
                           innerSetState(() {
-                            pickedDocuments.addAll(result.files);
                             selectedFile = result.files[0];
                           });
                         }
@@ -282,7 +290,6 @@ void showUploadDocumentModal(
                       height: 40,
                       onPressed: () {
                         if (docName != '' && selectedFile != null) {
-                          selectedDocName.add(docName);
                           setIsUploading(true);
 
                           uploadAttachmentsToFirebaseStorage(

@@ -18,9 +18,9 @@ import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/screens/account_screens/profile_screen.dart';
 import '../../../Customs/custom_fields.dart';
-import '../../../Customs/dropdown_field.dart';
 import '../../../constants/utils/constants.dart';
 import '../../../constants/utils/image_constants.dart';
+import '../../../customs/dropdown_field.dart';
 import '../../../widgets/auth/details_header.dart';
 import 'package:http/http.dart' as http;
 
