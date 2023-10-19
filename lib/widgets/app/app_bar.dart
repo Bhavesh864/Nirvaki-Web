@@ -1,16 +1,21 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:yes_broker/Customs/text_utility.dart';
 
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 
 import '../../Customs/custom_text.dart';
+import '../../constants/app_constant.dart';
 import '../../constants/utils/colors.dart';
 import 'nav_bar.dart';
 
 AppBar mobileAppBar(User? user, BuildContext context, void Function(String) onOptionSelect, WidgetRef ref) {
+  final notificationCollection = FirebaseFirestore.instance.collection("notification");
+
   return AppBar(
     foregroundColor: Colors.black,
     scrolledUnderElevation: 0.0,
@@ -30,6 +35,54 @@ AppBar mobileAppBar(User? user, BuildContext context, void Function(String) onOp
       ],
     ),
     actions: [
+      StreamBuilder(
+        stream: notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).where('isRead', isEqualTo: false).snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final notificationCount = snapshot.data!.docs.length;
+            return Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 12.0),
+                  child: InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return const NotificationDialogBox();
+                        },
+                      );
+                    },
+                    child: const Icon(
+                      Icons.notifications_none,
+                      size: 30,
+                    ),
+                  ),
+                ),
+                if (notificationCount > 0)
+                  Positioned(
+                    right: 0,
+                    top: 5,
+                    child: CircleAvatar(
+                      radius: 9,
+                      backgroundColor: Colors.red,
+                      child: Text(
+                        notificationCount.toString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 9,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )
+              ],
+            );
+          }
+          return const SizedBox();
+        },
+      ),
+      const SizedBox(width: 5),
       PopupMenuButton(
         onSelected: (value) {
           onOptionSelect(value);
@@ -69,6 +122,7 @@ AppBar mobileAppBar(User? user, BuildContext context, void Function(String) onOp
                 width: 35,
                 margin: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
+                  border: Border.all(width: 1, color: Colors.grey),
                   image: DecorationImage(
                     fit: BoxFit.cover,
                     image: NetworkImage(user?.image ?? noImg),

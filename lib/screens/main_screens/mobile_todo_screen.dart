@@ -11,7 +11,6 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/widgets/todo/todo_filter_view.dart';
-import '../../Customs/custom_text.dart';
 import '../../Customs/loader.dart';
 import '../../chat/controller/chat_controller.dart';
 import '../../constants/app_constant.dart';
@@ -23,19 +22,18 @@ import '../../routes/routes.dart';
 import '../../widgets/calendar_view.dart';
 import '../../widgets/card/custom_card.dart';
 import '../../widgets/table_view/table_view_widgets.dart';
-import '../../widgets/timeline_view.dart';
 import '../../widgets/top_search_bar.dart';
 import '../../widgets/workitems/workitem_filter_view.dart';
 import '../../widgets/workitems/workitems_list.dart';
 
-class TodoListingScreen extends ConsumerStatefulWidget {
-  const TodoListingScreen({super.key});
+class MobileTodoScreen extends ConsumerStatefulWidget {
+  const MobileTodoScreen({super.key});
 
   @override
-  TodoListingScreenState createState() => TodoListingScreenState();
+  MobileTodoScreenState createState() => MobileTodoScreenState();
 }
 
-class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
+class MobileTodoScreenState extends ConsumerState<MobileTodoScreen> {
   List<String> selectedFilters = [];
   final TextEditingController searchController = TextEditingController();
   bool isFilterOpen = false;
@@ -206,50 +204,12 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                                             mainAxisAlignment: MainAxisAlignment.start,
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Container(
-                                                  margin: const EdgeInsets.only(left: 10, bottom: 6),
-                                                  color: Colors.white,
-                                                  child: AppText(
-                                                    letterspacing: 0.4,
-                                                    text: "Welcome, ${capitalizeFirstLetter(user.userfirstname)}",
-                                                    fontWeight: FontWeight.w600,
-                                                    fontsize: 16,
-                                                  )),
-                                              const CustomCalendarView(),
                                               const SizedBox(
                                                 height: 10,
                                               ),
-                                              // WorkItemsList(
-                                              //   title: 'To do',
-                                              //   getCardDetails: filterTodoList,
-                                              // ),
-                                              // ======================= Dashboard timeline ======================
-                                              Container(
-                                                padding: const EdgeInsets.only(bottom: 8),
-                                                decoration: BoxDecoration(
-                                                  color: AppColor.secondary,
-                                                  borderRadius: BorderRadius.circular(20),
-                                                ),
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    const Padding(
-                                                      padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
-                                                      child: CustomText(
-                                                        title: 'Timeline',
-                                                        fontWeight: FontWeight.w600,
-                                                        size: 15,
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      margin: const EdgeInsets.symmetric(horizontal: 10),
-                                                      child: CustomTimeLineView(
-                                                        itemIds: filterItem.map((card) => card["workitemId"]).toList(),
-                                                        fromHome: true,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
+                                              WorkItemsList(
+                                                title: 'To do',
+                                                getCardDetails: filterTodoList,
                                               ),
                                             ],
                                           ),

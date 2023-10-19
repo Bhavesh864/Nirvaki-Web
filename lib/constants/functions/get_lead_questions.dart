@@ -727,7 +727,9 @@ Widget buildLeadQuestions(
                     formatValue(defaultRentRangeValues.start),
                     formatValue(defaultRentRangeValues.end),
                   ),
-                  divisions: (100000000 - 1000) ~/ divisionValue,
+                  divisions: 10,
+
+                  // divisions: (100000000 - 1000) ~/ divisionValue,
                   onChanged: (RangeValues newVal) {
                     setState(() {
                       defaultRentRangeValues = newVal;
@@ -757,7 +759,8 @@ Widget buildLeadQuestions(
                     formatValue(defaultBuyRangeValues.start),
                     formatValue(defaultBuyRangeValues.end),
                   ),
-                  divisions: (50000000 - 100000) ~/ divisionValue,
+                  // divisions: (50000000 - 100000) ~/ divisionValue,
+                  divisions: 10,
                   onChanged: (RangeValues newVal) {
                     setState(() {
                       defaultBuyRangeValues = newVal;
@@ -797,7 +800,8 @@ Widget buildLeadQuestions(
                 formatValueforOnlyNumbers(stateValue?.start ?? defaultAreaRangeValues.start),
                 formatValueforOnlyNumbers(stateValue?.end ?? defaultAreaRangeValues.end),
               ),
-              divisions: (10000 - 500) ~/ divisionValue,
+              divisions: 10,
+              // divisions: (10000 - 500) ~/ divisionValue,
               onChanged: (RangeValues newVal) {
                 setState(() {
                   // defaultAreaRangeValues = newVal;
