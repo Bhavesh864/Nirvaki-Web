@@ -199,7 +199,8 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                     AppText(
                       text: DateFormat('dd MMM yyyy').format(DateFormat('dd-MM-yy').parse(cardData.duedate!)),
                       fontsize: 10,
-                      textColor: cardData.duedate != null && DateFormat('dd-MM-yy').parse(cardData.duedate!).isBefore(DateTime.now()) ? Colors.red.shade500 : Colors.black,
+                      textColor:
+                          cardData.duedate != null && DateFormat('dd-MM-yy').parse(cardData.duedate!).isBefore(DateTime.now()) ? Colors.red.shade500 : Colors.black,
                     ),
                   ],
                 ),
