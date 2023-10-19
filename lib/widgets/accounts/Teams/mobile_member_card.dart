@@ -36,9 +36,12 @@ class MobileMemberCard extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(width: 7),
-                      AppText(
-                        text: "${capitalizeFirstLetter(user.userfirstname)} ${capitalizeFirstLetter(user.userlastname)}",
-                        softwrap: true,
+                      SizedBox(
+                        width: 200,
+                        child: AppText(
+                          text: "${capitalizeFirstLetter(user.userfirstname)} ${capitalizeFirstLetter(user.userlastname)}",
+                          softwrap: true,
+                        ),
                       ),
                     ],
                   ),
