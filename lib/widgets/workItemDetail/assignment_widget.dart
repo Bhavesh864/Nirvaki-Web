@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/small_custom_profile_image.dart';
+import 'package:yes_broker/widgets/app/nav_bar.dart';
 
 import '../../Customs/responsive.dart';
 import '../../constants/app_constant.dart';
@@ -71,7 +72,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                     children: [
                       SmallCustomCircularImage(imageUrl: widget.imageUrlCreatedBy),
                       Text(
-                        widget.createdBy,
+                        capitalizeFirstLetter(widget.createdBy),
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
                         style: const TextStyle(
@@ -171,20 +172,30 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                               return Container(
                                 margin: const EdgeInsets.only(bottom: 7),
                                 padding: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(color: AppColor.secondary, borderRadius: BorderRadius.circular(12)),
+                                decoration: BoxDecoration(
+                                  color: AppColor.secondary,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     SmallCustomCircularImage(imageUrl: item.image!.isNotEmpty ? item.image! : noImg),
-                                    Text(
-                                      "${item.firstname!} ${item.lastname}",
-                                      // "${item.firstname!} /${item.lastname}",
-                                      overflow: TextOverflow.ellipsis,
-                                      // textAlign: TextAlign.left,
-                                      style: const TextStyle(
-                                        color: AppColor.primary,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
+                                    Container(
+                                      constraints: BoxConstraints(
+                                        maxWidth: Responsive.isDesktop(context) ? 150 : 110,
+                                      ),
+                                      child: Text(
+                                        "${capitalizeFirstLetter(item.firstname!)} ${capitalizeFirstLetter(item.lastname)}",
+                                        // "${item.firstname!} /${item.lastname}",
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        softWrap: true,
+                                        // textAlign: TextAlign.left,
+                                        style: const TextStyle(
+                                          color: AppColor.primary,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(width: 3),

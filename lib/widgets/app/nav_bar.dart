@@ -221,6 +221,7 @@ String capitalizeFirstLetter(String input) {
   if (input.isEmpty) {
     return input;
   }
+
   return input[0].toUpperCase() + input.substring(1);
 }
 
@@ -320,7 +321,7 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
       child: Container(
         margin: const EdgeInsets.only(top: 45, right: 80),
         height: size.height * 0.8,
-        width: 440,
+        width: 450,
         child: Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: StreamBuilder(
@@ -342,24 +343,29 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                     children: [
                       if (!isChatOpen) ...[
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 20.0, top: 10, right: 10, left: 10),
+                          padding: const EdgeInsets.only(bottom: 20.0, top: 10, right: 10, left: 15),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const CustomText(
                                 title: 'Notifications',
                                 fontWeight: FontWeight.w600,
+                                size: 14,
+                                letterSpacing: 0.4,
                               ),
-                              Row(
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      markAllNotificationsAsRead(notificationList);
-                                    },
-                                    child: const Text('Mark all as read'),
-                                  ),
-                                  const Icon(Icons.check_circle_outline),
-                                ],
+                              InkWell(
+                                onTap: () {
+                                  markAllNotificationsAsRead(notificationList);
+                                },
+                                child: const Row(
+                                  children: [
+                                    Text('Mark all as read'),
+                                    SizedBox(
+                                      width: 3,
+                                    ),
+                                    Icon(Icons.check_circle_outline),
+                                  ],
+                                ),
                               )
                             ],
                           ),
@@ -373,7 +379,7 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                               final formattedTime = TimeFormatter.formatFirestoreTimestamp(firestoreTimestamp);
                               final notificationData = notificationList[index];
                               return ListTile(
-                                tileColor: notificationData.isRead! ? Colors.transparent : AppColor.secondary,
+                                // tileColor: notificationData.isRead! ? Colors.transparent : AppColor.secondary,
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                 onTap: () {
                                   navigateBasedOnId(context, notificationData.linkedItemId!, ref);
@@ -384,8 +390,10 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                                 },
                                 titleAlignment: ListTileTitleAlignment.top,
                                 leading: CircleAvatar(
-                                  backgroundImage:
-                                      NetworkImage(notificationData.imageUrl!.isNotEmpty && notificationData.imageUrl != null ? notificationData.imageUrl! : noImg),
+                                  radius: 18,
+                                  backgroundImage: NetworkImage(
+                                    notificationData.imageUrl!.isNotEmpty && notificationData.imageUrl != null ? notificationData.imageUrl! : noImg,
+                                  ),
                                 ),
                                 title: SizedBox(
                                   height: 80,
@@ -397,12 +405,17 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                                         notificationData.notificationContent!,
                                         maxLines: 3,
                                         overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          height: 1.8,
+                                          fontSize: 13,
+                                          letterSpacing: 0.4,
+                                        ),
                                       ),
                                       const Spacer(),
                                       CustomText(
                                         title: formattedTime,
                                         color: const Color(0xFF9B9B9B),
-                                        size: 14,
+                                        size: 12,
                                       ),
                                     ],
                                   ),
@@ -410,6 +423,7 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                                 trailing: Column(
                                   children: [
                                     CustomChip(
+                                      paddingVertical: 3,
                                       paddingHorizontal: 0,
                                       label: CustomText(
                                         title: notificationData.linkedItemId!,

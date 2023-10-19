@@ -342,18 +342,23 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                     ),
                     SizedBox(
                       // flex: 1,
-                      width: 340,
+                      width: Responsive.isTablet(context) ? 300 : 340,
                       child: ScrollConfiguration(
                         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                        child: SingleChildScrollView(
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            child: Column(
-                              children: [
-                                ContactInformation(
-                                  customerinfo: data.customerinfo!,
-                                ),
-                                if (Responsive.isDesktop(context))
+                        child: GestureDetector(
+                          onTap: () {
+                            if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
+                          },
+                          child: SingleChildScrollView(
+                            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              child: Column(
+                                children: [
+                                  ContactInformation(
+                                    customerinfo: data.customerinfo!,
+                                  ),
+                                  // if (Responsive.isDesktop(context))
                                   AssignmentWidget(
                                     id: data.inventoryId!,
                                     assignto: data.assignedto!,
@@ -361,16 +366,17 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                     createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
                                     data: data,
                                   ),
-                                if (Responsive.isDesktop(context))
-                                  MapViewWidget(
-                                    latLng: LatLng(data.propertylocation![0], data.propertylocation![1]),
-                                    state: data.propertyaddress!.state!,
-                                    city: data.propertyaddress!.city!,
-                                    addressline1: data.propertyaddress!.addressline1,
-                                    addressline2: data.propertyaddress?.addressline2,
-                                    locality: data.propertyaddress!.locality!,
-                                  ),
-                              ],
+                                  if (Responsive.isDesktop(context))
+                                    MapViewWidget(
+                                      latLng: LatLng(data.propertylocation![0], data.propertylocation![1]),
+                                      state: data.propertyaddress!.state!,
+                                      city: data.propertyaddress!.city!,
+                                      addressline1: data.propertyaddress!.addressline1,
+                                      addressline2: data.propertyaddress?.addressline2,
+                                      locality: data.propertyaddress!.locality!,
+                                    ),
+                                ],
+                              ),
                             ),
                           ),
                         ),

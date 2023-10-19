@@ -1,5 +1,6 @@
 // ignore_for_file: invalid_use_of_protected_member
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,6 +29,7 @@ class ActivityTabView extends ConsumerStatefulWidget {
 
 class ActivityTabViewState extends ConsumerState<ActivityTabView> {
   void submitTodo() {
+    if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
     final workItemId = ref.read(selectedWorkItemId);
     final User? user = ref.read(userDataProvider);
     if (controller.text.trim().isNotEmpty) {
