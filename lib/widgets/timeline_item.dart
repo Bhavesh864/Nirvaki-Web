@@ -25,6 +25,7 @@ class TimeLineItem extends ConsumerStatefulWidget {
 class _TimeLineItemState extends ConsumerState<TimeLineItem> {
   @override
   Widget build(BuildContext context) {
+    final scrWidth = MediaQuery.of(context).size.width;
     var timeLine = widget.activitiesList[widget.index];
     final formattedTime = TimeFormatter.formatFirestoreTimestamp(timeLine.createdate);
 
@@ -74,7 +75,11 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
               Padding(
                 padding: const EdgeInsets.only(left: 8),
                 child: Container(
-                  width: Responsive.isDesktop(context) ? 250 : 210,
+                  width: Responsive.isDesktop(context)
+                      ? 250
+                      : scrWidth < 400
+                          ? 200
+                          : 210,
                   padding: const EdgeInsets.only(bottom: 5, left: 5),
                   child: AppText(
                     text: capitalizeFirstLetter(timeLine.activitybody!.activitytitle!),
