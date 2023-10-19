@@ -303,13 +303,14 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                         ),
                       ),
                     ),
-                    if (Responsive.isDesktop(context)) ...[
+                    if (!Responsive.isMobile(context)) ...[
                       const VerticalDivider(
                         indent: 15,
                         width: 30,
                       ),
-                      Expanded(
-                        flex: 1,
+                      SizedBox(
+                        width: Responsive.isTablet(context) ? 300 : 340,
+                        // flex: 1,
                         child: SingleChildScrollView(
                           child: Container(
                             padding: const EdgeInsets.all(10),
@@ -318,14 +319,14 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                 ContactInformation(
                                   customerinfo: data.customerinfo!,
                                 ),
-                                if (Responsive.isDesktop(context))
-                                  AssignmentWidget(
-                                    id: data.leadId!,
-                                    assignto: data.assignedto!,
-                                    imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                    createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
-                                    data: data,
-                                  ),
+                                // if (Responsive.isDesktop(context))
+                                AssignmentWidget(
+                                  id: data.leadId!,
+                                  assignto: data.assignedto!,
+                                  imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                  createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
+                                  data: data,
+                                ),
                                 if (Responsive.isDesktop(context))
                                   MapViewWidget(
                                     latLng: LatLng(data.preferredlocation![0], data.preferredlocation![1]),
