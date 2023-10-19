@@ -144,16 +144,19 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
       // _mobileController.text = editUser?.mobile ?? '';
 
       List<String>? splitString = editUser?.mobile.split(' ');
-      if (splitString!.length == 2) {
+      if (splitString!.length == 1) {
+        _mobileController.text = splitString[0];
+      }
+      if (splitString.length == 2) {
         mobileCountryCode = splitString[0];
         _mobileController.text = splitString[1];
       }
     }
   }
 
-  void openModal({BuildContext? context}) {
+  void openModal(BuildContext context) {
     showDialog(
-      context: context!,
+      context: context,
       builder: (context) {
         return CountryCodeModel(onCountrySelected: (data) {
           if (data.isNotEmpty) {
@@ -229,14 +232,10 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                                 hintText: "Mobile",
                                 isEmpty: mobileNoValidation == '' ? false : true,
                                 openModal: () {
-                                  openModal(
-                                    context: context,
-                                  );
+                                  openModal(context);
                                 },
                                 countryCode: mobileCountryCode,
-                                onChange: (value) {
-                                  // _mobileController.text = value;
-                                },
+                                onChange: (value) {},
                               ),
                               if (mobileNoValidation != '')
                                 Padding(

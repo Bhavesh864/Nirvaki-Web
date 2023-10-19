@@ -103,7 +103,7 @@ class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingOb
         ),
       ),
       floatingActionButton: const CustomSpeedDialButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
     );
   }
 }

@@ -15,6 +15,7 @@ import 'package:yes_broker/screens/main_screens/chat_list_screen.dart';
 import 'package:yes_broker/screens/main_screens/create_group_screen.dart';
 import 'package:yes_broker/screens/main_screens/inventory_details_screen.dart';
 import 'package:yes_broker/screens/main_screens/lead_details_screen.dart';
+import 'package:yes_broker/screens/main_screens/mobile_todo_screen.dart';
 import 'package:yes_broker/screens/main_screens/todo_details_screen.dart';
 import 'package:yes_broker/widgets/workitems/workitem_filter_view.dart';
 
@@ -117,6 +118,12 @@ List<BottomBarItem> bottomBarItems = [
     nav: '/',
     iconData: homeIcon,
     screen: const TodoListingScreen(),
+  ),
+  BottomBarItem(
+    nav: '/todo',
+    label: todoPageLabel,
+    iconData: todoIcon,
+    screen: const MobileTodoScreen(),
   ),
   BottomBarItem(
     nav: '/inventory',
