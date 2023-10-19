@@ -95,14 +95,13 @@ class InventoryDetailsHeader extends ConsumerWidget {
             SizedBox(
               width: Responsive.isMobile(context) ? width! * 0.75 : null,
               child: Padding(
-                padding: const EdgeInsets.only(right: 8.0), // Adjust as needed
+                padding: const EdgeInsets.only(right: 8.0),
                 child: Text(
                   title,
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
                   ),
-                  // overflow: TextOverflow.ellipsis,
                 ),
               ),
             ),
