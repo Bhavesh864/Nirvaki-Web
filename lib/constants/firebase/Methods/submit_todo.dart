@@ -7,6 +7,8 @@ import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' a
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 
+import '../send_notification.dart';
+
 Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
   final User? currentUserdata = ref.read(userDataProvider);
   final randomId = randomNumeric(5);
@@ -28,6 +30,7 @@ Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
       userid: user.userId,
     );
   }).toList();
+
   final cards.CardDetails card = cards.CardDetails(
     workitemId: "TD$randomId",
     status: "New",
@@ -37,7 +40,7 @@ Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
     managerid: currentUserdata?.managerid,
     cardTitle: todoTitle,
     cardDescription: todoDescription,
-    linkedItemType: cardDetail != null ? cardDetail.cardType : "",
+    linkedItemType: checkNotNUllItem(cardDetail) ? cardDetail.cardType : "",
     customerinfo: cardDetail != null
         ? cards.Customerinfo(
             email: cardDetail.customerinfo?.email,
@@ -48,7 +51,7 @@ Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
             whatsapp: cardDetail.customerinfo?.whatsapp)
         : cards.Customerinfo(),
     cardStatus: "New",
-    linkedItemId: cardDetail != null ? cardDetail.workitemId : "",
+    linkedItemId: checkNotNUllItem(cardDetail) ? cardDetail.workitemId : "",
     assignedto: assignedToList,
     createdby: cards.Createdby(
         userfirstname: currentUserdata?.userfirstname, userid: currentUserdata?.userId, userlastname: currentUserdata?.userlastname, userimage: currentUserdata?.image),
@@ -72,7 +75,7 @@ Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
     todoName: todoTitle,
     todoDescription: todoDescription,
     dueTime: dueDataTime,
-    customerinfo: cardDetail != null
+    customerinfo: checkNotNUllItem(cardDetail)
         ? Customerinfo(
             email: cardDetail.customerinfo?.email,
             firstname: cardDetail.customerinfo?.firstname,
@@ -91,7 +94,7 @@ Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
     attachments: [],
     createdate: Timestamp.now(),
     linkedWorkItem: [
-      cardDetail != null
+      checkNotNUllItem(cardDetail)
           ? LinkedWorkItem(
               workItemId: cardDetail.workitemId, workItemTitle: cardDetail.cardTitle, workItemDescription: cardDetail.cardDescription, workItemType: cardDetail.cardType)
           : LinkedWorkItem()
@@ -100,6 +103,14 @@ Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
   );
   await cards.CardDetails.addCardDetails(card).then((value) => {res = "success"});
   await TodoDetails.addTodoDetails(todo).then((value) => {res == "success"});
-
+  for (var user in assignedListTodo) {
+    notifyToUser(
+        assignedto: user.userid,
+        title: "Assign new TD$randomId",
+        content: "TD$randomId New $todotype assigned to ${user.firstname} ${user.lastname}",
+        assigntofield: true,
+        itemid: "TD$randomId",
+        currentuserdata: currentUserdata!);
+  }
   return res;
 }

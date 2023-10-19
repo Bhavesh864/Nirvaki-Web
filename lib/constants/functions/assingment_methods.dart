@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:yes_broker/Customs/responsive.dart';
-
 import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart' as inventory;
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart' as lead;
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart' as todo;
 import 'package:yes_broker/constants/firebase/send_notification.dart';
-
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/widgets/questionaries/assign_user.dart';
-
 import '../app_constant.dart';
 import '../firebase/userModel/user_info.dart';
 
@@ -65,8 +62,16 @@ void submitAssignUser(String id, BuildContext context, List<User> users, User cu
       lead.LeadDetails.updateAssignUser(itemid: id, assignedtoList: assign);
     }
     CardDetails.updateAssignUser(itemid: id, assignedtoList: assigncard);
+
+    final typeofWorkitem = calculateTypeOfWorkitem(id);
     for (var user in users) {
-      notifyToUser(assignedto: user.userId, title: "Assign new $id", content: "New $id Assign To You", assigntofield: true, itemid: id, currentuserdata: currentuserdata);
+      notifyToUser(
+          assignedto: user.userId,
+          title: "Assign new $id",
+          content: "$id $typeofWorkitem assigned to ${user.userfirstname} ${user.userlastname}",
+          assigntofield: true,
+          itemid: id,
+          currentuserdata: currentuserdata);
     }
   } else {
     customSnackBar(context: context, text: "Please select user");
@@ -143,4 +148,14 @@ void assginUserToTodo(BuildContext context, Function assign, List<dynamic> assig
       );
     },
   );
+}
+
+String calculateTypeOfWorkitem(String id) {
+  if (id.contains(ItemCategory.isInventory)) {
+    return "Inventory";
+  } else if (id.contains(ItemCategory.isLead)) {
+    return "Lead";
+  } else {
+    return "Todo";
+  }
 }

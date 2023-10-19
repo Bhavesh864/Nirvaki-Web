@@ -6,9 +6,11 @@ import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' as cards;
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/riverpodstate/add_member_state.dart';
 
 import '../../../riverpodstate/user_data.dart';
 import '../../functions/convertStringTorange/convert_number_to_string.dart';
+import '../send_notification.dart';
 
 Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) async {
   final User? currentUserdata = ref.read(userDataProvider);
@@ -170,5 +172,16 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
   isEdit
       ? await InventoryDetails.updateInventoryDetails(id: existingInventoryId, inventoryDetails: inventory).then((value) => {res = "success"})
       : await InventoryDetails.addInventoryDetails(inventory).then((value) => {res = "success"});
+  if (!isEdit) {
+    for (var user in assignedListInInventory) {
+      notifyToUser(
+          assignedto: user.userid,
+          title: "Assign new IN$randomId",
+          content: "IN$randomId New Inventory assigned to ${user.firstname} ${user.lastname}",
+          assigntofield: true,
+          itemid: "IN$randomId",
+          currentuserdata: currentUserdata!);
+    }
+  }
   return res;
 }
