@@ -60,7 +60,8 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
         ref.read(selectedWorkItemId.notifier).addItemId(widget.inventoryId!);
       });
     }
-    inventoryDetails = FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId.isEmpty ? widget.inventoryId : workItemId).snapshots();
+    inventoryDetails =
+        FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId.isEmpty ? widget.inventoryId : workItemId).snapshots();
     AppConst.setPublicView(false);
   }
 
@@ -220,7 +221,8 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                               AssignmentWidget(
                                                 id: data.inventoryId!,
                                                 assignto: data.assignedto!,
-                                                imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                imageUrlCreatedBy:
+                                                    data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                 createdBy: '${data.createdby!.userfirstname!}  ${data.createdby!.userlastname!}',
                                               ),
                                             );
@@ -342,7 +344,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                     ),
                     SizedBox(
                       // flex: 1,
-                      width: 340,
+                      width: Responsive.isTablet(context) ? 300 : 340,
                       child: ScrollConfiguration(
                         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                         child: SingleChildScrollView(
@@ -353,14 +355,14 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                 ContactInformation(
                                   customerinfo: data.customerinfo!,
                                 ),
-                                if (Responsive.isDesktop(context))
-                                  AssignmentWidget(
-                                    id: data.inventoryId!,
-                                    assignto: data.assignedto!,
-                                    imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                    createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
-                                    data: data,
-                                  ),
+                                // if (Responsive.isDesktop(context))
+                                AssignmentWidget(
+                                  id: data.inventoryId!,
+                                  assignto: data.assignedto!,
+                                  imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                  createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
+                                  data: data,
+                                ),
                                 if (Responsive.isDesktop(context))
                                   MapViewWidget(
                                     latLng: LatLng(data.propertylocation![0], data.propertylocation![1]),
