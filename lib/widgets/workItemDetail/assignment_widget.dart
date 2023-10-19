@@ -180,17 +180,22 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     SmallCustomCircularImage(imageUrl: item.image!.isNotEmpty ? item.image! : noImg),
-                                    Text(
-                                      "${capitalizeFirstLetter(item.firstname!)} ${capitalizeFirstLetter(item.lastname)}",
-                                      // "${item.firstname!} /${item.lastname}",
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      softWrap: true,
-                                      // textAlign: TextAlign.left,
-                                      style: const TextStyle(
-                                        color: AppColor.primary,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
+                                    Container(
+                                      constraints: BoxConstraints(
+                                        maxWidth: Responsive.isDesktop(context) ? 150 : 110,
+                                      ),
+                                      child: Text(
+                                        "${capitalizeFirstLetter(item.firstname!)} ${capitalizeFirstLetter(item.lastname)}",
+                                        // "${item.firstname!} /${item.lastname}",
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        softWrap: true,
+                                        // textAlign: TextAlign.left,
+                                        style: const TextStyle(
+                                          color: AppColor.primary,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(width: 3),
