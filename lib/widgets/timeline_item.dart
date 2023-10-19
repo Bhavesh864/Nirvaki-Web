@@ -31,7 +31,6 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
 
     return Container(
       padding: const EdgeInsets.only(top: 20, left: 5),
-      // height: 100,
       width: 100,
       margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
       decoration: const BoxDecoration(
