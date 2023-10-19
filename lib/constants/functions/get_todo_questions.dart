@@ -190,20 +190,19 @@ Widget buildTodoQuestions(
             }
           }
           return StatefulBuilder(builder: (context, setState) {
-            return Container(
-              child: CustomDropdownFormField<String>(
-                label: question.questionTitle,
-                value: selectedvalue,
-                isMandatory: true,
-                items: options,
-                onChanged: (value) {
-                  setState(() {
-                    selectedvalue = value;
-                  });
-                  notify.add({"id": question.questionId, "item": value});
-                },
-                validator: (p0) => validateForNormalFeild(value: p0, props: question.questionTitle),
-              ),
+            return CustomDropdownFormField<String>(
+              label: question.questionTitle,
+              value: selectedvalue,
+              isMandatory: true,
+              items: options,
+              onChanged: (value) {
+                setState(() {
+                  selectedvalue = value;
+                  CardDetails selectedUser = snapshot.data!.firstWhere((user) => "${user.cardTitle} (${user.workitemId})" == value);
+                  notify.add({"id": question.questionId, "item": selectedUser});
+                });
+              },
+              validator: (p0) => validateForNormalFeild(value: p0, props: question.questionTitle),
             );
           });
           // return DropDownField(

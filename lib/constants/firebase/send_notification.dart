@@ -62,7 +62,6 @@ void notifyToUser({
       }
     }
     List<String> tokens = await User.getUserTokensByIds(userids);
-
     for (var token in tokens) {
       if (AppConst.getFcmToken() != token) {
         await sendNotificationTouser(token: token, title: title, content: content, itemid: itemid, currentuserdata: currentuserdata, usersIds: userids);
