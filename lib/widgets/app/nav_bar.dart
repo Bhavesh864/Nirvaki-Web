@@ -343,7 +343,7 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                     children: [
                       if (!isChatOpen) ...[
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 20.0, top: 10, right: 10, left: 15),
+                          padding: const EdgeInsets.only(bottom: 20.0, top: 15, right: 10, left: 15),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -406,8 +406,10 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                                         maxLines: 3,
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
+                                          // fontWeight: FontWeight.w600,
+                                          color: Color(0xFF1A1F36),
                                           height: 1.8,
-                                          fontSize: 13,
+                                          fontSize: 12,
                                           letterSpacing: 0.4,
                                         ),
                                       ),
@@ -415,7 +417,7 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                                       CustomText(
                                         title: formattedTime,
                                         color: const Color(0xFF9B9B9B),
-                                        size: 12,
+                                        size: 11,
                                       ),
                                     ],
                                   ),
