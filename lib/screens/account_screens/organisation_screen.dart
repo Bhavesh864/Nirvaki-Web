@@ -69,7 +69,7 @@ class _OrganisationScreenState extends ConsumerState<OrganisationScreen> {
                             // padding: EdgeInsets.only(left: 5.0),
                             padding: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
                             child: AppText(
-                              text: "Organisation",
+                              text: "Organization",
                               fontWeight: FontWeight.w700,
                               fontsize: 16,
                             ),

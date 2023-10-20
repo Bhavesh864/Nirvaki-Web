@@ -37,7 +37,19 @@ class NewGroupUserList extends StatelessWidget {
               splashColor: Colors.grey[350],
               leading: Hero(
                 tag: user.userId,
-                child: CircleAvatar(radius: 26, backgroundImage: NetworkImage(user.image.isEmpty ? noImg : user.image)),
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ),
+                  ),
+                  child: CircleAvatar(
+                    radius: 26,
+                    backgroundImage: NetworkImage(user.image.isEmpty ? noImg : user.image),
+                  ),
+                ),
               ),
               title: Row(
                 children: [
