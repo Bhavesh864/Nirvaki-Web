@@ -69,7 +69,7 @@ class _OrganisationScreenState extends ConsumerState<OrganisationScreen> {
                             // padding: EdgeInsets.only(left: 5.0),
                             padding: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
                             child: AppText(
-                              text: "Organistion",
+                              text: "Organisation",
                               fontWeight: FontWeight.w700,
                               fontsize: 16,
                             ),
@@ -306,6 +306,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
   @override
   Widget build(BuildContext context) {
     final BrokerInfo broker = widget.brokerData;
+    final isWidth = MediaQuery.of(context).size.width;
 
     if (widget.title == null) {
       return Card(
@@ -318,7 +319,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
               Row(
                 children: [
                   const SizedBox(
-                    width: 10,
+                    width: 5,
                   ),
                   GestureDetector(
                     onTap: () {
@@ -348,7 +349,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                         ),
                       ),
                       child: CircleAvatar(
-                        radius: 35,
+                        radius: Responsive.isMobile(context) ? 30 : 35,
                         backgroundImage: isNameEditing ? null : NetworkImage(broker.brokerlogo!),
                         child: isNameEditing
                             ? profilePhoto == null && webProfile == null
@@ -363,8 +364,8 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 10,
+                  SizedBox(
+                    width: Responsive.isMobile(context) ? 2 : 10,
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -373,14 +374,19 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                       if (isNameEditing) ...[
                         SizedBox(
                           height: 50,
-                          width: Responsive.isDesktop(context) ? 300 : 180,
+                          width: Responsive.isDesktop(context)
+                              ? 300
+                              : isWidth < 390
+                                  ? 160
+                                  : 180,
                           child: CustomTextInput(
                             controller: companyNameController,
                             onFieldSubmitted: (newValue) {},
                           ),
                         ),
                       ] else ...[
-                        SizedBox(
+                        Container(
+                          margin: EdgeInsets.only(left: Responsive.isMobile(context) ? 5 : 0),
                           width: Responsive.isMobile(context) ? 140 : 350,
                           child: Text(
                             maxLines: 3,
