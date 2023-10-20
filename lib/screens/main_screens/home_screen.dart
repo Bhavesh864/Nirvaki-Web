@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:yes_broker/Customs/responsive.dart';
+
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
@@ -137,28 +137,28 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                       child: const EmptyWorkItemList(),
                     ),
                   ] else ...[
-                    Expanded(
-                      flex: size.width > 1340 ? 3 : 5,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: WorkItemsList(
-                          title: "To do",
-                          getCardDetails: todoItems,
-                        ),
-                      ),
-                    ),
                     size.width > 1200
                         ? Expanded(
                             flex: size.width > 1340 ? 3 : 5,
                             child: Padding(
                               padding: const EdgeInsets.only(right: 8.0),
                               child: WorkItemsList(
-                                title: "Work Items",
-                                getCardDetails: workItems,
+                                title: "To do",
+                                getCardDetails: todoItems,
                               ),
                             ),
                           )
                         : Container(),
+                    Expanded(
+                      flex: size.width > 1340 ? 3 : 5,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: WorkItemsList(
+                          title: "Work Items",
+                          getCardDetails: workItems,
+                        ),
+                      ),
+                    )
                   ],
                   size.width >= 850
                       ? Expanded(

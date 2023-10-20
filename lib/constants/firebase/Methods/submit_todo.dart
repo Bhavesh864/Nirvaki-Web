@@ -53,6 +53,7 @@ Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
     cardStatus: "New",
     linkedItemId: checkNotNUllItem(cardDetail) ? cardDetail.workitemId : "",
     assignedto: assignedToList,
+    dueTime: dueDataTime,
     createdby: cards.Createdby(
         userfirstname: currentUserdata?.userfirstname, userid: currentUserdata?.userId, userlastname: currentUserdata?.userlastname, userimage: currentUserdata?.image),
     createdate: Timestamp.now(),

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:yes_broker/Customs/text_utility.dart';
 
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
@@ -325,6 +326,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                             child: Container(
                               padding: const EdgeInsets.all(10),
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   ContactInformation(
                                     customerinfo: data.customerinfo!,
@@ -337,7 +339,42 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                     createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
                                     data: data,
                                   ),
-                                  // if (Responsive.isDesktop(context))
+                                  if (Responsive.isDesktop(context)) ...[
+                                    const AppText(
+                                      text: "Preffered Locality",
+                                      fontsize: 20,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: data.preferredlocality?.listofLocality?.map(
+                                            (e) {
+                                              return Container(
+                                                margin: const EdgeInsets.only(bottom: 7),
+                                                child: Row(
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.location_on_outlined,
+                                                      size: 16,
+                                                      color: Colors.black,
+                                                    ),
+                                                    Container(
+                                                      margin: const EdgeInsets.only(left: 4),
+                                                      width: 300,
+                                                      child: AppText(
+                                                        text: e.fullAddress.toString(),
+                                                        softwrap: true,
+                                                        fontsize: 14,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          ).toList() ??
+                                          [],
+                                    )
+                                  ],
                                   //   MapViewWidget(
                                   //     latLng: LatLng(data.preferredlocation![0], data.preferredlocation![1]),
                                   //     state: data.preferredlocality!.state!,
@@ -417,6 +454,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
         {"id": 101, "item": data.leadId},
         {"id": 54, "item": data.preferredlocality?.locality},
         {"id": 55, "item": data.furnishedStatus},
+        {"id": 56, "item": data.preferredlocality?.listofLocality},
       ]);
     } catch (e) {
       if (kDebugMode) {

@@ -82,44 +82,46 @@ class _TopSerachBarState extends State<TopSerachBar> {
               )
             ],
           )
-        : widget.title != 'Todo'
-            ? Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomText(
-                      title: widget.title,
-                      fontWeight: FontWeight.w600,
-                      size: 18,
-                      letterSpacing: 0.3,
-                    ),
-                    Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            widget.onFilterOpen();
-                          },
-                          child: const Icon(
-                            Icons.filter_list,
-                            size: 20,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        InkWell(
-                          onTap: () {},
-                          child: const Icon(
-                            Icons.more_horiz,
-                            size: 20,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
+        :
+        // : widget.title != 'Todo'
+        //     ?
+        Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomText(
+                  title: widget.title,
+                  fontWeight: FontWeight.w600,
+                  size: 18,
+                  letterSpacing: 0.3,
                 ),
-              )
-            : Container();
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        widget.onFilterOpen();
+                      },
+                      child: const Icon(
+                        Icons.filter_list,
+                        size: 20,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    InkWell(
+                      onTap: () {},
+                      child: const Icon(
+                        Icons.more_horiz,
+                        size: 20,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          );
+    // : Container();
   }
 }

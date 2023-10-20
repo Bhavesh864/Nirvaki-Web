@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:yes_broker/Customs/text_utility.dart';
 
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
@@ -46,6 +45,11 @@ AppBar mobileAppBar(User? user, BuildContext context, void Function(String) onOp
                   padding: const EdgeInsets.only(top: 12.0),
                   child: InkWell(
                     onTap: () {
+                      // Navigator.of(context).push(
+                      //   AppRoutes.createAnimatedRoute(
+                      //     const MobileNotificationScreen(),
+                      //   ),
+                      // );
                       showDialog(
                         context: context,
                         builder: (context) {

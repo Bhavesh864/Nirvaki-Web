@@ -588,6 +588,38 @@ class Propertyarea {
   }
 }
 
+class LocalityNames {
+  String? city;
+  String? state;
+  String? locality;
+  String? fullAddress;
+  LocalityNames({this.city, this.state, this.locality, this.fullAddress});
+  LocalityNames.fromJson(Map<String, dynamic> json) {
+    if (json["city"] is String) {
+      city = json["city"];
+    }
+    if (json["state"] is String) {
+      state = json["state"];
+    }
+    if (json["fullAddress"] is String) {
+      fullAddress = json["fullAddress"];
+    }
+
+    if (json["locality"] is String) {
+      locality = json["locality"];
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["city"] = city;
+    data["state"] = state;
+    data["locality"] = locality;
+    data["fullAddress"] = fullAddress;
+    return data;
+  }
+}
+
 class Preferredlocality {
   String? addressline1;
   String? addressline2;
@@ -595,8 +627,9 @@ class Preferredlocality {
   String? city;
   String? state;
   String? locality;
+  List<LocalityNames>? listofLocality;
 
-  Preferredlocality({this.addressline1, this.addressline2, this.prefferedfloornumber, this.city, this.state, this.locality});
+  Preferredlocality({this.addressline1, this.addressline2, this.prefferedfloornumber, this.city, this.state, this.locality, this.listofLocality});
   Preferredlocality.fromJson(Map<String, dynamic> json) {
     if (json["addressline1"] is String) {
       addressline1 = json["addressline1"];
@@ -613,6 +646,9 @@ class Preferredlocality {
     if (json["state"] is String) {
       state = json["state"];
     }
+    if (json["listofLocality"] is List) {
+      listofLocality = json["listofLocality"] == null ? null : (json["listofLocality"] as List).map((e) => LocalityNames.fromJson(e)).toList();
+    }
     if (json["locality"] is String) {
       locality = json["locality"];
     }
@@ -626,6 +662,9 @@ class Preferredlocality {
     data["city"] = city;
     data["state"] = state;
     data["locality"] = locality;
+    if (listofLocality != null) {
+      data["listofLocality"] = listofLocality?.map((e) => e.toJson()).toList();
+    }
     return data;
   }
 }

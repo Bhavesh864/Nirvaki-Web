@@ -40,7 +40,6 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
 
   @override
   Widget build(BuildContext context) {
-    var selectedInventoryFilters = ref.read(selectedFilterInventory);
     var selectedInventoryFiltersProvider = ref.read(selectedFilterInventory.notifier);
 
     Widget bottomButton() {
@@ -67,11 +66,14 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
                 text: 'Apply Filters',
                 onPressed: () {
                   // widget.setFilters(selectedInventoryFilters, values);
-                  if (Responsive.isMobile(context)) {
-                    Navigator.of(context).pop();
-                  } else {
-                    widget.closeFilterView();
-                  }
+                  // if (Responsive.isMobile(context)) {
+                  // Navigator.of(context).pop();
+                  // } else {
+                  widget.closeFilterView();
+                  widget.setFilters(selectedInventoryFiltersProvider.state, values);
+                  selectedInventoryFiltersProvider.state = [];
+                  // widget.setFilters();
+                  // }
                 },
               ),
             ),
@@ -85,8 +87,10 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
       bottomNavigationBar: bottomButton(),
       appBar: Responsive.isMobile(context)
           ? AppBar(
+              titleSpacing: 0,
               toolbarHeight: 50,
               elevation: 0,
+              centerTitle: false,
               title: const CustomText(
                 title: 'Filter your search',
                 fontWeight: FontWeight.w700,
@@ -117,7 +121,8 @@ class WorkItemFilterViewState extends ConsumerState<WorkItemFilterView> {
                         onPressed: () {
                           widget.closeFilterView();
                           widget.setFilters([], values);
-                          selectedInventoryFilters = [];
+                          // selectedInventoryFilters = [];
+                          selectedInventoryFiltersProvider.state = [];
                         },
                         icon: const Icon(
                           Icons.close,
