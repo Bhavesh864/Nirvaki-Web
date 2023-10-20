@@ -136,6 +136,7 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
                     width: 30,
                     margin: const EdgeInsets.only(right: 10),
                     decoration: BoxDecoration(
+                      border: Border.all(width: 1, color: Colors.grey),
                       image: DecorationImage(
                         fit: BoxFit.cover,
                         image: NetworkImage(userData?.image ?? noImg),
@@ -389,10 +390,19 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                                   Navigator.of(context).pop();
                                 },
                                 titleAlignment: ListTileTitleAlignment.top,
-                                leading: CircleAvatar(
-                                  radius: 18,
-                                  backgroundImage: NetworkImage(
-                                    notificationData.imageUrl!.isNotEmpty && notificationData.imageUrl != null ? notificationData.imageUrl! : noImg,
+                                leading: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Colors.grey,
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                  child: CircleAvatar(
+                                    radius: 18,
+                                    backgroundImage: NetworkImage(
+                                      notificationData.imageUrl!.isNotEmpty && notificationData.imageUrl != null ? notificationData.imageUrl! : noImg,
+                                    ),
                                   ),
                                 ),
                                 title: SizedBox(

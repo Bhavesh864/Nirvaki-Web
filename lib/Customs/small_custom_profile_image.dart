@@ -13,7 +13,8 @@ class SmallCustomCircularImage extends StatelessWidget {
       height: height,
       width: width,
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.white),
+        // border: Border.all(color: Colors.white),
+        border: Border.all(color: Colors.grey, width: 1.0),
         image: DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.fill),
         borderRadius: BorderRadius.circular(40),
       ),

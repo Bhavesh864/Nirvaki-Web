@@ -202,10 +202,19 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
                             showEnlargedImage(context);
                           }
                         },
-                        child: CircleAvatar(
-                          radius: 60,
-                          backgroundImage: NetworkImage(
-                            widget.profilePic.isEmpty ? noImg : widget.profilePic,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: CircleAvatar(
+                            radius: 60,
+                            backgroundImage: NetworkImage(
+                              widget.profilePic.isEmpty ? noImg : widget.profilePic,
+                            ),
                           ),
                         ),
                       ),

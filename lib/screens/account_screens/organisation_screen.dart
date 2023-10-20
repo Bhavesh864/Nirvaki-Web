@@ -339,19 +339,28 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                         });
                       }
                     },
-                    child: CircleAvatar(
-                      radius: 35,
-                      backgroundImage: isNameEditing ? null : NetworkImage(broker.brokerlogo!),
-                      child: isNameEditing
-                          ? profilePhoto == null && webProfile == null
-                              ? const Icon(
-                                  Icons.add,
-                                  size: 25,
-                                )
-                              : (kIsWeb)
-                                  ? ClipOval(child: Image.memory(webProfile!, width: 70, height: 70, fit: BoxFit.cover))
-                                  : ClipOval(child: Image.file(profilePhoto!, width: 70, height: 70, fit: BoxFit.cover))
-                          : null,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                      ),
+                      child: CircleAvatar(
+                        radius: 35,
+                        backgroundImage: isNameEditing ? null : NetworkImage(broker.brokerlogo!),
+                        child: isNameEditing
+                            ? profilePhoto == null && webProfile == null
+                                ? const Icon(
+                                    Icons.add,
+                                    size: 25,
+                                  )
+                                : (kIsWeb)
+                                    ? ClipOval(child: Image.memory(webProfile!, width: 70, height: 70, fit: BoxFit.cover))
+                                    : ClipOval(child: Image.file(profilePhoto!, width: 70, height: 70, fit: BoxFit.cover))
+                            : null,
+                      ),
                     ),
                   ),
                   const SizedBox(
@@ -812,7 +821,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                           Container(
                             height: 200,
                             decoration: BoxDecoration(border: Border.all(color: Colors.grey, width: 0.8), borderRadius: BorderRadius.circular(8)),
-                            margin: const EdgeInsets.symmetric(horizontal: 7),
+                            // margin: const EdgeInsets.symmetric(horizontal: 7),
                             child: ListView.builder(
                               shrinkWrap: true,
                               itemCount: placesList.length,
