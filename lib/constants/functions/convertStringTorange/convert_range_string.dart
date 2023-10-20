@@ -4,14 +4,14 @@ String formatValue(double value) {
     if (crores % 1 == 0) {
       return '₹${crores.toStringAsFixed(0)} Cr';
     } else {
-      return '₹${crores.toStringAsFixed(2)} Cr';
+      return '₹${crores.toStringAsFixed(1)} Cr';
     }
   } else if (value >= 100000) {
     double lakhs = value / 100000;
     if (lakhs % 1 == 0) {
-      return '₹${lakhs.toStringAsFixed(0)} L';
+      return '₹${lakhs.toStringAsFixed(2)} L';
     } else {
-      return '₹${lakhs.toStringAsFixed(0)} L';
+      return '₹${lakhs.toStringAsFixed(2)} L';
     }
   } else {
     return '₹${value.toStringAsFixed(0)}';
@@ -36,4 +36,17 @@ String formatValueforOnlyNumbers(double value) {
   } else {
     return value.toStringAsFixed(0);
   }
+}
+
+String formatValueForAcre(double value) {
+  double result;
+  if (value >= 10000000) {
+    result = value / 10000000;
+  } else if (value >= 100000) {
+    result = value / 100000;
+  } else {
+    result = value;
+  }
+
+  return result.toStringAsFixed(2);
 }
