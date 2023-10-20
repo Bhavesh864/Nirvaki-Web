@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class TimeFormatter {
-  static String formatFirestoreTimestamp(Timestamp? firestoreTimestamp) {
+  static String formatFirestoreTimestamp(Timestamp? firestoreTimestamp, bool isSameWeek) {
     if (firestoreTimestamp == null) {
       return '';
     }
@@ -18,6 +19,8 @@ class TimeFormatter {
     } else if (difference == 1) {
       // Yesterday: Format as "Yesterday at HH:MM AM/PM"
       return 'Yesterday at ${_formatTime(timestamp)}';
+    } else if (!isSameWeek) {
+      return '${DateFormat('EEEE').format(firestoreTimestamp.toDate())} at ${_formatTime(timestamp)}';
     } else {
       // For older dates, return the date and time in a custom format
       final day = timestamp.day;

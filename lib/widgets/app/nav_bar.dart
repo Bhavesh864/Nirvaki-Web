@@ -377,7 +377,7 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                             itemCount: notificationList.length,
                             itemBuilder: (context, index) {
                               final firestoreTimestamp = notificationList[index].receiveDate;
-                              final formattedTime = TimeFormatter.formatFirestoreTimestamp(firestoreTimestamp);
+                              final formattedTime = TimeFormatter.formatFirestoreTimestamp(firestoreTimestamp, false);
                               final notificationData = notificationList[index];
                               return ListTile(
                                 // tileColor: notificationData.isRead! ? Colors.transparent : AppColor.secondary,

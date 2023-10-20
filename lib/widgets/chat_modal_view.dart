@@ -245,7 +245,7 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                                             snapshot.data![index - 1].timeSent.toDate(),
                                           );
 
-                                      final bool isNewWeek = index == 0 || messageData.timeSent.toDate().difference(messageData.timeSent.toDate()).inDays >= 7;
+                                      final bool isNewWeek = DateTime.now().difference(messageData.timeSent.toDate()).inDays >= 7;
                                       final String messageDay = getMessageDay(messageData.timeSent.toDate(), isNewWeek);
 
                                       if (!isSender && !messageData.isSeen && !isGroupChat) {

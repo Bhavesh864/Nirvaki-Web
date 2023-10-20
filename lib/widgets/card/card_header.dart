@@ -183,7 +183,10 @@ class CardHeaderState extends ConsumerState<CardHeader> {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4),
-                  color: cardData.duedate != null && DateFormat('dd-MM-yy HH:mm').parse('${cardData.duedate!} ${cardData.dueTime ?? '23:00'}').isBefore(DateTime.now())
+                  color: cardData.duedate != null &&
+                          DateFormat('dd-MM-yy HH:mm a').parse('${cardData.duedate!} ${cardData.dueTime ?? '11:00 PM'}').isBefore(
+                                DateTime.now(),
+                              )
                       ? const Color.fromARGB(255, 249, 145, 137).withOpacity(0.2)
                       : AppColor.chipGreyColor,
                 ),
@@ -193,19 +196,19 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                     Icon(
                       Icons.calendar_month_outlined,
                       size: 12,
-                      color:
-                          cardData.duedate != null && DateFormat('dd-MM-yy HH:mm').parse('${cardData.duedate!} ${cardData.dueTime ?? '23:00'}').isBefore(DateTime.now())
-                              ? Colors.red
-                              : Colors.black,
+                      color: cardData.duedate != null &&
+                              DateFormat('dd-MM-yy HH:mm a').parse('${cardData.duedate!} ${cardData.dueTime ?? '11:00 PM'}').isBefore(DateTime.now())
+                          ? Colors.red
+                          : Colors.black,
                     ),
                     const SizedBox(width: 2),
                     AppText(
-                      text: DateFormat('dd MMM yyyy').format(DateFormat('dd-MM-yy HH:mm').parse('${cardData.duedate!} ${cardData.dueTime ?? '23:00'}')),
+                      text: DateFormat('dd MMM yyyy').format(DateFormat('dd-MM-yy HH:mm a').parse('${cardData.duedate!} ${cardData.dueTime ?? '11:00 PM'}')),
                       fontsize: 10,
-                      textColor:
-                          cardData.duedate != null && DateFormat('dd-MM-yy HH:mm').parse('${cardData.duedate!} ${cardData.dueTime ?? '23:00'}').isBefore(DateTime.now())
-                              ? Colors.red.shade500
-                              : Colors.black,
+                      textColor: cardData.duedate != null &&
+                              DateFormat('dd-MM-yy HH:mm a').parse('${cardData.duedate!} ${cardData.dueTime ?? '11:00 PM'}').isBefore(DateTime.now())
+                          ? Colors.red.shade500
+                          : Colors.black,
                     ),
                   ],
                 ),

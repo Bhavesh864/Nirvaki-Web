@@ -9,6 +9,7 @@ import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/responsive.dart';
 
+import '../constants/functions/datetime/date_time.dart';
 import '../constants/functions/navigation/navigation_functions.dart';
 import '../constants/functions/time_formatter.dart';
 import '../riverpodstate/common_index_state.dart';
@@ -27,7 +28,19 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
   Widget build(BuildContext context) {
     final scrWidth = MediaQuery.of(context).size.width;
     var timeLine = widget.activitiesList[widget.index];
-    final formattedTime = TimeFormatter.formatFirestoreTimestamp(timeLine.createdate);
+    // final messageData = snapshot.data![index];
+    // final isSender = messageData.senderId == AppConst.getAccessToken();
+
+    // final bool isFirstMessageOfNewDay =
+    //     !isSameDay(
+    //       messageData.timeSent.toDate(),
+    //       snapshot.data![index - 1].timeSent.toDate(),
+    //     );
+
+    final bool isNewWeek = DateTime.now().difference(timeLine.createdate!.toDate()).inDays >= 7;
+    // final String formattedTime = getMessageDay(timeLine.createdate!.toDate(), isNewWeek);
+
+    final formattedTime = TimeFormatter.formatFirestoreTimestamp(timeLine.createdate, isNewWeek);
 
     return Container(
       padding: const EdgeInsets.only(top: 20, left: 5),
@@ -101,7 +114,8 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
               height: 20,
               width: 20,
               decoration: BoxDecoration(
-                image: DecorationImage(image: NetworkImage(timeLine.userImageUrl == null || timeLine.userImageUrl!.isEmpty ? noImg : timeLine.userImageUrl!), fit: BoxFit.fill),
+                image: DecorationImage(
+                    image: NetworkImage(timeLine.userImageUrl == null || timeLine.userImageUrl!.isEmpty ? noImg : timeLine.userImageUrl!), fit: BoxFit.fill),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
