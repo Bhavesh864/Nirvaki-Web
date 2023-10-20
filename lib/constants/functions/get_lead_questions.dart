@@ -98,12 +98,12 @@ Widget buildLeadQuestions(
         ref.read(selectedOptionNotifier.notifier).setRange(selectedchipOption);
       });
     }
-    if (!isEdit && question.questionId == 23) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        // ref.read(selectedOptionNotifier.notifier).setRange(selectedchipOption);
-        notify.add({"id": question.questionId, "item": "Sq ft"});
-      });
-    }
+    // if (!isEdit && question.questionId == 23) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     // ref.read(selectedOptionNotifier.notifier).setRange(selectedchipOption);
+    //     notify.add({"id": question.questionId, "item": "Sq ft"});
+    //   });
+    // }
 
     if (!isEdit && question.questionId == 47) {
       selectedchipOption = 'Ft';
@@ -354,13 +354,14 @@ Widget buildLeadQuestions(
       String? statevalue = "";
       String? cityvalue = "";
       String? localityvalue = "";
-      String? address1value = "";
-      String? address2value = "";
+      List<String> selectedLocality = [];
+      // String? address1value = "";
+      // String? address2value = "";
       final existingState = selectedValues.any((element) => element["id"] == 26);
       final existingCity = selectedValues.any((element) => element["id"] == 27);
       final existingLocality = selectedValues.any((element) => element["id"] == 54);
-      final existingaddress1 = selectedValues.any((element) => element["id"] == 28);
-      final existingaddress2 = selectedValues.any((element) => element["id"] == 29);
+      // final existingaddress1 = selectedValues.any((element) => element["id"] == 28);
+      // final existingaddress2 = selectedValues.any((element) => element["id"] == 29);
       if (existingState) {
         statevalue = selectedValues.firstWhere((element) => element["id"] == 26)["item"];
       }
@@ -370,20 +371,21 @@ Widget buildLeadQuestions(
       if (existingLocality) {
         localityvalue = selectedValues.firstWhere((element) => element["id"] == 54)["item"];
       }
-      if (existingaddress1) {
-        address1value = selectedValues.firstWhere((element) => element["id"] == 28)["item"];
-      }
-      if (existingaddress2) {
-        address2value = selectedValues.firstWhere((element) => element["id"] == 29)["item"];
-      }
+      // if (existingaddress1) {
+      //   address1value = selectedValues.firstWhere((element) => element["id"] == 28)["item"];
+      // }
+      // if (existingaddress2) {
+      //   address2value = selectedValues.firstWhere((element) => element["id"] == 29)["item"];
+      // }
       TextEditingController statecontroller = TextEditingController(text: statevalue);
       TextEditingController citycontroller = TextEditingController(text: cityvalue);
       TextEditingController localitycontroller = TextEditingController(text: localityvalue);
-      TextEditingController address1controller = TextEditingController(text: address1value);
-      TextEditingController address2controller = TextEditingController(text: address2value);
+      // TextEditingController address1controller = TextEditingController(text: address1value);
+      // TextEditingController address2controller = TextEditingController(text: address2value);
       List placesList = [];
       return StatefulBuilder(builder: (context, setState) {
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             LabelTextInputField(
               labelText: 'Search your location',
@@ -417,6 +419,8 @@ Widget buildLeadQuestions(
                         final str = placesList[index];
                         notify.add({"id": question.questionId, "item": str});
                         controller.text = str;
+                        selectedLocality.add(str);
+
                         try {
                           List<String> words = str.split(' ');
                           if (words.length >= 3) {
@@ -427,7 +431,6 @@ Widget buildLeadQuestions(
                               lastThreeWordsList.removeLast();
                               lastThreeWords = lastThreeWordsList.join(' ');
                             }
-
                             final cityName = lastThreeWordsList[0].endsWith(',') ? lastThreeWordsList[0].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[0];
                             final stateName = lastThreeWordsList[1].endsWith(',') ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[1];
                             statecontroller.text = stateName;
@@ -437,10 +440,10 @@ Widget buildLeadQuestions(
                             notify.add({"id": 26, "item": stateName});
                             notify.add({"id": 27, "item": cityName});
                             notify.add({"id": 54, "item": remainingWords});
-
                             setState(() {
                               placesList = [];
                             });
+                            controller.clear();
                           } else {
                             setState(() {
                               placesList = [];
@@ -459,58 +462,78 @@ Widget buildLeadQuestions(
                   },
                 ),
               ),
-            LabelTextInputField(
-                onChanged: (newvalue) {
-                  notify.add({"id": 26, "item": newvalue.trim()});
-                },
-                inputController: statecontroller,
-                isMandatory: true,
-                labelText: "State",
-                validator: (value) => validateForNormalFeild(value: value, props: "State")),
-            LabelTextInputField(
-                onChanged: (newvalue) {
-                  notify.add({"id": 27, "item": newvalue.trim()});
-                },
-                inputController: citycontroller,
-                isMandatory: true,
-                labelText: "City",
-                validator: (value) => validateForNormalFeild(value: value, props: "City")),
-            LabelTextInputField(
-                onChanged: (newvalue) {
-                  notify.add({"id": 54, "item": newvalue.trim()});
-                },
-                inputController: localitycontroller,
-                isMandatory: true,
-                labelText: "Locality",
-                validator: (value) => validateForNormalFeild(value: value, props: "Locality")),
-            LabelTextInputField(
-              onChanged: (newvalue) {
-                notify.add({"id": 28, "item": newvalue.trim()});
-              },
-              inputController: address1controller,
-              isMandatory: true,
-              labelText: "Address1",
-              validator: (value) {
-                if (!isChecked && value!.isEmpty) {
-                  return "Please enter ${question.questionTitle}";
-                }
-                return null;
-              },
-            ),
-            LabelTextInputField(
-              onChanged: (newvalue) {
-                notify.add({"id": 29, "item": newvalue.trim()});
-              },
-              inputController: address2controller,
-              isMandatory: true,
-              labelText: "Address2",
-              validator: (value) {
-                if (!isChecked && value!.isEmpty) {
-                  return "Please enter ${question.questionTitle}";
-                }
-                return null;
-              },
-            ),
+            Wrap(
+              children: selectedLocality.map((locality) {
+                return Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: Chip(
+                    backgroundColor: AppColor.secondary,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    label: AppText(
+                      text: locality,
+                      fontsize: 14,
+                    ),
+                    onDeleted: () {
+                      setState(() {
+                        selectedLocality.remove(locality);
+                      });
+                    },
+                  ),
+                );
+              }).toList(),
+            )
+            // LabelTextInputField(
+            //     onChanged: (newvalue) {
+            //       notify.add({"id": 26, "item": newvalue.trim()});
+            //     },
+            //     inputController: statecontroller,
+            //     isMandatory: true,
+            //     labelText: "State",
+            //     validator: (value) => validateForNormalFeild(value: value, props: "State")),
+            // LabelTextInputField(
+            //     onChanged: (newvalue) {
+            //       notify.add({"id": 27, "item": newvalue.trim()});
+            //     },
+            //     inputController: citycontroller,
+            //     isMandatory: true,
+            //     labelText: "City",
+            //     validator: (value) => validateForNormalFeild(value: value, props: "City")),
+            // LabelTextInputField(
+            //     onChanged: (newvalue) {
+            //       notify.add({"id": 54, "item": newvalue.trim()});
+            //     },
+            //     inputController: localitycontroller,
+            //     isMandatory: true,
+            //     labelText: "Locality",
+            //     validator: (value) => validateForNormalFeild(value: value, props: "Locality")),
+            // LabelTextInputField(
+            //   onChanged: (newvalue) {
+            //     notify.add({"id": 28, "item": newvalue.trim()});
+            //   },
+            //   inputController: address1controller,
+            //   isMandatory: true,
+            //   labelText: "Address1",
+            //   validator: (value) {
+            //     if (!isChecked && value!.isEmpty) {
+            //       return "Please enter ${question.questionTitle}";
+            //     }
+            //     return null;
+            //   },
+            // ),
+            // LabelTextInputField(
+            //   onChanged: (newvalue) {
+            //     notify.add({"id": 29, "item": newvalue.trim()});
+            //   },
+            //   inputController: address2controller,
+            //   isMandatory: true,
+            //   labelText: "Address2",
+            //   validator: (value) {
+            //     if (!isChecked && value!.isEmpty) {
+            //       return "Please enter ${question.questionTitle}";
+            //     }
+            //     return null;
+            //   },
+            // ),
           ],
         );
       });
@@ -624,33 +647,33 @@ Widget buildLeadQuestions(
       }),
     );
   } else if (question.questionOptionType == 'map') {
-    List? defaultValue;
+    // List? defaultValue;
 
-    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
-      defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
-    }
-    final state = getDataById(selectedValues, 26);
-    final city = getDataById(selectedValues, 27);
-    final address1 = getDataById(selectedValues, 28);
-    final address2 = getDataById(selectedValues, 29);
-    final locality = getDataById(selectedValues, 54);
+    // if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+    //   defaultValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
+    // }
+    // final state = getDataById(selectedValues, 26);
+    // final city = getDataById(selectedValues, 27);
+    // final address1 = getDataById(selectedValues, 28);
+    // final address2 = getDataById(selectedValues, 29);
+    // final locality = getDataById(selectedValues, 54);
 
-    return CustomGoogleMap(
-      isEdit: isEdit,
-      latLng: isEdit ? LatLng(defaultValue![0], defaultValue[1]) : null,
-      selectedValues: selectedValues,
-      onLatLngSelected: (latLng) {
-        notify.add({
-          "id": question.questionId,
-          "item": [latLng.latitude, latLng.longitude]
-        });
-      },
-      cityName: city,
-      stateName: state,
-      address1: address1,
-      address2: address2,
-      locality: locality,
-    );
+    // return CustomGoogleMap(
+    //   isEdit: isEdit,
+    //   latLng: isEdit ? LatLng(defaultValue![0], defaultValue[1]) : null,
+    //   selectedValues: selectedValues,
+    //   onLatLngSelected: (latLng) {
+    //     notify.add({
+    //       "id": question.questionId,
+    //       "item": [latLng.latitude, latLng.longitude]
+    //     });
+    //   },
+    //   cityName: city,
+    //   stateName: state,
+    //   address1: address1,
+    //   address2: address2,
+    //   locality: locality,
+    // );
   } else if (question.questionOptionType == 'photo') {
     return PhotosViewForm(
       notify: notify,
