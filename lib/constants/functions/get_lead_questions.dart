@@ -94,6 +94,7 @@ Widget buildLeadQuestions(
       selectedchipOption = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
     if (isEdit && question.questionId == 23) {
+      print("selectedchipOption---> $selectedchipOption");
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.read(selectedOptionNotifier.notifier).setRange(selectedchipOption);
       });
@@ -160,7 +161,7 @@ Widget buildLeadQuestions(
                                 bgcolor: selectedchipOption == option ? AppColor.primary : AppColor.primary.withOpacity(0.05),
                                 onSelected: (selectedItem) {
                                   setState(() {
-                                    if (selectedchipOption != option) {
+                                    if (selectedchipOption != option && question.questionId != 23 && question.questionId != 24) {
                                       selectedchipOption = option;
                                       notify.add({"id": question.questionId, "item": option});
                                     }
