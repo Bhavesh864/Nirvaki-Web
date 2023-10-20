@@ -258,7 +258,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
               Row(
                 children: [
                   const SizedBox(
-                    width: 10,
+                    width: 5,
                   ),
                   GestureDetector(
                     onTap: () {
@@ -304,7 +304,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                     ),
                   ),
                   const SizedBox(
-                    width: 20,
+                    width: 15,
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
