@@ -137,28 +137,28 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                       child: const EmptyWorkItemList(),
                     ),
                   ] else ...[
-                    Expanded(
-                      flex: size.width > 1340 ? 3 : 5,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: WorkItemsList(
-                          title: "To do",
-                          getCardDetails: todoItems,
-                        ),
-                      ),
-                    ),
                     size.width > 1200
                         ? Expanded(
                             flex: size.width > 1340 ? 3 : 5,
                             child: Padding(
                               padding: const EdgeInsets.only(right: 8.0),
                               child: WorkItemsList(
-                                title: "Work Items",
-                                getCardDetails: workItems,
+                                title: "To do",
+                                getCardDetails: todoItems,
                               ),
                             ),
                           )
                         : Container(),
+                    Expanded(
+                      flex: size.width > 1340 ? 3 : 5,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: WorkItemsList(
+                          title: "Work Items",
+                          getCardDetails: workItems,
+                        ),
+                      ),
+                    )
                   ],
                   size.width >= 850
                       ? Expanded(
