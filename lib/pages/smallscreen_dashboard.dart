@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/app_constant.dart';
+import 'package:yes_broker/pages/largescreen_dashboard.dart';
 
 import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/widgets/app/app_bar.dart';
@@ -67,6 +68,7 @@ class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingOb
         onTap: (value) => {
           ref.read(mobileBottomIndexProvider.notifier).update((state) => value),
           ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null),
+          ref.read(desktopSideBarIndexProvider.notifier).state = value,
         },
         currentIndex: currentIndex,
         selectedFontSize: 0,

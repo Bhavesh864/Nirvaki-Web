@@ -82,8 +82,12 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                         ref.read(desktopSideBarIndexProvider.notifier).update((state) => index);
                         // currentIndex = sideBarIndex.state;
 
-                        if (index != 0) {
-                          ref.read(mobileBottomIndexProvider.notifier).state = index == 4 ? 0 : index - 1;
+                        // if (index != 0) {
+                        //   ref.read(mobileBottomIndexProvider.notifier).state = index == 4 ? 0 : index - 1;
+                        // } else {
+                        // }
+                        if (index == 4) {
+                          ref.read(mobileBottomIndexProvider.notifier).state = 0;
                         } else {
                           ref.read(mobileBottomIndexProvider.notifier).state = index;
                         }

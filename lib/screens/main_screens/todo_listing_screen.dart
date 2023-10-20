@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
@@ -26,7 +27,6 @@ import '../../widgets/table_view/table_view_widgets.dart';
 import '../../widgets/timeline_view.dart';
 import '../../widgets/top_search_bar.dart';
 import '../../widgets/workitems/workitem_filter_view.dart';
-import '../../widgets/workitems/workitems_list.dart';
 
 class TodoListingScreen extends ConsumerStatefulWidget {
   const TodoListingScreen({super.key});
@@ -114,6 +114,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
               }
 
               todoItemsList.sort(compareDueDates);
+
               List<CardDetails> filterTodoList = todoItemsList.where((item) {
                 if (searchController.text.isEmpty) {
                   return true;
@@ -242,6 +243,9 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                                                       ),
                                                     ),
                                                     Container(
+                                                      height: 300,
+                                                      // width: 300,
+                                                      color: Colors.white,
                                                       margin: const EdgeInsets.symmetric(horizontal: 10),
                                                       child: CustomTimeLineView(
                                                         itemIds: filterItem.map((card) => card["workitemId"]).toList(),
