@@ -96,259 +96,264 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
 
               for (var data in leadlist) {
                 Future.delayed(const Duration(milliseconds: 500)).then((value) => setLeadEditData(notify, data));
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: ScrollConfiguration(
-                        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                        child: GestureDetector(
-                          onTap: () {
-                            if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
-                          },
-                          child: SingleChildScrollView(
-                            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                            child: Container(
-                              padding: const EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 10),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  InventoryDetailsHeader(
-                                    setState: () {
-                                      setState(() {});
-                                    },
-                                    setCurrentIndex: (p0) {
-                                      ref.read(detailsPageIndexTabProvider.notifier).update((state) => 0);
-                                      tabviewController.animateTo(0);
-                                    },
-                                    id: data.leadId!,
-                                    inventoryDetails: data,
-                                    title: data.leadTitle!,
-                                    category: data.leadcategory!,
-                                    type: data.leadType!,
-                                    propertyCategory: data.propertycategory!,
-                                    status: data.leadStatus!,
-                                    price: "${data.propertypricerange?.arearangestart}-${data.propertypricerange?.arearangeend}",
-                                  ),
-                                  if (Responsive.isMobile(context))
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 10),
-                                      child: Wrap(
-                                        runSpacing: 10,
-                                        crossAxisAlignment: WrapCrossAlignment.center,
-                                        alignment: WrapAlignment.spaceBetween,
-                                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          HeaderChips(
-                                            id: data.leadId!,
-                                            category: data.leadcategory!,
-                                            type: data.leadType!,
-                                            propertyCategory: data.propertycategory!,
-                                            status: data.leadStatus!,
-                                            inventoryDetails: data,
-                                          ),
-                                          CustomText(
-                                            size: 14,
-                                            softWrap: true,
-                                            textAlign: TextAlign.start,
-                                            title: data.propertypricerange?.arearangestart != null
-                                                ? '${data.propertypricerange?.arearangestart} - ${data.propertypricerange?.arearangeend}'
-                                                : '',
-                                            color: AppColor.primary,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  // ListTile(
-                                  //   contentPadding: const EdgeInsets.all(0),
-                                  //   leading: const Icon(
-                                  //     Icons.location_on_outlined,
-                                  //     size: 20,
-                                  //     color: Colors.black,
-                                  //   ),
-                                  //   minLeadingWidth: 2,
-                                  //   horizontalTitleGap: 8,
-                                  //   titleAlignment: ListTileTitleAlignment.center,
-                                  //   title: CustomText(
-                                  //     title: '${data.preferredlocality!.state},${data.preferredlocality!.city},${data.preferredlocality!.addressline1}',
-                                  //     size: 12,
-                                  //     fontWeight: FontWeight.w400,
-                                  //     color: const Color(0xFFA8A8A8),
-                                  //   ),
-                                  // ),
-                                  if (Responsive.isMobile(context))
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 15),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              ElevatedButton(
-                                                onPressed: () {
-                                                  showOwnerDetailsAndAssignToBottomSheet(
-                                                    context,
-                                                    'Owner Details',
-                                                    ContactInformation(customerinfo: data.customerinfo!),
-                                                  );
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  backgroundColor: AppColor.primary,
-                                                  // minimumSize: const Size(100, 20),
-                                                  padding: const EdgeInsets.all(8),
-                                                ),
-                                                child: const Text(
-                                                  'Owner Details',
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                    letterSpacing: 0.3,
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  showOwnerDetailsAndAssignToBottomSheet(
-                                                    context,
-                                                    'Assignment',
-                                                    AssignmentWidget(
-                                                      id: data.leadId!,
-                                                      assignto: data.assignedto!,
-                                                      imageUrlCreatedBy:
-                                                          data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                                      createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
-                                                    ),
-                                                  );
-                                                },
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.end,
-                                                  children: data.assignedto!.asMap().entries.map((entry) {
-                                                    final index = entry.key;
-                                                    final user = entry.value;
-                                                    return Transform.translate(
-                                                      offset: Offset(index * -8.0, 0),
-                                                      child: Container(
-                                                        width: 28,
-                                                        height: 28,
-                                                        decoration: BoxDecoration(
-                                                          border: Border.all(color: Colors.white),
-                                                          image: DecorationImage(
-                                                            image: NetworkImage(
-                                                              user.image!.isEmpty ? noImg : user.image!,
-                                                            ),
-                                                            fit: BoxFit.fill,
-                                                          ),
-                                                          borderRadius: BorderRadius.circular(40),
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }).toList(),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              const Icon(
-                                                Icons.calendar_month_outlined,
-                                                size: 20,
-                                                color: Colors.black,
-                                              ),
-                                              const SizedBox(width: 5),
-                                              CustomText(
-                                                title: DateFormat('d MMM y').format(data.createdate!.toDate()),
-                                                size: 12,
-                                                fontWeight: FontWeight.w400,
-                                                color: const Color(0xFFA8A8A8),
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  // if (Responsive.isMobile(context))
-                                  //   Padding(
-                                  //     padding: const EdgeInsets.only(top: 12.0),
-                                  //     child: CustomText(
-                                  //       title: data.propertypricerange?.arearangestart != null
-                                  //           ? '${data.propertypricerange?.arearangestart} ${data.propertypricerange?.arearangeend}'
-                                  //           : '50k/month',
-                                  //       color: AppColor.primary,
-                                  //     ),
-                                  //   ),
-                                  if (!AppConst.getPublicView())
-                                    TabBarWidget(
-                                      tabviewController: tabviewController,
-                                      onTabChanged: (e) {
-                                        ref.read(detailsPageIndexTabProvider.notifier).update((state) => e);
-                                      },
-                                    ),
-                                  const SizedBox(
-                                    height: 30,
-                                  ),
-                                  if (currentSelectedTab == 0)
-                                    DetailsTabView(
-                                      id: data.leadId!,
-                                      isLeadView: true,
-                                      data: data,
-                                      updateData: () {
+                return GestureDetector(
+                  onTap: () {
+                    if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
+                  },
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: ScrollConfiguration(
+                          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                          child: GestureDetector(
+                            onTap: () {
+                              if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
+                            },
+                            child: SingleChildScrollView(
+                              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                              child: Container(
+                                padding: const EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 10),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    InventoryDetailsHeader(
+                                      setState: () {
                                         setState(() {});
                                       },
+                                      setCurrentIndex: (p0) {
+                                        ref.read(detailsPageIndexTabProvider.notifier).update((state) => 0);
+                                        tabviewController.animateTo(0);
+                                      },
+                                      id: data.leadId!,
+                                      inventoryDetails: data,
+                                      title: data.leadTitle!,
+                                      category: data.leadcategory!,
+                                      type: data.leadType!,
+                                      propertyCategory: data.propertycategory!,
+                                      status: data.leadStatus!,
+                                      price: "${data.propertypricerange?.arearangestart}-${data.propertypricerange?.arearangeend}",
                                     ),
-                                  if (currentSelectedTab == 1) ActivityTabView(details: data),
-                                  if (currentSelectedTab == 2) TodoTabView(id: data.leadId!),
-                                ],
+                                    if (Responsive.isMobile(context))
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 10),
+                                        child: Wrap(
+                                          runSpacing: 10,
+                                          crossAxisAlignment: WrapCrossAlignment.center,
+                                          alignment: WrapAlignment.spaceBetween,
+                                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            HeaderChips(
+                                              id: data.leadId!,
+                                              category: data.leadcategory!,
+                                              type: data.leadType!,
+                                              propertyCategory: data.propertycategory!,
+                                              status: data.leadStatus!,
+                                              inventoryDetails: data,
+                                            ),
+                                            CustomText(
+                                              size: 14,
+                                              softWrap: true,
+                                              textAlign: TextAlign.start,
+                                              title: data.propertypricerange?.arearangestart != null
+                                                  ? '${data.propertypricerange?.arearangestart} - ${data.propertypricerange?.arearangeend}'
+                                                  : '',
+                                              color: AppColor.primary,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    // ListTile(
+                                    //   contentPadding: const EdgeInsets.all(0),
+                                    //   leading: const Icon(
+                                    //     Icons.location_on_outlined,
+                                    //     size: 20,
+                                    //     color: Colors.black,
+                                    //   ),
+                                    //   minLeadingWidth: 2,
+                                    //   horizontalTitleGap: 8,
+                                    //   titleAlignment: ListTileTitleAlignment.center,
+                                    //   title: CustomText(
+                                    //     title: '${data.preferredlocality!.state},${data.preferredlocality!.city},${data.preferredlocality!.addressline1}',
+                                    //     size: 12,
+                                    //     fontWeight: FontWeight.w400,
+                                    //     color: const Color(0xFFA8A8A8),
+                                    //   ),
+                                    // ),
+                                    if (Responsive.isMobile(context))
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 15),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                ElevatedButton(
+                                                  onPressed: () {
+                                                    showOwnerDetailsAndAssignToBottomSheet(
+                                                      context,
+                                                      'Owner Details',
+                                                      ContactInformation(customerinfo: data.customerinfo!),
+                                                    );
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: AppColor.primary,
+                                                    // minimumSize: const Size(100, 20),
+                                                    padding: const EdgeInsets.all(8),
+                                                  ),
+                                                  child: const Text(
+                                                    'Owner Details',
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.w600,
+                                                      letterSpacing: 0.3,
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    showOwnerDetailsAndAssignToBottomSheet(
+                                                      context,
+                                                      'Assignment',
+                                                      AssignmentWidget(
+                                                        id: data.leadId!,
+                                                        assignto: data.assignedto!,
+                                                        imageUrlCreatedBy:
+                                                            data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                        createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                    children: data.assignedto!.asMap().entries.map((entry) {
+                                                      final index = entry.key;
+                                                      final user = entry.value;
+                                                      return Transform.translate(
+                                                        offset: Offset(index * -8.0, 0),
+                                                        child: Container(
+                                                          width: 28,
+                                                          height: 28,
+                                                          decoration: BoxDecoration(
+                                                            border: Border.all(color: Colors.white),
+                                                            image: DecorationImage(
+                                                              image: NetworkImage(
+                                                                user.image!.isEmpty ? noImg : user.image!,
+                                                              ),
+                                                              fit: BoxFit.fill,
+                                                            ),
+                                                            borderRadius: BorderRadius.circular(40),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }).toList(),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.calendar_month_outlined,
+                                                  size: 20,
+                                                  color: Colors.black,
+                                                ),
+                                                const SizedBox(width: 5),
+                                                CustomText(
+                                                  title: DateFormat('d MMM y').format(data.createdate!.toDate()),
+                                                  size: 12,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: const Color(0xFFA8A8A8),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    // if (Responsive.isMobile(context))
+                                    //   Padding(
+                                    //     padding: const EdgeInsets.only(top: 12.0),
+                                    //     child: CustomText(
+                                    //       title: data.propertypricerange?.arearangestart != null
+                                    //           ? '${data.propertypricerange?.arearangestart} ${data.propertypricerange?.arearangeend}'
+                                    //           : '50k/month',
+                                    //       color: AppColor.primary,
+                                    //     ),
+                                    //   ),
+                                    if (!AppConst.getPublicView())
+                                      TabBarWidget(
+                                        tabviewController: tabviewController,
+                                        onTabChanged: (e) {
+                                          ref.read(detailsPageIndexTabProvider.notifier).update((state) => e);
+                                        },
+                                      ),
+                                    const SizedBox(
+                                      height: 30,
+                                    ),
+                                    if (currentSelectedTab == 0)
+                                      DetailsTabView(
+                                        id: data.leadId!,
+                                        isLeadView: true,
+                                        data: data,
+                                        updateData: () {
+                                          setState(() {});
+                                        },
+                                      ),
+                                    if (currentSelectedTab == 1) ActivityTabView(details: data),
+                                    if (currentSelectedTab == 2) TodoTabView(id: data.leadId!),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    if (!Responsive.isMobile(context)) ...[
-                      const VerticalDivider(
-                        indent: 15,
-                        width: 30,
-                      ),
-                      SizedBox(
-                        width: Responsive.isTablet(context) ? 300 : 340,
-                        // flex: 1,
-                        child: SingleChildScrollView(
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            child: Column(
-                              children: [
-                                ContactInformation(
-                                  customerinfo: data.customerinfo!,
-                                ),
-                                // if (Responsive.isDesktop(context))
-                                AssignmentWidget(
-                                  id: data.leadId!,
-                                  assignto: data.assignedto!,
-                                  imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                  createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
-                                  data: data,
-                                ),
-                                if (Responsive.isDesktop(context))
-                                  MapViewWidget(
-                                    latLng: LatLng(data.preferredlocation![0], data.preferredlocation![1]),
-                                    state: data.preferredlocality!.state!,
-                                    city: data.preferredlocality!.city!,
-                                    addressline1: data.preferredlocality?.addressline1,
-                                    addressline2: data.preferredlocality?.addressline2,
-                                    locality: data.preferredlocality!.locality!,
+                      if (!Responsive.isMobile(context)) ...[
+                        const VerticalDivider(
+                          indent: 15,
+                          width: 30,
+                        ),
+                        SizedBox(
+                          width: Responsive.isTablet(context) ? 300 : 340,
+                          // flex: 1,
+                          child: SingleChildScrollView(
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              child: Column(
+                                children: [
+                                  ContactInformation(
+                                    customerinfo: data.customerinfo!,
                                   ),
-                              ],
+                                  // if (Responsive.isDesktop(context))
+                                  AssignmentWidget(
+                                    id: data.leadId!,
+                                    assignto: data.assignedto!,
+                                    imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                    createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
+                                    data: data,
+                                  ),
+                                  if (Responsive.isDesktop(context))
+                                    MapViewWidget(
+                                      latLng: LatLng(data.preferredlocation![0], data.preferredlocation![1]),
+                                      state: data.preferredlocality!.state!,
+                                      city: data.preferredlocality!.city!,
+                                      addressline1: data.preferredlocality?.addressline1,
+                                      addressline2: data.preferredlocality?.addressline2,
+                                      locality: data.preferredlocality!.locality!,
+                                    ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                      ],
                     ],
-                  ],
+                  ),
                 );
               }
             }

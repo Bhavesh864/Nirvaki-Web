@@ -98,12 +98,12 @@ Widget buildLeadQuestions(
         ref.read(selectedOptionNotifier.notifier).setRange(selectedchipOption);
       });
     }
-    if (!isEdit && question.questionId == 23) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        // ref.read(selectedOptionNotifier.notifier).setRange(selectedchipOption);
-        notify.add({"id": question.questionId, "item": "Sq ft"});
-      });
-    }
+    // if (!isEdit && question.questionId == 23) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     // ref.read(selectedOptionNotifier.notifier).setRange(selectedchipOption);
+    //     notify.add({"id": question.questionId, "item": "Sq ft"});
+    //   });
+    // }
 
     if (!isEdit && question.questionId == 47) {
       selectedchipOption = 'Ft';

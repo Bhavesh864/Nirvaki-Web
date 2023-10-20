@@ -207,7 +207,6 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                 if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
                               },
                               child: SingleChildScrollView(
-                                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                                 child: Container(
                                   padding: const EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 10),
                                   child: Column(
