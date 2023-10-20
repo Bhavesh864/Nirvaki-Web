@@ -699,7 +699,6 @@ Widget buildLeadQuestions(
       RangeValues defaultRentRangeValues = stateValue ?? rentRangeValues;
       if (selectedValues.isNotEmpty && !selectedValues.any((element) => element["id"] == 32)) {
         if (isRentSelected) {
-          print("objec-------------t");
           stateValue = const RangeValues(0, 1000000);
           WidgetsBinding.instance.addPostFrameCallback((_) {
             notify.add({"id": 32, "item": stateValue});
@@ -729,9 +728,7 @@ Widget buildLeadQuestions(
                     formatValue(defaultRentRangeValues.start),
                     formatValue(defaultRentRangeValues.end),
                   ),
-                  divisions: 10,
-
-                  // divisions: (100000000 - 1000) ~/ divisionValue,
+                  divisions: defaultRentRangeValues.start > 100000 ? (1000000 - 0) ~/ 10000 : (1000000 - 0) ~/ 1000,
                   onChanged: (RangeValues newVal) {
                     setState(() {
                       defaultRentRangeValues = newVal;
@@ -761,8 +758,7 @@ Widget buildLeadQuestions(
                     formatValue(defaultBuyRangeValues.start),
                     formatValue(defaultBuyRangeValues.end),
                   ),
-                  // divisions: (50000000 - 100000) ~/ divisionValue,
-                  divisions: 10,
+                  divisions: defaultBuyRangeValues.start >= 10000000 ? ((500000000 - 500000) / 5000000).round() : ((500000000 - 500000) / 500000).round(),
                   onChanged: (RangeValues newVal) {
                     setState(() {
                       defaultBuyRangeValues = newVal;
@@ -784,26 +780,33 @@ Widget buildLeadQuestions(
         });
       }
     }
+    final selectedOption = ref.read(selectedOptionNotifier);
     double divisionValue = 50;
+
     return StatefulBuilder(
       builder: (context, setState) {
         return Column(
           children: [
             CustomText(
-              title:
-                  'Area: ${formatValueforOnlyNumbers(stateValue?.start ?? defaultAreaRangeValues.start)} - ${formatValueforOnlyNumbers(stateValue?.end ?? defaultAreaRangeValues.end)}',
+              title: selectedOption == 'Acre'
+                  ? 'Area: ${formatValueForAcre(stateValue?.start ?? defaultAreaRangeValues.start)} - ${formatValueForAcre(stateValue?.end ?? defaultAreaRangeValues.end)}'
+                  : 'Area: ${formatValueforOnlyNumbers(stateValue?.start ?? defaultAreaRangeValues.start)} - ${formatValueforOnlyNumbers(stateValue?.end ?? defaultAreaRangeValues.end)}',
               size: 14,
             ),
             RangeSlider(
               values: stateValue ?? defaultAreaRangeValues,
               min: areaRange.start,
               max: areaRange.end,
-              labels: RangeLabels(
-                formatValueforOnlyNumbers(stateValue?.start ?? defaultAreaRangeValues.start),
-                formatValueforOnlyNumbers(stateValue?.end ?? defaultAreaRangeValues.end),
-              ),
-              divisions: 10,
-              // divisions: (10000 - 500) ~/ divisionValue,
+              labels: selectedOption == 'Acre'
+                  ? RangeLabels(
+                      formatValueForAcre(stateValue?.start ?? defaultAreaRangeValues.start),
+                      formatValueForAcre(stateValue?.end ?? defaultAreaRangeValues.end),
+                    )
+                  : RangeLabels(
+                      formatValueforOnlyNumbers(stateValue?.start ?? defaultAreaRangeValues.start),
+                      formatValueforOnlyNumbers(stateValue?.end ?? defaultAreaRangeValues.end),
+                    ),
+              divisions: selectedOption == 'Acre' ? (areaRange.end - areaRange.start) ~/ 0.25 : (areaRange.end - areaRange.start) ~/ 50,
               onChanged: (RangeValues newVal) {
                 setState(() {
                   // defaultAreaRangeValues = newVal;
