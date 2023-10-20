@@ -592,13 +592,17 @@ class LocalityNames {
   String? city;
   String? state;
   String? locality;
-  LocalityNames({this.city, this.state, this.locality});
+  String? fullAddress;
+  LocalityNames({this.city, this.state, this.locality, this.fullAddress});
   LocalityNames.fromJson(Map<String, dynamic> json) {
     if (json["city"] is String) {
       city = json["city"];
     }
     if (json["state"] is String) {
       state = json["state"];
+    }
+    if (json["fullAddress"] is String) {
+      fullAddress = json["fullAddress"];
     }
 
     if (json["locality"] is String) {
@@ -611,6 +615,7 @@ class LocalityNames {
     data["city"] = city;
     data["state"] = state;
     data["locality"] = locality;
+    data["fullAddress"] = fullAddress;
     return data;
   }
 }
