@@ -183,7 +183,7 @@ class CardHeaderState extends ConsumerState<CardHeader> {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4),
-                  color: cardData.duedate != null && DateFormat('dd-MM-yy').parse(cardData.duedate!).isBefore(DateTime.now())
+                  color: cardData.duedate != null && DateFormat('dd-MM-yy HH:mm').parse(cardData.duedate! + ' 14:00').isBefore(DateTime.now())
                       ? const Color.fromARGB(255, 249, 145, 137).withOpacity(0.2)
                       : AppColor.chipGreyColor,
                 ),
