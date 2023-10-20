@@ -44,7 +44,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: Responsive.isMobile(context) ? 0 : 10),
+          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: Responsive.isMobile(context) ? 0 : 10),
           child: StreamBuilder(
               stream: userInfo,
               builder: (context, snapshot) {
@@ -279,19 +279,28 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                         });
                       }
                     },
-                    child: CircleAvatar(
-                      radius: 35,
-                      backgroundImage: isNameEditing ? null : NetworkImage(userData.image),
-                      child: isNameEditing
-                          ? profilePhoto == null && webProfile == null
-                              ? const Icon(
-                                  Icons.add,
-                                  size: 25,
-                                )
-                              : (kIsWeb)
-                                  ? ClipOval(child: Image.memory(webProfile!, width: 70, height: 70, fit: BoxFit.cover))
-                                  : ClipOval(child: Image.file(profilePhoto!, width: 70, height: 70, fit: BoxFit.cover))
-                          : null,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                      ),
+                      child: CircleAvatar(
+                        radius: 35,
+                        backgroundImage: isNameEditing ? null : NetworkImage(userData.image),
+                        child: isNameEditing
+                            ? profilePhoto == null && webProfile == null
+                                ? const Icon(
+                                    Icons.add,
+                                    size: 25,
+                                  )
+                                : (kIsWeb)
+                                    ? ClipOval(child: Image.memory(webProfile!, width: 70, height: 70, fit: BoxFit.cover))
+                                    : ClipOval(child: Image.file(profilePhoto!, width: 70, height: 70, fit: BoxFit.cover))
+                            : null,
+                      ),
                     ),
                   ),
                   const SizedBox(
@@ -611,6 +620,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
 }
 
 Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, TextEditingController textController, BuildContext context, FormFieldValidator<String>? validator) {
+  final width = MediaQuery.of(context).size.width;
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -628,7 +638,11 @@ Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, Tex
           //   minHeight: 40.0,
           // ),
           // height: 50,
-          width: Responsive.isDesktop(context) ? 300 : 160,
+          width: Responsive.isDesktop(context)
+              ? 300
+              : width > 390
+                  ? 160
+                  : 145,
           child: CustomTextInput(
             margin: const EdgeInsets.symmetric(vertical: 5),
             controller: textController,
@@ -660,6 +674,8 @@ Widget mobileInfoFields(
   openModal,
   bool isEmpty,
 ) {
+  final width = MediaQuery.of(context).size.width;
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -674,7 +690,11 @@ Widget mobileInfoFields(
       if (isEditing) ...[
         SizedBox(
           // height: 50,
-          width: Responsive.isDesktop(context) ? 300 : 160,
+          width: Responsive.isDesktop(context)
+              ? 300
+              : width > 390
+                  ? 160
+                  : 145,
           child: MobileNumberInputField(
             // bottomMargin: kIsWeb ? const EdgeInsets.only(bottom: 8.5) : const EdgeInsets.only(bottom: 1.5),
             margin: const EdgeInsets.symmetric(vertical: 5),

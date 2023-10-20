@@ -175,6 +175,10 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                         width: 150,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Colors.grey,
+                            width: 1.0,
+                          ),
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),

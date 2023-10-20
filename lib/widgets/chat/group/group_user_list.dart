@@ -70,10 +70,19 @@ class _GroupUserListState extends ConsumerState<GroupUserList> {
                 child: ListTile(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                  leading: CircleAvatar(
-                    radius: 21,
-                    backgroundImage: NetworkImage(
-                      user.image.isEmpty ? noImg : user.image,
+                  leading: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                    ),
+                    child: CircleAvatar(
+                      radius: 21,
+                      backgroundImage: NetworkImage(
+                        user.image.isEmpty ? noImg : user.image,
+                      ),
                     ),
                   ),
                   title: AppText(

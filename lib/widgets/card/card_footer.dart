@@ -138,14 +138,21 @@ class CardFooter extends StatelessWidget {
                       margin: EdgeInsets.zero,
                       width: 24,
                       height: 24,
+                      //   decoration: BoxDecoration(
+                      //   shape: BoxShape.circle,
+                      //   border: Border.all(
+                      //     color: Colors.grey,
+                      //     width: 1.0,
+                      //   ),
+                      // ),
                       decoration: index > 1
                           ? BoxDecoration(
-                              border: Border.all(color: Colors.white),
+                              border: Border.all(color: Colors.grey, width: 1.0),
                               color: index > 1 ? Colors.grey.shade300 : null,
                               borderRadius: BorderRadius.circular(40),
                             )
                           : BoxDecoration(
-                              border: Border.all(color: Colors.white),
+                              border: Border.all(color: Colors.grey, width: 1.0),
                               image: DecorationImage(
                                 image: NetworkImage(
                                   user.image!.isEmpty ? noImg : user.image!,

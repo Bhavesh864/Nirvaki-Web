@@ -104,10 +104,19 @@ class _ChatScreenHeaderState extends State<ChatScreenHeader> {
                       },
                       child: Row(
                         children: [
-                          CircleAvatar(
-                            radius: 20,
-                            backgroundImage: NetworkImage(
-                              profilePic.isEmpty ? noImg : profilePic,
+                          Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.grey,
+                                width: 1.0,
+                              ),
+                            ),
+                            child: CircleAvatar(
+                              radius: 20,
+                              backgroundImage: NetworkImage(
+                                profilePic.isEmpty ? noImg : profilePic,
+                              ),
                             ),
                           ),
                           const SizedBox(

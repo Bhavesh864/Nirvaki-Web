@@ -269,11 +269,20 @@ class TestList extends ConsumerWidget {
                                 style: const TextStyle(fontSize: 12),
                               ),
                             ),
-                            leading: CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                chatItem.profilePic == '' ? noImg : chatItem.profilePic,
+                            leading: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.grey,
+                                  width: 1.0,
+                                ),
                               ),
-                              radius: 25,
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                  chatItem.profilePic == '' ? noImg : chatItem.profilePic,
+                                ),
+                                radius: 25,
+                              ),
                             ),
                             trailing: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
