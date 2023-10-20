@@ -44,6 +44,8 @@ class CardDetails {
   Timestamp? createdate;
   @HiveField(18)
   String? linkedItemId;
+  @HiveField(19)
+  String? dueTime;
   CardDetails(
       {this.cardType,
       required this.workitemId,
@@ -62,6 +64,7 @@ class CardDetails {
       this.propertypricerange,
       this.duedate,
       this.linkedItemId,
+      this.dueTime,
       this.createdby,
       this.customerinfo});
 
@@ -117,6 +120,9 @@ class CardDetails {
     if (json["duedate"] is String) {
       duedate = json["duedate"];
     }
+    if (json["dueTime"] is String) {
+      dueTime = json["dueTime"];
+    }
     if (json["createdby"] is Map) {
       createdby = json["createdby"] == null ? null : Createdby.fromJson(json["createdby"]);
     }
@@ -159,6 +165,7 @@ class CardDetails {
       propertyarearange: json["propertyarearange"] == null ? null : Propertyarearange.fromJson(json['propertyarearange']),
       propertypricerange: json["propertypricerange"] == null ? null : Propertypricerange.fromJson(json["propertypricerange"]),
       duedate: json["duedate"] as String?,
+      dueTime: json["dueTime"] as String?,
       customerinfo: json["customerinfo"] == null ? null : Customerinfo.fromJson(json["customerinfo"]),
     );
   }
@@ -191,6 +198,7 @@ class CardDetails {
       data["propertypricerange"] = propertypricerange?.toJson();
     }
     data["duedate"] = duedate;
+    data["dueTime"] = dueTime;
     if (createdby != null) {
       data["createdby"] = createdby?.toJson();
     }
