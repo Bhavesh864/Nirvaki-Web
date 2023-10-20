@@ -337,15 +337,15 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                     createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
                                     data: data,
                                   ),
-                                  if (Responsive.isDesktop(context))
-                                    MapViewWidget(
-                                      latLng: LatLng(data.preferredlocation![0], data.preferredlocation![1]),
-                                      state: data.preferredlocality!.state!,
-                                      city: data.preferredlocality!.city!,
-                                      addressline1: data.preferredlocality?.addressline1,
-                                      addressline2: data.preferredlocality?.addressline2,
-                                      locality: data.preferredlocality!.locality!,
-                                    ),
+                                  // if (Responsive.isDesktop(context))
+                                  //   MapViewWidget(
+                                  //     latLng: LatLng(data.preferredlocation![0], data.preferredlocation![1]),
+                                  //     state: data.preferredlocality!.state!,
+                                  //     city: data.preferredlocality!.city!,
+                                  //     addressline1: data.preferredlocality?.addressline1,
+                                  //     addressline2: data.preferredlocality?.addressline2,
+                                  //     locality: data.preferredlocality!.locality!,
+                                  //   ),
                                 ],
                               ),
                             ),
