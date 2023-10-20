@@ -503,14 +503,14 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
 }
 
 Future<GooglePlaces> getPlaces(String text) async {
-  // final uri = Uri.parse("https://api.greencenteral.com/api/v1/user/locations?name=${text}");
-  // final uri = Uri.parse("http://142.93.234.216:44210/api/v1/user/locations?name=${text}");
   final uri = Uri.parse(kIsWeb
-      ? "https://proxy.cors.sh/https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$text&components=country:IN&key=${AppConst.googlemapkey}"
+      ? "https://us-central1-brokr-in.cloudfunctions.net/getPlacesData?input=$text"
       : "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$text&components=country:IN&key=${AppConst.googlemapkey}");
-  final response = await http.get(uri, headers: {
-    "Content-Type": "application/json",
-  });
+  // final uri = Uri.parse("http://142.93.234.216:44210/api/v1/user/locations?name=${text}");
+  // final uri = Uri.parse(kIsWeb
+  //     ? "https://proxy.cors.sh/https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$text&components=country:IN&key=${AppConst.googlemapkey}"
+  //     : "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$text&components=country:IN&key=${AppConst.googlemapkey}");
+  final response = await http.get(uri);
   var responseData = json.decode(response.body);
   if (response.statusCode == 200) {
     return GooglePlaces.fromJson(responseData);

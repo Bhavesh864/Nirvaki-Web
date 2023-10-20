@@ -2,6 +2,7 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
@@ -10,6 +11,7 @@ import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
+import '../../Customs/snackbar.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
@@ -93,14 +95,13 @@ class InventoryDetailsHeader extends ConsumerWidget {
             SizedBox(
               width: Responsive.isMobile(context) ? width! * 0.75 : null,
               child: Padding(
-                padding: const EdgeInsets.only(right: 8.0), // Adjust as needed
+                padding: const EdgeInsets.only(right: 8.0),
                 child: Text(
                   title,
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
                   ),
-                  // overflow: TextOverflow.ellipsis,
                 ),
               ),
             ),
