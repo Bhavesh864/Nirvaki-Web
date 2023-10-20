@@ -44,18 +44,19 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
   final areaUnit = getDataById(state, 23);
   final superArea = getDataById(state, 24);
   // final carpetArea = getDataById(state, 25);
-  final propertyState = getDataById(state, 26);
-  final propertyCity = getDataById(state, 27);
-  final addressLine1 = getDataById(state, 28);
-  final addressLine2 = getDataById(state, 29);
+  // final propertyState = getDataById(state, 26);
+  // final propertyCity = getDataById(state, 27);
+  // final addressLine1 = getDataById(state, 28);
+  // final addressLine2 = getDataById(state, 29);
   final floorNumber = getDataById(state, 30);
   final latlng = getDataById(state, 31);
   final budgetPrice = getDataById(state, 32);
   final preferredpropertyfacing = getDataById(state, 34);
   final comments = getDataById(state, 35);
   final List<User> assignto = getDataById(state, 36);
-  final locality = getDataById(state, 54);
+  // final locality = getDataById(state, 54);
   final furnishedStatus = getDataById(state, 55);
+  final listofLocality = getDataById(state, 56);
 
   // commerical
   final availability = getDataById(state, 37);
@@ -87,7 +88,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       linkedItemType: "LD",
       brokerid: currentUserdata?.brokerId,
       cardType: "LD",
-      cardTitle: "$propertyCategory $propertyKind-$propertyCity",
+      cardTitle: "$propertyCategory $propertyKind",
       cardDescription: "Want to $leadCategory her $bedrooms BHK for ${formatValue(budgetPrice?.start)}-${formatValue(budgetPrice?.end)} rupees",
       customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
       cardStatus: "New",
@@ -143,8 +144,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       plotdetails: Plotdetails(boundarywall: boundaryWall, opensides: openSides),
       amenities: amenities ?? [],
       propertyarea: Propertyarea(unit: areaUnit),
-      preferredlocality: Preferredlocality(
-          state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, prefferedfloornumber: floorNumber, locality: locality),
+      preferredlocality: Preferredlocality(listofLocality: listofLocality, prefferedfloornumber: floorNumber),
       propertyarearange: Propertyarearange(unit: areaUnit, arearangestart: formatValueforOnlyNumbers(superArea.start), arearangeend: formatValueforOnlyNumbers(superArea.end)),
       propertypricerange: Propertypricerange(arearangestart: formatValue(budgetPrice.start), arearangeend: formatValue(budgetPrice.end)),
       reservedparking: Reservedparking(covered: coveredparking),
