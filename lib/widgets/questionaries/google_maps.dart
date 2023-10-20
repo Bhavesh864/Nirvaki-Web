@@ -63,7 +63,7 @@ class _CustomGoogleMapState extends ConsumerState<CustomGoogleMap> {
   }
 
   Future<void> loadMap() async {
-    final placeName = '${widget.stateName} ${widget.cityName} ${widget.locality} ${widget.address1 ?? ''} ${widget.address2 ?? ''}';
+    final placeName = '${widget.stateName} ${widget.cityName} ${widget.locality} ${widget.address2 ?? ''} ${widget.address1 ?? ''}';
     location = await getLatLng(placeName);
 
     if (!widget.selectedValues!.any((element) => element['id'] == 31)) {
