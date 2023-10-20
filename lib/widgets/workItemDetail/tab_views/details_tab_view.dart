@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -15,6 +16,7 @@ import 'package:yes_broker/widgets/workItemDetail/tab_views/iframe_modules.dart'
 import '../../../Customs/custom_chip.dart';
 import '../../../Customs/custom_text.dart';
 import '../../../Customs/responsive.dart';
+import '../../../Customs/text_utility.dart';
 import '../../../constants/app_constant.dart';
 import '../../../constants/functions/datetime/date_time.dart';
 import '../../../constants/functions/workitems_detail_methods.dart';
@@ -812,6 +814,43 @@ class _DetailsTabViewState extends State<DetailsTabView> {
           ),
         if (!Responsive.isDesktop(context) && !AppConst.getPublicView()) ...[
           if (widget.isLeadView) ...[
+            const SizedBox(height: 5),
+            const AppText(
+              text: "Preffered Locality",
+              fontsize: 20,
+              fontWeight: FontWeight.w700,
+            ),
+
+            // Column(
+            //   crossAxisAlignment: CrossAxisAlignment.start,
+            //   children: widget.data.preferredlocality?.listofLocality?.map(
+            //         (e) {
+            //           return Container(
+            //             margin: const EdgeInsets.only(bottom: 7),
+            //             child: Row(
+            //               children: [
+            //                 const Icon(
+            //                   Icons.location_on_outlined,
+            //                   size: 16,
+            //                   color: Colors.black,
+            //                 ),
+            //                 Container(
+            //                   margin: const EdgeInsets.only(left: 4),
+            //                   width: 300,
+            //                   child: AppText(
+            //                     text: e.fullAddress.toString(),
+            //                     softwrap: true,
+            //                     fontsize: 14,
+            //                   ),
+            //                 ),
+            //               ],
+            //             ),
+            //           );
+            //         },
+            //       ).toList() ??
+            //       [SizedBox()],
+            // )
+
             // MapViewWidget(
             //   latLng: widget.isLeadView
             //       ? LatLng(widget.data.preferredlocation![0], widget.data.preferredlocation![1])

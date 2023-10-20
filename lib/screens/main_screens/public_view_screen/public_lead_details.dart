@@ -10,6 +10,7 @@ import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/small_custom_profile_image.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import '../../../Customs/custom_text.dart';
+import '../../../Customs/text_utility.dart';
 import '../../../constants/firebase/userModel/broker_info.dart';
 import '../../../constants/functions/workitems_detail_methods.dart';
 import '../../../constants/utils/colors.dart';
@@ -205,6 +206,7 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
                             child: Container(
                               padding: const EdgeInsets.all(10),
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   StreamBuilder(
                                     stream: FirebaseFirestore.instance.collection("brokerInfo").where("brokerid", isEqualTo: data.brokerid).snapshots(),
@@ -220,14 +222,40 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
                                       return const SizedBox();
                                     },
                                   ),
-                                  // if (Responsive.isDesktop(context))
-                                  //   MapViewWidget(
-                                  //     state: data.preferredlocality!.state!,
-                                  //     city: data.preferredlocality!.city!,
-                                  //     addressline1: data.preferredlocality!.addressline1!,
-                                  //     addressline2: data.preferredlocality?.addressline2,
-                                  //     locality: data.preferredlocality!.locality!,
-                                  //   ),
+                                  const AppText(
+                                    text: "Preffered Locality",
+                                    fontsize: 20,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: data.preferredlocality?.listofLocality?.map(
+                                          (e) {
+                                            return Container(
+                                              margin: const EdgeInsets.only(bottom: 7),
+                                              child: Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons.location_on_outlined,
+                                                    size: 16,
+                                                    color: Colors.black,
+                                                  ),
+                                                  Container(
+                                                    margin: const EdgeInsets.only(left: 4),
+                                                    width: 300,
+                                                    child: AppText(
+                                                      text: e.fullAddress.toString(),
+                                                      softwrap: true,
+                                                      fontsize: 14,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        ).toList() ??
+                                        [],
+                                  )
                                 ],
                               ),
                             ),
