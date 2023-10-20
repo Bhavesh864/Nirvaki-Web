@@ -329,7 +329,7 @@ Widget buildInventoryQuestions(
             LabelTextInputField(
               labelText: 'Search your location',
               inputController: controller,
-              hintText: "Search",
+              hintText: "Search here...",
               onChanged: (value) {
                 getPlaces(value).then((places) {
                   final descriptions = places.predictions?.map((prediction) => prediction.description) ?? [];
@@ -408,6 +408,7 @@ Widget buildInventoryQuestions(
                 notify.add({"id": 26, "item": newvalue.trim()});
               },
               inputController: statecontroller,
+              readyOnly: true,
               isMandatory: true,
               labelText: "State",
               validator: (value) => validateForNormalFeild(value: value, props: "State"),
@@ -418,6 +419,7 @@ Widget buildInventoryQuestions(
               },
               inputController: citycontroller,
               isMandatory: true,
+              readyOnly: true,
               labelText: "City",
               validator: (value) => validateForNormalFeild(value: value, props: "City"),
             ),
@@ -427,6 +429,7 @@ Widget buildInventoryQuestions(
               },
               inputController: localitycontroller,
               isMandatory: true,
+              readyOnly: true,
               labelText: "Locality",
               validator: (value) => validateForNormalFeild(value: value, props: "Locality"),
             ),
