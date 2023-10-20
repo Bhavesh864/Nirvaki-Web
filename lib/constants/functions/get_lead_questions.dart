@@ -436,7 +436,6 @@ Widget buildLeadQuestions(
                             statecontroller.text = stateName;
                             citycontroller.text = cityName;
                             localitycontroller.text = remainingWords;
-
                             notify.add({"id": 26, "item": stateName});
                             notify.add({"id": 27, "item": cityName});
                             notify.add({"id": 54, "item": remainingWords});
