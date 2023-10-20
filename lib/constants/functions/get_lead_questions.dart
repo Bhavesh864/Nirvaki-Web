@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:number_to_words/number_to_words.dart';
+import 'package:yes_broker/constants/app_constant.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/riverpodstate/arearange_state.dart';
 import '../../Customs/snackbar.dart';
 import '../../Customs/text_utility.dart';
@@ -227,7 +229,12 @@ Widget buildLeadQuestions(
     String textResult = '';
 
     final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
-    TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
+    TextEditingController controller = TextEditingController(
+        text: question.questionId == 56
+            ? ""
+            : value.isNotEmpty
+                ? value[0]["item"]
+                : "");
     String mobileCountryCode = '+91';
     String whatsappCountryCode = '+91';
 
@@ -352,37 +359,11 @@ Widget buildLeadQuestions(
     }
 
     if (question.questionId == 56) {
-      String? statevalue = "";
-      String? cityvalue = "";
-      String? localityvalue = "";
-      List<String> selectedLocality = [];
-      // String? address1value = "";
-      // String? address2value = "";
-      final existingState = selectedValues.any((element) => element["id"] == 26);
-      final existingCity = selectedValues.any((element) => element["id"] == 27);
-      final existingLocality = selectedValues.any((element) => element["id"] == 54);
-      // final existingaddress1 = selectedValues.any((element) => element["id"] == 28);
-      // final existingaddress2 = selectedValues.any((element) => element["id"] == 29);
-      if (existingState) {
-        statevalue = selectedValues.firstWhere((element) => element["id"] == 26)["item"];
+      List<LocalityNames> selectedLocality = [];
+      if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+        selectedLocality = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? [];
       }
-      if (existingCity) {
-        cityvalue = selectedValues.firstWhere((element) => element["id"] == 27)["item"];
-      }
-      if (existingLocality) {
-        localityvalue = selectedValues.firstWhere((element) => element["id"] == 54)["item"];
-      }
-      // if (existingaddress1) {
-      //   address1value = selectedValues.firstWhere((element) => element["id"] == 28)["item"];
-      // }
-      // if (existingaddress2) {
-      //   address2value = selectedValues.firstWhere((element) => element["id"] == 29)["item"];
-      // }
-      TextEditingController statecontroller = TextEditingController(text: statevalue);
-      TextEditingController citycontroller = TextEditingController(text: cityvalue);
-      TextEditingController localitycontroller = TextEditingController(text: localityvalue);
-      // TextEditingController address1controller = TextEditingController(text: address1value);
-      // TextEditingController address2controller = TextEditingController(text: address2value);
+
       List placesList = [];
       return StatefulBuilder(builder: (context, setState) {
         return Column(
@@ -391,17 +372,25 @@ Widget buildLeadQuestions(
             LabelTextInputField(
               labelText: 'Search your location',
               inputController: controller,
-              hintText: "Search",
+              hintText: "Search here...",
+              validator: (value) {
+                if (selectedLocality.isEmpty) {
+                  return "Please Add your Preffered Location";
+                }
+                return null;
+              },
               onChanged: (value) {
+                // if (selectedLocality.length < 5) {
                 getPlaces(value).then((places) {
                   final descriptions = places.predictions?.map((prediction) => prediction.description) ?? [];
                   setState(() {
                     placesList = descriptions.toList();
                   });
                 });
+                // }
               },
             ),
-            if (placesList.isNotEmpty)
+            if (placesList.isNotEmpty) ...[
               Container(
                 height: 200,
                 decoration: BoxDecoration(border: Border.all(color: Colors.grey, width: 0.8), borderRadius: BorderRadius.circular(8)),
@@ -417,11 +406,15 @@ Widget buildLeadQuestions(
                         textColor: Colors.black,
                       ),
                       onTap: () {
+                        if (selectedLocality.length >= 5) {
+                          customSnackBar(context: context, text: "You can add maximum 5 Localities");
+                          controller.clear();
+                          setState(() {
+                            placesList = [];
+                          });
+                          return;
+                        }
                         final str = placesList[index];
-                        notify.add({"id": question.questionId, "item": str});
-                        controller.text = str;
-                        selectedLocality.add(str);
-
                         try {
                           List<String> words = str.split(' ');
                           if (words.length >= 3) {
@@ -434,13 +427,11 @@ Widget buildLeadQuestions(
                             }
                             final cityName = lastThreeWordsList[0].endsWith(',') ? lastThreeWordsList[0].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[0];
                             final stateName = lastThreeWordsList[1].endsWith(',') ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[1];
-                            statecontroller.text = stateName;
-                            citycontroller.text = cityName;
-                            localitycontroller.text = remainingWords;
-
-                            notify.add({"id": 26, "item": stateName});
-                            notify.add({"id": 27, "item": cityName});
-                            notify.add({"id": 54, "item": remainingWords});
+                            controller.text = str;
+                            if (selectedLocality.length < 5) {
+                              selectedLocality.add(LocalityNames(city: cityName, locality: remainingWords, fullAddress: str, state: stateName));
+                            }
+                            notify.add({"id": question.questionId, "item": selectedLocality});
                             setState(() {
                               placesList = [];
                             });
@@ -449,8 +440,6 @@ Widget buildLeadQuestions(
                             setState(() {
                               placesList = [];
                             });
-                            // controller.text = "";
-                            // controller.text = "";
                             customSnackBar(context: context, text: 'Choose a proper address');
                           }
                         } catch (e) {
@@ -463,78 +452,29 @@ Widget buildLeadQuestions(
                   },
                 ),
               ),
-            Wrap(
-              children: selectedLocality.map((locality) {
-                return Padding(
-                  padding: const EdgeInsets.all(4),
-                  child: Chip(
-                    backgroundColor: AppColor.secondary,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                    label: AppText(
-                      text: locality,
-                      fontsize: 14,
-                    ),
-                    onDeleted: () {
-                      setState(() {
-                        selectedLocality.remove(locality);
-                      });
-                    },
-                  ),
-                );
-              }).toList(),
-            )
-            // LabelTextInputField(
-            //     onChanged: (newvalue) {
-            //       notify.add({"id": 26, "item": newvalue.trim()});
-            //     },
-            //     inputController: statecontroller,
-            //     isMandatory: true,
-            //     labelText: "State",
-            //     validator: (value) => validateForNormalFeild(value: value, props: "State")),
-            // LabelTextInputField(
-            //     onChanged: (newvalue) {
-            //       notify.add({"id": 27, "item": newvalue.trim()});
-            //     },
-            //     inputController: citycontroller,
-            //     isMandatory: true,
-            //     labelText: "City",
-            //     validator: (value) => validateForNormalFeild(value: value, props: "City")),
-            // LabelTextInputField(
-            //     onChanged: (newvalue) {
-            //       notify.add({"id": 54, "item": newvalue.trim()});
-            //     },
-            //     inputController: localitycontroller,
-            //     isMandatory: true,
-            //     labelText: "Locality",
-            //     validator: (value) => validateForNormalFeild(value: value, props: "Locality")),
-            // LabelTextInputField(
-            //   onChanged: (newvalue) {
-            //     notify.add({"id": 28, "item": newvalue.trim()});
-            //   },
-            //   inputController: address1controller,
-            //   isMandatory: true,
-            //   labelText: "Address1",
-            //   validator: (value) {
-            //     if (!isChecked && value!.isEmpty) {
-            //       return "Please enter ${question.questionTitle}";
-            //     }
-            //     return null;
-            //   },
-            // ),
-            // LabelTextInputField(
-            //   onChanged: (newvalue) {
-            //     notify.add({"id": 29, "item": newvalue.trim()});
-            //   },
-            //   inputController: address2controller,
-            //   isMandatory: true,
-            //   labelText: "Address2",
-            //   validator: (value) {
-            //     if (!isChecked && value!.isEmpty) {
-            //       return "Please enter ${question.questionTitle}";
-            //     }
-            //     return null;
-            //   },
-            // ),
+            ],
+            selectedLocality.isNotEmpty
+                ? Wrap(
+                    children: selectedLocality.map((locality) {
+                      return Padding(
+                        padding: const EdgeInsets.all(4),
+                        child: Chip(
+                          backgroundColor: AppColor.secondary,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          label: AppText(
+                            text: locality.fullAddress!,
+                            fontsize: 14,
+                          ),
+                          onDeleted: () {
+                            setState(() {
+                              selectedLocality.remove(locality);
+                            });
+                          },
+                        ),
+                      );
+                    }).toList(),
+                  )
+                : const SizedBox()
           ],
         );
       });

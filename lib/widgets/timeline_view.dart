@@ -123,6 +123,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                         child: ListView.builder(
                           shrinkWrap: true,
                           itemCount: activities.length,
+                          // physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
                             return TimelineTile(
                               isFirst: index == 0 ? true : false,

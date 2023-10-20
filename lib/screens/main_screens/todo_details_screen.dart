@@ -141,7 +141,9 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
           time.hour,
           time.minute,
         );
+
         TodoDetails.updateCardTime(id: itemid, dueTime: DateFormat('hh:mm a').format(formattedDateTime));
+        CardDetails.updateCardTime(id: itemid, dueTime: DateFormat('hh:mm a').format(formattedDateTime));
       },
     );
   }

@@ -34,7 +34,6 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
 
   void getCalenderDetailsfunc() {
     final User? user = ref.read(userDataProvider);
-    print(user?.brokerId);
     calenderDetails = FirebaseFirestore.instance.collection('calenderDetails').where('brokerId', isEqualTo: user?.brokerId).snapshots();
   }
 
@@ -44,40 +43,11 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
       stream: calenderDetails,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          // return const SizedBox(
-          //   height: 180,
-          // );
           return const Loader();
         }
         if (snapshot.hasData) {
           final dataList = snapshot.data!.docs;
           List<CalendarModel> calenderList = dataList.map((doc) => CalendarModel.fromSnapshot(doc)).toList();
-
-//           Map<DateTime, List<CalendarModel>> timeSlotMap = {};
-//           DateTime timeSlotKey = parseDateTime(event.dueDate!, event.time!);
-
-//           if (timeSlotMap[timeSlotKey] == null) {
-//             timeSlotMap[timeSlotKey] = [event];
-//           } else {
-//             timeSlotMap[timeSlotKey]!.add(event);
-//           }
-
-// // Limit each time slot to only two appointments
-//           for (var timeSlotKey in timeSlotMap.keys) {
-//             if (timeSlotMap[timeSlotKey]!.length > 2) {
-//               // Sort the appointments in this time slot based on your criteria
-//               timeSlotMap[timeSlotKey]!.sort((a, b) {
-//                 // Compare and sort your appointments here
-//                 // For example, by priority, date, or any other criteria
-//                 return (parseDateTime(a.dueDate!, a.time!)).compareTo(parseDateTime(b.dueDate!, b.time!));
-//               });
-
-//               // Keep only the top two appointments
-//               timeSlotMap[timeSlotKey] = timeSlotMap[timeSlotKey]!.sublist(0, 1);
-//             }
-//           }
-
-//           event = timeSlotMap.values.expand((appointments) => appointments).toList().first;
 
           return Container(
             decoration: BoxDecoration(
@@ -149,6 +119,8 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                       child: SingleChildScrollView(
                         physics: const NeverScrollableScrollPhysics(),
                         child: SfCalendar(
+                          initialDisplayDate: DateTime.now(),
+                          controller: CalendarController(),
                           headerHeight: 0,
                           dataSource: EventDataSource(calenderList),
                           view: CalendarView.timelineDay,
