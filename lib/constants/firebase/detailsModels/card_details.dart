@@ -368,6 +368,18 @@ class CardDetails {
     }
   }
 
+  static Future<void> updateCardTime({required String id, required String dueTime}) async {
+    try {
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'dueTime': dueTime});
+      }
+      print('cardTime update');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
+
   static Future<void> updateCardDescription({required String id, required String cardDescription}) async {
     try {
       QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();

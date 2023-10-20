@@ -145,7 +145,19 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
             }).toList();
 
             filteredleadList = filteredleadList.where((item) {
-              final bool isBedRoomMatch = selectedFilters.isEmpty || selectedFilters.contains('${item.roomconfig!.bedroom!}BHK');
+              if (item.cardTitle!.contains('Residential')) {
+                final bool isBedRoomMatch = selectedFilters.isEmpty || selectedFilters.contains('${item.roomconfig!.bedroom!}BHK');
+                final bool has5BHKFilter = selectedFilters.contains('5BHK +');
+                final int numberOfBedrooms = int.parse(item.roomconfig!.bedroom!);
+
+                if (has5BHKFilter) {
+                  return numberOfBedrooms >= 5; // Show items with 5 or more bedrooms
+                }
+                return isBedRoomMatch;
+              } else {
+                return false;
+              }
+              // final bool isBedRoomMatch = selectedFilters.isEmpty || selectedFilters.contains('${item.roomconfig!.bedroom!}BHK');
 
               // final RateUnit rateStartUnit = getRateUnitFromString(item.propertypricerange!.unit!);
               // final RateUnit rateEndUnit = getRateUnitFromString(item.propertypricerange!.unit!);
@@ -153,8 +165,6 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
               // final double itemRateEnd = convertToRupees(double.parse(item.propertypricerange!.arearangeend!), rateEndUnit);
 
               // final bool isRateInRange = itemRateStart >= rateRange.start && itemRateEnd <= rateRange.end;
-
-              return isBedRoomMatch;
             }).toList();
 
             status = filteredleadList;
@@ -200,8 +210,17 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
                               if (Responsive.isMobile(context)) {
                                 Navigator.of(context).push(
                                   AppRoutes.createAnimatedRoute(
-                                    const WorkItemFilterView(
-                                      originalCardList: [],
+                                    WorkItemFilterView(
+                                      closeFilterView: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      setFilters: (p0, selectedRange) {
+                                        setState(() {
+                                          selectedFilters = p0;
+                                          // rateRange = selectedRange;
+                                        });
+                                      },
+                                      originalCardList: leadList,
                                     ),
                                   ),
                                 );

@@ -10,6 +10,7 @@ import 'package:yes_broker/Customs/custom_chip.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/userModel/notification_model.dart';
 import 'package:yes_broker/customs/loader.dart';
+import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/pages/largescreen_dashboard.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 import '../../Customs/custom_text.dart';
@@ -319,9 +320,9 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
     return Align(
       alignment: Alignment.topRight,
       child: Container(
-        margin: const EdgeInsets.only(top: 45, right: 80),
+        margin: EdgeInsets.only(top: 45, right: Responsive.isMobile(context) ? 20 : 80, left: Responsive.isMobile(context) ? 20 : 0),
         height: size.height * 0.8,
-        width: 450,
+        width: Responsive.isMobile(context) ? 400 : 450,
         child: Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: StreamBuilder(

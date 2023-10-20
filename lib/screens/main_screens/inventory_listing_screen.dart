@@ -1,6 +1,5 @@
 // ignore_for_file: invalid_use_of_protected_member
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -82,9 +81,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
         stream: cardDetails,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator.adaptive(),
-            );
+            return const Loader();
           }
           if (snapshot.hasData) {
             if (user == null) return const Loader();
@@ -95,6 +92,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
             final List<CardDetails> inventoryList = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN").toList();
             inventoryList.sort((a, b) => b.createdate!.compareTo(a.createdate!));
+
             List<CardDetails> filteredInventoryList = inventoryList.where((item) {
               if (searchController.text.isEmpty) {
                 return true;
@@ -109,26 +107,38 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
             }).toList();
 
             filteredInventoryList = filteredInventoryList.where((item) {
-              final bool isBedRoomMatch = selectedFilters.isEmpty || selectedFilters.contains('${item.roomconfig!.bedroom!}BHK');
+              if (item.cardTitle!.contains('Residential')) {
+                final bool isBedRoomMatch = selectedFilters.isEmpty || selectedFilters.contains('${item.roomconfig!.bedroom!}BHK');
+                final bool has5BHKFilter = selectedFilters.contains('5BHK +');
+                final int numberOfBedrooms = int.parse(item.roomconfig!.bedroom!);
+
+                if (has5BHKFilter) {
+                  return numberOfBedrooms >= 5; // Show items with 5 or more bedrooms
+                }
+                return isBedRoomMatch;
+              } else {
+                return false;
+              }
               // final double itemRateStart = double.parse(item.propertypricerange!.arearangestart!);
 
               // final bool isRateInRange = itemRateStart >= rateRange.start;
-
-              return isBedRoomMatch;
+              // print('${item.roomconfig!.bedroom}BHK');
             }).toList();
 
             status = filteredInventoryList;
 
-            final tableRowList = filteredInventoryList.map((e) {
-              return buildWorkItemRowTile(
-                e,
-                filteredInventoryList.indexOf(e),
-                status,
-                id: e.workitemId,
-                ref: ref,
-                context: context,
-              );
-            });
+            final tableRowList = filteredInventoryList.map(
+              (e) {
+                return buildWorkItemRowTile(
+                  e,
+                  filteredInventoryList.indexOf(e),
+                  status,
+                  id: e.workitemId,
+                  ref: ref,
+                  context: context,
+                );
+              },
+            );
 
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,34 +149,44 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                     child: Column(
                       children: [
                         TopSerachBar(
-                            onChanged: (value) {
-                              setState(() {});
-                            },
-                            onToggleShowTable: () {
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          onToggleShowTable: () {
+                            setState(() {
+                              showTableView = !showTableView;
+                            });
+                          },
+                          showTableView: showTableView,
+                          searchController: searchController,
+                          title: 'Inventory',
+                          isFilterOpen: isFilterOpen,
+                          onFilterClose: () {
+                            setState(() {
+                              isFilterOpen = false;
+                            });
+                          },
+                          onFilterOpen: () {
+                            if (Responsive.isMobile(context)) {
+                              Navigator.of(context).push(AppRoutes.createAnimatedRoute(WorkItemFilterView(
+                                closeFilterView: () {
+                                  Navigator.of(context).pop();
+                                },
+                                setFilters: (p0, selectedRange) {
+                                  setState(() {
+                                    selectedFilters = p0;
+                                    // rateRange = selectedRange;
+                                  });
+                                },
+                                originalCardList: inventoryList,
+                              )));
+                            } else {
                               setState(() {
-                                showTableView = !showTableView;
+                                isFilterOpen = true;
                               });
-                            },
-                            showTableView: showTableView,
-                            searchController: searchController,
-                            title: 'Inventory',
-                            isFilterOpen: isFilterOpen,
-                            onFilterClose: () {
-                              setState(() {
-                                isFilterOpen = false;
-                              });
-                            },
-                            onFilterOpen: () {
-                              if (Responsive.isMobile(context)) {
-                                Navigator.of(context).push(AppRoutes.createAnimatedRoute(const WorkItemFilterView(
-                                  originalCardList: [],
-                                )));
-                              } else {
-                                setState(() {
-                                  isFilterOpen = true;
-                                });
-                              }
-                            }),
+                            }
+                          },
+                        ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -287,7 +307,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                             setFilters: (p0, selectedRange) {
                               setState(() {
                                 selectedFilters = p0;
-                                rateRange = selectedRange;
+                                // rateRange = selectedRange;
                               });
                             },
                             originalCardList: inventoryList,
