@@ -284,34 +284,34 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                   title: "Todo status changed");
                                             },
                                           ),
-                                          Container(
-                                            margin: const EdgeInsets.only(left: 5),
-                                            child: CustomChip(
-                                                color: const Color.fromARGB(255, 239, 219, 219),
-                                                onPressed: () {
-                                                  customDeleteBox(context, () {
-                                                    ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
-                                                    context.beamToNamed('/');
-                                                    customSnackBar(context: context, text: 'To do deleted successfully');
-                                                  }, 'Todo Delete', 'Are you sure you want to delete this todo?');
-                                                },
-                                                paddingVertical: 4,
-                                                label: const Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.delete_outline,
-                                                      size: 12,
-                                                      color: Colors.red,
-                                                    ),
-                                                    SizedBox(width: 5),
-                                                    AppText(
-                                                      text: "Delete Todo",
-                                                      fontsize: 12,
-                                                      textColor: Colors.red,
-                                                    ),
-                                                  ],
-                                                )),
-                                          ),
+                                          // Container(
+                                          //   margin: const EdgeInsets.only(left: 5),
+                                          //   child: CustomChip(
+                                          //       color: const Color.fromARGB(255, 239, 219, 219),
+                                          //       onPressed: () {
+                                          //         customDeleteBox(context, () {
+                                          //           ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
+                                          //           context.beamToNamed('/');
+                                          //           customSnackBar(context: context, text: 'To do deleted successfully');
+                                          //         }, 'Todo Delete', 'Are you sure you want to delete this todo?');
+                                          //       },
+                                          //       paddingVertical: 4,
+                                          //       label: const Row(
+                                          //         children: [
+                                          //           Icon(
+                                          //             Icons.delete_outline,
+                                          //             size: 12,
+                                          //             color: Colors.red,
+                                          //           ),
+                                          //           SizedBox(width: 5),
+                                          //           AppText(
+                                          //             text: "Delete Todo",
+                                          //             fontsize: 12,
+                                          //             textColor: Colors.red,
+                                          //           ),
+                                          //         ],
+                                          //       )),
+                                          // ),
                                         ],
                                       ),
                                       if (Responsive.isMobile(context)) ...[
