@@ -3,6 +3,7 @@ import 'dart:async';
 
 // import 'dart:html';
 
+import 'package:beamer/beamer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -25,9 +26,11 @@ import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/userModel/user_info.dart';
+import '../../constants/functions/chat_group/group.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
+import '../../pages/largescreen_dashboard.dart';
 import '../../riverpodstate/selected_workitem.dart';
 import '../../widgets/app/nav_bar.dart';
 import '../../widgets/workItemDetail/assignment_widget.dart';
@@ -280,6 +283,34 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                   content: "${data.todoId} Todo status changed to $value",
                                                   title: "Todo status changed");
                                             },
+                                          ),
+                                          Container(
+                                            margin: const EdgeInsets.only(left: 5),
+                                            child: CustomChip(
+                                                color: const Color.fromARGB(255, 239, 219, 219),
+                                                onPressed: () {
+                                                  customDeleteBox(context, () {
+                                                    ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
+                                                    context.beamToNamed('/');
+                                                    customSnackBar(context: context, text: 'To do deleted successfully');
+                                                  }, 'Todo Delete', 'Are you sure you want to delete this todo?');
+                                                },
+                                                paddingVertical: 4,
+                                                label: const Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.delete_outline,
+                                                      size: 12,
+                                                      color: Colors.red,
+                                                    ),
+                                                    SizedBox(width: 5),
+                                                    AppText(
+                                                      text: "Delete Todo",
+                                                      fontsize: 12,
+                                                      textColor: Colors.red,
+                                                    ),
+                                                  ],
+                                                )),
                                           ),
                                         ],
                                       ),
@@ -768,4 +799,49 @@ class Textarea extends StatelessWidget {
       ),
     );
   }
+}
+
+void customDeleteBox(BuildContext context, void Function() onConfirmPress, String title, String content) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: AppText(
+          text: title,
+          fontsize: 20,
+          fontWeight: FontWeight.w500,
+        ),
+        content: AppText(
+          text: content,
+          fontWeight: FontWeight.w600,
+          fontsize: 16,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const AppText(
+              text: 'Cancel',
+              fontWeight: FontWeight.w500,
+              fontsize: 16,
+              textColor: AppColor.primary,
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              onConfirmPress();
+            },
+            child: const AppText(
+              text: 'Delete',
+              fontWeight: FontWeight.w500,
+              fontsize: 16,
+              textColor: AppColor.primary,
+            ),
+          ),
+        ],
+      );
+    },
+  );
 }
