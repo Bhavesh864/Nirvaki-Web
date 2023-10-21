@@ -12,6 +12,7 @@ import 'package:yes_broker/riverpodstate/user_data.dart';
 
 import '../../functions/convertStringTorange/convert_range_string.dart';
 import '../send_notification.dart';
+import 'add_activity.dart';
 
 Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async {
   final randomId = randomNumeric(5);
@@ -165,15 +166,25 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
   isEdit
       ? await LeadDetails.updateLeadDetails(id: existingLeadId, leadDetails: lead).then((value) => {res = "success"})
       : await LeadDetails.addLeadDetails(lead).then((value) => {res = "success"});
-  if (!isEdit) {
-    for (var user in assignedListInLead) {
+  for (var user in assignedListInLead) {
+    if (!isEdit) {
+      submitActivity(itemid: "IN$randomId", activitytitle: "New Lead assigned to ${user.firstname} ${user.lastname}", user: currentUserdata!);
       notifyToUser(
           assignedto: user.userid,
           title: "Assign new LD$randomId",
           content: "LD$randomId New Lead assigned to ${user.firstname} ${user.lastname}",
           assigntofield: true,
           itemid: "LD$randomId",
-          currentuserdata: currentUserdata!);
+          currentuserdata: currentUserdata);
+    } else {
+      submitActivity(itemid: existingLeadId, activitytitle: "Lead detail updated", user: currentUserdata!);
+      notifyToUser(
+          assignedto: user.userid,
+          title: "Lead detail Updated",
+          content: "$existingLeadId Lead detail Updated",
+          assigntofield: true,
+          itemid: existingLeadId,
+          currentuserdata: currentUserdata);
     }
   }
   return res;

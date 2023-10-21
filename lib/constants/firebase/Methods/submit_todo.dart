@@ -5,9 +5,11 @@ import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' as cards;
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/riverpodstate/todo/linked_with_workItem.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 
 import '../send_notification.dart';
+import 'add_activity.dart';
 
 Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
   final User? currentUserdata = ref.read(userDataProvider);
@@ -105,13 +107,23 @@ Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
   await cards.CardDetails.addCardDetails(card).then((value) => {res = "success"});
   await TodoDetails.addTodoDetails(todo).then((value) => {res == "success"});
   for (var user in assignedListTodo) {
+    submitActivity(itemid: "IN$randomId", activitytitle: "New $todotype assigned to ${user.firstname} ${user.lastname}", user: currentUserdata!);
     notifyToUser(
         assignedto: user.userid,
-        title: "Assign new TD$randomId",
+        title: "New Todo Created",
         content: "TD$randomId New $todotype assigned to ${user.firstname} ${user.lastname}",
         assigntofield: true,
         itemid: "TD$randomId",
-        currentuserdata: currentUserdata!);
+        currentuserdata: currentUserdata);
+    if (cardDetail != null) {
+      notifyToUser(
+          assignedto: user.userid,
+          title: "New Todo created for ${cardDetail.workitemId}",
+          content: "TD$randomId New $todotype created for ${cardDetail.workitemId}",
+          assigntofield: true,
+          itemid: "TD$randomId",
+          currentuserdata: currentUserdata);
+    }
   }
   return res;
 }

@@ -90,7 +90,7 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
                   width: Responsive.isDesktop(context)
                       ? 250
                       : scrWidth < 400
-                          ? 200
+                          ? 180
                           : 210,
                   padding: const EdgeInsets.only(bottom: 5, left: 5),
                   child: AppText(

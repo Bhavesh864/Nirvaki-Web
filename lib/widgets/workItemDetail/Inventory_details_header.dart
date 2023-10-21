@@ -278,12 +278,14 @@ class _HeaderChipsState extends ConsumerState<HeaderChips> {
                 }
                 currentStatus = value;
                 setState(() {});
+                final item = calculateTypeOfWorkitem(widget.id);
                 notifyToUser(
-                    currentuserdata: user!,
-                    itemid: widget.id,
-                    assignedto: widget.inventoryDetails.assignedto,
-                    content: "${user.userfirstname} ${user.userlastname} change status to $value",
-                    title: "${widget.id.contains(ItemCategory.isInventory) ? "Inventory" : "Lead"} status changed");
+                  currentuserdata: user!,
+                  itemid: widget.id,
+                  assignedto: widget.inventoryDetails.assignedto,
+                  content: "${widget.id} $item status changed to $value",
+                  title: "$item status changed",
+                );
               },
             ),
           ),
