@@ -165,14 +165,22 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
   isEdit
       ? await LeadDetails.updateLeadDetails(id: existingLeadId, leadDetails: lead).then((value) => {res = "success"})
       : await LeadDetails.addLeadDetails(lead).then((value) => {res = "success"});
-  if (!isEdit) {
-    for (var user in assignedListInLead) {
+  for (var user in assignedListInLead) {
+    if (!isEdit) {
       notifyToUser(
           assignedto: user.userid,
           title: "Assign new LD$randomId",
           content: "LD$randomId New Lead assigned to ${user.firstname} ${user.lastname}",
           assigntofield: true,
           itemid: "LD$randomId",
+          currentuserdata: currentUserdata!);
+    } else {
+      notifyToUser(
+          assignedto: user.userid,
+          title: "Lead detail Updated",
+          content: "$existingLeadId Lead detail Updated",
+          assigntofield: true,
+          itemid: existingLeadId,
           currentuserdata: currentUserdata!);
     }
   }

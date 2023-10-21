@@ -34,7 +34,13 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
     final User? user = ref.read(userDataProvider);
     if (controller.text.trim().isNotEmpty) {
       submitActivity(itemid: workItemId, activitytitle: controller.text.trim(), user: user!);
-      notifyToUser(currentuserdata: user, assignedto: widget.details.assignedto, content: "$workItemId added new Activity", title: controller.text, itemid: workItemId);
+      notifyToUser(
+        currentuserdata: user,
+        assignedto: widget.details.assignedto,
+        content: "$workItemId New comment added",
+        title: "Activity Added",
+        itemid: workItemId,
+      );
       controller.clear();
     } else {
       customSnackBar(context: context, text: 'Please enter note to submit');

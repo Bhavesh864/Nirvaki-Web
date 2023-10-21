@@ -16,6 +16,7 @@ import '../../constants/app_constant.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
 import '../../constants/firebase/userModel/user_info.dart';
+import '../../constants/functions/assingment_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
 import '../../routes/routes.dart';
@@ -268,12 +269,14 @@ class _HeaderChipsState extends ConsumerState<HeaderChips> {
                 }
                 currentStatus = value;
                 setState(() {});
+                final item = calculateTypeOfWorkitem(widget.id);
                 notifyToUser(
-                    currentuserdata: user!,
-                    itemid: widget.id,
-                    assignedto: widget.inventoryDetails.assignedto,
-                    content: "${user.userfirstname} ${user.userlastname} change status to $value",
-                    title: "${widget.id.contains(ItemCategory.isInventory) ? "Inventory" : "Lead"} status changed");
+                  currentuserdata: user!,
+                  itemid: widget.id,
+                  assignedto: widget.inventoryDetails.assignedto,
+                  content: "${widget.id} $item status changed to $value",
+                  title: "$item status changed",
+                );
               },
             ),
           ),

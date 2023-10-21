@@ -86,6 +86,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userDataProvider);
+    final size = MediaQuery.of(context).size;
     return Container(
       color: Colors.white,
       child: StreamBuilder(
@@ -243,7 +244,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                                                       ),
                                                     ),
                                                     Container(
-                                                      height: 300,
+                                                      height: size.height * 0.5,
                                                       // width: 300,
                                                       color: Colors.white,
                                                       margin: const EdgeInsets.symmetric(horizontal: 10),
