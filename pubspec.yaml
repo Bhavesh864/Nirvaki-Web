@@ -78,6 +78,7 @@ dependencies:
   country_flags: ^2.1.1
   path_provider: ^2.1.1
   google_maps_flutter_android: ^2.5.1
+  rxdart: ^0.27.7
 
 dev_dependencies:
   flutter_lints: ^2.0.0
