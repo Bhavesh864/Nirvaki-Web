@@ -11,11 +11,13 @@ import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/screens/main_screens/caledar_screen.dart';
 import '../constants/firebase/calenderModel/calender_model.dart';
+import '../constants/firebase/detailsModels/card_details.dart';
 import '../constants/firebase/userModel/user_info.dart';
 import '../constants/functions/calendar/calendar_functions.dart';
 import '../constants/functions/workitems_detail_methods.dart';
 import '../riverpodstate/user_data.dart';
 import 'calendar/event_data.dart';
+import "package:rxdart/rxdart.dart";
 
 class CustomCalendarView extends ConsumerStatefulWidget {
   const CustomCalendarView({super.key});
@@ -26,15 +28,56 @@ class CustomCalendarView extends ConsumerStatefulWidget {
 
 class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
   late Stream<QuerySnapshot<Map<String, dynamic>>> calenderDetails;
+  late Stream<QuerySnapshot<Map<String, dynamic>>> cardDetails;
+
   @override
   void initState() {
     super.initState();
     getCalenderDetailsfunc();
+    setCardDetails();
+    // mergeCalendarTodo();
+  }
+
+  void setCardDetails() async {
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
   }
 
   void getCalenderDetailsfunc() {
     final User? user = ref.read(userDataProvider);
     calenderDetails = FirebaseFirestore.instance.collection('calenderDetails').where('brokerId', isEqualTo: user?.brokerId).snapshots();
+  }
+
+  mergeCalendarTodo() {
+    final User? currentUserdata = ref.read(userDataProvider);
+
+    Stream<List<CalendarModel>> calendarStream = calenderDetails.map((querySnapshot) {
+      List<CalendarModel> calendarList = [];
+      // ignore: unused_local_variable
+      for (var doc in querySnapshot.docs) {
+        CalendarModel calendarModel = CalendarModel();
+        calendarList.add(calendarModel);
+      }
+      return calendarList;
+    });
+
+    Stream<List<CardDetails>> cardDetailStream = calenderDetails.map((querySnapshot) {
+      List<CardDetails> cardList = [];
+      // ignore: unused_local_variable
+      for (var doc in querySnapshot.docs) {
+        CardDetails cardModel = CardDetails(workitemId: doc['workitemId'], status: 'NEW', createdate: Timestamp.now(), brokerid: currentUserdata?.brokerId);
+        cardList.add(cardModel);
+      }
+      return cardList;
+    });
+
+    final mergeList = Rx.combineLatest2<List<CalendarModel>, List<CardDetails>, List<dynamic>>(calendarStream, cardDetailStream, (calendarData, cardData) {
+      final list = [];
+
+      list.addAll(calendarData);
+      list.addAll(cardData);
+      return list;
+    });
+    return mergeList;
   }
 
   @override
@@ -199,4 +242,14 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
       },
     );
   }
+}
+
+class CalendarItem {
+  final String id;
+  final bool isCalendar;
+
+  CalendarItem({
+    required this.id,
+    required this.isCalendar,
+  });
 }
