@@ -671,10 +671,10 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                       //   anchorElement.click();
                                       // }
 
-                                      downloadFile(
-                                        attachment.path,
-                                        attachment.title,
-                                      );
+                                      // downloadFile(
+                                      //   attachment.path,
+                                      //   attachment.title,
+                                      // );
                                     },
                                   ),
                                   GestureDetector(
@@ -825,19 +825,25 @@ class _DetailsTabViewState extends State<DetailsTabView> {
             const SizedBox(height: 5),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: (widget.data.preferredlocality?.listofLocality ?? []).map<Widget>((e) {
                 return Container(
-                  margin: const EdgeInsets.only(bottom: 7),
+                  margin: const EdgeInsets.only(bottom: 10),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const Icon(
-                        Icons.location_on_outlined,
-                        size: 16,
-                        color: Colors.black,
+                      Container(
+                        margin: const EdgeInsets.only(top: 5),
+                        child: const Icon(
+                          Icons.location_on_outlined,
+                          size: 14,
+                          color: Colors.black,
+                        ),
                       ),
                       Container(
-                        margin: const EdgeInsets.only(left: 4),
-                        width: 300,
+                        margin: const EdgeInsets.only(left: 10),
+                        width: 280,
                         child: AppText(
                           text: e.fullAddress.toString(),
                           softwrap: true,

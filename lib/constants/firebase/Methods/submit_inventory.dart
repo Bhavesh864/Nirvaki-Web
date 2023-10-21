@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:random_string/random_string.dart';
 import 'package:yes_broker/constants/app_constant.dart';
+import 'package:yes_broker/constants/firebase/Methods/add_activity.dart';
 
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' as cards;
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
@@ -173,21 +174,23 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       : await InventoryDetails.addInventoryDetails(inventory).then((value) => {res = "success"});
   for (var user in assignedListInInventory) {
     if (!isEdit) {
+      submitActivity(itemid: "IN$randomId", activitytitle: "New Inventory assigned to ${user.firstname} ${user.lastname}", user: currentUserdata!);
       notifyToUser(
           assignedto: user.userid,
           title: "Assign new IN$randomId",
           content: "IN$randomId New Inventory assigned to ${user.firstname} ${user.lastname}",
           assigntofield: true,
           itemid: "IN$randomId",
-          currentuserdata: currentUserdata!);
+          currentuserdata: currentUserdata);
     } else {
+      submitActivity(itemid: existingInventoryId, activitytitle: "Inventory detail updated", user: currentUserdata!);
       notifyToUser(
           assignedto: user.userid,
           title: "Inventory detail Updated",
           content: "$existingInventoryId Inventory detail Updated",
           assigntofield: true,
           itemid: existingInventoryId,
-          currentuserdata: currentUserdata!);
+          currentuserdata: currentUserdata);
     }
   }
   return res;
