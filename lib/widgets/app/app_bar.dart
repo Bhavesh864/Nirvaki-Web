@@ -96,6 +96,7 @@ AppBar mobileAppBar(User? user, BuildContext context, void Function(String) onOp
         ),
         color: Colors.white.withOpacity(1),
         offset: const Offset(200, 40),
+
         itemBuilder: (context) {
           if (user != null) {
             addOrRemoveTeamAndOrganization(user);

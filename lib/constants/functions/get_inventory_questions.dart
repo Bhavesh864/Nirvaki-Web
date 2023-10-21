@@ -209,7 +209,6 @@ Widget buildInventoryQuestions(
     if (isPlotSelected && question.questionId == 30) {
       return const SizedBox();
     }
-
     if (question.questionTitle == 'Mobile') {
       return StatefulBuilder(builder: (context, setState) {
         return Column(
@@ -621,12 +620,11 @@ Widget buildInventoryQuestions(
     );
   } else if (question.questionOptionType == 'photo') {
     Propertyphotos? propertyphotos;
-    if (isEdit) {
-      if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
-        propertyphotos = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
-      }
+    // if (isEdit) {
+    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+      propertyphotos = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+      // }
     }
-
     return PhotosViewForm(
       notify: notify,
       id: question.questionId,

@@ -171,14 +171,22 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
   isEdit
       ? await InventoryDetails.updateInventoryDetails(id: existingInventoryId, inventoryDetails: inventory).then((value) => {res = "success"})
       : await InventoryDetails.addInventoryDetails(inventory).then((value) => {res = "success"});
-  if (!isEdit) {
-    for (var user in assignedListInInventory) {
+  for (var user in assignedListInInventory) {
+    if (!isEdit) {
       notifyToUser(
           assignedto: user.userid,
           title: "Assign new IN$randomId",
           content: "IN$randomId New Inventory assigned to ${user.firstname} ${user.lastname}",
           assigntofield: true,
           itemid: "IN$randomId",
+          currentuserdata: currentUserdata!);
+    } else {
+      notifyToUser(
+          assignedto: user.userid,
+          title: "Inventory detail Updated",
+          content: "$existingInventoryId Inventory detail Updated",
+          assigntofield: true,
+          itemid: existingInventoryId,
           currentuserdata: currentUserdata!);
     }
   }
