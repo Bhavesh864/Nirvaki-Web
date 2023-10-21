@@ -2,7 +2,6 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
@@ -168,6 +167,7 @@ class InventoryDetailsHeader extends ConsumerWidget {
                                 } else if (e.contains('Delete')) {
                                   final itemType = calculateTypeOfWorkitem(id);
                                   customDeleteBox(context, () {
+                                    CardDetails.deleteCardDetails(id);
                                     ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
                                     context.beamToNamed('/');
                                     customSnackBar(context: context, text: '$itemType deleted successfully');

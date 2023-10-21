@@ -671,10 +671,10 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                       //   anchorElement.click();
                                       // }
 
-                                      // downloadFile(
-                                      //   attachment.path,
-                                      //   attachment.title,
-                                      // );
+                                      downloadFile(
+                                        attachment.path,
+                                        attachment.title,
+                                      );
                                     },
                                   ),
                                   GestureDetector(
