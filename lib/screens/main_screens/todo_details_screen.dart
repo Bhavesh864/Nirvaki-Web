@@ -290,6 +290,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                 color: const Color.fromARGB(255, 239, 219, 219),
                                                 onPressed: () {
                                                   customDeleteBox(context, () {
+                                                    CardDetails.deleteCardDetails(widget.todoId);
                                                     ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
                                                     context.beamToNamed('/');
                                                     customSnackBar(context: context, text: 'To do deleted successfully');
