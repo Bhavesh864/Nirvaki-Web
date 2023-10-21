@@ -326,16 +326,18 @@ class CardDetails {
     }
   }
 
-  // Delete a Inventory item
   static Future<void> deleteCardDetails(String id) async {
     try {
-      await cardDetailsCollection.doc(id).delete();
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.delete();
+      }
       if (kDebugMode) {
-        print("deleted successfully");
+        print('cardTitle delete card');
       }
     } catch (error) {
       if (kDebugMode) {
-        print('Failed to delete Inventory item: $error');
+        print('Failed to update card status: $error');
       }
     }
   }
