@@ -123,7 +123,7 @@ AppBar mobileAppBar(User? user, BuildContext context, void Function(String) onOp
         // ),
         child: user?.image != '' && user?.image != null
             ? Container(
-                height: 25,
+                height: 32,
                 width: 35,
                 margin: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
@@ -132,7 +132,7 @@ AppBar mobileAppBar(User? user, BuildContext context, void Function(String) onOp
                     fit: BoxFit.cover,
                     image: NetworkImage(user?.image ?? noImg),
                   ),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(17.5),
                 ),
               )
             : Container(
@@ -141,7 +141,7 @@ AppBar mobileAppBar(User? user, BuildContext context, void Function(String) onOp
                 margin: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: AppColor.primary,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(17.5),
                 ),
                 child: Center(
                   child: Text(

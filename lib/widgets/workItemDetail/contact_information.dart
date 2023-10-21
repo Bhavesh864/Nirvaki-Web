@@ -7,6 +7,7 @@ import 'package:yes_broker/constants/functions/make_call_function.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/app_constant.dart';
+import '../app/nav_bar.dart';
 
 class ContactInformation extends StatelessWidget {
   final dynamic customerinfo;
@@ -28,7 +29,7 @@ class ContactInformation extends StatelessWidget {
             children: [
               checkNotNUllItem(customerinfo?.firstname) || checkNotNUllItem(customerinfo?.lastname)
                   ? CustomText(
-                      title: '${customerinfo.firstname} ${checkNotNUllItem(customerinfo?.lastname) ? customerinfo.lastname : ""}',
+                      title: capitalizeFirstLetter('${customerinfo.firstname} ${checkNotNUllItem(customerinfo?.lastname) ? customerinfo.lastname : ""}'),
                       fontWeight: FontWeight.w600,
                       size: 20,
                     )

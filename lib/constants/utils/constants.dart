@@ -250,7 +250,7 @@ List<String> todoDropDownList = [
 List<Map<String, dynamic>> dropDownDetailsList = [
   {'title': 'Edit', 'icon': Icons.edit},
   {'title': 'Preview Public View', 'icon': Icons.remove_red_eye_rounded},
-  {'title': 'Delete', 'icon': Icons.delete_outline}
+  // {'title': 'Delete', 'icon': Icons.delete_outline}
 ];
 
 List<Map<String, dynamic>> dropDownDetailsList2 = [

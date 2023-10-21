@@ -73,6 +73,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
   final commercialphotos = getDataById(state, 53);
   final locality = getDataById(state, 54);
   final furnishedStatus = getDataById(state, 55);
+  final fullAddress = getDataById(state, 56);
   final attachments = getDataById(state, 100);
   final existingInventoryId = getDataById(state, 101);
 
@@ -155,8 +156,14 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       comments: comments,
       furnishedStatus: furnishedStatus,
       plotarea: Plotarea(area: superArea, unit: areaUnit),
-      propertyaddress:
-          Propertyaddress(state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, floornumber: floorNumber, locality: locality),
+      propertyaddress: Propertyaddress(
+          fullAddress: fullAddress,
+          state: propertyState,
+          city: propertyCity,
+          addressline1: addressLine1,
+          addressline2: addressLine2,
+          floornumber: floorNumber,
+          locality: locality),
       propertylocation: latlng,
       propertyvideo: video,
       propertyphotos: photos,

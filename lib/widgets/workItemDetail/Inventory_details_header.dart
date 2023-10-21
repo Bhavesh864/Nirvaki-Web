@@ -164,15 +164,15 @@ class InventoryDetailsHeader extends ConsumerWidget {
                                   Future.delayed(const Duration(milliseconds: 400)).then(
                                     (value) => AppConst.getOuterContext()!.beamToNamed(id.contains("IN") ? AppRoutes.addInventory : AppRoutes.addLead, data: true),
                                   );
-                                } else if (e.contains('Delete')) {
-                                  final itemType = calculateTypeOfWorkitem(id);
-                                  customDeleteBox(context, () {
-                                    CardDetails.deleteCardDetails(id);
-                                    ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
-                                    context.beamToNamed('/');
-                                    customSnackBar(context: context, text: '$itemType deleted successfully');
-                                  }, '$itemType Delete', 'Are you sure you want to delete this $itemType?');
                                 }
+                                // else if (e.contains('Delete')) {
+                                //   final itemType = calculateTypeOfWorkitem(id);
+                                //   customDeleteBox(context, () {
+                                //     ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
+                                //     context.beamToNamed('/');
+                                //     customSnackBar(context: context, text: '$itemType deleted successfully');
+                                //   }, '$itemType Delete', 'Are you sure you want to delete this $itemType?');
+                                // }
                               }, showicon: true, icon: e['icon']),
                             )
                             .toList(),
