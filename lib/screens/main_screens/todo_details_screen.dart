@@ -280,8 +280,8 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                   currentuserdata: user!,
                                                   itemid: data.todoId!,
                                                   assignedto: data.assignedto,
-                                                  content: "${user.userfirstname} ${user.userlastname} change status to $value",
-                                                  title: "${data.todoName} status changed");
+                                                  content: "${data.todoId} Todo status changed to $value",
+                                                  title: "Todo status changed");
                                             },
                                           ),
                                           Container(
