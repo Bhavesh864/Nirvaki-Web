@@ -62,12 +62,12 @@ class NewGroupUserList extends StatelessWidget {
                   const SizedBox(
                     width: 10,
                   ),
-                  CustomChip(
-                    label: AppText(
-                      text: user.role,
-                      fontsize: 9,
-                    ),
-                  ),
+                  // CustomChip(
+                  //   label: AppText(
+                  //     text: user.role,
+                  //     fontsize: 9,
+                  //   ),
+                  // ),
                 ],
               ),
               trailing: selectedUser.isNotEmpty && selectedUser.contains(user.userId)

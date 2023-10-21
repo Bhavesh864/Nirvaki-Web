@@ -625,12 +625,16 @@ class Propertyaddress {
   String? city;
   String? state;
   String? locality;
+  String? fullAddress;
 
-  Propertyaddress({this.addressline1, this.addressline2, this.floornumber, this.city, this.state, this.locality});
+  Propertyaddress({this.addressline1, this.addressline2, this.floornumber, this.city, this.state, this.locality, this.fullAddress});
 
   Propertyaddress.fromJson(Map<String, dynamic> json) {
     if (json["Addressline1"] is String) {
       addressline1 = json["Addressline1"];
+    }
+    if (json["fullAddress"] is String) {
+      fullAddress = json["fullAddress"];
     }
     if (json["addressline2"] is String) {
       addressline2 = json["addressline2"];
@@ -657,6 +661,7 @@ class Propertyaddress {
     data["city"] = city;
     data["state"] = state;
     data["locality"] = locality;
+    data["fullAddress"] = fullAddress;
     return data;
   }
 }
