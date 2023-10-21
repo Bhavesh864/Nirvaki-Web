@@ -345,22 +345,29 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                       fontsize: 20,
                                       fontWeight: FontWeight.w700,
                                     ),
+                                    const SizedBox(height: 5),
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.start,
                                       children: data.preferredlocality?.listofLocality?.map(
                                             (e) {
                                               return Container(
                                                 margin: const EdgeInsets.only(bottom: 7),
                                                 child: Row(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  mainAxisAlignment: MainAxisAlignment.start,
                                                   children: [
-                                                    const Icon(
-                                                      Icons.location_on_outlined,
-                                                      size: 16,
-                                                      color: Colors.black,
+                                                    Container(
+                                                      margin: const EdgeInsets.only(top: 3),
+                                                      child: const Icon(
+                                                        Icons.location_on_outlined,
+                                                        size: 14,
+                                                        color: Colors.black,
+                                                      ),
                                                     ),
                                                     Container(
-                                                      margin: const EdgeInsets.only(left: 4),
-                                                      width: 300,
+                                                      margin: const EdgeInsets.only(left: 8),
+                                                      width: 290,
                                                       child: AppText(
                                                         text: e.fullAddress.toString(),
                                                         softwrap: true,
