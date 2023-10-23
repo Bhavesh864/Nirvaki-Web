@@ -1,23 +1,27 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import "package:rxdart/rxdart.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:yes_broker/Customs/loader.dart';
 
-import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/Customs/loader.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/responsive.dart';
+import 'package:yes_broker/riverpodstate/calendar_items/controller/calendar_controller.dart';
 import 'package:yes_broker/screens/main_screens/caledar_screen.dart';
+import 'package:yes_broker/widgets/assigned_circular_images.dart';
+
 import '../constants/firebase/calenderModel/calender_model.dart';
-import '../constants/firebase/detailsModels/card_details.dart';
 import '../constants/firebase/userModel/user_info.dart';
 import '../constants/functions/calendar/calendar_functions.dart';
 import '../constants/functions/workitems_detail_methods.dart';
 import '../riverpodstate/user_data.dart';
 import 'calendar/event_data.dart';
-import "package:rxdart/rxdart.dart";
 
 class CustomCalendarView extends ConsumerStatefulWidget {
   const CustomCalendarView({super.key});
@@ -28,18 +32,12 @@ class CustomCalendarView extends ConsumerStatefulWidget {
 
 class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
   late Stream<QuerySnapshot<Map<String, dynamic>>> calenderDetails;
-  late Stream<QuerySnapshot<Map<String, dynamic>>> cardDetails;
 
   @override
   void initState() {
     super.initState();
     getCalenderDetailsfunc();
-    setCardDetails();
     // mergeCalendarTodo();
-  }
-
-  void setCardDetails() async {
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
   }
 
   void getCalenderDetailsfunc() {
@@ -83,14 +81,14 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: calenderDetails,
+      stream: mergeCalendarEventsAndTodo(ref),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Loader();
         }
         if (snapshot.hasData) {
-          final dataList = snapshot.data!.docs;
-          List<CalendarModel> calenderList = dataList.map((doc) => CalendarModel.fromSnapshot(doc)).toList();
+          List<CalendarItems> calenderList = snapshot.data!;
+          // List<CalendarModel> calenderList = dataList.map((doc) => CalendarModel.fromSnapshot(doc)).toList();
 
           return Container(
             decoration: BoxDecoration(
@@ -163,23 +161,30 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                         physics: const NeverScrollableScrollPhysics(),
                         child: SfCalendar(
                           initialDisplayDate: DateTime.now(),
-                          controller: CalendarController(),
                           headerHeight: 0,
+
                           dataSource: EventDataSource(calenderList),
                           view: CalendarView.timelineDay,
                           timeSlotViewSettings: TimeSlotViewSettings(
-                            startHour: 9,
-                            endHour: 24,
                             timeTextStyle: TextStyle(
                               color: Colors.black,
                               fontSize: 10,
-                              fontWeight: FontWeight.lerp(FontWeight.w400, FontWeight.w600, 0.7),
+                              fontWeight: FontWeight.lerp(
+                                FontWeight.w400,
+                                FontWeight.w600,
+                                0.7,
+                              ),
                             ),
                             timelineAppointmentHeight: Responsive.isMobile(context) ? 70 : 60,
                           ),
 
                           backgroundColor: Colors.white,
-                          allowAppointmentResize: true,
+                          allowAppointmentResize: false,
+                          selectionDecoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.transparent,
+                            ),
+                          ),
                           showDatePickerButton: false,
                           viewHeaderHeight: 0,
 
@@ -189,8 +194,7 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                           // ),
                           // appointmentTimeTextFormat: Intl.defaultLocale,
                           appointmentBuilder: (context, calendarAppointmentDetails) {
-                            final CalendarModel event = calendarAppointmentDetails.appointments.first;
-
+                            final CalendarItems event = calendarAppointmentDetails.appointments.first;
                             return Container(
                               margin: const EdgeInsets.symmetric(vertical: 10),
                               height: calendarAppointmentDetails.bounds.height,
@@ -198,34 +202,51 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                                 color: AppColor.secondary.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(6),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 12),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      height: 4,
-                                      width: 40,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        color: getColorForTaskType('Meeting'),
+                              padding: const EdgeInsets.only(left: 12),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        height: 4,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(20),
+                                          color: getColorForTaskType(''),
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      height: 6,
-                                    ),
-                                    Text(
-                                      event.calenderTitle.toString(),
-                                      // maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
+                                      const SizedBox(
+                                        height: 6,
                                       ),
-                                    ),
-                                  ],
-                                ),
+                                      Container(
+                                        constraints: const BoxConstraints(
+                                          maxWidth: 100,
+                                        ),
+                                        child: Text(
+                                          event.calenderTitle.toString(),
+                                          overflow: TextOverflow.ellipsis,
+                                          softWrap: true,
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  if (event.calenderType == 'Todo')
+                                    Padding(
+                                      padding: EdgeInsets.only(right: event.todoDetails!.assignedto!.length > 1 ? 0 : 8),
+                                      child: AssignedCircularImages(
+                                        cardData: event.todoDetails,
+                                        heightOfCircles: 20,
+                                        widthOfCircles: 20,
+                                      ),
+                                    )
+                                ],
                               ),
                             );
                           },
@@ -244,12 +265,82 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
   }
 }
 
-class CalendarItem {
-  final String id;
-  final bool isCalendar;
+class CalendarItems {
+  String? id;
+  String? calenderTitle;
+  String? calenderDescription;
+  String? calenderType;
+  String? userId;
+  String? brokerId;
+  String? managerId;
+  String? dueDate;
+  String? time;
+  CardDetails? todoDetails;
 
-  CalendarItem({
-    required this.id,
-    required this.isCalendar,
+  CalendarItems({
+    this.id,
+    this.calenderTitle,
+    this.calenderDescription,
+    this.calenderType,
+    this.userId,
+    this.brokerId,
+    this.managerId,
+    this.dueDate,
+    this.time,
+    this.todoDetails,
   });
+}
+
+Stream<List<CalendarItems>> mergeCalendarEventsAndTodo(WidgetRef ref) {
+  final calendarEventsList = ref.watch(calendarControllerProvider).calendarEvents();
+  final cardDetailsList = ref.watch(calendarControllerProvider).cardDetails(ref);
+
+  final mergedStream = Rx.combineLatest2(
+    calendarEventsList,
+    cardDetailsList,
+    (List<CalendarModel>? calendarEvents, List<CardDetails>? todoItems) {
+      final calendarItems = <CalendarItems>[];
+
+      if (calendarEvents != null) {
+        calendarItems.addAll(
+          calendarEvents.map(
+            (calendarItem) => CalendarItems(
+              id: calendarItem.id,
+              calenderTitle: calendarItem.calenderTitle,
+              calenderDescription: calendarItem.calenderDescription,
+              calenderType: calendarItem.calenderType,
+              userId: calendarItem.userId,
+              brokerId: calendarItem.brokerId,
+              managerId: calendarItem.managerId,
+              dueDate: calendarItem.dueDate,
+              time: calendarItem.time,
+            ),
+          ),
+        );
+      }
+
+      if (todoItems != null) {
+        calendarItems.addAll(
+          todoItems.map(
+            (todoItem) => CalendarItems(
+              id: todoItem.workitemId,
+              calenderTitle: todoItem.cardTitle,
+              calenderDescription: todoItem.cardDescription,
+              calenderType: "Todo",
+              userId: todoItem.brokerid,
+              brokerId: todoItem.brokerid,
+              managerId: todoItem.managerid,
+              dueDate: todoItem.duedate,
+              time: todoItem.dueTime,
+              todoDetails: todoItem,
+            ),
+          ),
+        );
+      }
+
+      return calendarItems;
+    },
+  );
+
+  return mergedStream;
 }

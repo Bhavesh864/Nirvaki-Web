@@ -280,10 +280,10 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                   widget.data.typeofschool,
                   context,
                 ),
-              if (checkNotNUllItem(widget.data.hospitalrooms))
+              if (checkNotNUllItem(widget.data.hospitalityrooms))
                 buildInfoFields(
                   'Rooms Constructed',
-                  widget.data.hospitalrooms,
+                  widget.data.hospitalityrooms,
                   context,
                 ),
             ]),
@@ -426,10 +426,10 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                 widget.data.typeofschool,
                 context,
               ),
-            if (checkNotNUllItem(widget.data.hospitalrooms))
+            if (checkNotNUllItem(widget.data.hospitalityrooms))
               buildInfoFields(
                 'Rooms Constructed',
-                widget.data.hospitalrooms,
+                widget.data.hospitalityrooms,
                 context,
               ),
             const Divider(
@@ -671,10 +671,10 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                       //   anchorElement.click();
                                       // }
 
-                                      // downloadFile(
-                                      //   attachment.path,
-                                      //   attachment.title,
-                                      // );
+                                      downloadFile(
+                                        attachment.path,
+                                        attachment.title,
+                                      );
                                     },
                                   ),
                                   GestureDetector(

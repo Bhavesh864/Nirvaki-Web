@@ -18,6 +18,7 @@ import '../../customs/custom_chip.dart';
 import '../../riverpodstate/common_index_state.dart';
 import '../app/dropdown_menu.dart';
 import '../app/nav_bar.dart';
+import '../assigned_circular_images.dart';
 
 TableRow buildTableHeader({bool isTodo = false}) {
   return TableRow(
@@ -289,61 +290,11 @@ TableRow buildWorkItemRowTile(
 
       buildWorkItemTableItem(
         align: Alignment.center,
-        checkNotNUllItem(cardItem.assignedto) && cardItem.assignedto!.isNotEmpty
-            ? Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: cardItem.assignedto!
-                    .sublist(
-                        0,
-                        cardItem.assignedto!.length < 2
-                            ? 1
-                            : cardItem.assignedto!.length < 3
-                                ? 2
-                                : 3)
-                    .asMap()
-                    .entries
-                    .map((entry) {
-                  final index = entry.key;
-                  final user = entry.value;
-                  return Transform.translate(
-                    offset: Offset(index * -8.0, 0),
-                    child: Container(
-                      margin: EdgeInsets.zero,
-                      width: 24,
-                      height: 24,
-                      decoration: index > 1
-                          ? BoxDecoration(
-                              border: Border.all(color: Colors.white),
-                              color: index > 1 ? Colors.grey.shade300 : null,
-                              borderRadius: BorderRadius.circular(40),
-                            )
-                          : BoxDecoration(
-                              border: Border.all(color: Colors.white),
-                              image: DecorationImage(
-                                image: NetworkImage(
-                                  user.image!.isEmpty ? noImg : user.image!,
-                                ),
-                                fit: BoxFit.fill,
-                              ),
-                              borderRadius: BorderRadius.circular(40),
-                            ),
-                      child: index > 1
-                          ? Center(
-                              child: CustomText(
-                                title: '+${cardItem.assignedto!.length - 2}',
-                                color: Colors.black,
-                                size: 9,
-                                // textAlign: TextAlign.center,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )
-                          : null,
-                    ),
-                  );
-                }).toList(),
-              )
-            : const SizedBox(),
+        AssignedCircularImages(
+          cardData: cardItem,
+          heightOfCircles: 24,
+          widthOfCircles: 24,
+        ),
         id: id,
         context: context,
         ref: ref,

@@ -1,4 +1,4 @@
-// List<InventoryQuestions> screensList = [
+// LiSt<InventoryQuestions> screensList = [
 //       InventoryQuestions(
 //         type: "Residential",
 //         screens: [

@@ -4,11 +4,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
+import 'package:yes_broker/widgets/assigned_circular_images.dart';
 import '../../Customs/custom_chip.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/functions/make_call_function.dart';
 import '../../constants/functions/navigation/navigation_functions.dart';
-import '../../constants/utils/constants.dart';
 import '../workItemDetail/inventory_details_header.dart';
 
 class CardFooter extends StatelessWidget {
@@ -114,69 +114,11 @@ class CardFooter extends StatelessWidget {
           ),
         ),
         const Spacer(),
-        checkNotNUllItem(cardData.assignedto) && cardData.assignedto!.isNotEmpty
-            ? Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: cardData.assignedto!
-                    .sublist(
-                      0,
-                      cardData.assignedto!.length < 2
-                          ? 1
-                          : cardData.assignedto!.length < 3
-                              ? 2
-                              : 3,
-                    )
-                    .asMap()
-                    .entries
-                    .map((entry) {
-                  final index = entry.key;
-                  final user = entry.value;
-                  return Transform.translate(
-                    offset: Offset(index * -10.0, 0),
-                    child: Container(
-                      margin: EdgeInsets.zero,
-                      width: 24,
-                      height: 24,
-                      //   decoration: BoxDecoration(
-                      //   shape: BoxShape.circle,
-                      //   border: Border.all(
-                      //     color: Colors.grey,
-                      //     width: 1.0,
-                      //   ),
-                      // ),
-                      decoration: index > 1
-                          ? BoxDecoration(
-                              border: Border.all(color: Colors.grey, width: 1.0),
-                              color: index > 1 ? Colors.grey.shade300 : null,
-                              borderRadius: BorderRadius.circular(40),
-                            )
-                          : BoxDecoration(
-                              border: Border.all(color: Colors.grey, width: 1.0),
-                              image: DecorationImage(
-                                image: NetworkImage(
-                                  user.image!.isEmpty ? noImg : user.image!,
-                                ),
-                                fit: BoxFit.fill,
-                              ),
-                              borderRadius: BorderRadius.circular(40),
-                            ),
-                      child: index > 1
-                          ? Center(
-                              child: CustomText(
-                                title: '+${cardData.assignedto!.length - 2}',
-                                color: Colors.black,
-                                size: 9,
-                                // textAlign: TextAlign.center,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )
-                          : null,
-                    ),
-                  );
-                }).toList(),
-              )
-            : const SizedBox.shrink(),
+        AssignedCircularImages(
+          cardData: cardData,
+          heightOfCircles: 24,
+          widthOfCircles: 24,
+        )
       ],
     );
   }

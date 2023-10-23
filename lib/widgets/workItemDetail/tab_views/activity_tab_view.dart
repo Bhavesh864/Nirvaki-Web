@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:yes_broker/constants/utils/colors.dart';
 
 import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/custom_text.dart';

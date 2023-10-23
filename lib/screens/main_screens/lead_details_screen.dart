@@ -5,7 +5,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 
@@ -15,6 +14,7 @@ import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/pages/add_lead.dart';
 
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
+import 'package:yes_broker/widgets/assigned_circular_images.dart';
 import '../../constants/functions/convertStringTorange/convert_string_to_range.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
 import '../../customs/custom_text.dart';
@@ -25,7 +25,6 @@ import '../../riverpodstate/selected_workitem.dart';
 import '../../widgets/workItemDetail/assignment_widget.dart';
 import '../../widgets/workItemDetail/contact_information.dart';
 import '../../widgets/workItemDetail/inventory_details_header.dart';
-import '../../widgets/workItemDetail/mapview_widget.dart';
 import '../../widgets/workItemDetail/tab_bar_widget.dart';
 import '../../widgets/workItemDetail/tab_views/activity_tab_view.dart';
 import '../../widgets/workItemDetail/tab_views/details_tab_view.dart';
@@ -217,44 +216,25 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                                   width: 10,
                                                 ),
                                                 GestureDetector(
-                                                  onTap: () {
-                                                    showOwnerDetailsAndAssignToBottomSheet(
-                                                      context,
-                                                      'Assignment',
-                                                      AssignmentWidget(
-                                                        id: data.leadId!,
-                                                        assignto: data.assignedto!,
-                                                        imageUrlCreatedBy:
-                                                            data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                                        createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
-                                                      ),
-                                                    );
-                                                  },
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                    children: data.assignedto!.asMap().entries.map((entry) {
-                                                      final index = entry.key;
-                                                      final user = entry.value;
-                                                      return Transform.translate(
-                                                        offset: Offset(index * -8.0, 0),
-                                                        child: Container(
-                                                          width: 28,
-                                                          height: 28,
-                                                          decoration: BoxDecoration(
-                                                            border: Border.all(color: Colors.white),
-                                                            image: DecorationImage(
-                                                              image: NetworkImage(
-                                                                user.image!.isEmpty ? noImg : user.image!,
-                                                              ),
-                                                              fit: BoxFit.fill,
-                                                            ),
-                                                            borderRadius: BorderRadius.circular(40),
-                                                          ),
+                                                    onTap: () {
+                                                      showOwnerDetailsAndAssignToBottomSheet(
+                                                        context,
+                                                        'Assignment',
+                                                        AssignmentWidget(
+                                                          id: data.leadId!,
+                                                          assignto: data.assignedto!,
+                                                          imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty
+                                                              ? noImg
+                                                              : data.createdby!.userimage!,
+                                                          createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
                                                         ),
                                                       );
-                                                    }).toList(),
-                                                  ),
-                                                ),
+                                                    },
+                                                    child: AssignedCircularImages(
+                                                      cardData: data,
+                                                      heightOfCircles: 28,
+                                                      widthOfCircles: 28,
+                                                    )),
                                               ],
                                             ),
                                             Row(
@@ -454,14 +434,15 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
         {"id": 42, "item": data.typeofhealthcare},
         {"id": 43, "item": data.approvedbeds},
         {"id": 44, "item": data.typeofschool},
-        {"id": 45, "item": data.hospitalrooms},
+        {"id": 45, "item": data.hospitalityrooms},
         {"id": 46, "item": data.preferredroadwidth},
         {"id": 47, "item": data.preferredroadwidthAreaUnit},
-        {"id": 100, "item": data.attachments},
-        {"id": 101, "item": data.leadId},
         {"id": 54, "item": data.preferredlocality?.locality},
         {"id": 55, "item": data.furnishedStatus},
         {"id": 56, "item": data.preferredlocality?.listofLocality},
+        {"id": 100, "item": data.attachments},
+        {"id": 101, "item": data.leadId},
+        {"id": 102, "item": data.leadStatus},
       ]);
     } catch (e) {
       if (kDebugMode) {

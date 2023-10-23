@@ -18,6 +18,7 @@ final groupControllerProvider = Provider((ref) {
 class GroupController {
   final GroupRepository groupRepository;
   final ProviderRef ref;
+
   GroupController({
     required this.groupRepository,
     required this.ref,

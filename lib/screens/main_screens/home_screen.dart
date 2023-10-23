@@ -63,11 +63,14 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   getUserData(token) async {
-    final User? user = await User.getUser(token);
-    if (user != null) {
-      ref.read(userDataProvider.notifier).storeUserData(user);
-      AppConst.setRole(user.role);
-      UserHiveMethods.addData(key: "brokerId", data: user.brokerId);
+    if (mounted) {
+      final User? user = await User.getUser(token);
+      final hasUser = ref.read(userDataProvider);
+      if (user != null && hasUser == null) {
+        ref.read(userDataProvider.notifier).storeUserData(user);
+        AppConst.setRole(user.role);
+        UserHiveMethods.addData(key: "brokerId", data: user.brokerId);
+      }
     }
   }
 
@@ -92,6 +95,11 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
         });
       }
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

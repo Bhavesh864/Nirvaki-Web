@@ -32,7 +32,7 @@ class AddLead extends ConsumerStatefulWidget {
 }
 
 class _AddLeadState extends ConsumerState<AddLead> {
-  String? response;
+  // String? response;
   bool allQuestionFinishes = false;
   bool isEdit = false;
   bool isBuy = true;
@@ -73,9 +73,12 @@ class _AddLeadState extends ConsumerState<AddLead> {
 
   addDataOnfirestore(AllChipSelectedAnwers notify) {
     notify.submitLead(isEdit, ref).then((value) => {
-          setState(() {
-            response = value;
-          })
+          if (value == "success")
+            {
+              setState(() {
+                allQuestionFinishes = true;
+              })
+            }
         });
   }
 
@@ -334,9 +337,9 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                                       // final hasvalues = selectedValues.any((element) => element["id"] == 36);
                                                                       // final assignFieldValue = selectedValues.firstWhere((element) => element["id"] == 36);
                                                                       if (currentScreenList[index].title == "Assign to") {
-                                                                        setState(() {
-                                                                          allQuestionFinishes = true;
-                                                                        });
+                                                                        // setState(() {
+                                                                        //   allQuestionFinishes = true;
+                                                                        // });
                                                                         addDataOnfirestore(notify);
                                                                       }
                                                                     }
