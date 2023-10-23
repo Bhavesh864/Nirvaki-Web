@@ -293,7 +293,7 @@ class CalendarItems {
 
 Stream<List<CalendarItems>> mergeCalendarEventsAndTodo(WidgetRef ref) {
   final calendarEventsList = ref.watch(calendarControllerProvider).calendarEvents();
-  final cardDetailsList = ref.watch(calendarControllerProvider).cardDetails();
+  final cardDetailsList = ref.watch(calendarControllerProvider).cardDetails(ref);
 
   final mergedStream = Rx.combineLatest2(
     calendarEventsList,

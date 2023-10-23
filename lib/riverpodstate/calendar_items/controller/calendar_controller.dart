@@ -31,7 +31,7 @@ class CalendarController {
     return calendarRepository.getCalendarEventsStream(user);
   }
 
-  Stream<List<CardDetails>?> cardDetails() {
-    return calendarRepository.getCardDetailsStream();
+  Stream<List<CardDetails>?> cardDetails(WidgetRef ref) {
+    return calendarRepository.getCardDetailsStream(ref);
   }
 }

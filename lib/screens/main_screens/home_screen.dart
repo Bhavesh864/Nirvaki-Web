@@ -63,11 +63,14 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   getUserData(token) async {
-    final User? user = await User.getUser(token);
-    if (user != null) {
-      ref.read(userDataProvider.notifier).storeUserData(user);
-      AppConst.setRole(user.role);
-      UserHiveMethods.addData(key: "brokerId", data: user.brokerId);
+    if (mounted) {
+      final User? user = await User.getUser(token);
+      final hasUser = ref.read(userDataProvider);
+      if (user != null && hasUser == null) {
+        ref.read(userDataProvider.notifier).storeUserData(user);
+        AppConst.setRole(user.role);
+        UserHiveMethods.addData(key: "brokerId", data: user.brokerId);
+      }
     }
   }
 
@@ -95,6 +98,11 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final user = ref.watch(userDataProvider);
     Size size = MediaQuery.of(context).size;
@@ -112,10 +120,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               isUserLoaded = true;
             }
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
-            final List<CardDetails> todoItems = filterItem!
-                .map((doc) => CardDetails.fromSnapshot(doc))
-                .where((item) => item.cardType != "IN" && item.cardType != "LD" && item.status != "Closed")
-                .toList();
+            final List<CardDetails> todoItems =
+                filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD" && item.status != "Closed").toList();
             int compareDueDates(CardDetails a, CardDetails b) {
               DateTime aDueDate = DateFormat('dd-MM-yy').parse(a.duedate!);
               DateTime bDueDate = DateFormat('dd-MM-yy').parse(b.duedate!);
@@ -123,8 +129,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             }
 
             todoItems.sort(compareDueDates);
-            final List<CardDetails> workItems =
-                filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
+            final List<CardDetails> workItems = filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
             workItems.sort((a, b) => b.createdate!.compareTo(a.createdate!));
             bool isDataEmpty = workItems.isEmpty && todoItems.isEmpty;
             return Container(
