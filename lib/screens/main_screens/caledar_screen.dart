@@ -10,12 +10,11 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/customs/responsive.dart';
-import 'package:yes_broker/riverpodstate/user_data.dart';
-
 import '../../constants/firebase/calenderModel/calender_model.dart';
-import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/calendar/calendar_functions.dart';
+import '../../widgets/assigned_circular_images.dart';
 import '../../widgets/calendar/event_data.dart';
+import '../../widgets/calendar_view.dart';
 
 class CalendarScreen extends ConsumerStatefulWidget {
   const CalendarScreen({super.key});
@@ -51,8 +50,6 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final User? user = ref.read(userDataProvider);
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: Responsive.isMobile(context)
@@ -73,14 +70,14 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
           : null,
       body: SafeArea(
         child: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('calenderDetails').where('brokerId', isEqualTo: user?.brokerId).snapshots(),
+          stream: mergeCalendarEventsAndTodo(ref),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Loader();
             }
             if (snapshot.hasData) {
-              final dataList = snapshot.data!.docs;
-              List<CalendarModel> calenderList = dataList.map((doc) => CalendarModel.fromSnapshot(doc)).toList();
+              List<CalendarItems> calenderList = snapshot.data!;
+              // List<CalendarModel> calenderList = dataList.map((doc) => CalendarModel.fromSnapshot(doc)).toList();
 
               return Row(
                 children: [
@@ -88,57 +85,84 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                     flex: 4,
                     child: Padding(
                       padding: const EdgeInsets.all(15),
-                      child: SfCalendar(
-                        showCurrentTimeIndicator: false,
-                        dataSource: EventDataSource(calenderList),
-                        view: CalendarView.day,
-                        showDatePickerButton: true,
-                        timeSlotViewSettings: const TimeSlotViewSettings(startHour: 8, endHour: 24),
-                        initialDisplayDate: selectedDate,
-                        viewHeaderHeight: Responsive.isMobile(context) ? 0 : -1,
-                        showTodayButton: Responsive.isMobile(context) ? false : true,
-                        showNavigationArrow: Responsive.isMobile(context) ? false : true,
-                        backgroundColor: Colors.white,
-                        allowedViews: Responsive.isMobile(context)
-                            ? null
-                            : [
-                                CalendarView.day,
-                                CalendarView.week,
-                              ],
-                        onTap: (details) {
-                          if (details.appointments == null) return;
-                          final CalendarModel event = details.appointments!.first;
-                          showAddCalendarModal(
-                            context: context,
-                            isEdit: true,
-                            calendarModel: event,
-                            ref: ref,
-                          );
-                        },
-                        appointmentBuilder: (context, calendarAppointmentDetails) {
-                          final event = calendarAppointmentDetails.appointments.first;
-                          return Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            margin: EdgeInsets.symmetric(horizontal: Responsive.isMobile(context) ? 0 : 8),
-                            height: calendarAppointmentDetails.bounds.height,
-                            width: calendarAppointmentDetails.bounds.width,
-                            decoration: BoxDecoration(
-                              color: getColorForTaskType('Appointment').withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(12),
+                      child: ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                        child: SfCalendar(
+                          showCurrentTimeIndicator: false,
+                          dataSource: EventDataSource(calenderList),
+                          view: CalendarView.day,
+                          allowAppointmentResize: false,
+                          selectionDecoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.transparent,
                             ),
-                            child: Center(
-                              child: Text(
-                                event.calenderTitle,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
+                          ),
+                          showDatePickerButton: true,
+                          timeSlotViewSettings: const TimeSlotViewSettings(),
+                          initialDisplayDate: selectedDate,
+                          viewHeaderHeight: Responsive.isMobile(context) ? 0 : -1,
+                          showTodayButton: Responsive.isMobile(context) ? false : true,
+                          showNavigationArrow: Responsive.isMobile(context) ? false : true,
+                          backgroundColor: Colors.white,
+                          allowedViews: Responsive.isMobile(context)
+                              ? null
+                              : [
+                                  CalendarView.day,
+                                  CalendarView.week,
+                                ],
+                          onTap: (details) {
+                            if (details.appointments == null) return;
+
+                            final CalendarModel event = details.appointments!.first;
+                            showAddCalendarModal(
+                              context: context,
+                              isEdit: true,
+                              calendarModel: event,
+                              ref: ref,
+                            );
+                          },
+                          appointmentBuilder: (context, calendarAppointmentDetails) {
+                            final CalendarItems event = calendarAppointmentDetails.appointments.first;
+                            return Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              margin: EdgeInsets.symmetric(horizontal: Responsive.isMobile(context) ? 0 : 8),
+                              height: calendarAppointmentDetails.bounds.height,
+                              width: calendarAppointmentDetails.bounds.width,
+                              decoration: BoxDecoration(
+                                color: getColorForTaskType('').withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      event.calenderTitle!,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    if (event.calenderType == 'Todo')
+                                      Padding(
+                                        padding: EdgeInsets.only(right: event.todoDetails!.assignedto!.length > 1 ? 0 : 8),
+                                        child: AssignedCircularImages(
+                                          cardData: event.todoDetails,
+                                          heightOfCircles: 26,
+                                          widthOfCircles: 26,
+                                        ),
+                                      )
+                                  ],
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),

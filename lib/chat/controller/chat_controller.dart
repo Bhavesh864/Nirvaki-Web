@@ -12,17 +12,20 @@ import '../enums/message.enums.dart';
 import '../models/chat_contact.dart';
 import '../repositories/chat_repositories.dart';
 
-final chatControllerProvider = Provider((ref) {
-  final chatRepository = ref.watch(chatRepositoryProvider);
-  return ChatController(
-    chatRepository: chatRepository,
-    ref: ref,
-  );
-});
+final chatControllerProvider = Provider(
+  (ref) {
+    final chatRepository = ref.watch(chatRepositoryProvider);
+    return ChatController(
+      chatRepository: chatRepository,
+      ref: ref,
+    );
+  },
+);
 
 class ChatController {
   final ChatRepository chatRepository;
   final ProviderRef ref;
+
   ChatController({
     required this.chatRepository,
     required this.ref,
