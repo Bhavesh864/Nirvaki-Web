@@ -19,6 +19,7 @@ import 'package:yes_broker/widgets/assigned_circular_images.dart';
 import '../constants/firebase/calenderModel/calender_model.dart';
 import '../constants/firebase/userModel/user_info.dart';
 import '../constants/functions/calendar/calendar_functions.dart';
+import '../constants/functions/navigation/navigation_functions.dart';
 import '../constants/functions/workitems_detail_methods.dart';
 import '../riverpodstate/user_data.dart';
 import 'calendar/event_data.dart';
@@ -162,7 +163,23 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                         child: SfCalendar(
                           initialDisplayDate: DateTime.now(),
                           headerHeight: 0,
+                          onTap: (details) {
+                            if (details.appointments == null) return;
 
+                            final CalendarItems event = details.appointments!.first;
+
+                            if (event.calenderType == 'Todo') {
+                              navigateBasedOnId(context, event.id!, ref);
+                              return;
+                            }
+
+                            showAddCalendarModal(
+                              context: context,
+                              isEdit: true,
+                              calendarModel: event,
+                              ref: ref,
+                            );
+                          },
                           dataSource: EventDataSource(calenderList),
                           view: CalendarView.timelineDay,
                           timeSlotViewSettings: TimeSlotViewSettings(
@@ -177,7 +194,6 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                             ),
                             timelineAppointmentHeight: Responsive.isMobile(context) ? 70 : 60,
                           ),
-
                           backgroundColor: Colors.white,
                           allowAppointmentResize: false,
                           selectionDecoration: BoxDecoration(
@@ -187,7 +203,6 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                           ),
                           showDatePickerButton: false,
                           viewHeaderHeight: 0,
-
                           // headerStyle: const CalendarHeaderStyle(
                           //   textAlign: TextAlign.center,
                           //   backgroundColor: Colors.amber,

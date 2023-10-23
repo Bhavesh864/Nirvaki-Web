@@ -10,8 +10,8 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/customs/responsive.dart';
-import '../../constants/firebase/calenderModel/calender_model.dart';
 import '../../constants/functions/calendar/calendar_functions.dart';
+import '../../constants/functions/navigation/navigation_functions.dart';
 import '../../widgets/assigned_circular_images.dart';
 import '../../widgets/calendar/event_data.dart';
 import '../../widgets/calendar_view.dart';
@@ -27,6 +27,8 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   late DateTime _displayedMonth;
   DateTime selectedDate = DateTime.now();
   Stream<QuerySnapshot<Map<String, dynamic>>>? stream;
+  CalendarController firstCalendarController = CalendarController();
+  CalendarController secondCalendarController = CalendarController();
 
   @override
   void initState() {
@@ -88,6 +90,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                       child: ScrollConfiguration(
                         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                         child: SfCalendar(
+                          controller: firstCalendarController,
                           showCurrentTimeIndicator: false,
                           dataSource: EventDataSource(calenderList),
                           view: CalendarView.day,
@@ -113,7 +116,13 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                           onTap: (details) {
                             if (details.appointments == null) return;
 
-                            final CalendarModel event = details.appointments!.first;
+                            final CalendarItems event = details.appointments!.first;
+
+                            if (event.calenderType == 'Todo') {
+                              navigateBasedOnId(context, event.id!, ref);
+                              return;
+                            }
+
                             showAddCalendarModal(
                               context: context,
                               isEdit: true,
@@ -136,13 +145,16 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      event.calenderTitle!,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
+                                    Container(
+                                      constraints: const BoxConstraints(maxWidth: 200),
+                                      child: Text(
+                                        event.calenderTitle!,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14,
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(
@@ -216,7 +228,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                                 dataSource: EventDataSource(calenderList),
                                 cellBorderColor: Colors.transparent,
                                 view: CalendarView.month,
-                                controller: CalendarController(),
+                                controller: secondCalendarController,
                                 backgroundColor: Colors.white,
                               ),
                             ),
