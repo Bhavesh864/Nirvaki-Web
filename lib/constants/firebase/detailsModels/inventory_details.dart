@@ -48,8 +48,10 @@ class InventoryDetails {
   String? typeofhealthcare;
   String? approvedbeds;
   String? typeofschool;
-  String? hospitalrooms;
+  String? hospitalityrooms;
   String? furnishedStatus;
+  String? widthofRoad;
+  String? widthOfRoadUnit;
 
   InventoryDetails(
       {required this.inventoryTitle,
@@ -69,6 +71,8 @@ class InventoryDetails {
       this.inventorycategory,
       this.inventoryType,
       this.inventorysource,
+      this.widthOfRoadUnit,
+      this.widthofRoad,
       this.propertycategory,
       this.propertykind,
       this.transactiontype,
@@ -96,7 +100,7 @@ class InventoryDetails {
       this.typeofhealthcare,
       this.approvedbeds,
       this.typeofschool,
-      this.hospitalrooms,
+      this.hospitalityrooms,
       this.furnishedStatus});
 
   factory InventoryDetails.fromSnapshot(DocumentSnapshot snapshot) {
@@ -104,6 +108,8 @@ class InventoryDetails {
     return InventoryDetails(
       inventoryTitle: json["inventoryTitle"],
       inventoryDescription: json["inventoryDescription"],
+      widthOfRoadUnit: json["widthOfRoadUnit"],
+      widthofRoad: json["widthofRoad"],
       inventoryId: json["InventoryId"],
       inventoryStatus: json["InventoryStatus"],
       brokerid: json["brokerid"],
@@ -147,13 +153,19 @@ class InventoryDetails {
       typeofhealthcare: json["typeofhealthcare"],
       approvedbeds: json["approvedbeds"],
       typeofschool: json["typeofschool"],
-      hospitalrooms: json["hospitalrooms"],
+      hospitalityrooms: json["hospitalityrooms"],
     );
   }
 
   InventoryDetails.fromJson(Map<String, dynamic> json) {
     if (json["inventoryTitle"] is String) {
       inventoryTitle = json["inventoryTitle"];
+    }
+    if (json["widthofRoad"] is String) {
+      widthofRoad = json["widthofRoad"];
+    }
+    if (json["widthOfRoadUnit"] is String) {
+      widthOfRoadUnit = json["widthOfRoadUnit"];
     }
     if (json["inventoryDescription"] is String) {
       inventoryDescription = json["inventoryDescription"];
@@ -287,8 +299,8 @@ class InventoryDetails {
     if (json["typeofschool"] is String) {
       typeofschool = json["typeofschool"];
     }
-    if (json["hospitalrooms"] is String) {
-      hospitalrooms = json["hospitalrooms"];
+    if (json["hospitalityrooms"] is String) {
+      hospitalityrooms = json["hospitalityrooms"];
     }
   }
 
@@ -297,6 +309,8 @@ class InventoryDetails {
     data["inventoryTitle"] = inventoryTitle;
     data["inventoryDescription"] = inventoryDescription;
     data["InventoryId"] = inventoryId;
+    data["widthOfRoadUnit"] = widthOfRoadUnit;
+    data["widthofRoad"] = widthofRoad;
     data["InventoryStatus"] = inventoryStatus;
     data["furnishedStatus"] = furnishedStatus;
     data["brokerid"] = brokerid;
@@ -371,7 +385,7 @@ class InventoryDetails {
     data["typeofhealthcare"] = typeofhealthcare;
     data["approvedbeds"] = approvedbeds;
     data["typeofschool"] = typeofschool;
-    data["hospitalrooms"] = hospitalrooms;
+    data["hospitalityrooms"] = hospitalityrooms;
     return data;
   }
 
@@ -625,12 +639,16 @@ class Propertyaddress {
   String? city;
   String? state;
   String? locality;
+  String? fullAddress;
 
-  Propertyaddress({this.addressline1, this.addressline2, this.floornumber, this.city, this.state, this.locality});
+  Propertyaddress({this.addressline1, this.addressline2, this.floornumber, this.city, this.state, this.locality, this.fullAddress});
 
   Propertyaddress.fromJson(Map<String, dynamic> json) {
     if (json["Addressline1"] is String) {
       addressline1 = json["Addressline1"];
+    }
+    if (json["fullAddress"] is String) {
+      fullAddress = json["fullAddress"];
     }
     if (json["addressline2"] is String) {
       addressline2 = json["addressline2"];
@@ -657,6 +675,7 @@ class Propertyaddress {
     data["city"] = city;
     data["state"] = state;
     data["locality"] = locality;
+    data["fullAddress"] = fullAddress;
     return data;
   }
 }

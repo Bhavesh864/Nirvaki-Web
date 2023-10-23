@@ -403,7 +403,7 @@ Widget buildLeadQuestions(
                         textColor: Colors.black,
                       ),
                       onTap: () {
-                        if (selectedLocality.length >= 5) {
+                        if (selectedLocality.length == 5) {
                           customSnackBar(context: context, text: "You can add maximum 5 Localities");
                           controller.clear();
                           setState(() {

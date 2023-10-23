@@ -143,29 +143,30 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
                 return fullName.contains(searchText) || title.contains(searchText) || mobileNumber.contains(searchText);
               }
             }).toList();
+            if (selectedFilters.isNotEmpty) {
+              filteredleadList = filteredleadList.where((item) {
+                if (!item.cardTitle!.contains('Plot') && item.cardTitle!.contains("Residential")) {
+                  final bool isBedRoomMatch = selectedFilters.isEmpty || selectedFilters.contains('${item.roomconfig!.bedroom!}BHK');
+                  final bool has5BHKFilter = selectedFilters.contains('5BHK +');
+                  final int numberOfBedrooms = int.parse(item.roomconfig!.bedroom!);
 
-            filteredleadList = filteredleadList.where((item) {
-              if (item.cardTitle!.contains('Residential')) {
-                final bool isBedRoomMatch = selectedFilters.isEmpty || selectedFilters.contains('${item.roomconfig!.bedroom!}BHK');
-                final bool has5BHKFilter = selectedFilters.contains('5BHK +');
-                final int numberOfBedrooms = int.parse(item.roomconfig!.bedroom!);
-
-                if (has5BHKFilter) {
-                  return numberOfBedrooms >= 5; // Show items with 5 or more bedrooms
+                  if (has5BHKFilter) {
+                    return numberOfBedrooms >= 5; // Show items with 5 or more bedrooms
+                  }
+                  return isBedRoomMatch;
+                } else {
+                  return false;
                 }
-                return isBedRoomMatch;
-              } else {
-                return false;
-              }
-              // final bool isBedRoomMatch = selectedFilters.isEmpty || selectedFilters.contains('${item.roomconfig!.bedroom!}BHK');
+                // final bool isBedRoomMatch = selectedFilters.isEmpty || selectedFilters.contains('${item.roomconfig!.bedroom!}BHK');
 
-              // final RateUnit rateStartUnit = getRateUnitFromString(item.propertypricerange!.unit!);
-              // final RateUnit rateEndUnit = getRateUnitFromString(item.propertypricerange!.unit!);
-              // final double itemRateStart = convertToRupees(double.parse(item.propertypricerange!.arearangestart!), rateStartUnit);
-              // final double itemRateEnd = convertToRupees(double.parse(item.propertypricerange!.arearangeend!), rateEndUnit);
+                // final RateUnit rateStartUnit = getRateUnitFromString(item.propertypricerange!.unit!);
+                // final RateUnit rateEndUnit = getRateUnitFromString(item.propertypricerange!.unit!);
+                // final double itemRateStart = convertToRupees(double.parse(item.propertypricerange!.arearangestart!), rateStartUnit);
+                // final double itemRateEnd = convertToRupees(double.parse(item.propertypricerange!.arearangeend!), rateEndUnit);
 
-              // final bool isRateInRange = itemRateStart >= rateRange.start && itemRateEnd <= rateRange.end;
-            }).toList();
+                // final bool isRateInRange = itemRateStart >= rateRange.start && itemRateEnd <= rateRange.end;
+              }).toList();
+            }
 
             status = filteredleadList;
 

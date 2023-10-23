@@ -209,7 +209,6 @@ Widget buildInventoryQuestions(
     if (isPlotSelected && question.questionId == 30) {
       return const SizedBox();
     }
-
     if (question.questionTitle == 'Mobile') {
       return StatefulBuilder(builder: (context, setState) {
         return Column(
@@ -330,6 +329,7 @@ Widget buildInventoryQuestions(
               labelText: 'Search your location',
               inputController: controller,
               hintText: "Search here...",
+              validator: (value) => validateForNormalFeild(value: value, props: "Location"),
               onChanged: (value) {
                 getPlaces(value).then((places) {
                   final descriptions = places.predictions?.map((prediction) => prediction.description) ?? [];
@@ -409,29 +409,23 @@ Widget buildInventoryQuestions(
               },
               inputController: statecontroller,
               readyOnly: true,
-              isMandatory: true,
               labelText: "State",
-              validator: (value) => validateForNormalFeild(value: value, props: "State"),
             ),
             LabelTextInputField(
               onChanged: (newvalue) {
                 notify.add({"id": 27, "item": newvalue.trim()});
               },
               inputController: citycontroller,
-              isMandatory: true,
               readyOnly: true,
               labelText: "City",
-              validator: (value) => validateForNormalFeild(value: value, props: "City"),
             ),
             LabelTextInputField(
               onChanged: (newvalue) {
                 notify.add({"id": 54, "item": newvalue.trim()});
               },
               inputController: localitycontroller,
-              isMandatory: true,
               readyOnly: true,
               labelText: "Locality",
-              validator: (value) => validateForNormalFeild(value: value, props: "Locality"),
             ),
             LabelTextInputField(
               onChanged: (newvalue) {
@@ -621,12 +615,11 @@ Widget buildInventoryQuestions(
     );
   } else if (question.questionOptionType == 'photo') {
     Propertyphotos? propertyphotos;
-    if (isEdit) {
-      if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
-        propertyphotos = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
-      }
+    // if (isEdit) {
+    if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
+      propertyphotos = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"];
+      // }
     }
-
     return PhotosViewForm(
       notify: notify,
       id: question.questionId,

@@ -37,11 +37,45 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
   void initState() {
     super.initState();
     getCalenderDetailsfunc();
+    // mergeCalendarTodo();
   }
 
   void getCalenderDetailsfunc() {
     final User? user = ref.read(userDataProvider);
     calenderDetails = FirebaseFirestore.instance.collection('calenderDetails').where('brokerId', isEqualTo: user?.brokerId).snapshots();
+  }
+
+  mergeCalendarTodo() {
+    final User? currentUserdata = ref.read(userDataProvider);
+
+    Stream<List<CalendarModel>> calendarStream = calenderDetails.map((querySnapshot) {
+      List<CalendarModel> calendarList = [];
+      // ignore: unused_local_variable
+      for (var doc in querySnapshot.docs) {
+        CalendarModel calendarModel = CalendarModel();
+        calendarList.add(calendarModel);
+      }
+      return calendarList;
+    });
+
+    Stream<List<CardDetails>> cardDetailStream = calenderDetails.map((querySnapshot) {
+      List<CardDetails> cardList = [];
+      // ignore: unused_local_variable
+      for (var doc in querySnapshot.docs) {
+        CardDetails cardModel = CardDetails(workitemId: doc['workitemId'], status: 'NEW', createdate: Timestamp.now(), brokerid: currentUserdata?.brokerId);
+        cardList.add(cardModel);
+      }
+      return cardList;
+    });
+
+    final mergeList = Rx.combineLatest2<List<CalendarModel>, List<CardDetails>, List<dynamic>>(calendarStream, cardDetailStream, (calendarData, cardData) {
+      final list = [];
+
+      list.addAll(calendarData);
+      list.addAll(cardData);
+      return list;
+    });
+    return mergeList;
   }
 
   @override

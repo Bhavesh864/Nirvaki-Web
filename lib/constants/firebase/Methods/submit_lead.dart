@@ -12,6 +12,7 @@ import 'package:yes_broker/riverpodstate/user_data.dart';
 
 import '../../functions/convertStringTorange/convert_range_string.dart';
 import '../send_notification.dart';
+import 'add_activity.dart';
 
 Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async {
   final randomId = randomNumeric(5);
@@ -30,17 +31,17 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
   final email = getDataById(state, 9);
   final companyNamecustomer = getDataById(state, 10);
   final propertyKind = getDataById(state, 11);
-  final villaType = getDataById(state, 12);
-  final transactionType = getDataById(state, 13);
-  final bedrooms = getDataById(state, 14);
-  final additionalRoom = getDataById(state, 15);
-  final bathrooms = getDataById(state, 16);
-  final balconies = getDataById(state, 17);
-  final boundaryWall = getDataById(state, 18);
-  final openSides = getDataById(state, 19);
-  final possession = getDataById(state, 20);
+  var villaType = getDataById(state, 12);
+  var transactionType = getDataById(state, 13);
+  var bedrooms = getDataById(state, 14);
+  var additionalRoom = getDataById(state, 15);
+  var bathrooms = getDataById(state, 16);
+  var balconies = getDataById(state, 17);
+  var boundaryWall = getDataById(state, 18);
+  var openSides = getDataById(state, 19);
+  var possession = getDataById(state, 20);
   final amenities = getDataById(state, 21);
-  final coveredparking = getDataById(state, 22);
+  var coveredparking = getDataById(state, 22);
   final areaUnit = getDataById(state, 23);
   final superArea = getDataById(state, 24);
   // final carpetArea = getDataById(state, 25);
@@ -49,29 +50,113 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
   // final addressLine1 = getDataById(state, 28);
   // final addressLine2 = getDataById(state, 29);
   final floorNumber = getDataById(state, 30);
-  final latlng = getDataById(state, 31);
+  // final latlng = getDataById(state, 31);
   final budgetPrice = getDataById(state, 32);
   final preferredpropertyfacing = getDataById(state, 34);
   final comments = getDataById(state, 35);
   final List<User> assignto = getDataById(state, 36);
   // final locality = getDataById(state, 54);
-  final furnishedStatus = getDataById(state, 55);
+  var furnishedStatus = getDataById(state, 55);
   final listofLocality = getDataById(state, 56);
 
   // commerical
-  final availability = getDataById(state, 37);
+  var availability = getDataById(state, 37);
   final commericialtype = getDataById(state, 38);
-  final typeofoffice = getDataById(state, 39);
-  final typeofretail = getDataById(state, 40);
-  final typeofhospitality = getDataById(state, 41);
-  final typeofhealthcare = getDataById(state, 42);
-  final approvedbeds = getDataById(state, 43);
-  final typeofschool = getDataById(state, 44);
-  final hospitalrooms = getDataById(state, 45);
+  var typeofoffice = getDataById(state, 39);
+  var typeofretail = getDataById(state, 40);
+  var typeofhospitality = getDataById(state, 41);
+  var typeofhealthcare = getDataById(state, 42);
+  var approvedbeds = getDataById(state, 43);
+  var typeofschool = getDataById(state, 44);
+  var hospitalityrooms = getDataById(state, 45);
   final widthofRoad = getDataById(state, 46);
   final widthofRoadft = getDataById(state, 47);
   final attachments = getDataById(state, 100);
   final existingLeadId = getDataById(state, 101);
+  final existingCardStatus = getDataById(state, 102);
+  if (propertyCategory == "Residential") {
+    if (leadCategory == "Rent") {
+      availability = boundaryWall = openSides = transactionType = null;
+    } else if (leadCategory == "Buy") {}
+    switch (propertyKind) {
+      case "Apartment":
+      case "Builder Floor":
+      case "Independent House/Villa":
+        boundaryWall = openSides = null;
+        if (propertyKind != "Independent House/Villa") {
+          villaType = null;
+        }
+        break;
+      case "Farm House":
+        villaType = coveredparking = boundaryWall = openSides = null;
+        break;
+      case "Plot":
+        bedrooms = bathrooms = balconies = additionalRoom = villaType = coveredparking = furnishedStatus = null;
+        break;
+    }
+  }
+
+  void resetAllFields() {
+    typeofoffice = typeofschool = typeofretail = typeofhospitality = typeofhealthcare = approvedbeds = hospitalityrooms = null;
+  }
+
+  void resetAllFieldsForOffice() {
+    typeofschool = typeofretail = typeofhospitality = typeofhealthcare = approvedbeds = hospitalityrooms = null;
+  }
+
+  void resetAllFieldsForSchool() {
+    typeofoffice = typeofretail = typeofhospitality = typeofhealthcare = approvedbeds = hospitalityrooms = null;
+  }
+
+  if (propertyCategory == "Commercial") {
+    if (leadCategory == "Rent") {
+      transactionType = null;
+    } else if (leadCategory == "Buy") {}
+    switch (propertyKind) {
+      case "Land":
+        if (commericialtype == "Shop Cum Office" || commericialtype == "Mall" || commericialtype == "Shopping Complex" || commericialtype == "Warehouse") {
+          resetAllFields();
+          possession = null;
+        }
+        if (commericialtype == "Office") {
+          resetAllFieldsForOffice();
+        }
+        if (commericialtype == "School") {
+          resetAllFieldsForSchool();
+        }
+        break;
+      case "Constructed Property":
+      case "Under Construction":
+        if (propertyKind == "Constructed Property") {
+          possession = null;
+        }
+        if (commericialtype == "Office") {
+          resetAllFieldsForOffice();
+        }
+        if (commericialtype == "School") {
+          resetAllFieldsForSchool();
+        }
+        if (commericialtype == "Retail") {
+          typeofoffice = typeofschool = typeofhospitality = typeofhealthcare = approvedbeds = hospitalityrooms = null;
+        }
+        if (commericialtype == "Industrial") {
+          resetAllFields();
+        }
+        if (commericialtype == "Hospitality") {
+          typeofoffice = typeofschool = typeofretail = typeofhealthcare = approvedbeds = null;
+        }
+        if (commericialtype == "Healthcare") {
+          if (typeofhealthcare == "Clinic") {
+            approvedbeds = null;
+          }
+          typeofoffice = typeofschool = typeofretail = typeofhospitality = hospitalityrooms = null;
+        }
+        if (commericialtype == "Institutional" || commericialtype == "Warehouse") {
+          resetAllFields();
+        }
+        break;
+    }
+  }
   final List<cards.Assignedto> assignedToList = assignto.map((user) {
     return cards.Assignedto(
       firstname: user.userfirstname,
@@ -83,15 +168,15 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
   }).toList();
   final cards.CardDetails card = cards.CardDetails(
       workitemId: isEdit ? existingLeadId : "LD$randomId",
-      status: "New",
+      status: isEdit ? existingCardStatus : "New",
       cardCategory: leadCategory,
       linkedItemType: "LD",
+      cardStatus: isEdit ? existingCardStatus : "New",
       brokerid: currentUserdata?.brokerId,
       cardType: "LD",
       cardTitle: "$propertyCategory $propertyKind",
       cardDescription: "Want to $leadCategory her $bedrooms BHK for ${formatValue(budgetPrice?.start)}-${formatValue(budgetPrice?.end)} rupees",
       customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
-      cardStatus: "New",
       assignedto: assignedToList,
       createdby: cards.Createdby(
           userfirstname: currentUserdata?.userfirstname, userid: currentUserdata?.userId, userlastname: currentUserdata?.userlastname, userimage: currentUserdata?.image),
@@ -115,11 +200,11 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       leadTitle: "$propertyCategory $title $propertyKind",
       leadDescription: "lead",
       leadId: isEdit ? existingLeadId : "LD$randomId",
-      leadStatus: "New",
+      leadStatus: isEdit ? existingCardStatus : "New",
       typeofoffice: typeofoffice,
       approvedbeds: approvedbeds,
       typeofhospitality: typeofhospitality,
-      hospitalrooms: hospitalrooms,
+      hospitalityrooms: hospitalityrooms,
       propertykind: propertyKind,
       managerid: currentUserdata?.managerid,
       commericialtype: commericialtype,
@@ -127,10 +212,10 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       typeofretail: typeofretail,
       typeofhealthcare: typeofhealthcare,
       preferredroadwidth: widthofRoad,
-      propertylocation: latlng,
+      // propertylocation: latlng,
       preferredroadwidthAreaUnit: widthofRoadft,
       villatype: villaType,
-      preferredlocation: latlng,
+      // preferredlocation: latlng,
       typeofschool: typeofschool,
       transactiontype: transactionType,
       attachments: attachments ?? [],
@@ -165,16 +250,26 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
   isEdit
       ? await LeadDetails.updateLeadDetails(id: existingLeadId, leadDetails: lead).then((value) => {res = "success"})
       : await LeadDetails.addLeadDetails(lead).then((value) => {res = "success"});
-  if (!isEdit) {
-    for (var user in assignedListInLead) {
-      notifyToUser(
-          assignedto: user.userid,
-          title: "Assign new LD$randomId",
-          content: "LD$randomId New Lead assigned to ${user.firstname} ${user.lastname}",
-          assigntofield: true,
-          itemid: "LD$randomId",
-          currentuserdata: currentUserdata!);
-    }
-  }
+  // for (var user in assignedListInLead) {
+  //   if (!isEdit) {
+  //     submitActivity(itemid: "IN$randomId", activitytitle: "New Lead assigned to ${user.firstname} ${user.lastname}", user: currentUserdata!);
+  //     notifyToUser(
+  //         assignedto: user.userid,
+  //         title: "Assign new LD$randomId",
+  //         content: "LD$randomId New Lead assigned to ${user.firstname} ${user.lastname}",
+  //         assigntofield: true,
+  //         itemid: "LD$randomId",
+  //         currentuserdata: currentUserdata);
+  //   } else {
+  //     submitActivity(itemid: existingLeadId, activitytitle: "Lead detail updated", user: currentUserdata!);
+  //     notifyToUser(
+  //         assignedto: user.userid,
+  //         title: "Lead detail Updated",
+  //         content: "$existingLeadId Lead detail Updated",
+  //         assigntofield: true,
+  //         itemid: existingLeadId,
+  //         currentuserdata: currentUserdata);
+  //   }
+  // }
   return res;
 }

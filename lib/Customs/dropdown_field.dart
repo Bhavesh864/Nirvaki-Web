@@ -232,7 +232,7 @@ class _CustomDropdownFormFieldState<T> extends State<CustomDropdownFormField<T>>
               borderSide: const BorderSide(color: Colors.red, width: 1),
             ),
             contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            hintText: "--select--",
+            hintText: "--Select--",
             hintStyle: widget.hintStyle,
             focusColor: Colors.transparent,
             fillColor: Colors.transparent,

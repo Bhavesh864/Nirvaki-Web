@@ -46,7 +46,7 @@ class LeadDetails {
   String? typeofhealthcare;
   String? approvedbeds;
   String? typeofschool;
-  String? hospitalrooms;
+  String? hospitalityrooms;
   String? preferredroadwidth;
   String? preferredroadwidthAreaUnit;
   String? furnishedStatus;
@@ -94,7 +94,7 @@ class LeadDetails {
     this.approvedbeds,
     this.propertyarea,
     this.typeofschool,
-    this.hospitalrooms,
+    this.hospitalityrooms,
     this.preferredroadwidth,
     this.preferredroadwidthAreaUnit,
   });
@@ -146,7 +146,7 @@ class LeadDetails {
       typeofhealthcare: json["typeofhealthcare"],
       approvedbeds: json["approvedbeds"],
       typeofschool: json["typeofschool"],
-      hospitalrooms: json["hospitalrooms"],
+      hospitalityrooms: json["hospitalityrooms"],
     );
   }
 
@@ -277,8 +277,8 @@ class LeadDetails {
     if (json["typeofschool"] is String) {
       typeofschool = json["typeofschool"];
     }
-    if (json["hospitalrooms"] is String) {
-      hospitalrooms = json["hospitalrooms"];
+    if (json["hospitalityrooms"] is String) {
+      hospitalityrooms = json["hospitalityrooms"];
     }
     if (json["preferredroadwidth"] is String) {
       preferredroadwidth = json["preferredroadwidth"];
@@ -357,7 +357,7 @@ class LeadDetails {
     data["typeofhealthcare"] = typeofhealthcare;
     data["approvedbeds"] = approvedbeds;
     data["typeofschool"] = typeofschool;
-    data["hospitalrooms"] = hospitalrooms;
+    data["hospitalityrooms"] = hospitalityrooms;
     data["preferredroadwidth"] = preferredroadwidth;
     data["preferredroadwidthAreaUnit"] = preferredroadwidthAreaUnit;
     return data;
