@@ -9,6 +9,7 @@ import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.da
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
 import 'package:yes_broker/constants/firebase/send_notification.dart';
+import 'package:yes_broker/constants/functions/assingment_methods.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
@@ -109,12 +110,13 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                       TodoDetails.updatecardStatus(id: cardData.workitemId!, newStatus: value);
                     }
                     setState(() {});
+                    final item = calculateTypeOfWorkitem(cardData.workitemId!);
                     notifyToUser(
                       currentuserdata: user!,
                       itemid: cardData.workitemId!,
                       assignedto: cardData.assignedto,
-                      content: "${user.userfirstname} ${user.userlastname} change status to $value",
-                      title: "${cardData.workitemId} status changed",
+                      content: "${cardData.workitemId} $item status changed to $value",
+                      title: "$item status changed",
                     );
                   },
                 ),
@@ -196,8 +198,7 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                     Icon(
                       Icons.calendar_month_outlined,
                       size: 12,
-                      color: cardData.duedate != null &&
-                              DateFormat('dd-MM-yy HH:mm a').parse('${cardData.duedate!} ${cardData.dueTime ?? '11:00 PM'}').isBefore(DateTime.now())
+                      color: cardData.duedate != null && DateFormat('dd-MM-yy HH:mm a').parse('${cardData.duedate!} ${cardData.dueTime ?? '11:00 PM'}').isBefore(DateTime.now())
                           ? Colors.red
                           : Colors.black,
                     ),
@@ -205,10 +206,10 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                     AppText(
                       text: DateFormat('dd MMM yyyy').format(DateFormat('dd-MM-yy HH:mm a').parse('${cardData.duedate!} ${cardData.dueTime ?? '11:00 PM'}')),
                       fontsize: 10,
-                      textColor: cardData.duedate != null &&
-                              DateFormat('dd-MM-yy HH:mm a').parse('${cardData.duedate!} ${cardData.dueTime ?? '11:00 PM'}').isBefore(DateTime.now())
-                          ? Colors.red.shade500
-                          : Colors.black,
+                      textColor:
+                          cardData.duedate != null && DateFormat('dd-MM-yy HH:mm a').parse('${cardData.duedate!} ${cardData.dueTime ?? '11:00 PM'}').isBefore(DateTime.now())
+                              ? Colors.red.shade500
+                              : Colors.black,
                     ),
                   ],
                 ),

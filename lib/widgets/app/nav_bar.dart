@@ -112,7 +112,7 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
                 return const SizedBox();
               }),
           const SizedBox(
-            width: 20,
+            width: 10,
           ),
           PopupMenuButton(
             shape: RoundedRectangleBorder(
@@ -133,8 +133,8 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
             },
             child: userData?.image != '' && userData?.image != null
                 ? Container(
-                    height: 30,
-                    width: 30,
+                    height: 32,
+                    width: 32,
                     margin: const EdgeInsets.only(right: 10),
                     decoration: BoxDecoration(
                       border: Border.all(width: 1, color: Colors.grey),
@@ -142,16 +142,16 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
                         fit: BoxFit.cover,
                         image: NetworkImage(userData?.image ?? noImg),
                       ),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                   )
                 : Container(
-                    height: 30,
-                    width: 30,
+                    height: 32,
+                    width: 32,
                     margin: const EdgeInsets.only(right: 10),
                     decoration: BoxDecoration(
                       color: AppColor.primary,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                     child: Center(
                       child: Text(

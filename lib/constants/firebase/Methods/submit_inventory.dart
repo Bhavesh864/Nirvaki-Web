@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:random_string/random_string.dart';
 import 'package:yes_broker/constants/app_constant.dart';
+import 'package:yes_broker/constants/firebase/Methods/add_activity.dart';
 
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' as cards;
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
@@ -28,17 +29,17 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
   final email = getDataById(state, 9);
   final companyNamecustomer = getDataById(state, 10);
   final propertyKind = getDataById(state, 11);
-  final villaType = getDataById(state, 12);
-  final transactionType = getDataById(state, 13);
-  final bedrooms = getDataById(state, 14);
-  final additionalRoom = getDataById(state, 15);
-  final bathrooms = getDataById(state, 16);
-  final balconies = getDataById(state, 17);
-  final boundaryWall = getDataById(state, 18);
-  final openSides = getDataById(state, 19);
-  final possession = getDataById(state, 20);
+  var villaType = getDataById(state, 12);
+  var transactionType = getDataById(state, 13);
+  var bedrooms = getDataById(state, 14);
+  var additionalRoom = getDataById(state, 15);
+  var bathrooms = getDataById(state, 16);
+  var balconies = getDataById(state, 17);
+  var boundaryWall = getDataById(state, 18);
+  var openSides = getDataById(state, 19);
+  var possession = getDataById(state, 20);
   final amenities = getDataById(state, 21);
-  final coveredparking = getDataById(state, 22);
+  var coveredparking = getDataById(state, 22);
   final areaUnit = getDataById(state, 23);
   final superArea = getDataById(state, 24);
   // final carpetArea = getDataById(state, 25);
@@ -53,27 +54,119 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
   final video = getDataById(state, 34);
   final comments = getDataById(state, 35);
   final List<User> assignto = getDataById(state, 36);
-  final availability = getDataById(state, 37);
-  final commericialtype = getDataById(state, 38);
-  final typeofoffice = getDataById(state, 39);
-  final typeofretail = getDataById(state, 40);
-  final typeofhospitality = getDataById(state, 41);
-  final typeofhealthcare = getDataById(state, 42);
-  final approvedbeds = getDataById(state, 43);
-  final typeofschool = getDataById(state, 44);
-  final hospitalrooms = getDataById(state, 45);
-  final price = getDataById(state, 46);
-  // final priceunit = getDataById(state, 47);
-  final rentamount = getDataById(state, 48);
+  var availability = getDataById(state, 37);
+  var commericialtype = getDataById(state, 38);
+  var typeofoffice = getDataById(state, 39);
+  var typeofretail = getDataById(state, 40);
+  var typeofhospitality = getDataById(state, 41);
+  var typeofhealthcare = getDataById(state, 42);
+  var approvedbeds = getDataById(state, 43);
+  var typeofschool = getDataById(state, 44);
+  var hospitalityRoom = getDataById(state, 45);
+  var price = getDataById(state, 46);
+  // c priceunit = getDataById(state, 47);
+  var rentamount = getDataById(state, 48);
   // final rentunit = getDataById(state, 49);
-  final securityamount = getDataById(state, 50);
+  var securityamount = getDataById(state, 50);
   final securityunit = getDataById(state, 51);
   final lockinperiod = getDataById(state, 52);
   final commercialphotos = getDataById(state, 53);
   final locality = getDataById(state, 54);
-  final furnishedStatus = getDataById(state, 55);
+  var furnishedStatus = getDataById(state, 55);
+  final fullAddress = getDataById(state, 56);
+  final widthofRoad = getDataById(state, 57);
+  final widthOfRoadAreaUnit = getDataById(state, 58);
   final attachments = getDataById(state, 100);
   final existingInventoryId = getDataById(state, 101);
+  final existingcardStatus = getDataById(state, 102);
+
+  if (propertyCategory == "Residential") {
+    if (inventoryCategory == "Rent") {
+      availability = price = boundaryWall = openSides = transactionType = null;
+    } else if (inventoryCategory == "Sell") {
+      rentamount = securityamount = null;
+    }
+    switch (propertyKind) {
+      case "Apartment":
+      case "Builder Floor":
+      case "Independent House/Villa":
+        boundaryWall = openSides = null;
+        if (propertyKind != "Independent House/Villa") {
+          villaType = null;
+        }
+        break;
+      case "Farm House":
+        villaType = coveredparking = boundaryWall = openSides = null;
+        break;
+      case "Plot":
+        bedrooms = bathrooms = balconies = additionalRoom = villaType = coveredparking = furnishedStatus = null;
+        break;
+    }
+  }
+
+  void resetAllFields() {
+    typeofoffice = typeofschool = typeofretail = typeofhospitality = typeofhealthcare = approvedbeds = hospitalityRoom = null;
+  }
+
+  void resetAllFieldsForOffice() {
+    typeofschool = typeofretail = typeofhospitality = typeofhealthcare = approvedbeds = hospitalityRoom = null;
+  }
+
+  void resetAllFieldsForSchool() {
+    typeofoffice = typeofretail = typeofhospitality = typeofhealthcare = approvedbeds = hospitalityRoom = null;
+  }
+
+  if (propertyCategory == "Commercial") {
+    if (inventoryCategory == "Rent") {
+      price = transactionType = null;
+    } else if (inventoryCategory == "Sell") {
+      rentamount = securityamount = null;
+    }
+    switch (propertyKind) {
+      case "Land":
+        if (commericialtype == "Shop Cum Office" || commericialtype == "Mall" || commericialtype == "Shopping Complex" || commericialtype == "Warehouse") {
+          possession = null;
+          resetAllFields();
+        }
+        if (commericialtype == "Office") {
+          resetAllFieldsForOffice();
+        }
+        if (commericialtype == "School") {
+          resetAllFieldsForSchool();
+        }
+        break;
+      case "Constructed Property":
+      case "Under Construction":
+        if (propertyKind == "Constructed Property") {
+          possession = null;
+        }
+        if (commericialtype == "Office") {
+          resetAllFieldsForOffice();
+        }
+        if (commericialtype == "School") {
+          resetAllFieldsForSchool();
+        }
+        if (commericialtype == "Retail") {
+          typeofoffice = typeofschool = typeofhospitality = typeofhealthcare = approvedbeds = hospitalityRoom = null;
+        }
+        if (commericialtype == "Industrial") {
+          resetAllFields();
+        }
+        if (commericialtype == "Hospitality") {
+          typeofoffice = typeofschool = typeofretail = typeofhealthcare = approvedbeds = null;
+        }
+        if (commericialtype == "Healthcare") {
+          if (typeofhealthcare == "Clinic") {
+            approvedbeds = null;
+          }
+          typeofoffice = typeofschool = typeofretail = typeofhospitality = hospitalityRoom = null;
+        }
+        if (commericialtype == "Institutional" || commericialtype == "Warehouse") {
+          resetAllFields();
+        }
+        break;
+    }
+  }
 
   final List<cards.Assignedto> assignedToList = assignto.map((user) {
     return cards.Assignedto(
@@ -87,7 +180,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
 
   final cards.CardDetails card = cards.CardDetails(
       workitemId: isEdit ? existingInventoryId : "IN$randomId",
-      status: "New",
+      status: isEdit ? existingcardStatus : "New",
       cardCategory: inventoryCategory,
       linkedItemType: "IN",
       brokerid: currentUserdata?.brokerId,
@@ -120,12 +213,12 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       inventoryTitle: "$propertyCategory $title $propertyKind",
       inventoryDescription: "Want to $inventoryCategory her $bedrooms BHK for $price rupees",
       inventoryId: isEdit ? existingInventoryId : "IN$randomId",
-      inventoryStatus: "New",
+      inventoryStatus: isEdit ? existingcardStatus : "New",
       typeofoffice: typeofoffice,
       approvedbeds: approvedbeds,
       managerid: currentUserdata?.managerid,
       typeofhospitality: typeofhospitality,
-      hospitalrooms: hospitalrooms,
+      hospitalityrooms: hospitalityRoom,
       propertykind: propertyKind,
       commericialtype: commericialtype,
       typeofretail: typeofretail,
@@ -141,6 +234,8 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       possessiondate: possession,
       amenities: amenities ?? [],
       attachments: attachments ?? [],
+      widthofRoad: widthofRoad,
+      widthOfRoadUnit: widthOfRoadAreaUnit,
       commercialphotos: commercialphotos,
       propertyrent: Propertyrent(rentamount: rentamount, securityamount: securityamount, securityunit: securityunit, lockinperiod: lockinperiod),
       availability: availability,
@@ -154,8 +249,14 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       comments: comments,
       furnishedStatus: furnishedStatus,
       plotarea: Plotarea(area: superArea, unit: areaUnit),
-      propertyaddress:
-          Propertyaddress(state: propertyState, city: propertyCity, addressline1: addressLine1, addressline2: addressLine2, floornumber: floorNumber, locality: locality),
+      propertyaddress: Propertyaddress(
+          fullAddress: fullAddress,
+          state: propertyState,
+          city: propertyCity,
+          addressline1: addressLine1,
+          addressline2: addressLine2,
+          floornumber: floorNumber,
+          locality: locality),
       propertylocation: latlng,
       propertyvideo: video,
       propertyphotos: photos,
@@ -171,15 +272,25 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
   isEdit
       ? await InventoryDetails.updateInventoryDetails(id: existingInventoryId, inventoryDetails: inventory).then((value) => {res = "success"})
       : await InventoryDetails.addInventoryDetails(inventory).then((value) => {res = "success"});
-  if (!isEdit) {
-    for (var user in assignedListInInventory) {
+  for (var user in assignedListInInventory) {
+    if (!isEdit) {
+      submitActivity(itemid: "IN$randomId", activitytitle: "New Inventory assigned to ${user.firstname} ${user.lastname}", user: currentUserdata!);
       notifyToUser(
           assignedto: user.userid,
           title: "Assign new IN$randomId",
           content: "IN$randomId New Inventory assigned to ${user.firstname} ${user.lastname}",
           assigntofield: true,
           itemid: "IN$randomId",
-          currentuserdata: currentUserdata!);
+          currentuserdata: currentUserdata);
+    } else {
+      submitActivity(itemid: existingInventoryId, activitytitle: "Inventory detail updated", user: currentUserdata!);
+      notifyToUser(
+          assignedto: user.userid,
+          title: "Inventory detail Updated",
+          content: "$existingInventoryId Inventory detail Updated",
+          assigntofield: true,
+          itemid: existingInventoryId,
+          currentuserdata: currentUserdata);
     }
   }
   return res;

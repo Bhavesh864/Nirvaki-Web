@@ -15,9 +15,12 @@ import '../../constants/app_constant.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
 import '../../constants/firebase/userModel/user_info.dart';
+import '../../constants/functions/assingment_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
+import '../../pages/largescreen_dashboard.dart';
 import '../../routes/routes.dart';
+import '../../screens/main_screens/todo_details_screen.dart';
 import '../app/app_bar.dart';
 import '../app/nav_bar.dart';
 
@@ -162,6 +165,14 @@ class InventoryDetailsHeader extends ConsumerWidget {
                                     (value) => AppConst.getOuterContext()!.beamToNamed(id.contains("IN") ? AppRoutes.addInventory : AppRoutes.addLead, data: true),
                                   );
                                 }
+                                // else if (e.contains('Delete')) {
+                                //   final itemType = calculateTypeOfWorkitem(id);
+                                //   customDeleteBox(context, () {
+                                //     ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
+                                //     context.beamToNamed('/');
+                                //     customSnackBar(context: context, text: '$itemType deleted successfully');
+                                //   }, '$itemType Delete', 'Are you sure you want to delete this $itemType?');
+                                // }
                               }, showicon: true, icon: e['icon']),
                             )
                             .toList(),
@@ -267,12 +278,14 @@ class _HeaderChipsState extends ConsumerState<HeaderChips> {
                 }
                 currentStatus = value;
                 setState(() {});
+                final item = calculateTypeOfWorkitem(widget.id);
                 notifyToUser(
-                    currentuserdata: user!,
-                    itemid: widget.id,
-                    assignedto: widget.inventoryDetails.assignedto,
-                    content: "${user.userfirstname} ${user.userlastname} change status to $value",
-                    title: "${widget.id.contains(ItemCategory.isInventory) ? "Inventory" : "Lead"} status changed");
+                  currentuserdata: user!,
+                  itemid: widget.id,
+                  assignedto: widget.inventoryDetails.assignedto,
+                  content: "${widget.id} $item status changed to $value",
+                  title: "$item status changed",
+                );
               },
             ),
           ),

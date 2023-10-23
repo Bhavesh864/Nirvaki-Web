@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
-
 import 'package:yes_broker/constants/firebase/detailsModels/activity_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
@@ -88,7 +87,7 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
                   width: Responsive.isDesktop(context)
                       ? 250
                       : scrWidth < 400
-                          ? 200
+                          ? 180
                           : 210,
                   padding: const EdgeInsets.only(bottom: 5, left: 5),
                   child: AppText(

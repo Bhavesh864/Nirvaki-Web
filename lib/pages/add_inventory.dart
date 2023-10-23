@@ -29,7 +29,7 @@ class AddInventory extends ConsumerStatefulWidget {
 }
 
 class AddInventoryState extends ConsumerState<AddInventory> {
-  String? response;
+  // String? response;
   bool allQuestionFinishes = false;
   bool isEdit = false;
   late Future<List<InventoryQuestions>> getQuestions;
@@ -70,9 +70,10 @@ class AddInventoryState extends ConsumerState<AddInventory> {
 
   addDataOnfirestore(AllChipSelectedAnwers notify) {
     notify.submitInventory(isEdit, ref).then((value) => {
-          setState(() {
-            response = value;
-          })
+          if (value == "success")
+            setState(() {
+              allQuestionFinishes = true;
+            })
         });
   }
 
@@ -331,9 +332,9 @@ class AddInventoryState extends ConsumerState<AddInventory> {
                                                                           // final hasvalues = selectedValues.any((element) => element["id"] == 36);
                                                                           // final assignFieldValue = selectedValues.firstWhere((element) => element["id"] == 36);
                                                                           if (currentScreenList[index].title == "Assign to") {
-                                                                            setState(() {
-                                                                              allQuestionFinishes = true;
-                                                                            });
+                                                                            // setState(() {
+                                                                            //   allQuestionFinishes = true;
+                                                                            // });
                                                                             addDataOnfirestore(notify);
                                                                           }
                                                                         }

@@ -3,6 +3,7 @@ import 'dart:async';
 
 // import 'dart:html';
 
+import 'package:beamer/beamer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -26,9 +27,11 @@ import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/userModel/user_info.dart';
+import '../../constants/functions/chat_group/group.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
+import '../../pages/largescreen_dashboard.dart';
 import '../../riverpodstate/selected_workitem.dart';
 import '../../widgets/app/nav_bar.dart';
 import '../../widgets/workItemDetail/assignment_widget.dart';
@@ -278,8 +281,8 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                   currentuserdata: user!,
                                                   itemid: data.todoId!,
                                                   assignedto: data.assignedto,
-                                                  content: "${user.userfirstname} ${user.userlastname} change status to $value",
-                                                  title: "${data.todoName} status changed");
+                                                  content: "${data.todoId} Todo status changed to $value",
+                                                  title: "Todo status changed");
                                             },
                                           ),
                                         ],
@@ -721,4 +724,49 @@ class Textarea extends StatelessWidget {
       ),
     );
   }
+}
+
+void customDeleteBox(BuildContext context, void Function() onConfirmPress, String title, String content) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: AppText(
+          text: title,
+          fontsize: 20,
+          fontWeight: FontWeight.w500,
+        ),
+        content: AppText(
+          text: content,
+          fontWeight: FontWeight.w600,
+          fontsize: 16,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const AppText(
+              text: 'Cancel',
+              fontWeight: FontWeight.w500,
+              fontsize: 16,
+              textColor: AppColor.primary,
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              onConfirmPress();
+            },
+            child: const AppText(
+              text: 'Delete',
+              fontWeight: FontWeight.w500,
+              fontsize: 16,
+              textColor: AppColor.primary,
+            ),
+          ),
+        ],
+      );
+    },
+  );
 }

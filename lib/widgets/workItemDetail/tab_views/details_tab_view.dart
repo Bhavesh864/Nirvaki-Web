@@ -1,5 +1,4 @@
 // import 'dart:html';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,6 @@ import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/customs/loader.dart';
@@ -282,10 +280,10 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                   widget.data.typeofschool,
                   context,
                 ),
-              if (checkNotNUllItem(widget.data.hospitalrooms))
+              if (checkNotNUllItem(widget.data.hospitalityrooms))
                 buildInfoFields(
                   'Rooms Constructed',
-                  widget.data.hospitalrooms,
+                  widget.data.hospitalityrooms,
                   context,
                 ),
             ]),
@@ -428,10 +426,10 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                 widget.data.typeofschool,
                 context,
               ),
-            if (checkNotNUllItem(widget.data.hospitalrooms))
+            if (checkNotNUllItem(widget.data.hospitalityrooms))
               buildInfoFields(
                 'Rooms Constructed',
-                widget.data.hospitalrooms,
+                widget.data.hospitalityrooms,
                 context,
               ),
             const Divider(
@@ -818,42 +816,45 @@ class _DetailsTabViewState extends State<DetailsTabView> {
           ),
         if (!Responsive.isDesktop(context) && !AppConst.getPublicView()) ...[
           if (widget.isLeadView) ...[
-            const SizedBox(height: 5),
+            const SizedBox(height: 10),
             const AppText(
               text: "Preffered Locality",
               fontsize: 20,
               fontWeight: FontWeight.w700,
             ),
-
-            // Column(
-            //   crossAxisAlignment: CrossAxisAlignment.start,
-            //   children: widget.data.preferredlocality?.listofLocality?.map(
-            //         (e) {
-            //           return Container(
-            //             margin: const EdgeInsets.only(bottom: 7),
-            //             child: Row(
-            //               children: [
-            //                 const Icon(
-            //                   Icons.location_on_outlined,
-            //                   size: 16,
-            //                   color: Colors.black,
-            //                 ),
-            //                 Container(
-            //                   margin: const EdgeInsets.only(left: 4),
-            //                   width: 300,
-            //                   child: AppText(
-            //                     text: e.fullAddress.toString(),
-            //                     softwrap: true,
-            //                     fontsize: 14,
-            //                   ),
-            //                 ),
-            //               ],
-            //             ),
-            //           );
-            //         },
-            //       ).toList() ??
-            //       [SizedBox()],
-            // )
+            const SizedBox(height: 5),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: (widget.data.preferredlocality?.listofLocality ?? []).map<Widget>((e) {
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(top: 5),
+                        child: const Icon(
+                          Icons.location_on_outlined,
+                          size: 14,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 10),
+                        width: 280,
+                        child: AppText(
+                          text: e.fullAddress.toString(),
+                          softwrap: true,
+                          fontsize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            )
           ] else ...[
             MapViewWidget(
               latLng: widget.isLeadView
