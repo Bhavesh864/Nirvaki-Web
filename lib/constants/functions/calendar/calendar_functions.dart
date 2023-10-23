@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:yes_broker/widgets/calendar_view.dart';
 
 import '../../../Customs/snackbar.dart';
 import '../../../riverpodstate/user_data.dart';
@@ -155,7 +156,7 @@ void onDeleteTask({
   required TextEditingController timeController,
   required TextEditingController titleController,
   required TextEditingController descriptionController,
-  required CalendarModel calendarModel,
+  required CalendarItems calendarModel,
 }) {
   CalendarModel.deleteCalendarModel(calendarModel.id!);
   titleController.clear();
@@ -172,7 +173,7 @@ void onUpdateTask({
   required TextEditingController timeController,
   required TextEditingController titleController,
   required TextEditingController descriptionController,
-  required CalendarModel calendarModel,
+  required CalendarItems calendarModel,
 }) {
   final CalendarModel updatedModel = CalendarModel(
     id: calendarModel.id,
