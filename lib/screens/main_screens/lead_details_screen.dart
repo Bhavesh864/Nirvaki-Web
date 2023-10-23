@@ -454,14 +454,15 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
         {"id": 42, "item": data.typeofhealthcare},
         {"id": 43, "item": data.approvedbeds},
         {"id": 44, "item": data.typeofschool},
-        {"id": 45, "item": data.hospitalrooms},
+        {"id": 45, "item": data.hospitalityrooms},
         {"id": 46, "item": data.preferredroadwidth},
         {"id": 47, "item": data.preferredroadwidthAreaUnit},
-        {"id": 100, "item": data.attachments},
-        {"id": 101, "item": data.leadId},
         {"id": 54, "item": data.preferredlocality?.locality},
         {"id": 55, "item": data.furnishedStatus},
         {"id": 56, "item": data.preferredlocality?.listofLocality},
+        {"id": 100, "item": data.attachments},
+        {"id": 101, "item": data.leadId},
+        {"id": 102, "item": data.leadStatus},
       ]);
     } catch (e) {
       if (kDebugMode) {
