@@ -1,6 +1,6 @@
 import 'package:beamer/beamer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -10,7 +10,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 
 import 'package:hive_flutter/adapters.dart';
-import 'package:yes_broker/Customs/snackbar.dart';
 
 import 'firebase_options.dart';
 import 'package:yes_broker/constants/firebase/Hive/timestamp.dart';
@@ -18,7 +17,7 @@ import 'package:yes_broker/routes/routes.dart';
 import 'constants/notification/app_notification.dart';
 import 'package:yes_broker/constants/utils/theme.dart';
 
-void main(context) async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseFirestore firestore = FirebaseFirestore.instance;
