@@ -105,25 +105,26 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                 return fullName.contains(searchText) || title.contains(searchText) || mobileNumber.contains(searchText);
               }
             }).toList();
+            if (selectedFilters.isNotEmpty) {
+              filteredInventoryList = filteredInventoryList.where((item) {
+                if (!item.cardTitle!.contains('Plot') && item.cardTitle!.contains("Residential")) {
+                  final bool isBedRoomMatch = selectedFilters.isEmpty || selectedFilters.contains('${item.roomconfig!.bedroom!}BHK');
+                  final bool has5BHKFilter = selectedFilters.contains('5BHK +');
+                  final int numberOfBedrooms = int.parse(item.roomconfig!.bedroom!);
 
-            filteredInventoryList = filteredInventoryList.where((item) {
-              if (item.cardTitle!.contains('Residential')) {
-                final bool isBedRoomMatch = selectedFilters.isEmpty || selectedFilters.contains('${item.roomconfig!.bedroom!}BHK');
-                final bool has5BHKFilter = selectedFilters.contains('5BHK +');
-                final int numberOfBedrooms = int.parse(item.roomconfig!.bedroom!);
-
-                if (has5BHKFilter) {
-                  return numberOfBedrooms >= 5; // Show items with 5 or more bedrooms
+                  if (has5BHKFilter) {
+                    return numberOfBedrooms >= 5; // Show items with 5 or more bedrooms
+                  }
+                  return isBedRoomMatch;
+                } else {
+                  return false;
                 }
-                return isBedRoomMatch;
-              } else {
-                return false;
-              }
-              // final double itemRateStart = double.parse(item.propertypricerange!.arearangestart!);
+                // final double itemRateStart = double.parse(item.propertypricerange!.arearangestart!);
 
-              // final bool isRateInRange = itemRateStart >= rateRange.start;
-              // print('${item.roomconfig!.bedroom}BHK');
-            }).toList();
+                // final bool isRateInRange = itemRateStart >= rateRange.start;
+                // print('${item.roomconfig!.bedroom}BHK');
+              }).toList();
+            }
 
             status = filteredInventoryList;
 

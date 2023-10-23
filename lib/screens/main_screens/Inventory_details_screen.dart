@@ -439,7 +439,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
         {"id": 42, "item": data.typeofhealthcare},
         {"id": 43, "item": data.approvedbeds},
         {"id": 44, "item": data.typeofschool},
-        {"id": 45, "item": data.hospitalrooms},
+        {"id": 45, "item": data.hospitalityrooms},
         {"id": 46, "item": data.propertyprice?.price},
         {"id": 47, "item": data.propertyprice?.unit},
         {"id": 48, "item": data.propertyrent?.rentamount},
@@ -451,8 +451,11 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
         {"id": 54, "item": data.propertyaddress?.locality},
         {"id": 55, "item": data.furnishedStatus},
         {"id": 56, "item": data.propertyaddress?.fullAddress},
+        {"id": 57, "item": data.widthofRoad},
+        {"id": 58, "item": data.widthOfRoadUnit},
         {"id": 100, "item": data.attachments},
         {"id": 101, "item": data.inventoryId},
+        {"id": 102, "item": data.inventoryStatus},
       ]);
     } catch (e) {
       if (kDebugMode) {
