@@ -2,10 +2,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:number_to_words/number_to_words.dart';
-import 'package:yes_broker/constants/app_constant.dart';
+
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/riverpodstate/arearange_state.dart';
 import '../../Customs/snackbar.dart';
@@ -20,7 +18,6 @@ import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/questionaries/questions_form_photos_view.dart';
 import 'package:yes_broker/widgets/questionaries/assign_user.dart';
-import 'package:yes_broker/widgets/questionaries/google_maps.dart';
 import '../../Customs/custom_fields.dart';
 import '../../Customs/custom_text.dart';
 import '../../Customs/label_text_field.dart';
@@ -675,7 +672,7 @@ Widget buildLeadQuestions(
         }
       }
       if (isRentSelected) {
-        double divisionValue = 5000;
+        // double divisionValue = 5000;
         return StatefulBuilder(
           builder: (context, setState) {
             return Column(
@@ -705,7 +702,7 @@ Widget buildLeadQuestions(
           },
         );
       } else {
-        double divisionValue = 50000;
+        // double divisionValue = 50000;
         return StatefulBuilder(
           builder: (context, setState) {
             return Column(
@@ -745,7 +742,7 @@ Widget buildLeadQuestions(
       }
     }
     final selectedOption = ref.read(selectedOptionNotifier);
-    double divisionValue = 50;
+    // double divisionValue = 50;
 
     return StatefulBuilder(
       builder: (context, setState) {

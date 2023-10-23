@@ -59,6 +59,7 @@ class _MapViewWidgetState extends State<MapViewWidget> {
   @override
   Widget build(BuildContext context) {
     String googleMapsLink = '';
+    print(googleMapsLink);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

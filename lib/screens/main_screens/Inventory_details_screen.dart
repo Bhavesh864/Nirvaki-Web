@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +14,7 @@ import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/pages/add_inventory.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
+import 'package:yes_broker/widgets/assigned_circular_images.dart';
 
 import '../../Customs/custom_text.dart';
 import '../../constants/functions/convertStringTorange/convert_number_to_string.dart';
@@ -217,74 +218,24 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                             width: 10,
                                           ),
                                           GestureDetector(
-                                            onTap: () {
-                                              showOwnerDetailsAndAssignToBottomSheet(
-                                                context,
-                                                'Assignment',
-                                                AssignmentWidget(
-                                                  id: data.inventoryId!,
-                                                  assignto: data.assignedto!,
-                                                  imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                                  createdBy: '${data.createdby!.userfirstname!}  ${data.createdby!.userlastname!}',
-                                                ),
-                                              );
-                                            },
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: checkNotNUllItem(data.assignedto) && data.assignedto!.isNotEmpty
-                                                  ? data.assignedto!
-                                                      .sublist(
-                                                          0,
-                                                          data.assignedto!.length < 2
-                                                              ? 1
-                                                              : data.assignedto!.length < 3
-                                                                  ? 2
-                                                                  : 3)
-                                                      .asMap()
-                                                      .entries
-                                                      .map((entry) {
-                                                      final index = entry.key;
-                                                      final user = entry.value;
-                                                      return Transform.translate(
-                                                        offset: Offset(index * -8.0, 0),
-                                                        child: Container(
-                                                          margin: EdgeInsets.zero,
-                                                          width: 28,
-                                                          height: 28,
-                                                          decoration: index > 1
-                                                              ? BoxDecoration(
-                                                                  border: Border.all(color: Colors.white),
-                                                                  color: index > 1 ? Colors.grey.shade300 : null,
-                                                                  borderRadius: BorderRadius.circular(40),
-                                                                )
-                                                              : BoxDecoration(
-                                                                  border: Border.all(color: Colors.white),
-                                                                  image: DecorationImage(
-                                                                    image: NetworkImage(
-                                                                      user.image!.isEmpty ? noImg : user.image!,
-                                                                    ),
-                                                                    fit: BoxFit.fill,
-                                                                  ),
-                                                                  borderRadius: BorderRadius.circular(40),
-                                                                ),
-                                                          child: index > 1
-                                                              ? Center(
-                                                                  child: CustomText(
-                                                                    title: '+${data.assignedto!.length - 2}',
-                                                                    color: Colors.black,
-                                                                    size: 9,
-                                                                    // textAlign: TextAlign.center,
-                                                                    fontWeight: FontWeight.w600,
-                                                                  ),
-                                                                )
-                                                              : null,
-                                                        ),
-                                                      );
-                                                    }).toList()
-                                                  : [],
-                                            ),
-                                          )
+                                              onTap: () {
+                                                showOwnerDetailsAndAssignToBottomSheet(
+                                                  context,
+                                                  'Assignment',
+                                                  AssignmentWidget(
+                                                    id: data.inventoryId!,
+                                                    assignto: data.assignedto!,
+                                                    imageUrlCreatedBy:
+                                                        data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                    createdBy: '${data.createdby!.userfirstname!}  ${data.createdby!.userlastname!}',
+                                                  ),
+                                                );
+                                              },
+                                              child: AssignedCircularImages(
+                                                cardData: data,
+                                                heightOfCircles: 28,
+                                                widthOfCircles: 28,
+                                              ))
                                         ],
                                       ),
                                       Row(
@@ -439,7 +390,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
         {"id": 42, "item": data.typeofhealthcare},
         {"id": 43, "item": data.approvedbeds},
         {"id": 44, "item": data.typeofschool},
-        {"id": 45, "item": data.hospitalrooms},
+        {"id": 45, "item": data.hospitalityrooms},
         {"id": 46, "item": data.propertyprice?.price},
         {"id": 47, "item": data.propertyprice?.unit},
         {"id": 48, "item": data.propertyrent?.rentamount},
@@ -451,8 +402,11 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
         {"id": 54, "item": data.propertyaddress?.locality},
         {"id": 55, "item": data.furnishedStatus},
         {"id": 56, "item": data.propertyaddress?.fullAddress},
+        {"id": 57, "item": data.widthofRoad},
+        {"id": 58, "item": data.widthOfRoadUnit},
         {"id": 100, "item": data.attachments},
         {"id": 101, "item": data.inventoryId},
+        {"id": 102, "item": data.inventoryStatus},
       ]);
     } catch (e) {
       if (kDebugMode) {
