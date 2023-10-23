@@ -77,25 +77,76 @@ class ChatListScreen extends ConsumerWidget {
           fontWeight: FontWeight.w600,
         ),
         actions: [
-          InkWell(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (ctx) => const CreateGroupScreen(
-                    createGroup: true,
-                  ),
-                ),
-              );
-            },
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12),
+          PopupMenuButton<int>(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            color: Colors.white.withOpacity(1),
+            offset: const Offset(100, 40),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
               child: Icon(
-                Icons.add_circle_outline,
-                color: Color.fromARGB(255, 92, 91, 91),
-                size: 25,
+                Icons.more_vert_outlined,
+                color: Colors.black,
+                size: 22,
               ),
             ),
-          )
+            itemBuilder: (BuildContext context) {
+              return <PopupMenuEntry<int>>[
+                PopupMenuItem<int>(
+                  value: 1,
+                  child: Row(
+                    children: const [
+                      AppText(
+                        text: 'New Chat  ',
+                        fontsize: 13,
+                      ),
+                      Icon(
+                        Icons.chat_outlined,
+                        size: 16,
+                        color: Colors.black,
+                      ),
+                    ],
+                  ),
+                ),
+                PopupMenuItem<int>(
+                  value: 2,
+                  child: Row(
+                    children: const [
+                      AppText(
+                        text: 'Create Group  ',
+                        fontsize: 13,
+                      ),
+                      Icon(
+                        Icons.group_add_outlined,
+                        size: 16,
+                        color: Colors.black,
+                      ),
+                    ],
+                  ),
+                ),
+              ];
+            },
+            onSelected: (int value) {
+              if (value == 1) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) => const CreateGroupScreen(
+                      createGroup: false,
+                    ),
+                  ),
+                );
+              } else if (value == 2) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) => const CreateGroupScreen(
+                      createGroup: true,
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
         ],
       ),
       backgroundColor: Colors.white,
@@ -104,19 +155,6 @@ class ChatListScreen extends ConsumerWidget {
           color: Colors.white,
         ),
         child: TestList(selectedUserIds: selectedUserIds),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (ctx) => const CreateGroupScreen(
-                createGroup: false,
-              ),
-            ),
-          );
-        },
-        backgroundColor: AppColor.primary,
-        child: const Icon(Icons.chat),
       ),
     );
   }

@@ -104,8 +104,9 @@ class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingOb
           ),
         ),
       ),
-      floatingActionButton: const CustomSpeedDialButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
+      floatingActionButton: currentIndex == 4 ? null : const CustomSpeedDialButton(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      // floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
     );
   }
 }

@@ -461,6 +461,7 @@ Widget buildInventoryQuestions(
             question.questionTitle == 'Rent' ||
             question.questionTitle == 'Listing Price';
         final isEmail = question.questionTitle.contains("Email");
+        final video = question.questionTitle.contains("Video");
 
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -486,16 +487,18 @@ Widget buildInventoryQuestions(
                 }
                 notify.add({"id": question.questionId, "item": newvalue.trim()});
               },
-              validator: isEmail
-                  ? validateEmailNotMandatory
-                  : isvalidationtrue
-                      ? (value) {
-                          if (value!.isEmpty) {
-                            return "Please enter ${question.questionTitle}";
-                          }
-                          return null;
-                        }
-                      : null,
+              validator: video
+                  ? (value) => isYouTubeVideoURL(value!)
+                  : isEmail
+                      ? validateEmailNotMandatory
+                      : isvalidationtrue
+                          ? (value) {
+                              if (value!.isEmpty) {
+                                return "Please enter ${question.questionTitle}";
+                              }
+                              return null;
+                            }
+                          : null,
             ),
             isPriceField
                 ? Container(margin: const EdgeInsets.all(7), child: AppText(text: textResult.toUpperCase(), textColor: AppColor.grey, fontsize: 16))
