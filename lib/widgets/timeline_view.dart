@@ -143,6 +143,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                               endChild: TimeLineItem(
                                 index: index,
                                 activitiesList: activities,
+                                fromHome: widget.fromHome,
                               ),
                             );
                           },
@@ -174,6 +175,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                             endChild: TimeLineItem(
                               index: index,
                               activitiesList: activities,
+                              fromHome: widget.fromHome,
                             ),
                           );
                         },

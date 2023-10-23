@@ -62,3 +62,18 @@ String? validateEmailNotMandatory(String? value) {
   }
   return null;
 }
+
+String? isYouTubeVideoURL(String url) {
+  if (url.isEmpty) {
+    return null;
+  }
+  final RegExp regExp = RegExp(
+    r'^https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)',
+    caseSensitive: false,
+  );
+
+  if (!regExp.hasMatch(url)) {
+    return 'Please enter a valid Youtube video link';
+  }
+  return null;
+}
