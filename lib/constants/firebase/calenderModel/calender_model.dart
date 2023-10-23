@@ -42,6 +42,20 @@ class CalendarModel {
     );
   }
 
+  factory CalendarModel.fromMap(Map<String, dynamic> map) {
+    return CalendarModel(
+      id: map['id'] as String,
+      calenderTitle: map['calenderTitle'] as String,
+      calenderDescription: map['calenderDescription'] as String,
+      time: map['time'] as String,
+      calenderType: map['calenderType'] as String,
+      userId: map['userId'] as String,
+      brokerId: map['brokerId'] as String,
+      managerId: map['managerId'] as String,
+      dueDate: map['dueDate'] as String,
+    );
+  }
+
   CalendarModel.fromJson(Map<String, dynamic> json) {
     if (json["id"] is String) {
       id = json["id"];
