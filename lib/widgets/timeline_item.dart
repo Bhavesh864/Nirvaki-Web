@@ -17,7 +17,9 @@ import '../riverpodstate/common_index_state.dart';
 class TimeLineItem extends ConsumerStatefulWidget {
   final int index;
   final List<ActivityDetails> activitiesList;
-  const TimeLineItem({super.key, required this.index, required this.activitiesList});
+  final bool fromHome;
+
+  const TimeLineItem({super.key, required this.index, required this.activitiesList, required this.fromHome});
 
   @override
   ConsumerState<TimeLineItem> createState() => _TimeLineItemState();
@@ -41,6 +43,28 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
     // final String formattedTime = getMessageDay(timeLine.createdate!.toDate(), isNewWeek);
 
     final formattedTime = TimeFormatter.formatFirestoreTimestamp(timeLine.createdate, isNewWeek);
+
+    double detailsViewWidth() {
+      if (Responsive.isDesktop(context)) {
+        if (widget.fromHome) {
+          return 250.0;
+        }
+        return scrWidth / 2;
+      } else if (Responsive.isMobile(context)) {
+        if (scrWidth < 400) {
+          return 180;
+        }
+        return 210;
+      } else {
+        if (widget.fromHome == false && scrWidth < 1100 && scrWidth > 900) {
+          return scrWidth / 2.5;
+        }
+        if (widget.fromHome == false && scrWidth < 900 && scrWidth > 750) {
+          return scrWidth / 3;
+        }
+        return 250.0;
+      }
+    }
 
     return Container(
       padding: const EdgeInsets.only(top: 20, left: 5),
@@ -87,11 +111,7 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
               Padding(
                 padding: const EdgeInsets.only(left: 8),
                 child: Container(
-                  width: Responsive.isDesktop(context)
-                      ? 250
-                      : scrWidth < 400
-                          ? 180
-                          : 210,
+                  width: detailsViewWidth(),
                   padding: const EdgeInsets.only(bottom: 5, left: 5),
                   child: AppText(
                     text: capitalizeFirstLetter(timeLine.activitybody!.activitytitle!),
