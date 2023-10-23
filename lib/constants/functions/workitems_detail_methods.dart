@@ -17,6 +17,7 @@ import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.da
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart' as lead;
 import 'package:yes_broker/constants/firebase/random_uid.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/widgets/calendar_view.dart';
 import '../../Customs/custom_text.dart';
 import '../../customs/custom_fields.dart';
 import '../../widgets/card/questions card/chip_button.dart';
@@ -427,7 +428,7 @@ void showAddCalendarModal({
   required BuildContext context,
   required bool isEdit,
   required WidgetRef ref,
-  CalendarModel? calendarModel,
+  CalendarItems? calendarModel,
 }) {
   final formkey = GlobalKey<FormState>();
   DateTime pickedDate = DateTime.now();
@@ -614,58 +615,16 @@ void showAddCalendarModal({
                       const SizedBox(
                         height: 10,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          if (isEdit)
-                            if (Responsive.isMobile(context)) ...[
-                              GestureDetector(
-                                onTap: () {
-                                  onDeleteTask(
-                                    context: context,
-                                    dateController: dateController,
-                                    timeController: timeController,
-                                    titleController: titleController,
-                                    descriptionController: descriptionController,
-                                    calendarModel: calendarModel!,
-                                  );
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Icon(
-                                  Icons.delete,
-                                  color: Colors.red,
-                                  size: 25,
-                                ),
-                              ),
-                            ] else ...[
-                              CustomButton(
-                                buttonColor: Colors.red,
-                                text: 'Delete',
-                                onPressed: () {
-                                  onDeleteTask(
-                                    context: context,
-                                    dateController: dateController,
-                                    timeController: timeController,
-                                    titleController: titleController,
-                                    descriptionController: descriptionController,
-                                    calendarModel: calendarModel!,
-                                  );
-                                  Navigator.of(context).pop();
-                                },
-                                width: 80,
-                                height: 39,
-                              ),
-                            ],
-                          const SizedBox(),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: CustomButton(
-                              buttonColor: AppColor.primary,
-                              text: isEdit ? 'Update' : 'Save',
-                              onPressed: () {
-                                if (isEdit) {
-                                  if (formkey.currentState!.validate()) {
-                                    onUpdateTask(
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            if (isEdit)
+                              if (Responsive.isMobile(context)) ...[
+                                GestureDetector(
+                                  onTap: () {
+                                    onDeleteTask(
                                       context: context,
                                       dateController: dateController,
                                       timeController: timeController,
@@ -674,26 +633,71 @@ void showAddCalendarModal({
                                       calendarModel: calendarModel!,
                                     );
                                     Navigator.of(context).pop();
-                                  }
-                                } else {
-                                  if (formkey.currentState!.validate()) {
-                                    onAddTask(
-                                      ref: ref,
+                                  },
+                                  child: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                    size: 25,
+                                  ),
+                                ),
+                              ] else ...[
+                                CustomButton(
+                                  buttonColor: Colors.red,
+                                  text: 'Delete',
+                                  onPressed: () {
+                                    onDeleteTask(
                                       context: context,
                                       dateController: dateController,
                                       timeController: timeController,
                                       titleController: titleController,
                                       descriptionController: descriptionController,
+                                      calendarModel: calendarModel!,
                                     );
                                     Navigator.of(context).pop();
+                                  },
+                                  width: 80,
+                                  height: 39,
+                                ),
+                              ],
+                            const SizedBox(),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: CustomButton(
+                                buttonColor: AppColor.primary,
+                                text: isEdit ? 'Update' : 'Save',
+                                onPressed: () {
+                                  if (isEdit) {
+                                    if (formkey.currentState!.validate()) {
+                                      onUpdateTask(
+                                        context: context,
+                                        dateController: dateController,
+                                        timeController: timeController,
+                                        titleController: titleController,
+                                        descriptionController: descriptionController,
+                                        calendarModel: calendarModel!,
+                                      );
+                                      Navigator.of(context).pop();
+                                    }
+                                  } else {
+                                    if (formkey.currentState!.validate()) {
+                                      onAddTask(
+                                        ref: ref,
+                                        context: context,
+                                        dateController: dateController,
+                                        timeController: timeController,
+                                        titleController: titleController,
+                                        descriptionController: descriptionController,
+                                      );
+                                      Navigator.of(context).pop();
+                                    }
                                   }
-                                }
-                              },
-                              width: 85,
-                              height: 39,
+                                },
+                                width: 85,
+                                height: 39,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
