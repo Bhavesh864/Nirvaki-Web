@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/small_custom_profile_image.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
 
 import '../../Customs/responsive.dart';
@@ -35,6 +36,7 @@ class AssignmentWidget extends ConsumerStatefulWidget {
 }
 
 class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
+  bool loadedData = false;
   void assign(List<User> assignedUser) {
     setState(() {
       user = assignedUser;
@@ -44,6 +46,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
   @override
   Widget build(BuildContext context) {
     final User? userData = ref.watch(userDataProvider);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
