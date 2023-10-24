@@ -50,9 +50,12 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
     });
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: Responsive.isMobile(context)
           ? AppBar(
