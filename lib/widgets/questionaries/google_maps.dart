@@ -59,7 +59,9 @@ class _CustomGoogleMapState extends ConsumerState<CustomGoogleMap> {
     if (location != null && mapController != null) {
       mapController!.animateCamera(CameraUpdate.newLatLng(location!));
     }
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   Future<void> loadMap() async {
