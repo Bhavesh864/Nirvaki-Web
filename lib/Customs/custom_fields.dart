@@ -65,7 +65,7 @@ class CustomTextInput extends StatefulWidget {
       this.readonly = false,
       this.label,
       this.enabled = true,
-      this.autofocus = true,
+      this.autofocus = false,
       this.contentPadding = const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
       this.onFieldSubmitted,
       this.autofillHints,

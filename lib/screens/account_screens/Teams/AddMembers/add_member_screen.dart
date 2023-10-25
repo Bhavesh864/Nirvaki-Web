@@ -179,6 +179,8 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
     final isEdit = ref.read(editAddMemberState);
     final editUser = ref.read(userForEditScreen);
 
+    print('object');
+
     return GestureDetector(
       onTap: () {
         if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
