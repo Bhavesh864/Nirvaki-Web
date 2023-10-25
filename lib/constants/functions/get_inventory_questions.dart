@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -60,12 +62,9 @@ Widget buildInventoryQuestions(
               onSelect: () {
                 nextQuestion(screensDataList: screensDataList, option: option);
                 if (currentScreenIndex < screensDataList.length - 1) {
-                  print('this is if part =========');
-
                   notify.add({"id": question.questionId, "item": option});
                 } else {
                   // Handle reaching the last question
-                  print('this is else part =========');
                 }
               },
             );
@@ -174,9 +173,8 @@ Widget buildInventoryQuestions(
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       existingValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
-    // ref.watch(textEditingControllerProvider);
+    print(notify.state);
     TextEditingController controller = TextEditingController(text: existingValue);
-
     String mobileCountryCode = '+91';
     String whatsappCountryCode = '+91';
     if (question.questionTitle == 'Mobile' && existingValue.isNotEmpty) {
@@ -335,7 +333,6 @@ Widget buildInventoryQuestions(
             LabelTextInputField(
               labelText: 'Search your location',
               inputController: controller,
-              autofocus: false,
               hintText: "Search here...",
               validator: (value) => validateForNormalFeild(value: value, props: "Location"),
               onChanged: (value) {
@@ -412,7 +409,6 @@ Widget buildInventoryQuestions(
               },
               inputController: statecontroller,
               readyOnly: true,
-              autofocus: false,
               labelText: "State",
             ),
             LabelTextInputField(
@@ -421,7 +417,6 @@ Widget buildInventoryQuestions(
               },
               inputController: citycontroller,
               readyOnly: true,
-              autofocus: false,
               labelText: "City",
             ),
             LabelTextInputField(
@@ -430,19 +425,16 @@ Widget buildInventoryQuestions(
               },
               inputController: localitycontroller,
               readyOnly: true,
-              autofocus: false,
               labelText: "Locality",
             ),
             LabelTextInputField(
               onChanged: (newvalue) {
                 notify.add({"id": 28, "item": newvalue.trim()});
               },
-              autofocus: false,
               inputController: address1controller,
               labelText: "Address1",
             ),
             LabelTextInputField(
-              autofocus: false,
               onChanged: (newvalue) {
                 notify.add({"id": 29, "item": newvalue.trim()});
               },
@@ -462,7 +454,6 @@ Widget buildInventoryQuestions(
             question.questionTitle.contains('Floor Number') ||
             question.questionTitle.contains('Property Area') ||
             question.questionId == 22;
-
         final isvalidationtrue = question.questionTitle.contains('First') ||
             question.questionTitle.contains('Property Area') ||
             question.questionTitle.contains('Mobile') ||
@@ -480,9 +471,10 @@ Widget buildInventoryQuestions(
               keyboardType: isPriceField || isDigitsOnly ? TextInputType.number : TextInputType.name,
               inputController: controller,
               labelText: question.questionTitle,
-              autofocus: false,
               isMandatory: isvalidationtrue,
               onChanged: (newvalue) {
+                print("object");
+                print("newvalue========>$newvalue");
                 try {
                   int number = int.parse(newvalue);
                   String words = NumberToWord().convert("en-in", number);
@@ -494,7 +486,10 @@ Widget buildInventoryQuestions(
                     textResult = '';
                   });
                 }
+
                 notify.add({"id": question.questionId, "item": newvalue.trim()});
+                print('after');
+                print(notify.state);
               },
               validator: video
                   ? (value) => isYouTubeVideoURL(value!)
@@ -1011,8 +1006,7 @@ Widget buildInventoryQuestions(
 //               LabelTextInputField(
 //                 labelText: 'Search your location',
 //                 inputController: controller,
-//                 autofocus: false,
-//                 hintText: "Search here...",
+// /                 hintText: "Search here...",
 //                 validator: (value) => validateForNormalFeild(value: value, props: "Location"),
 //                 onChanged: (value) {
 //                   getPlaces(value).then((places) {
@@ -1088,8 +1082,7 @@ Widget buildInventoryQuestions(
 //                 },
 //                 inputController: statecontroller,
 //                 readyOnly: true,
-//                 autofocus: false,
-//                 labelText: "State",
+// /                 labelText: "State",
 //               ),
 //               LabelTextInputField(
 //                 onChanged: (newvalue) {
@@ -1097,8 +1090,7 @@ Widget buildInventoryQuestions(
 //                 },
 //                 inputController: citycontroller,
 //                 readyOnly: true,
-//                 autofocus: false,
-//                 labelText: "City",
+// /                 labelText: "City",
 //               ),
 //               LabelTextInputField(
 //                 onChanged: (newvalue) {
@@ -1106,20 +1098,17 @@ Widget buildInventoryQuestions(
 //                 },
 //                 inputController: localitycontroller,
 //                 readyOnly: true,
-//                 autofocus: false,
-//                 labelText: "Locality",
+// /                 labelText: "Locality",
 //               ),
 //               LabelTextInputField(
 //                 onChanged: (newvalue) {
 //                   notify.add({"id": 28, "item": newvalue.trim()});
 //                 },
-//                 autofocus: false,
-//                 inputController: address1controller,
+// /                 inputController: address1controller,
 //                 labelText: "Address1",
 //               ),
 //               LabelTextInputField(
-//                 autofocus: false,
-//                 onChanged: (newvalue) {
+// /                 onChanged: (newvalue) {
 //                   notify.add({"id": 29, "item": newvalue.trim()});
 //                 },
 //                 inputController: address2controller,
@@ -1156,8 +1145,7 @@ Widget buildInventoryQuestions(
 //                 keyboardType: isPriceField || isDigitsOnly ? TextInputType.number : TextInputType.name,
 //                 inputController: controller,
 //                 labelText: question.questionTitle,
-//                 autofocus: false,
-//                 isMandatory: isvalidationtrue,
+// /                 isMandatory: isvalidationtrue,
 //                 onChanged: (newvalue) {
 //                   try {
 //                     int number = int.parse(newvalue);
