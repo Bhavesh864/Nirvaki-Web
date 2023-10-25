@@ -147,6 +147,9 @@ class InventoryDetailsHeader extends ConsumerWidget {
                                   AppConst.setPublicView(!AppConst.getPublicView());
                                   setState();
                                 } else if (e.contains("Edit")) {
+                                  if (!kIsWeb) {
+                                    // Navigator.of(context).pop();
+                                  }
                                   Future.delayed(const Duration(milliseconds: 400)).then(
                                     (value) => AppConst.getOuterContext()!.beamToNamed(id.contains("IN") ? AppRoutes.addInventory : AppRoutes.addLead, data: true),
                                   );
@@ -163,6 +166,9 @@ class InventoryDetailsHeader extends ConsumerWidget {
 
                                   setState();
                                 } else if (e.contains("Edit")) {
+                                  if (!kIsWeb) {
+                                    // Navigator.of(context).pop();
+                                  }
                                   Future.delayed(const Duration(milliseconds: 400)).then(
                                     (value) => AppConst.getOuterContext()!.beamToNamed(id.contains("IN") ? AppRoutes.addInventory : AppRoutes.addLead, data: true),
                                   );

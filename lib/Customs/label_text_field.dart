@@ -25,7 +25,6 @@ class LabelTextInputField extends StatelessWidget {
   final bool isPhoneNumberField;
   final EdgeInsetsGeometry margin;
   final FocusNode? focusNode;
-  final bool autofocus;
   final void Function()? onEditingComplete;
 
   const LabelTextInputField(
@@ -48,7 +47,6 @@ class LabelTextInputField extends StatelessWidget {
       this.readyOnly = false,
       this.isPhoneNumberField = false,
       this.focusNode,
-      this.autofocus = true,
       this.onEditingComplete})
       : super(key: key);
 
@@ -108,7 +106,6 @@ class LabelTextInputField extends StatelessWidget {
             keyboardType: keyboardType,
             validator: validator,
             maxLines: maxLines,
-            autofocus: autofocus,
             onEditingComplete: onEditingComplete,
             initialvalue: initialvalue,
             isDense: true,
