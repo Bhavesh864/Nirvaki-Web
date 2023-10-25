@@ -1,4 +1,5 @@
 import 'package:beamer/beamer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/custom_chip.dart';
@@ -32,14 +33,32 @@ class TodoTabView extends ConsumerStatefulWidget {
 }
 
 class TodoTabViewState extends ConsumerState<TodoTabView> {
+  late Stream<QuerySnapshot<Map<String, dynamic>>> cardDetails;
+
   TextEditingController searchController = TextEditingController();
   bool showTableView = false;
   Future<List<CardDetails>>? future;
   List<User> userList = [];
+  bool isUserLoaded = false;
   @override
   void initState() {
-    future = CardDetails.getcardByInventoryId(widget.id);
     super.initState();
+    setCardDetails();
+  }
+
+  void setCardDetails() {
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("linkedItemId", isEqualTo: widget.id).snapshots();
+  }
+
+  void getDetails(User currentuser) async {
+    if (mounted) {
+      final List<User> user = await User.getUserAllRelatedToBrokerId(currentuser);
+      if (mounted) {
+        setState(() {
+          userList = user;
+        });
+      }
+    }
   }
 
   @override
@@ -105,8 +124,8 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
             ],
           ),
         ),
-        FutureBuilder(
-            future: future,
+        StreamBuilder(
+            stream: cardDetails,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const SizedBox(
@@ -118,23 +137,29 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
               }
               if (snapshot.hasData) {
                 if (user == null) return const Loader();
-                final filterItem = filterCardsAccordingToRoleInFutureBuilder(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
-                List<CardDetails> filteredList = filterItem!.where((card) {
+                if (!isUserLoaded) {
+                  getDetails(user);
+                  isUserLoaded = true;
+                }
+                final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
+                final List<CardDetails> todoItems =
+                    filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
+                List<CardDetails> todoItemsList = todoItems.where((card) {
                   final searchTerm = searchController.text.toLowerCase();
                   return card.cardTitle!.toLowerCase().contains(searchTerm) || card.cardType!.toLowerCase().contains(searchTerm);
                 }).toList();
                 if (showTableView) {
-                  final tableRowList = filteredList.map((e) {
+                  final tableRowList = todoItemsList.map((e) {
                     return buildWorkItemRowTile(
                       e,
-                      filteredList.indexOf(e),
-                      filteredList,
+                      todoItemsList.indexOf(e),
+                      todoItemsList,
                       id: e.workitemId,
                       ref: ref,
                       context: context,
                     );
                   });
-                  return filteredList.isNotEmpty
+                  return todoItemsList.isNotEmpty
                       ? Container(
                           width: double.infinity,
                           margin: const EdgeInsets.symmetric(horizontal: 0),
@@ -172,7 +197,7 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
                           ),
                         );
                 } else {
-                  return filteredList.isNotEmpty
+                  return todoItemsList.isNotEmpty
                       ? Container(
                           decoration: BoxDecoration(
                             color: AppColor.secondary,
@@ -188,12 +213,12 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
                               crossAxisSpacing: 10.0,
                               mainAxisExtent: 170,
                             ),
-                            itemCount: filteredList.length,
+                            itemCount: todoItemsList.length,
                             itemBuilder: (context, index) => GestureDetector(
                               onTap: () {
-                                navigateBasedOnId(context, filteredList[index].workitemId!, ref);
+                                navigateBasedOnId(context, todoItemsList[index].workitemId!, ref);
                               },
-                              child: CustomCard(cardDetails: filteredList, index: index),
+                              child: CustomCard(cardDetails: todoItemsList, index: index),
                             ),
                           ),
                         )

@@ -123,7 +123,9 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
     try {
       initialTime = TimeOfDay.fromDateTime(DateFormat('hh:mm a').parse(time));
     } catch (e) {
-      print('Error parsing time: $e');
+      if (kDebugMode) {
+        print('Error parsing time: $e');
+      }
     }
 
     showTimePicker(

@@ -35,6 +35,7 @@ class CustomTextInput extends StatefulWidget {
   final TextStyle? hintstyle;
   final FormFieldValidator<String>? validator;
   final Function(String)? onChanged;
+  final void Function()? onEditingComplete;
   final EdgeInsetsGeometry? margin;
   final Iterable<String>? autofillHints;
   final TextInputAction? textInputAction;
@@ -53,6 +54,7 @@ class CustomTextInput extends StatefulWidget {
       this.rightIcon,
       this.obscureText = false,
       this.keyboardType,
+      this.onEditingComplete,
       this.onChanged,
       this.maxLength,
       this.validator,
@@ -164,6 +166,7 @@ class CustomTextInputState extends State<CustomTextInput> {
         onChanged: widget.onChanged,
         validator: widget.validator,
         readOnly: widget.readonly!,
+        onEditingComplete: widget.onEditingComplete,
         initialValue: widget.initialvalue,
         maxLines: widget.maxLines,
         minLines: widget.minLines,
