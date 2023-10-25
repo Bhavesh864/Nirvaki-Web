@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
@@ -68,7 +69,7 @@ class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingOb
         onTap: (value) => {
           ref.read(mobileBottomIndexProvider.notifier).update((state) => value),
           ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null),
-          ref.read(desktopSideBarIndexProvider.notifier).state = value,
+          ref.read(desktopSideBarIndexProvider.notifier).update((state) => value),
         },
         currentIndex: currentIndex,
         selectedFontSize: 0,

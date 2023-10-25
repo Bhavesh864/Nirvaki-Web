@@ -117,6 +117,7 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
   }
 
   Widget _buildMobileLayout(bool isAuthenticated) {
+    print('--------- MobileView ------------');
     if (isAuthenticated) {
       return const SmallScreen();
     } else {
@@ -139,7 +140,13 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
   }
 
   Widget _buildTabletLayout(bool isAuthenticated) {
+    print('--------- TabletView ------------');
+    //   beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[index].nav);
+    // ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
+
     if (isAuthenticated) {
+      Navigator.pop(context);
+
       return const LargeScreen();
     } else {
       final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
@@ -161,12 +168,17 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
   }
 
   Widget _buildDesktopLayout(bool isAuthenticated) {
+    print('--------- DestopView ------------');
+
     if (isAuthenticated) {
+      Navigator.pop(context);
+
       return const LargeScreen();
     } else {
       final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
       if (location.isNotEmpty && location.contains('inventory-details')) {
         AppConst.setPublicView(true);
+
         return PublicViewInventoryDetails(
           inventoryId: extractItemIdFromPath(location, 'inventory')!,
         );

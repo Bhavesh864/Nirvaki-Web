@@ -5,7 +5,6 @@ import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' as cards;
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
-import 'package:yes_broker/riverpodstate/todo/linked_with_workItem.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 
 import '../send_notification.dart';
@@ -69,6 +68,7 @@ Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
       userid: user.userId,
     );
   }).toList();
+
   final TodoDetails todo = TodoDetails(
     todoId: "TD$randomId",
     managerId: currentUserdata?.managerid,

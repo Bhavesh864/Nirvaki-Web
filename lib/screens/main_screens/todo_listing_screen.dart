@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
@@ -150,6 +151,8 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                 );
               });
 
+              print(width);
+
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -160,7 +163,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            if (width! >= 850)
+                            if (width! > 850)
                               TopSerachBar(
                                 onChanged: (value) {
                                   setState(() {

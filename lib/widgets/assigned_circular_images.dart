@@ -46,7 +46,7 @@ class AssignedCircularImages extends StatelessWidget {
                   decoration: index > 1
                       ? BoxDecoration(
                           border: Border.all(color: Colors.white, width: 1.5),
-                          color: index > 1 ? const Color(0xFFF9F9FD) : null,
+                          color: index > 1 ? Color.fromARGB(255, 234, 234, 249) : null,
                           borderRadius: BorderRadius.circular(40),
                         )
                       : BoxDecoration(

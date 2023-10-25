@@ -1,13 +1,13 @@
-[debug] [2023-10-24T06:43:44.746Z] ----------------------------------------------------------------------
-[debug] [2023-10-24T06:43:44.748Z] Command:       /opt/homebrew/Cellar/node/20.3.0/bin/node /opt/homebrew/bin/firebase init
-[debug] [2023-10-24T06:43:44.748Z] CLI Version:   12.7.0
-[debug] [2023-10-24T06:43:44.749Z] Platform:      darwin
-[debug] [2023-10-24T06:43:44.749Z] Node Version:  v20.3.0
-[debug] [2023-10-24T06:43:44.749Z] Time:          Tue Oct 24 2023 12:13:44 GMT+0530 (India Standard Time)
-[debug] [2023-10-24T06:43:44.749Z] ----------------------------------------------------------------------
+[debug] [2023-10-24T09:31:27.839Z] ----------------------------------------------------------------------
+[debug] [2023-10-24T09:31:27.841Z] Command:       /opt/homebrew/Cellar/node/20.3.0/bin/node /opt/homebrew/bin/firebase init
+[debug] [2023-10-24T09:31:27.841Z] CLI Version:   12.7.0
+[debug] [2023-10-24T09:31:27.842Z] Platform:      darwin
+[debug] [2023-10-24T09:31:27.842Z] Node Version:  v20.3.0
+[debug] [2023-10-24T09:31:27.842Z] Time:          Tue Oct 24 2023 15:01:27 GMT+0530 (India Standard Time)
+[debug] [2023-10-24T09:31:27.842Z] ----------------------------------------------------------------------
 [debug] 
-[debug] [2023-10-24T06:43:44.788Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2023-10-24T06:43:44.789Z] > authorizing via signed-in user (bhaveshkhatri864@gmail.com)
+[debug] [2023-10-24T09:31:27.883Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-10-24T09:31:27.883Z] > authorizing via signed-in user (bhaveshkhatri864@gmail.com)
 [info] 
      ######## #### ########  ######## ########     ###     ######  ########
      ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
@@ -23,72 +23,3 @@ Before we get started, keep in mind:
 
   * You are initializing within an existing Firebase project directory
 
-[debug] [2023-10-24T07:02:47.975Z] ----------------------------------------------------------------------
-[debug] [2023-10-24T07:02:47.979Z] Command:       /opt/homebrew/Cellar/node/20.3.0/bin/node /opt/homebrew/bin/firebase init
-[debug] [2023-10-24T07:02:47.980Z] CLI Version:   12.7.0
-[debug] [2023-10-24T07:02:47.980Z] Platform:      darwin
-[debug] [2023-10-24T07:02:47.980Z] Node Version:  v20.3.0
-[debug] [2023-10-24T07:02:47.980Z] Time:          Tue Oct 24 2023 12:32:47 GMT+0530 (India Standard Time)
-[debug] [2023-10-24T07:02:47.980Z] ----------------------------------------------------------------------
-[debug] 
-[debug] [2023-10-24T07:02:48.020Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2023-10-24T07:02:48.020Z] > authorizing via signed-in user (bhaveshkhatri864@gmail.com)
-[info] 
-     ######## #### ########  ######## ########     ###     ######  ########
-     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
-     ######    ##  ########  ######   ########  #########  ######  ######
-     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
-     ##       #### ##     ## ######## ########  ##     ##  ######  ########
-
-You're about to initialize a Firebase project in this directory:
-
-  /Users/saurabhmehra/flutter/projects/broker_webappV1
-
-Before we get started, keep in mind:
-
-  * You are initializing within an existing Firebase project directory
-
-[debug] [2023-10-24T07:03:16.664Z] ----------------------------------------------------------------------
-[debug] [2023-10-24T07:03:16.666Z] Command:       /opt/homebrew/Cellar/node/20.3.0/bin/node /opt/homebrew/bin/firebase init hosting
-[debug] [2023-10-24T07:03:16.666Z] CLI Version:   12.7.0
-[debug] [2023-10-24T07:03:16.666Z] Platform:      darwin
-[debug] [2023-10-24T07:03:16.667Z] Node Version:  v20.3.0
-[debug] [2023-10-24T07:03:16.667Z] Time:          Tue Oct 24 2023 12:33:16 GMT+0530 (India Standard Time)
-[debug] [2023-10-24T07:03:16.667Z] ----------------------------------------------------------------------
-[debug] 
-[debug] [2023-10-24T07:03:16.707Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2023-10-24T07:03:16.707Z] > authorizing via signed-in user (bhaveshkhatri864@gmail.com)
-[info] 
-     ######## #### ########  ######## ########     ###     ######  ########
-     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
-     ######    ##  ########  ######   ########  #########  ######  ######
-     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
-     ##       #### ##     ## ######## ########  ##     ##  ######  ########
-
-You're about to initialize a Firebase project in this directory:
-
-  /Users/saurabhmehra/flutter/projects/broker_webappV1
-
-Before we get started, keep in mind:
-
-  * You are initializing within an existing Firebase project directory
-
-[info] 
-=== Project Setup
-[info] 
-[info] First, let's associate this project directory with a Firebase project.
-[info] You can create multiple project aliases by running firebase use --add, 
-[info] but for now we'll just set up a default project.
-[info] 
-[debug] [2023-10-24T07:03:16.708Z] Using project from CLI flag: brokr-in
-[debug] [2023-10-24T07:03:16.710Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/brokr-in [none]
-[debug] [2023-10-24T07:03:17.750Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/brokr-in 200
-[debug] [2023-10-24T07:03:17.750Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/brokr-in {"projectId":"brokr-in","projectNumber":"868897852943","displayName":"Brokr","name":"projects/brokr-in","resources":{"hostingSite":"brokr-in","realtimeDatabaseInstance":"brokr-in-default-rtdb","storageBucket":"brokr-in.appspot.com","locationId":"asia-south1"},"state":"ACTIVE","etag":"1_3699a77a-a67f-4201-8ca1-bd0edce00804"}
-[info] i  Using project brokr-in (Brokr) 
-[info] 
-=== Hosting Setup
-[info] 
-[info] Your public directory is the folder (relative to your project directory) that
-[info] will contain Hosting assets to be uploaded with firebase deploy. If you
-[info] have a build process for your assets, use your build's output directory.
-[info] 
