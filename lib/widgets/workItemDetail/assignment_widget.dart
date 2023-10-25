@@ -1,11 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:yes_broker/Customs/small_custom_profile_image.dart';
-import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
-
 import '../../Customs/responsive.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/userModel/user_info.dart';

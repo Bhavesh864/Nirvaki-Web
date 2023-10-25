@@ -3,7 +3,6 @@ import 'dart:async';
 
 // import 'dart:html';
 
-import 'package:beamer/beamer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -27,11 +26,11 @@ import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/userModel/user_info.dart';
-import '../../constants/functions/chat_group/group.dart';
+
 import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
-import '../../pages/largescreen_dashboard.dart';
+
 import '../../riverpodstate/selected_workitem.dart';
 import '../../widgets/app/nav_bar.dart';
 import '../../widgets/workItemDetail/assignment_widget.dart';
@@ -125,7 +124,9 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
     try {
       initialTime = TimeOfDay.fromDateTime(DateFormat('hh:mm a').parse(time));
     } catch (e) {
-      print('Error parsing time: $e');
+      if (kDebugMode) {
+        print('Error parsing time: $e');
+      }
     }
 
     showTimePicker(

@@ -29,7 +29,6 @@ class AddInventory extends ConsumerStatefulWidget {
 }
 
 class AddInventoryState extends ConsumerState<AddInventory> {
-  // String? response;
   bool allQuestionFinishes = false;
   bool isEdit = false;
   late Future<List<InventoryQuestions>> getQuestions;
@@ -214,6 +213,7 @@ class AddInventoryState extends ConsumerState<AddInventory> {
                       allInventoryQuestionsNotifier.addAllQuestion(screensDataList);
                     });
                   }
+
                   if (selectedValues.isNotEmpty && getWhichItemIsSelectedBYId(selectedValues, 1) == "Residential") {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       allInventoryQuestionsNotifier.addAllQuestion(screensDataList);
@@ -229,7 +229,6 @@ class AddInventoryState extends ConsumerState<AddInventory> {
                     final filter = currentScreenList.where((element) => !arr.contains(element.screenId)).toList();
                     currentScreenList = filter;
                   }
-
                   return Stack(
                     // fit: StackFit.expand,
                     children: [
@@ -279,6 +278,10 @@ class AddInventoryState extends ConsumerState<AddInventory> {
                                                         fontWeight: FontWeight.bold,
                                                       ),
                                                     ),
+                                                  // CustomTextInput(
+                                                  //   controller: _textController,
+                                                  //   hintText: "demo",
+                                                  // ),
                                                   for (var i = 0; i < currentScreenList[index].questions.length; i++)
                                                     Column(
                                                       children: [
