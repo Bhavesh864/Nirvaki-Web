@@ -328,6 +328,7 @@ Widget buildInventoryQuestions(
             LabelTextInputField(
               labelText: 'Search your location',
               inputController: controller,
+              autofocus: false,
               hintText: "Search here...",
               validator: (value) => validateForNormalFeild(value: value, props: "Location"),
               onChanged: (value) {
@@ -409,6 +410,7 @@ Widget buildInventoryQuestions(
               },
               inputController: statecontroller,
               readyOnly: true,
+              autofocus: false,
               labelText: "State",
             ),
             LabelTextInputField(
@@ -417,6 +419,7 @@ Widget buildInventoryQuestions(
               },
               inputController: citycontroller,
               readyOnly: true,
+              autofocus: false,
               labelText: "City",
             ),
             LabelTextInputField(
@@ -425,16 +428,19 @@ Widget buildInventoryQuestions(
               },
               inputController: localitycontroller,
               readyOnly: true,
+              autofocus: false,
               labelText: "Locality",
             ),
             LabelTextInputField(
               onChanged: (newvalue) {
                 notify.add({"id": 28, "item": newvalue.trim()});
               },
+              autofocus: false,
               inputController: address1controller,
               labelText: "Address1",
             ),
             LabelTextInputField(
+              autofocus: false,
               onChanged: (newvalue) {
                 notify.add({"id": 29, "item": newvalue.trim()});
               },
@@ -445,6 +451,7 @@ Widget buildInventoryQuestions(
         );
       });
     }
+    print(controller.text);
     return StatefulBuilder(
       builder: (context, setState) {
         final isPriceField = question.questionId == 46 || question.questionId == 48 || question.questionId == 50;
@@ -472,6 +479,7 @@ Widget buildInventoryQuestions(
               keyboardType: isPriceField || isDigitsOnly ? TextInputType.number : TextInputType.name,
               inputController: controller,
               labelText: question.questionTitle,
+              autofocus: false,
               isMandatory: isvalidationtrue,
               onChanged: (newvalue) {
                 try {
@@ -510,6 +518,7 @@ Widget buildInventoryQuestions(
   } else if (question.questionOptionType == 'textarea') {
     final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
     TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
+
     return TextFormField(
       keyboardType: TextInputType.multiline,
       maxLines: 5,

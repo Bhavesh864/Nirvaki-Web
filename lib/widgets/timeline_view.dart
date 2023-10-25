@@ -33,20 +33,12 @@ class CustomTimeLineView extends ConsumerStatefulWidget {
 }
 
 class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
-  User? userdata;
   late Stream<QuerySnapshot<Map<String, dynamic>>> activityDetails;
-  bool loadedData = false;
+
   @override
   void initState() {
     super.initState();
     setactivity();
-  }
-
-  void getUserForActivity(userid) async {
-    final User? getuser = await User.getUser(userid);
-    setState(() {
-      userdata = getuser;
-    });
   }
 
   void setactivity() {
@@ -135,10 +127,6 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                           itemCount: activities.length,
                           // physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
-                            if (!loadedData) {
-                              getUserForActivity(activities[index].userid);
-                              loadedData = true;
-                            }
                             return TimelineTile(
                               isFirst: index == 0 ? true : false,
                               indicatorStyle: const IndicatorStyle(
@@ -158,7 +146,6 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                                 index: index,
                                 activitiesList: activities,
                                 fromHome: widget.fromHome,
-                                createUser: userdata,
                               ),
                             );
                           },
@@ -172,10 +159,6 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                         shrinkWrap: true,
                         itemCount: activities.length,
                         itemBuilder: (context, index) {
-                          if (!loadedData) {
-                            getUserForActivity(activities[index].userid);
-                            loadedData = true;
-                          }
                           return TimelineTile(
                             isFirst: index == 0 ? true : false,
                             indicatorStyle: const IndicatorStyle(
@@ -195,7 +178,6 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                               index: index,
                               activitiesList: activities,
                               fromHome: widget.fromHome,
-                              createUser: userdata,
                             ),
                           );
                         },

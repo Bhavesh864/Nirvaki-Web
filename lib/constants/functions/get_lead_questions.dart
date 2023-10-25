@@ -370,6 +370,7 @@ Widget buildLeadQuestions(
               labelText: 'Search your location',
               inputController: controller,
               hintText: "Search here...",
+              autofocus: false,
               validator: (value) {
                 if (selectedLocality.isEmpty) {
                   return "Please Add your Preffered Location";
@@ -497,6 +498,7 @@ Widget buildLeadQuestions(
               inputController: controller,
               labelText: question.questionTitle,
               isMandatory: isvalidationtrue,
+              autofocus: false,
               onChanged: (newvalue) {
                 try {
                   int number = int.parse(newvalue);
