@@ -8,7 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/constants/firebase/send_notification.dart';
-import 'package:yes_broker/pages/add_inventory.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../Customs/custom_chip.dart';
@@ -20,7 +19,9 @@ import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/assingment_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
+
 import '../../routes/routes.dart';
+
 import '../app/app_bar.dart';
 import '../app/nav_bar.dart';
 
@@ -145,6 +146,9 @@ class InventoryDetailsHeader extends ConsumerWidget {
                                   AppConst.setPublicView(!AppConst.getPublicView());
                                   setState();
                                 } else if (e.contains("Edit")) {
+                                  if (!kIsWeb) {
+                                    // Navigator.of(context).pop();
+                                  }
                                   Future.delayed(const Duration(milliseconds: 400)).then(
                                     (value) => AppConst.getOuterContext()!.beamToNamed(
                                       id.contains("IN") ? AppRoutes.addInventory : AppRoutes.addLead,
@@ -164,6 +168,9 @@ class InventoryDetailsHeader extends ConsumerWidget {
 
                                   setState();
                                 } else if (e.contains("Edit")) {
+                                  if (!kIsWeb) {
+                                    // Navigator.of(context).pop();
+                                  }
                                   Future.delayed(const Duration(milliseconds: 400)).then(
                                     (value) => AppConst.getOuterContext()!.beamToNamed(id.contains("IN") ? AppRoutes.addInventory : AppRoutes.addLead, data: true),
                                   );

@@ -159,7 +159,9 @@ void uploadAttachmentsToFirebaseStorage(
     }
     // InventoryDetails.deleteAttachment(itemId: id, attachmentIdToDelete: "1");
   } catch (e) {
-    print(e);
+    if (kDebugMode) {
+      print(e);
+    }
   }
 }
 
