@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -55,9 +56,13 @@ class AddInventoryState extends ConsumerState<AddInventory> {
     try {
       if (isEdit) {
         if (answers[0]["item"] == "Residential") {
-          ref.read(filterCommercialQuestion.notifier).toggleCommericalQuestionary(false);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            ref.read(filterCommercialQuestion.notifier).toggleCommericalQuestionary(false);
+          });
         } else if (answers[0]["item"] == "Commercial") {
-          ref.read(filterCommercialQuestion.notifier).toggleCommericalQuestionary(true);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            ref.read(filterCommercialQuestion.notifier).toggleCommericalQuestionary(true);
+          });
         }
       }
     } catch (e) {
@@ -190,6 +195,7 @@ class AddInventoryState extends ConsumerState<AddInventory> {
     final isPlotSelected = ref.read(filterPlotQuestion);
     final allInventoryQuestionsNotifier = ref.read(allInventoryQuestion.notifier);
     final allInventoryQuestions = ref.read(allInventoryQuestion);
+
     return GestureDetector(
         onTap: () {
           if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
@@ -229,6 +235,7 @@ class AddInventoryState extends ConsumerState<AddInventory> {
                     final filter = currentScreenList.where((element) => !arr.contains(element.screenId)).toList();
                     currentScreenList = filter;
                   }
+
                   return Stack(
                     // fit: StackFit.expand,
                     children: [
@@ -260,7 +267,7 @@ class AddInventoryState extends ConsumerState<AddInventory> {
                                           ),
                                           child: Container(
                                             constraints: BoxConstraints(
-                                              maxHeight: MediaQuery.of(context).size.height * 0.8,
+                                              maxHeight: 800,
                                             ),
                                             width: Responsive.isMobile(context) ? width! * 0.9 : 650,
                                             padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
@@ -279,7 +286,7 @@ class AddInventoryState extends ConsumerState<AddInventory> {
                                                       ),
                                                     ),
                                                   // CustomTextInput(
-                                                  //   controller: _textController,
+                                                  //   controller: controller,
                                                   //   hintText: "demo",
                                                   // ),
                                                   for (var i = 0; i < currentScreenList[index].questions.length; i++)
@@ -310,7 +317,26 @@ class AddInventoryState extends ConsumerState<AddInventory> {
                                                           iswhatsappMobileNoEmpty,
                                                           isChecked,
                                                           isCheckedUpdate,
+                                                          ref,
                                                         ),
+                                                        // BuilInventoryQuestions(
+                                                        //   currentScreenIndex: currentScreenIndex,
+                                                        //   isChecked: isChecked,
+                                                        //   isCheckedUpdate: isCheckedUpdate,
+                                                        //   isEdit: isEdit,
+                                                        //   isMobileNoEmpty: isMobileNoEmpty,
+                                                        //   isPlotSelected: isPlotSelected,
+                                                        //   isRentSelected: isRentSelected,
+                                                        //   iswhatsappMobileNoEmpty: iswhatsappMobileNoEmpty,
+                                                        //   nextQuestion: nextQuestion,
+                                                        //   notify: notify,
+                                                        //   question: currentScreenList[index].questions[i],
+                                                        //   ref: ref,
+                                                        //   screensDataList: currentScreenList,
+                                                        //   selectedValues: selectedValues,
+                                                        //   stateList: stateList,
+
+                                                        // ),
                                                         SizedBox(height: currentScreenList[index].questions[i].questionOptionType != 'textfield' ? 10 : 0),
                                                         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                                                           const SizedBox(),
