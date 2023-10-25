@@ -19,7 +19,14 @@ class PhotosViewForm extends ConsumerStatefulWidget {
   final int id;
   final bool isEdit;
   final void Function()? onNext;
-  const PhotosViewForm({this.notify, required this.id, this.propertyphotos, required this.isEdit, this.onNext, super.key});
+  const PhotosViewForm({
+    this.notify,
+    required this.id,
+    this.propertyphotos,
+    required this.isEdit,
+    this.onNext,
+    super.key,
+  });
 
   @override
   PhotosViewFormState createState() => PhotosViewFormState();
@@ -129,7 +136,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
       }
     });
 
-    if (widget.isEdit && widget.propertyphotos != null && widget.propertyphotos!.imageTitle!.isNotEmpty) {
+    if (widget.propertyphotos != null && widget.propertyphotos!.imageTitle!.isNotEmpty) {
       List list = [];
       setState(() {
         selectedImagesTitleList.addAll(widget.propertyphotos!.imageTitle!);
@@ -166,10 +173,10 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
                   setState(() {
                     final item = roomImages.removeAt(oldIndex);
                     roomImages.insert(newIndex, item);
-                    setState(() {
-                      final titleItem = selectedImagesTitleList.removeAt(oldIndex);
-                      selectedImagesTitleList.insert(newIndex, titleItem);
-                    });
+
+                    final titleItem = selectedImagesTitleList.removeAt(oldIndex);
+                    selectedImagesTitleList.insert(newIndex, titleItem);
+
                     final urlItem = selectedImagesUrlList.removeAt(oldIndex);
                     selectedImagesUrlList.insert(newIndex, urlItem);
                   });
@@ -222,7 +229,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
                                     : SizedBox(
                                         width: constraints.maxWidth / crossAxisCount - 20,
                                         height: constraints.maxWidth / crossAxisCount - 45,
-                                        child: widget.isEdit && roomImages[index]["webImageUrl"].contains("https")
+                                        child: roomImages[index]["webImageUrl"].contains("https")
                                             ? Image.network(
                                                 roomImages[index]["webImageUrl"]!,
                                                 fit: BoxFit.fill,

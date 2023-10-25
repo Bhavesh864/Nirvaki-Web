@@ -3,7 +3,6 @@ import 'dart:async';
 
 // import 'dart:html';
 
-import 'package:beamer/beamer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -27,11 +26,9 @@ import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/userModel/user_info.dart';
-import '../../constants/functions/chat_group/group.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
-import '../../pages/largescreen_dashboard.dart';
 import '../../riverpodstate/selected_workitem.dart';
 import '../../widgets/app/nav_bar.dart';
 import '../../widgets/workItemDetail/assignment_widget.dart';
@@ -65,7 +62,8 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
     super.initState();
     tabviewController = TabController(length: 4, vsync: this);
     final workItemId = ref.read(selectedWorkItemId);
-    if (workItemId.isEmpty) {
+
+    if (workItemId.isEmpty || !workItemId.contains('TD')) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.read(selectedWorkItemId.notifier).addItemId(widget.todoId);
       });
@@ -481,7 +479,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                 runSpacing: 20,
                                                 children: [
                                                   SizedBox(
-                                                    height: 100,
+                                                    height: 120,
                                                     child: ListView.builder(
                                                       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                                                       shrinkWrap: true,
@@ -505,8 +503,9 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                               },
                                                               child: Container(
                                                                 height: 99,
-                                                                margin: const EdgeInsets.only(right: 15),
+                                                                margin: const EdgeInsets.only(right: 15, top: 5),
                                                                 width: 108,
+                                                                clipBehavior: Clip.none,
                                                                 alignment: Alignment.center,
                                                                 padding: const EdgeInsets.symmetric(vertical: 10),
                                                                 decoration: BoxDecoration(
@@ -544,7 +543,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                               right: 10,
                                                               child: Row(
                                                                 children: [
-                                                                  GestureDetector(
+                                                                  InkWell(
                                                                     child: const Icon(
                                                                       Icons.download_for_offline,
                                                                       size: 18,
@@ -557,7 +556,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                                       // }
                                                                     },
                                                                   ),
-                                                                  GestureDetector(
+                                                                  InkWell(
                                                                     child: const Icon(
                                                                       Icons.cancel,
                                                                       size: 18,
@@ -579,7 +578,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                       },
                                                     ),
                                                   ),
-                                                  GestureDetector(
+                                                  InkWell(
                                                     onTap: () async {
                                                       showUploadDocumentModal(
                                                         context,
@@ -592,9 +591,11 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                         (b) {},
                                                       );
                                                     },
+                                                    borderRadius: BorderRadius.circular(10),
                                                     child: Container(
                                                       height: 100,
                                                       width: 100,
+                                                      margin: const EdgeInsets.only(top: 4),
                                                       alignment: Alignment.center,
                                                       padding: const EdgeInsets.symmetric(vertical: 15),
                                                       decoration: BoxDecoration(
