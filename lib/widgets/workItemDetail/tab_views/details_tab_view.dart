@@ -359,6 +359,12 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                   widget.data.plotdetails.boundarywall,
                   context,
                 ),
+              if (checkNotNUllItem(widget.data.furnishedStatus))
+                buildInfoFields(
+                  'Furnished Status',
+                  widget.data.furnishedStatus,
+                  context,
+                ),
             ]),
             const Divider(
               height: 40,
@@ -498,6 +504,12 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                   buildInfoFields(
                     'Boundary',
                     widget.data.plotdetails.boundarywall,
+                    context,
+                  ),
+                if (checkNotNUllItem(widget.data.furnishedStatus))
+                  buildInfoFields(
+                    'Furnished Status',
+                    widget.data.furnishedStatus,
                     context,
                   ),
                 const Divider(
