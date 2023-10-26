@@ -384,11 +384,11 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                                 // tileColor: notificationData.isRead! ? Colors.transparent : AppColor.secondary,
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                 onTap: () {
-                                  navigateBasedOnId(context, notificationData.linkedItemId!, ref);
+                                  // navigateBasedOnId(context, notificationData.linkedItemId!, ref);
                                   if (!notificationData.isRead!) {
                                     markNotificationAsRead(notificationData);
                                   }
-                                  Navigator.of(context).pop();
+                                  // Navigator.of(context).pop();
                                 },
                                 titleAlignment: ListTileTitleAlignment.top,
                                 leading: Container(

@@ -89,6 +89,7 @@ class _AssignUserState extends ConsumerState<AssignUser> {
                     return CustomTextInput(
                       hintText: "Type here...",
                       controller: _textEditingController,
+                      autofocus: false,
                       focusnode: focusNode,
                       isDense: false,
                       ontap: () {},

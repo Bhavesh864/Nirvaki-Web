@@ -5,8 +5,6 @@ import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 
-import '../../../Customs/custom_chip.dart';
-
 class NewGroupUserList extends StatelessWidget {
   final List<User> users;
   final List<String> selectedUser;

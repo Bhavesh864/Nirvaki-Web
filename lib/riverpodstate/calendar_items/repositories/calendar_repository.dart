@@ -42,13 +42,10 @@ class CalendarRepository {
       final currentUser = ref.watch(userDataProvider);
       final List<User> userList = [];
       if (querySnapshot.docs.isNotEmpty) {
-        // Map QueryDocumentSnapshot to CardDetails and convert to a list
         final snap = filterCalenderItemByRole(snapshot: querySnapshot, ref: ref, userList: userList, currentUser: currentUser!);
         final filterItem = snap?.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
-
         // final List<CardDetails> todoItemsList =
         //   filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
-
         return filterItem;
       } else {
         return null;

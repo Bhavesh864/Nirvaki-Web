@@ -283,15 +283,17 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
           itemid: "IN$randomId",
           currentuserdata: currentUserdata);
     } else {
-      submitActivity(itemid: existingInventoryId, activitytitle: "Inventory detail updated", user: currentUserdata!);
       notifyToUser(
           assignedto: user.userid,
           title: "Inventory detail Updated",
           content: "$existingInventoryId Inventory detail Updated",
           assigntofield: true,
           itemid: existingInventoryId,
-          currentuserdata: currentUserdata);
+          currentuserdata: currentUserdata!);
     }
+  }
+  if (isEdit) {
+    submitActivity(itemid: existingInventoryId, activitytitle: "Inventory detail updated", user: currentUserdata!);
   }
   return res;
 }

@@ -26,7 +26,7 @@
             <stringArg name="classpath">
               <args>
                 <arg>$MODULE_DIR$/../../../../build/app/intermediates/compile_and_runtime_not_namespaced_r_class_jar/debug/R.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/be0dbcd2a85aad32d9bf75d1adbf2688/transformed/jetified-libs.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/transforms-3/0d23d6f4d6fc816ccf7f15bdbe50dfe4/transformed/jetified-libs.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/firebase_database/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/firebase_messaging/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/cloud_firestore/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
@@ -39,12 +39,9 @@
                 <arg>$MODULE_DIR$/../../../../build/flutter_local_notifications/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/file_picker/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/path_provider_android/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
-                <arg>$MODULE_DIR$/../../../../build/just_audio/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/shared_preferences_android/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
-                <arg>$MODULE_DIR$/../../../../build/wakelock_plus/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/integration_test/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/image_picker_android/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
-                <arg>$MODULE_DIR$/../../../../build/video_player_android/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/firebase_crashlytics/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/flutter_plugin_android_lifecycle/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/sqflite/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
@@ -53,17 +50,15 @@
                 <arg>$MODULE_DIR$/../../../../build/flutter_file_downloader/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/connectivity_plus/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/webview_flutter_android/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
-                <arg>$MODULE_DIR$/../../../../build/package_info_plus/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/emoji_picker_flutter/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
-                <arg>$MODULE_DIR$/../../../../build/audio_session/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/9f38560ace316a0951955f491362361d/transformed/jetified-armeabi_v7a_debug-1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/c0f9d2f510118321be7015e060aae5e9/transformed/jetified-arm64_v8a_debug-1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/312de3f4c5ec06f73acb95e70b8becd4/transformed/jetified-x86_64_debug-1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/a69b65e0b5002d3dbf08bc3b49b3b6ff/transformed/jetified-x86_debug-1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/29e2498ca42d00220b1052789dc05730/transformed/jetified-flutter_embedding_debug-1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/7eadf444d9b330cf9bbe57551a44a6fa/transformed/jetified-firebase-analytics-ktx-21.3.0-api.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/632bdfe7bd4260192b7b3f15c40f0ee8/transformed/jetified-firebase-crashlytics-ktx-18.4.1-api.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/bbd268f385fd89597351588d7261dac5/transformed/jetified-firebase-crashlytics-18.4.1-api.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/transforms-3/d76803a0d107da5f7b77d3d14658b507/transformed/jetified-firebase-crashlytics-ktx-18.4.3-api.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/transforms-3/e17ae47a2b235e47162673c9fd27a292/transformed/jetified-firebase-crashlytics-18.4.3-api.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/72b6a73f18236ba023ef56896a1ceb3e/transformed/jetified-firebase-sessions-1.0.2-api.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/cb87bc11da639a22587b02152e75e049/transformed/jetified-firebase-common-ktx-20.3.3-api.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/fb0d312a9d4b5c3e013ed08bac5ac3a9/transformed/jetified-firebase-analytics-21.3.0-api.jar</arg>
@@ -197,35 +192,30 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 33, extension level 3 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="android.firebase_core.main" />
-    <orderEntry type="module" module-name="android.network_info_plus.main" />
-    <orderEntry type="module" module-name="android.firebase_database.main" />
-    <orderEntry type="module" module-name="android.flutter_local_notifications.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.core.android.firebase_core.main" />
+    <orderEntry type="module" module-name="dev.fluttercommunity.plus.network_info.android.network_info_plus.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.database.android.firebase_database.main" />
+    <orderEntry type="module" module-name="com.dexterous.flutterlocalnotifications.android.flutter_local_notifications.main" />
     <orderEntry type="module" module-name="android.file_picker.main" />
     <orderEntry type="module" module-name="android.path_provider_android.main" />
-    <orderEntry type="module" module-name="android.just_audio.main" />
     <orderEntry type="module" module-name="android.shared_preferences_android.main" />
-    <orderEntry type="module" module-name="android.wakelock_plus.main" />
     <orderEntry type="module" module-name="android.integration_test.main" />
-    <orderEntry type="module" module-name="android.image_picker_android.main" />
-    <orderEntry type="module" module-name="android.video_player_android.main" />
-    <orderEntry type="module" module-name="android.firebase_messaging.main" />
-    <orderEntry type="module" module-name="android.firebase_crashlytics.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.imagepicker.android.image_picker_android.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebasemessaging.android.firebase_messaging.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.crashlytics.android.firebase_crashlytics.main" />
     <orderEntry type="module" module-name="android.flutter_plugin_android_lifecycle.main" />
     <orderEntry type="module" module-name="android.sqflite.main" />
     <orderEntry type="module" module-name="android.url_launcher_android.main" />
     <orderEntry type="module" module-name="android.google_maps_flutter_android.main" />
     <orderEntry type="module" module-name="android.flutter_file_downloader.main" />
-    <orderEntry type="module" module-name="android.cloud_firestore.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.cloudfirestore.android.cloud_firestore.main" />
     <orderEntry type="module" module-name="android.connectivity_plus.main" />
-    <orderEntry type="module" module-name="android.firebase_dynamic_links.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.dynamiclinks.android.firebase_dynamic_links.main" />
     <orderEntry type="module" module-name="android.webview_flutter_android.main" />
-    <orderEntry type="module" module-name="android.firebase_analytics.main" />
-    <orderEntry type="module" module-name="android.firebase_auth.main" />
-    <orderEntry type="module" module-name="android.package_info_plus.main" />
-    <orderEntry type="module" module-name="android.emoji_picker_flutter.main" />
-    <orderEntry type="module" module-name="android.audio_session.main" />
-    <orderEntry type="module" module-name="android.firebase_storage.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.analytics.android.firebase_analytics.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.auth.android.firebase_auth.main" />
+    <orderEntry type="module" module-name="com.fintasys.emoji_picker_flutter.android.emoji_picker_flutter.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.storage.android.firebase_storage.main" />
     <orderEntry type="library" name="Gradle: io.flutter:flutter_embedding_debug:1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420" level="project" />
     <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-common:2.6.1" level="project" />
     <orderEntry type="library" name="Gradle: androidx.annotation:annotation-jvm:1.7.0" level="project" />
@@ -307,8 +297,8 @@
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-measurement-connector:19.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-measurement-sdk:21.3.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-common-ktx:20.3.3@aar" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.firebase:firebase-crashlytics-ktx:18.4.1@aar" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.firebase:firebase-crashlytics:18.4.1@aar" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.firebase:firebase-crashlytics-ktx:18.4.3@aar" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.firebase:firebase-crashlytics:18.4.3@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-encoders-json:18.0.1@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.datatransport:transport-api:3.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.datatransport:transport-runtime:3.1.9@aar" level="project" />

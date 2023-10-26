@@ -44,7 +44,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
   PlatformFile? selectedImageName;
   List<PlatformFile> pickedDocuments = [];
   List<String> selectedDocsName = [];
-
+  bool uploaded = false;
   @override
   void initState() {
     super.initState();
@@ -95,7 +95,10 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
               List<LeadDetails> leadlist = dataList.map((doc) => LeadDetails.fromSnapshot(doc)).toList();
 
               for (var data in leadlist) {
-                Future.delayed(const Duration(milliseconds: 500)).then((value) => setLeadEditData(notify, data));
+                if (!uploaded) {
+                  Future.delayed(const Duration(milliseconds: 500)).then((value) => setLeadEditData(notify, data));
+                  uploaded = true;
+                }
                 return GestureDetector(
                   onTap: () {
                     if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
@@ -223,9 +226,8 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                                         AssignmentWidget(
                                                           id: data.leadId!,
                                                           assignto: data.assignedto!,
-                                                          imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty
-                                                              ? noImg
-                                                              : data.createdby!.userimage!,
+                                                          imageUrlCreatedBy:
+                                                              data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                           createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
                                                         ),
                                                       );
