@@ -230,7 +230,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                         ],
                       ),
                     ),
-                  )
+                  ),
                   // : const SizedBox.shrink(),
                 ],
               ),

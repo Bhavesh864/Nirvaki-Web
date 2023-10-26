@@ -24,6 +24,3 @@ exports.getPlacesData = functions.https.onRequest(async (req, res) => {
     res.status(500).send("Error fetching places data");
   }
 });
-
-
-

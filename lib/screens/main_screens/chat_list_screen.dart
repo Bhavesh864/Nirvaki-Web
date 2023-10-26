@@ -126,23 +126,14 @@ class ChatListScreen extends ConsumerWidget {
               ];
             },
             onSelected: (int value) {
-              if (value == 1) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (ctx) => const CreateGroupScreen(
-                      createGroup: false,
-                    ),
+              bool isGroup = value == 2 ? true : false;
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) => CreateGroupScreen(
+                    createGroup: isGroup,
                   ),
-                );
-              } else if (value == 2) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (ctx) => const CreateGroupScreen(
-                      createGroup: true,
-                    ),
-                  ),
-                );
-              }
+                ),
+              );
             },
           ),
         ],

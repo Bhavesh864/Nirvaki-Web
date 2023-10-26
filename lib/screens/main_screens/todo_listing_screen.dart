@@ -150,8 +150,6 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                 );
               });
 
-              print(width);
-
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
