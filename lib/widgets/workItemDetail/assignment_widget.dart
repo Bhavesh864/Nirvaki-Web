@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/small_custom_profile_image.dart';
-import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
 
 import '../../Customs/responsive.dart';
@@ -46,6 +45,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
   @override
   Widget build(BuildContext context) {
     final User? userData = ref.watch(userDataProvider);
+    double bottomNavHeight = MediaQuery.of(context).padding.bottom;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -257,6 +257,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
             ],
           ),
         ),
+        SizedBox(height: bottomNavHeight),
       ],
     );
   }
