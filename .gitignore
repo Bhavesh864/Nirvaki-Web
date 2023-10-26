@@ -21,6 +21,9 @@ doc/api/
 # dotenv environment variables file
 .env*
 
+.gradle/
+build/
+
 android/.gradle
 ios
 # Avoid committing generated Javascript files:
