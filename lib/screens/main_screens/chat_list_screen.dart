@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/chat/controller/chat_controller.dart';
 import 'package:yes_broker/chat/models/chat_contact.dart';
@@ -19,7 +18,6 @@ import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/screens/main_screens/chat_screen.dart';
 import 'package:yes_broker/screens/main_screens/create_group_screen.dart';
-
 import '../../Customs/responsive.dart';
 import '../../constants/utils/colors.dart';
 import '../../widgets/app/nav_bar.dart';
@@ -128,23 +126,14 @@ class ChatListScreen extends ConsumerWidget {
               ];
             },
             onSelected: (int value) {
-              if (value == 1) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (ctx) => const CreateGroupScreen(
-                      createGroup: false,
-                    ),
+              bool isGroup = value == 2 ? true : false;
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) => CreateGroupScreen(
+                    createGroup: isGroup,
                   ),
-                );
-              } else if (value == 2) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (ctx) => const CreateGroupScreen(
-                      createGroup: true,
-                    ),
-                  ),
-                );
-              }
+                ),
+              );
             },
           ),
         ],

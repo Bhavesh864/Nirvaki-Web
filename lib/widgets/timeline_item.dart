@@ -7,7 +7,6 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/responsive.dart';
-import '../constants/firebase/userModel/user_info.dart';
 import '../constants/functions/navigation/navigation_functions.dart';
 import '../constants/functions/time_formatter.dart';
 import '../riverpodstate/common_index_state.dart';
@@ -136,7 +135,8 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
               width: 20,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey, width: 1.0),
-                image: DecorationImage(image: NetworkImage(timeLine.userImageUrl == null || timeLine.userImageUrl!.isEmpty ? noImg : timeLine.userImageUrl!), fit: BoxFit.fill),
+                image: DecorationImage(
+                    image: NetworkImage(timeLine.userImageUrl == null || timeLine.userImageUrl!.isEmpty ? noImg : timeLine.userImageUrl!), fit: BoxFit.fill),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),

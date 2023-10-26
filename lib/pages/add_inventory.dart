@@ -197,7 +197,7 @@ class AddInventoryState extends ConsumerState<AddInventory> {
 
     return GestureDetector(
         onTap: () {
-          if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
+          // if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
         },
         child: Scaffold(
           body: FutureBuilder<List<InventoryQuestions>>(
@@ -348,7 +348,7 @@ class AddInventoryState extends ConsumerState<AddInventory> {
                                                                             addDataOnfirestore(notify);
                                                                           }
                                                                         }
-                                                                        if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
+                                                                        // if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
                                                                       },
                                                                       width: currentScreenList[index].title == "Assign to" ? 90 : 70,
                                                                       height: 39,

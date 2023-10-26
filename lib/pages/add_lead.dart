@@ -132,7 +132,9 @@ class _AddLeadState extends ConsumerState<AddLead> {
         });
       }
     }
+
     updateLeadListInventory(ref, option, screensDataList);
+
     if (currentScreenIndex < screensDataList!.length - 1) {
       setState(() {
         currentScreenIndex++;
@@ -151,6 +153,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
   }
 
   bool backButtonEnabled = true;
+
   void goBack(List<int> id, type) {
     if (backButtonEnabled) {
       if (currentScreenIndex > 0) {
@@ -235,6 +238,7 @@ class _AddLeadState extends ConsumerState<AddLead> {
                 final filter = currentScreenList.where((element) => !arr.contains(element.screenId)).toList();
                 currentScreenList = filter;
               }
+
               return Stack(
                 children: [
                   Container(
@@ -268,7 +272,12 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                           maxHeight: MediaQuery.of(context).size.height * 0.8,
                                         ),
                                         width: Responsive.isMobile(context) ? width! * 0.9 : 650,
-                                        padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: Responsive.isMobile(context) ? 10 : 20),
+                                        padding: EdgeInsets.only(
+                                          left: 20,
+                                          right: 20,
+                                          bottom: 10,
+                                          top: Responsive.isMobile(context) ? 10 : 20,
+                                        ),
                                         child: SingleChildScrollView(
                                           child: Column(
                                             children: [
@@ -313,46 +322,51 @@ class _AddLeadState extends ConsumerState<AddLead> {
                                                       ref,
                                                       isBuy,
                                                     ),
-                                                    SizedBox(height: currentScreenList[index].questions[i].questionOptionType != 'textfield' ? 10 : 0),
-                                                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                                                      const SizedBox(),
-                                                      if (i == currentScreenList[index].questions.length - 1 &&
-                                                          currentScreenList[index].questions[i].questionOptionType != 'chip') ...[
-                                                        Container(
-                                                          margin: const EdgeInsets.only(top: 10),
-                                                          alignment: Alignment.centerRight,
-                                                          child: allQuestionFinishes
-                                                              ? const Center(
-                                                                  child: CircularProgressIndicator.adaptive(),
-                                                                )
-                                                              : CustomButton(
-                                                                  text: currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next',
-                                                                  onPressed: () {
-                                                                    if (!allQuestionFinishes) {
-                                                                      if (currentScreenList[index].title != "Assign to") {
-                                                                        if (_formKey.currentState!.validate()) {
-                                                                          nextQuestion(screensDataList: screensDataList, option: "");
+                                                    SizedBox(
+                                                      height: currentScreenList[index].questions[i].questionOptionType != 'textfield' ? 10 : 0,
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        const SizedBox(),
+                                                        if (i == currentScreenList[index].questions.length - 1 &&
+                                                            currentScreenList[index].questions[i].questionOptionType != 'chip') ...[
+                                                          Container(
+                                                            margin: const EdgeInsets.only(top: 10),
+                                                            alignment: Alignment.centerRight,
+                                                            child: allQuestionFinishes
+                                                                ? const Center(
+                                                                    child: CircularProgressIndicator.adaptive(),
+                                                                  )
+                                                                : CustomButton(
+                                                                    text: currentScreenList[index].title == "Assign to" ? 'Submit' : 'Next',
+                                                                    onPressed: () {
+                                                                      if (!allQuestionFinishes) {
+                                                                        if (currentScreenList[index].title != "Assign to") {
+                                                                          if (_formKey.currentState!.validate()) {
+                                                                            nextQuestion(screensDataList: screensDataList, option: "");
+                                                                          }
+                                                                        }
+                                                                        // final hasvalues = selectedValues.any((element) => element["id"] == 36);
+                                                                        // final assignFieldValue = selectedValues.firstWhere((element) => element["id"] == 36);
+                                                                        if (currentScreenList[index].title == "Assign to") {
+                                                                          // setState(() {
+                                                                          //   allQuestionFinishes = true;
+                                                                          // });
+                                                                          addDataOnfirestore(notify);
                                                                         }
                                                                       }
-                                                                      // final hasvalues = selectedValues.any((element) => element["id"] == 36);
-                                                                      // final assignFieldValue = selectedValues.firstWhere((element) => element["id"] == 36);
-                                                                      if (currentScreenList[index].title == "Assign to") {
-                                                                        // setState(() {
-                                                                        //   allQuestionFinishes = true;
-                                                                        // });
-                                                                        addDataOnfirestore(notify);
-                                                                      }
-                                                                    }
-                                                                    if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
-                                                                  },
-                                                                  width: currentScreenList[index].title == "Assign to" ? 90 : 70,
-                                                                  height: 39,
-                                                                ),
-                                                        ),
-                                                      ] else ...[
-                                                        const SizedBox()
-                                                      ]
-                                                    ]),
+                                                                      if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
+                                                                    },
+                                                                    width: currentScreenList[index].title == "Assign to" ? 90 : 70,
+                                                                    height: 39,
+                                                                  ),
+                                                          ),
+                                                        ] else ...[
+                                                          const SizedBox()
+                                                        ]
+                                                      ],
+                                                    ),
                                                   ],
                                                 ),
                                             ],

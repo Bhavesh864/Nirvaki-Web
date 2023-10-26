@@ -49,71 +49,71 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
   final TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Wrap(
-          runSpacing: 20,
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const CustomText(
-              title: 'Activity',
-              fontWeight: FontWeight.w700,
-              size: 18,
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 10),
-                  width: Responsive.isMobile(context) ? width! * 0.6 : 400,
-                  child: TextFormField(
-                    controller: controller,
-                    decoration: InputDecoration(
-                      // enabledBorder: OutlineInputBorder(
-                      //   borderRadius: BorderRadius.circular(6),
-                      // ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6),
-                        borderSide: const BorderSide(
-                          color: Colors.grey,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Wrap(
+            runSpacing: 20,
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const CustomText(
+                title: 'Activity',
+                fontWeight: FontWeight.w700,
+                size: 18,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(right: 10),
+                    width: Responsive.isMobile(context) ? width! * 0.6 : 400,
+                    child: TextFormField(
+                      controller: controller,
+                      decoration: InputDecoration(
+                        // enabledBorder: OutlineInputBorder(
+                        //   borderRadius: BorderRadius.circular(6),
+                        // ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(6),
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                          ),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        hintText: 'Type note here..',
+                        hintStyle: TextStyle(
+                          fontFamily: GoogleFonts.dmSans().fontFamily,
+                          color: const Color(0xFF828282),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                        ),
+                        isDense: true,
+                        prefixIcon: const Icon(
+                          Icons.search,
+                          color: Colors.black,
                         ),
                       ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      hintText: 'Type note here..',
-                      hintStyle: TextStyle(
-                        fontFamily: GoogleFonts.dmSans().fontFamily,
-                        color: const Color(0xFF828282),
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                      ),
-                      isDense: true,
-                      prefixIcon: const Icon(
-                        Icons.search,
-                        color: Colors.black,
-                      ),
+                      onFieldSubmitted: (_) => submitTodo(),
                     ),
-                    onFieldSubmitted: (_) => submitTodo(),
                   ),
-                ),
-                CustomButton(
-                  text: 'Add Note',
-                  fontWeight: FontWeight.w500,
-                  onPressed: submitTodo,
-                  height: Responsive.isMobile(context) ? 45 : 40,
-                ),
-              ],
-            ),
-          ],
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 8.0),
-          child: CustomTimeLineView(
-            isScrollable: false,
+                  CustomButton(
+                    text: 'Add Note',
+                    fontWeight: FontWeight.w500,
+                    onPressed: submitTodo,
+                    height: Responsive.isMobile(context) ? 45 : 40,
+                  ),
+                ],
+              ),
+            ],
           ),
-        ),
-      ],
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: const CustomTimeLineView(),
+          ),
+        ],
+      ),
     );
   }
 }

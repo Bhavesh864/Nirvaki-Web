@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -487,8 +485,6 @@ Widget buildInventoryQuestions(
                 }
 
                 notify.add({"id": question.questionId, "item": newvalue.trim()});
-                print('after');
-                print(notify.state);
               },
               validator: video
                   ? (value) => isYouTubeVideoURL(value!)

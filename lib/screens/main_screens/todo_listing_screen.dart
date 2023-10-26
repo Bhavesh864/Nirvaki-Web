@@ -160,7 +160,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            if (width! >= 850)
+                            if (width! > 850)
                               TopSerachBar(
                                 onChanged: (value) {
                                   setState(() {

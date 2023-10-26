@@ -1,44 +1,44 @@
-// {
-//   "steps": [
-//     {
-//       "action": "connect",
-//       "target": "flutter_driver"
-//     },
-//     {
-//       "action": "tap",
-//       "locator": {
-//         "key": "usernameField"
-//       }
-//     },
-//     {
-//       "action": "enterText",
-//       "text": "bhavesh@gmail.com"
-//     },
-//     {
-//       "action": "tap",
-//       "locator": {
-//         "key": "passwordField"
-//       }
-//     },
-//     {
-//       "action": "enterText",
-//       "text": "123456"
-//     },
-//     {
-//       "action": "tap",
-//       "locator": {
-//         "key": "loginButton"
-//       }
-//     },
-//     {
-//       "action": "waitFor",
-//       "locator": {
-//         "key": "YesBroker"
-//       }
-//     },
-//     {
-//       "action": "print",
-//       "message": "Test completed successfully."
-//     }
-//   ]
-// }
+{
+  "steps": [
+    {
+      "action": "connect",
+      "target": "flutter_driver"
+    },
+    {
+      "action": "tap",
+      "locator": {
+        "key": "usernameField"
+      }
+    },
+    {
+      "action": "enterText",
+      "text": "bhavesh@gmail.com"
+    },
+    {
+      "action": "tap",
+      "locator": {
+        "key": "passwordField"
+      }
+    },
+    {
+      "action": "enterText",
+      "text": "123456"
+    },
+    {
+      "action": "tap",
+      "locator": {
+        "key": "loginButton"
+      }
+    },
+    {
+      "action": "waitFor",
+      "locator": {
+        "key": "YesBroker"
+      }
+    },
+    {
+      "action": "print",
+      "message": "Test completed successfully."
+    }
+  ]
+}

@@ -51,7 +51,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
     final currentIndex = ref.read(detailsPageIndexTabProvider);
     tabviewController = TabController(length: 3, vsync: this, initialIndex: currentIndex);
     final workItemId = ref.read(selectedWorkItemId);
-    if (workItemId.isEmpty) {
+    if (workItemId.isEmpty || !workItemId.contains('LD')) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.read(selectedWorkItemId.notifier).addItemId(widget.leadId);
       });
