@@ -52,13 +52,16 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
         if (scrWidth < 400) {
           return 180;
         }
+        if (scrWidth > 600) {
+          return 260;
+        }
         return 210;
       } else {
         if (widget.fromHome == false && scrWidth < 1100 && scrWidth > 900) {
-          return scrWidth / 2.5;
+          return scrWidth / 2.6;
         }
         if (widget.fromHome == false && scrWidth < 900 && scrWidth > 750) {
-          return scrWidth / 3;
+          return scrWidth / 2.8;
         }
         return 250.0;
       }

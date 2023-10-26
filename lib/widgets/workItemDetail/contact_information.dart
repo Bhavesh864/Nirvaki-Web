@@ -18,6 +18,8 @@ class ContactInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double bottomNavHeight = MediaQuery.of(context).padding.bottom;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -146,6 +148,8 @@ class ContactInformation extends StatelessWidget {
             ),
             minLeadingWidth: 0,
           ),
+
+        SizedBox(height: bottomNavHeight),
       ],
     );
   }
