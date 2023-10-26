@@ -43,6 +43,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
   @override
   Widget build(BuildContext context) {
     final User? userData = ref.watch(userDataProvider);
+    double bottomNavHeight = MediaQuery.of(context).padding.bottom;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -254,6 +255,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
             ],
           ),
         ),
+        SizedBox(height: bottomNavHeight),
       ],
     );
   }

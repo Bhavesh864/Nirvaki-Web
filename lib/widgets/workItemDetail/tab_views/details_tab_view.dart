@@ -108,6 +108,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    double bottomNavHeight = MediaQuery.of(context).padding.bottom;
     List<String> allImages = [];
     List<String> allTitles = [];
 
@@ -881,6 +882,8 @@ class _DetailsTabViewState extends State<DetailsTabView> {
             ),
           ]
         ],
+
+        SizedBox(height: bottomNavHeight),
       ],
     );
   }
