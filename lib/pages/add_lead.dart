@@ -59,11 +59,14 @@ class _AddLeadState extends ConsumerState<AddLead> {
         } else {
           isBuy = false;
         }
-
         if (answers[0]["item"] == "Residential") {
-          ref.read(leadFilterCommercialQuestion.notifier).toggleCommericalQuestionary(false);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            ref.read(leadFilterCommercialQuestion.notifier).toggleCommericalQuestionary(false);
+          });
         } else if (answers[0]["item"] == "Commercial") {
-          ref.read(leadFilterCommercialQuestion.notifier).toggleCommericalQuestionary(true);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            ref.read(leadFilterCommercialQuestion.notifier).toggleCommericalQuestionary(true);
+          });
         }
       }
     } catch (e) {

@@ -451,6 +451,26 @@ class CardDetails {
       print('Failed to delete user: $error');
     }
   }
+
+  static Future<void> updateCustomerInfo({required List<String> itemIds, required Customerinfo newCustomerInfo}) async {
+    try {
+      for (String itemId in itemIds) {
+        QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: itemId).get();
+        if (querySnapshot.docs.isNotEmpty) {
+          QueryDocumentSnapshot docSnapshot = querySnapshot.docs.first;
+          await docSnapshot.reference.update({'customerinfo': newCustomerInfo.toJson()});
+        } else {
+          if (kDebugMode) {
+            print('Item not found with todoId: $itemId');
+          }
+        }
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to update customer information for some items: $error');
+      }
+    }
+  }
 }
 
 class Customerinfo {
