@@ -27,8 +27,6 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   late DateTime _displayedMonth;
   DateTime selectedDate = DateTime.now();
   Stream<QuerySnapshot<Map<String, dynamic>>>? stream;
-  CalendarController firstCalendarController = CalendarController();
-  CalendarController secondCalendarController = CalendarController();
 
   @override
   void initState() {
@@ -93,7 +91,6 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                       child: ScrollConfiguration(
                         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                         child: SfCalendar(
-                          controller: firstCalendarController,
                           showCurrentTimeIndicator: false,
                           dataSource: EventDataSource(calenderList),
                           view: CalendarView.day,
@@ -106,6 +103,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                           showDatePickerButton: true,
                           timeSlotViewSettings: const TimeSlotViewSettings(),
                           initialDisplayDate: selectedDate,
+                          initialSelectedDate: selectedDate,
                           viewHeaderHeight: Responsive.isMobile(context) ? 0 : -1,
                           showTodayButton: Responsive.isMobile(context) ? false : true,
                           showNavigationArrow: Responsive.isMobile(context) ? false : true,
@@ -223,7 +221,9 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                               child: SfCalendar(
                                 onTap: (calendarLongPressDetails) {
                                   selectedDate = calendarLongPressDetails.date!;
-                                  setState(() {});
+                                  setState(
+                                    () {},
+                                  );
                                 },
                                 headerHeight: 0,
                                 initialDisplayDate: selectedDate,
@@ -231,7 +231,6 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                                 dataSource: EventDataSource(calenderList),
                                 cellBorderColor: Colors.transparent,
                                 view: CalendarView.month,
-                                controller: secondCalendarController,
                                 backgroundColor: Colors.white,
                               ),
                             ),
