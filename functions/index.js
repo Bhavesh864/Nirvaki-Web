@@ -17,7 +17,7 @@ exports.getPlacesData = functions.https.onRequest(async (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Headers", "*");
     const input = req.query.input;
-    const {data} = await axios.get(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&components=country:IN&key=AIzaSyD7KtQoq29-5TqELLdPBSQoqCD376-qGjA`);
+    const { data } = await axios.get(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&components=country:IN&key=AIzaSyD7KtQoq29-5TqELLdPBSQoqCD376-qGjA`);
     res.status(200).json(data);
   } catch (error) {
     logger.error("Error while fetching places data:", error);

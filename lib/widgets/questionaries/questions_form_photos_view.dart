@@ -19,7 +19,14 @@ class PhotosViewForm extends ConsumerStatefulWidget {
   final int id;
   final bool isEdit;
   final void Function()? onNext;
-  const PhotosViewForm({this.notify, required this.id, this.propertyphotos, required this.isEdit, this.onNext, super.key});
+  const PhotosViewForm({
+    this.notify,
+    required this.id,
+    this.propertyphotos,
+    required this.isEdit,
+    this.onNext,
+    super.key,
+  });
 
   @override
   PhotosViewFormState createState() => PhotosViewFormState();
@@ -166,10 +173,10 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
                   setState(() {
                     final item = roomImages.removeAt(oldIndex);
                     roomImages.insert(newIndex, item);
-                    setState(() {
-                      final titleItem = selectedImagesTitleList.removeAt(oldIndex);
-                      selectedImagesTitleList.insert(newIndex, titleItem);
-                    });
+
+                    final titleItem = selectedImagesTitleList.removeAt(oldIndex);
+                    selectedImagesTitleList.insert(newIndex, titleItem);
+
                     final urlItem = selectedImagesUrlList.removeAt(oldIndex);
                     selectedImagesUrlList.insert(newIndex, urlItem);
                   });

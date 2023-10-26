@@ -40,6 +40,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
   List<CardDetails>? status;
   List<User> userList = [];
   bool isUserLoaded = false;
+
   @override
   void initState() {
     super.initState();

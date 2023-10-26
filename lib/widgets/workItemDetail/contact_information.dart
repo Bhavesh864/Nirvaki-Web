@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 import 'package:yes_broker/constants/functions/make_call_function.dart';
+import 'package:yes_broker/customs/text_utility.dart';
 
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
@@ -25,15 +26,19 @@ class ContactInformation extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(bottom: 0.0),
+          padding: const EdgeInsets.only(right: 4.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               checkNotNUllItem(customerinfo?.firstname) || checkNotNUllItem(customerinfo?.lastname)
-                  ? CustomText(
-                      title: capitalizeFirstLetter('${customerinfo.firstname} ${checkNotNUllItem(customerinfo?.lastname) ? customerinfo.lastname : ""}'),
-                      fontWeight: FontWeight.w600,
-                      size: 20,
+                  ? Container(
+                      constraints: const BoxConstraints(maxWidth: 240),
+                      child: AppText(
+                        text: capitalizeFirstLetter('${customerinfo.firstname} ${checkNotNUllItem(customerinfo?.lastname) ? customerinfo.lastname : ""}'),
+                        fontWeight: FontWeight.w600,
+                        overflow: TextOverflow.ellipsis,
+                        fontsize: 20,
+                      ),
                     )
                   : const SizedBox(),
               if (!AppConst.getPublicView())

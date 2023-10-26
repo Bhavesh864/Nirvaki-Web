@@ -14,8 +14,6 @@ import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/timeline_item.dart';
 
-import '../constants/firebase/userModel/user_info.dart';
-
 class CustomTimeLineView extends ConsumerStatefulWidget {
   final bool fromHome;
   final bool isScrollable;
@@ -153,34 +151,38 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                       ),
                     );
                   } else {
-                    return ScrollConfiguration(
-                      behavior: const ScrollBehavior().copyWith(overscroll: false),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: activities.length,
-                        itemBuilder: (context, index) {
-                          return TimelineTile(
-                            isFirst: index == 0 ? true : false,
-                            indicatorStyle: const IndicatorStyle(
-                              color: AppColor.primary,
-                              height: 8,
-                              width: 8,
-                              padding: EdgeInsets.only(
-                                left: 15,
+                    return SizedBox(
+                      height: 300,
+                      child: ScrollConfiguration(
+                        behavior: const ScrollBehavior().copyWith(overscroll: false),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          // physics: const NeverScrollableScrollPhysics(),
+                          itemCount: activities.length,
+                          itemBuilder: (context, index) {
+                            return TimelineTile(
+                              isFirst: index == 0 ? true : false,
+                              indicatorStyle: const IndicatorStyle(
+                                color: AppColor.primary,
+                                height: 8,
+                                width: 8,
+                                padding: EdgeInsets.only(
+                                  left: 15,
+                                ),
                               ),
-                            ),
-                            beforeLineStyle: const LineStyle(
-                              color: AppColor.primary,
-                              thickness: 2,
-                            ),
-                            alignment: TimelineAlign.start,
-                            endChild: TimeLineItem(
-                              index: index,
-                              activitiesList: activities,
-                              fromHome: widget.fromHome,
-                            ),
-                          );
-                        },
+                              beforeLineStyle: const LineStyle(
+                                color: AppColor.primary,
+                                thickness: 2,
+                              ),
+                              alignment: TimelineAlign.start,
+                              endChild: TimeLineItem(
+                                index: index,
+                                activitiesList: activities,
+                                fromHome: widget.fromHome,
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     );
                   }
@@ -195,7 +197,9 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
               }
               return Container(
                 decoration: const BoxDecoration(color: Colors.amber),
-                child: const Text("data"),
+                child: const Text(
+                  "data",
+                ),
               );
             },
           ),

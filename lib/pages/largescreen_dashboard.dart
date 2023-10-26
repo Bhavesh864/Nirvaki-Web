@@ -33,6 +33,8 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
       // const path = '/lead';
       final path = (context.currentBeamLocation.state as BeamState).uri.path;
       final sideBarIndex = ref.read(desktopSideBarIndexProvider.notifier);
+
+      // if (sideBarIndex.state == 0) {
       if (path.contains('/ ')) {
         sideBarIndex.update((state) => 0);
       } else if (path.contains('/todo')) {
@@ -48,6 +50,7 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
       } else {
         sideBarIndex.state = 0;
       }
+      // }
     });
   }
 

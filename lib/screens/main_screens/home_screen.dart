@@ -15,12 +15,15 @@ import 'package:yes_broker/widgets/calendar_view.dart';
 import 'package:yes_broker/widgets/timeline_view.dart';
 import 'package:yes_broker/widgets/workitems/empty_work_item_list.dart';
 import 'package:yes_broker/widgets/workitems/workitems_list.dart';
+import '../../Customs/responsive.dart';
+import '../../Customs/text_utility.dart';
 import '../../chat/controller/chat_controller.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/Hive/hive_methods.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/filterdataAccordingRole/data_according_role.dart';
 import '../../riverpodstate/user_data.dart';
+import '../../widgets/app/nav_bar.dart';
 import '../../widgets/app/speed_dial_button.dart';
 import '../../widgets/chat_modal_view.dart';
 import '../account_screens/common_screen.dart';
@@ -65,7 +68,9 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   getUserData(token) async {
     if (mounted) {
       final User? user = await User.getUser(token);
+
       final hasUser = ref.read(userDataProvider);
+
       if (user != null && hasUser == null) {
         ref.read(userDataProvider.notifier).storeUserData(user);
         AppConst.setRole(user.role);
@@ -98,11 +103,6 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final user = ref.watch(userDataProvider);
     Size size = MediaQuery.of(context).size;
@@ -120,8 +120,10 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               isUserLoaded = true;
             }
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
-            final List<CardDetails> todoItems =
-                filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD" && item.status != "Closed").toList();
+            final List<CardDetails> todoItems = filterItem!
+                .map((doc) => CardDetails.fromSnapshot(doc))
+                .where((item) => item.cardType != "IN" && item.cardType != "LD" && item.status != "Closed")
+                .toList();
             int compareDueDates(CardDetails a, CardDetails b) {
               DateTime aDueDate = DateFormat('dd-MM-yy').parse(a.duedate!);
               DateTime bDueDate = DateFormat('dd-MM-yy').parse(b.duedate!);
@@ -129,7 +131,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             }
 
             todoItems.sort(compareDueDates);
-            final List<CardDetails> workItems = filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
+            final List<CardDetails> workItems =
+                filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
             workItems.sort((a, b) => b.createdate!.compareTo(a.createdate!));
             bool isDataEmpty = workItems.isEmpty && todoItems.isEmpty;
             return Container(
@@ -154,68 +157,81 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                             ),
                           )
                         : Container(),
-                    Expanded(
-                      flex: size.width > 1340 ? 3 : 5,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: WorkItemsList(
-                          title: "Work Items",
-                          getCardDetails: workItems,
+                    if (!Responsive.isMobile(context))
+                      Expanded(
+                        flex: size.width > 1340 ? 3 : 5,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: WorkItemsList(
+                            title: "Work Items",
+                            getCardDetails: workItems,
+                          ),
                         ),
-                      ),
-                    )
+                      )
                   ],
-                  size.width >= 850
-                      ? Expanded(
-                          flex: size.width > 1340 ? 4 : 6,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 6.0),
-                            child: Column(
-                              children: [
-                                const Expanded(
-                                  flex: 3,
-                                  child: CustomCalendarView(),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Expanded(
-                                  flex: 5,
-                                  child: Container(
-                                    padding: const EdgeInsets.only(bottom: 8),
-                                    decoration: BoxDecoration(
-                                      color: AppColor.secondary,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        const Padding(
-                                          padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
-                                          child: CustomText(
-                                            title: 'Timeline',
-                                            fontWeight: FontWeight.w600,
-                                            size: 15,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Container(
-                                            margin: const EdgeInsets.symmetric(horizontal: 10),
-                                            child: CustomTimeLineView(
-                                              itemIds: filterItem.map((card) => card["workitemId"]).toList(),
-                                              fromHome: true,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                  // size.width >= 850
+                  //     ?
+                  Expanded(
+                    flex: size.width > 1340 ? 4 : 6,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 6.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (Responsive.isMobile(context))
+                            Container(
+                                margin: const EdgeInsets.only(left: 10, bottom: 6),
+                                color: Colors.white,
+                                child: AppText(
+                                  letterspacing: 0.4,
+                                  text: "Welcome, ${capitalizeFirstLetter(user.userfirstname)}",
+                                  fontWeight: FontWeight.w600,
+                                  fontsize: 16,
+                                )),
+                          Expanded(
+                            flex: Responsive.isMobile(context) ? 0 : 3,
+                            child: const CustomCalendarView(),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Expanded(
+                            flex: 5,
+                            child: Container(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              decoration: BoxDecoration(
+                                color: AppColor.secondary,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
+                                    child: CustomText(
+                                      title: 'Timeline',
+                                      fontWeight: FontWeight.w600,
+                                      size: 15,
                                     ),
                                   ),
-                                ),
-                              ],
+                                  Expanded(
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                                      child: CustomTimeLineView(
+                                        itemIds: filterItem.map((card) => card["workitemId"]).toList(),
+                                        fromHome: true,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        )
-                      : const SizedBox.shrink(),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // : const SizedBox.shrink(),
                 ],
               ),
             );
@@ -306,8 +322,6 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 }
-
-
 
 // List<LeadQuestions> screensList = [
 //   LeadQuestions(

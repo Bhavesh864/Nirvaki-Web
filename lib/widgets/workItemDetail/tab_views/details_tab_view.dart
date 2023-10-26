@@ -612,7 +612,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                 ),
               ),
               SizedBox(
-                height: 100,
+                height: 120,
                 child: ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
@@ -634,7 +634,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                               },
                               child: Container(
                                 height: 110,
-                                margin: const EdgeInsets.only(right: 15),
+                                margin: const EdgeInsets.only(right: 15, top: 4),
                                 width: 108,
                                 alignment: Alignment.center,
                                 padding: const EdgeInsets.symmetric(vertical: 10),
@@ -673,7 +673,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                               right: 10,
                               child: Row(
                                 children: [
-                                  GestureDetector(
+                                  InkWell(
                                     child: const Icon(
                                       Icons.download_for_offline,
                                       size: 18,
@@ -691,7 +691,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                                       );
                                     },
                                   ),
-                                  GestureDetector(
+                                  InkWell(
                                     child: const Icon(
                                       Icons.cancel,
                                       size: 18,
@@ -718,7 +718,8 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                           ],
                         );
                       } else {
-                        return GestureDetector(
+                        return InkWell(
+                          borderRadius: BorderRadius.circular(10),
                           onTap: () async {
                             if (!isUploading) {
                               showUploadDocumentModal(
@@ -737,10 +738,10 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                             }
                           },
                           child: Container(
-                            height: 100,
                             width: 100,
                             alignment: Alignment.center,
                             padding: const EdgeInsets.symmetric(vertical: 15),
+                            margin: const EdgeInsets.only(top: 4),
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.withOpacity(0.5)),
                               borderRadius: BorderRadius.circular(10),

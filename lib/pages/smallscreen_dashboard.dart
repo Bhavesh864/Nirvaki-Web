@@ -68,7 +68,7 @@ class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingOb
         onTap: (value) => {
           ref.read(mobileBottomIndexProvider.notifier).update((state) => value),
           ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null),
-          ref.read(desktopSideBarIndexProvider.notifier).state = value,
+          ref.read(desktopSideBarIndexProvider.notifier).update((state) => value),
         },
         currentIndex: currentIndex,
         selectedFontSize: 0,

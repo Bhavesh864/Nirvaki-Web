@@ -68,6 +68,7 @@ Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
       userid: user.userId,
     );
   }).toList();
+
   final TodoDetails todo = TodoDetails(
     todoId: "TD$randomId",
     managerId: currentUserdata?.managerid,
