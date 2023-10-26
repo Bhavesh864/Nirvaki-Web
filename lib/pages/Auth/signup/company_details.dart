@@ -65,7 +65,6 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
         isloading = true;
       });
       notify.signup().then((value) => {
-            prints("matcher"),
             if (value == 'success')
               {
                 setState(() {
@@ -80,7 +79,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                 setState(() {
                   isloading = false;
                 }),
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value!))),
+                customSnackBar(context: context, text: value!),
               }
           });
     }

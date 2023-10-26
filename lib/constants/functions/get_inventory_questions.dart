@@ -173,7 +173,6 @@ Widget buildInventoryQuestions(
     if (selectedValues.any((answer) => answer["id"] == question.questionId)) {
       existingValue = selectedValues.firstWhere((answer) => answer["id"] == question.questionId)["item"] ?? "";
     }
-    print(notify.state);
     TextEditingController controller = TextEditingController(text: existingValue);
     String mobileCountryCode = '+91';
     String whatsappCountryCode = '+91';
