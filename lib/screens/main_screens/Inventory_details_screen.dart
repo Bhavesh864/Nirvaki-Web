@@ -48,7 +48,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
   late TabController tabviewController;
   late Stream<QuerySnapshot<Map<String, dynamic>>> inventoryDetails;
   // int currentSelectedTab = 0;
-
+  bool uploaded = false;
   @override
   void initState() {
     super.initState();
@@ -97,11 +97,13 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
           if (snapshot.hasData) {
             final dataList = snapshot.data!.docs;
             List<InventoryDetails> inventoryList = dataList.map((doc) => InventoryDetails.fromSnapshot(doc)).toList();
-
             for (var data in inventoryList) {
-              Future.delayed(const Duration(milliseconds: 500)).then((value) => {
-                    setEditData(notify, data),
-                  });
+              if (!uploaded) {
+                Future.delayed(const Duration(milliseconds: 500)).then((value) => {
+                      setEditData(notify, data),
+                    });
+                uploaded = true;
+              }
               return GestureDetector(
                 onTap: () {
                   if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();

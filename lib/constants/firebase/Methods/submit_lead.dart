@@ -271,5 +271,8 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
           currentuserdata: currentUserdata);
     }
   }
+  if (isEdit) {
+    submitActivity(itemid: existingLeadId, activitytitle: "Inventory detail updated", user: currentUserdata!);
+  }
   return res;
 }

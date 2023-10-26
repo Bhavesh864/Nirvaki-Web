@@ -129,7 +129,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
       }
     });
 
-    if (widget.isEdit && widget.propertyphotos != null && widget.propertyphotos!.imageTitle!.isNotEmpty) {
+    if (widget.propertyphotos != null && widget.propertyphotos!.imageTitle!.isNotEmpty) {
       List list = [];
       setState(() {
         selectedImagesTitleList.addAll(widget.propertyphotos!.imageTitle!);
@@ -222,7 +222,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
                                     : SizedBox(
                                         width: constraints.maxWidth / crossAxisCount - 20,
                                         height: constraints.maxWidth / crossAxisCount - 45,
-                                        child: widget.isEdit && roomImages[index]["webImageUrl"].contains("https")
+                                        child: roomImages[index]["webImageUrl"].contains("https")
                                             ? Image.network(
                                                 roomImages[index]["webImageUrl"]!,
                                                 fit: BoxFit.fill,

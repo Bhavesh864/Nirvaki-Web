@@ -16,9 +16,8 @@ class TimeLineItem extends ConsumerStatefulWidget {
   final int index;
   final List<ActivityDetails> activitiesList;
   final bool fromHome;
-  final User? createUser;
 
-  const TimeLineItem({super.key, required this.index, required this.activitiesList, required this.fromHome, this.createUser});
+  const TimeLineItem({super.key, required this.index, required this.activitiesList, required this.fromHome});
 
   @override
   ConsumerState<TimeLineItem> createState() => _TimeLineItemState();
@@ -27,132 +26,128 @@ class TimeLineItem extends ConsumerStatefulWidget {
 class _TimeLineItemState extends ConsumerState<TimeLineItem> {
   @override
   Widget build(BuildContext context) {
-    if (widget.createUser != null) {
-      final scrWidth = MediaQuery.of(context).size.width;
-      var timeLine = widget.activitiesList[widget.index];
-      // final messageData = snapshot.data![index];
-      // final isSender = messageData.senderId == AppConst.getAccessToken();
+    final scrWidth = MediaQuery.of(context).size.width;
+    var timeLine = widget.activitiesList[widget.index];
+    // final messageData = snapshot.data![index];
+    // final isSender = messageData.senderId == AppConst.getAccessToken();
 
-      // final bool isFirstMessageOfNewDay =
-      //     !isSameDay(
-      //       messageData.timeSent.toDate(),
-      //       snapshot.data![index - 1].timeSent.toDate(),
-      //     );
+    // final bool isFirstMessageOfNewDay =
+    //     !isSameDay(
+    //       messageData.timeSent.toDate(),
+    //       snapshot.data![index - 1].timeSent.toDate(),
+    //     );
 
-      final bool isNewWeek = DateTime.now().difference(timeLine.createdate!.toDate()).inDays >= 7;
-      // final String formattedTime = getMessageDay(timeLine.createdate!.toDate(), isNewWeek);
+    final bool isNewWeek = DateTime.now().difference(timeLine.createdate!.toDate()).inDays >= 7;
+    // final String formattedTime = getMessageDay(timeLine.createdate!.toDate(), isNewWeek);
 
-      final formattedTime = TimeFormatter.formatFirestoreTimestamp(timeLine.createdate, isNewWeek);
+    final formattedTime = TimeFormatter.formatFirestoreTimestamp(timeLine.createdate, isNewWeek);
 
-      double detailsViewWidth() {
-        if (Responsive.isDesktop(context)) {
-          if (widget.fromHome) {
-            return 250.0;
-          }
-          return scrWidth / 2;
-        } else if (Responsive.isMobile(context)) {
-          if (scrWidth < 400) {
-            return 180;
-          }
-          if (scrWidth > 600) {
-            return 260;
-          }
-          return 210;
-        } else {
-          if (widget.fromHome == false && scrWidth < 1100 && scrWidth > 900) {
-            return scrWidth / 2.6;
-          }
-          if (widget.fromHome == false && scrWidth < 900 && scrWidth > 750) {
-            return scrWidth / 2.8;
-          }
+    double detailsViewWidth() {
+      if (Responsive.isDesktop(context)) {
+        if (widget.fromHome) {
           return 250.0;
         }
+        return scrWidth / 2;
+      } else if (Responsive.isMobile(context)) {
+        if (scrWidth < 400) {
+          return 180;
+        }
+        if (scrWidth > 600) {
+          return 260;
+        }
+        return 210;
+      } else {
+        if (widget.fromHome == false && scrWidth < 1100 && scrWidth > 900) {
+          return scrWidth / 2.6;
+        }
+        if (widget.fromHome == false && scrWidth < 900 && scrWidth > 750) {
+          return scrWidth / 2.8;
+        }
+        return 250.0;
       }
-
-      return Container(
-        padding: const EdgeInsets.only(top: 20, left: 5),
-        width: 100,
-        margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-        decoration: const BoxDecoration(
-          border: Border(
-            bottom: BorderSide(color: Colors.grey),
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                InkWell(
-                  onTap: () {
-                    ref.read(detailsPageIndexTabProvider.notifier).state = 1;
-                    navigateBasedOnId(context, timeLine.itemid!, ref);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: timeLine.itemid!.contains('LD') ? AppColor.leadChipColor : AppColor.inventoryChipColor,
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          timeLine.itemid!.contains('LD') ? MaterialSymbols.location_away : MaterialSymbols.location_home_outlined,
-                          color: timeLine.itemid!.contains('LD') ? AppColor.leadIconColor : AppColor.inventoryIconColor,
-                        ),
-                        const SizedBox(width: 5),
-                        CustomText(
-                          title: timeLine.itemid!,
-                          size: 12,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Container(
-                    width: detailsViewWidth(),
-                    padding: const EdgeInsets.only(bottom: 5, left: 5),
-                    child: AppText(
-                      text: capitalizeFirstLetter(timeLine.activitybody!.activitytitle!),
-                      fontsize: 14,
-                      softwrap: true,
-                    ),
-                  ),
-                )
-              ],
-            ),
-            ListTile(
-              horizontalTitleGap: 6,
-              titleAlignment: ListTileTitleAlignment.center,
-              trailing: CustomText(
-                title: formattedTime,
-                size: 12,
-                color: AppColor.primary,
-              ),
-              leading: Container(
-                height: 20,
-                width: 20,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey, width: 1.0),
-                  image: DecorationImage(
-                      image: NetworkImage(widget.createUser?.image == null || widget.createUser!.image.isEmpty ? noImg : widget.createUser!.image), fit: BoxFit.fill),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              title: CustomText(
-                title: capitalizeFirstLetter(widget.createUser!.userfirstname),
-                size: 12,
-              ),
-            ),
-          ],
-        ),
-      );
     }
-    return const SizedBox();
+
+    return Container(
+      padding: const EdgeInsets.only(top: 20, left: 5),
+      width: 100,
+      margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: Colors.grey),
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              InkWell(
+                onTap: () {
+                  ref.read(detailsPageIndexTabProvider.notifier).state = 1;
+                  navigateBasedOnId(context, timeLine.itemid!, ref);
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: timeLine.itemid!.contains('LD') ? AppColor.leadChipColor : AppColor.inventoryChipColor,
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        timeLine.itemid!.contains('LD') ? MaterialSymbols.location_away : MaterialSymbols.location_home_outlined,
+                        color: timeLine.itemid!.contains('LD') ? AppColor.leadIconColor : AppColor.inventoryIconColor,
+                      ),
+                      const SizedBox(width: 5),
+                      CustomText(
+                        title: timeLine.itemid!,
+                        size: 12,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Container(
+                  width: detailsViewWidth(),
+                  padding: const EdgeInsets.only(bottom: 5, left: 5),
+                  child: AppText(
+                    text: capitalizeFirstLetter(timeLine.activitybody!.activitytitle!),
+                    fontsize: 14,
+                    softwrap: true,
+                  ),
+                ),
+              )
+            ],
+          ),
+          ListTile(
+            horizontalTitleGap: 6,
+            titleAlignment: ListTileTitleAlignment.center,
+            trailing: CustomText(
+              title: formattedTime,
+              size: 12,
+              color: AppColor.primary,
+            ),
+            leading: Container(
+              height: 20,
+              width: 20,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey, width: 1.0),
+                image: DecorationImage(image: NetworkImage(timeLine.userImageUrl == null || timeLine.userImageUrl!.isEmpty ? noImg : timeLine.userImageUrl!), fit: BoxFit.fill),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            title: CustomText(
+              title: capitalizeFirstLetter(timeLine.createdby!.userfirstname!),
+              size: 12,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 

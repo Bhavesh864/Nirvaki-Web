@@ -29,7 +29,6 @@ class AddInventory extends ConsumerStatefulWidget {
 }
 
 class AddInventoryState extends ConsumerState<AddInventory> {
-  // String? response;
   bool allQuestionFinishes = false;
   bool isEdit = false;
   late Future<List<InventoryQuestions>> getQuestions;
@@ -56,9 +55,13 @@ class AddInventoryState extends ConsumerState<AddInventory> {
     try {
       if (isEdit) {
         if (answers[0]["item"] == "Residential") {
-          ref.read(filterCommercialQuestion.notifier).toggleCommericalQuestionary(false);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            ref.read(filterCommercialQuestion.notifier).toggleCommericalQuestionary(false);
+          });
         } else if (answers[0]["item"] == "Commercial") {
-          ref.read(filterCommercialQuestion.notifier).toggleCommericalQuestionary(true);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            ref.read(filterCommercialQuestion.notifier).toggleCommericalQuestionary(true);
+          });
         }
       }
     } catch (e) {
@@ -191,6 +194,7 @@ class AddInventoryState extends ConsumerState<AddInventory> {
     final isPlotSelected = ref.read(filterPlotQuestion);
     final allInventoryQuestionsNotifier = ref.read(allInventoryQuestion.notifier);
     final allInventoryQuestions = ref.read(allInventoryQuestion);
+
     return GestureDetector(
         onTap: () {
           if (!kIsWeb) FocusManager.instance.primaryFocus?.unfocus();
@@ -214,6 +218,7 @@ class AddInventoryState extends ConsumerState<AddInventory> {
                       allInventoryQuestionsNotifier.addAllQuestion(screensDataList);
                     });
                   }
+
                   if (selectedValues.isNotEmpty && getWhichItemIsSelectedBYId(selectedValues, 1) == "Residential") {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       allInventoryQuestionsNotifier.addAllQuestion(screensDataList);
@@ -279,6 +284,10 @@ class AddInventoryState extends ConsumerState<AddInventory> {
                                                         fontWeight: FontWeight.bold,
                                                       ),
                                                     ),
+                                                  // CustomTextInput(
+                                                  //   controller: controller,
+                                                  //   hintText: "demo",
+                                                  // ),
                                                   for (var i = 0; i < currentScreenList[index].questions.length; i++)
                                                     Column(
                                                       children: [
@@ -307,6 +316,7 @@ class AddInventoryState extends ConsumerState<AddInventory> {
                                                           iswhatsappMobileNoEmpty,
                                                           isChecked,
                                                           isCheckedUpdate,
+                                                          ref,
                                                         ),
                                                         SizedBox(height: currentScreenList[index].questions[i].questionOptionType != 'textfield' ? 10 : 0),
                                                         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [

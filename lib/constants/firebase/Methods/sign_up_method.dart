@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart' as userauth;
+
 import '../../app_constant.dart';
 import '../Hive/hive_methods.dart';
 import '../userModel/broker_info.dart';
@@ -62,8 +64,18 @@ Future<String> signUpMethod({required state}) async {
     await authResult.user?.sendEmailVerification();
     res = "success";
     return res;
-  } catch (er) {
-    // print(er);
-    return er.toString();
+  } on userauth.FirebaseAuthException catch (e) {
+    if (e.code == 'invalid-email') {
+      return 'Your email address appears to be malformed.';
+    } else if (e.code == 'wrong-password') {
+      return 'Your email or password is wrong.';
+    } else if (e.code == "weak-password") {
+      return "Your password should be at least 6 characters.";
+    } else if (e.code == "email-already-in-use") {
+      return "The email address is already in use by another account.";
+    }
+    return "Something went wrong";
+  } catch (E) {
+    return "Something went wrong";
   }
 }

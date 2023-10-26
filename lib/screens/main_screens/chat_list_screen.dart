@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import 'package:yes_broker/Customs/custom_chip.dart';
+
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/chat/controller/chat_controller.dart';
 import 'package:yes_broker/chat/models/chat_contact.dart';

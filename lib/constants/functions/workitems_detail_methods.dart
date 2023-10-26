@@ -10,7 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:yes_broker/Customs/dropdown_field.dart';
 import 'package:yes_broker/Customs/label_text_field.dart';
-import 'package:yes_broker/constants/firebase/calenderModel/calender_model.dart';
+
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart' as inventory;
@@ -159,7 +159,9 @@ void uploadAttachmentsToFirebaseStorage(
     }
     // InventoryDetails.deleteAttachment(itemId: id, attachmentIdToDelete: "1");
   } catch (e) {
-    print(e);
+    if (kDebugMode) {
+      print(e);
+    }
   }
 }
 
