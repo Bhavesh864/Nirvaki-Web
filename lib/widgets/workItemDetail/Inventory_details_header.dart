@@ -165,7 +165,6 @@ class InventoryDetailsHeader extends ConsumerWidget {
                                 if (e.contains('Public')) {
                                   AppConst.setPublicView(!AppConst.getPublicView());
                                   setCurrentIndex(0);
-
                                   setState();
                                 } else if (e.contains("Edit")) {
                                   if (!kIsWeb) {
