@@ -14,6 +14,8 @@ import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/timeline_item.dart';
 
+import '../constants/firebase/userModel/user_info.dart';
+
 class CustomTimeLineView extends ConsumerStatefulWidget {
   final bool fromHome;
   final bool isScrollable;

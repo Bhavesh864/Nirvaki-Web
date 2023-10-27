@@ -227,23 +227,29 @@ class _DetailsTabViewState extends State<DetailsTabView> {
         if (!widget.isLeadView) ...[
           if (widget.data.propertycategory == 'Commercial') ...[
             Wrap(children: [
-              if (checkNotNUllItem(widget.data.availability)) ...[
+              if (checkNotNUllItem(widget.data.propertykind)) ...[
                 buildInfoFields(
                   'Property Category',
-                  widget.data.availability,
+                  widget.data.propertykind,
                   context,
                 ),
               ],
-              if (checkNotNUllItem(widget.data.propertykind))
-                buildInfoFields(
-                  'Type of Land',
-                  "${widget.data.propertykind}",
-                  context,
-                ),
+              // if (checkNotNUllItem(widget.data.commericialtype))
+              //   buildInfoFields(
+              //     'Type of Land',
+              //     "${widget.data.commericialtype}",
+              //     context,
+              //   ),
               if (checkNotNUllItem(widget.data.commericialtype))
                 buildInfoFields(
                   'Property Type',
                   "${widget.data.commericialtype}",
+                  context,
+                ),
+              if (checkNotNUllItem(widget.data.propertyarea.superarea) && checkNotNUllItem(widget.data.propertyarea.unit))
+                buildInfoFields(
+                  'Area',
+                  "${widget.data.propertyarea.superarea} ${widget.data.propertyarea.unit}",
                   context,
                 ),
               if (checkNotNUllItem(widget.data.typeofoffice))
@@ -373,19 +379,19 @@ class _DetailsTabViewState extends State<DetailsTabView> {
           ]
         ] else ...[
           if (widget.data.propertycategory == 'Commercial') ...[
-            if (checkNotNUllItem(widget.data.availability)) ...[
+            if (checkNotNUllItem(widget.data.propertykind)) ...[
               buildInfoFields(
                 'Property Category',
-                widget.data.availability,
+                widget.data.propertykind,
                 context,
               ),
             ],
-            if (checkNotNUllItem(widget.data.propertykind))
-              buildInfoFields(
-                'Type of Land',
-                "${widget.data.propertykind}",
-                context,
-              ),
+            // if (checkNotNUllItem(widget.data.commericialtype))
+            //   buildInfoFields(
+            //     'Type of Land',
+            //     "${widget.data.commericialtype}",
+            //     context,
+            //   ),
             if (checkNotNUllItem(widget.data.commericialtype))
               buildInfoFields(
                 'Property Type',
