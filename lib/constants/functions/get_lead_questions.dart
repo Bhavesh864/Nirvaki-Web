@@ -44,8 +44,6 @@ Widget buildLeadQuestions(
   final selectedOption = ref.watch(selectedOptionNotifier);
   final defaultAreaRangeValues = ref.watch(defaultAreaRangeValuesNotifier);
 
-  print('welcome');
-
   if (question.questionOptionType == 'chip') {
     return Column(
       children: [

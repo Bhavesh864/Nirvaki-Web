@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +9,7 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/responsive.dart';
+import '../constants/firebase/userModel/user_info.dart';
 import '../constants/functions/navigation/navigation_functions.dart';
 import '../constants/functions/time_formatter.dart';
 import '../riverpodstate/common_index_state.dart';
@@ -23,6 +26,29 @@ class TimeLineItem extends ConsumerStatefulWidget {
 }
 
 class _TimeLineItemState extends ConsumerState<TimeLineItem> {
+  // List<User> assigned = [];
+
+  // void setassignedData() async {
+  //   final userids = [];
+  //   for (var data in widget.activitiesList) {
+  //     userids.add(data.createdby?.userid);
+  //   }
+  //   if (userids.isNotEmpty) {
+  //     final List<User> userdata = await User.getListOfUsersByIds(userids);
+  //     if (mounted) {
+  //       setState(() {
+  //         assigned = userdata;
+  //       });
+  //     }
+  //   }
+  // }
+
+  @override
+  void initState() {
+    // setassignedData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final scrWidth = MediaQuery.of(context).size.width;
@@ -51,13 +77,16 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
         if (scrWidth < 400) {
           return 180;
         }
+        if (scrWidth > 600) {
+          return 260;
+        }
         return 210;
       } else {
         if (widget.fromHome == false && scrWidth < 1100 && scrWidth > 900) {
-          return scrWidth / 2.5;
+          return scrWidth / 2.6;
         }
         if (widget.fromHome == false && scrWidth < 900 && scrWidth > 750) {
-          return scrWidth / 3;
+          return scrWidth / 2.8;
         }
         return 250.0;
       }
@@ -132,8 +161,7 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
               width: 20,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey, width: 1.0),
-                image: DecorationImage(
-                    image: NetworkImage(timeLine.userImageUrl == null || timeLine.userImageUrl!.isEmpty ? noImg : timeLine.userImageUrl!), fit: BoxFit.fill),
+                image: DecorationImage(image: NetworkImage(timeLine.userImageUrl == null || timeLine.userImageUrl!.isEmpty ? noImg : timeLine.userImageUrl!), fit: BoxFit.fill),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),

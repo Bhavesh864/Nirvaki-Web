@@ -33,6 +33,8 @@ class AssignmentWidget extends ConsumerStatefulWidget {
 }
 
 class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
+  List<User> assigned = [];
+  User? createdByUser;
   bool loadedData = false;
   void assign(List<User> assignedUser) {
     setState(() {
@@ -41,8 +43,40 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    setassignedData();
+    setCreatedByUser();
+  }
+
+  void setassignedData() async {
+    final userids = [];
+    for (var data in widget.assignto) {
+      userids.add(data.userid);
+    }
+    if (userids.isNotEmpty) {
+      final List<User> userdata = await User.getListOfUsersByIds(userids);
+      if (mounted) {
+        setState(() {
+          assigned = userdata;
+        });
+      }
+    }
+  }
+
+  void setCreatedByUser() async {
+    final User? user = await User.getUser(widget.createdBy);
+    if (mounted) {
+      setState(() {
+        createdByUser = user;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final User? userData = ref.watch(userDataProvider);
+    double bottomNavHeight = MediaQuery.of(context).padding.bottom;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -68,21 +102,23 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 29, top: 2),
-                  child: Row(
-                    children: [
-                      SmallCustomCircularImage(imageUrl: widget.imageUrlCreatedBy),
-                      Text(
-                        capitalizeFirstLetter(widget.createdBy),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.left,
-                        style: const TextStyle(
-                          color: AppColor.primary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
+                  child: createdByUser != null
+                      ? Row(
+                          children: [
+                            SmallCustomCircularImage(imageUrl: createdByUser!.image),
+                            Text(
+                              capitalizeFirstLetter("${createdByUser!.userfirstname} ${createdByUser!.userlastname}"),
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.left,
+                              style: const TextStyle(
+                                color: AppColor.primary,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        )
+                      : const SizedBox.shrink(),
                 )
               ],
             ),
@@ -167,8 +203,8 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: widget.assignto.isNotEmpty
-                          ? widget.assignto.map((item) {
+                      children: assigned.isNotEmpty
+                          ? assigned.map((item) {
                               return Container(
                                 margin: const EdgeInsets.only(bottom: 7),
                                 padding: const EdgeInsets.all(5),
@@ -179,14 +215,13 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    SmallCustomCircularImage(imageUrl: item.image!.isNotEmpty ? item.image! : noImg),
+                                    SmallCustomCircularImage(imageUrl: item.image.isNotEmpty ? item.image : noImg),
                                     Container(
                                       constraints: BoxConstraints(
                                         maxWidth: Responsive.isDesktop(context) ? 150 : 110,
                                       ),
                                       child: Text(
-                                        "${capitalizeFirstLetter(item.firstname!)} ${capitalizeFirstLetter(item.lastname)}",
-                                        // "${item.firstname!} /${item.lastname}",
+                                        "${capitalizeFirstLetter(item.userfirstname)} ${capitalizeFirstLetter(item.userlastname)}",
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
                                         softWrap: true,
@@ -203,10 +238,11 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                                       userData?.role != "Employee"
                                           ? GestureDetector(
                                               onTap: () {
-                                                deleteassignUser(item.userid, widget.id);
+                                                deleteassignUser(item.userId, widget.id);
                                                 if (Responsive.isMobile(context)) {
                                                   Navigator.of(context).pop();
                                                 }
+                                                assigned.remove(item);
                                               },
                                               child: const Icon(Icons.close),
                                             )
@@ -224,7 +260,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                             onTap: () {
                               assginUserToTodo(context, assign, widget.assignto, widget.id, () {
                                 Navigator.of(context).pop();
-                              }, userData!);
+                              }, userData!, assigned);
                               user = [];
                             },
                             child: const Padding(
@@ -254,6 +290,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
             ],
           ),
         ),
+        SizedBox(height: bottomNavHeight),
       ],
     );
   }
