@@ -73,74 +73,76 @@ class FullViewGoogleScreenState extends ConsumerState<FullViewGoogleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: GoogleMap(
-              onMapCreated: (controller) {
-                mapController = controller;
-                if (widget.isReadOnly || widget.isEdit) {
-                  _loadMap();
-                } else {
-                  loadMap();
-                }
-              },
-              initialCameraPosition: CameraPosition(
-                target: location ?? const LatLng(20.5937, 78.9629),
-                zoom: 15,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: GoogleMap(
+                onMapCreated: (controller) {
+                  mapController = controller;
+                  if (widget.isReadOnly || widget.isEdit) {
+                    _loadMap();
+                  } else {
+                    loadMap();
+                  }
+                },
+                initialCameraPosition: CameraPosition(
+                  target: location ?? const LatLng(20.5937, 78.9629),
+                  zoom: 15,
+                ),
+                onTap: widget.isReadOnly
+                    ? null
+                    : (latLng) {
+                        setState(() {
+                          location = latLng;
+                        });
+                        widget.onLatLngSelected(location!);
+                      },
+                markers: location != null
+                    ? <Marker>{
+                        Marker(
+                          markerId: const MarkerId('myLocation'),
+                          position: location!,
+                        ),
+                      }
+                    : {},
+                mapType: MapType.normal,
               ),
-              onTap: widget.isReadOnly
-                  ? null
-                  : (latLng) {
-                      setState(() {
-                        location = latLng;
-                      });
-                      widget.onLatLngSelected(location!);
-                    },
-              markers: location != null
-                  ? <Marker>{
-                      Marker(
-                        markerId: const MarkerId('myLocation'),
-                        position: location!,
+            ),
+            Positioned(
+              top: 20,
+              left: 10,
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColor.primary,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        blurRadius: 5,
+                        offset: const Offset(0, 3),
                       ),
-                    }
-                  : {},
-              mapType: MapType.normal,
-            ),
-          ),
-          Positioned(
-            top: 20,
-            left: 10,
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColor.primary,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
+                    ],
                   ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

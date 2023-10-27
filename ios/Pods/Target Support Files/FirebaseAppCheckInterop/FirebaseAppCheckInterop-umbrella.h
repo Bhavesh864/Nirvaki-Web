@@ -11,7 +11,6 @@
 #endif
 
 #import "FIRAppCheckInterop.h"
-#import "FIRAppCheckProtocol.h"
 #import "FIRAppCheckTokenResultInterop.h"
 
 FOUNDATION_EXPORT double FirebaseAppCheckInteropVersionNumber;

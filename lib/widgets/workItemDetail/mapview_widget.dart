@@ -35,7 +35,6 @@ class MapViewWidget extends StatefulWidget {
 
 class _MapViewWidgetState extends State<MapViewWidget> {
   void openFullScreenMap() {
-    print(widget.latLng);
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => FullViewGoogleScreen(

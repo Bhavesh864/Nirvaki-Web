@@ -48,10 +48,13 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
     WidgetsBinding.instance.addObserver(this);
     final token = UserHiveMethods.getdata("token");
     authState = authentication.authStateChanges();
+    print(token);
     if (token != null) {
       AppConst.setAccessToken(token);
       getUserData(token);
     }
+    print(AppConst.getAccessToken());
+
     authState = authentication.authStateChanges();
     setAllNotification();
     super.initState();
