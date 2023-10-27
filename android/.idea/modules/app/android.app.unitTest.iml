@@ -27,7 +27,8 @@
             <stringArg name="classpath">
               <args>
                 <arg>$MODULE_DIR$/../../../../build/app/intermediates/compile_and_runtime_not_namespaced_r_class_jar/debug/R.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/0d23d6f4d6fc816ccf7f15bdbe50dfe4/transformed/jetified-libs.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/transforms-3/a6f483179d8d07c3a646b9a3e1e26f50/transformed/jetified-libs.jar</arg>
+                <arg>$MODULE_DIR$/../../../../build/app/intermediates/compile_app_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/firebase_database/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/firebase_messaging/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/cloud_firestore/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
@@ -58,8 +59,8 @@
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/a69b65e0b5002d3dbf08bc3b49b3b6ff/transformed/jetified-x86_debug-1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/29e2498ca42d00220b1052789dc05730/transformed/jetified-flutter_embedding_debug-1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/7eadf444d9b330cf9bbe57551a44a6fa/transformed/jetified-firebase-analytics-ktx-21.3.0-api.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/d76803a0d107da5f7b77d3d14658b507/transformed/jetified-firebase-crashlytics-ktx-18.4.3-api.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/e17ae47a2b235e47162673c9fd27a292/transformed/jetified-firebase-crashlytics-18.4.3-api.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/transforms-3/632bdfe7bd4260192b7b3f15c40f0ee8/transformed/jetified-firebase-crashlytics-ktx-18.4.1-api.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/transforms-3/bbd268f385fd89597351588d7261dac5/transformed/jetified-firebase-crashlytics-18.4.1-api.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/72b6a73f18236ba023ef56896a1ceb3e/transformed/jetified-firebase-sessions-1.0.2-api.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/cb87bc11da639a22587b02152e75e049/transformed/jetified-firebase-common-ktx-20.3.3-api.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/fb0d312a9d4b5c3e013ed08bac5ac3a9/transformed/jetified-firebase-analytics-21.3.0-api.jar</arg>
@@ -176,6 +177,20 @@
     <content url="file://$MODULE_DIR$/../../../../build/app/generated/ap_generated_sources/debugUnitTest/out" />
     <orderEntry type="jdk" jdkName="Android API 33, extension level 3 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+<<<<<<< HEAD
+    <orderEntry type="module" module-name="android.firebase_core.main" scope="TEST" />
+    <orderEntry type="module" module-name="android.network_info_plus.main" scope="TEST" />
+    <orderEntry type="module" module-name="android.firebase_database.main" scope="TEST" />
+    <orderEntry type="module" module-name="android.flutter_local_notifications.main" scope="TEST" />
+    <orderEntry type="module" module-name="com.mr.flutter.plugin.filepicker.android.file_picker.main" scope="TEST" />
+    <orderEntry type="module" module-name="android.path_provider_android.main" scope="TEST" />
+    <orderEntry type="module" module-name="io.flutter.plugins.sharedpreferences.android.shared_preferences_android.main" scope="TEST" />
+    <orderEntry type="module" module-name="com.example.integration_test.android.integration_test.main" scope="TEST" />
+    <orderEntry type="module" module-name="android.image_picker_android.main" scope="TEST" />
+    <orderEntry type="module" module-name="android.firebase_messaging.main" scope="TEST" />
+    <orderEntry type="module" module-name="android.firebase_crashlytics.main" scope="TEST" />
+    <orderEntry type="module" module-name="io.flutter.plugins.flutter_plugin_android_lifecycle.android.flutter_plugin_android_lifecycle.main" scope="TEST" />
+=======
     <orderEntry type="module" module-name="io.flutter.plugins.firebase.core.android.firebase_core.main~1" scope="TEST" />
     <orderEntry type="module" module-name="dev.fluttercommunity.plus.network_info.android.network_info_plus.main~1" scope="TEST" />
     <orderEntry type="module" module-name="io.flutter.plugins.firebase.database.android.firebase_database.main~1" scope="TEST" />
@@ -188,10 +203,21 @@
     <orderEntry type="module" module-name="io.flutter.plugins.firebasemessaging.android.firebase_messaging.main~1" scope="TEST" />
     <orderEntry type="module" module-name="io.flutter.plugins.firebase.crashlytics.android.firebase_crashlytics.main~1" scope="TEST" />
     <orderEntry type="module" module-name="android.flutter_plugin_android_lifecycle.main" scope="TEST" />
+>>>>>>> e84bf622fdd8c1e9067b2ec1131364c88aa2c38b
     <orderEntry type="module" module-name="android.sqflite.main" scope="TEST" />
     <orderEntry type="module" module-name="android.url_launcher_android.main" scope="TEST" />
     <orderEntry type="module" module-name="android.google_maps_flutter_android.main" scope="TEST" />
     <orderEntry type="module" module-name="android.flutter_file_downloader.main" scope="TEST" />
+<<<<<<< HEAD
+    <orderEntry type="module" module-name="android.cloud_firestore.main" scope="TEST" />
+    <orderEntry type="module" module-name="android.connectivity_plus.main" scope="TEST" />
+    <orderEntry type="module" module-name="android.firebase_dynamic_links.main" scope="TEST" />
+    <orderEntry type="module" module-name="android.webview_flutter_android.main" scope="TEST" />
+    <orderEntry type="module" module-name="android.firebase_analytics.main" scope="TEST" />
+    <orderEntry type="module" module-name="android.firebase_auth.main" scope="TEST" />
+    <orderEntry type="module" module-name="android.emoji_picker_flutter.main" scope="TEST" />
+    <orderEntry type="module" module-name="android.firebase_storage.main" scope="TEST" />
+=======
     <orderEntry type="module" module-name="io.flutter.plugins.firebase.cloudfirestore.android.cloud_firestore.main~1" scope="TEST" />
     <orderEntry type="module" module-name="android.connectivity_plus.main" scope="TEST" />
     <orderEntry type="module" module-name="io.flutter.plugins.firebase.dynamiclinks.android.firebase_dynamic_links.main~1" scope="TEST" />
@@ -200,6 +226,7 @@
     <orderEntry type="module" module-name="io.flutter.plugins.firebase.auth.android.firebase_auth.main~1" scope="TEST" />
     <orderEntry type="module" module-name="com.fintasys.emoji_picker_flutter.android.emoji_picker_flutter.main~1" scope="TEST" />
     <orderEntry type="module" module-name="io.flutter.plugins.firebase.storage.android.firebase_storage.main~1" scope="TEST" />
+>>>>>>> e84bf622fdd8c1e9067b2ec1131364c88aa2c38b
     <orderEntry type="module" module-name="android.app.main" scope="TEST" />
     <orderEntry type="library" scope="TEST" name="Gradle: io.flutter:flutter_embedding_debug:1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.lifecycle:lifecycle-common:2.6.1" level="project" />
@@ -235,7 +262,7 @@
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.firebase:firebase-encoders-proto:16.0.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.datastore:datastore-core:1.0.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.datastore:datastore-preferences-core:1.0.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: /Users/saurabhmehra/flutterProject/broker_webappV1/build/app/intermediates/flutter/debug/libs.jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: /Users/saurabhmehra/flutter/projects/broker_webappV1/build/app/intermediates/flutter/debug/libs.jar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.lifecycle:lifecycle-runtime:2.6.1@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.fragment:fragment:1.1.0@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.core:core:1.10.1@aar" level="project" />
@@ -282,8 +309,8 @@
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.firebase:firebase-measurement-connector:19.0.0@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.android.gms:play-services-measurement-sdk:21.3.0@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.firebase:firebase-common-ktx:20.3.3@aar" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: com.google.firebase:firebase-crashlytics-ktx:18.4.3@aar" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: com.google.firebase:firebase-crashlytics:18.4.3@aar" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.google.firebase:firebase-crashlytics-ktx:18.4.1@aar" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.google.firebase:firebase-crashlytics:18.4.1@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.firebase:firebase-encoders-json:18.0.1@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.android.datatransport:transport-api:3.0.0@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.android.datatransport:transport-runtime:3.1.9@aar" level="project" />

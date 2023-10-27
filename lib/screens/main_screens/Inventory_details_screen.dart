@@ -60,7 +60,8 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
         ref.read(selectedWorkItemId.notifier).addItemId(widget.inventoryId!);
       });
     }
-    inventoryDetails = FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId.isEmpty ? widget.inventoryId : workItemId).snapshots();
+    inventoryDetails =
+        FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId.isEmpty ? widget.inventoryId : workItemId).snapshots();
     AppConst.setPublicView(false);
   }
 
@@ -79,9 +80,13 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                   Navigator.of(context).pop();
                 },
               ),
+              centerTitle: false,
               title: const CustomText(
                 title: 'Inventory Details',
                 color: Colors.black,
+                fontWeight: FontWeight.w600,
+                size: 16,
+                letterSpacing: 0.5,
               ),
               foregroundColor: Colors.black,
               toolbarHeight: 50,
