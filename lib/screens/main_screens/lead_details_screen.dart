@@ -230,7 +230,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                                           imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty
                                                               ? noImg
                                                               : data.createdby!.userimage!,
-                                                          createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
+                                                          createdBy: data.createdby!.userid!,
                                                         ),
                                                       );
                                                     },
@@ -320,7 +320,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                     id: data.leadId!,
                                     assignto: data.assignedto!,
                                     imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                    createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
+                                    createdBy: data.createdby!.userid!,
                                     data: data,
                                   ),
                                   if (Responsive.isDesktop(context)) ...[

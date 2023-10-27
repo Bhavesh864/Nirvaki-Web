@@ -179,6 +179,7 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 33, extension level 3 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+<<<<<<< HEAD
     <orderEntry type="module" module-name="android.firebase_core.main" scope="TEST" />
     <orderEntry type="module" module-name="android.network_info_plus.main" scope="TEST" />
     <orderEntry type="module" module-name="android.firebase_database.main" scope="TEST" />
@@ -191,10 +192,25 @@
     <orderEntry type="module" module-name="android.firebase_messaging.main" scope="TEST" />
     <orderEntry type="module" module-name="android.firebase_crashlytics.main" scope="TEST" />
     <orderEntry type="module" module-name="io.flutter.plugins.flutter_plugin_android_lifecycle.android.flutter_plugin_android_lifecycle.main" scope="TEST" />
+=======
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.core.android.firebase_core.main~1" scope="TEST" />
+    <orderEntry type="module" module-name="dev.fluttercommunity.plus.network_info.android.network_info_plus.main~1" scope="TEST" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.database.android.firebase_database.main~1" scope="TEST" />
+    <orderEntry type="module" module-name="com.dexterous.flutterlocalnotifications.android.flutter_local_notifications.main~1" scope="TEST" />
+    <orderEntry type="module" module-name="android.file_picker.main" scope="TEST" />
+    <orderEntry type="module" module-name="android.path_provider_android.main" scope="TEST" />
+    <orderEntry type="module" module-name="android.shared_preferences_android.main" scope="TEST" />
+    <orderEntry type="module" module-name="android.integration_test.main" scope="TEST" />
+    <orderEntry type="module" module-name="io.flutter.plugins.imagepicker.android.image_picker_android.main~1" scope="TEST" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebasemessaging.android.firebase_messaging.main~1" scope="TEST" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.crashlytics.android.firebase_crashlytics.main~1" scope="TEST" />
+    <orderEntry type="module" module-name="android.flutter_plugin_android_lifecycle.main" scope="TEST" />
+>>>>>>> e84bf622fdd8c1e9067b2ec1131364c88aa2c38b
     <orderEntry type="module" module-name="android.sqflite.main" scope="TEST" />
     <orderEntry type="module" module-name="android.url_launcher_android.main" scope="TEST" />
     <orderEntry type="module" module-name="android.google_maps_flutter_android.main" scope="TEST" />
     <orderEntry type="module" module-name="android.flutter_file_downloader.main" scope="TEST" />
+<<<<<<< HEAD
     <orderEntry type="module" module-name="android.cloud_firestore.main" scope="TEST" />
     <orderEntry type="module" module-name="android.connectivity_plus.main" scope="TEST" />
     <orderEntry type="module" module-name="android.firebase_dynamic_links.main" scope="TEST" />
@@ -203,6 +219,16 @@
     <orderEntry type="module" module-name="android.firebase_auth.main" scope="TEST" />
     <orderEntry type="module" module-name="android.emoji_picker_flutter.main" scope="TEST" />
     <orderEntry type="module" module-name="android.firebase_storage.main" scope="TEST" />
+=======
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.cloudfirestore.android.cloud_firestore.main~1" scope="TEST" />
+    <orderEntry type="module" module-name="android.connectivity_plus.main" scope="TEST" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.dynamiclinks.android.firebase_dynamic_links.main~1" scope="TEST" />
+    <orderEntry type="module" module-name="android.webview_flutter_android.main" scope="TEST" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.analytics.android.firebase_analytics.main~1" scope="TEST" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.auth.android.firebase_auth.main~1" scope="TEST" />
+    <orderEntry type="module" module-name="com.fintasys.emoji_picker_flutter.android.emoji_picker_flutter.main~1" scope="TEST" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.storage.android.firebase_storage.main~1" scope="TEST" />
+>>>>>>> e84bf622fdd8c1e9067b2ec1131364c88aa2c38b
     <orderEntry type="module" module-name="android.app.main" scope="TEST" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.annotation:annotation-jvm:1.7.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.8.22" level="project" />
