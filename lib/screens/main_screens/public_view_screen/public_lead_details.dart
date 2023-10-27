@@ -56,6 +56,7 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
                   Navigator.of(context).pop();
                 },
               ),
+              centerTitle: false,
               title: const CustomText(
                 title: 'Lead Details',
                 color: Colors.black,
@@ -157,7 +158,8 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
                                                 AssignmentWidget(
                                                   id: data.leadId!,
                                                   assignto: data.assignedto!,
-                                                  imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                  imageUrlCreatedBy:
+                                                      data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                   createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                                 ),
                                               );

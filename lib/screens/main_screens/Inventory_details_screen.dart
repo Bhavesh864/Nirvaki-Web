@@ -84,6 +84,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                   Navigator.of(context).pop();
                 },
               ),
+              centerTitle: false,
               title: const CustomText(
                 title: 'Inventory Details',
                 color: Colors.black,
