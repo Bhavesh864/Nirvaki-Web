@@ -7,8 +7,8 @@ import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
-import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/customs/snackbar.dart';
 import 'package:yes_broker/widgets/workItemDetail/tab_views/iframe_modules.dart';
@@ -17,10 +17,10 @@ import '../../../Customs/custom_text.dart';
 import '../../../Customs/responsive.dart';
 import '../../../Customs/text_utility.dart';
 import '../../../constants/app_constant.dart';
-import '../../../constants/functions/datetime/date_time.dart';
 import '../../../constants/functions/workitems_detail_methods.dart';
 import '../../../constants/utils/colors.dart';
 import '../../../constants/utils/constants.dart';
+import '../../attachments/attachment_widget.dart';
 import '../mapview_widget.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
@@ -610,170 +610,181 @@ class _DetailsTabViewState extends State<DetailsTabView> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(bottom: 8.0),
-                child: CustomText(
-                  title: "Attachments",
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              SizedBox(
-                height: 120,
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: widget.data.attachments.length + 1,
-                    itemBuilder: (context, index) {
-                      final attachments = widget.data.attachments;
-                      if (index < attachments.length) {
-                        final attachment = attachments[index];
-                        return Stack(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AttachmentPreviewDialog(attachmentPath: attachment.path);
-                                  },
-                                );
-                              },
-                              child: Container(
-                                height: 110,
-                                margin: const EdgeInsets.only(right: 15, top: 4),
-                                width: 108,
-                                alignment: Alignment.center,
-                                padding: const EdgeInsets.symmetric(vertical: 10),
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey.withOpacity(0.5)),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Icon(
-                                      Icons.image_outlined,
-                                      size: 40,
-                                    ),
-                                    Column(
-                                      children: [
-                                        CustomText(
-                                          title: attachment.title!,
-                                          size: 13,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                        CustomText(
-                                          title: 'Added ${formatMessageDate(attachment.createddate!.toDate())}',
-                                          size: 8,
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              top: 0,
-                              right: 10,
-                              child: Row(
-                                children: [
-                                  InkWell(
-                                    child: const Icon(
-                                      Icons.download_for_offline,
-                                      size: 18,
-                                    ),
-                                    onTap: () async {
-                                      // if (kIsWeb) {
-                                      //   AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                      //   anchorElement.download = 'Attachment file';
-                                      //   anchorElement.click();
-                                      // }
+              // Column(
+              //   children: [
+              //     const Padding(
+              //       padding: EdgeInsets.only(bottom: 8.0),
+              //       child: CustomText(
+              //         title: "Attachments",
+              //         fontWeight: FontWeight.w700,
+              //       ),
+              //     ),
+              //     SizedBox(
+              //       height: 120,
+              //       child: ListView.builder(
+              //           shrinkWrap: true,
+              //           scrollDirection: Axis.horizontal,
+              //           itemCount: widget.data.attachments.length + 1,
+              //           itemBuilder: (context, index) {
+              //             final attachments = widget.data.attachments;
+              //             if (index < attachments.length) {
+              //               final attachment = attachments[index];
+              //               return Stack(
+              //                 children: [
+              //                   GestureDetector(
+              //                     onTap: () {
+              //                       showDialog(
+              //                         context: context,
+              //                         builder: (context) {
+              //                           return AttachmentPreviewDialog(attachmentPath: attachment.path);
+              //                         },
+              //                       );
+              //                     },
+              //                     child: Container(
+              //                       height: 120,
+              //                       margin: const EdgeInsets.only(right: 15, top: 4),
+              //                       width: 108,
+              //                       alignment: Alignment.center,
+              //                       padding: const EdgeInsets.symmetric(vertical: 10),
+              //                       decoration: BoxDecoration(
+              //                         border: Border.all(color: Colors.grey.withOpacity(0.5)),
+              //                         borderRadius: BorderRadius.circular(10),
+              //                       ),
+              //                       child: Column(
+              //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //                         children: [
+              //                           const Icon(
+              //                             Icons.image_outlined,
+              //                             size: 40,
+              //                           ),
+              //                           Column(
+              //                             children: [
+              //                               CustomText(
+              //                                 title: attachment.title!,
+              //                                 size: 13,
+              //                                 fontWeight: FontWeight.w400,
+              //                               ),
+              //                               CustomText(
+              //                                 title: 'Added ${formatMessageDate(attachment.createddate!.toDate())}',
+              //                                 size: 8,
+              //                                 color: Colors.grey,
+              //                                 fontWeight: FontWeight.w400,
+              //                               ),
+              //                             ],
+              //                           ),
+              //                         ],
+              //                       ),
+              //                     ),
+              //                   ),
+              //                   Positioned(
+              //                     top: 0,
+              //                     right: 10,
+              //                     child: Row(
+              //                       children: [
+              //                         InkWell(
+              //                           child: const Icon(
+              //                             Icons.download_for_offline,
+              //                             size: 18,
+              //                           ),
+              //                           onTap: () async {
+              //                             // if (kIsWeb) {
+              //                             //   AnchorElement anchorElement = AnchorElement(href: attachment.path);
+              //                             //   anchorElement.download = 'Attachment file';
+              //                             //   anchorElement.click();
+              //                             // }
+              //                             downloadFile(
+              //                               attachment.path,
+              //                               attachment.title,
+              //                             );
+              //                           },
+              //                         ),
+              //                         InkWell(
+              //                           child: const Icon(
+              //                             Icons.cancel,
+              //                             size: 18,
+              //                           ),
+              //                           onTap: () {
+              //                             setState(() {
+              //                               showConfirmDeleteAttachment(context, () {
+              //                                 if (widget.id.contains(ItemCategory.isInventory)) {
+              //                                   InventoryDetails.deleteAttachment(itemId: widget.id, attachmentIdToDelete: attachment.id!).then(
+              //                                     (value) => widget.updateData(),
+              //                                   );
+              //                                 } else if (widget.id.contains(ItemCategory.isLead)) {
+              //                                   LeadDetails.deleteAttachment(itemId: widget.id, attachmentIdToDelete: attachment.id!).then(
+              //                                     (value) => widget.updateData(),
+              //                                   );
+              //                                 }
+              //                               });
+              //                             });
+              //                           },
+              //                         ),
+              //                       ],
+              //                     ),
+              //                   ),
+              //                 ],
+              //               );
+              //             } else {
+              //               return InkWell(
+              //                 borderRadius: BorderRadius.circular(10),
+              //                 onTap: () async {
+              //                   if (!isUploading) {
+              //                     showUploadDocumentModal(
+              //                       context,
+              //                       widget.updateData,
+              //                       selectedFile,
+              //                       () {
+              //                         setState(() {});
+              //                       },
+              //                       widget.id,
+              //                       (k) {
+              //                         isUploading = k;
+              //                         setState(() {});
+              //                       },
+              //                     );
+              //                   }
+              //                 },
+              //                 child: Container(
+              //                   height: 100,
+              //                   width: 100,
+              //                   alignment: Alignment.center,
+              //                   padding: const EdgeInsets.symmetric(vertical: 15),
+              //                   margin: const EdgeInsets.only(top: 4),
+              //                   decoration: BoxDecoration(
+              //                     border: Border.all(color: Colors.grey.withOpacity(0.5)),
+              //                     borderRadius: BorderRadius.circular(10),
+              //                   ),
+              //                   child: Column(
+              //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //                     children: [
+              //                       if (isUploading) ...[
+              //                         const Loader(),
+              //                       ] else ...[
+              //                         const Icon(
+              //                           Icons.add,
+              //                           size: 40,
+              //                         ),
+              //                         const CustomText(
+              //                           title: 'ADD MORE',
+              //                           size: 10,
+              //                           fontWeight: FontWeight.w400,
+              //                         ),
+              //                       ]
+              //                     ],
+              //                   ),
+              //                 ),
+              //               );
+              //             }
+              //           }),
+              //     ),
+              //   ],
+              // ),
 
-                                      downloadFile(
-                                        attachment.path,
-                                        attachment.title,
-                                      );
-                                    },
-                                  ),
-                                  InkWell(
-                                    child: const Icon(
-                                      Icons.cancel,
-                                      size: 18,
-                                    ),
-                                    onTap: () {
-                                      setState(() {
-                                        showConfirmDeleteAttachment(context, () {
-                                          if (widget.id.contains(ItemCategory.isInventory)) {
-                                            InventoryDetails.deleteAttachment(itemId: widget.id, attachmentIdToDelete: attachment.id!).then(
-                                              (value) => widget.updateData(),
-                                            );
-                                          } else if (widget.id.contains(ItemCategory.isLead)) {
-                                            LeadDetails.deleteAttachment(itemId: widget.id, attachmentIdToDelete: attachment.id!).then(
-                                              (value) => widget.updateData(),
-                                            );
-                                          }
-                                        });
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        );
-                      } else {
-                        return InkWell(
-                          borderRadius: BorderRadius.circular(10),
-                          onTap: () async {
-                            if (!isUploading) {
-                              showUploadDocumentModal(
-                                context,
-                                widget.updateData,
-                                selectedFile,
-                                () {
-                                  setState(() {});
-                                },
-                                widget.id,
-                                (k) {
-                                  isUploading = k;
-                                  setState(() {});
-                                },
-                              );
-                            }
-                          },
-                          child: Container(
-                            width: 100,
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.symmetric(vertical: 15),
-                            margin: const EdgeInsets.only(top: 4),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.withOpacity(0.5)),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                if (isUploading) ...[
-                                  const Loader(),
-                                ] else ...[
-                                  const Icon(
-                                    Icons.add,
-                                    size: 40,
-                                  ),
-                                  const CustomText(
-                                    title: 'ADD MORE',
-                                    size: 10,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ]
-                              ],
-                            ),
-                          ),
-                        );
-                      }
-                    }),
+              AttachmentWidget(
+                attachments: widget.data.attachments,
+                selectedImageName: selectedFile,
+                id: widget.id,
+                updateData: widget.updateData,
               ),
               // ================================ Video Section ================================
               if (!widget.isLeadView && videoUrl != null && videoUrl.contains('youtube.com') && videoUrl.contains('watch')) ...[
