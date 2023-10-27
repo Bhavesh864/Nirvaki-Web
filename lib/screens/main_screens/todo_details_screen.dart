@@ -177,6 +177,9 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
               title: const CustomText(
                 title: 'Todo Details',
                 color: Colors.black,
+                fontWeight: FontWeight.w600,
+                size: 16,
+                letterSpacing: 0.5,
               ),
               foregroundColor: Colors.black,
               toolbarHeight: 50,
