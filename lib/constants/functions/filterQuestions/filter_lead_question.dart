@@ -10,9 +10,6 @@ void updateLeadListInventory(WidgetRef ref, String option, screenList) {
   final isCommercialNotifier = ref.read(leadFilterCommercialQuestion.notifier);
   final isRentNotifier = ref.read(leadFilterRentQuestion.notifier);
   // residental flow --------->
-  print("isCommercial====$isCommercial");
-  print("resi======${isRentNotifier.state}");
-  print(option);
   if (option.contains("Rent") && !isCommercial) {
     questionNotifier.updateScreenIsActive(setTrueInScreens: [], setFalseInScreens: ["S10", "S8", "S7"]);
     isRentNotifier.toggleRentQuestionary(true);

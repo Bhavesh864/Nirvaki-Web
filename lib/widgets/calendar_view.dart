@@ -159,7 +159,7 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                     child: ScrollConfiguration(
                       behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                       child: SingleChildScrollView(
-                        physics: const NeverScrollableScrollPhysics(),
+                        // physics: const NeverScrollableScrollPhysics(),
                         child: SfCalendar(
                           initialDisplayDate: DateTime.now(),
                           headerHeight: 0,
@@ -203,11 +203,6 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                           ),
                           showDatePickerButton: false,
                           viewHeaderHeight: 0,
-                          // headerStyle: const CalendarHeaderStyle(
-                          //   textAlign: TextAlign.center,
-                          //   backgroundColor: Colors.amber,
-                          // ),
-                          // appointmentTimeTextFormat: Intl.defaultLocale,
                           appointmentBuilder: (context, calendarAppointmentDetails) {
                             final CalendarItems event = calendarAppointmentDetails.appointments.first;
                             return Container(
