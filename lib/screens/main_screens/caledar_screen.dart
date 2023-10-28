@@ -69,6 +69,21 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                 size: 18,
                 letterSpacing: 0.5,
               ),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.add),
+                  // height: 40,
+                  // width: 160,
+                  // text: 'Create new +',
+                  onPressed: () {
+                    showAddCalendarModal(
+                      context: context,
+                      isEdit: false,
+                      ref: ref,
+                    );
+                  },
+                ),
+              ],
             )
           : null,
       body: SafeArea(

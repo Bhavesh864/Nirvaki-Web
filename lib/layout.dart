@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+
 import 'package:yes_broker/chat/controller/chat_controller.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
@@ -48,13 +49,10 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
     WidgetsBinding.instance.addObserver(this);
     final token = UserHiveMethods.getdata("token");
     authState = authentication.authStateChanges();
-    print(token);
     if (token != null) {
       AppConst.setAccessToken(token);
       getUserData(token);
     }
-    print(AppConst.getAccessToken());
-
     authState = authentication.authStateChanges();
     setAllNotification();
     super.initState();
@@ -120,7 +118,6 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
   }
 
   Widget _buildMobileLayout(bool isAuthenticated) {
-    print('--------- MobileView ------------');
     if (isAuthenticated) {
       return const SmallScreen();
     } else {
@@ -143,13 +140,8 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
   }
 
   Widget _buildTabletLayout(bool isAuthenticated) {
-    print('--------- TabletView ------------');
-    //   beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[index].nav);
-    // ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
-
     if (isAuthenticated) {
       Navigator.pop(context);
-
       return const LargeScreen();
     } else {
       final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
@@ -171,8 +163,6 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
   }
 
   Widget _buildDesktopLayout(bool isAuthenticated) {
-    print('--------- DestopView ------------');
-
     if (isAuthenticated) {
       Navigator.pop(context);
 

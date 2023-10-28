@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:number_to_words/number_to_words.dart';
@@ -227,6 +228,21 @@ Widget buildInventoryQuestions(
               countryCode: mobileCountryCode,
               onChange: (value) {
                 notify.add({"id": question.questionId, "item": "$mobileCountryCode ${value.trim()}"});
+              },
+              onContactPick: () async {
+                final PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
+                String phoneNum = contact.phoneNumber!.number!;
+                String fullName = contact.fullName!;
+                if (phoneNum.startsWith('+91')) {
+                  phoneNum = phoneNum.substring(3);
+                }
+                controller.text = phoneNum;
+                notify.add({"id": 5, "item": fullName});
+                if (question.questionId == 5) {
+                  controller.text = fullName;
+                }
+
+                notify.add({"id": question.questionId, "item": "$mobileCountryCode ${controller.text.trim()}"});
               },
             ),
             if (isMobileNoEmpty)
@@ -470,8 +486,6 @@ Widget buildInventoryQuestions(
               labelText: question.questionTitle,
               isMandatory: isvalidationtrue,
               onChanged: (newvalue) {
-                print("object");
-                print("newvalue========>$newvalue");
                 try {
                   int number = int.parse(newvalue);
                   String words = NumberToWord().convert("en-in", number);
