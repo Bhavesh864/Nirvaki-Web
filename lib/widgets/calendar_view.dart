@@ -43,7 +43,7 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
 
   void getCalenderDetailsfunc() {
     final User? user = ref.read(userDataProvider);
-    calenderDetails = FirebaseFirestore.instance.collection('calenderDetails').where('brokerId', isEqualTo: user?.brokerId).snapshots();
+    calenderDetails = FirebaseFirestore.instance.collection('calenderDetails').where('brokerId', isEqualTo: user?.brokerId).snapshots(includeMetadataChanges: true);
   }
 
   mergeCalendarTodo() {

@@ -158,8 +158,7 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
                                                 AssignmentWidget(
                                                   id: data.leadId!,
                                                   assignto: data.assignedto!,
-                                                  imageUrlCreatedBy:
-                                                      data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                  imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                   createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                                 ),
                                               );
@@ -211,7 +210,8 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   StreamBuilder(
-                                    stream: FirebaseFirestore.instance.collection("brokerInfo").where("brokerid", isEqualTo: data.brokerid).snapshots(),
+                                    stream:
+                                        FirebaseFirestore.instance.collection("brokerInfo").where("brokerid", isEqualTo: data.brokerid).snapshots(includeMetadataChanges: true),
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {
                                         final dataList = snapshot.data?.docs;

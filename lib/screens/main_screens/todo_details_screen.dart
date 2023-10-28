@@ -66,7 +66,8 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
       });
     }
     // todoArray = [];
-    todoDetails = FirebaseFirestore.instance.collection('todoDetails').where('todoId', isEqualTo: workItemId.isEmpty ? widget.todoId : workItemId).snapshots();
+    todoDetails =
+        FirebaseFirestore.instance.collection('todoDetails').where('todoId', isEqualTo: workItemId.isEmpty ? widget.todoId : workItemId).snapshots(includeMetadataChanges: true);
     // for (var i = 0; i < todoDetails; i++) {
     //   ele = todoDetails[i];
     //   userDeatil = FirebaseFirestore.instance.collection(where id =  ele.userId)
@@ -726,9 +727,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                   );
                 }
               }
-              return Container(
-                color: Colors.amber,
-              );
+              return Container();
             }),
       ),
     );

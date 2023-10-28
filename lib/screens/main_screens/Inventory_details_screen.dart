@@ -60,8 +60,10 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
         ref.read(selectedWorkItemId.notifier).addItemId(widget.inventoryId!);
       });
     }
-    inventoryDetails =
-        FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId.isEmpty ? widget.inventoryId : workItemId).snapshots();
+    inventoryDetails = FirebaseFirestore.instance
+        .collection('inventoryDetails')
+        .where('InventoryId', isEqualTo: workItemId.isEmpty ? widget.inventoryId : workItemId)
+        .snapshots(includeMetadataChanges: true);
     AppConst.setPublicView(false);
   }
 

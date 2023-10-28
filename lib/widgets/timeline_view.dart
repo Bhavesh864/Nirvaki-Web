@@ -14,8 +14,6 @@ import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/timeline_item.dart';
 
-import '../constants/firebase/userModel/user_info.dart';
-
 class CustomTimeLineView extends ConsumerStatefulWidget {
   final bool fromHome;
   final bool isScrollable;
@@ -44,8 +42,8 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
   void setactivity() {
     final workitemId = ref.read(selectedWorkItemId);
     activityDetails = widget.fromHome
-        ? FirebaseFirestore.instance.collection('activityDetails').snapshots()
-        : FirebaseFirestore.instance.collection('activityDetails').where('itemid', isEqualTo: workitemId).snapshots();
+        ? FirebaseFirestore.instance.collection('activityDetails').snapshots(includeMetadataChanges: true)
+        : FirebaseFirestore.instance.collection('activityDetails').where('itemid', isEqualTo: workitemId).snapshots(includeMetadataChanges: true);
   }
 
   @override

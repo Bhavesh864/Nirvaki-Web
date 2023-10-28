@@ -62,7 +62,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   void setCardDetails() async {
     //   final brokerid = UserHiveMethods.getdata("brokerId");
     //   print("$brokerid===================================");
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots(includeMetadataChanges: true);
   }
 
   getUserData(token) async {
@@ -114,16 +114,17 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             return const Loader();
           }
           if (snapshot.hasData) {
+            print(snapshot.data?.metadata.isFromCache);
+            final source = (snapshot.data!.metadata.isFromCache) ? "local cache" : "server";
+            print("Data fetched from $source}");
             if (user == null) return const Loader();
             if (!isUserLoaded) {
               getDetails(user);
               isUserLoaded = true;
             }
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
-            final List<CardDetails> todoItems = filterItem!
-                .map((doc) => CardDetails.fromSnapshot(doc))
-                .where((item) => item.cardType != "IN" && item.cardType != "LD" && item.status != "Closed")
-                .toList();
+            final List<CardDetails> todoItems =
+                filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD" && item.status != "Closed").toList();
             int compareDueDates(CardDetails a, CardDetails b) {
               DateTime aDueDate = DateFormat('dd-MM-yy').parse(a.duedate!);
               DateTime bDueDate = DateFormat('dd-MM-yy').parse(b.duedate!);
@@ -131,8 +132,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             }
 
             todoItems.sort(compareDueDates);
-            final List<CardDetails> workItems =
-                filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
+            final List<CardDetails> workItems = filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
             workItems.sort((a, b) => b.createdate!.compareTo(a.createdate!));
             bool isDataEmpty = workItems.isEmpty && todoItems.isEmpty;
             return Container(

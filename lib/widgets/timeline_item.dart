@@ -9,6 +9,7 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/responsive.dart';
+import 'package:yes_broker/riverpodstate/user_data.dart';
 import '../constants/firebase/userModel/user_info.dart';
 import '../constants/functions/navigation/navigation_functions.dart';
 import '../constants/functions/time_formatter.dart';
@@ -26,26 +27,22 @@ class TimeLineItem extends ConsumerStatefulWidget {
 }
 
 class _TimeLineItemState extends ConsumerState<TimeLineItem> {
-  // List<User> assigned = [];
-
-  // void setassignedData() async {
-  //   final userids = [];
-  //   for (var data in widget.activitiesList) {
-  //     userids.add(data.createdby?.userid);
-  //   }
-  //   if (userids.isNotEmpty) {
-  //     final List<User> userdata = await User.getListOfUsersByIds(userids);
-  //     if (mounted) {
-  //       setState(() {
-  //         assigned = userdata;
-  //       });
-  //     }
-  //   }
-  // }
+  List<User> assigned = [];
+  void setassignedData() async {
+    final currentuser = ref.read(userDataProvider);
+    if (currentuser != null) {
+      final List<User> userdata = await User.getAllUsers(currentuser);
+      if (mounted) {
+        setState(() {
+          assigned = userdata;
+        });
+      }
+    }
+  }
 
   @override
   void initState() {
-    // setassignedData();
+    setassignedData();
     super.initState();
   }
 
@@ -66,6 +63,8 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
     // final String formattedTime = getMessageDay(timeLine.createdate!.toDate(), isNewWeek);
 
     final formattedTime = TimeFormatter.formatFirestoreTimestamp(timeLine.createdate, isNewWeek);
+
+    // final createdbyUser = getUserNameById(timeLine.createdby!.userid!, assigned.isNotEmpty ?  assigned :[]);
 
     double detailsViewWidth() {
       if (Responsive.isDesktop(context)) {
@@ -148,6 +147,32 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
               )
             ],
           ),
+          // ListTile(
+          //   horizontalTitleGap: 6,
+          //   titleAlignment: ListTileTitleAlignment.center,
+          //   trailing: CustomText(
+          //     title: formattedTime,
+          //     size: 12,
+          //     color: AppColor.primary,
+          //   ),
+          //   leading: assigned.isNotEmpty && widget.activitiesList.isNotEmpty
+          //       ? Container(
+          //           height: 20,
+          //           width: 20,
+          //           decoration: BoxDecoration(
+          //             border: Border.all(color: Colors.grey, width: 1.0),
+          //             image: DecorationImage(image: NetworkImage(createdbyUser.image.isEmpty ? noImg : createdbyUser.image), fit: BoxFit.fill),
+          //             borderRadius: BorderRadius.circular(10),
+          //           ),
+          //         )
+          //       : SizedBox(),
+          //   title: assigned.isNotEmpty && widget.activitiesList.isNotEmpty
+          //       ? CustomText(
+          //           title: capitalizeFirstLetter(createdbyUser.userfirstname),
+          //           size: 12,
+          //         )
+          //       : SizedBox(),
+          // ),
           ListTile(
             horizontalTitleGap: 6,
             titleAlignment: ListTileTitleAlignment.center,
@@ -169,7 +194,7 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
               title: capitalizeFirstLetter(timeLine.createdby!.userfirstname!),
               size: 12,
             ),
-          ),
+          )
         ],
       ),
     );
@@ -181,4 +206,9 @@ String capitalizeFirstLetter(String text) {
     return text;
   }
   return text[0].toUpperCase() + text.substring(1).toLowerCase();
+}
+
+User getUserNameById(String id, List<User> users) {
+  final User user = users.firstWhere((user) => user.userId == id);
+  return user;
 }

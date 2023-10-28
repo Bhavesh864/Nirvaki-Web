@@ -1,9 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+// import 'dart:html';
+
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 
 import '../../Customs/custom_text.dart';
 import '../../Customs/loader.dart';
+import '../../Customs/snackbar.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
 import '../../constants/firebase/detailsModels/lead_details.dart';
 import '../../constants/firebase/detailsModels/todo_details.dart';
@@ -32,6 +37,14 @@ class AttachmentWidget extends StatefulWidget {
 
 class AttachmentWidgetState extends State<AttachmentWidget> {
   bool isUploading = false;
+  void downloadFile(String url, String name) async {
+    FileDownloader.downloadFile(
+      url: url,
+      onDownloadCompleted: (String path) {
+        customSnackBar(context: context, text: 'FILE DOWNLOADED TO PATH: $path');
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,6 +139,10 @@ class AttachmentWidgetState extends State<AttachmentWidget> {
                                     //   anchorElement.download = 'Attachment file';
                                     //   anchorElement.click();
                                     // }
+                                    downloadFile(
+                                      attachment.path,
+                                      attachment.title,
+                                    );
                                   },
                                 ),
                                 InkWell(

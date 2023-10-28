@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/chat/controller/chat_controller.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
@@ -92,18 +93,18 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
               final bool connected = connectivity != ConnectivityResult.none;
               if (!connected) {
                 ref.read(chatControllerProvider).setUserState(false);
-                return const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(4.0),
-                    child: CustomText(
-                      title: 'You are Offline...Please check your internet connection!',
-                      size: 25,
-                      softWrap: true,
-                      textAlign: TextAlign.center,
-                      color: Colors.grey,
-                    ),
-                  ),
-                );
+                // return const Center(
+                //   child: Padding(
+                //     padding: EdgeInsets.all(4.0),
+                //     child: CustomText(
+                //       title: 'You are Offline...Please check your internet connection!',
+                //       size: 25,
+                //       softWrap: true,
+                //       textAlign: TextAlign.center,
+                //       color: Colors.grey,
+                //     ),
+                //   ),
+                // );
               }
               return ScreenTypeLayout.builder(
                 breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 850, watch: 400),

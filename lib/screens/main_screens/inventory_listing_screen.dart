@@ -49,7 +49,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
 
   void setCardDetails() {
     final brokerid = UserHiveMethods.getdata("brokerId");
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("brokerid", isEqualTo: brokerid).snapshots();
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("brokerid", isEqualTo: brokerid).snapshots(includeMetadataChanges: true);
   }
 
   getDetails(User currentuser) async {

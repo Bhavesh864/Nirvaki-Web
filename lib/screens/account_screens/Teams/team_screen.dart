@@ -32,7 +32,7 @@ class TeamScreen extends ConsumerWidget {
       } else {
         return SingleChildScrollView(
           child: StreamBuilder(
-              stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: currentUserdata?.brokerId).snapshots(),
+              stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: currentUserdata?.brokerId).snapshots(includeMetadataChanges: true),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
@@ -96,7 +96,7 @@ class TeamScreen extends ConsumerWidget {
         margin: const EdgeInsets.all(15),
         child: SingleChildScrollView(
           child: StreamBuilder(
-              stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: currentUserdata?.brokerId).snapshots(),
+              stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: currentUserdata?.brokerId).snapshots(includeMetadataChanges: true),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
