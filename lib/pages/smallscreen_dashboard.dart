@@ -50,7 +50,11 @@ class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingOb
           // }, 'Logout', 'Are you sure you want to logout?');
         }
       }, ref),
-      body: Stack(
+      body:
+          // deskTopSideBarIndex == 4 && currentIndex != 4
+          //     // ? const CalendarScreen()
+          //     :
+          Stack(
         children: [
           if (selectedItem == null) ...[
             bottomBarItems[currentIndex].screen,

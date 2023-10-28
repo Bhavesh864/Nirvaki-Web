@@ -1,10 +1,12 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/customs/responsive.dart';
 
 import '../constants/utils/constants.dart';
@@ -493,26 +495,8 @@ class CustomCheckboxListTile extends StatelessWidget {
 // }
 
 class MobileNumberInputField extends StatefulWidget {
-  const MobileNumberInputField({
-    super.key,
-    required this.isEmpty,
-    required this.openModal,
-    required this.countryCode,
-    required this.onChange,
-    required this.controller,
-    required this.hintText,
-    this.margin = const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-    this.validator,
-    this.fontsize = 14.0,
-    this.isMandatory = true,
-    this.showLabel = true,
-    this.isDense = true,
-    this.contentPadding = const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-    this.bottomMargin = const EdgeInsets.only(bottom: 0),
-    this.fromProfile = false,
-    this.innnerContainerPadding = const EdgeInsets.symmetric(vertical: 5),
-  });
   final bool isEmpty;
+  final Function? onContactPick;
   final bool isDense;
   final String countryCode;
   final String hintText;
@@ -528,6 +512,28 @@ class MobileNumberInputField extends StatefulWidget {
   final bool? fromProfile;
   final EdgeInsets? innnerContainerPadding;
   final EdgeInsetsGeometry margin;
+
+  const MobileNumberInputField({
+    Key? key,
+    required this.isEmpty,
+    this.onContactPick,
+    this.isDense = true,
+    required this.countryCode,
+    required this.hintText,
+    this.fontsize = 14.0,
+    this.isMandatory = true,
+    this.showLabel = true,
+    this.bottomMargin = const EdgeInsets.only(bottom: 0),
+    required this.controller,
+    required this.openModal,
+    required this.onChange,
+    this.validator,
+    this.contentPadding = const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+    this.fromProfile = false,
+    this.innnerContainerPadding = const EdgeInsets.symmetric(vertical: 5),
+    this.margin = const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+  }) : super(key: key);
+
   @override
   State<MobileNumberInputField> createState() => _MobileNumberInputFieldState();
 }
@@ -621,6 +627,15 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
                     isDense: widget.isDense,
                     hintText: "Type here..",
                     counterText: "",
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        widget.onContactPick!();
+                      },
+                      child: const Icon(
+                        Icons.contact_phone_outlined,
+                        size: 20,
+                      ),
+                    ),
                     hintStyle: const TextStyle(color: Colors.grey, fontSize: 12),
                     contentPadding: widget.contentPadding,
                     border: InputBorder.none,
