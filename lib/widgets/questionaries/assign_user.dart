@@ -58,7 +58,7 @@ class _AssignUserState extends ConsumerState<AssignUser> {
         SizedBox(
           height: 45,
           child: StreamBuilder(
-              stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: user?.brokerId).snapshots(),
+              stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: user?.brokerId).snapshots(includeMetadataChanges: true),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data == null) {
                   return const CircularProgressIndicator.adaptive();

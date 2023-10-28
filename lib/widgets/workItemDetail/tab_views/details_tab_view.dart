@@ -91,15 +91,6 @@ class _DetailsTabViewState extends State<DetailsTabView> {
     );
   }
 
-  void downloadFile(String url, String name) async {
-    FileDownloader.downloadFile(
-      url: url,
-      onDownloadCompleted: (String path) {
-        customSnackBar(context: context, text: 'FILE DOWNLOADED TO PATH: $path');
-      },
-    );
-  }
-
   Future<String> getFilePath(String filename) async {
     final dir = await getApplicationDocumentsDirectory();
     return "${dir.path}/$filename";

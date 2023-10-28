@@ -308,6 +308,26 @@ class CardDetails {
     }
   }
 
+  static Future<void> updateCustomerInfoForLinkedToDos(String linkedItemId, Customerinfo newCustomerInfo) async {
+    try {
+      final QuerySnapshot querySnapshot = await cardDetailsCollection.where("linkedItemId", isEqualTo: linkedItemId).get();
+
+      for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        if (documentSnapshot.exists) {
+          final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+          await documentSnapshot.reference.update({'customerinfo': newCustomerInfo.toJson()});
+          if (kDebugMode) {
+            print('Customer info updated for todo with ID: ${data["todoId"]}');
+          }
+        }
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to update customer info for linked to-do items: $error');
+      }
+    }
+  }
+
   static Future<void> updateCardStatus({required String id, required String newStatus}) async {
     try {
       QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();

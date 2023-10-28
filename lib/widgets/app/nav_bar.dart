@@ -63,7 +63,7 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
           largeScreenView("${userData?.userfirstname ?? ""} ${userData?.userlastname ?? ""}", context, ref: ref),
           const Spacer(),
           StreamBuilder(
-              stream: notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).where('isRead', isEqualTo: false).snapshots(),
+              stream: notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).where('isRead', isEqualTo: false).snapshots(includeMetadataChanges: true),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   final notificationCount = snapshot.data!.docs.length;
@@ -312,7 +312,7 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
   @override
   void initState() {
     super.initState();
-    notification = notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).snapshots();
+    notification = notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).snapshots(includeMetadataChanges: true);
   }
 
   @override

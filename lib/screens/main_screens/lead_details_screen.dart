@@ -56,7 +56,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
         ref.read(selectedWorkItemId.notifier).addItemId(widget.leadId);
       });
     }
-    leadDetails = FirebaseFirestore.instance.collection('leadDetails').where('leadId', isEqualTo: workItemId.isEmpty ? widget.leadId : workItemId).snapshots();
+    leadDetails = FirebaseFirestore.instance.collection('leadDetails').where('leadId', isEqualTo: workItemId.isEmpty ? widget.leadId : workItemId).snapshots(includeMetadataChanges: true);
     AppConst.setPublicView(false);
   }
 

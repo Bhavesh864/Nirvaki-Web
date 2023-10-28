@@ -30,7 +30,7 @@ class ChatRepository {
   });
 
   Stream<List<ChatGroup>> getChatGroups() {
-    return firestore.collection('groups').snapshots().map(
+    return firestore.collection('groups').snapshots(includeMetadataChanges: true).map(
       (event) {
         try {
           List<ChatGroup> groups = [];
@@ -59,7 +59,7 @@ class ChatRepository {
         .orderBy(
           'timeSent',
         )
-        .snapshots()
+        .snapshots(includeMetadataChanges: true)
         .map((event) {
       List<ChatMessage> messages = [];
       for (var document in event.docs) {
@@ -76,7 +76,7 @@ class ChatRepository {
         .collection(
           'chats',
         )
-        .snapshots()
+        .snapshots(includeMetadataChanges: true)
         .asyncMap((event) async {
       List<ChatContact> contacts = [];
       for (var document in event.docs) {
@@ -109,7 +109,7 @@ class ChatRepository {
         .doc(recieverUserId)
         .collection('messages')
         .orderBy('timeSent')
-        .snapshots()
+        .snapshots(includeMetadataChanges: true)
         .map((event) {
       List<ChatMessage> messages = [];
       for (var document in event.docs) {
@@ -126,23 +126,9 @@ class ChatRepository {
     bool isSender,
   ) async {
     try {
-      await firestore
-          .collection('users')
-          .doc(AppConst.getAccessToken())
-          .collection('chats')
-          .doc(recieverUserId)
-          .collection('messages')
-          .doc(messageId)
-          .update({'isSeen': true});
+      await firestore.collection('users').doc(AppConst.getAccessToken()).collection('chats').doc(recieverUserId).collection('messages').doc(messageId).update({'isSeen': true});
 
-      await firestore
-          .collection('users')
-          .doc(recieverUserId)
-          .collection('chats')
-          .doc(AppConst.getAccessToken())
-          .collection('messages')
-          .doc(messageId)
-          .update({'isSeen': true});
+      await firestore.collection('users').doc(recieverUserId).collection('chats').doc(AppConst.getAccessToken()).collection('messages').doc(messageId).update({'isSeen': true});
     } catch (e) {
       customSnackBar(
         context: context,

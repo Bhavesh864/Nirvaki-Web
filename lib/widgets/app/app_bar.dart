@@ -35,7 +35,7 @@ AppBar mobileAppBar(User? user, BuildContext context, void Function(String) onOp
     ),
     actions: [
       StreamBuilder(
-        stream: notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).where('isRead', isEqualTo: false).snapshots(),
+        stream: notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).where('isRead', isEqualTo: false).snapshots(includeMetadataChanges: true),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final notificationCount = snapshot.data!.docs.length;

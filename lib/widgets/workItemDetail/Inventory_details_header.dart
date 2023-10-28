@@ -18,9 +18,7 @@ import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/assingment_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
-
 import '../../routes/routes.dart';
-
 import '../app/app_bar.dart';
 import '../app/nav_bar.dart';
 

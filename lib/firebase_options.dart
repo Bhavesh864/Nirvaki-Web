@@ -3,7 +3,6 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
-//
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -50,6 +49,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '868897852943',
     projectId: 'brokr-in',
     authDomain: 'brokr-in.firebaseapp.com',
+    databaseURL: 'https://brokr-in-default-rtdb.firebaseio.com',
     storageBucket: 'brokr-in.appspot.com',
     measurementId: 'G-4G43D3Z8FK',
   );
@@ -59,6 +59,7 @@ class DefaultFirebaseOptions {
     appId: '1:868897852943:android:da6e9a154a1d6117979d7a',
     messagingSenderId: '868897852943',
     projectId: 'brokr-in',
+    databaseURL: 'https://brokr-in-default-rtdb.firebaseio.com',
     storageBucket: 'brokr-in.appspot.com',
   );
 
@@ -67,9 +68,10 @@ class DefaultFirebaseOptions {
     appId: '1:868897852943:ios:9d3a1c4e480129eb979d7a',
     messagingSenderId: '868897852943',
     projectId: 'brokr-in',
+    databaseURL: 'https://brokr-in-default-rtdb.firebaseio.com',
     storageBucket: 'brokr-in.appspot.com',
-    iosClientId:
-        '868897852943-sa7p0lub6upq9b3rjkrthd5vhdu6gial.apps.googleusercontent.com',
+    androidClientId: '868897852943-s3h62g9gvhcr0trk80ugbh3ud978l649.apps.googleusercontent.com',
+    iosClientId: '868897852943-sa7p0lub6upq9b3rjkrthd5vhdu6gial.apps.googleusercontent.com',
     iosBundleId: 'com.example.yesBroker',
   );
 
@@ -78,9 +80,10 @@ class DefaultFirebaseOptions {
     appId: '1:868897852943:ios:2a26edff0356baa2979d7a',
     messagingSenderId: '868897852943',
     projectId: 'brokr-in',
+    databaseURL: 'https://brokr-in-default-rtdb.firebaseio.com',
     storageBucket: 'brokr-in.appspot.com',
-    iosClientId:
-        '868897852943-vitn6u89j8pt3kegcodic5aqglc13qeg.apps.googleusercontent.com',
+    androidClientId: '868897852943-s3h62g9gvhcr0trk80ugbh3ud978l649.apps.googleusercontent.com',
+    iosClientId: '868897852943-vitn6u89j8pt3kegcodic5aqglc13qeg.apps.googleusercontent.com',
     iosBundleId: 'com.example.yesBroker.RunnerTests',
   );
 }

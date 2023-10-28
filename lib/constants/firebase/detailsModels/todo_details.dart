@@ -336,6 +336,25 @@ class TodoDetails {
       }
     }
   }
+
+  static Future<void> updateCustomerInfoForLinkedToDos(String linkedItemId, Customerinfo newCustomerInfo) async {
+    try {
+      final QuerySnapshot querySnapshot = await todoDetailsCollection.where("linkedWorkItem.workItemId", isEqualTo: linkedItemId).get();
+      for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        if (documentSnapshot.exists) {
+          final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+          await documentSnapshot.reference.update({'customerinfo': newCustomerInfo.toJson()});
+          if (kDebugMode) {
+            print('Customer info updated for todo with ID: ${data["todoId"]}');
+          }
+        }
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to update customer info for linked to-do items: $error');
+      }
+    }
+  }
 }
 
 class Attachments {
