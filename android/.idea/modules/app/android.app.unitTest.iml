@@ -183,14 +183,14 @@
     <orderEntry type="module" module-name="android.network_info_plus.main" scope="TEST" />
     <orderEntry type="module" module-name="android.firebase_database.main" scope="TEST" />
     <orderEntry type="module" module-name="android.flutter_local_notifications.main" scope="TEST" />
-    <orderEntry type="module" module-name="com.mr.flutter.plugin.filepicker.android.file_picker.main" scope="TEST" />
-    <orderEntry type="module" module-name="io.flutter.plugins.pathprovider.android.path_provider_android.main" scope="TEST" />
-    <orderEntry type="module" module-name="io.flutter.plugins.sharedpreferences.android.shared_preferences_android.main" scope="TEST" />
-    <orderEntry type="module" module-name="com.example.integration_test.android.integration_test.main" scope="TEST" />
+    <orderEntry type="module" module-name="com.mr.flutter.plugin.filepicker.android.file_picker.main~1" scope="TEST" />
+    <orderEntry type="module" module-name="io.flutter.plugins.pathprovider.android.path_provider_android.main~1" scope="TEST" />
+    <orderEntry type="module" module-name="io.flutter.plugins.sharedpreferences.android.shared_preferences_android.main~1" scope="TEST" />
+    <orderEntry type="module" module-name="com.example.integration_test.android.integration_test.main~1" scope="TEST" />
     <orderEntry type="module" module-name="android.image_picker_android.main" scope="TEST" />
     <orderEntry type="module" module-name="android.firebase_messaging.main" scope="TEST" />
     <orderEntry type="module" module-name="android.firebase_crashlytics.main" scope="TEST" />
-    <orderEntry type="module" module-name="io.flutter.plugins.flutter_plugin_android_lifecycle.android.flutter_plugin_android_lifecycle.main" scope="TEST" />
+    <orderEntry type="module" module-name="io.flutter.plugins.flutter_plugin_android_lifecycle.android.flutter_plugin_android_lifecycle.main~1" scope="TEST" />
     <orderEntry type="module" module-name="android.sqflite.main" scope="TEST" />
     <orderEntry type="module" module-name="android.url_launcher_android.main" scope="TEST" />
     <orderEntry type="module" module-name="android.google_maps_flutter_android.main" scope="TEST" />
