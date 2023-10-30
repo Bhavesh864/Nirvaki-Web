@@ -628,11 +628,9 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
                     hintText: "Type here..",
                     counterText: "",
                     suffixIcon: GestureDetector(
-                      onTap: kIsWeb
-                          ? null
-                          : () {
-                              widget.onContactPick!();
-                            },
+                      onTap: () {
+                        widget.onContactPick!();
+                      },
                       child: const Icon(
                         Icons.contact_phone_outlined,
                         size: 20,

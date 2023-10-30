@@ -68,14 +68,14 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   getUserData(token) async {
     if (mounted) {
       final User? user = await User.getUser(token);
-
-      final hasUser = ref.read(userDataProvider);
-
-      if (user != null && hasUser == null) {
-        ref.read(userDataProvider.notifier).storeUserData(user);
-        AppConst.setRole(user.role);
-        UserHiveMethods.addData(key: "brokerId", data: user.brokerId);
-      }
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final hasUser = ref.read(userDataProvider);
+        if (user != null && hasUser == null) {
+          ref.read(userDataProvider.notifier).storeUserData(user);
+          AppConst.setRole(user.role);
+          UserHiveMethods.addData(key: "brokerId", data: user.brokerId);
+        }
+      });
     }
   }
 
@@ -114,9 +114,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             return const Loader();
           }
           if (snapshot.hasData) {
-            print(snapshot.data?.metadata.isFromCache);
-            final source = (snapshot.data!.metadata.isFromCache) ? "local cache" : "server";
-            print("Data fetched from $source}");
+            // final source = (snapshot.data!.metadata.isFromCache) ? "local cache" : "server";
+            // print("Data fetched from $source}");
             if (user == null) return const Loader();
             if (!isUserLoaded) {
               getDetails(user);
