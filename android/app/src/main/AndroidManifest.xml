@@ -18,11 +18,11 @@
     </instrumentation>
     
        <application
-        android:label="yes_broker"
+        android:label="Nirvaki"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
-             
+
             android:exported="true"
             android:showWhenLocked="true"
             android:turnScreenOn="true"
