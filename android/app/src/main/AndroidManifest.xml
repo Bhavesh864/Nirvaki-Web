@@ -23,10 +23,6 @@
         android:icon="@mipmap/launcher_icon">
         
         <activity
-<<<<<<< HEAD
-=======
-
->>>>>>> 1d1c1159ca22d0543e083d1d58199c7ed70414c9
             android:exported="true"
             android:showWhenLocked="true"
             android:turnScreenOn="true"
