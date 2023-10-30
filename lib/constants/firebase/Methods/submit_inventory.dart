@@ -298,7 +298,9 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
     submitActivity(itemid: existingInventoryId, activitytitle: "Inventory detail updated", user: currentUserdata!);
   } else {
     final userNames = assignedListInInventory.map((user) => "${user.firstname} ${user.lastname}").join(", ");
-    submitActivity(itemid: idForNewInventory, activitytitle: "New Inventory assigned to $userNames", user: currentUserdata!);
+    if (userNames.isNotEmpty) {
+      submitActivity(itemid: idForNewInventory, activitytitle: "New Inventory assigned to $userNames", user: currentUserdata!);
+    }
   }
   for (var user in assignedListInInventory) {
     if (!isEdit) {
@@ -308,7 +310,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
           content: "$idForNewInventory New Inventory assigned to ${user.firstname} ${user.lastname}",
           assigntofield: true,
           itemid: idForNewInventory,
-          currentuserdata: currentUserdata);
+          currentuserdata: currentUserdata!);
     } else {
       notifyToUser(
           assignedto: user.userid,
@@ -316,7 +318,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
           content: "$existingInventoryId Inventory detail Updated",
           assigntofield: true,
           itemid: existingInventoryId,
-          currentuserdata: currentUserdata);
+          currentuserdata: currentUserdata!);
     }
   }
 

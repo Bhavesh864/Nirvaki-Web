@@ -1,18 +1,14 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/customs/label_text_field.dart';
-
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/riverpodstate/sign_up_state.dart';
 import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
-
 import 'package:yes_broker/routes/routes.dart';
-
 import 'package:yes_broker/widgets/auth/details_header.dart';
 import '../../../Customs/custom_fields.dart';
 import '../../../constants/utils/constants.dart';
@@ -135,7 +131,7 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   AppText(
-                    text: 'Welcome to Brokr',
+                    text: 'Welcome to Nirvaki',
                     textColor: Colors.white,
                     fontsize: Responsive.isMobile(context) ? 20 : 23,
                     fontWeight: FontWeight.w600,
