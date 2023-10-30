@@ -8,6 +8,7 @@ import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 
 class AssignUser extends ConsumerStatefulWidget {
@@ -58,7 +59,7 @@ class _AssignUserState extends ConsumerState<AssignUser> {
         SizedBox(
           height: 45,
           child: StreamBuilder(
-              stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: user?.brokerId).snapshots(),
+              stream: FirebaseFirestore.instance.collection("users").where("brokerId", isEqualTo: user?.brokerId).snapshots(includeMetadataChanges: true),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data == null) {
                   return const CircularProgressIndicator.adaptive();

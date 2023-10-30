@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module external.linked.project.id=":app:main" external.linked.project.path="$MODULE_DIR$/../../../app" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.type="sourceSet" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
+<<<<<<< HEAD
     <facet type="android" name="Android">
       <configuration>
         <option name="SELECTED_BUILD_VARIANT" value="debug" />
@@ -17,6 +18,8 @@
         <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/src/main/assets" />
       </configuration>
     </facet>
+=======
+>>>>>>> 673ddf558cc5fd73642e30a97ffcc859319b9145
     <facet type="kotlin-language" name="Kotlin">
       <configuration version="5" platform="JVM 1.8" allPlatforms="JVM [1.8]" useProjectSettings="false">
         <compilerSettings>
@@ -31,7 +34,11 @@
             <stringArg name="classpath">
               <args>
                 <arg>$MODULE_DIR$/../../../../build/app/intermediates/compile_and_runtime_not_namespaced_r_class_jar/debug/R.jar</arg>
+<<<<<<< HEAD
                 <arg>$USER_HOME$/caches/transforms-3/9d01cdbd87219f253fe9537cc373bc47/transformed/jetified-libs.jar</arg>
+=======
+                <arg>$USER_HOME$/.gradle/caches/transforms-3/6b1d3f8e7633f8c9f7b2c4b341f7a074/transformed/jetified-libs.jar</arg>
+>>>>>>> 673ddf558cc5fd73642e30a97ffcc859319b9145
                 <arg>$MODULE_DIR$/../../../../build/firebase_database/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/firebase_messaging/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/cloud_firestore/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
@@ -164,6 +171,17 @@
         </compilerArguments>
       </configuration>
     </facet>
+    <facet type="android" name="Android">
+      <configuration>
+        <option name="SELECTED_BUILD_VARIANT" value="debug" />
+        <option name="ALLOW_USER_CONFIGURATION" value="false" />
+        <option name="MANIFEST_FILE_RELATIVE_PATH" value="/src/main/AndroidManifest.xml" />
+        <option name="RES_FOLDER_RELATIVE_PATH" value="/src/main/res" />
+        <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/../../../app/src/main/res;file://$MODULE_DIR$/../../../app/src/debug/res;file://$MODULE_DIR$/../../../../build/app/generated/res/google-services/debug;file://$MODULE_DIR$/../../../../build/app/generated/crashlytics/res/debug;file://$MODULE_DIR$/../../../../build/app/generated/res/rs/debug;file://$MODULE_DIR$/../../../../build/app/generated/res/resValues/debug" />
+        <option name="TEST_RES_FOLDERS_RELATIVE_PATH" value="" />
+        <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/src/main/assets" />
+      </configuration>
+    </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="true">
     <exclude-output />
@@ -199,6 +217,7 @@
     <orderEntry type="module" module-name="android.network_info_plus.main" />
     <orderEntry type="module" module-name="android.firebase_database.main" />
     <orderEntry type="module" module-name="android.flutter_local_notifications.main" />
+<<<<<<< HEAD
     <orderEntry type="module" module-name="com.mr.flutter.plugin.filepicker.android.file_picker.main~1" />
     <orderEntry type="module" module-name="io.flutter.plugins.pathprovider.android.path_provider_android.main~1" />
     <orderEntry type="module" module-name="io.flutter.plugins.sharedpreferences.android.shared_preferences_android.main~1" />
@@ -207,6 +226,16 @@
     <orderEntry type="module" module-name="android.firebase_messaging.main" />
     <orderEntry type="module" module-name="android.firebase_crashlytics.main" />
     <orderEntry type="module" module-name="io.flutter.plugins.flutter_plugin_android_lifecycle.android.flutter_plugin_android_lifecycle.main~1" />
+=======
+    <orderEntry type="module" module-name="android.file_picker.main" />
+    <orderEntry type="module" module-name="android.path_provider_android.main" />
+    <orderEntry type="module" module-name="android.shared_preferences_android.main" />
+    <orderEntry type="module" module-name="android.integration_test.main" />
+    <orderEntry type="module" module-name="android.image_picker_android.main" />
+    <orderEntry type="module" module-name="android.firebase_messaging.main" />
+    <orderEntry type="module" module-name="android.firebase_crashlytics.main" />
+    <orderEntry type="module" module-name="android.flutter_plugin_android_lifecycle.main" />
+>>>>>>> 673ddf558cc5fd73642e30a97ffcc859319b9145
     <orderEntry type="module" module-name="android.sqflite.main" />
     <orderEntry type="module" module-name="android.url_launcher_android.main" />
     <orderEntry type="module" module-name="android.google_maps_flutter_android.main" />
@@ -219,7 +248,11 @@
     <orderEntry type="module" module-name="android.firebase_auth.main" />
     <orderEntry type="module" module-name="android.emoji_picker_flutter.main" />
     <orderEntry type="module" module-name="android.firebase_storage.main" />
+<<<<<<< HEAD
     <orderEntry type="library" name="Gradle: io.flutter:flutter_embedding_debug:1.0.0-cdbeda788a293fa29665dc3fa3d6e63bd221cb0d" level="project" />
+=======
+    <orderEntry type="library" name="Gradle: io.flutter:flutter_embedding_debug:1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420" level="project" />
+>>>>>>> 673ddf558cc5fd73642e30a97ffcc859319b9145
     <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-common:2.6.1" level="project" />
     <orderEntry type="library" name="Gradle: androidx.annotation:annotation-jvm:1.7.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.8.22" level="project" />

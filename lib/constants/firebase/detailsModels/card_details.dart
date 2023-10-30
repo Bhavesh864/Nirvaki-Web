@@ -308,6 +308,26 @@ class CardDetails {
     }
   }
 
+  static Future<void> updateCustomerInfoForLinkedToDos(String linkedItemId, Customerinfo newCustomerInfo) async {
+    try {
+      final QuerySnapshot querySnapshot = await cardDetailsCollection.where("linkedItemId", isEqualTo: linkedItemId).get();
+
+      for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        if (documentSnapshot.exists) {
+          final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+          await documentSnapshot.reference.update({'customerinfo': newCustomerInfo.toJson()});
+          if (kDebugMode) {
+            print('Customer info updated for todo with ID: ${data["todoId"]}');
+          }
+        }
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to update customer info for linked to-do items: $error');
+      }
+    }
+  }
+
   static Future<void> updateCardStatus({required String id, required String newStatus}) async {
     try {
       QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();
@@ -449,6 +469,26 @@ class CardDetails {
       }
     } catch (error) {
       print('Failed to delete user: $error');
+    }
+  }
+
+  static Future<void> updateCustomerInfo({required List<String> itemIds, required Customerinfo newCustomerInfo}) async {
+    try {
+      for (String itemId in itemIds) {
+        QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: itemId).get();
+        if (querySnapshot.docs.isNotEmpty) {
+          QueryDocumentSnapshot docSnapshot = querySnapshot.docs.first;
+          await docSnapshot.reference.update({'customerinfo': newCustomerInfo.toJson()});
+        } else {
+          if (kDebugMode) {
+            print('Item not found with todoId: $itemId');
+          }
+        }
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to update customer information for some items: $error');
+      }
     }
   }
 }

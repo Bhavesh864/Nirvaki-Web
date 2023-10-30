@@ -1,21 +1,17 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/pages/add_inventory.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/assigned_circular_images.dart';
-
 import '../../Customs/custom_text.dart';
 import '../../constants/functions/convertStringTorange/convert_number_to_string.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
@@ -54,14 +50,20 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
     super.initState();
     final currentIndex = ref.read(detailsPageIndexTabProvider);
     // currentSelectedTab = currentIndex;
+
     tabviewController = TabController(length: 3, vsync: this, initialIndex: currentIndex);
+
     final workItemId = ref.read(selectedWorkItemId);
-    if (workItemId.isEmpty) {
+
+    if (workItemId.isEmpty || !workItemId.contains('IN')) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.read(selectedWorkItemId.notifier).addItemId(widget.inventoryId!);
       });
     }
-    inventoryDetails = FirebaseFirestore.instance.collection('inventoryDetails').where('InventoryId', isEqualTo: workItemId.isEmpty ? widget.inventoryId : workItemId).snapshots();
+    inventoryDetails = FirebaseFirestore.instance
+        .collection('inventoryDetails')
+        .where('InventoryId', isEqualTo: workItemId.isEmpty ? widget.inventoryId : workItemId)
+        .snapshots(includeMetadataChanges: true);
     AppConst.setPublicView(false);
   }
 
@@ -80,9 +82,13 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                   Navigator.of(context).pop();
                 },
               ),
+              centerTitle: false,
               title: const CustomText(
                 title: 'Inventory Details',
                 color: Colors.black,
+                fontWeight: FontWeight.w600,
+                size: 16,
+                letterSpacing: 0.5,
               ),
               foregroundColor: Colors.black,
               toolbarHeight: 50,
@@ -229,7 +235,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                                     assignto: data.assignedto!,
                                                     imageUrlCreatedBy:
                                                         data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                                    createdBy: '${data.createdby!.userfirstname!}  ${data.createdby!.userlastname!}',
+                                                    createdBy: data.createdby!.userid!,
                                                   ),
                                                 );
                                               },
@@ -316,7 +322,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                     id: data.inventoryId!,
                                     assignto: data.assignedto!,
                                     imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                    createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
+                                    createdBy: data.createdby!.userid!,
                                     data: data,
                                   ),
                                   if (Responsive.isDesktop(context))

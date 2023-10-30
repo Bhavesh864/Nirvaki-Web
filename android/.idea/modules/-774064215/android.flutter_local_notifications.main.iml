@@ -4,22 +4,35 @@
     <facet type="android" name="Android">
       <configuration>
         <option name="SELECTED_BUILD_VARIANT" value="debug" />
+<<<<<<< HEAD
         <option name="ASSEMBLE_TASK_NAME" value="assembleDebug" />
         <option name="COMPILE_JAVA_TASK_NAME" value="compileDebugSources" />
         <afterSyncTasks>
           <task>generateDebugSources</task>
         </afterSyncTasks>
+=======
+>>>>>>> 673ddf558cc5fd73642e30a97ffcc859319b9145
         <option name="ALLOW_USER_CONFIGURATION" value="false" />
         <option name="MANIFEST_FILE_RELATIVE_PATH" value="/src/main/AndroidManifest.xml" />
         <option name="RES_FOLDER_RELATIVE_PATH" value="/src/main/res" />
         <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_local_notifications-15.1.0+1/android/src/main/res;file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_local_notifications-15.1.0+1/android/src/debug/res;file://$MODULE_DIR$/../../../../build/flutter_local_notifications/generated/res/rs/debug;file://$MODULE_DIR$/../../../../build/flutter_local_notifications/generated/res/resValues/debug" />
+<<<<<<< HEAD
         <option name="TEST_RES_FOLDERS_RELATIVE_PATH" value="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_local_notifications-15.1.0+1/android/src/androidTest/res;file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_local_notifications-15.1.0+1/android/src/androidTestDebug/res;file://$MODULE_DIR$/../../../../build/flutter_local_notifications/generated/res/rs/androidTest/debug;file://$MODULE_DIR$/../../../../build/flutter_local_notifications/generated/res/resValues/androidTest/debug" />
+=======
+        <option name="TEST_RES_FOLDERS_RELATIVE_PATH" value="" />
+>>>>>>> 673ddf558cc5fd73642e30a97ffcc859319b9145
         <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/src/main/assets" />
         <option name="PROJECT_TYPE" value="1" />
       </configuration>
     </facet>
   </component>
+<<<<<<< HEAD
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="true">
+=======
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
+    <output url="file://$MODULE_DIR$/../../../../build/flutter_local_notifications/intermediates/javac/debug/classes" />
+    <output-test url="file://$MODULE_DIR$/../../../../build/flutter_local_notifications/intermediates/javac/debugUnitTest/classes" />
+>>>>>>> 673ddf558cc5fd73642e30a97ffcc859319b9145
     <exclude-output />
     <content url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_local_notifications-15.1.0+1/android/src/debug" />
     <content url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_local_notifications-15.1.0+1/android/src/main">
@@ -39,7 +52,11 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 33, extension level 3 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+<<<<<<< HEAD
     <orderEntry type="library" name="Gradle: io.flutter:flutter_embedding_debug:1.0.0-cdbeda788a293fa29665dc3fa3d6e63bd221cb0d" level="project" />
+=======
+    <orderEntry type="library" name="Gradle: io.flutter:flutter_embedding_debug:1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420" level="project" />
+>>>>>>> 673ddf558cc5fd73642e30a97ffcc859319b9145
     <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-common:2.2.0" level="project" />
     <orderEntry type="library" name="Gradle: androidx.annotation:annotation:1.2.0" level="project" />
     <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-common-java8:2.2.0" level="project" />

@@ -28,7 +28,11 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="android.firebase_core.main" scope="TEST" />
     <orderEntry type="module" module-name="android.cloud_firestore.main" scope="TEST" />
+<<<<<<< HEAD:android/.idea/modules/548988443/android.cloud_firestore.unitTest.iml
     <orderEntry type="library" scope="TEST" name="Gradle: io.flutter:flutter_embedding_debug:1.0.0-cdbeda788a293fa29665dc3fa3d6e63bd221cb0d" level="project" />
+=======
+    <orderEntry type="library" scope="TEST" name="Gradle: io.flutter:flutter_embedding_debug:1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420" level="project" />
+>>>>>>> 673ddf558cc5fd73642e30a97ffcc859319b9145:android/.idea/modules/-415961019/android.cloud_firestore.unitTest.iml
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.lifecycle:lifecycle-common:2.2.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.annotation:annotation:1.5.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.7.10" level="project" />

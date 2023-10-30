@@ -10,26 +10,25 @@ void updateLeadListInventory(WidgetRef ref, String option, screenList) {
   final isCommercialNotifier = ref.read(leadFilterCommercialQuestion.notifier);
   final isRentNotifier = ref.read(leadFilterRentQuestion.notifier);
   // residental flow --------->
-
   if (option.contains("Rent") && !isCommercial) {
     questionNotifier.updateScreenIsActive(setTrueInScreens: [], setFalseInScreens: ["S10", "S8", "S7"]);
     isRentNotifier.toggleRentQuestionary(true);
   } else if (option.contains("Buy") && !isCommercial) {
-    isRentNotifier.toggleRentQuestionary(false);
     questionNotifier.updateScreenIsActive(setTrueInScreens: ["S8", "S10", "S7"], setFalseInScreens: []);
+    isRentNotifier.toggleRentQuestionary(false);
   } else if (option.contains("Independent House/Villa")) {
     plotNotifier.togglePlotQuestionary(false);
-    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S6", "S9", "S8", "S11", "S13"], setFalseInScreens: ["S10"]);
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S6", "S9", "S11", "S13"], setFalseInScreens: ["S10"]);
   } else if (option.contains("Apartment") || option.contains("Builder Floor")) {
     plotNotifier.togglePlotQuestionary(false);
-    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S9", "S8", "S11", "S13"], setFalseInScreens: ["S6", "S10"]);
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S9", "S11", "S13"], setFalseInScreens: ["S6", "S10"]);
   } else if (option.contains("Farm House")) {
     plotNotifier.togglePlotQuestionary(false);
-    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S9", "S8", "S11"], setFalseInScreens: ["S6", "S10", "S13"]);
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S9", "S11"], setFalseInScreens: ["S6", "S10", "S13"]);
   }
   if (option.contains("Plot")) {
     plotNotifier.togglePlotQuestionary(true);
-    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S10"], setFalseInScreens: ["S6", "S9", "S8", "S11", "S13"]);
+    questionNotifier.updateScreenIsActive(setTrueInScreens: ["S10"], setFalseInScreens: ["S6", "S9", "S11", "S13"]);
   }
   // common flow
   if (option.contains("Residential")) {

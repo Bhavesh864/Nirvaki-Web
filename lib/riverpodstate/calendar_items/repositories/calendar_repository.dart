@@ -22,7 +22,7 @@ class CalendarRepository {
   });
 
   Stream<List<CalendarModel>?> getCalendarEventsStream(User? user) {
-    return FirebaseFirestore.instance.collection('calenderDetails').where('brokerId', isEqualTo: user?.brokerId).snapshots().map((querySnapshot) {
+    return FirebaseFirestore.instance.collection('calenderDetails').where('brokerId', isEqualTo: user?.brokerId).snapshots(includeMetadataChanges: true).map((querySnapshot) {
       // Check if there is data in the querySnapshot
       if (querySnapshot.docs.isNotEmpty) {
         // Map QueryDocumentSnapshot to CalendarModel and convert to a list
@@ -35,7 +35,7 @@ class CalendarRepository {
 
   Stream<List<CardDetails>?> getCardDetailsStream(WidgetRef ref) {
     final brokerid = ref.watch(userDataProvider)?.brokerId;
-    return FirebaseFirestore.instance.collection('cardDetails').where("brokerid", isEqualTo: brokerid).snapshots().map((
+    return FirebaseFirestore.instance.collection('cardDetails').where("brokerid", isEqualTo: brokerid).snapshots(includeMetadataChanges: true).map((
       querySnapshot,
     ) {
       // Check if there is data in the querySnapshot

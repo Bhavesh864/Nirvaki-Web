@@ -54,7 +54,7 @@ class _ChatScreenHeaderState extends State<ChatScreenHeader> {
     final String adminId = widget.chatItem?.adminId ?? '';
 
     return StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('users').doc(chatItemId).snapshots(),
+        stream: FirebaseFirestore.instance.collection('users').doc(chatItemId).snapshots(includeMetadataChanges: true),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final dataList = snapshot.data!.data();

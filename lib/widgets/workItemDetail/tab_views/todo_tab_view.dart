@@ -47,7 +47,7 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
   }
 
   void setCardDetails() {
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("linkedItemId", isEqualTo: widget.id).snapshots();
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("linkedItemId", isEqualTo: widget.id).snapshots(includeMetadataChanges: true);
   }
 
   void getDetails(User currentuser) async {

@@ -80,6 +80,8 @@ dependencies:
   google_maps_flutter_android: ^2.5.1
   rxdart: ^0.27.7
   connectivity_plus: ^4.0.2
+  firebase_performance: ^0.9.3+2
+  fluttercontactpicker: ^4.7.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0

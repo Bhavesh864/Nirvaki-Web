@@ -25,7 +25,7 @@ AppBar mobileAppBar(User? user, BuildContext context, void Function(String) onOp
         ScreenTypeLayout.builder(
           breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
           mobile: (p0) => const CustomText(
-            title: 'YesBrokr',
+            title: 'Nirvaki',
             letterSpacing: 0.4,
             fontWeight: FontWeight.w700,
             size: 16,
@@ -35,40 +35,40 @@ AppBar mobileAppBar(User? user, BuildContext context, void Function(String) onOp
     ),
     actions: [
       StreamBuilder(
-        stream: notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).where('isRead', isEqualTo: false).snapshots(),
+        stream: notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).where('isRead', isEqualTo: false).snapshots(includeMetadataChanges: true),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final notificationCount = snapshot.data!.docs.length;
             return Stack(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 12.0),
-                  child: InkWell(
-                    onTap: () {
-                      // Navigator.of(context).push(
-                      //   AppRoutes.createAnimatedRoute(
-                      //     const MobileNotificationScreen(),
-                      //   ),
-                      // );
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return const NotificationDialogBox();
-                        },
-                      );
-                    },
-                    child: const Icon(
+                InkWell(
+                  onTap: () {
+                    // Navigator.of(context).push(
+                    //   AppRoutes.createAnimatedRoute(
+                    //     const MobileNotificationScreen(),
+                    //   ),
+                    // );
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return const NotificationDialogBox();
+                      },
+                    );
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(top: 12.0, right: 3),
+                    child: Icon(
                       Icons.notifications_none,
-                      size: 30,
+                      size: 28,
                     ),
                   ),
                 ),
                 if (notificationCount > 0)
                   Positioned(
                     right: 0,
-                    top: 5,
+                    top: 10,
                     child: CircleAvatar(
-                      radius: 9,
+                      radius: 8,
                       backgroundColor: Colors.red,
                       child: Text(
                         notificationCount.toString(),

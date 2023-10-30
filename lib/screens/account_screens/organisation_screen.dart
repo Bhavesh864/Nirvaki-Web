@@ -34,7 +34,7 @@ class _OrganisationScreenState extends ConsumerState<OrganisationScreen> {
   @override
   void initState() {
     super.initState();
-    brokerInfo = FirebaseFirestore.instance.collection('brokerInfo').doc(AppConst.getAccessToken()).snapshots();
+    brokerInfo = FirebaseFirestore.instance.collection('brokerInfo').doc(AppConst.getAccessToken()).snapshots(includeMetadataChanges: true);
   }
 
   @override

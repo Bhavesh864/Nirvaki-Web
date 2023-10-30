@@ -63,7 +63,7 @@ class MobileTodoScreenState extends ConsumerState<MobileTodoScreen> {
   }
 
   void setCardDetails() {
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots(includeMetadataChanges: true);
   }
 
   void getDetails(User currentuser) async {

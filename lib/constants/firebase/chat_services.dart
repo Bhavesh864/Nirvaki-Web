@@ -47,7 +47,7 @@ class ChatService {
           'timestamp',
           descending: false,
         )
-        .snapshots();
+        .snapshots(includeMetadataChanges: true);
   }
 
   // Stream<List> getChatContacts() {

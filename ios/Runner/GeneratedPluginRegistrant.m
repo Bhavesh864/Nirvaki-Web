@@ -72,6 +72,12 @@
 @import firebase_messaging;
 #endif
 
+#if __has_include(<firebase_performance/FLTFirebasePerformancePlugin.h>)
+#import <firebase_performance/FLTFirebasePerformancePlugin.h>
+#else
+@import firebase_performance;
+#endif
+
 #if __has_include(<firebase_storage/FLTFirebaseStoragePlugin.h>)
 #import <firebase_storage/FLTFirebaseStoragePlugin.h>
 #else
@@ -82,6 +88,12 @@
 #import <flutter_local_notifications/FlutterLocalNotificationsPlugin.h>
 #else
 @import flutter_local_notifications;
+#endif
+
+#if __has_include(<fluttercontactpicker/FlutterContactPickerPlugin.h>)
+#import <fluttercontactpicker/FlutterContactPickerPlugin.h>
+#else
+@import fluttercontactpicker;
 #endif
 
 #if __has_include(<google_maps_flutter_ios/FLTGoogleMapsPlugin.h>)
@@ -152,8 +164,10 @@
   [FLTFirebaseDatabasePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseDatabasePlugin"]];
   [FLTFirebaseDynamicLinksPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseDynamicLinksPlugin"]];
   [FLTFirebaseMessagingPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseMessagingPlugin"]];
+  [FLTFirebasePerformancePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebasePerformancePlugin"]];
   [FLTFirebaseStoragePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseStoragePlugin"]];
   [FlutterLocalNotificationsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterLocalNotificationsPlugin"]];
+  [FlutterContactPickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterContactPickerPlugin"]];
   [FLTGoogleMapsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTGoogleMapsPlugin"]];
   [FLTImagePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTImagePickerPlugin"]];
   [IntegrationTestPlugin registerWithRegistrar:[registry registrarForPlugin:@"IntegrationTestPlugin"]];

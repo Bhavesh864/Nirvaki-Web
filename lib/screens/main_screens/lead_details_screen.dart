@@ -51,12 +51,12 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
     final currentIndex = ref.read(detailsPageIndexTabProvider);
     tabviewController = TabController(length: 3, vsync: this, initialIndex: currentIndex);
     final workItemId = ref.read(selectedWorkItemId);
-    if (workItemId.isEmpty) {
+    if (workItemId.isEmpty || !workItemId.contains('LD')) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.read(selectedWorkItemId.notifier).addItemId(widget.leadId);
       });
     }
-    leadDetails = FirebaseFirestore.instance.collection('leadDetails').where('leadId', isEqualTo: workItemId.isEmpty ? widget.leadId : workItemId).snapshots();
+    leadDetails = FirebaseFirestore.instance.collection('leadDetails').where('leadId', isEqualTo: workItemId.isEmpty ? widget.leadId : workItemId).snapshots(includeMetadataChanges: true);
     AppConst.setPublicView(false);
   }
 
@@ -75,9 +75,13 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                   Navigator.of(context).pop();
                 },
               ),
+              centerTitle: false,
               title: const CustomText(
                 title: 'Lead Details',
                 color: Colors.black,
+                fontWeight: FontWeight.w600,
+                size: 16,
+                letterSpacing: 0.5,
               ),
               foregroundColor: Colors.black,
               toolbarHeight: 50,
@@ -226,9 +230,10 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                                         AssignmentWidget(
                                                           id: data.leadId!,
                                                           assignto: data.assignedto!,
-                                                          imageUrlCreatedBy:
-                                                              data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                                          createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
+                                                          imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty
+                                                              ? noImg
+                                                              : data.createdby!.userimage!,
+                                                          createdBy: data.createdby!.userid!,
                                                         ),
                                                       );
                                                     },
@@ -318,7 +323,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
                                     id: data.leadId!,
                                     assignto: data.assignedto!,
                                     imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                    createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
+                                    createdBy: data.createdby!.userid!,
                                     data: data,
                                   ),
                                   if (Responsive.isDesktop(context)) ...[

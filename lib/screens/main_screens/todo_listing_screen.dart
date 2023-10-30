@@ -60,16 +60,18 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   }
 
   getUserData(token) async {
-    final User? user = await User.getUser(token);
-    if (user != null) {
-      ref.read(userDataProvider.notifier).storeUserData(user);
-      AppConst.setRole(user.role);
-      UserHiveMethods.addData(key: "brokerId", data: user.brokerId);
+    if (mounted) {
+      final User? user = await User.getUser(token);
+      if (user != null) {
+        ref.read(userDataProvider.notifier).storeUserData(user);
+        AppConst.setRole(user.role);
+        UserHiveMethods.addData(key: "brokerId", data: user.brokerId);
+      }
     }
   }
 
   void setCardDetails() {
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots();
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots(includeMetadataChanges: true);
   }
 
   void getDetails(User currentuser) async {
@@ -160,7 +162,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            if (width! >= 850)
+                            if (width! > 850)
                               TopSerachBar(
                                 onChanged: (value) {
                                   setState(() {
