@@ -43,7 +43,7 @@ class _GroupUserListState extends ConsumerState<GroupUserList> {
   Widget build(BuildContext context) {
     final selectedUserIds = ref.read(selectedUserIdsProvider.notifier);
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection("groups").where("groupId", isEqualTo: widget.contactId).snapshots(),
+      stream: FirebaseFirestore.instance.collection("groups").where("groupId", isEqualTo: widget.contactId).snapshots(includeMetadataChanges: true),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final userSnapshot = snapshot.data?.docs;

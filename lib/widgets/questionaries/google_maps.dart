@@ -14,7 +14,6 @@ class CustomGoogleMap extends ConsumerStatefulWidget {
   final String? address2;
   final String? locality;
   final bool isReadOnly;
-
   final LatLng? latLng;
   final void Function(LatLng) onLatLngSelected;
 

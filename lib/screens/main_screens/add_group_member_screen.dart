@@ -168,7 +168,7 @@ class _AddGroupMembersScreenBodyState extends ConsumerState<AddGroupMembersScree
                 "brokerId",
                 isEqualTo: user?.brokerId,
               )
-              .snapshots(),
+              .snapshots(includeMetadataChanges: true),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return SizedBox(

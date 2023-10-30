@@ -31,7 +31,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    userInfo = FirebaseFirestore.instance.collection('users').doc(AppConst.getAccessToken()).snapshots();
+    userInfo = FirebaseFirestore.instance.collection('users').doc(AppConst.getAccessToken()).snapshots(includeMetadataChanges: true);
   }
 
   @override

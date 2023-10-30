@@ -66,6 +66,7 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                   Navigator.of(context).pop();
                 },
               ),
+              centerTitle: false,
               title: const CustomText(
                 title: 'Inventory Details',
                 color: Colors.black,
@@ -173,8 +174,7 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                                                 AssignmentWidget(
                                                   id: data.inventoryId!,
                                                   assignto: data.assignedto!,
-                                                  imageUrlCreatedBy:
-                                                      data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                  imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                   createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                                 ),
                                               );
@@ -222,7 +222,8 @@ class PublicViewInventoryDetailsState extends ConsumerState<PublicViewInventoryD
                               child: Column(
                                 children: [
                                   StreamBuilder(
-                                    stream: FirebaseFirestore.instance.collection("brokerInfo").where("brokerid", isEqualTo: data.brokerid).snapshots(),
+                                    stream:
+                                        FirebaseFirestore.instance.collection("brokerInfo").where("brokerid", isEqualTo: data.brokerid).snapshots(includeMetadataChanges: true),
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {
                                         final dataList = snapshot.data?.docs;

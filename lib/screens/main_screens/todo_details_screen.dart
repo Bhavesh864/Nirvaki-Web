@@ -1,41 +1,35 @@
 // ignore_for_file: invalid_use_of_protected_member, avoid_web_libraries_in_flutter
 import 'dart:async';
-
 // import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-
 import 'package:yes_broker/Customs/custom_fields.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart';
 import 'package:yes_broker/constants/firebase/send_notification.dart';
-import 'package:yes_broker/constants/functions/datetime/date_time.dart';
 import 'package:yes_broker/constants/functions/navigation/navigation_functions.dart';
 import 'package:yes_broker/customs/text_utility.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import 'package:yes_broker/widgets/assigned_circular_images.dart';
+import 'package:yes_broker/widgets/attachments/attachment_widget.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/userModel/user_info.dart';
-
 import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
-
 import '../../riverpodstate/selected_workitem.dart';
 import '../../widgets/app/nav_bar.dart';
 import '../../widgets/workItemDetail/assignment_widget.dart';
 import '../../widgets/workItemDetail/tab_views/activity_tab_view.dart';
-import '../../widgets/workItemDetail/tab_views/details_tab_view.dart';
 
 class TodoDetailsScreen extends ConsumerStatefulWidget {
   final String todoId;
@@ -58,18 +52,32 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
   bool iseditingTodoDescription = false;
   TextEditingController todoNameEditingController = TextEditingController();
   TextEditingController todoDescriptionEditingController = TextEditingController();
+  bool isUploading = false;
 
   @override
   void initState() {
     super.initState();
     tabviewController = TabController(length: 4, vsync: this);
     final workItemId = ref.read(selectedWorkItemId);
-    if (workItemId.isEmpty) {
+
+    if (workItemId.isEmpty || !workItemId.contains('TD')) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.read(selectedWorkItemId.notifier).addItemId(widget.todoId);
       });
     }
-    todoDetails = FirebaseFirestore.instance.collection('todoDetails').where('todoId', isEqualTo: workItemId.isEmpty ? widget.todoId : workItemId).snapshots();
+    // todoArray = [];
+    todoDetails =
+        FirebaseFirestore.instance.collection('todoDetails').where('todoId', isEqualTo: workItemId.isEmpty ? widget.todoId : workItemId).snapshots(includeMetadataChanges: true);
+    // for (var i = 0; i < todoDetails; i++) {
+    //   ele = todoDetails[i];
+    //   userDeatil = FirebaseFirestore.instance.collection(where id =  ele.userId)
+    //  {
+    //   ele
+    //   ele.assignto = {
+    //     userDetail
+    //   }
+    //  }
+    // }
   }
 
   void startEditingTodoName(String todoName) {
@@ -166,9 +174,13 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                   Navigator.of(context).pop();
                 },
               ),
+              centerTitle: false,
               title: const CustomText(
                 title: 'Todo Details',
                 color: Colors.black,
+                fontWeight: FontWeight.w600,
+                size: 16,
+                letterSpacing: 0.5,
               ),
               foregroundColor: Colors.black,
               toolbarHeight: 50,
@@ -334,7 +346,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                       id: data.todoId!,
                                                       imageUrlCreatedBy:
                                                           data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                                      createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
+                                                      createdBy: data.createdby!.userid!,
                                                       data: data,
                                                     ),
                                                   );
@@ -469,158 +481,181 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          const Padding(
-                                            padding: EdgeInsets.only(bottom: 8.0),
-                                            child: CustomText(
-                                              title: "Attachments",
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                          StatefulBuilder(
-                                            builder: (context, setState) {
-                                              return Wrap(
-                                                runSpacing: 20,
-                                                children: [
-                                                  SizedBox(
-                                                    height: 100,
-                                                    child: ListView.builder(
-                                                      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                                                      shrinkWrap: true,
-                                                      scrollDirection: Axis.horizontal,
-                                                      itemCount: attachments!.length,
-                                                      itemBuilder: (context, index) {
-                                                        // if (index < attachments.length) {
-                                                        final attachment = attachments[index];
-                                                        return Stack(
-                                                          children: [
-                                                            GestureDetector(
-                                                              onTap: () {
-                                                                showDialog(
-                                                                  context: context,
-                                                                  builder: (context) {
-                                                                    return AttachmentPreviewDialog(
-                                                                      attachmentPath: attachment.path!,
-                                                                    );
-                                                                  },
-                                                                );
-                                                              },
-                                                              child: Container(
-                                                                height: 99,
-                                                                margin: const EdgeInsets.only(right: 15),
-                                                                width: 108,
-                                                                alignment: Alignment.center,
-                                                                padding: const EdgeInsets.symmetric(vertical: 10),
-                                                                decoration: BoxDecoration(
-                                                                  border: Border.all(color: Colors.grey.withOpacity(0.5)),
-                                                                  borderRadius: BorderRadius.circular(10),
-                                                                ),
-                                                                child: Column(
-                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                  children: [
-                                                                    const Icon(
-                                                                      Icons.image_outlined,
-                                                                      size: 40,
-                                                                    ),
-                                                                    Column(
-                                                                      children: [
-                                                                        CustomText(
-                                                                          title: attachment.title!,
-                                                                          size: 13,
-                                                                          fontWeight: FontWeight.w400,
-                                                                        ),
-                                                                        CustomText(
-                                                                          title: 'Added ${formatMessageDate(attachment.createddate!.toDate())}',
-                                                                          size: 8,
-                                                                          color: Colors.grey,
-                                                                          fontWeight: FontWeight.w400,
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Positioned(
-                                                              top: 0,
-                                                              right: 10,
-                                                              child: Row(
-                                                                children: [
-                                                                  GestureDetector(
-                                                                    child: const Icon(
-                                                                      Icons.download_for_offline,
-                                                                      size: 18,
-                                                                    ),
-                                                                    onTap: () {
-                                                                      // if (kIsWeb) {
-                                                                      //   AnchorElement anchorElement = AnchorElement(href: attachment.path);
-                                                                      //   anchorElement.download = 'Attachment file';
-                                                                      //   anchorElement.click();
-                                                                      // }
-                                                                    },
-                                                                  ),
-                                                                  GestureDetector(
-                                                                    child: const Icon(
-                                                                      Icons.cancel,
-                                                                      size: 18,
-                                                                    ),
-                                                                    onTap: () {
-                                                                      showConfirmDeleteAttachment(context, () {
-                                                                        TodoDetails.deleteAttachment(itemId: data.todoId!, attachmentIdToDelete: attachment.id!);
-                                                                      });
-                                                                    },
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        );
-                                                        // } else {
+                                          // Column(
+                                          //   crossAxisAlignment: CrossAxisAlignment.start,
+                                          //   children: [
+                                          //     const Padding(
+                                          //       padding: EdgeInsets.only(bottom: 8.0),
+                                          //       child: CustomText(
+                                          //         title: "Attachments",
+                                          //         fontWeight: FontWeight.w700,
+                                          //       ),
+                                          //     ),
+                                          //     StatefulBuilder(
+                                          //       builder: (context, setstate) {
+                                          //         return Wrap(
+                                          //           runSpacing: 15,
+                                          //           children: [
+                                          //             SizedBox(
+                                          //               height: 120,
+                                          //               child: ListView.builder(
+                                          //                 keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                                          //                 shrinkWrap: true,
+                                          //                 scrollDirection: Axis.horizontal,
+                                          //                 itemCount: attachments!.length,
+                                          //                 itemBuilder: (context, index) {
+                                          //                   // if (index < attachments.length) {
+                                          //                   final attachment = attachments[index];
+                                          //                   return Stack(
+                                          //                     children: [
+                                          //                       GestureDetector(
+                                          //                         onTap: () {
+                                          //                           showDialog(
+                                          //                             context: context,
+                                          //                             builder: (context) {
+                                          //                               return AttachmentPreviewDialog(
+                                          //                                 attachmentPath: attachment.path!,
+                                          //                               );
+                                          //                             },
+                                          //                           );
+                                          //                         },
+                                          //                         child: Container(
+                                          //                           height: 99,
+                                          //                           margin: const EdgeInsets.only(right: 15, top: 5),
+                                          //                           width: 108,
+                                          //                           clipBehavior: Clip.none,
+                                          //                           alignment: Alignment.center,
+                                          //                           padding: const EdgeInsets.symmetric(vertical: 10),
+                                          //                           decoration: BoxDecoration(
+                                          //                             border: Border.all(color: Colors.grey.withOpacity(0.5)),
+                                          //                             borderRadius: BorderRadius.circular(10),
+                                          //                           ),
+                                          //                           child: Column(
+                                          //                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          //                             children: [
+                                          //                               const Icon(
+                                          //                                 Icons.image_outlined,
+                                          //                                 size: 40,
+                                          //                               ),
+                                          //                               Column(
+                                          //                                 children: [
+                                          //                                   CustomText(
+                                          //                                     title: attachment.title!,
+                                          //                                     size: 13,
+                                          //                                     fontWeight: FontWeight.w400,
+                                          //                                   ),
+                                          //                                   CustomText(
+                                          //                                     title: 'Added ${formatMessageDate(attachment.createddate!.toDate())}',
+                                          //                                     size: 8,
+                                          //                                     color: Colors.grey,
+                                          //                                     fontWeight: FontWeight.w400,
+                                          //                                   ),
+                                          //                                 ],
+                                          //                               ),
+                                          //                             ],
+                                          //                           ),
+                                          //                         ),
+                                          //                       ),
+                                          //                       Positioned(
+                                          //                         top: 0,
+                                          //                         right: 10,
+                                          //                         child: Row(
+                                          //                           children: [
+                                          //                             InkWell(
+                                          //                               child: const Icon(
+                                          //                                 Icons.download_for_offline,
+                                          //                                 size: 18,
+                                          //                               ),
+                                          //                               onTap: () {
+                                          //                                 // if (kIsWeb) {
+                                          //                                 //   AnchorElement anchorElement = AnchorElement(href: attachment.path);
+                                          //                                 //   anchorElement.download = 'Attachment file';
+                                          //                                 //   anchorElement.click();
+                                          //                                 // }
+                                          //                               },
+                                          //                             ),
+                                          //                             InkWell(
+                                          //                               child: const Icon(
+                                          //                                 Icons.cancel,
+                                          //                                 size: 18,
+                                          //                               ),
+                                          //                               onTap: () {
+                                          //                                 showConfirmDeleteAttachment(context, () {
+                                          //                                   TodoDetails.deleteAttachment(
+                                          //                                     itemId: data.todoId!,
+                                          //                                     attachmentIdToDelete: attachment.id!,
+                                          //                                   );
+                                          //                                 });
+                                          //                               },
+                                          //                             ),
+                                          //                           ],
+                                          //                         ),
+                                          //                       ),
+                                          //                     ],
+                                          //                   );
+                                          //                   // } else {
+                                          //                   // },
+                                          //                 },
+                                          //               ),
+                                          //             ),
+                                          //             InkWell(
+                                          //               onTap: () async {
+                                          //                 if (!isUploading) {
+                                          //                   showUploadDocumentModal(
+                                          //                     context,
+                                          //                     () {},
+                                          //                     selectedImageName,
+                                          //                     () {
+                                          //                       setstate(() {});
+                                          //                     },
+                                          //                     widget.todoId,
+                                          //                     (k) {
+                                          //                       isUploading = k;
+                                          //                       setstate(() {});
+                                          //                     },
+                                          //                   );
+                                          //                 }
+                                          //               },
+                                          //               borderRadius: BorderRadius.circular(10),
+                                          //               child: Container(
+                                          //                 height: 100,
+                                          //                 width: 100,
+                                          //                 margin: const EdgeInsets.only(top: 4),
+                                          //                 alignment: Alignment.center,
+                                          //                 padding: const EdgeInsets.symmetric(vertical: 15),
+                                          //                 decoration: BoxDecoration(
+                                          //                   border: Border.all(color: Colors.grey.withOpacity(0.5)),
+                                          //                   borderRadius: BorderRadius.circular(10),
+                                          //                 ),
+                                          //                 child: !isUploading
+                                          //                     ? const Column(
+                                          //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          //                         children: [
+                                          //                           Icon(
+                                          //                             Icons.add,
+                                          //                             size: 40,
+                                          //                           ),
+                                          //                           CustomText(
+                                          //                             title: 'ADD MORE',
+                                          //                             size: 10,
+                                          //                             fontWeight: FontWeight.w400,
+                                          //                           ),
+                                          //                         ],
+                                          //                       )
+                                          //                     : const Loader(),
+                                          //               ),
+                                          //             ),
+                                          //           ],
+                                          //         );
+                                          //       },
+                                          //     ),
+                                          //   ],
+                                          // ),
 
-                                                        // },
-                                                      },
-                                                    ),
-                                                  ),
-                                                  GestureDetector(
-                                                    onTap: () async {
-                                                      showUploadDocumentModal(
-                                                        context,
-                                                        () {},
-                                                        selectedImageName,
-                                                        () {
-                                                          setState(() {});
-                                                        },
-                                                        data.todoId!,
-                                                        (b) {},
-                                                      );
-                                                    },
-                                                    child: Container(
-                                                      height: 100,
-                                                      width: 100,
-                                                      alignment: Alignment.center,
-                                                      padding: const EdgeInsets.symmetric(vertical: 15),
-                                                      decoration: BoxDecoration(
-                                                        border: Border.all(color: Colors.grey.withOpacity(0.5)),
-                                                        borderRadius: BorderRadius.circular(10),
-                                                      ),
-                                                      child: const Column(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                        children: [
-                                                          Icon(
-                                                            Icons.add,
-                                                            size: 40,
-                                                          ),
-                                                          CustomText(
-                                                            title: 'ADD MORE',
-                                                            size: 10,
-                                                            fontWeight: FontWeight.w400,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              );
-                                            },
+                                          AttachmentWidget(
+                                            attachments: attachments,
+                                            selectedImageName: selectedImageName,
+                                            id: data.todoId!,
                                           ),
                                           if (Responsive.isMobile(context)) ...[
                                             const Divider(
@@ -679,7 +714,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                       assignto: data.assignedto!,
                                       id: data.todoId!,
                                       imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
-                                      createdBy: '${data.createdby!.userfirstname!} ${data.createdby!.userlastname!}',
+                                      createdBy: data.createdby!.userid!,
                                       data: data,
                                     ),
                                 ],
@@ -692,9 +727,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                   );
                 }
               }
-              return Container(
-                color: Colors.amber,
-              );
+              return Container();
             }),
       ),
     );

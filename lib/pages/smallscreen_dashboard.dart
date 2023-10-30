@@ -50,7 +50,11 @@ class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingOb
           // }, 'Logout', 'Are you sure you want to logout?');
         }
       }, ref),
-      body: Stack(
+      body:
+          // deskTopSideBarIndex == 4 && currentIndex != 4
+          //     // ? const CalendarScreen()
+          //     :
+          Stack(
         children: [
           if (selectedItem == null) ...[
             bottomBarItems[currentIndex].screen,
@@ -68,7 +72,7 @@ class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingOb
         onTap: (value) => {
           ref.read(mobileBottomIndexProvider.notifier).update((state) => value),
           ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null),
-          ref.read(desktopSideBarIndexProvider.notifier).state = value,
+          ref.read(desktopSideBarIndexProvider.notifier).update((state) => value),
         },
         currentIndex: currentIndex,
         selectedFontSize: 0,

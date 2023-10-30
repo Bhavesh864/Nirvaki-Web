@@ -20,7 +20,7 @@ void userLogout(WidgetRef ref, BuildContext context) {
           // context.beamToReplacementNamed('/login'),
           Beamer.of(context).beamToReplacementNamed('/'),
           Navigator.of(context).pop(),
-          User.updateFcmToken(fcmtoken: null, userid: AppConst.getAccessToken()!),
+          User.updateFcmToken(fcmtoken: null, userid: AppConst.getAccessToken()),
           UserHiveMethods.deleteData(AppConst.getAccessToken()),
           UserHiveMethods.deleteData("token"),
           UserHiveMethods.deleteData("brokerId"),

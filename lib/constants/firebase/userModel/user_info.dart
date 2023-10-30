@@ -282,12 +282,10 @@ class User extends HiveObject {
     } catch (e) {
       print('Error fetching user tokens: $e');
     }
-    print("usertokens=======$userTokens");
     return userTokens;
   }
 
   String toJson() => json.encode(toMap());
-
   factory User.fromJson(String source) => User.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 

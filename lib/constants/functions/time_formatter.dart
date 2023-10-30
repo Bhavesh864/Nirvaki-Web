@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:yes_broker/constants/functions/datetime/date_time.dart';
 
 class TimeFormatter {
   static String formatFirestoreTimestamp(Timestamp? firestoreTimestamp, bool isSameWeek) {
@@ -8,16 +9,12 @@ class TimeFormatter {
     }
 
     final timestamp = firestoreTimestamp.toDate();
-    final now = DateTime.now();
+    final DateTime now = DateTime.now();
+    final DateTime yesterday = DateTime(now.year, now.month, now.day - 1);
 
-    // Calculate the difference in days
-    final difference = now.difference(timestamp).inDays;
-
-    if (difference == 0) {
-      // Today: Format as "Today at HH:MM AM/PM"
+    if (isSameDay(timestamp, now)) {
       return 'Today at ${_formatTime(timestamp)}';
-    } else if (difference == 1) {
-      // Yesterday: Format as "Yesterday at HH:MM AM/PM"
+    } else if (isSameDay(timestamp, yesterday)) {
       return 'Yesterday at ${_formatTime(timestamp)}';
     } else if (!isSameWeek) {
       return '${DateFormat('EEEE').format(firestoreTimestamp.toDate())} at ${_formatTime(timestamp)}';

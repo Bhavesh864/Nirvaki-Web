@@ -2,14 +2,26 @@
 FLUTTER_ROOT=/Users/saurabhmehra/Projects/flutterProjects/flutter
 FLUTTER_APPLICATION_PATH=/Users/saurabhmehra/Projects/flutterProjects/broker_webappV1
 COCOAPODS_PARALLEL_CODE_SIGN=true
+<<<<<<< HEAD
 FLUTTER_TARGET=/Users/saurabhmehra/Projects/flutterProjects/broker_webappV1/lib/main.dart
+=======
+FLUTTER_TARGET=/Users/saurabhmehra/flutterProject/broker_webappV1/lib/main.dart
+>>>>>>> 673ddf558cc5fd73642e30a97ffcc859319b9145
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=1.0.0
 FLUTTER_BUILD_NUMBER=1
 EXCLUDED_ARCHS[sdk=iphonesimulator*]=i386 arm64
 EXCLUDED_ARCHS[sdk=iphoneos*]=armv7
+<<<<<<< HEAD
 DART_DEFINES=RkxVVFRFUl9XRUJfQVVUT19ERVRFQ1Q9dHJ1ZQ==,RkxVVFRFUl9XRUJfQ0FOVkFTS0lUX1VSTD1odHRwczovL3d3dy5nc3RhdGljLmNvbS9mbHV0dGVyLWNhbnZhc2tpdC9jZGJlZGE3ODhhMjkzZmEyOTY2NWRjM2ZhM2Q2ZTYzYmQyMjFjYjBkLw==
 DART_OBFUSCATION=false
 TRACK_WIDGET_CREATION=true
 TREE_SHAKE_ICONS=false
 PACKAGE_CONFIG=/Users/saurabhmehra/Projects/flutterProjects/broker_webappV1/.dart_tool/package_config.json
+=======
+DART_DEFINES=RkxVVFRFUl9XRUJfQVVUT19ERVRFQ1Q9dHJ1ZQ==,RkxVVFRFUl9XRUJfQ0FOVkFTS0lUX1VSTD1odHRwczovL3d3dy5nc3RhdGljLmNvbS9mbHV0dGVyLWNhbnZhc2tpdC80NWY2ZTAwOTExMGRmNGYzNGVjMmNmOTlmNjNjZjczYjcxYjdhNDIwLw==
+DART_OBFUSCATION=false
+TRACK_WIDGET_CREATION=true
+TREE_SHAKE_ICONS=false
+PACKAGE_CONFIG=/Users/saurabhmehra/flutterProject/broker_webappV1/.dart_tool/package_config.json
+>>>>>>> 673ddf558cc5fd73642e30a97ffcc859319b9145

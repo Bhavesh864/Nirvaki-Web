@@ -56,6 +56,7 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
                   Navigator.of(context).pop();
                 },
               ),
+              centerTitle: false,
               title: const CustomText(
                 title: 'Lead Details',
                 color: Colors.black,
@@ -209,7 +210,8 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   StreamBuilder(
-                                    stream: FirebaseFirestore.instance.collection("brokerInfo").where("brokerid", isEqualTo: data.brokerid).snapshots(),
+                                    stream:
+                                        FirebaseFirestore.instance.collection("brokerInfo").where("brokerid", isEqualTo: data.brokerid).snapshots(includeMetadataChanges: true),
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {
                                         final dataList = snapshot.data?.docs;

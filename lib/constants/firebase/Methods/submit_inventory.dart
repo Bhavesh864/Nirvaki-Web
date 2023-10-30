@@ -6,6 +6,7 @@ import 'package:yes_broker/constants/firebase/Methods/add_activity.dart';
 
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart' as cards;
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart' as todo;
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 
 import '../../../riverpodstate/user_data.dart';
@@ -15,6 +16,7 @@ import '../send_notification.dart';
 Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) async {
   final User? currentUserdata = ref.read(userDataProvider);
   final randomId = randomNumeric(5);
+  final idForNewInventory = "IN$randomId";
   var res = "pending";
   //  inventorycategory example =  rent ,sell
   //   propertycategory example = residental ,commerical,
@@ -177,9 +179,16 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       userid: user.userId,
     );
   }).toList();
-
+  final cards.Customerinfo customercardInfo = cards.Customerinfo(
+    email: email,
+    firstname: firstName,
+    lastname: lastName,
+    mobile: mobileNo,
+    title: companyNamecustomer,
+    whatsapp: whatsAppNo ?? mobileNo,
+  );
   final cards.CardDetails card = cards.CardDetails(
-      workitemId: isEdit ? existingInventoryId : "IN$randomId",
+      workitemId: isEdit ? existingInventoryId : idForNewInventory,
       status: isEdit ? existingcardStatus : "New",
       cardCategory: inventoryCategory,
       linkedItemType: "IN",
@@ -189,7 +198,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       cardTitle: "$propertyCategory $propertyKind-$propertyCity",
       cardDescription:
           "Want to $inventoryCategory her $bedrooms BHK for ${inventoryCategory == "Rent" ? convertToCroresAndLakhs(rentamount) : convertToCroresAndLakhs(price)} rupees",
-      customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
+      customerinfo: customercardInfo,
       cardStatus: "New",
       assignedto: assignedToList,
       createdby: cards.Createdby(
@@ -212,7 +221,7 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
   final InventoryDetails inventory = InventoryDetails(
       inventoryTitle: "$propertyCategory $title $propertyKind",
       inventoryDescription: "Want to $inventoryCategory her $bedrooms BHK for $price rupees",
-      inventoryId: isEdit ? existingInventoryId : "IN$randomId",
+      inventoryId: isEdit ? existingInventoryId : idForNewInventory,
       inventoryStatus: isEdit ? existingcardStatus : "New",
       typeofoffice: typeofoffice,
       approvedbeds: approvedbeds,
@@ -272,16 +281,36 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
   isEdit
       ? await InventoryDetails.updateInventoryDetails(id: existingInventoryId, inventoryDetails: inventory).then((value) => {res = "success"})
       : await InventoryDetails.addInventoryDetails(inventory).then((value) => {res = "success"});
+
+  if (isEdit) {
+    final todo.Customerinfo customerinfo = todo.Customerinfo(
+      email: email,
+      firstname: firstName,
+      lastname: lastName,
+      title: companyNamecustomer,
+      mobile: mobileNo,
+      whatsapp: whatsAppNo ?? mobileNo,
+    );
+    await todo.TodoDetails.updateCustomerInfoForLinkedToDos(existingInventoryId, customerinfo);
+    await cards.CardDetails.updateCustomerInfoForLinkedToDos(existingInventoryId, customercardInfo);
+  }
+  if (isEdit) {
+    submitActivity(itemid: existingInventoryId, activitytitle: "Inventory detail updated", user: currentUserdata!);
+  } else {
+    final userNames = assignedListInInventory.map((user) => "${user.firstname} ${user.lastname}").join(", ");
+    if (userNames.isNotEmpty) {
+      submitActivity(itemid: idForNewInventory, activitytitle: "New Inventory assigned to $userNames", user: currentUserdata!);
+    }
+  }
   for (var user in assignedListInInventory) {
     if (!isEdit) {
-      submitActivity(itemid: "IN$randomId", activitytitle: "New Inventory assigned to ${user.firstname} ${user.lastname}", user: currentUserdata!);
       notifyToUser(
           assignedto: user.userid,
-          title: "Assign new IN$randomId",
-          content: "IN$randomId New Inventory assigned to ${user.firstname} ${user.lastname}",
+          title: "Assign new $idForNewInventory",
+          content: "$idForNewInventory New Inventory assigned to ${user.firstname} ${user.lastname}",
           assigntofield: true,
-          itemid: "IN$randomId",
-          currentuserdata: currentUserdata);
+          itemid: idForNewInventory,
+          currentuserdata: currentUserdata!);
     } else {
       notifyToUser(
           assignedto: user.userid,
@@ -292,8 +321,6 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
           currentuserdata: currentUserdata!);
     }
   }
-  if (isEdit) {
-    submitActivity(itemid: existingInventoryId, activitytitle: "Inventory detail updated", user: currentUserdata!);
-  }
+
   return res;
 }

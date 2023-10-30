@@ -31,9 +31,8 @@ Future<void> sendNotificationTouser({
   };
   await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
       body: jsonEncode(data), headers: {'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'key=$serverKey'}).then((value) {
-    if (value.statusCode == 200) {
-      setNotificationTOfirestore(title, content, itemid, currentuserdata, usersIds);
-    }
+    // if (value.statusCode == 200) {
+    // }
     if (kDebugMode) {
       print(value.body.toString());
     }
@@ -61,6 +60,7 @@ void notifyToUser({
         userids.add(data.userid);
       }
     }
+    setNotificationTOfirestore(title, content, itemid, currentuserdata, userids);
     List<String> tokens = await User.getUserTokensByIds(userids);
     for (var token in tokens) {
       if (AppConst.getFcmToken() != token) {

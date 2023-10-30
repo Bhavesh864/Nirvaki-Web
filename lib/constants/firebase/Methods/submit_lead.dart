@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:random_string/random_string.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/todo_details.dart' as todo;
 
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
@@ -16,6 +17,7 @@ import 'add_activity.dart';
 
 Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async {
   final randomId = randomNumeric(5);
+  final idForNewLead = "LD$randomId";
   final User? currentUserdata = ref.read(userDataProvider);
   var res = "pending";
   //  leadcategory example =  rent ,buy
@@ -166,8 +168,16 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       userid: user.userId,
     );
   }).toList();
+  final cards.Customerinfo customercardInfo = cards.Customerinfo(
+    email: email,
+    firstname: firstName,
+    lastname: lastName,
+    mobile: mobileNo,
+    title: companyNamecustomer,
+    whatsapp: whatsAppNo ?? mobileNo,
+  );
   final cards.CardDetails card = cards.CardDetails(
-      workitemId: isEdit ? existingLeadId : "LD$randomId",
+      workitemId: isEdit ? existingLeadId : idForNewLead,
       status: isEdit ? existingCardStatus : "New",
       cardCategory: leadCategory,
       linkedItemType: "LD",
@@ -176,7 +186,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       cardType: "LD",
       cardTitle: "$propertyCategory $propertyKind",
       cardDescription: "Want to $leadCategory her $bedrooms BHK for ${formatValue(budgetPrice?.start)}-${formatValue(budgetPrice?.end)} rupees",
-      customerinfo: cards.Customerinfo(email: email, firstname: firstName, lastname: lastName, mobile: mobileNo, title: companyNamecustomer, whatsapp: whatsAppNo ?? mobileNo),
+      customerinfo: customercardInfo,
       assignedto: assignedToList,
       createdby: cards.Createdby(
           userfirstname: currentUserdata?.userfirstname, userid: currentUserdata?.userId, userlastname: currentUserdata?.userlastname, userimage: currentUserdata?.image),
@@ -199,7 +209,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
   final LeadDetails lead = LeadDetails(
       leadTitle: "$propertyCategory $title $propertyKind",
       leadDescription: "lead",
-      leadId: isEdit ? existingLeadId : "LD$randomId",
+      leadId: isEdit ? existingLeadId : idForNewLead,
       leadStatus: isEdit ? existingCardStatus : "New",
       typeofoffice: typeofoffice,
       approvedbeds: approvedbeds,
@@ -250,18 +260,34 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
   isEdit
       ? await LeadDetails.updateLeadDetails(id: existingLeadId, leadDetails: lead).then((value) => {res = "success"})
       : await LeadDetails.addLeadDetails(lead).then((value) => {res = "success"});
+  if (isEdit) {
+    final todo.Customerinfo customerinfo = todo.Customerinfo(
+      email: email,
+      firstname: firstName,
+      lastname: lastName,
+      title: companyNamecustomer,
+      mobile: mobileNo,
+      whatsapp: whatsAppNo ?? mobileNo,
+    );
+    await todo.TodoDetails.updateCustomerInfoForLinkedToDos(existingLeadId, customerinfo);
+    await cards.CardDetails.updateCustomerInfoForLinkedToDos(existingLeadId, customercardInfo);
+  }
+  if (isEdit) {
+    submitActivity(itemid: existingLeadId, activitytitle: "Lead detail updated", user: currentUserdata!);
+  } else {
+    final userNames = assignedListInLead.map((user) => "${user.firstname} ${user.lastname}").join(", ");
+    submitActivity(itemid: idForNewLead, activitytitle: "New Lead assigned to $userNames", user: currentUserdata!);
+  }
   for (var user in assignedListInLead) {
     if (!isEdit) {
-      submitActivity(itemid: "IN$randomId", activitytitle: "New Lead assigned to ${user.firstname} ${user.lastname}", user: currentUserdata!);
       notifyToUser(
           assignedto: user.userid,
-          title: "Assign new LD$randomId",
-          content: "LD$randomId New Lead assigned to ${user.firstname} ${user.lastname}",
+          title: "Assign new $idForNewLead",
+          content: "LD$idForNewLead New Lead assigned to ${user.firstname} ${user.lastname}",
           assigntofield: true,
-          itemid: "LD$randomId",
+          itemid: "LD$idForNewLead",
           currentuserdata: currentUserdata);
     } else {
-      submitActivity(itemid: existingLeadId, activitytitle: "Lead detail updated", user: currentUserdata!);
       notifyToUser(
           assignedto: user.userid,
           title: "Lead detail Updated",
@@ -270,9 +296,6 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
           itemid: existingLeadId,
           currentuserdata: currentUserdata);
     }
-  }
-  if (isEdit) {
-    submitActivity(itemid: existingLeadId, activitytitle: "Inventory detail updated", user: currentUserdata!);
   }
   return res;
 }

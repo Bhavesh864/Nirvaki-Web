@@ -13,6 +13,7 @@ import 'add_activity.dart';
 Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
   final User? currentUserdata = ref.read(userDataProvider);
   final randomId = randomNumeric(5);
+  final idForNewTodo = "TD$randomId";
   var res = "pending";
   final todotype = getDataById(state, 1);
   final todoTitle = getDataById(state, 2);
@@ -33,7 +34,7 @@ Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
   }).toList();
 
   final cards.CardDetails card = cards.CardDetails(
-    workitemId: "TD$randomId",
+    workitemId: idForNewTodo,
     status: "New",
     brokerid: currentUserdata?.brokerId,
     cardType: todotype,
@@ -68,8 +69,9 @@ Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
       userid: user.userId,
     );
   }).toList();
+
   final TodoDetails todo = TodoDetails(
-    todoId: "TD$randomId",
+    todoId: idForNewTodo,
     managerId: currentUserdata?.managerid,
     todoType: todotype,
     brokerId: currentUserdata?.brokerId,
@@ -105,22 +107,23 @@ Future<String> submitTodoAndCardDetails(state, WidgetRef ref) async {
   );
   await cards.CardDetails.addCardDetails(card).then((value) => {res = "success"});
   await TodoDetails.addTodoDetails(todo).then((value) => {res == "success"});
+  final userNames = assignedListTodo.map((user) => "${user.firstname} ${user.lastname}").join(", ");
+  submitActivity(itemid: idForNewTodo, activitytitle: "New $todotype assigned to $userNames", user: currentUserdata!);
   for (var user in assignedListTodo) {
-    submitActivity(itemid: "IN$randomId", activitytitle: "New $todotype assigned to ${user.firstname} ${user.lastname}", user: currentUserdata!);
     notifyToUser(
         assignedto: user.userid,
         title: "New Todo Created",
-        content: "TD$randomId New $todotype assigned to ${user.firstname} ${user.lastname}",
+        content: "$idForNewTodo New $todotype assigned to ${user.firstname} ${user.lastname}",
         assigntofield: true,
-        itemid: "TD$randomId",
+        itemid: idForNewTodo,
         currentuserdata: currentUserdata);
     if (cardDetail != null) {
       notifyToUser(
           assignedto: user.userid,
           title: "New Todo created for ${cardDetail.workitemId}",
-          content: "TD$randomId New $todotype created for ${cardDetail.workitemId}",
+          content: "$idForNewTodo New $todotype created for ${cardDetail.workitemId}",
           assigntofield: true,
-          itemid: "TD$randomId",
+          itemid: idForNewTodo,
           currentuserdata: currentUserdata);
     }
   }
