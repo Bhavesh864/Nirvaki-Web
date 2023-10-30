@@ -2,7 +2,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
@@ -627,15 +626,17 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
                     isDense: widget.isDense,
                     hintText: "Type here..",
                     counterText: "",
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        widget.onContactPick!();
-                      },
-                      child: const Icon(
-                        Icons.contact_phone_outlined,
-                        size: 20,
-                      ),
-                    ),
+                    suffixIcon: widget.onContactPick != null
+                        ? GestureDetector(
+                            onTap: () {
+                              widget.onContactPick!();
+                            },
+                            child: const Icon(
+                              Icons.contact_phone_outlined,
+                              size: 20,
+                            ),
+                          )
+                        : null,
                     hintStyle: const TextStyle(color: Colors.grey, fontSize: 12),
                     contentPadding: widget.contentPadding,
                     border: InputBorder.none,
