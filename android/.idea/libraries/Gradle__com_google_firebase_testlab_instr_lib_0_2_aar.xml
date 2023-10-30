@@ -3,10 +3,13 @@
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/2435197b06d5fa7dd4f6488006ffe6c4/transformed/jetified-testlab-instr-lib-0.2/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/2435197b06d5fa7dd4f6488006ffe6c4/transformed/jetified-testlab-instr-lib-0.2/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/caches/transforms-3/2435197b06d5fa7dd4f6488006ffe6c4/transformed/jetified-testlab-instr-lib-0.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/caches/transforms-3/2435197b06d5fa7dd4f6488006ffe6c4/transformed/jetified-testlab-instr-lib-0.2/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.firebase/testlab-instr-lib/0.2/f6e9cfc838a3afa8b1ee8f09b0d7d3bb94098610/testlab-instr-lib-0.2-sources.jar!/" />
+      <root url="jar://$USER_HOME$/caches/modules-2/files-2.1/com.google.firebase/testlab-instr-lib/0.2/f6e9cfc838a3afa8b1ee8f09b0d7d3bb94098610/testlab-instr-lib-0.2-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
