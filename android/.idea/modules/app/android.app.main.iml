@@ -199,14 +199,14 @@
     <orderEntry type="module" module-name="android.network_info_plus.main" />
     <orderEntry type="module" module-name="android.firebase_database.main" />
     <orderEntry type="module" module-name="android.flutter_local_notifications.main" />
-    <orderEntry type="module" module-name="com.mr.flutter.plugin.filepicker.android.file_picker.main" />
-    <orderEntry type="module" module-name="io.flutter.plugins.pathprovider.android.path_provider_android.main" />
-    <orderEntry type="module" module-name="io.flutter.plugins.sharedpreferences.android.shared_preferences_android.main" />
-    <orderEntry type="module" module-name="com.example.integration_test.android.integration_test.main" />
+    <orderEntry type="module" module-name="com.mr.flutter.plugin.filepicker.android.file_picker.main~1" />
+    <orderEntry type="module" module-name="io.flutter.plugins.pathprovider.android.path_provider_android.main~1" />
+    <orderEntry type="module" module-name="io.flutter.plugins.sharedpreferences.android.shared_preferences_android.main~1" />
+    <orderEntry type="module" module-name="com.example.integration_test.android.integration_test.main~1" />
     <orderEntry type="module" module-name="android.image_picker_android.main" />
     <orderEntry type="module" module-name="android.firebase_messaging.main" />
     <orderEntry type="module" module-name="android.firebase_crashlytics.main" />
-    <orderEntry type="module" module-name="io.flutter.plugins.flutter_plugin_android_lifecycle.android.flutter_plugin_android_lifecycle.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.flutter_plugin_android_lifecycle.android.flutter_plugin_android_lifecycle.main~1" />
     <orderEntry type="module" module-name="android.sqflite.main" />
     <orderEntry type="module" module-name="android.url_launcher_android.main" />
     <orderEntry type="module" module-name="android.google_maps_flutter_android.main" />
