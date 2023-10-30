@@ -33,7 +33,7 @@
     {
       "action": "waitFor",
       "locator": {
-        "key": "YesBroker"
+        "key": "Nirvaki"
       }
     },
     {

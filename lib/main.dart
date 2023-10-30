@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       backButtonDispatcher: BeamerBackButtonDispatcher(delegate: routerDelegate),
       debugShowCheckedModeBanner: false,
-      title: 'Brokr',
+      title: 'Nirvaki',
       theme: TAppTheme.lightTheme,
       routeInformationParser: BeamerParser(),
       routerDelegate: routerDelegate,
