@@ -24,7 +24,8 @@ class CustomSpeedDialButtonState extends ConsumerState<CustomSpeedDialButton> {
   @override
   Widget build(BuildContext context) {
     return SpeedDial(
-      animatedIcon: AnimatedIcons.add_event,
+      icon: Icons.add,
+      activeIcon: Icons.close,
       foregroundColor: Colors.white,
       backgroundColor: AppColor.primary,
       // overlayColor: Colors.black.withOpacity(0.2),

@@ -25,30 +25,32 @@ class LabelTextInputField extends StatelessWidget {
   final bool isPhoneNumberField;
   final EdgeInsetsGeometry margin;
   final FocusNode? focusNode;
+  final int? maxLength;
   final void Function()? onEditingComplete;
 
-  const LabelTextInputField(
-      {Key? key,
-      required this.labelText,
-      this.labelFontWeight = FontWeight.w500,
-      this.margin = const EdgeInsets.symmetric(horizontal: 7, vertical: 0),
-      this.hintText = 'Type here..',
-      this.isDropDown = false,
-      this.rightIcon = Icons.calendar_month_outlined,
-      this.isDatePicker = false,
-      this.isMandatory = false,
-      this.maxLines,
-      this.keyboardType = TextInputType.name,
-      required this.inputController,
-      this.onChanged,
-      this.validator,
-      this.initialvalue,
-      this.onlyDigits = false,
-      this.readyOnly = false,
-      this.isPhoneNumberField = false,
-      this.focusNode,
-      this.onEditingComplete})
-      : super(key: key);
+  const LabelTextInputField({
+    Key? key,
+    required this.labelText,
+    this.labelFontWeight = FontWeight.w500,
+    this.margin = const EdgeInsets.symmetric(horizontal: 7, vertical: 0),
+    this.hintText = 'Type here..',
+    this.isDropDown = false,
+    this.rightIcon = Icons.calendar_month_outlined,
+    this.isDatePicker = false,
+    this.isMandatory = false,
+    this.maxLines,
+    this.keyboardType = TextInputType.name,
+    required this.inputController,
+    this.onChanged,
+    this.validator,
+    this.initialvalue,
+    this.onlyDigits = false,
+    this.readyOnly = false,
+    this.isPhoneNumberField = false,
+    this.focusNode,
+    this.onEditingComplete,
+    this.maxLength,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -106,6 +108,7 @@ class LabelTextInputField extends StatelessWidget {
             keyboardType: keyboardType,
             validator: validator,
             maxLines: maxLines,
+            maxLength: maxLength,
             onEditingComplete: onEditingComplete,
             initialvalue: initialvalue,
             isDense: true,
@@ -186,12 +189,14 @@ class LabelTextAreaField extends StatelessWidget {
             maxLines: 5,
             controller: inputController,
             onChanged: onChanged,
+            maxLength: 500,
             style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w400,
             ),
             decoration: InputDecoration(
               hintText: 'Type here...',
+              counterText: "",
               hintStyle: const TextStyle(
                 color: Colors.grey,
               ),
