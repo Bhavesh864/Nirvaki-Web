@@ -146,6 +146,7 @@ class LoginScreenState extends ConsumerState<LoginScreen> {
                           onFieldSubmitted: (_) {
                             FocusScope.of(context).requestFocus(passwordFocusNode);
                           },
+                          maxLength: 50,
                         ),
                         const SizedBox(
                           height: 10,
@@ -159,6 +160,7 @@ class LoginScreenState extends ConsumerState<LoginScreen> {
                           rightIcon: Icons.remove_red_eye_outlined,
                           validator: validatePassword,
                           onFieldSubmitted: (_) => loginwithemailpassword(context),
+                          maxLength: 30,
                         ),
                         const SizedBox(height: 15),
                         isloading

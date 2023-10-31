@@ -68,11 +68,13 @@ class ActivityTabViewState extends ConsumerState<ActivityTabView> {
                     margin: const EdgeInsets.only(right: 10),
                     width: Responsive.isMobile(context) ? width! * 0.6 : 400,
                     child: TextFormField(
+                      maxLength: 500,
                       controller: controller,
                       decoration: InputDecoration(
                         // enabledBorder: OutlineInputBorder(
                         //   borderRadius: BorderRadius.circular(6),
                         // ),
+                        counterText: "",
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(6),
                           borderSide: const BorderSide(

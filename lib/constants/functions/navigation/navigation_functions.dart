@@ -1,6 +1,7 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/riverpodstate/header_text_state.dart';
 
 import '../../../Customs/responsive.dart';
 import '../../../riverpodstate/selected_workitem.dart';
@@ -22,6 +23,7 @@ void navigateBasedOnId(BuildContext context, String id, WidgetRef ref) {
   } else if (routePrefix == 'TD') {
     route = '/todo/todo-details/$id';
   }
+  ref.read(headerTextProvider.notifier).addTitle(route);
 
   if (Responsive.isMobile(context)) {
     Navigator.push(
