@@ -216,12 +216,14 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                             SizedBox(height: height! * 0.04),
                             LabelTextInputField(
                               labelText: "First Name",
+                              maxLength: 30,
                               inputController: _firstNameController,
                               validator: (value) => validateForNormalFeild(value: value, props: "First Name"),
                               isMandatory: true,
                             ),
                             const SizedBox(height: 4),
                             LabelTextInputField(
+                              maxLength: 30,
                               labelText: "Last Name",
                               inputController: _lastNameController,
                               // validator: (value) => validateForNormalFeild(value: value, props: "Last Name"),
@@ -258,6 +260,7 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                             LabelTextInputField(
                               isMandatory: true,
                               labelText: "Email",
+                              maxLength: 50,
                               inputController: _emailController,
                               readyOnly: isEdit ? true : false,
                               validator: (value) => validateEmail(value),

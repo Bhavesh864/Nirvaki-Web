@@ -116,6 +116,7 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                                 controller: emailcontroller,
                                 labelText: 'Email address',
                                 validator: validateEmail,
+                                maxLength: 50,
                                 onChanged: (value) {
                                   notify.add({"id": 1, "item": value.trim()});
                                 }),
@@ -128,6 +129,7 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                             labelText: 'Password',
                             validator: validateSignupPassword,
                             obscureText: true,
+                            maxLength: 30,
                             // rightIcon: Icons.remove_red_eye,
                           ),
                           Container(
@@ -144,6 +146,7 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                             onChanged: (value) {
                               notify.add({"id": 2, "item": value.trim()});
                             },
+                            maxLength: 30,
                             rightIcon: Icons.remove_red_eye,
                             validator: validateReenteredPassword,
                           ),

@@ -448,6 +448,7 @@ Widget buildInventoryQuestions(
               },
               inputController: address1controller,
               labelText: "Address1",
+              maxLength: 150,
             ),
             LabelTextInputField(
               onChanged: (newvalue) {
@@ -455,6 +456,7 @@ Widget buildInventoryQuestions(
               },
               inputController: address2controller,
               labelText: "Address2",
+              maxLength: 150,
             ),
           ],
         );
@@ -477,12 +479,32 @@ Widget buildInventoryQuestions(
         final isEmail = question.questionTitle.contains("Email");
         final video = question.questionTitle.contains("Video");
 
+        int maxLength = 30;
+        switch (question.questionTitle) {
+          case "Email":
+            maxLength = 50;
+            break;
+          case "Company Name":
+            maxLength = 100;
+            break;
+          case "Video":
+            maxLength = 200;
+            break;
+          // case "Address1":
+          // case "Address2":
+          //   maxLength = 150;
+          //   break;
+          default:
+            maxLength = 30;
+        }
+
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             LabelTextInputField(
               onlyDigits: isDigitsOnly,
+              maxLength: maxLength,
               keyboardType: isPriceField || isDigitsOnly ? TextInputType.number : TextInputType.name,
               inputController: controller,
               labelText: question.questionTitle,
@@ -536,8 +558,10 @@ Widget buildInventoryQuestions(
       onChanged: (newvalue) {
         notify.add({"id": question.questionId, "item": newvalue.trim()});
       },
+      maxLength: 500,
       decoration: InputDecoration(
         hintText: question.questionOption,
+        counterText: "",
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
         ),

@@ -13,6 +13,8 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/timeline_item.dart';
 
+import '../Customs/responsive.dart';
+
 class CustomTimeLineView extends ConsumerStatefulWidget {
   final bool fromHome;
   final bool isScrollable;
@@ -159,25 +161,28 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                           // physics: const NeverScrollableScrollPhysics(),
                           itemCount: activities.length,
                           itemBuilder: (context, index) {
-                            return TimelineTile(
-                              isFirst: index == 0 ? true : false,
-                              indicatorStyle: const IndicatorStyle(
-                                color: AppColor.primary,
-                                height: 8,
-                                width: 8,
-                                padding: EdgeInsets.only(
-                                  left: 15,
+                            return Container(
+                              padding: !Responsive.isDesktop(context) && activities.length - 1 == index ? const EdgeInsets.only(bottom: 20) : const EdgeInsets.all(0),
+                              child: TimelineTile(
+                                isFirst: index == 0 ? true : false,
+                                indicatorStyle: const IndicatorStyle(
+                                  color: AppColor.primary,
+                                  height: 8,
+                                  width: 8,
+                                  padding: EdgeInsets.only(
+                                    left: 15,
+                                  ),
                                 ),
-                              ),
-                              beforeLineStyle: const LineStyle(
-                                color: AppColor.primary,
-                                thickness: 2,
-                              ),
-                              alignment: TimelineAlign.start,
-                              endChild: TimeLineItem(
-                                index: index,
-                                activitiesList: activities,
-                                fromHome: widget.fromHome,
+                                beforeLineStyle: const LineStyle(
+                                  color: AppColor.primary,
+                                  thickness: 2,
+                                ),
+                                alignment: TimelineAlign.start,
+                                endChild: TimeLineItem(
+                                  index: index,
+                                  activitiesList: activities,
+                                  fromHome: widget.fromHome,
+                                ),
                               ),
                             );
                           },

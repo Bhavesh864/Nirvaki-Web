@@ -217,7 +217,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                   // margin: const EdgeInsets.all(7),
                                   labelText: 'Company Name',
                                   isMandatory: true,
-
+                                  maxLength: 100,
                                   inputController: companynamecontroller,
                                   validator: (value) => validateForNormalFeild(value: value, props: "Company Name"),
                                   onChanged: (value) {
@@ -351,7 +351,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                   labelText: 'Address 1',
                                   // margin: const EdgeInsets.all(7),
                                   isMandatory: true,
-
+                                  maxLength: 150,
                                   inputController: address1controller,
                                   validator: (value) => validateForNormalFeild(value: value, props: "Addressline 1"),
                                   onChanged: (value) {
@@ -360,6 +360,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                 ),
                                 LabelTextInputField(
                                   labelText: 'Address 2',
+                                  maxLength: 150,
                                   isMandatory: true,
                                   inputController: address2controller,
                                   validator: (value) => validateForNormalFeild(value: value, props: "Addressline 2"),
