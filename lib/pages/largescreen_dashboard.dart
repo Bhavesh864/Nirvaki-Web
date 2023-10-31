@@ -13,6 +13,7 @@ import 'package:yes_broker/widgets/app/nav_bar.dart';
 import '../constants/app_constant.dart';
 import '../constants/functions/auth/auth_functions.dart';
 import '../constants/functions/chat_group/group.dart';
+import '../riverpodstate/header_text_state.dart';
 import '../screens/account_screens/Teams/team_screen.dart';
 
 final desktopSideBarIndexProvider = StateProvider<int>((ref) {
@@ -33,22 +34,29 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final path = (context.currentBeamLocation.state as BeamState).uri.path;
       final sideBarIndex = ref.read(desktopSideBarIndexProvider.notifier);
+      final headerText = ref.watch(headerTextProvider.notifier);
 
       // if (sideBarIndex.state == 0) {
       if (path.contains('/ ')) {
         sideBarIndex.update((state) => 0);
+        headerText.addTitle('home');
       } else if (path.contains('/todo')) {
         sideBarIndex.state = 1;
+        headerText.addTitle('todo');
       } else if (path.contains('/inventory')) {
         sideBarIndex.state = 2;
+        headerText.addTitle('inventory');
       } else if (path.contains('/lead')) {
         sideBarIndex.state = 3;
+        headerText.addTitle('lead');
       } else if (path.contains('/calendar')) {
         sideBarIndex.state = 4;
+        headerText.addTitle('calendar');
       } else if (path.contains('/profile')) {
         sideBarIndex.state = 5;
       } else {
         sideBarIndex.state = 0;
+        headerText.addTitle('home');
       }
       // }
     });
@@ -58,6 +66,8 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
   Widget build(BuildContext context) {
     final sideBarIndex = ref.watch(desktopSideBarIndexProvider);
     final beamerKey = GlobalKey<BeamerState>();
+    final headerText = ref.watch(headerTextProvider.notifier);
+
     AppConst.setOuterContext(context);
 
     return Scaffold(
@@ -83,8 +93,6 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                         () {
                           beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[index].nav);
                           ref.read(desktopSideBarIndexProvider.notifier).update((state) => index);
-                          // ref.read(mobileBottomIndexProvider.notifier).state = index;
-
                           if (index == 4) {
                             ref.read(mobileBottomIndexProvider.notifier).state = 0;
                           } else {
@@ -92,6 +100,19 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                           }
                         },
                       );
+                      if (index == 0) {
+                        headerText.addTitle('home');
+                      } else if (index == 1) {
+                        headerText.addTitle('todo');
+                      } else if (index == 2) {
+                        headerText.addTitle('inventory');
+                      } else if (index == 3) {
+                        headerText.addTitle('hleadome');
+                      } else if (index == 4) {
+                        headerText.addTitle('/calendar');
+                      } else {
+                        headerText.addTitle('home');
+                      }
                     },
                     destinations: sideBarItems
                         .sublist(0, 5)

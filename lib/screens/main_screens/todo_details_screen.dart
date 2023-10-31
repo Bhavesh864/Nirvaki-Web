@@ -66,8 +66,10 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
       });
     }
     // todoArray = [];
-    todoDetails =
-        FirebaseFirestore.instance.collection('todoDetails').where('todoId', isEqualTo: workItemId.isEmpty ? widget.todoId : workItemId).snapshots(includeMetadataChanges: true);
+    todoDetails = FirebaseFirestore.instance
+        .collection('todoDetails')
+        .where('todoId', isEqualTo: workItemId.isEmpty ? widget.todoId : workItemId)
+        .snapshots(includeMetadataChanges: true);
     // for (var i = 0; i < todoDetails; i++) {
     //   ele = todoDetails[i];
     //   userDeatil = FirebaseFirestore.instance.collection(where id =  ele.userId)
@@ -244,6 +246,7 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                   child: CustomTextInput(
                                                     autofocus: true,
                                                     controller: todoNameEditingController,
+                                                    maxLength: 100,
                                                     onFieldSubmitted: (newValue) {
                                                       if (newValue.isNotEmpty) {
                                                         TodoDetails.updatetodoName(id: data.todoId!, todoName: newValue).then((value) => setState(() {
@@ -443,7 +446,9 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                       iseditingTodoDescription
                                           ? SizedBox(
                                               width: 350,
-                                              child: Textarea(controller: todoDescriptionEditingController),
+                                              child: Textarea(
+                                                controller: todoDescriptionEditingController,
+                                              ),
                                             )
                                           : Text(
                                               data.todoDescription!.trim(),
@@ -744,6 +749,7 @@ class Textarea extends StatelessWidget {
       keyboardType: TextInputType.multiline,
       maxLines: 5,
       controller: controller,
+      maxLength: 500,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
