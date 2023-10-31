@@ -626,17 +626,17 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
                     isDense: widget.isDense,
                     hintText: "Type here..",
                     counterText: "",
-                    suffixIcon: GestureDetector(
-                      onTap: kIsWeb
-                          ? null
-                          : () {
+                    suffixIcon: widget.onContactPick != null
+                        ? GestureDetector(
+                            onTap: () {
                               widget.onContactPick!();
                             },
-                      child: const Icon(
-                        Icons.contact_phone_outlined,
-                        size: 20,
-                      ),
-                    ),
+                            child: const Icon(
+                              Icons.contact_phone_outlined,
+                              size: 20,
+                            ),
+                          )
+                        : null,
                     hintStyle: const TextStyle(color: Colors.grey, fontSize: 12),
                     contentPadding: widget.contentPadding,
                     border: InputBorder.none,

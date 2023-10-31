@@ -2,6 +2,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:number_to_words/number_to_words.dart';
 
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
@@ -221,8 +222,6 @@ Widget buildLeadQuestions(
       },
     );
   } else if (question.questionOptionType == 'textfield') {
-    print("leadmobilefild---------------");
-
     String textResult = '';
 
     final value = selectedValues.where((e) => e["id"] == question.questionId).toList();
@@ -290,6 +289,23 @@ Widget buildLeadQuestions(
               onChange: (value) {
                 notify.add({"id": question.questionId, "item": "$mobileCountryCode ${value.trim()}"});
               },
+              onContactPick: kIsWeb
+                  ? null
+                  : () async {
+                      final PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
+                      String phoneNum = contact.phoneNumber!.number!;
+                      String fullName = contact.fullName!;
+                      if (phoneNum.startsWith('+91')) {
+                        phoneNum = phoneNum.substring(3);
+                      }
+                      controller.text = phoneNum;
+                      notify.add({"id": 5, "item": fullName});
+                      if (question.questionId == 5) {
+                        controller.text = fullName;
+                      }
+
+                      notify.add({"id": question.questionId, "item": "$mobileCountryCode ${controller.text.trim()}"});
+                    },
             ),
             if (isMobileNoEmpty)
               const Padding(

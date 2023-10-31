@@ -229,20 +229,23 @@ Widget buildInventoryQuestions(
               onChange: (value) {
                 notify.add({"id": question.questionId, "item": "$mobileCountryCode ${value.trim()}"});
               },
-              onContactPick: () async {
-                final PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
-                String phoneNum = contact.phoneNumber!.number!;
-                String fullName = contact.fullName!;
-                if (phoneNum.startsWith('+91')) {
-                  phoneNum = phoneNum.substring(3);
-                }
-                controller.text = phoneNum;
-                notify.add({"id": 5, "item": fullName});
-                if (question.questionId == 5) {
-                  controller.text = fullName;
-                }
-                notify.add({"id": question.questionId, "item": "$mobileCountryCode ${controller.text.trim()}"});
-              },
+              onContactPick: kIsWeb
+                  ? null
+                  : () async {
+                      final PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
+                      String phoneNum = contact.phoneNumber!.number!;
+                      String fullName = contact.fullName!;
+                      if (phoneNum.startsWith('+91')) {
+                        phoneNum = phoneNum.substring(3);
+                      }
+                      controller.text = phoneNum;
+                      notify.add({"id": 5, "item": fullName});
+                      if (question.questionId == 5) {
+                        controller.text = fullName;
+                      }
+
+                      notify.add({"id": question.questionId, "item": "$mobileCountryCode ${controller.text.trim()}"});
+                    },
             ),
             if (isMobileNoEmpty)
               const Padding(
