@@ -63,7 +63,10 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
           largeScreenView("${userData?.userfirstname ?? ""} ${userData?.userlastname ?? ""}", context, ref: ref),
           const Spacer(),
           StreamBuilder(
-              stream: notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).where('isRead', isEqualTo: false).snapshots(includeMetadataChanges: true),
+              stream: notificationCollection
+                  .where("userId", arrayContains: AppConst.getAccessToken())
+                  .where('isRead', isEqualTo: false)
+                  .snapshots(includeMetadataChanges: true),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   final notificationCount = snapshot.data!.docs.length;
@@ -227,7 +230,23 @@ String capitalizeFirstLetter(String input) {
   return input[0].toUpperCase() + input.substring(1);
 }
 
+String getUrlText(String url, String name) {
+  print(url);
+  if (url.contains('lead')) {
+    return 'Lead';
+  } else if (url.contains('inventory')) {
+    return 'Inventory';
+  } else if (url.contains('todo')) {
+    return 'To-Do';
+  } else if (url.contains('calendar')) {
+    return 'Calendar';
+  } else {
+    return 'Welcome, ${capitalizeFirstLetter(name)}';
+  }
+}
+
 Widget largeScreenView(String name, BuildContext context, {WidgetRef? ref}) {
+  final url = (context.currentBeamLocation.state as BeamState).uri.path;
   return Container(
     padding: const EdgeInsets.only(left: 10),
     child: Column(
@@ -235,7 +254,7 @@ Widget largeScreenView(String name, BuildContext context, {WidgetRef? ref}) {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CustomText(
-          title: capitalizeFirstLetter(name) != 'Public View' ? 'Welcome, ${capitalizeFirstLetter(name)}' : capitalizeFirstLetter(name),
+          title: getUrlText(url, name),
           fontWeight: FontWeight.bold,
         ),
         InkWell(
