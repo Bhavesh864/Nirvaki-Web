@@ -231,7 +231,6 @@ String capitalizeFirstLetter(String input) {
 }
 
 String getUrlText(String url, String name) {
-  print(url);
   if (url.contains('lead')) {
     return 'Lead';
   } else if (url.contains('inventory')) {
