@@ -170,6 +170,7 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
                                 LabelTextInputField(
                                   labelText: 'First Name',
                                   isMandatory: true,
+                                  maxLength: 30,
                                   inputController: firstnamecontroller,
                                   validator: (value) => validateForNormalFeild(props: "First Name", value: value),
                                   onChanged: (value) {
@@ -178,6 +179,7 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
                                 ),
                                 LabelTextInputField(
                                   labelText: 'Last Name',
+                                  maxLength: 30,
                                   isMandatory: true,
                                   inputController: lastnamecontroller,
                                   validator: (value) => validateForNormalFeild(props: "Last Name", value: value),

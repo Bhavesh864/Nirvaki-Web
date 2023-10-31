@@ -5,5 +5,9 @@ final headerTextProvider = StateNotifierProvider<HeaderTextStateNotifier, String
 });
 
 class HeaderTextStateNotifier extends StateNotifier<String> {
-  HeaderTextStateNotifier() : super('');
+  HeaderTextStateNotifier() : super('home');
+
+  void addTitle(String title) {
+    state = title;
+  }
 }

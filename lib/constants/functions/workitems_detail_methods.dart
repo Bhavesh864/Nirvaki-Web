@@ -490,6 +490,7 @@ void showAddCalendarModal({
                       LabelTextInputField(
                         labelText: 'Title',
                         isMandatory: true,
+                        maxLength: 100,
                         labelFontWeight: FontWeight.w600,
                         inputController: titleController,
                         validator: (value) => validateForNormalFeild(props: "Title", value: value),

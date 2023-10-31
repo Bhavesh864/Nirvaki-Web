@@ -45,6 +45,7 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
   List<PlatformFile> pickedDocuments = [];
   List<String> selectedDocsName = [];
   bool uploaded = false;
+
   @override
   void initState() {
     super.initState();
@@ -56,7 +57,10 @@ class LeadDetailsScreenState extends ConsumerState<LeadDetailsScreen> with Ticke
         ref.read(selectedWorkItemId.notifier).addItemId(widget.leadId);
       });
     }
-    leadDetails = FirebaseFirestore.instance.collection('leadDetails').where('leadId', isEqualTo: workItemId.isEmpty ? widget.leadId : workItemId).snapshots(includeMetadataChanges: true);
+    leadDetails = FirebaseFirestore.instance
+        .collection('leadDetails')
+        .where('leadId', isEqualTo: workItemId.isEmpty ? widget.leadId : workItemId)
+        .snapshots(includeMetadataChanges: true);
     AppConst.setPublicView(false);
   }
 

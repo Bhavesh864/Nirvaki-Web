@@ -126,6 +126,7 @@ class CustomTextInputState extends State<CustomTextInput> {
             borderSide: const BorderSide(color: Colors.red, width: 1),
           ),
           label: widget.label,
+          counterText: "",
           contentPadding: widget.contentPadding,
           labelText: widget.labelText,
           hintText: widget.hintText,

@@ -103,9 +103,10 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                             width: screenWidth,
                             child: CustomTextInput(
                               controller: emailcontroller,
-                              hintText: 'Email address/ Phone number',
+                              hintText: 'Email address',
                               keyboardType: TextInputType.emailAddress,
                               validator: validateEmail,
+                              maxLength: 50,
                             ),
                           ),
                           // const SizedBox(height: 15),

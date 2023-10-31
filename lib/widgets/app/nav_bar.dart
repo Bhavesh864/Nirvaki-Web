@@ -13,6 +13,8 @@ import 'package:yes_broker/constants/firebase/userModel/notification_model.dart'
 import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/pages/largescreen_dashboard.dart';
+import 'package:yes_broker/riverpodstate/header_text_state.dart';
+import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/firebase/userModel/user_info.dart';
@@ -226,17 +228,27 @@ String capitalizeFirstLetter(String input) {
   if (input.isEmpty) {
     return input;
   }
-
   return input[0].toUpperCase() + input.substring(1);
 }
 
-String getUrlText(String url, String name) {
+String getUrlText(String url, String name, String selectedId, BuildContext context) {
+  // final path = (context.currentBeamLocation.state as BeamState).uri.path;
+
+  if (url.contains('lead-details')) {
+    return 'Lead - $selectedId';
+  }
+  if (url.contains('inventory-details')) {
+    return 'Inventory - $selectedId';
+  }
+  if (url.contains('todo-details')) {
+    return 'Todo - $selectedId';
+  }
   if (url.contains('lead')) {
-    return 'Lead';
+    return 'Lead Listing';
   } else if (url.contains('inventory')) {
-    return 'Inventory';
+    return 'Inventory Listing';
   } else if (url.contains('todo')) {
-    return 'To-Do';
+    return 'To-Do Listing';
   } else if (url.contains('calendar')) {
     return 'Calendar';
   } else {
@@ -245,7 +257,9 @@ String getUrlText(String url, String name) {
 }
 
 Widget largeScreenView(String name, BuildContext context, {WidgetRef? ref}) {
-  final url = (context.currentBeamLocation.state as BeamState).uri.path;
+  final headerText = ref!.watch(headerTextProvider);
+  final selectedId = ref.watch(selectedWorkItemId);
+
   return Container(
     padding: const EdgeInsets.only(left: 10),
     child: Column(
@@ -253,14 +267,14 @@ Widget largeScreenView(String name, BuildContext context, {WidgetRef? ref}) {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CustomText(
-          title: getUrlText(url, name),
+          title: headerText == 'home' ? 'Welcome, ${capitalizeFirstLetter(name)}' : getUrlText(headerText, name, selectedId, context),
           fontWeight: FontWeight.bold,
         ),
         InkWell(
           onTap: () {
             context.beamToNamed('/');
             if (!AppConst.getPublicView() && AppConst.getIsAuthenticated()) {
-              ref!.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
+              ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
             }
           },
           child: Center(
