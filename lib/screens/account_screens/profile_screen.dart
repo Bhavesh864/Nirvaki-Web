@@ -564,14 +564,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                         child: Table(
                           children: [
                             TableRow(children: [
-                              buildInfoFields(
-                                'Email address',
-                                userData.email,
-                                isPersonalDetailsEditing,
-                                emailController,
-                                context,
-                                validateEmail,
-                              ),
+                              buildInfoFields('Email address', userData.email, isPersonalDetailsEditing, emailController, context, validateEmail, maxLength: 50),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -608,7 +601,8 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                   ),
                 ),
                 if (Responsive.isMobile(context))
-                  buildInfoFields('Employee ID', userData.userId, false, TextEditingController(), context, (value) => validateForNormalFeild(props: "First name", value: value)),
+                  buildInfoFields(
+                      'Employee ID', userData.userId, false, TextEditingController(), context, (value) => validateForNormalFeild(props: "First name", value: value)),
               ] else
                 ...[]
             ],
@@ -619,7 +613,15 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
   }
 }
 
-Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, TextEditingController textController, BuildContext context, FormFieldValidator<String>? validator) {
+Widget buildInfoFields(
+  String fieldName,
+  String fieldDetail,
+  bool isEditing,
+  TextEditingController textController,
+  BuildContext context,
+  FormFieldValidator<String>? validator, {
+  int maxLength = 30,
+}) {
   final width = MediaQuery.of(context).size.width;
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -644,11 +646,7 @@ Widget buildInfoFields(String fieldName, String fieldDetail, bool isEditing, Tex
                   ? 160
                   : 145,
           child: CustomTextInput(
-            margin: const EdgeInsets.symmetric(vertical: 5),
-            controller: textController,
-            onFieldSubmitted: (newValue) {},
-            validator: validator,
-          ),
+              margin: const EdgeInsets.symmetric(vertical: 5), controller: textController, onFieldSubmitted: (newValue) {}, validator: validator, maxLength: maxLength),
         ),
       ] else ...[
         const SizedBox(height: 3),
@@ -708,6 +706,7 @@ Widget mobileInfoFields(
             openModal: openModal,
             countryCode: countryCode,
             onChange: (value) {},
+            contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
             // validator: validator,
           ),
         ),
@@ -749,6 +748,7 @@ Widget serachLocationInfoFields(
           // height: 50,
           width: Responsive.isDesktop(context) ? 300 : 335,
           child: CustomTextInput(
+            maxLength: 250,
             margin: const EdgeInsets.symmetric(vertical: 5),
             hintText: "Type here...",
             controller: textController,

@@ -145,6 +145,8 @@ Widget buildTodoQuestions(
       onChanged: (newvalue) {
         notify.add({"id": question.questionId, "item": newvalue.trim()});
       },
+      // maxLength: question.questionTitle.contains('Title') ? 100 : 200,
+      maxLength: 100,
       validator: (value) => validateForNormalFeild(value: value, props: "Title"),
     );
   } else if (question.questionOptionType == 'textarea') {

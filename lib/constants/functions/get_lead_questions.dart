@@ -503,6 +503,17 @@ Widget buildLeadQuestions(
             question.questionTitle.contains('Property Area');
 
         final isEmail = question.questionTitle.contains("Email");
+        int maxLength = 30;
+        switch (question.questionTitle) {
+          case "Email":
+            maxLength = 50;
+            break;
+          case "Company Name":
+            maxLength = 100;
+            break;
+          default:
+            maxLength = 30;
+        }
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -513,6 +524,7 @@ Widget buildLeadQuestions(
               inputController: controller,
               labelText: question.questionTitle,
               isMandatory: isvalidationtrue,
+              maxLength: maxLength,
               onChanged: (newvalue) {
                 try {
                   int number = int.parse(newvalue);
@@ -639,12 +651,14 @@ Widget buildLeadQuestions(
     TextEditingController controller = TextEditingController(text: value.isNotEmpty ? value[0]["item"] : "");
     return TextFormField(
       keyboardType: TextInputType.multiline,
+      maxLength: 50,
       maxLines: 5,
       controller: controller,
       onChanged: (newvalue) {
         notify.add({"id": question.questionId, "item": newvalue.trim()});
       },
       decoration: InputDecoration(
+        counterText: "",
         hintText: question.questionOption,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),

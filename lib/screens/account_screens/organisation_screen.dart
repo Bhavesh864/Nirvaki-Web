@@ -382,6 +382,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                           child: CustomTextInput(
                             controller: companyNameController,
                             onFieldSubmitted: (newValue) {},
+                            maxLength: 100,
                           ),
                         ),
                       ] else ...[
@@ -738,14 +739,8 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                         child: Table(
                           children: [
                             TableRow(children: [
-                              buildInfoFields(
-                                'Email address',
-                                broker.brokercompanyemail!,
-                                isPersonalDetailsEditing,
-                                emailController,
-                                context,
-                                validateEmail,
-                              ),
+                              buildInfoFields('Email address', broker.brokercompanyemail!, isPersonalDetailsEditing, emailController, context, validateEmail,
+                                  maxLength: 50),
                               // buildInfoFields('Phone ', broker.brokercompanynumber!, isPersonalDetailsEditing, phoneController, context),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -845,7 +840,8 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                                     try {
                                       List<String> words = str.split(' ');
                                       if (words.length > 3) {
-                                        String lastThreeWords = words.contains("India") ? words.sublist(words.length - 3).join(' ') : words.sublist(words.length - 2).join(' ');
+                                        String lastThreeWords =
+                                            words.contains("India") ? words.sublist(words.length - 3).join(' ') : words.sublist(words.length - 2).join(' ');
                                         String remainingWords =
                                             words.contains("India") ? words.sublist(0, words.length - 3).join(' ') : words.sublist(0, words.length - 2).join(' ');
                                         if (remainingWords.endsWith(',')) {
@@ -866,8 +862,10 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                                         }
                                         address1Controller.text = remainingWords;
                                         address2Controller.text = lastThreeWords;
-                                        final cityName = lastThreeWordsList[0].endsWith(',') ? lastThreeWordsList[0].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[0];
-                                        final stateName = lastThreeWordsList[1].endsWith(',') ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[1];
+                                        final cityName =
+                                            lastThreeWordsList[0].endsWith(',') ? lastThreeWordsList[0].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[0];
+                                        final stateName =
+                                            lastThreeWordsList[1].endsWith(',') ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[1];
                                         cityController.text = cityName;
                                         stateController.text = stateName;
                                         setState(() {
@@ -901,10 +899,24 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                         child: Table(
                           children: [
                             TableRow(children: [
-                              buildInfoFields('Address 1', broker.brokercompanyaddress['Addressline1'] ?? "", isAddressEditing, address1Controller, context,
-                                  (value) => validateForNormalFeild(props: "Addressline 1", value: value)),
-                              buildInfoFields('Address 2', broker.brokercompanyaddress['Addressline2'] ?? "", isAddressEditing, address2Controller, context,
-                                  (value) => validateForNormalFeild(props: "Addressline 2", value: value)),
+                              buildInfoFields(
+                                'Address 1',
+                                broker.brokercompanyaddress['Addressline1'] ?? "",
+                                isAddressEditing,
+                                address1Controller,
+                                context,
+                                (value) => validateForNormalFeild(props: "Addressline 1", value: value),
+                                maxLength: 150,
+                              ),
+                              buildInfoFields(
+                                'Address 2',
+                                broker.brokercompanyaddress['Addressline2'] ?? "",
+                                isAddressEditing,
+                                address2Controller,
+                                context,
+                                (value) => validateForNormalFeild(props: "Addressline 2", value: value),
+                                maxLength: 150,
+                              ),
                               if (Responsive.isDesktop(context)) const SizedBox(),
                             ])
                           ],
@@ -915,10 +927,22 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                         child: Table(
                           children: [
                             TableRow(children: [
-                              buildInfoFields('City', broker.brokercompanyaddress['city'], isAddressEditing, cityController, context,
-                                  (value) => validateForNormalFeild(value: value, props: "City")),
-                              buildInfoFields('State', broker.brokercompanyaddress['state'], isAddressEditing, stateController, context,
-                                  (value) => validateForNormalFeild(value: value, props: "State")),
+                              buildInfoFields(
+                                'City',
+                                broker.brokercompanyaddress['city'],
+                                isAddressEditing,
+                                cityController,
+                                context,
+                                (value) => validateForNormalFeild(value: value, props: "City"),
+                              ),
+                              buildInfoFields(
+                                'State',
+                                broker.brokercompanyaddress['state'],
+                                isAddressEditing,
+                                stateController,
+                                context,
+                                (value) => validateForNormalFeild(value: value, props: "State"),
+                              ),
                               if (Responsive.isDesktop(context)) const SizedBox(),
                             ])
                           ],

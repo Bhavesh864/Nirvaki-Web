@@ -73,7 +73,7 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
         return scrWidth / 2;
       } else if (Responsive.isMobile(context)) {
         if (scrWidth < 400) {
-          return 180;
+          return 170;
         }
         if (scrWidth > 600) {
           return 260;
@@ -108,8 +108,10 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
             children: [
               InkWell(
                 onTap: () {
-                  ref.read(detailsPageIndexTabProvider.notifier).state = 1;
-                  navigateBasedOnId(context, timeLine.itemid!, ref);
+                  if (widget.fromHome) {
+                    ref.read(detailsPageIndexTabProvider.notifier).state = 1;
+                    navigateBasedOnId(context, timeLine.itemid!, ref);
+                  }
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -185,7 +187,8 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
               width: 20,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey, width: 1.0),
-                image: DecorationImage(image: NetworkImage(timeLine.userImageUrl == null || timeLine.userImageUrl!.isEmpty ? noImg : timeLine.userImageUrl!), fit: BoxFit.fill),
+                image: DecorationImage(
+                    image: NetworkImage(timeLine.userImageUrl == null || timeLine.userImageUrl!.isEmpty ? noImg : timeLine.userImageUrl!), fit: BoxFit.fill),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
