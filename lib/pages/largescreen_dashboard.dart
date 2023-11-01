@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,11 +38,27 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
       final sideBarIndex = ref.read(desktopSideBarIndexProvider.notifier);
       final headerText = ref.watch(headerTextProvider.notifier);
 
-      // if (sideBarIndex.state == 0) {
-      if (path.contains('/ ')) {
-        sideBarIndex.update((state) => 0);
-        headerText.addTitle('home');
-      } else if (path.contains('/todo')) {
+      if (path.contains('/todo-details')) {
+        headerText.addTitle('todo-details');
+        if (path.contains('/todo/')) {
+          sideBarIndex.state = 1;
+        }
+        return;
+      } else if (path.contains('/inventory-details')) {
+        if (path.contains('/inventory/')) {
+          sideBarIndex.state = 2;
+        }
+        headerText.addTitle('inventory-details');
+        return;
+      } else if (path.contains('/lead-details')) {
+        if (path.contains('/lead/')) {
+          sideBarIndex.state = 3;
+        }
+        headerText.addTitle('lead-details');
+        return;
+      }
+
+      if (path.contains('/todo')) {
         sideBarIndex.state = 1;
         headerText.addTitle('todo');
       } else if (path.contains('/inventory')) {
@@ -58,7 +76,6 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
         sideBarIndex.state = 0;
         headerText.addTitle('home');
       }
-      // }
     });
   }
 
@@ -100,14 +117,12 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                           }
                         },
                       );
-                      if (index == 0) {
-                        headerText.addTitle('home');
-                      } else if (index == 1) {
+                      if (index == 1) {
                         headerText.addTitle('todo');
                       } else if (index == 2) {
                         headerText.addTitle('inventory');
                       } else if (index == 3) {
-                        headerText.addTitle('hleadome');
+                        headerText.addTitle('lead');
                       } else if (index == 4) {
                         headerText.addTitle('/calendar');
                       } else {

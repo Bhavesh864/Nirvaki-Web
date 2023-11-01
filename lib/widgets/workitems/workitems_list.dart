@@ -236,7 +236,7 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                         ref.read(detailsPageIndexTabProvider.notifier).update(
                               (state) => 0,
                             );
-                        navigateBasedOnId(context, id!, ref);
+                        navigateBasedOnId(context, id!, ref, fromHome: true);
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4.0),
