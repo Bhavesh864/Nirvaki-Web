@@ -167,6 +167,7 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
       return const LargeScreen();
     } else {
       final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
+      print(extractItemIdFromPath(location, 'inventory'));
       if (location.isNotEmpty && location.contains('inventory-details')) {
         AppConst.setPublicView(true);
 
@@ -188,7 +189,18 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
 String? extractItemIdFromPath(String path, String itemType) {
   List<String> segments = Uri.parse(path).pathSegments;
 
-  if (segments.length >= 3 && segments[0] == itemType && segments[1] == '$itemType-details') {
+  if (segments.length >= 2 && segments[0] == '$itemType-details') {
+    String itemId = segments[1];
+    return itemId;
+  } else {
+    return null;
+  }
+}
+
+String? extractItemIdFromPathWithoutType(String path) {
+  List<String> segments = Uri.parse(path).pathSegments;
+
+  if (segments.length >= 3 && segments[1].contains('details')) {
     String itemId = segments[2];
     return itemId;
   } else {

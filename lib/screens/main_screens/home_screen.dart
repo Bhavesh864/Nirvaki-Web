@@ -68,14 +68,14 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   getUserData(token) async {
     if (mounted) {
       final User? user = await User.getUser(token);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        final hasUser = ref.read(userDataProvider);
-        if (user != null && hasUser == null) {
-          ref.read(userDataProvider.notifier).storeUserData(user);
-          AppConst.setRole(user.role);
-          UserHiveMethods.addData(key: "brokerId", data: user.brokerId);
-        }
-      });
+      // WidgetsBinding.instance.addPostFrameCallback((_) {
+      // final hasUser = ref.read(userDataProvider);
+      if (user != null) {
+        ref.read(userDataProvider.notifier).storeUserData(user);
+        AppConst.setRole(user.role);
+        UserHiveMethods.addData(key: "brokerId", data: user.brokerId);
+      }
+      // });
     }
   }
 

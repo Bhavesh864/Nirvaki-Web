@@ -10,20 +10,34 @@ import '../../../screens/main_screens/home_screen.dart';
 import '../../../screens/main_screens/lead_details_screen.dart';
 import '../../../screens/main_screens/todo_details_screen.dart';
 
-void navigateBasedOnId(BuildContext context, String id, WidgetRef ref) {
+void navigateBasedOnId(BuildContext context, String id, WidgetRef ref, {bool fromHome = false}) {
   final routePrefix = id.substring(0, 2);
   ref.read(selectedWorkItemId.notifier).addItemId(id);
 
   String route = '/inventory/inventory-details/$id';
 
-  if (routePrefix == 'IN') {
-    route = '/inventory/inventory-details/$id';
-  } else if (routePrefix == 'LD') {
-    route = '/lead/lead-details/$id';
-  } else if (routePrefix == 'TD') {
-    route = '/todo/todo-details/$id';
+  if (fromHome) {
+    if (routePrefix == 'IN') {
+      route = '/inventory-details/$id';
+    } else if (routePrefix == 'LD') {
+      route = '/lead-details/$id';
+    } else if (routePrefix == 'TD') {
+      route = '/todo-details/$id';
+    }
+  } else {
+    if (routePrefix == 'IN') {
+      route = '/inventory/inventory-details/$id';
+    } else if (routePrefix == 'LD') {
+      route = '/lead/lead-details/$id';
+    } else if (routePrefix == 'TD') {
+      route = '/todo/todo-details/$id';
+    }
   }
-  ref.read(headerTextProvider.notifier).addTitle(route);
+  if (fromHome) {
+    ref.read(headerTextProvider.notifier).addTitle('fromHome $route');
+  } else {
+    ref.read(headerTextProvider.notifier).addTitle(route);
+  }
 
   if (Responsive.isMobile(context)) {
     Navigator.push(

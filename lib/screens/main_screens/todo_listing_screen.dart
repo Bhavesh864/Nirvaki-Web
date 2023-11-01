@@ -48,13 +48,13 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   @override
   void initState() {
     super.initState();
-    final token = UserHiveMethods.getdata("token");
-    if (token != null) {
-      AppConst.setAccessToken(token);
-      getUserData(token);
-    }
     setCardDetails();
     if (!kIsWeb) {
+      final token = UserHiveMethods.getdata("token");
+      if (token != null) {
+        AppConst.setAccessToken(token);
+        getUserData(token);
+      }
       ref.read(chatControllerProvider).setUserState(true);
     }
   }
@@ -89,6 +89,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(userDataProvider);
     final size = MediaQuery.of(context).size;
+
     return Container(
       color: Colors.white,
       child: StreamBuilder(
