@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "137591066546",
+    "project_id": "nirvaaki",
+    "storage_bucket": "nirvaaki.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137591066546:android:fca20b325465e7bda51eab",
+        "android_client_info": {
+          "package_name": "com.example.yes_broker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNzpPciGY_JD5MkIhp5sRYzgJz1xXndl4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

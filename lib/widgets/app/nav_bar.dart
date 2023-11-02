@@ -12,7 +12,7 @@ import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/userModel/notification_model.dart';
 import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/customs/responsive.dart';
-import 'package:yes_broker/pages/largescreen_dashboard.dart';
+import 'package:yes_broker/layout.dart';
 import 'package:yes_broker/riverpodstate/header_text_state.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
@@ -24,22 +24,18 @@ import '../../constants/utils/constants.dart';
 import '../../screens/account_screens/Teams/team_screen.dart';
 import '../../screens/account_screens/organisation_screen.dart';
 
-final notificationListProvider = StateProvider<List<NotificationModel>>((ref) => []);
-
 class LargeScreenNavBar extends ConsumerStatefulWidget {
   final void Function(String) onOptionSelect;
-  const LargeScreenNavBar(this.onOptionSelect, {super.key});
+  const LargeScreenNavBar(
+    this.onOptionSelect, {
+    super.key,
+  });
 
   @override
   ConsumerState<LargeScreenNavBar> createState() => _LargeScreenNavBarState();
 }
 
 class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     final notificationCollection = FirebaseFirestore.instance.collection("notification");
@@ -231,9 +227,7 @@ String capitalizeFirstLetter(String input) {
   return input[0].toUpperCase() + input.substring(1);
 }
 
-String getUrlText(String url, String name, String selectedId, BuildContext context) {
-  // final path = (context.currentBeamLocation.state as BeamState).uri.path;
-
+String getUrlText(String url, String name, String? selectedId, BuildContext context) {
   if (url.contains('lead-details')) {
     return 'Lead - $selectedId';
   }
@@ -257,8 +251,10 @@ String getUrlText(String url, String name, String selectedId, BuildContext conte
 }
 
 Widget largeScreenView(String name, BuildContext context, {WidgetRef? ref}) {
-  final headerText = ref!.watch(headerTextProvider);
-  final selectedId = ref.watch(selectedWorkItemId);
+  final headerText = ref?.watch(headerTextProvider);
+  final selectedId = ref?.watch(selectedWorkItemId);
+  final path = (context.currentBeamLocation.state as BeamState).uri.path;
+  final id = extractItemIdFromPathWithoutType(path);
 
   return Container(
     padding: const EdgeInsets.only(left: 10),
@@ -266,41 +262,238 @@ Widget largeScreenView(String name, BuildContext context, {WidgetRef? ref}) {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        CustomText(
-          title: headerText == 'home' ? 'Welcome, ${capitalizeFirstLetter(name)}' : getUrlText(headerText, name, selectedId, context),
-          fontWeight: FontWeight.bold,
-        ),
-        InkWell(
-          onTap: () {
-            context.beamToNamed('/');
-            if (!AppConst.getPublicView() && AppConst.getIsAuthenticated()) {
-              ref.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
-            }
-          },
-          child: Center(
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.home_outlined,
-                  weight: 100,
-                  size: 18,
+        if (!AppConst.getPublicView() && AppConst.getIsAuthenticated()) ...[
+          CustomText(
+            title: headerText == 'home' ? 'Welcome, ${capitalizeFirstLetter(name)}' : getUrlText(headerText!, name, selectedId == '' ? id : selectedId, context),
+            fontWeight: FontWeight.bold,
+          ),
+        ] else ...[
+          const CustomText(
+            title: 'Public View',
+            fontWeight: FontWeight.bold,
+          ),
+        ],
+        Center(
+          child: Row(
+            children: [
+              const Icon(
+                Icons.home_outlined,
+                weight: 100,
+                size: 18,
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 5),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      // onTap: () {
+                      //   if (!AppConst.getPublicView() && AppConst.getIsAuthenticated()) {
+                      //     ref!.read(desktopSideBarIndexProvider.notifier).update((state) => 0);
+                      //     ref.read(headerTextProvider.notifier).addTitle('home');
+                      //     context.beamToNamed('/');
+                      //   } else {
+                      //     context.beamToNamed('/');
+                      //   }
+                      // },
+                      onTap: () {
+                        if (AppConst.getPublicView() && !AppConst.getIsAuthenticated()) {
+                          context.beamToNamed('/');
+                        }
+                      },
+                      child: CustomText(
+                        letterSpacing: 0.4,
+                        title: AppConst.getPublicView() && !AppConst.getIsAuthenticated() ? 'Login' : 'Home',
+                        fontWeight: FontWeight.w600,
+                        color: headerText != 'home' && !AppConst.getPublicView() ? AppColor.headerTextGreyColor : AppColor.primary,
+                        size: 13,
+                      ),
+                    ),
+                    if (!AppConst.getPublicView() && AppConst.getIsAuthenticated()) ...[
+                      buildNavigationHeader(headerText!, selectedId!, ref!),
+
+                      // if (headerText!.contains('inventory') && !headerText.contains('fromHome')) ...[
+                      //   const Icon(
+                      //     Icons.chevron_right,
+                      //     color: AppColor.headerTextGreyColor,
+                      //     size: 22,
+                      //   ),
+                      //   CustomText(
+                      //     letterSpacing: 0.4,
+                      //     title: 'Inventory Listing',
+                      //     fontWeight: FontWeight.w600,
+                      //     color: headerText.contains('inventory-details') ? AppColor.headerTextGreyColor : AppColor.primary,
+                      //     size: 13,
+                      //   ),
+                      // ],
+
+                      // if (headerText.contains('inventory-details')) ...[
+                      //   const Icon(
+                      //     Icons.chevron_right,
+                      //     color: AppColor.headerTextGreyColor,
+                      //     size: 22,
+                      //   ),
+                      //   CustomText(
+                      //     letterSpacing: 0.4,
+                      //     title: 'Inventory - $selectedId',
+                      //     fontWeight: FontWeight.w600,
+                      //     color: AppColor.primary,
+                      //     size: 13,
+                      //   ),
+                      // ],
+
+                      // if (headerText.contains('lead') && !headerText.contains('fromHome')) ...[
+                      //   const Icon(
+                      //     Icons.chevron_right,
+                      //     color: AppColor.headerTextGreyColor,
+                      //     size: 22,
+                      //   ),
+                      //   CustomText(
+                      //     letterSpacing: 0.4,
+                      //     title: 'Lead Listing',
+                      //     fontWeight: FontWeight.w600,
+                      //     color: headerText.contains('lead-details') ? AppColor.headerTextGreyColor : AppColor.primary,
+                      //     size: 13,
+                      //   ),
+                      // ],
+                      // if (headerText.contains('lead-details')) ...[
+                      //   const Icon(
+                      //     Icons.chevron_right,
+                      //     color: AppColor.headerTextGreyColor,
+                      //     size: 22,
+                      //   ),
+                      //   CustomText(
+                      //     letterSpacing: 0.4,
+                      //     title: 'Lead - $selectedId',
+                      //     fontWeight: FontWeight.w600,
+                      //     color: AppColor.primary,
+                      //     size: 13,
+                      //   ),
+                      // ],
+                      // if (headerText.contains('todo') && !headerText.contains('fromHome')) ...[
+                      //   const Icon(
+                      //     Icons.chevron_right,
+                      //     color: AppColor.headerTextGreyColor,
+                      //     size: 22,
+                      //   ),
+                      //   CustomText(
+                      //     letterSpacing: 0.4,
+                      //     title: 'To-do Listing',
+                      //     fontWeight: FontWeight.w600,
+                      //     color: headerText.contains('todo-details') ? AppColor.headerTextGreyColor : AppColor.primary,
+                      //     size: 13,
+                      //   ),
+                      // ],
+                      // if (headerText.contains('todo-details')) ...[
+                      //   const Icon(
+                      //     Icons.chevron_right,
+                      //     color: AppColor.headerTextGreyColor,
+                      //     size: 22,
+                      //   ),
+                      //   CustomText(
+                      //     letterSpacing: 0.4,
+                      //     title: 'To Do - $selectedId',
+                      //     fontWeight: FontWeight.w600,
+                      //     color: AppColor.primary,
+                      //     size: 13,
+                      //   ),
+                      // ],
+                      // if (headerText.contains('calendar')) ...[
+                      //   const Icon(
+                      //     Icons.chevron_right,
+                      //     color: AppColor.headerTextGreyColor,
+                      //     size: 22,
+                      //   ),
+                      //   const CustomText(
+                      //     letterSpacing: 0.4,
+                      //     title: 'Calendar',
+                      //     fontWeight: FontWeight.w600,
+                      //     color: AppColor.primary,
+                      //     size: 13,
+                      //   ),
+                      // ],
+                    ],
+                  ],
                 ),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 5),
-                  child: CustomText(
-                    letterSpacing: 0.4,
-                    title: AppConst.getPublicView() && !AppConst.getIsAuthenticated() ? 'Login' : 'Home',
-                    fontWeight: FontWeight.w600,
-                    color: AppColor.primary,
-                    size: 13,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ],
     ),
+  );
+}
+
+Widget buildNavigationHeader(String headerText, String selectedId, WidgetRef ref) {
+  Widget? headerContent;
+
+  if (headerText.contains('inventory')) {
+    headerContent = Row(
+      children: [
+        if (!headerText.contains('fromHome')) ...[
+          _buildHeaderItem(
+            'Inventory Listing',
+            headerText.contains('inventory-details') ? AppColor.headerTextGreyColor : AppColor.primary,
+            ref: ref,
+          ),
+        ],
+        if (headerText.contains('inventory-details')) ...[
+          _buildHeaderItem('Inventory - $selectedId', AppColor.primary, ref: ref),
+        ],
+      ],
+    );
+  } else if (headerText.contains('lead')) {
+    headerContent = Row(
+      children: [
+        if (!headerText.contains('fromHome')) ...[
+          _buildHeaderItem(
+            'Lead Listing',
+            headerText.contains('lead-details') ? AppColor.headerTextGreyColor : AppColor.primary,
+            ref: ref,
+          ),
+        ],
+        if (headerText.contains('lead-details')) ...[
+          _buildHeaderItem('Lead - $selectedId', AppColor.primary, ref: ref),
+        ],
+      ],
+    );
+  } else if (headerText.contains('todo')) {
+    headerContent = Row(
+      children: [
+        if (!headerText.contains('fromHome')) ...[
+          _buildHeaderItem(
+            'To-do Listing',
+            headerText.contains('todo-details') ? AppColor.headerTextGreyColor : AppColor.primary,
+            ref: ref,
+          ),
+        ],
+        if (headerText.contains('todo-details')) ...[
+          _buildHeaderItem('To Do - $selectedId', AppColor.primary, ref: ref),
+        ],
+      ],
+    );
+  } else if (headerText.contains('calendar')) {
+    headerContent = _buildHeaderItem('Calendar', AppColor.primary);
+  }
+
+  return headerContent ?? const SizedBox();
+}
+
+Widget _buildHeaderItem(String title, Color color, {WidgetRef? ref}) {
+  return Row(
+    children: [
+      const Icon(
+        Icons.chevron_right,
+        color: AppColor.headerTextGreyColor,
+        size: 22,
+      ),
+      CustomText(
+        letterSpacing: 0.4,
+        title: title,
+        fontWeight: FontWeight.w600,
+        color: color,
+        size: 13,
+      ),
+    ],
   );
 }
 
