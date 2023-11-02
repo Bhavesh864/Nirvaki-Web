@@ -23,7 +23,7 @@ if (flutterVersionName == null) {
 
 apply plugin: 'com.android.application'
 // START: FlutterFire Configuration
-apply plugin: 'com.google.gms.google-services'
+// apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.firebase-perf'
 // END: FlutterFire Configuration
 apply plugin: 'kotlin-android'
@@ -79,6 +79,23 @@ android {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
             signingConfig signingConfigs.release
+        }
+    }
+    flavorDimensions "nirvaki"
+      productFlavors {
+        dev {
+            dimension "nirvaki"
+            applicationIdSuffix ".dev"
+            resValue "string", "app_name", "Nirvaki-dev"
+            versionNameSuffix ".dev"
+            // flutter.target "lib/main_dev.dart"
+        }
+        prod {
+            dimension "nirvaki"
+            applicationIdSuffix ".prod"
+            resValue "string", "app_name", "Nirvaki"
+            versionNameSuffix ".prod"
+            // flutter.target "lib/main_prod.dart"
         }
     }
 }
