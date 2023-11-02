@@ -81,7 +81,8 @@ class AddInventoryState extends ConsumerState<AddInventory> {
   }
 
   nextQuestion({List<Screen>? screensDataList, required String option}) {
-    if (currentScreenIndex == 3) {
+    int numberIndex = isEdit ? 2 : 3;
+    if (currentScreenIndex == numberIndex) {
       final List<Map<String, dynamic>> selectedValues = ref.read(myArrayProvider);
       final mobileNoValue = selectedValues.where((e) => e["id"] == 7).toList();
       final whatsappNoValue = selectedValues.where((e) => e["id"] == 8).toList();

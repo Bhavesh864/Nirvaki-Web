@@ -53,7 +53,6 @@ class _TodoFilterViewState extends State<TodoFilterView> {
                 // if (Responsive.isMobile(context)) {
                 //   Navigator.of(context).pop();
                 // } else {
-
                 widget.closeFilterView();
                 widget.onApplyFilters(selectedList);
                 // }
