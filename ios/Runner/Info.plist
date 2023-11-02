@@ -2,31 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-<<<<<<< HEAD
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
-=======
-	<!-- <key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow access to the location for distance calculation</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Always and when in use!</string>
-	<key>NSLocationUsageDescription</key>
-	<string>Older devices need location.</string> 
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Allow access to the location for distance calculation</string> -->
-	<key>NSLocationWhenInUseUsageDescription</key>
-    <string>Need location when in use</string>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Always and when in use!</string>
-    <key>NSLocationUsageDescription</key>
-    <string>Older devices need location.</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>Can I have location always?</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Allow access to camera for profile picture</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allow access to photo library for profile picture</string>
->>>>>>> 673ddf558cc5fd73642e30a97ffcc859319b9145
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
