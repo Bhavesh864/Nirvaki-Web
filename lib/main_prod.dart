@@ -34,6 +34,8 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(TimestampAdapter());
   await Hive.openBox("users");
+  await Hive.openBox("organization");
+
   runApp(
     const ProviderScope(
       child: MyApp(),

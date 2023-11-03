@@ -6,15 +6,48 @@ import 'package:yes_broker/riverpodstate/add_member_state.dart';
 import 'package:yes_broker/screens/account_screens/Teams/team_screen.dart';
 import 'package:yes_broker/widgets/timeline_item.dart';
 
+import '../../../constants/firebase/Hive/hive_methods.dart';
 import '../../../constants/firebase/userModel/user_info.dart';
 import '../../../constants/utils/colors.dart';
 
-class MobileMemberCard extends ConsumerWidget {
-  final User user;
-  const MobileMemberCard({super.key, required this.user});
+class MobileMemberCard extends ConsumerStatefulWidget {
+  final List<User> userList;
+  final int index;
+  const MobileMemberCard({super.key, required this.userList, required this.index});
+  @override
+  ConsumerState<MobileMemberCard> createState() => _MobileMemberCardState();
+}
+
+class _MobileMemberCardState extends ConsumerState<MobileMemberCard> {
+  List<User> managers = [];
+  void getdataFromLocalStorage() async {
+    final userids = [];
+    for (var data in widget.userList) {
+      userids.add(data.managerid);
+    }
+    List<User> retrievedUsers = await UserListPreferences.getUserList();
+    List<User> filteredUsers = retrievedUsers.where((user) => userids.contains(user.userId)).toList();
+    if (mounted) {
+      setState(() {
+        managers = filteredUsers;
+      });
+    }
+  }
+
+  String getNamesMatchWithid(id) {
+    final User managerArr = managers.firstWhere((element) => id == element.userId);
+    return "${managerArr.userfirstname} ${managerArr.userlastname}";
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    getdataFromLocalStorage();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final user = widget.userList[widget.index];
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4),
       child: Card(
@@ -100,7 +133,7 @@ class MobileMemberCard extends ConsumerWidget {
                         ),
                       ),
                       TextSpan(
-                        text: capitalizeFirstLetter(user.managerName ?? ""),
+                        text: managers.isNotEmpty ? capitalizeFirstLetter(getNamesMatchWithid(user.managerid)) : "",
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
