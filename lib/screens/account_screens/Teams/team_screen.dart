@@ -154,8 +154,7 @@ class TeamScreen extends ConsumerWidget {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: usersList.length,
                           itemBuilder: (context, index) {
-                            final user = usersList[index];
-                            return MobileMemberCard(user: user);
+                            return MobileMemberCard(userList: usersList, index: index);
                           }),
                       const SizedBox(height: 12),
                       CustomButton(

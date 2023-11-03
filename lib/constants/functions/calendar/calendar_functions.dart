@@ -11,6 +11,7 @@ import '../../firebase/calenderModel/calender_model.dart';
 import '../../firebase/random_uid.dart';
 import '../../firebase/userModel/user_info.dart';
 import '../../utils/colors.dart';
+import '../../validation/basic_validation.dart';
 
 Color getColorForTaskType(String taskType) {
   // Implement logic to map task types to colors here
@@ -137,8 +138,8 @@ void onAddTask({
   required TextEditingController descriptionController,
 }) {
   addCalenderDatatoFirebase(
-    title: titleController.text.trim(),
-    description: descriptionController.text.trim(),
+    title: removeExtraSpaces(titleController.text),
+    description: removeExtraSpaces(descriptionController.text),
     dueDate: dateController.text.trim(),
     time: timeController.text.trim(),
     ref: ref,
@@ -181,8 +182,8 @@ void onUpdateTask({
     brokerId: calendarModel.brokerId,
     userId: calendarModel.userId,
     managerId: calendarModel.managerId,
-    calenderTitle: titleController.text,
-    calenderDescription: descriptionController.text,
+    calenderTitle: removeExtraSpaces(titleController.text),
+    calenderDescription: removeExtraSpaces(descriptionController.text),
     dueDate: dateController.text,
     time: timeController.text,
   );

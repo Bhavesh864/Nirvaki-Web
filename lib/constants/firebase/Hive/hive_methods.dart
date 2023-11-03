@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:hive/hive.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../userModel/user_info.dart';
 
 class UserHiveMethods {
   static Box userInfoBox = Hive.box("users");
@@ -16,35 +21,24 @@ class UserHiveMethods {
   }
 }
 
-class CardDetailsHiveMethods {
-  static Box carddetailsHiveBox = Hive.box("carddetails");
+class UserListPreferences {
+  static const String _key = 'user_list';
 
-  static getdata(key) {
-    return carddetailsHiveBox.get(key);
+  static Future<void> saveUserList(List<User> userList) async {
+    final prefs = await SharedPreferences.getInstance();
+    final userMapList = userList.map((user) => user.toMap()).toList();
+    await prefs.setStringList(_key, userMapList.map((map) => jsonEncode(map)).toList());
   }
 
-  static addData({required key, required data}) {
-    carddetailsHiveBox.put(key, data);
+  static Future<List<User>> getUserList() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userMapList = prefs.getStringList(_key);
+    if (userMapList == null) return [];
+    return userMapList.map((userMap) => User.fromMap(jsonDecode(userMap))).toList();
   }
 
-  static deleteData(key) {
-    carddetailsHiveBox.delete(key);
+  static Future<void> deleteUserList() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_key);
   }
 }
-
-// class SharedPreferece {
-//   static Future<void> saveDataLocally(String key, String value) async {
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     prefs.setString(key, value);
-//   }
-
-//   static Future<String?> retrieveDataLocally(String key) async {
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     return prefs.getString(key);
-//   }
-
-//   static Future<void> deleteDataLocally(String key) async {
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     prefs.remove(key);
-//   }
-// }
