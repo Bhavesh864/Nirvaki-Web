@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -6,7 +8,9 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/riverpodstate/add_member_state.dart';
 
 import 'package:yes_broker/widgets/accounts/Teams/bottom_card_header.dart';
+import 'package:yes_broker/widgets/timeline_item.dart';
 
+import '../../../constants/firebase/Hive/hive_methods.dart';
 import '../../../constants/firebase/userModel/user_info.dart';
 
 class BottomCardMain extends ConsumerStatefulWidget {
@@ -18,8 +22,35 @@ class BottomCardMain extends ConsumerStatefulWidget {
 }
 
 class _BottomCardMainState extends ConsumerState<BottomCardMain> {
+  List<User> managers = [];
+  void getdataFromLocalStorage() async {
+    final userids = [];
+    for (var data in widget.userList) {
+      userids.add(data.managerid);
+    }
+    List<User> retrievedUsers = await UserListPreferences.getUserList();
+    List<User> filteredUsers = retrievedUsers.where((user) => userids.contains(user.userId)).toList();
+    if (mounted) {
+      setState(() {
+        managers = filteredUsers;
+      });
+    }
+  }
+
+  String getNamesMatchWithid(id) {
+    final User managerArr = managers.firstWhere((element) => id == element.userId);
+    return "${managerArr.userfirstname} ${managerArr.userlastname}";
+  }
+
+  @override
+  void initState() {
+    getdataFromLocalStorage();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    // print(managers.length);
     return Container(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -39,6 +70,7 @@ class _BottomCardMainState extends ConsumerState<BottomCardMain> {
               itemCount: widget.userList.length,
               itemBuilder: (context, index) {
                 final user = widget.userList[index];
+
                 return Container(
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   padding: const EdgeInsets.symmetric(vertical: 7),
@@ -49,12 +81,12 @@ class _BottomCardMainState extends ConsumerState<BottomCardMain> {
                         AppText(text: '${user.userfirstname} ${user.userlastname}', fontsize: 12, fontWeight: FontWeight.bold),
                         AppText(text: user.role, fontsize: 12, fontWeight: FontWeight.w400),
                         TableCell(
-                          child: user.managerName != null ? AppText(text: user.managerName!, fontsize: 12, fontWeight: FontWeight.w400) : const SizedBox(),
+                          child: AppText(text: managers.isNotEmpty ? capitalizeFirstLetter(getNamesMatchWithid(user.managerid)) : "", fontsize: 12, fontWeight: FontWeight.w400),
                         ),
                         TableCell(
                           child: Container(
                             width: 20, // Set the desired width for the edit container
-                            height: 20, // Set the desired height for the edit container
+                            height: 20, // Set the desired heighdt for the edit container
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10), // Set the desired border radius
                             ),

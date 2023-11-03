@@ -505,9 +505,10 @@ Widget buildInventoryQuestions(
             LabelTextInputField(
               onlyDigits: isDigitsOnly,
               maxLength: maxLength,
+              hintText: video ? "Video Link" : "Type here...",
               keyboardType: isPriceField || isDigitsOnly ? TextInputType.number : TextInputType.name,
               inputController: controller,
-              labelText: question.questionTitle,
+              labelText: video ? "" : question.questionTitle,
               isMandatory: isvalidationtrue,
               onChanged: (newvalue) {
                 try {

@@ -59,7 +59,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
   final List<User> assignto = getDataById(state, 36);
   // final locality = getDataById(state, 54);
   var furnishedStatus = getDataById(state, 55);
-  final listofLocality = getDataById(state, 56);
+  final List<LocalityNames> listofLocality = getDataById(state, 56);
 
   // commerical
   var availability = getDataById(state, 37);
@@ -176,6 +176,10 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
     title: companyNamecustomer,
     whatsapp: whatsAppNo ?? mobileNo,
   );
+  bool isResidential = propertyCategory == "Residential";
+  var title = isResidential ? "" : commericialtype;
+  String city = listofLocality[0].city.toString();
+
   final cards.CardDetails card = cards.CardDetails(
       workitemId: isEdit ? existingLeadId : idForNewLead,
       status: isEdit ? existingCardStatus : "New",
@@ -184,7 +188,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       cardStatus: isEdit ? existingCardStatus : "New",
       brokerid: currentUserdata?.brokerId,
       cardType: "LD",
-      cardTitle: "$propertyCategory $propertyKind",
+      cardTitle: "$propertyCategory $title $propertyKind-$city",
       cardDescription: "Want to $leadCategory her $bedrooms BHK for ${formatValue(budgetPrice?.start)}-${formatValue(budgetPrice?.end)} rupees",
       customerinfo: customercardInfo,
       assignedto: assignedToList,
@@ -204,10 +208,9 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
       userid: user.userId,
     );
   }).toList();
-  bool isResidential = propertyCategory == "Residential";
-  var title = isResidential ? "" : commericialtype;
+
   final LeadDetails lead = LeadDetails(
-      leadTitle: "$propertyCategory $title $propertyKind",
+      leadTitle: "$propertyCategory $title $propertyKind-$city",
       leadDescription: "lead",
       leadId: isEdit ? existingLeadId : idForNewLead,
       leadStatus: isEdit ? existingCardStatus : "New",

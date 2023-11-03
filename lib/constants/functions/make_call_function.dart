@@ -9,6 +9,14 @@ Future<void> makePhoneCall(String phoneNumber) async {
   await launchUrl(launchUri);
 }
 
+Future<void> openEmailApp(String email) async {
+  final Uri launchUri = Uri(
+    scheme: 'mailto',
+    path: email,
+  );
+  await launchUrl(launchUri);
+}
+
 Future<void> launchWhatsapp(whatsapp, buildContext) async {
   var url = Uri.parse("https://wa.me/$whatsapp?text=${Uri.parse('Hello')}");
   if (await canLaunchUrl(url)) {

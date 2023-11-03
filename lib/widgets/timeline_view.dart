@@ -32,7 +32,6 @@ class CustomTimeLineView extends ConsumerStatefulWidget {
 
 class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
   late Stream<QuerySnapshot<Map<String, dynamic>>> activityDetails;
-
   @override
   void initState() {
     super.initState();
@@ -115,6 +114,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                   activities = activities.where((activity) => widget.itemIds!.contains(activity.itemid)).toList();
                 }
                 activities.sort((a, b) => b.createdate!.compareTo(a.createdate!));
+
                 if (activities.isNotEmpty) {
                   if (widget.fromHome) {
                     return Expanded(
