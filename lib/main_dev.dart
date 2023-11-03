@@ -16,7 +16,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   if (kIsWeb) {
-    await firestore.enablePersistence(const PersistenceSettings(synchronizeTabs: true));
+    // await firestore.enablePersistence(const PersistenceSettings(synchronizeTabs: true));
   } else {
     firestore.settings = const Settings(
       persistenceEnabled: true,
