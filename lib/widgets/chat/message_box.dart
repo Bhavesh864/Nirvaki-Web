@@ -7,8 +7,7 @@ import 'package:yes_broker/chat/models/message.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/customs/responsive.dart';
-
-import '../../constants/functions/datetime/date_time.dart';
+import '../../constants/methods/date_time_methods.dart';
 import '../../constants/utils/constants.dart';
 
 // User getUser(userId) {

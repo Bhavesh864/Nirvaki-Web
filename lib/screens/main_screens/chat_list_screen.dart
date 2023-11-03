@@ -19,8 +19,8 @@ import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/screens/main_screens/chat_screen.dart';
 import 'package:yes_broker/screens/main_screens/create_group_screen.dart';
 import '../../Customs/responsive.dart';
+import '../../constants/methods/string_methods.dart';
 import '../../constants/utils/colors.dart';
-import '../../widgets/app/nav_bar.dart';
 
 class ChatItem {
   final String id;

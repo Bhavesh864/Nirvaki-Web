@@ -15,7 +15,7 @@ import 'package:yes_broker/widgets/chat/chat_input.dart';
 import 'package:yes_broker/widgets/chat/chat_screen_header.dart';
 import 'package:yes_broker/widgets/chat/message_box.dart';
 
-import '../../constants/functions/datetime/date_time.dart';
+import '../../constants/methods/date_time_methods.dart';
 import '../../constants/utils/colors.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {

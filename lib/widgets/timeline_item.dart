@@ -12,6 +12,7 @@ import 'package:yes_broker/riverpodstate/user_data.dart';
 import '../constants/firebase/userModel/user_info.dart';
 import '../constants/functions/navigation/navigation_functions.dart';
 import '../constants/functions/time_formatter.dart';
+import '../constants/methods/string_methods.dart';
 import '../riverpodstate/common_index_state.dart';
 
 class TimeLineItem extends ConsumerStatefulWidget {
@@ -201,16 +202,4 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
       ),
     );
   }
-}
-
-String capitalizeFirstLetter(String text) {
-  if (text.isEmpty) {
-    return text;
-  }
-  return text[0].toUpperCase() + text.substring(1).toLowerCase();
-}
-
-User getUserNameById(String id, List<User> users) {
-  final User user = users.firstWhere((user) => user.userId == id);
-  return user;
 }

@@ -1,16 +1,20 @@
 // import 'dart:html';
+
 import 'package:beamer/beamer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
 import 'package:yes_broker/constants/firebase/send_notification.dart';
+import 'package:yes_broker/constants/functions/navigation/navigation_functions.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
+import '../../Customs/snackbar.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
@@ -24,12 +28,16 @@ import '../app/nav_bar.dart';
 
 Future<void> shareUrl(BuildContext context, {String textToCombine = ''}) async {
   try {
-    // final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
-    // print(location);
-    // final currentUrl = window.location.href;
-    // Clipboard.setData(ClipboardData(text: currentUrl + textToCombine)).then((_) {
-    //   customSnackBar(context: context, text: 'URL copied to clipboard');
-    // });
+    String currentUrl = '';
+
+    if (kIsWeb) {
+      // currentUrl = window.location.href;
+    } else {
+      currentUrl = 'https://brokr-in.web.app/#/';
+    }
+    Clipboard.setData(ClipboardData(text: currentUrl + textToCombine)).then((_) {
+      customSnackBar(context: context, text: 'URL copied to clipboard');
+    });
   } catch (e) {
     if (kDebugMode) {
       print('Error sharing URL: $e');
@@ -63,16 +71,6 @@ class InventoryDetailsHeader extends ConsumerWidget {
       required this.setState});
 
   static void defaultFunc(e) {}
-
-  Future<void> shareUrl(BuildContext context) async {
-    try {
-      // final currentUrl = window.location.href;
-      // await Clipboard.setData(ClipboardData(text: currentUrl));
-      // customSnackBar(context: context, text: 'URL copied to clipboard');
-    } catch (e) {
-      print('Error sharing URL: $e');
-    }
-  }
 
   void navigateToEditPage(BuildContext context) {
     Future.delayed(const Duration(milliseconds: 500), () {
@@ -119,7 +117,14 @@ class InventoryDetailsHeader extends ConsumerWidget {
                 CustomChip(
                   paddingVertical: 5,
                   onPressed: () {
-                    shareUrl(context);
+                    if (kIsWeb) {
+                      shareUrl(context);
+                    } else {
+                      shareUrl(
+                        context,
+                        textToCombine: navigationUrl(context, id),
+                      );
+                    }
                   },
                   label: const Icon(
                     Icons.share_outlined,

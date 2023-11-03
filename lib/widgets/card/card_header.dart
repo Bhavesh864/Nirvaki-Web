@@ -169,58 +169,107 @@ class CardHeaderState extends ConsumerState<CardHeader> {
         // const Spacer(),
         Row(
           children: [
-            if (cardData.duedate != null)
-              // CustomChip(
-              //   avatar: const Icon(
-              //     Icons.calendar_month_outlined,
-              //     size: 14,
-              //   ),
-              //   paddingHorizontal: 0,
-              //   label: AppText(
-              //     // text: DateFormat(' d MMM y').format(DateTime.parse(cardData.duedate!)),
-              //     text: cardData.duedate!,
-              //     fontsize: 9,
-              //   ),
-              // ),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: cardData.duedate != null &&
-                          DateFormat('dd-MM-yy HH:mm a').parse('${cardData.duedate!} ${cardData.dueTime ?? '11:00 PM'}').isBefore(
-                                DateTime.now(),
-                              )
-                      ? const Color.fromARGB(255, 249, 145, 137).withOpacity(0.2)
-                      : AppColor.chipGreyColor,
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.calendar_month_outlined,
-                      size: 12,
-                      color: cardData.duedate != null && DateFormat('dd-MM-yy HH:mm a').parse('${cardData.duedate!} ${cardData.dueTime ?? '11:00 PM'}').isBefore(DateTime.now())
-                          ? Colors.red
-                          : Colors.black,
-                    ),
-                    const SizedBox(width: 2),
-                    AppText(
-                      text: DateFormat('dd MMM yyyy').format(DateFormat('dd-MM-yy HH:mm a').parse('${cardData.duedate!} ${cardData.dueTime ?? '11:00 PM'}')),
-                      fontsize: 10,
-                      textColor:
-                          cardData.duedate != null && DateFormat('dd-MM-yy HH:mm a').parse('${cardData.duedate!} ${cardData.dueTime ?? '11:00 PM'}').isBefore(DateTime.now())
-                              ? Colors.red.shade500
-                              : Colors.black,
-                    ),
-                  ],
-                ),
-              ),
+            buildDateChip(cardData),
             const Icon(
               Icons.chevron_right,
               size: 20,
             )
           ],
         )
+        // Row(
+        //   children: [
+        //     if (cardData.duedate != null)
+        //       Container(
+        //         decoration: BoxDecoration(
+        //           borderRadius: BorderRadius.circular(4),
+        //           color: cardData.duedate != null &&
+        //                   DateFormat('dd-MM-yy HH:mm a').parse('${cardData.duedate!} ${cardData.dueTime ?? '11:00 PM'}').isBefore(
+        //                         DateTime.now(),
+        //                       )
+        //               ? cardData.status == "Closed"
+        //                   ? AppColor.chipGreyColor
+        //                   : const Color.fromARGB(255, 249, 145, 137).withOpacity(0.2)
+        //               : AppColor.chipGreyColor,
+        //         ),
+        //         padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        //         child: Row(
+        //           children: [
+        //             Icon(
+        //               Icons.calendar_month_outlined,
+        //               size: 12,
+        //               color: cardData.duedate != null &&
+        //                       DateFormat('dd-MM-yy HH:mm a').parse('${cardData.duedate!} ${cardData.dueTime ?? '11:00 PM'}').isBefore(DateTime.now())
+        //                   ? cardData.status == "Closed"
+        //                       ? Colors.black
+        //                       : Colors.red
+        //                   : Colors.black,
+        //             ),
+        //             const SizedBox(width: 2),
+        //             AppText(
+        //               text: DateFormat('dd MMM yyyy').format(DateFormat('dd-MM-yy HH:mm a').parse('${cardData.duedate!} ${cardData.dueTime ?? '11:00 PM'}')),
+        //               fontsize: 10,
+        //               textColor: cardData.duedate != null &&
+        //                       DateFormat('dd-MM-yy HH:mm a').parse('${cardData.duedate!} ${cardData.dueTime ?? '11:00 PM'}').isBefore(DateTime.now())
+        //                   ? cardData.status == "Closed"
+        //                       ? Colors.black
+        //                       : Colors.red.shade500
+        //                   : Colors.black,
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+        //     const Icon(
+        //       Icons.chevron_right,
+        //       size: 20,
+        //     )
+        //   ],
+        // )
       ],
     );
   }
+}
+
+Widget buildChipColor(Color backgroundColor, Color textColor, IconData icon, String text) {
+  return Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(4),
+      color: backgroundColor,
+    ),
+    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+    child: Row(
+      children: [
+        Icon(
+          icon,
+          size: 12,
+          color: textColor,
+        ),
+        const SizedBox(width: 2),
+        AppText(
+          text: text,
+          fontsize: 10,
+          textColor: textColor,
+        ),
+      ],
+    ),
+  );
+}
+
+Widget buildDateChip(CardDetails cardData) {
+  if (cardData.duedate == null) {
+    return const SizedBox(); // Return an empty widget if duedate is null
+  }
+
+  final parsedDueDate = DateFormat('dd-MM-yy HH:mm a').parse('${cardData.duedate!} ${cardData.dueTime ?? '11:00 PM'}');
+  final isBeforeNow = parsedDueDate.isBefore(DateTime.now());
+
+  final backgroundColor =
+      isBeforeNow ? (cardData.status == "Closed" ? AppColor.chipGreyColor : const Color.fromARGB(255, 249, 145, 137).withOpacity(0.2)) : AppColor.chipGreyColor;
+  final textColor = isBeforeNow ? (cardData.status == "Closed" ? Colors.black : Colors.red.shade500) : Colors.black;
+
+  return buildChipColor(
+    backgroundColor,
+    textColor,
+    Icons.calendar_month_outlined,
+    DateFormat('dd MMM yyyy').format(parsedDueDate),
+  );
 }

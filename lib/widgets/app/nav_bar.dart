@@ -19,6 +19,7 @@ import 'package:yes_broker/riverpodstate/user_data.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/time_formatter.dart';
+import '../../constants/methods/string_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
 import '../../screens/account_screens/Teams/team_screen.dart';
@@ -218,13 +219,6 @@ PopupMenuItem popupMenuItem(
       ),
     ),
   );
-}
-
-String capitalizeFirstLetter(String input) {
-  if (input.isEmpty) {
-    return input;
-  }
-  return input[0].toUpperCase() + input.substring(1);
 }
 
 String getUrlText(String url, String name, String? selectedId, BuildContext context) {

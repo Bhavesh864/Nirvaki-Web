@@ -16,6 +16,7 @@ import '../../Customs/custom_fields.dart';
 import '../../Customs/responsive.dart';
 import '../../Customs/snackbar.dart';
 import '../../Customs/text_utility.dart';
+import '../../constants/methods/string_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../pages/Auth/signup/company_details.dart';
 import '../../pages/Auth/signup/country_code_modal.dart';
@@ -392,7 +393,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                           child: Text(
                             maxLines: 3,
                             softWrap: true,
-                            broker.companyname!,
+                            toPascalCase(broker.companyname!),
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,

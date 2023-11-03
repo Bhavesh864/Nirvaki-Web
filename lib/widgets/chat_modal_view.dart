@@ -12,7 +12,7 @@ import 'package:yes_broker/widgets/chat/group/newchat_newgroup_popup.dart';
 import '../Customs/custom_text.dart';
 import '../chat/controller/chat_controller.dart';
 import '../constants/app_constant.dart';
-import '../constants/functions/datetime/date_time.dart';
+import '../constants/methods/date_time_methods.dart';
 import '../constants/utils/colors.dart';
 import 'chat/chat_input.dart';
 import 'chat/chat_screen_header.dart';

@@ -167,18 +167,17 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
       return const LargeScreen();
     } else {
       final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;
-      print(extractItemIdFromPath(location, 'inventory'));
       if (location.isNotEmpty && location.contains('inventory-details')) {
         AppConst.setPublicView(true);
 
         return PublicViewInventoryDetails(
-          inventoryId: extractItemIdFromPath(location, 'inventory')!,
+          inventoryId: extractItemIdForPublicView(location, 'inventory')!,
         );
       } else if (location.isNotEmpty && location.contains('lead-details')) {
         AppConst.setPublicView(true);
 
         return PublicViewLeadDetails(
-          leadId: extractItemIdFromPath(location, 'lead')!,
+          leadId: extractItemIdForPublicView(location, 'lead')!,
         );
       }
       return const LoginScreen();
@@ -189,11 +188,31 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
 String? extractItemIdFromPath(String path, String itemType) {
   List<String> segments = Uri.parse(path).pathSegments;
 
-  if (segments.length >= 2 && segments[0] == '$itemType-details') {
+  if (segments.length >= 3 && segments[1] == '$itemType-details') {
     String itemId = segments[1];
     return itemId;
   } else {
     return null;
+  }
+}
+
+String? extractItemIdForPublicView(String path, String itemType) {
+  List<String> segments = Uri.parse(path).pathSegments;
+
+  if (segments.length > 2) {
+    if (segments.length >= 2 && segments[1] == '$itemType-details') {
+      String itemId = segments[2];
+      return itemId;
+    } else {
+      return null;
+    }
+  } else {
+    if (segments.length >= 2 && segments[0] == '$itemType-details') {
+      String itemId = segments[1];
+      return itemId;
+    } else {
+      return null;
+    }
   }
 }
 

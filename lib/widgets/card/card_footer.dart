@@ -3,12 +3,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
-import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/widgets/assigned_circular_images.dart';
 import '../../Customs/custom_chip.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/functions/make_call_function.dart';
 import '../../constants/functions/navigation/navigation_functions.dart';
+import '../../constants/methods/string_methods.dart';
 import '../workItemDetail/inventory_details_header.dart';
 
 class CardFooter extends StatelessWidget {
@@ -71,20 +71,6 @@ class CardFooter extends StatelessWidget {
               ] else ...[
                 const SizedBox.shrink()
               ],
-              // GestureDetector(
-              //   onTap: () {
-              //     if (cardData.workitemId!.contains("TD")) {
-              //       // Navigator .of(context).pushNamed(AppRoutes.editTodo);
-              //       context.beamToNamed(AppRoutes.editTodo, data: cardData);
-              //     }
-              //   },
-              //   child: const CustomChip(
-              //     label: Icon(
-              //       Icons.edit_outlined,
-              //     ),
-              //     paddingHorizontal: 3,
-              //   ),
-              // ),
               if (!cardDetails[index].workitemId!.contains('TD'))
                 CustomChip(
                   onPressed: () {
