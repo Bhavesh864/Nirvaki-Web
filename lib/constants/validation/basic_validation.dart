@@ -44,6 +44,24 @@ String? validateForNormalFeild({required String? value, required String? props})
   return null;
 }
 
+String? validateForNameField({required String? value, required String? props}) {
+  final RegExp nameRegExp = RegExp(r'^[a-zA-Z\s]+$');
+
+  if (value == null || value.isEmpty) {
+    return 'Please enter your $props';
+  }
+  if (!nameRegExp.hasMatch(value)) {
+    return 'Invalid $props';
+  }
+  return null;
+}
+
+String removeExtraSpaces(String input) {
+  List<String> words = input.split(' ').where((word) => word.isNotEmpty).toList();
+  String output = words.join(' ');
+  return output;
+}
+
 String? validateForMobileNumberFeild({required String? value, required String? props}) {
   if (value == null || value.isEmpty) {
     return 'Please enter your $props';
@@ -71,8 +89,22 @@ String? isYouTubeVideoURL(String url) {
     r'^https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)',
     caseSensitive: false,
   );
+  final RegExp regExp2 = RegExp(
+    r'^https:\/\/(?:www\.)?youtu\.be\/([\w-]+)(?:\?.*)?$',
+    caseSensitive: false,
+  );
 
-  if (!regExp.hasMatch(url)) {
+  final RegExp shortsUrlRegex = RegExp(
+    r'^https:\/\/(?:www\.)?youtube\.com\/(?:shorts\/)?([\w-]+)(?:\?.*)?$',
+    caseSensitive: false,
+  );
+
+  final RegExp shortsUrlRegex2 = RegExp(
+    r'^https:\/\/(?:www\.)?youtube\.com\/(?:(?:shorts\/)|(?:watch\?v=))?([\w-]+)(?:\?.*)?$',
+    caseSensitive: false,
+  );
+
+  if (!regExp.hasMatch(url) && !regExp2.hasMatch(url) && !shortsUrlRegex.hasMatch(url) && !shortsUrlRegex2.hasMatch(url)) {
     return 'Please enter a valid Youtube video link';
   }
   return null;

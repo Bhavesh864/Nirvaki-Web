@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -50,7 +48,6 @@ class _BottomCardMainState extends ConsumerState<BottomCardMain> {
 
   @override
   Widget build(BuildContext context) {
-    // print(managers.length);
     return Container(
       padding: const EdgeInsets.all(10),
       child: Column(

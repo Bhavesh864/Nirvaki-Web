@@ -40,6 +40,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   late Stream<QuerySnapshot<Map<String, dynamic>>> cardDetails;
   bool isUserLoaded = false;
   List<User> userList = [];
+  int currentPage = 1; // Add this variable for tracking the current page
+  int pageSize = 20;
   @override
   void initState() {
     super.initState();

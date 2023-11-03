@@ -25,19 +25,6 @@ class TimeLineItem extends ConsumerStatefulWidget {
 }
 
 class _TimeLineItemState extends ConsumerState<TimeLineItem> {
-  List<User> assigned = [];
-  List<String> ids = [];
-  // void setassignedData() async {
-  //   final currentuser = ref.read(userDataProvider);
-  //   if (currentuser != null) {
-  //     final List<User> userdata = await User.getAllUsers(currentuser);
-  //     if (mounted) {
-  //       setState(() {
-  //         assigned = userdata;
-  //       });
-  //     }
-  //   }
-  // }
   List<User> createdByUser = [];
   void getdataFromLocalStorage() async {
     final userids = [];
@@ -58,10 +45,15 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
     return userArr;
   }
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  // }
+
   @override
-  void initState() {
+  void didChangeDependencies() {
     getdataFromLocalStorage();
-    super.initState();
+    super.didChangeDependencies();
   }
 
   @override
@@ -200,9 +192,4 @@ String capitalizeFirstLetter(String text) {
     return text;
   }
   return text[0].toUpperCase() + text.substring(1).toLowerCase();
-}
-
-User getUserNameById(String id, List<User> users) {
-  final User user = users.firstWhere((user) => user.userId == id);
-  return user;
 }
