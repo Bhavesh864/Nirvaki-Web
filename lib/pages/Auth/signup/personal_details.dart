@@ -172,9 +172,9 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
                                   isMandatory: true,
                                   maxLength: 30,
                                   inputController: firstnamecontroller,
-                                  validator: (value) => validateForNormalFeild(props: "First Name", value: value),
+                                  validator: (value) => validateForNameField(props: "First Name", value: value!.trim()),
                                   onChanged: (value) {
-                                    notify.add({"id": 3, "item": value.trim()});
+                                    notify.add({"id": 3, "item": removeExtraSpaces(value)});
                                   },
                                 ),
                                 LabelTextInputField(
@@ -182,9 +182,9 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
                                   maxLength: 30,
                                   isMandatory: true,
                                   inputController: lastnamecontroller,
-                                  validator: (value) => validateForNormalFeild(props: "Last Name", value: value),
+                                  validator: (value) => validateForNameField(props: "Last Name", value: value!.trim()),
                                   onChanged: (value) {
-                                    notify.add({"id": 4, "item": value.trim()});
+                                    notify.add({"id": 4, "item": removeExtraSpaces(value)});
                                   },
                                 ),
                                 // CustomTextInput(

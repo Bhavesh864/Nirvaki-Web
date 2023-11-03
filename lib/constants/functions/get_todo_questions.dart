@@ -143,7 +143,7 @@ Widget buildTodoQuestions(
       isMandatory: true,
       labelText: question.questionTitle,
       onChanged: (newvalue) {
-        notify.add({"id": question.questionId, "item": newvalue.trim()});
+        notify.add({"id": question.questionId, "item": removeExtraSpaces(newvalue.trim())});
       },
       // maxLength: question.questionTitle.contains('Title') ? 100 : 200,
       maxLength: 100,

@@ -458,9 +458,9 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                             }
                             if (formKey.currentState!.validate()) {
                               updateTeamMember(
-                                      email: emailController.text.trim(),
-                                      firstname: firstNameController.text.trim(),
-                                      lastname: lastNameController.text.trim(),
+                                      email: removeExtraSpaces(emailController.text.trim()),
+                                      firstname: removeExtraSpaces(firstNameController.text.trim()),
+                                      lastname: removeExtraSpaces(lastNameController.text.trim()),
                                       mobile: '$countryCode ${phoneController.text.trim()}',
                                       managerName: userData.managerName,
                                       managerid: userData.managerid,
@@ -551,9 +551,9 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                           children: [
                             TableRow(children: [
                               buildInfoFields('First name', userData.userfirstname, isPersonalDetailsEditing, firstNameController, context,
-                                  (value) => validateForNormalFeild(props: "First name", value: value)),
+                                  (value) => validateForNameField(props: "First name", value: value!.trim())),
                               buildInfoFields('Last Name ', userData.userlastname, isPersonalDetailsEditing, lastNameController, context,
-                                  (value) => validateForNormalFeild(props: "Last name", value: value)),
+                                  (value) => validateForNameField(props: "Last name", value: value!.trim())),
                               if (Responsive.isDesktop(context)) ...[const SizedBox()],
                             ])
                           ],
@@ -601,8 +601,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                   ),
                 ),
                 if (Responsive.isMobile(context))
-                  buildInfoFields(
-                      'Employee ID', userData.userId, false, TextEditingController(), context, (value) => validateForNormalFeild(props: "First name", value: value)),
+                  buildInfoFields('Employee ID', userData.userId, false, TextEditingController(), context, (value) => validateForNormalFeild(props: "First name", value: value)),
               ] else
                 ...[]
             ],

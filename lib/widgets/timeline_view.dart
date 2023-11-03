@@ -10,9 +10,10 @@ import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/loader.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/activity_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
-import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/timeline_item.dart';
+
+import '../Customs/responsive.dart';
 
 class CustomTimeLineView extends ConsumerStatefulWidget {
   final bool fromHome;
@@ -58,12 +59,12 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: EdgeInsets.only(left: Responsive.isDesktop(context) ? 10.0 : 0),
-                child: const CustomChip(
+                padding: EdgeInsets.only(left: 10),
+                child: CustomChip(
                   paddingVertical: 3,
                   paddingHorizontal: 0,
                   avatar: Icon(
@@ -78,8 +79,8 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(right: Responsive.isDesktop(context) ? 5.0 : 0),
-                child: const CustomChip(
+                padding: EdgeInsets.only(right: 5.0),
+                child: CustomChip(
                   paddingVertical: 3,
                   label: Row(
                     children: [
