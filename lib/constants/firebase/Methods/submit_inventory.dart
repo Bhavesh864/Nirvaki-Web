@@ -187,6 +187,8 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
     title: companyNamecustomer,
     whatsapp: whatsAppNo ?? mobileNo,
   );
+  bool isResidential = propertyCategory == "Residential";
+  var title = isResidential ? "" : commericialtype;
   final cards.CardDetails card = cards.CardDetails(
       workitemId: isEdit ? existingInventoryId : idForNewInventory,
       status: isEdit ? existingcardStatus : "New",
@@ -195,7 +197,8 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       brokerid: currentUserdata?.brokerId,
       managerid: currentUserdata?.managerid,
       cardType: "IN",
-      cardTitle: "$propertyCategory $propertyKind-$propertyCity",
+      cardTitle: "$propertyCategory $title $propertyKind-$propertyCity",
+      // cardTitle: "$propertyCategory $propertyKind-$propertyCity",
       cardDescription:
           "Want to $inventoryCategory her $bedrooms BHK for ${inventoryCategory == "Rent" ? convertToCroresAndLakhs(rentamount) : convertToCroresAndLakhs(price)} rupees",
       customerinfo: customercardInfo,
@@ -216,8 +219,8 @@ Future<String> submitInventoryAndcardDetails(state, bool isEdit, WidgetRef ref) 
       userid: user.userId,
     );
   }).toList();
-  bool isResidential = propertyCategory == "Residential";
-  var title = isResidential ? "" : commericialtype;
+  // bool isResidential = propertyCategory == "Residential";
+  // var title = isResidential ? "" : commericialtype;
   final InventoryDetails inventory = InventoryDetails(
       inventoryTitle: "$propertyCategory $title $propertyKind",
       inventoryDescription: "Want to $inventoryCategory her $bedrooms BHK for $price rupees",

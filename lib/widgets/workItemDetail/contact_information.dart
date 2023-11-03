@@ -113,7 +113,12 @@ class ContactInformation extends StatelessWidget {
         ),
         ListTile(
           minVerticalPadding: 0,
-          onTap: () => launchWhatsapp(customerinfo.whatsapp, context),
+          onTap: () {
+            List<String> splitString = customerinfo.whatsapp.split(' ');
+            if (splitString.length == 2) {
+              launchWhatsapp(splitString[1], context);
+            }
+          },
           contentPadding: const EdgeInsets.all(0),
           dense: true,
           visualDensity: const VisualDensity(vertical: -2),
@@ -134,7 +139,9 @@ class ContactInformation extends StatelessWidget {
         ),
         if (customerinfo?.email != null)
           ListTile(
-            onTap: () {},
+            onTap: () {
+              openEmailApp(customerinfo?.email);
+            },
             contentPadding: const EdgeInsets.all(0),
             dense: true,
             visualDensity: const VisualDensity(vertical: -2),
