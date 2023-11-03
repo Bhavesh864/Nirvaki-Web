@@ -207,7 +207,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 10.0),
           child: CustomText(
-            title: "Property Details",
+            title: "Property Requirements",
             fontWeight: FontWeight.w700,
           ),
         ),

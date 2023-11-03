@@ -12,6 +12,7 @@ import 'package:yes_broker/constants/firebase/detailsModels/activity_details.dar
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
+import 'package:yes_broker/widgets/app/dropdown_menu.dart';
 import 'package:yes_broker/widgets/timeline_item.dart';
 
 class CustomTimeLineView extends ConsumerStatefulWidget {
@@ -32,6 +33,7 @@ class CustomTimeLineView extends ConsumerStatefulWidget {
 
 class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
   late Stream<QuerySnapshot<Map<String, dynamic>>> activityDetails;
+  String selectedDay = 'All Time';
 
   @override
   void initState() {
@@ -62,40 +64,124 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Padding(
-                padding: EdgeInsets.only(left: Responsive.isDesktop(context) ? 10.0 : 0),
-                child: const CustomChip(
-                  paddingVertical: 3,
-                  paddingHorizontal: 0,
-                  avatar: Icon(
-                    Icons.calendar_view_week_outlined,
-                    weight: 1000,
-                    size: 18,
-                  ),
-                  label: CustomText(
-                    title: 'This Week',
-                    size: 10,
+              CustomDropDown(
+                initialValue: selectedDay,
+                onSelected: (value) {
+                  setState(() {
+                    if (value == '0') {
+                      selectedDay = 'All Time';
+                    }
+                    if (value == '1') {
+                      selectedDay = 'This Week';
+                    }
+                    if (value == '2') {
+                      selectedDay = 'This Day';
+                    }
+                  });
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(left: Responsive.isDesktop(context) ? 10.0 : 0),
+                  child: CustomChip(
+                    paddingVertical: 3,
+                    paddingHorizontal: 0,
+                    avatar: const Icon(
+                      Icons.calendar_view_week_outlined,
+                      weight: 1000,
+                      size: 18,
+                    ),
+                    label: CustomText(
+                      title: selectedDay, // Change the label text
+                      size: 10,
+                    ),
                   ),
                 ),
+                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                  const PopupMenuItem<String>(
+                    value: '0',
+                    height: 30,
+                    child: CustomText(
+                      title: 'All Time',
+                      size: 12,
+                    ),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: '1',
+                    height: 30,
+                    child: CustomText(
+                      title: 'This Week',
+                      size: 12,
+                    ),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: '2',
+                    height: 30,
+                    child: CustomText(
+                      title: 'This Day',
+                      size: 12,
+                    ),
+                  ),
+                ],
               ),
-              Padding(
-                padding: EdgeInsets.only(right: Responsive.isDesktop(context) ? 5.0 : 0),
-                child: const CustomChip(
-                  paddingVertical: 3,
-                  label: Row(
-                    children: [
-                      CustomText(
-                        title: 'Filter By',
-                        size: 10,
-                      ),
-                      Icon(
-                        Icons.arrow_downward_outlined,
-                        weight: 1000,
-                        size: 18,
-                      ),
-                    ],
+              CustomDropDown(
+                initialValue: selectedDay,
+                onSelected: (value) {
+                  setState(() {
+                    if (value == '0') {
+                      selectedDay = 'All Time';
+                    }
+                    if (value == '1') {
+                      selectedDay = 'This Week';
+                    }
+                    if (value == '2') {
+                      selectedDay = 'This Day';
+                    }
+                  });
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(right: Responsive.isDesktop(context) ? 5.0 : 0),
+                  child: const CustomChip(
+                    paddingVertical: 3,
+                    label: Row(
+                      children: [
+                        CustomText(
+                          title: 'Filter By',
+                          size: 10,
+                        ),
+                        Icon(
+                          Icons.arrow_downward_outlined,
+                          weight: 1000,
+                          size: 18,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
+                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                  const PopupMenuItem<String>(
+                    value: '0',
+                    height: 30,
+                    child: CustomText(
+                      title: 'All Time',
+                      size: 12,
+                    ),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: '1',
+                    height: 30,
+                    child: CustomText(
+                      title: 'This Week',
+                      size: 12,
+                    ),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: '2',
+                    height: 30,
+                    child: CustomText(
+                      title: 'This Day',
+                      size: 12,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

@@ -2,12 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/small_custom_profile_image.dart';
-import 'package:yes_broker/widgets/app/nav_bar.dart';
+
 import '../../Customs/responsive.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/assingment_methods.dart';
-import '../../constants/functions/datetime/date_time.dart';
+import '../../constants/methods/date_time_methods.dart';
+import '../../constants/methods/string_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
 import '../../riverpodstate/user_data.dart';

@@ -10,7 +10,6 @@ import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/functions/navigation/navigation_functions.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
-import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/widgets/todo/todo_filter_view.dart';
 import '../../Customs/custom_text.dart';
 import '../../Customs/loader.dart';
@@ -19,6 +18,7 @@ import '../../constants/app_constant.dart';
 import '../../constants/firebase/Hive/hive_methods.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/filterdataAccordingRole/data_according_role.dart';
+import '../../constants/methods/string_methods.dart';
 import '../../constants/utils/constants.dart';
 import '../../routes/routes.dart';
 import '../../widgets/calendar_view.dart';
@@ -89,6 +89,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(userDataProvider);
     final size = MediaQuery.of(context).size;
+    final showClosed = ref.watch(showClosedTodoItemsProvider);
 
     return Container(
       color: Colors.white,
@@ -142,6 +143,10 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
 
               status = filterTodoList;
 
+              if (!showClosed) {
+                filterTodoList = filterTodoList.where((item) => item.status != 'Closed').toList();
+              }
+
               final tableRowList = filterTodoList.map((e) {
                 return buildWorkItemRowTile(
                   e,
@@ -166,9 +171,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                             if (width! > 850)
                               TopSerachBar(
                                 onChanged: (value) {
-                                  setState(() {
-                                    // searchController.text = value;
-                                  });
+                                  setState(() {});
                                 },
                                 onToggleShowTable: () {
                                   setState(() {

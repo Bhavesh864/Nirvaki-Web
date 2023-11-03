@@ -1,11 +1,11 @@
 // ignore_for_file: invalid_use_of_protected_member
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_fields.dart';
+import 'package:yes_broker/Customs/loader.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/small_custom_profile_image.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
@@ -69,7 +69,7 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
           future: leadDetails,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator.adaptive());
+              return const Loader();
             }
             if (snapshot.hasData) {
               final data = snapshot.data!;
@@ -158,7 +158,8 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
                                                 AssignmentWidget(
                                                   id: data.leadId!,
                                                   assignto: data.assignedto!,
-                                                  imageUrlCreatedBy: data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
+                                                  imageUrlCreatedBy:
+                                                      data.createdby!.userimage == null || data.createdby!.userimage!.isEmpty ? noImg : data.createdby!.userimage!,
                                                   createdBy: data.createdby!.userfirstname! + data.createdby!.userlastname!,
                                                 ),
                                               );
@@ -210,8 +211,10 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   StreamBuilder(
-                                    stream:
-                                        FirebaseFirestore.instance.collection("brokerInfo").where("brokerid", isEqualTo: data.brokerid).snapshots(includeMetadataChanges: true),
+                                    stream: FirebaseFirestore.instance
+                                        .collection("brokerInfo")
+                                        .where("brokerid", isEqualTo: data.brokerid)
+                                        .snapshots(includeMetadataChanges: true),
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {
                                         final dataList = snapshot.data?.docs;
@@ -277,8 +280,11 @@ class PublicViewLeadDetailsState extends ConsumerState<PublicViewLeadDetails> wi
                 ),
               );
             }
+            if (snapshot.hasError) {
+              print('e');
+            }
             return Container(
-              color: Colors.amber,
+              color: Colors.blue,
             );
           }),
     );

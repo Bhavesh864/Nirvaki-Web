@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/customs/custom_chip.dart';
 import 'package:yes_broker/customs/responsive.dart';
 
-class TopSerachBar extends StatefulWidget {
+final showClosedTodoItemsProvider = StateProvider<bool>((ref) => false);
+
+class TopSerachBar extends ConsumerStatefulWidget {
   final String title;
   final Function(String) onChanged;
   final Function onToggleShowTable;
@@ -27,12 +30,16 @@ class TopSerachBar extends StatefulWidget {
   });
 
   @override
-  State<TopSerachBar> createState() => _TopSerachBarState();
+  ConsumerState<TopSerachBar> createState() => _TopSerachBarState();
 }
 
-class _TopSerachBarState extends State<TopSerachBar> {
+class _TopSerachBarState extends ConsumerState<TopSerachBar> {
+  // bool _showClosed = false;
+
   @override
   Widget build(BuildContext context) {
+    final showClosed = ref.watch(showClosedTodoItemsProvider);
+
     return !Responsive.isMobile(context)
         ? Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -57,6 +64,38 @@ class _TopSerachBarState extends State<TopSerachBar> {
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Row(
                   children: [
+                    widget.title == 'Todo'
+                        ? InkWell(
+                            onTap: () {
+                              // setState(() {
+                              //   _showClosed = !_showClosed;
+                              //   // widget.onShowClosedChanged(_showClosed);
+                              // });
+                              ref.read(showClosedTodoItemsProvider.notifier).state = !showClosed;
+                            },
+                            child: Row(
+                              children: [
+                                const CustomText(
+                                  title: 'Show Closed',
+                                  fontWeight: FontWeight.w600,
+                                  size: 14,
+                                ),
+                                Switch(
+                                    value: showClosed,
+                                    onChanged: (value) {
+                                      // setState(() {
+                                      //   _showClosed = !_showClosed;
+                                      //   // widget.onShowClosedChanged(_showClosed);
+                                      // });
+                                      ref.read(showClosedTodoItemsProvider.notifier).state = !showClosed;
+                                    }),
+                              ],
+                            ),
+                          )
+                        : const SizedBox(),
+                    const SizedBox(
+                      width: 10,
+                    ),
                     CustomChip(
                       paddingVertical: 5,
                       onPressed: () {

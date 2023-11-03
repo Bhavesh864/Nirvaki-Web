@@ -82,8 +82,8 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
   @override
   Widget build(BuildContext context) {
     final sideBarIndex = ref.watch(desktopSideBarIndexProvider);
-    final beamerKey = GlobalKey<BeamerState>();
     final headerText = ref.watch(headerTextProvider.notifier);
+    final beamerKey = GlobalKey<BeamerState>();
 
     AppConst.setOuterContext(context);
 

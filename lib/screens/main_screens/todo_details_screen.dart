@@ -111,11 +111,14 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
   }
 
   void updateDate(itemid, initialDate) {
+    final DateTime currentDate = DateTime.now();
+
     showDatePicker(
       context: context,
-      initialDate: initialDate,
-      firstDate: initialDate,
-      lastDate: DateTime(initialDate.year + 1),
+      currentDate: initialDate,
+      initialDate: currentDate,
+      firstDate: currentDate,
+      lastDate: DateTime(initialDate.year + 2),
     ).then(
       (pickedDate) {
         if (pickedDate == null) {

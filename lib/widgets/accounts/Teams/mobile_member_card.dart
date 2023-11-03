@@ -4,9 +4,9 @@ import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/riverpodstate/add_member_state.dart';
 import 'package:yes_broker/screens/account_screens/Teams/team_screen.dart';
-import 'package:yes_broker/widgets/timeline_item.dart';
 
 import '../../../constants/firebase/userModel/user_info.dart';
+import '../../../constants/methods/string_methods.dart';
 import '../../../constants/utils/colors.dart';
 
 class MobileMemberCard extends ConsumerWidget {
