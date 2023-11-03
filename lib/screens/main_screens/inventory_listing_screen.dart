@@ -93,7 +93,6 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
             final List<CardDetails> inventoryList = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN").toList();
             inventoryList.sort((a, b) => b.createdate!.compareTo(a.createdate!));
-
             List<CardDetails> filteredInventoryList = inventoryList.where((item) {
               if (searchController.text.isEmpty) {
                 return true;
@@ -102,7 +101,6 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
                 final fullName = "${item.customerinfo!.firstname} ${item.customerinfo!.lastname}".toLowerCase();
                 final title = item.cardTitle!.toLowerCase();
                 final mobileNumber = item.customerinfo!.mobile!.toLowerCase();
-
                 return fullName.contains(searchText) || title.contains(searchText) || mobileNumber.contains(searchText);
               }
             }).toList();

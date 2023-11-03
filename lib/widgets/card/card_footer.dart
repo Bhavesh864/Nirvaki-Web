@@ -60,7 +60,12 @@ class CardFooter extends StatelessWidget {
                     : const SizedBox(),
                 checkNotNUllItem(cardData.customerinfo?.whatsapp)
                     ? CustomChip(
-                        onPressed: () => launchWhatsapp(cardData.customerinfo?.whatsapp, context),
+                        onPressed: () {
+                          List<String>? splitString = cardData.customerinfo?.whatsapp?.split(' ');
+                          if (splitString?.length == 2) {
+                            launchWhatsapp(splitString?[1], context);
+                          }
+                        },
                         label: const FaIcon(
                           FontAwesomeIcons.whatsapp,
                           size: 12,

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +14,7 @@ import '../../app_constant.dart';
 import '../../firebase/Hive/hive_methods.dart';
 import '../../firebase/userModel/broker_info.dart';
 
-void userLogout(WidgetRef ref, BuildContext context) {
+void userLogout(WidgetRef ref, BuildContext context) async {
   authentication.signOut().then(
         (value) => {
           ref.read(chatControllerProvider).setUserState(false),
@@ -30,6 +32,7 @@ void userLogout(WidgetRef ref, BuildContext context) {
           AppConst.setRole(""),
         },
       );
+  await UserListPreferences.deleteUserList();
 }
 
 // void logoutaction(WidgetRef ref, BuildContext context) {
