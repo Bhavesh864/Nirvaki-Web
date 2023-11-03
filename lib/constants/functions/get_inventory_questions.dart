@@ -487,13 +487,9 @@ Widget buildInventoryQuestions(
           case "Company Name":
             maxLength = 100;
             break;
-          case "Video":
+          case "Youtube Video":
             maxLength = 200;
             break;
-          // case "Address1":
-          // case "Address2":
-          //   maxLength = 150;
-          //   break;
           default:
             maxLength = 30;
         }
@@ -522,16 +518,24 @@ Widget buildInventoryQuestions(
                   });
                 }
 
-                notify.add({"id": question.questionId, "item": newvalue.trim()});
+                notify.add({"id": question.questionId, "item": removeExtraSpaces(newvalue.trim())});
               },
               validator: video
                   ? (value) => isYouTubeVideoURL(value!)
                   : isEmail
                       ? validateEmailNotMandatory
-                      : isvalidationtrue
+                      : isvalidationtrue || question.questionTitle.contains('Last')
                           ? (value) {
-                              if (value!.isEmpty) {
+                              if (value!.isEmpty && question.questionTitle != "Last Name") {
                                 return "Please enter ${question.questionTitle}";
+                              }
+                              if (question.questionTitle == "First Name") {
+                                var invalid = validateForNameField(value: value.trim(), props: question.questionTitle);
+                                return invalid;
+                              }
+                              if (question.questionTitle == "Last Name" && controller.text != "") {
+                                var invalid = validateForNameField(value: value.trim(), props: question.questionTitle);
+                                return invalid;
                               }
                               return null;
                             }

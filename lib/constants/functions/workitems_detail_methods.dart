@@ -493,7 +493,7 @@ void showAddCalendarModal({
                         maxLength: 100,
                         labelFontWeight: FontWeight.w600,
                         inputController: titleController,
-                        validator: (value) => validateForNormalFeild(props: "Title", value: value),
+                        validator: (value) => validateForNormalFeild(props: "Title", value: value!.trim()),
                       ),
                       const SizedBox(
                         height: 10,
@@ -613,7 +613,7 @@ void showAddCalendarModal({
                           // descriptionController.itext = p0;
                         },
                         inputController: descriptionController,
-                        validator: (value) => validateForNormalFeild(props: "Details", value: value),
+                        validator: (value) => validateForNormalFeild(props: "Details", value: value!.trim()),
                       ),
                       const SizedBox(
                         height: 10,

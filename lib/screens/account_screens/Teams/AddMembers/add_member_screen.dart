@@ -65,9 +65,9 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
       });
       if (isEdit) {
         updateTeamMember(
-                email: _emailController.text,
-                firstname: _firstNameController.text,
-                lastname: _lastNameController.text,
+                email: removeExtraSpaces(_emailController.text.trim()),
+                firstname: removeExtraSpaces(_firstNameController.text.trim()),
+                lastname: removeExtraSpaces(_lastNameController.text.trim()),
                 mobile: "$mobileCountryCode ${_mobileController.text}",
                 managerName: manager != null ? '${manager?.userfirstname} ${manager?.userlastname}' : editUser?.managerName,
                 managerid: manager != null ? manager?.userId : editUser?.managerid,
@@ -98,9 +98,9 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                 });
       } else {
         sendInvitationEmail(
-                email: _emailController.text,
-                firstname: _firstNameController.text,
-                lastname: _lastNameController.text,
+                email: removeExtraSpaces(_emailController.text.trim()),
+                firstname: removeExtraSpaces(_firstNameController.text.trim()),
+                lastname: removeExtraSpaces(_lastNameController.text.trim()),
                 mobile: "$mobileCountryCode ${_mobileController.text}",
                 managerName: '${manager?.userfirstname} ${manager?.userlastname}',
                 managerid: manager?.userId,
@@ -218,7 +218,7 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                               labelText: "First Name",
                               maxLength: 30,
                               inputController: _firstNameController,
-                              validator: (value) => validateForNormalFeild(value: value, props: "First Name"),
+                              validator: (value) => validateForNameField(value: value?.trim(), props: "First Name"),
                               isMandatory: true,
                             ),
                             const SizedBox(height: 4),
@@ -226,7 +226,7 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                               maxLength: 30,
                               labelText: "Last Name",
                               inputController: _lastNameController,
-                              // validator: (value) => validateForNormalFeild(value: value, props: "Last Name"),
+                              validator: (value) => _lastNameController.text != "" ? validateForNameField(value: value?.trim(), props: "Last Name") : null,
                             ),
                             const SizedBox(height: 4),
                             Column(
