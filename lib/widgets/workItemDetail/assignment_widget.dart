@@ -5,6 +5,7 @@ import 'package:yes_broker/Customs/small_custom_profile_image.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
 import '../../Customs/responsive.dart';
 import '../../constants/app_constant.dart';
+import '../../constants/firebase/Hive/hive_methods.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/assingment_methods.dart';
 import '../../constants/functions/datetime/date_time.dart';
@@ -45,30 +46,22 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
   @override
   void initState() {
     super.initState();
-    setassignedData();
-    setCreatedByUser();
+    getdataFromLocalStorage();
+    // setCreatedByUser();
   }
 
-  void setassignedData() async {
+  void getdataFromLocalStorage() async {
     final userids = [];
     for (var data in widget.assignto) {
       userids.add(data.userid);
     }
-    if (userids.isNotEmpty) {
-      final List<User> userdata = await User.getListOfUsersByIds(userids);
-      if (mounted) {
-        setState(() {
-          assigned = userdata;
-        });
-      }
-    }
-  }
-
-  void setCreatedByUser() async {
-    final User? user = await User.getUser(widget.createdBy);
+    List<User> retrievedUsers = await UserListPreferences.getUserList();
+    List<User> filteredUsers = retrievedUsers.where((user) => userids.contains(user.userId)).toList();
+    User createdby = retrievedUsers.firstWhere((user) => user.userId == widget.createdBy);
     if (mounted) {
       setState(() {
-        createdByUser = user;
+        assigned = filteredUsers;
+        createdByUser = createdby;
       });
     }
   }

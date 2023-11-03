@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../Customs/custom_text.dart';
 import '../constants/app_constant.dart';
+import '../constants/firebase/Hive/hive_methods.dart';
 import '../constants/firebase/userModel/user_info.dart';
 import '../constants/utils/constants.dart';
 
@@ -25,24 +26,23 @@ class AssignedCircularImages extends StatefulWidget {
 class _AssignedCircularImagesState extends State<AssignedCircularImages> {
   List<User> assigned = [];
 
-  void setassignedData() async {
+  void getdataFromLocalStorage() async {
     final userids = [];
     for (var data in widget.cardData.assignedto) {
       userids.add(data.userid);
     }
-    if (userids.isNotEmpty) {
-      final List<User> userdata = await User.getListOfUsersByIds(userids);
-      if (mounted) {
-        setState(() {
-          assigned = userdata;
-        });
-      }
+    List<User> retrievedUsers = await UserListPreferences.getUserList();
+    List<User> filteredUsers = retrievedUsers.where((user) => userids.contains(user.userId)).toList();
+    if (mounted) {
+      setState(() {
+        assigned = filteredUsers;
+      });
     }
   }
 
   @override
   void initState() {
-    setassignedData();
+    getdataFromLocalStorage();
     super.initState();
   }
 
