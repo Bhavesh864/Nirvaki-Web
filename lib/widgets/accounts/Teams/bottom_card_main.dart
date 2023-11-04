@@ -6,7 +6,6 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/riverpodstate/add_member_state.dart';
 
 import 'package:yes_broker/widgets/accounts/Teams/bottom_card_header.dart';
-import 'package:yes_broker/widgets/timeline_item.dart';
 
 import '../../../constants/firebase/Hive/hive_methods.dart';
 import '../../../constants/firebase/userModel/user_info.dart';
