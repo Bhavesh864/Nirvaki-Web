@@ -575,10 +575,10 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                                     email: broker.brokercompanyemail,
                                     image: broker.brokerlogo,
                                     companyAddress: {
-                                      "city": cityController.text,
-                                      "state": stateController.text,
-                                      "Addressline1": address1Controller.text,
-                                      "Addressline2": address2Controller.text
+                                      "city": cityController.text.trim(),
+                                      "state": stateController.text.trim(),
+                                      "Addressline1": address1Controller.text.trim(),
+                                      "Addressline2": address2Controller.text.trim()
                                     }).then((value) => {cancelEditingAddressDetail()});
                               }
                             }
