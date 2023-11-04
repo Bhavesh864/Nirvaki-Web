@@ -14,7 +14,6 @@ import 'package:yes_broker/constants/firebase/detailsModels/activity_details.dar
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
-import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/widgets/timeline_item.dart';
 
 import '../Customs/responsive.dart';
@@ -53,6 +52,11 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
     }
   }
 
+  User getNamesMatchWithid(id) {
+    final User userArr = allUsersList.firstWhere((element) => id == element.userId);
+    return userArr;
+  }
+
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 1)).then((value) => {getdataFromLocalStorage()});
@@ -87,15 +91,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                 initialValue: selectedDay,
                 onSelected: (value) {
                   setState(() {
-                    if (value == '0') {
-                      selectedDay = 'All Time';
-                    }
-                    if (value == '1') {
-                      selectedDay = 'This Week';
-                    }
-                    if (value == '2') {
-                      selectedDay = 'This Day';
-                    }
+                    selectedDay = value;
                   });
                 },
                 child: Padding(
@@ -103,10 +99,24 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                   child: CustomChip(
                     paddingVertical: 3,
                     paddingHorizontal: 0,
-                    avatar: const Icon(
-                      Icons.calendar_view_week_outlined,
-                      weight: 1000,
-                      size: 18,
+                    avatar: Row(
+                      children: [
+                        if (selectedDay.isNotEmpty && selectedDay != 'All Time')
+                          Container(
+                            width: 6,
+                            height: 6,
+                            margin: const EdgeInsets.only(right: 4),
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColor.primary,
+                            ),
+                          ),
+                        const Icon(
+                          Icons.calendar_view_week_outlined,
+                          weight: 1000,
+                          size: 18,
+                        ),
+                      ],
                     ),
                     label: CustomText(
                       title: selectedDay,
@@ -116,7 +126,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                 ),
                 itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                   const PopupMenuItem<String>(
-                    value: '0',
+                    value: 'All Time',
                     height: 30,
                     child: CustomText(
                       title: 'All Time',
@@ -124,7 +134,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                     ),
                   ),
                   const PopupMenuItem<String>(
-                    value: '1',
+                    value: 'This Week',
                     height: 30,
                     child: CustomText(
                       title: 'This Week',
@@ -132,7 +142,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                     ),
                   ),
                   const PopupMenuItem<String>(
-                    value: '2',
+                    value: 'This Day',
                     height: 30,
                     child: CustomText(
                       title: 'This Day',
@@ -143,22 +153,44 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
               ),
               CustomDropDown(
                 initialValue: seleteduserName,
+
                 onSelected: (value) {
-                  setState(() {
-                    selectedUserid = value;
-                  });
+                  if (value == 'All') {
+                    setState(() {
+                      selectedUserid = '';
+                    });
+                  } else {
+                    setState(() {
+                      selectedUserid = value;
+                      seleteduserName = getNamesMatchWithid(selectedUserid).userfirstname;
+                    });
+                  }
                 },
                 child: Padding(
                   padding: EdgeInsets.only(right: Responsive.isDesktop(context) ? 5.0 : 0),
-                  child: const CustomChip(
+                  child: CustomChip(
                     paddingVertical: 3,
                     label: Row(
                       children: [
-                        CustomText(
-                          title: 'Filter By',
-                          size: 10,
+                        Row(
+                          children: [
+                            if (selectedUserid.isNotEmpty)
+                              Container(
+                                width: 6,
+                                height: 6,
+                                margin: const EdgeInsets.only(right: 4),
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColor.primary,
+                                ),
+                              ),
+                            const CustomText(
+                              title: 'Filter By',
+                              size: 10,
+                            ),
+                          ],
                         ),
-                        Icon(
+                        const Icon(
                           Icons.arrow_downward_outlined,
                           weight: 1000,
                           size: 18,
@@ -167,14 +199,40 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                     ),
                   ),
                 ),
-                itemBuilder: (context) => allUsersList
-                    .map(
-                      (e) => popupMenuItemKamStyling(
-                        e.userfirstname.toString(),
-                        e.userId.toString(),
+                itemBuilder: (BuildContext context) {
+                  List<PopupMenuEntry<String>> menuItems = [
+                    const PopupMenuItem<String>(
+                      value: 'All',
+                      height: 30,
+                      child: CustomText(
+                        title: 'All',
+                        size: 12,
                       ),
-                    )
-                    .toList(),
+                    ),
+                    const PopupMenuDivider(),
+                  ];
+
+                  menuItems.addAll(allUsersList.map((e) {
+                    return PopupMenuItem<String>(
+                      value: e.userId.toString(),
+                      height: 30,
+                      child: CustomText(
+                        title: e.userfirstname.toString(),
+                        size: 12,
+                      ),
+                    );
+                  }));
+
+                  return menuItems;
+                },
+                // itemBuilder: (context) => allUsersList
+                //     .map(
+                //       (e) => popupMenuItemKamStyling(
+                //         e.userfirstname.toString(),
+                //         e.userId.toString(),
+                //       ),
+                //     )
+                //     .toList(),
               ),
             ],
           ),
@@ -192,10 +250,29 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                 List<ActivityDetails> activities = datalist!.map((e) => ActivityDetails.fromSnapshot(e)).toList();
                 if (widget.fromHome) {
                   activities = activities.where((activity) => widget.itemIds!.contains(activity.itemid)).toList();
-                  if (selectedUserid.isNotEmpty) {
-                    activities = activities.where((element) => selectedUserid == element.userid).toList();
+                }
+                if (selectedUserid.isNotEmpty) {
+                  activities = activities.where((element) => selectedUserid == element.userid).toList();
+                }
+                if (selectedDay.isNotEmpty) {
+                  DateTime today = DateTime.now();
+
+                  if (selectedDay == 'This Week') {
+                    // Calculate the start date of the current week (assuming Monday is the start of the week)
+                    DateTime startOfWeek = today.subtract(Duration(days: today.weekday - 1));
+
+                    activities = activities.where((element) {
+                      DateTime activityDate = element.createdate!.toDate(); // Assuming the date is in string format
+                      return activityDate.isAfter(startOfWeek);
+                    }).toList();
+                  } else if (selectedDay == 'This Day') {
+                    activities = activities.where((element) {
+                      DateTime activityDate = element.createdate!.toDate(); // Assuming the date is in string format
+                      return activityDate.year == today.year && activityDate.month == today.month && activityDate.day == today.day;
+                    }).toList();
                   }
                 }
+
                 activities.sort((a, b) => b.createdate!.compareTo(a.createdate!));
                 if (activities.isNotEmpty) {
                   if (widget.fromHome) {

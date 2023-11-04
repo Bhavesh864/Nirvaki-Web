@@ -40,6 +40,7 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
   Future<List<CardDetails>>? future;
   List<User> userList = [];
   bool isUserLoaded = false;
+
   @override
   void initState() {
     super.initState();
@@ -144,10 +145,14 @@ class TodoTabViewState extends ConsumerState<TodoTabView> {
                 final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
                 final List<CardDetails> todoItems =
                     filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
+
                 List<CardDetails> todoItemsList = todoItems.where((card) {
                   final searchTerm = searchController.text.toLowerCase();
                   return card.cardTitle!.toLowerCase().contains(searchTerm) || card.cardType!.toLowerCase().contains(searchTerm);
                 }).toList();
+
+                todoItemsList = todoItemsList.where((item) => item.status != 'Closed').toList();
+
                 if (showTableView) {
                   final tableRowList = todoItemsList.map((e) {
                     return buildWorkItemRowTile(
