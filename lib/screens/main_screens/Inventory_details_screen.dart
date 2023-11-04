@@ -176,23 +176,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                       ],
                                     ),
                                   ),
-                                // ListTile(
-                                //   contentPadding: const EdgeInsets.all(0),
-                                //   leading: const Icon(
-                                //     Icons.location_on_outlined,
-                                //     size: 20,
-                                //     color: Colors.black,
-                                //   ),
-                                //   minLeadingWidth: 2,
-                                //   horizontalTitleGap: 8,
-                                //   titleAlignment: ListTileTitleAlignment.center,
-                                //   title: CustomText(
-                                //     title: '${data.propertyaddress!.city},${data.propertyaddress!.state}',
-                                //     size: 12,
-                                //     fontWeight: FontWeight.w400,
-                                //     color: const Color(0xFFA8A8A8),
-                                //   ),
-                                // ),
+
                                 if (Responsive.isMobile(context)) ...[
                                   const SizedBox(height: 18),
                                   Row(

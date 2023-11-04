@@ -89,7 +89,7 @@ void deleteassignUser(userid, String id) {
   CardDetails.deleteCardAssignUser(itemId: id, userid: userid);
 }
 
-void assginUserToTodo(BuildContext context, Function assign, List<dynamic> assignto, String id, Function popBottomSheet, User currentuserdata, List<User> assigned) {
+void assginUserToTodo(BuildContext context, Function assign, List<dynamic> assignto, String id, Function popBottomSheet, User currentuserdata) {
   showDialog(
     context: context,
     builder: (context) {
@@ -127,7 +127,7 @@ void assginUserToTodo(BuildContext context, Function assign, List<dynamic> assig
                         child: ElevatedButton(
                           onPressed: () {
                             submitAssignUser(id, context, user!, currentuserdata);
-                            assigned.addAll(user!);
+                            // assigned.addAll(user!);
                             if (user!.isNotEmpty) {
                               Navigator.of(context).pop();
                               if (Responsive.isMobile(context)) {

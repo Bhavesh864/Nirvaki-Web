@@ -2,7 +2,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/constants/functions/filterdataAccordingRole/data_according_role.dart';
 import 'package:yes_broker/constants/functions/navigation/navigation_functions.dart';
@@ -34,7 +33,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
 
   List<String> selectedFilters = [];
   final TextEditingController searchController = TextEditingController();
-  RangeValues rateRange = const RangeValues(0, 0);
+  // RangeValues rateRange = const RangeValues(0, 0);
 
   late Stream<QuerySnapshot<Map<String, dynamic>>> cardDetails;
   List<CardDetails>? status;
@@ -49,7 +48,8 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
 
   void setCardDetails() {
     final brokerid = UserHiveMethods.getdata("brokerId");
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("brokerid", isEqualTo: brokerid).snapshots(includeMetadataChanges: true);
+    cardDetails =
+        FirebaseFirestore.instance.collection('cardDetails').where("brokerid", isEqualTo: brokerid).where("cardType", whereIn: ["IN"]).snapshots(includeMetadataChanges: true);
   }
 
   getDetails(User currentuser) async {
@@ -90,6 +90,7 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
               getDetails(user);
               isUserLoaded = true;
             }
+            print(snapshot.data?.docs.length);
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
             final List<CardDetails> inventoryList = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN").toList();
             inventoryList.sort((a, b) => b.createdate!.compareTo(a.createdate!));

@@ -84,7 +84,8 @@ class LeadListingScreenState extends ConsumerState<LeadListingScreen> {
 
   void setCardDetails() {
     final brokerid = UserHiveMethods.getdata("brokerId");
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("brokerid", isEqualTo: brokerid).snapshots(includeMetadataChanges: true);
+    cardDetails =
+        FirebaseFirestore.instance.collection('cardDetails').where("brokerid", isEqualTo: brokerid).where("cardType", whereIn: ["LD"]).snapshots(includeMetadataChanges: true);
   }
 
   void getDetails(User currentuser) async {

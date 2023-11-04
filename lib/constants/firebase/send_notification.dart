@@ -27,7 +27,7 @@ Future<void> sendNotificationTouser({
         'notification_count': 23,
       },
     },
-    'data': {'id': itemid, "imageUrl": currentuserdata.image}
+    'data': {'id': itemid, "userid": currentuserdata.userId}
   };
   await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
       body: jsonEncode(data), headers: {'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'key=$serverKey'}).then((value) {
@@ -81,7 +81,7 @@ Future<void> setNotificationTOfirestore(String title, String content, String ite
       notificationContent: content,
       receiveDate: Timestamp.now(),
       linkedItemId: itemid,
-      imageUrl: currentuserdata.image,
+      createdUserId: currentuserdata.userId,
       userId: usersIds.where((element) => element != AppConst.getAccessToken()).toList(),
       isRead: false,
       id: generateUid(),

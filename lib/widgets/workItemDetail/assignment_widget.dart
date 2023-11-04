@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/Customs/small_custom_profile_image.dart';
-
 import '../../Customs/responsive.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/firebase/Hive/hive_methods.dart';
@@ -15,7 +14,7 @@ import '../../constants/utils/constants.dart';
 import '../../riverpodstate/user_data.dart';
 
 class AssignmentWidget extends ConsumerStatefulWidget {
-  final List assignto;
+  final dynamic assignto;
   final String createdBy;
   final String imageUrlCreatedBy;
   final String id;
@@ -36,7 +35,6 @@ class AssignmentWidget extends ConsumerStatefulWidget {
 
 class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
   List<User> assigned = [];
-  User? createdByUser;
   bool loadedData = false;
   void assign(List<User> assignedUser) {
     setState(() {
@@ -48,23 +46,20 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
   void initState() {
     super.initState();
     getdataFromLocalStorage();
-    // setCreatedByUser();
   }
 
   void getdataFromLocalStorage() async {
-    final userids = [];
-    for (var data in widget.assignto) {
-      userids.add(data.userid);
-    }
     List<User> retrievedUsers = await UserListPreferences.getUserList();
-    List<User> filteredUsers = retrievedUsers.where((user) => userids.contains(user.userId)).toList();
-    User createdby = retrievedUsers.firstWhere((user) => user.userId == widget.createdBy);
     if (mounted) {
       setState(() {
-        assigned = filteredUsers;
-        createdByUser = createdby;
+        assigned = retrievedUsers;
       });
     }
+  }
+
+  User getNamesMatchWithid(id) {
+    final User user = assigned.firstWhere((element) => id == element.userId);
+    return user;
   }
 
   @override
@@ -95,25 +90,29 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 29, top: 2),
-                  child: createdByUser != null
-                      ? Row(
-                          children: [
-                            SmallCustomCircularImage(imageUrl: createdByUser!.image),
-                            Text(
-                              capitalizeFirstLetter("${createdByUser!.userfirstname} ${createdByUser!.userlastname}"),
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.left,
-                              style: const TextStyle(
-                                color: AppColor.primary,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        )
-                      : const SizedBox.shrink(),
-                )
+                    padding: const EdgeInsets.only(left: 29, top: 2),
+                    child: Row(
+                      children: [
+                        SmallCustomCircularImage(
+                            imageUrl: assigned.isNotEmpty
+                                ? getNamesMatchWithid(widget.createdBy).image.isEmpty
+                                    ? noImg
+                                    : getNamesMatchWithid(widget.createdBy).image
+                                : noImg),
+                        Text(
+                          assigned.isNotEmpty
+                              ? capitalizeFirstLetter("${getNamesMatchWithid(widget.createdBy).userfirstname} ${getNamesMatchWithid(widget.createdBy).userlastname}")
+                              : "",
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                            color: AppColor.primary,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ))
               ],
             ),
           ),
@@ -197,8 +196,8 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: assigned.isNotEmpty
-                          ? assigned.map((item) {
+                      children: widget.assignto.isNotEmpty
+                          ? widget.assignto.map<Widget>((item) {
                               return Container(
                                 margin: const EdgeInsets.only(bottom: 7),
                                 padding: const EdgeInsets.all(5),
@@ -209,13 +208,20 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    SmallCustomCircularImage(imageUrl: item.image.isNotEmpty ? item.image : noImg),
+                                    SmallCustomCircularImage(
+                                        imageUrl: assigned.isNotEmpty
+                                            ? getNamesMatchWithid(item.userid).image.isEmpty
+                                                ? noImg
+                                                : getNamesMatchWithid(item.userid).image
+                                            : noImg),
                                     Container(
                                       constraints: BoxConstraints(
                                         maxWidth: Responsive.isDesktop(context) ? 150 : 110,
                                       ),
                                       child: Text(
-                                        "${capitalizeFirstLetter(item.userfirstname)} ${capitalizeFirstLetter(item.userlastname)}",
+                                        assigned.isNotEmpty
+                                            ? "${capitalizeFirstLetter(getNamesMatchWithid(item.userid).userfirstname)} ${capitalizeFirstLetter(getNamesMatchWithid(item.userid).userlastname)}"
+                                            : "",
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
                                         softWrap: true,
@@ -232,11 +238,10 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                                       userData?.role != "Employee"
                                           ? GestureDetector(
                                               onTap: () {
-                                                deleteassignUser(item.userId, widget.id);
+                                                deleteassignUser(item.userid, widget.id);
                                                 if (Responsive.isMobile(context)) {
                                                   Navigator.of(context).pop();
                                                 }
-                                                assigned.remove(item);
                                               },
                                               child: const Icon(Icons.close),
                                             )
@@ -254,7 +259,7 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                             onTap: () {
                               assginUserToTodo(context, assign, widget.assignto, widget.id, () {
                                 Navigator.of(context).pop();
-                              }, userData!, assigned);
+                              }, userData!);
                               user = [];
                             },
                             child: const Padding(

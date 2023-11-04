@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timeline_tile/timeline_tile.dart';
@@ -12,9 +13,12 @@ import 'package:yes_broker/constants/firebase/detailsModels/activity_details.dar
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/widgets/app/dropdown_menu.dart';
+import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/widgets/timeline_item.dart';
 
 import '../Customs/responsive.dart';
+import '../constants/firebase/Hive/hive_methods.dart';
+import '../constants/firebase/userModel/user_info.dart';
 
 class CustomTimeLineView extends ConsumerStatefulWidget {
   final bool fromHome;
@@ -35,9 +39,22 @@ class CustomTimeLineView extends ConsumerStatefulWidget {
 class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
   late Stream<QuerySnapshot<Map<String, dynamic>>> activityDetails;
   String selectedDay = 'All Time';
+  String seleteduserName = "";
+  String selectedUserid = "";
+  List<User> allUsersList = [];
+
+  void getdataFromLocalStorage() async {
+    List<User> retrievedUsers = await UserListPreferences.getUserList();
+    if (mounted) {
+      setState(() {
+        allUsersList = retrievedUsers;
+      });
+    }
+  }
 
   @override
   void initState() {
+    Future.delayed(const Duration(seconds: 1)).then((value) => {getdataFromLocalStorage()});
     super.initState();
     setactivity();
   }
@@ -91,7 +108,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                       size: 18,
                     ),
                     label: CustomText(
-                      title: selectedDay, // Change the label text
+                      title: selectedDay,
                       size: 10,
                     ),
                   ),
@@ -124,18 +141,10 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                 ],
               ),
               CustomDropDown(
-                initialValue: selectedDay,
+                initialValue: seleteduserName,
                 onSelected: (value) {
                   setState(() {
-                    if (value == '0') {
-                      selectedDay = 'All Time';
-                    }
-                    if (value == '1') {
-                      selectedDay = 'This Week';
-                    }
-                    if (value == '2') {
-                      selectedDay = 'This Day';
-                    }
+                    selectedUserid = value;
                   });
                 },
                 child: Padding(
@@ -157,32 +166,14 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                     ),
                   ),
                 ),
-                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                  const PopupMenuItem<String>(
-                    value: '0',
-                    height: 30,
-                    child: CustomText(
-                      title: 'All Time',
-                      size: 12,
-                    ),
-                  ),
-                  const PopupMenuItem<String>(
-                    value: '1',
-                    height: 30,
-                    child: CustomText(
-                      title: 'This Week',
-                      size: 12,
-                    ),
-                  ),
-                  const PopupMenuItem<String>(
-                    value: '2',
-                    height: 30,
-                    child: CustomText(
-                      title: 'This Day',
-                      size: 12,
-                    ),
-                  ),
-                ],
+                itemBuilder: (context) => allUsersList
+                    .map(
+                      (e) => popupMenuItemKamStyling(
+                        e.userfirstname.toString(),
+                        e.userId.toString(),
+                      ),
+                    )
+                    .toList(),
               ),
             ],
           ),
@@ -200,13 +191,19 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                 List<ActivityDetails> activities = datalist!.map((e) => ActivityDetails.fromSnapshot(e)).toList();
                 if (widget.fromHome) {
                   activities = activities.where((activity) => widget.itemIds!.contains(activity.itemid)).toList();
+                  if (selectedUserid.isNotEmpty) {
+                    activities = activities.where((element) => selectedUserid == element.userid).toList();
+                  }
                 }
                 activities.sort((a, b) => b.createdate!.compareTo(a.createdate!));
                 if (activities.isNotEmpty) {
                   if (widget.fromHome) {
                     return Expanded(
                       child: ScrollConfiguration(
-                        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                        behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.mouse,
+                        }),
                         child: ListView.builder(
                           shrinkWrap: true,
                           itemCount: activities.length,
@@ -231,6 +228,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                                 index: index,
                                 activitiesList: activities,
                                 fromHome: widget.fromHome,
+                                allUsersList: allUsersList,
                               ),
                             );
                           },
@@ -241,7 +239,10 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                     return SizedBox(
                       height: 300,
                       child: ScrollConfiguration(
-                        behavior: const ScrollBehavior().copyWith(overscroll: false),
+                        behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.mouse,
+                        }),
                         child: ListView.builder(
                           shrinkWrap: true,
                           // physics: const NeverScrollableScrollPhysics(),
@@ -268,6 +269,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                                   index: index,
                                   activitiesList: activities,
                                   fromHome: widget.fromHome,
+                                  allUsersList: allUsersList,
                                 ),
                               ),
                             );

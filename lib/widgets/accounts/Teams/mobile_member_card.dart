@@ -21,15 +21,10 @@ class MobileMemberCard extends ConsumerStatefulWidget {
 class _MobileMemberCardState extends ConsumerState<MobileMemberCard> {
   List<User> managers = [];
   void getdataFromLocalStorage() async {
-    final userids = [];
-    for (var data in widget.userList) {
-      userids.add(data.managerid);
-    }
     List<User> retrievedUsers = await UserListPreferences.getUserList();
-    List<User> filteredUsers = retrievedUsers.where((user) => userids.contains(user.userId)).toList();
     if (mounted) {
       setState(() {
-        managers = filteredUsers;
+        managers = retrievedUsers;
       });
     }
   }
