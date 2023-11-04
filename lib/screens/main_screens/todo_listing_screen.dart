@@ -73,7 +73,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   }
 
   void setCardDetails() {
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots(includeMetadataChanges: true);
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("cardType", whereNotIn: ["LD", "IN"]).snapshots(includeMetadataChanges: true);
   }
 
   void getDetails(User currentuser) async {
@@ -109,10 +109,8 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                 getDetails(user);
                 isUserLoaded = true;
               }
-
               final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
-              final List<CardDetails> todoItemsList =
-                  filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
+              final List<CardDetails> todoItemsList = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).toList();
 
               int compareDueDates(CardDetails a, CardDetails b) {
                 DateTime aDueDate = DateFormat('dd-MM-yy').parse(a.duedate!);
