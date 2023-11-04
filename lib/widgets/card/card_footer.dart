@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -31,77 +32,83 @@ class CardFooter extends StatelessWidget {
         SizedBox(
           height: 25,
           width: 220,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              if (cardData.customerinfo != null) ...[
-                Center(
-                  child: Container(
-                    margin: const EdgeInsets.only(right: 5),
-                    child: Text(
-                      "${checkNotNUllItem(cardData.customerinfo?.firstname) ? capitalizeFirstLetter(cardData.customerinfo!.firstname!) : ""} ${checkNotNUllItem(cardData.customerinfo?.lastname) ? capitalizeFirstLetter(cardData.customerinfo!.lastname!) : ""}",
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
+          child: ScrollConfiguration(
+            behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+              PointerDeviceKind.touch,
+              PointerDeviceKind.mouse,
+            }),
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                if (cardData.customerinfo != null) ...[
+                  Center(
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 5),
+                      child: Text(
+                        "${checkNotNUllItem(cardData.customerinfo?.firstname) ? capitalizeFirstLetter(cardData.customerinfo!.firstname!) : ""} ${checkNotNUllItem(cardData.customerinfo?.lastname) ? capitalizeFirstLetter(cardData.customerinfo!.lastname!) : ""}",
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                checkNotNUllItem(cardData.customerinfo?.mobile)
-                    ? CustomChip(
-                        onPressed: () => makePhoneCall(cardData.customerinfo!.mobile!),
-                        label: const Icon(
-                          Icons.call_outlined,
-                          size: 12,
-                        ),
-                        paddingHorizontal: 3,
-                      )
-                    : const SizedBox(),
-                checkNotNUllItem(cardData.customerinfo?.whatsapp)
-                    ? CustomChip(
-                        onPressed: () {
-                          List<String>? splitString = cardData.customerinfo?.whatsapp?.split(' ');
-                          if (splitString?.length == 2) {
-                            launchWhatsapp(splitString?[1], context);
-                          }
-                        },
-                        label: const FaIcon(
-                          FontAwesomeIcons.whatsapp,
-                          size: 12,
-                        ),
-                        paddingHorizontal: 3,
-                      )
-                    : const SizedBox(),
-              ] else ...[
-                const SizedBox.shrink()
-              ],
-              if (!cardDetails[index].workitemId!.contains('TD'))
-                CustomChip(
-                  onPressed: () {
-                    shareUrl(
-                      context,
-                      textToCombine: navigationUrl(
+                  checkNotNUllItem(cardData.customerinfo?.mobile)
+                      ? CustomChip(
+                          onPressed: () => makePhoneCall(cardData.customerinfo!.mobile!),
+                          label: const Icon(
+                            Icons.call_outlined,
+                            size: 12,
+                          ),
+                          paddingHorizontal: 3,
+                        )
+                      : const SizedBox(),
+                  checkNotNUllItem(cardData.customerinfo?.whatsapp)
+                      ? CustomChip(
+                          onPressed: () {
+                            List<String>? splitString = cardData.customerinfo?.whatsapp?.split(' ');
+                            if (splitString?.length == 2) {
+                              launchWhatsapp(splitString?[1], context);
+                            }
+                          },
+                          label: const FaIcon(
+                            FontAwesomeIcons.whatsapp,
+                            size: 12,
+                          ),
+                          paddingHorizontal: 3,
+                        )
+                      : const SizedBox(),
+                ] else ...[
+                  const SizedBox.shrink()
+                ],
+                if (!cardDetails[index].workitemId!.contains('TD'))
+                  CustomChip(
+                    onPressed: () {
+                      shareUrl(
                         context,
-                        cardDetails[index].workitemId!,
-                      ),
-                    );
-                  },
-                  label: const Icon(
-                    Icons.share_outlined,
-                    size: 12,
+                        textToCombine: navigationUrl(
+                          context,
+                          cardDetails[index].workitemId!,
+                        ),
+                      );
+                    },
+                    label: const Icon(
+                      Icons.share_outlined,
+                      size: 12,
+                    ),
+                    paddingHorizontal: 3,
                   ),
-                  paddingHorizontal: 3,
-                ),
-              if (!cardDetails[index].workitemId!.contains('TD'))
-                CustomChip(
-                  label: CustomText(
-                    title: cardData.workitemId!,
-                    size: 10,
+                if (!cardDetails[index].workitemId!.contains('TD'))
+                  CustomChip(
+                    label: CustomText(
+                      title: cardData.workitemId!,
+                      size: 10,
+                    ),
+                    paddingHorizontal: 2,
                   ),
-                  paddingHorizontal: 2,
-                ),
-            ],
+              ],
+            ),
           ),
         ),
         const Spacer(),

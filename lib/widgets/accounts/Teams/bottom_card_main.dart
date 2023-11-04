@@ -23,15 +23,10 @@ class BottomCardMain extends ConsumerStatefulWidget {
 class _BottomCardMainState extends ConsumerState<BottomCardMain> {
   List<User> managers = [];
   void getdataFromLocalStorage() async {
-    final userids = [];
-    for (var data in widget.userList) {
-      userids.add(data.managerid);
-    }
     List<User> retrievedUsers = await UserListPreferences.getUserList();
-    List<User> filteredUsers = retrievedUsers.where((user) => userids.contains(user.userId)).toList();
     if (mounted) {
       setState(() {
-        managers = filteredUsers;
+        managers = retrievedUsers;
       });
     }
   }
@@ -79,8 +74,7 @@ class _BottomCardMainState extends ConsumerState<BottomCardMain> {
                         AppText(text: '${user.userfirstname} ${user.userlastname}', fontsize: 12, fontWeight: FontWeight.bold),
                         AppText(text: user.role, fontsize: 12, fontWeight: FontWeight.w400),
                         TableCell(
-                          child: AppText(
-                              text: managers.isNotEmpty ? capitalizeFirstLetter(getNamesMatchWithid(user.managerid)) : "", fontsize: 12, fontWeight: FontWeight.w400),
+                          child: AppText(text: managers.isNotEmpty ? capitalizeFirstLetter(getNamesMatchWithid(user.managerid)) : "", fontsize: 12, fontWeight: FontWeight.w400),
                         ),
                         TableCell(
                           child: Container(
