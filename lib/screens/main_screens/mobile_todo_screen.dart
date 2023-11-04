@@ -63,7 +63,10 @@ class MobileTodoScreenState extends ConsumerState<MobileTodoScreen> {
   }
 
   void setCardDetails() {
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots(includeMetadataChanges: true);
+    final brokerid = UserHiveMethods.getdata("brokerId");
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("cardType", whereNotIn: ["IN", "LD"])
+        // .orderBy("createdate", descending: true)
+        .snapshots(includeMetadataChanges: true);
   }
 
   void getDetails(User currentuser) async {
@@ -96,10 +99,8 @@ class MobileTodoScreenState extends ConsumerState<MobileTodoScreen> {
                 getDetails(user);
                 isUserLoaded = true;
               }
-
               final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
-              final List<CardDetails> todoItemsList =
-                  filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
+              final List<CardDetails> todoItemsList = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).toList();
 
               int compareDueDates(CardDetails a, CardDetails b) {
                 DateTime aDueDate = DateFormat('dd-MM-yy').parse(a.duedate!);

@@ -61,6 +61,8 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
     ref.read(userDataProvider.notifier).storeUserData(user!);
     AppConst.setRole(user.role);
     UserHiveMethods.addData(key: "brokerId", data: user.brokerId);
+    final List<userinfo.User> userList = await userinfo.User.getAllUsers(user);
+    UserListPreferences.saveUserList(userList);
   }
 
   @override

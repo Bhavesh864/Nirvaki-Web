@@ -9,7 +9,7 @@ class NotificationModel {
   String? notificationContent;
   Timestamp? receiveDate;
   String? linkedItemId;
-  String? imageUrl;
+  String? createdUserId;
   List<String>? userId;
   bool? isRead;
 
@@ -19,7 +19,7 @@ class NotificationModel {
     this.notificationContent,
     this.receiveDate,
     this.linkedItemId,
-    this.imageUrl,
+    this.createdUserId,
     this.userId,
     this.isRead,
   });
@@ -32,7 +32,7 @@ class NotificationModel {
       notificationContent: json["notificationContent"],
       receiveDate: json["receiveDate"],
       linkedItemId: json["linkedItemId"],
-      imageUrl: json["imageUrl"],
+      createdUserId: json["createdUserId"],
       userId: json["userId"] == null ? null : List<String>.from(json["userId"]),
       isRead: json['isRead'],
       id: json['id'],
@@ -49,8 +49,8 @@ class NotificationModel {
     if (json["linkedItemId"] is String) {
       linkedItemId = json["linkedItemId"];
     }
-    if (json["imageUrl"] is String) {
-      imageUrl = json["imageUrl"];
+    if (json["createdUserId"] is String) {
+      createdUserId = json["createdUserId"];
     }
     if (json["userId"] is List) {
       userId = json["userId"] == null ? null : List<String>.from(json["userId"]);
@@ -71,7 +71,7 @@ class NotificationModel {
     data["notificationContent"] = notificationContent;
     data["receiveDate"] = receiveDate;
     data["linkedItemId"] = linkedItemId;
-    data["imageUrl"] = imageUrl;
+    data["createdUserId"] = createdUserId;
     data["userId"] = userId;
     data["title"] = title;
     data["isRead"] = isRead;

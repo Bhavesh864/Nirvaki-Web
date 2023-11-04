@@ -13,7 +13,11 @@
         // END: FlutterFire Configuration
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
+<<<<<<< HEAD
         // classpath 'com.google.firebase:firebase-plugins:1.1.0'
+=======
+        // classpath ('com.google.firebase:firebase-plugins:1.1.0')
+>>>>>>> 221a5af652848c3e1cae7655bf209ce669a5ad14
     }
 }
 
