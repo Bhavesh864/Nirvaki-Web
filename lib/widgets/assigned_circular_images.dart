@@ -42,7 +42,7 @@ class _AssignedCircularImagesState extends State<AssignedCircularImages> {
 
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 1)).then((value) => {getdataFromLocalStorage()});
+    getdataFromLocalStorage();
     super.initState();
   }
 
