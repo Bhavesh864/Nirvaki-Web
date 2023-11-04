@@ -63,7 +63,6 @@ class MobileTodoScreenState extends ConsumerState<MobileTodoScreen> {
   }
 
   void setCardDetails() {
-    final brokerid = UserHiveMethods.getdata("brokerId");
     cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("cardType", whereNotIn: ["IN", "LD"])
         // .orderBy("createdate", descending: true)
         .snapshots(includeMetadataChanges: true);
@@ -83,6 +82,8 @@ class MobileTodoScreenState extends ConsumerState<MobileTodoScreen> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userDataProvider);
+    final showClosed = ref.watch(showClosedTodoItemsProvider);
+
     return Container(
       color: Colors.white,
       child: StreamBuilder(
@@ -131,6 +132,23 @@ class MobileTodoScreenState extends ConsumerState<MobileTodoScreen> {
               }).toList();
 
               status = filterTodoList;
+
+              if (!showClosed) {
+                filterTodoList = filterTodoList.where((item) => item.status != 'Closed').toList();
+              } else {
+                filterTodoList.sort((a, b) {
+                  if (a.status == 'Closed' && b.status != 'Closed') {
+                    return 1; // 'Closed' items go to the end
+                  } else if (a.status != 'Closed' && b.status == 'Closed') {
+                    return -1; // 'Closed' items go to the end
+                  } else if (a.status == 'Inventory' && b.status == 'Lead') {
+                    return -1; // 'Inventory' goes before 'Lead'
+                  } else if (a.status == 'Lead' && b.status == 'Inventory') {
+                    return 1; // 'Inventory' goes before 'Lead'
+                  }
+                  return 0; // Maintain the existing order for other items
+                });
+              }
 
               final tableRowList = filterTodoList.map((e) {
                 return buildWorkItemRowTile(

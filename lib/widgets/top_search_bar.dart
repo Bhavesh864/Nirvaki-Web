@@ -137,6 +137,35 @@ class _TopSerachBarState extends ConsumerState<TopSerachBar> {
                 ),
                 Row(
                   children: [
+                    widget.title == 'Todo'
+                        ? InkWell(
+                            onTap: () {
+                              // setState(() {
+                              //   _showClosed = !_showClosed;
+                              //   // widget.onShowClosedChanged(_showClosed);
+                              // });
+                              ref.read(showClosedTodoItemsProvider.notifier).state = !showClosed;
+                            },
+                            child: Row(
+                              children: [
+                                const CustomText(
+                                  title: 'Show Closed',
+                                  fontWeight: FontWeight.w600,
+                                  size: 14,
+                                ),
+                                Switch(
+                                    value: showClosed,
+                                    onChanged: (value) {
+                                      // setState(() {
+                                      //   _showClosed = !_showClosed;
+                                      //   // widget.onShowClosedChanged(_showClosed);
+                                      // });
+                                      ref.read(showClosedTodoItemsProvider.notifier).state = !showClosed;
+                                    }),
+                              ],
+                            ),
+                          )
+                        : const SizedBox(),
                     InkWell(
                       onTap: () {
                         widget.onFilterOpen();
