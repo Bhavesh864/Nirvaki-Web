@@ -214,10 +214,10 @@ class _DetailsTabViewState extends State<DetailsTabView> {
           ),
         ],
         // if (!AppConst.getPublicView()) ...[
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 10.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: CustomText(
-            title: "Property Requirements",
+            title: widget.isLeadView ? "Property Requirements" : 'Property Details',
             fontWeight: FontWeight.w700,
           ),
         ),
