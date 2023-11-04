@@ -103,6 +103,7 @@ class CustomAddressAndProfileCard extends ConsumerStatefulWidget {
   final String? title;
   final bool isPersonalDetails;
   final User userData;
+
   const CustomAddressAndProfileCard({
     Key? key,
     this.title,
@@ -311,7 +312,7 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        width: Responsive.isMobile(context) ? 140 : 350,
+                        width: Responsive.isMobile(context) ? 200 : 400,
                         child: Text(
                           maxLines: 3,
                           softWrap: true,
@@ -549,13 +550,15 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                         padding: const EdgeInsets.symmetric(vertical: 15.0),
                         child: Table(
                           children: [
-                            TableRow(children: [
-                              buildInfoFields('First name', userData.userfirstname, isPersonalDetailsEditing, firstNameController, context,
-                                  (value) => validateForNameField(props: "First name", value: value!.trim())),
-                              buildInfoFields('Last Name ', userData.userlastname, isPersonalDetailsEditing, lastNameController, context,
-                                  (value) => validateForNameField(props: "Last name", value: value!.trim())),
-                              if (Responsive.isDesktop(context)) ...[const SizedBox()],
-                            ])
+                            TableRow(
+                              children: [
+                                buildInfoFields('First name', userData.userfirstname, isPersonalDetailsEditing, firstNameController, context,
+                                    (value) => validateForNameField(props: "First name", value: value!.trim())),
+                                buildInfoFields('Last Name ', userData.userlastname, isPersonalDetailsEditing, lastNameController, context,
+                                    (value) => validateForNameField(props: "Last name", value: value!.trim())),
+                                if (Responsive.isDesktop(context)) ...[const SizedBox()],
+                              ],
+                            )
                           ],
                         ),
                       ),
@@ -601,7 +604,8 @@ class _CustomAddressAndProfileCardState extends ConsumerState<CustomAddressAndPr
                   ),
                 ),
                 if (Responsive.isMobile(context))
-                  buildInfoFields('Employee ID', userData.userId, false, TextEditingController(), context, (value) => validateForNormalFeild(props: "First name", value: value)),
+                  buildInfoFields(
+                      'Employee ID', userData.userId, false, TextEditingController(), context, (value) => validateForNormalFeild(props: "First name", value: value)),
               ] else
                 ...[]
             ],
@@ -649,11 +653,14 @@ Widget buildInfoFields(
         ),
       ] else ...[
         const SizedBox(height: 3),
-        Text(
-          fieldDetail,
-          style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
+        Padding(
+          padding: const EdgeInsets.only(right: 25.0),
+          child: Text(
+            fieldDetail,
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ]
