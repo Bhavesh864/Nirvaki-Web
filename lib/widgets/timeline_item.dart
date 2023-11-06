@@ -7,10 +7,12 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/responsive.dart';
+
 import '../constants/firebase/Hive/hive_methods.dart';
 import '../constants/firebase/userModel/user_info.dart';
 import '../constants/functions/navigation/navigation_functions.dart';
 import '../constants/functions/time_formatter.dart';
+import '../constants/methods/string_methods.dart';
 import '../riverpodstate/common_index_state.dart';
 
 class TimeLineItem extends ConsumerStatefulWidget {
@@ -25,36 +27,18 @@ class TimeLineItem extends ConsumerStatefulWidget {
 }
 
 class _TimeLineItemState extends ConsumerState<TimeLineItem> {
-  List<User> assigned = [];
-  List<String> ids = [];
-  // void setassignedData() async {
-  //   final currentuser = ref.read(userDataProvider);
-  //   if (currentuser != null) {
-  //     final List<User> userdata = await User.getAllUsers(currentuser);
-  //     if (mounted) {
-  //       setState(() {
-  //         assigned = userdata;
-  //       });
-  //     }
-  //   }
-  // }
-  List<User> createdByUser = [];
+  List<User> allUsersList = [];
   void getdataFromLocalStorage() async {
-    final userids = [];
-    for (var data in widget.activitiesList) {
-      userids.add(data.createdby?.userid);
-    }
     List<User> retrievedUsers = await UserListPreferences.getUserList();
-    List<User> filteredUsers = retrievedUsers.where((user) => userids.contains(user.userId)).toList();
     if (mounted) {
       setState(() {
-        createdByUser = filteredUsers;
+        allUsersList = retrievedUsers;
       });
     }
   }
 
   User getNamesMatchWithid(id) {
-    final User userArr = createdByUser.firstWhere((element) => id == element.userId);
+    final User userArr = allUsersList.firstWhere((element) => id == element.userId);
     return userArr;
   }
 
@@ -180,12 +164,18 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
               width: 20,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey, width: 1.0),
-                image: DecorationImage(image: NetworkImage(createdByUser.isNotEmpty ? getNamesMatchWithid(timeLine.createdby?.userid).image : noImg), fit: BoxFit.fill),
+                image: DecorationImage(
+                    image: NetworkImage(allUsersList.isNotEmpty
+                        ? getNamesMatchWithid(timeLine.createdby?.userid).image.isEmpty
+                            ? noImg
+                            : getNamesMatchWithid(timeLine.createdby?.userid).image
+                        : noImg),
+                    fit: BoxFit.fill),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
             title: CustomText(
-              title: capitalizeFirstLetter(createdByUser.isNotEmpty ? getNamesMatchWithid(timeLine.createdby?.userid).userfirstname : ""),
+              title: capitalizeFirstLetter(allUsersList.isNotEmpty ? getNamesMatchWithid(timeLine.createdby?.userid).userfirstname : ""),
               size: 12,
             ),
           )
@@ -193,16 +183,4 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
       ),
     );
   }
-}
-
-String capitalizeFirstLetter(String text) {
-  if (text.isEmpty) {
-    return text;
-  }
-  return text[0].toUpperCase() + text.substring(1).toLowerCase();
-}
-
-User getUserNameById(String id, List<User> users) {
-  final User user = users.firstWhere((user) => user.userId == id);
-  return user;
 }

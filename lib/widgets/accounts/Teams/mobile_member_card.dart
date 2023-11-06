@@ -4,10 +4,10 @@ import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/riverpodstate/add_member_state.dart';
 import 'package:yes_broker/screens/account_screens/Teams/team_screen.dart';
-import 'package:yes_broker/widgets/timeline_item.dart';
 
 import '../../../constants/firebase/Hive/hive_methods.dart';
 import '../../../constants/firebase/userModel/user_info.dart';
+import '../../../constants/methods/string_methods.dart';
 import '../../../constants/utils/colors.dart';
 
 class MobileMemberCard extends ConsumerStatefulWidget {
@@ -21,15 +21,10 @@ class MobileMemberCard extends ConsumerStatefulWidget {
 class _MobileMemberCardState extends ConsumerState<MobileMemberCard> {
   List<User> managers = [];
   void getdataFromLocalStorage() async {
-    final userids = [];
-    for (var data in widget.userList) {
-      userids.add(data.managerid);
-    }
     List<User> retrievedUsers = await UserListPreferences.getUserList();
-    List<User> filteredUsers = retrievedUsers.where((user) => userids.contains(user.userId)).toList();
     if (mounted) {
       setState(() {
-        managers = filteredUsers;
+        managers = retrievedUsers;
       });
     }
   }

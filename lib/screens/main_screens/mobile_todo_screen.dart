@@ -63,7 +63,9 @@ class MobileTodoScreenState extends ConsumerState<MobileTodoScreen> {
   }
 
   void setCardDetails() {
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots(includeMetadataChanges: true);
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("cardType", whereNotIn: ["IN", "LD"])
+        // .orderBy("createdate", descending: true)
+        .snapshots(includeMetadataChanges: true);
   }
 
   void getDetails(User currentuser) async {
@@ -80,6 +82,8 @@ class MobileTodoScreenState extends ConsumerState<MobileTodoScreen> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userDataProvider);
+    final showClosed = ref.watch(showClosedTodoItemsProvider);
+
     return Container(
       color: Colors.white,
       child: StreamBuilder(
@@ -96,10 +100,8 @@ class MobileTodoScreenState extends ConsumerState<MobileTodoScreen> {
                 getDetails(user);
                 isUserLoaded = true;
               }
-
               final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
-              final List<CardDetails> todoItemsList =
-                  filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
+              final List<CardDetails> todoItemsList = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).toList();
 
               int compareDueDates(CardDetails a, CardDetails b) {
                 DateTime aDueDate = DateFormat('dd-MM-yy').parse(a.duedate!);
@@ -130,6 +132,23 @@ class MobileTodoScreenState extends ConsumerState<MobileTodoScreen> {
               }).toList();
 
               status = filterTodoList;
+
+              if (!showClosed) {
+                filterTodoList = filterTodoList.where((item) => item.status != 'Closed').toList();
+              } else {
+                filterTodoList.sort((a, b) {
+                  if (a.status == 'Closed' && b.status != 'Closed') {
+                    return 1; // 'Closed' items go to the end
+                  } else if (a.status != 'Closed' && b.status == 'Closed') {
+                    return -1; // 'Closed' items go to the end
+                  } else if (a.status == 'Inventory' && b.status == 'Lead') {
+                    return -1; // 'Inventory' goes before 'Lead'
+                  } else if (a.status == 'Lead' && b.status == 'Inventory') {
+                    return 1; // 'Inventory' goes before 'Lead'
+                  }
+                  return 0; // Maintain the existing order for other items
+                });
+              }
 
               final tableRowList = filterTodoList.map((e) {
                 return buildWorkItemRowTile(

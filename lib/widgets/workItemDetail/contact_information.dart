@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:yes_broker/constants/firebase/userModel/broker_info.dart';
 import 'package:yes_broker/constants/functions/make_call_function.dart';
+import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/customs/text_utility.dart';
 
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../../constants/app_constant.dart';
-import '../app/nav_bar.dart';
+import '../../constants/methods/string_methods.dart';
 
 class ContactInformation extends StatelessWidget {
   final dynamic customerinfo;
@@ -25,32 +26,31 @@ class ContactInformation extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 4.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              checkNotNUllItem(customerinfo?.firstname) || checkNotNUllItem(customerinfo?.lastname)
-                  ? Container(
-                      constraints: const BoxConstraints(maxWidth: 240),
-                      child: AppText(
-                        text: capitalizeFirstLetter('${customerinfo.firstname} ${checkNotNUllItem(customerinfo?.lastname) ? customerinfo.lastname : ""}'),
-                        fontWeight: FontWeight.w600,
-                        overflow: TextOverflow.ellipsis,
-                        fontsize: 20,
-                      ),
-                    )
-                  : const SizedBox(),
-              if (!AppConst.getPublicView())
-                const CustomChip(
-                  paddingVertical: 6,
-                  label: Icon(
-                    Icons.more_vert,
-                  ),
-                  paddingHorizontal: 3,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (checkNotNUllItem(customerinfo?.firstname) || checkNotNUllItem(customerinfo?.lastname)) ...[
+              Container(
+                constraints: BoxConstraints(maxWidth: Responsive.isTablet(context) ? 240 : 270),
+                child: AppText(
+                  text: capitalizeFirstLetter('${customerinfo.firstname} ${checkNotNUllItem(customerinfo?.lastname) ? customerinfo.lastname : ""}'),
+                  fontWeight: FontWeight.w600,
+                  softwrap: true,
+                  // overflow: TextOverflow.ellipsis,
+                  fontsize: 20,
                 ),
+              ),
             ],
-          ),
+            if (!AppConst.getPublicView())
+              const CustomChip(
+                paddingVertical: 6,
+                label: Icon(
+                  Icons.more_vert,
+                ),
+                paddingHorizontal: 3,
+              ),
+          ],
         ),
         if (customerinfo.companyname != null)
           Padding(
@@ -153,10 +153,18 @@ class ContactInformation extends StatelessWidget {
               ),
               paddingHorizontal: 3,
             ),
-            title: CustomText(
-              title: customerinfo.email ?? 'Not Active',
-              size: 13,
-              color: const Color(0xFFA8A8A8),
+            title: Container(
+              height: 30,
+              alignment: Alignment.center,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: CustomText(
+                  title: customerinfo.email ?? 'Not Active',
+                  size: 13,
+                  // softWrap: true,
+                  color: const Color(0xFFA8A8A8),
+                ),
+              ),
             ),
             minLeadingWidth: 0,
           ),
@@ -186,7 +194,7 @@ class CompanyInformation extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CustomText(
-                title: companyInfo.companyname!,
+                title: toPascalCase(companyInfo.companyname!),
                 fontWeight: FontWeight.w600,
                 size: 20,
               ),

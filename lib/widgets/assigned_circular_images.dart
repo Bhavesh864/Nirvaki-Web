@@ -27,17 +27,17 @@ class _AssignedCircularImagesState extends State<AssignedCircularImages> {
   List<User> assigned = [];
 
   void getdataFromLocalStorage() async {
-    final userids = [];
-    for (var data in widget.cardData.assignedto) {
-      userids.add(data.userid);
-    }
     List<User> retrievedUsers = await UserListPreferences.getUserList();
-    List<User> filteredUsers = retrievedUsers.where((user) => userids.contains(user.userId)).toList();
     if (mounted) {
       setState(() {
-        assigned = filteredUsers;
+        assigned = retrievedUsers;
       });
     }
+  }
+
+  User getNamesMatchWithid(id) {
+    final User userArr = assigned.firstWhere((element) => id == element.userId);
+    return userArr;
   }
 
   @override
@@ -51,13 +51,13 @@ class _AssignedCircularImagesState extends State<AssignedCircularImages> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.end,
-      children: checkNotNUllItem(assigned) && assigned.isNotEmpty
-          ? assigned
+      children: checkNotNUllItem(widget.cardData.assignedto) && widget.cardData.assignedto.isNotEmpty
+          ? widget.cardData.assignedto
               .sublist(
                 0,
-                assigned.length < 2
+                widget.cardData.assignedto.length < 2
                     ? 1
-                    : assigned.length < 3
+                    : widget.cardData.assignedto.length < 3
                         ? 2
                         : 3,
               )
@@ -82,7 +82,11 @@ class _AssignedCircularImagesState extends State<AssignedCircularImages> {
                           border: Border.all(color: Colors.white, width: 1.5),
                           image: DecorationImage(
                             image: NetworkImage(
-                              user.image.isEmpty ? noImg : user.image,
+                              assigned.isNotEmpty
+                                  ? getNamesMatchWithid(user.userid).image.isEmpty
+                                      ? noImg
+                                      : getNamesMatchWithid(user.userid).image
+                                  : noImg,
                               scale: 1,
                             ),
                             fit: BoxFit.fill,
@@ -92,7 +96,7 @@ class _AssignedCircularImagesState extends State<AssignedCircularImages> {
                   child: index > 1
                       ? Center(
                           child: CustomText(
-                            title: '+${assigned.length - 2}',
+                            title: '+${widget.cardData.assignedto.length - 2}',
                             color: Colors.black,
                             size: 9,
                             // textAlign: TextAlign.center,

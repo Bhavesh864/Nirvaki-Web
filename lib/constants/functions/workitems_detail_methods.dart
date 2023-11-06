@@ -11,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:yes_broker/Customs/dropdown_field.dart';
 import 'package:yes_broker/Customs/label_text_field.dart';
+import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart' as inventory;
@@ -175,6 +176,7 @@ void showUploadDocumentModal(
 ) {
   String docName = '';
   String? name;
+  final key = GlobalKey<FormState>();
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -186,130 +188,145 @@ void showUploadDocumentModal(
             child: Dialog(
               insetPadding: const EdgeInsets.all(15),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              child: Container(
-                padding: Responsive.isMobile(context) ? const EdgeInsets.all(15) : const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                height: docName == 'Other' ? 400 : 300,
-                width: Responsive.isMobile(context) ? width : 530,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Upload New Document',
-                          style: TextStyle(
-                            fontFamily: GoogleFonts.dmSans().fontFamily,
-                            fontSize: Responsive.isMobile(context) ? 18 : 24,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 0.4,
+              child: Form(
+                key: key,
+                child: Container(
+                  padding: Responsive.isMobile(context) ? const EdgeInsets.all(15) : const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  height: docName == 'Other' ? 400 : 300,
+                  width: Responsive.isMobile(context) ? width : 530,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Upload New Document',
+                            style: TextStyle(
+                              fontFamily: GoogleFonts.dmSans().fontFamily,
+                              fontSize: Responsive.isMobile(context) ? 18 : 24,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 0.4,
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.close),
-                          iconSize: 20,
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 2,
-                    ),
-                    CustomDropdownFormField(
-                      isMandatory: true,
-                      labelFontWeight: FontWeight.w500,
-                      label: 'Document Type',
-                      labelFontSize: 15,
-                      value: name,
-                      items: const ['Adhaar card', 'Agreement', 'Insurance', 'Other'],
-                      onChanged: (value) {
-                        docName = value!;
-                        name = value;
-                        innerSetState(
-                          () {},
-                        );
-                      },
-                    ),
-                    if (docName == 'Other') ...[
-                      LabelTextInputField(
-                        labelText: "Title",
-                        margin: const EdgeInsets.symmetric(horizontal: 2),
-                        inputController: titleController,
-                        // controller: titleController,
-                      )
-                      // const Padding(
-                      //   padding: EdgeInsets.only(top: 3.0),
-                      //   child: CustomText(
-                      //     title: 'Title',
-                      //     textAlign: TextAlign.start,
-                      //   ),
-                      // ),
-                      // Padding(
-                      //   padding: const EdgeInsets.only(bottom: 12.0),
-                      //   child: TextField(
-                      //     controller: titleController,
-                      //     decoration: const InputDecoration(hintText: 'Enter title'),
-                      //   ),
-                      // ),
-                    ],
-                    const SizedBox(
-                      height: 2,
-                    ),
-                    CustomButton(
-                      borderColor: AppColor.secondary,
-                      textAlign: TextAlign.left,
-                      isAttachments: true,
-                      fontWeight: FontWeight.w400,
-                      fontsize: 14,
-                      text: selectedFile == null ? 'Upload Document' : selectedFile!.name.toString(),
-                      rightIcon: MaterialSymbols.publish,
-                      buttonColor: AppColor.secondary,
-                      textColor: Colors.black,
-                      righticonColor: Colors.black,
-                      titleLeft: true,
-                      onPressed: () async {
-                        FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
-                        if (result != null) {
-                          innerSetState(() {
-                            selectedFile = result.files[0];
-                          });
-                        }
-                      },
-                    ),
-                    const SizedBox(
-                      height: 2,
-                    ),
-                    CustomButton(
-                      text: 'Done',
-                      fontsize: 12,
-                      fontWeight: FontWeight.w600,
-                      isBorder: false,
-                      height: 40,
-                      onPressed: () {
-                        if (docName != '' && selectedFile != null) {
-                          setIsUploading(true);
-
-                          uploadAttachmentsToFirebaseStorage(
-                            selectedFile!,
-                            id,
-                            docName,
-                            updateState,
-                            titleController.text,
-                            setIsUploading,
+                          IconButton(
+                            icon: const Icon(Icons.close),
+                            iconSize: 20,
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 2,
+                      ),
+                      CustomDropdownFormField(
+                        isMandatory: true,
+                        labelFontWeight: FontWeight.w500,
+                        label: 'Document Type',
+                        labelFontSize: 15,
+                        value: name,
+                        items: const ['Adhaar card', 'Agreement', 'Insurance', 'Other'],
+                        onChanged: (value) {
+                          docName = value!;
+                          name = value;
+                          innerSetState(
+                            () {},
                           );
-                          onPressed();
-                          selectedFile = null;
-                          Navigator.of(context).pop();
-                        }
-                      },
-                    ),
-                  ],
+                        },
+                      ),
+                      if (docName == 'Other') ...[
+                        LabelTextInputField(
+                          labelText: "Title",
+                          margin: const EdgeInsets.symmetric(horizontal: 2),
+                          inputController: titleController,
+                          maxLength: 40,
+                          validator: (value) => validateForNormalFeild(value: value, props: "Title"),
+                          // controller: titleController,
+                        )
+                        // const Padding(
+                        //   padding: EdgeInsets.only(top: 3.0),
+                        //   child: CustomText(
+                        //     title: 'Title',
+                        //     textAlign: TextAlign.start,
+                        //   ),
+                        // ),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(bottom: 12.0),
+                        //   child: TextField(
+                        //     controller: titleController,
+                        //     decoration: const InputDecoration(hintText: 'Enter title'),
+                        //   ),
+                        // ),
+                      ],
+                      const SizedBox(
+                        height: 2,
+                      ),
+                      CustomButton(
+                        borderColor: AppColor.secondary,
+                        textAlign: TextAlign.left,
+                        isAttachments: true,
+                        fontWeight: FontWeight.w400,
+                        fontsize: 14,
+                        text: selectedFile == null ? 'Upload Document' : selectedFile!.name.toString(),
+                        rightIcon: MaterialSymbols.publish,
+                        buttonColor: AppColor.secondary,
+                        textColor: Colors.black,
+                        righticonColor: Colors.black,
+                        titleLeft: true,
+                        onPressed: () async {
+                          FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
+                          if (result != null) {
+                            innerSetState(() {
+                              selectedFile = result.files[0];
+                            });
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        height: 2,
+                      ),
+                      CustomButton(
+                          text: 'Done',
+                          fontsize: 12,
+                          fontWeight: FontWeight.w600,
+                          isBorder: false,
+                          height: 40,
+                          onPressed: () {
+                            if (docName == '') {
+                              customSnackBar(context: context, text: 'Please select any document type');
+                              return;
+                            }
+                            if (selectedFile == null) {
+                              customSnackBar(context: context, text: 'Please upload a document');
+                              return;
+                            }
+                            if (docName == "Other") {
+                              final isvalid = key.currentState?.validate();
+                              if (isvalid == false) {
+                                return;
+                              }
+                            }
+                            setIsUploading(true);
+                            uploadAttachmentsToFirebaseStorage(
+                              selectedFile!,
+                              id,
+                              docName,
+                              updateState,
+                              removeExtraSpaces(titleController.text),
+                              setIsUploading,
+                            );
+                            onPressed();
+                            selectedFile = null;
+                            Navigator.of(context).pop();
+                          }),
+                    ],
+                  ),
                 ),
               ),
             ),

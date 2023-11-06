@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
@@ -22,8 +21,8 @@ import '../../constants/app_constant.dart';
 import '../../constants/firebase/Hive/hive_methods.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/filterdataAccordingRole/data_according_role.dart';
+import '../../constants/methods/string_methods.dart';
 import '../../riverpodstate/user_data.dart';
-import '../../widgets/app/nav_bar.dart';
 import '../../widgets/app/speed_dial_button.dart';
 import '../../widgets/chat_modal_view.dart';
 import '../account_screens/common_screen.dart';
@@ -40,6 +39,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   late Stream<QuerySnapshot<Map<String, dynamic>>> cardDetails;
   bool isUserLoaded = false;
   List<User> userList = [];
+  int currentPage = 1; // Add this variable for tracking the current page
+  int pageSize = 20;
   @override
   void initState() {
     super.initState();
@@ -50,8 +51,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
     });
     final token = UserHiveMethods.getdata("token");
     if (token != null) {
-      AppConst.setAccessToken(token);
       getUserData(token);
+      AppConst.setAccessToken(token);
     }
     if (kIsWeb) {
       ref.read(chatControllerProvider).setUserState(true);
@@ -60,7 +61,12 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void setCardDetails() async {
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots(includeMetadataChanges: true);
+    // final brokerid = UserHiveMethods.getdata("brokerId");
+    cardDetails = FirebaseFirestore.instance
+        .collection('cardDetails')
+        // .where("brokerid", isEqualTo: brokerid ?? "")
+        .where("Status", isNotEqualTo: "Closed")
+        .snapshots(includeMetadataChanges: true);
   }
 
   getUserData(token) async {
@@ -99,12 +105,6 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  // void getdataFromLocalStorage(List<String> userids) async {
-  //   List<User> retrievedUsers = await UserListPreferences.getUserList();
-  //   List<User> filteredUsers = retrievedUsers.where((user) => userids.contains(user.userId)).toList();
-  //   print(filteredUsers);
-  // }
-
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userDataProvider);
@@ -125,8 +125,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               isUserLoaded = true;
             }
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
-            final List<CardDetails> todoItems =
-                filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD" && item.status != "Closed").toList();
+            final List<CardDetails> todoItems = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
             int compareDueDates(CardDetails a, CardDetails b) {
               DateTime aDueDate = DateFormat('dd-MM-yy').parse(a.duedate!);
               DateTime bDueDate = DateFormat('dd-MM-yy').parse(b.duedate!);

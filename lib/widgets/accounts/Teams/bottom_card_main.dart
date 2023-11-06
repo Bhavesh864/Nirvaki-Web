@@ -6,10 +6,10 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/riverpodstate/add_member_state.dart';
 
 import 'package:yes_broker/widgets/accounts/Teams/bottom_card_header.dart';
-import 'package:yes_broker/widgets/timeline_item.dart';
 
 import '../../../constants/firebase/Hive/hive_methods.dart';
 import '../../../constants/firebase/userModel/user_info.dart';
+import '../../../constants/methods/string_methods.dart';
 
 class BottomCardMain extends ConsumerStatefulWidget {
   final List<User> userList;
@@ -22,15 +22,10 @@ class BottomCardMain extends ConsumerStatefulWidget {
 class _BottomCardMainState extends ConsumerState<BottomCardMain> {
   List<User> managers = [];
   void getdataFromLocalStorage() async {
-    final userids = [];
-    for (var data in widget.userList) {
-      userids.add(data.managerid);
-    }
     List<User> retrievedUsers = await UserListPreferences.getUserList();
-    List<User> filteredUsers = retrievedUsers.where((user) => userids.contains(user.userId)).toList();
     if (mounted) {
       setState(() {
-        managers = filteredUsers;
+        managers = retrievedUsers;
       });
     }
   }

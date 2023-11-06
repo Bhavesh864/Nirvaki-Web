@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/customs/loader.dart';
+import 'package:yes_broker/riverpodstate/chat/message_selection_state.dart';
 import 'package:yes_broker/screens/main_screens/add_group_member_screen.dart';
 
 import 'package:yes_broker/screens/main_screens/chat_list_screen.dart';
@@ -12,7 +14,7 @@ import 'package:yes_broker/widgets/chat/group/newchat_newgroup_popup.dart';
 import '../Customs/custom_text.dart';
 import '../chat/controller/chat_controller.dart';
 import '../constants/app_constant.dart';
-import '../constants/functions/datetime/date_time.dart';
+import '../constants/methods/date_time_methods.dart';
 import '../constants/utils/colors.dart';
 import 'chat/chat_input.dart';
 import 'chat/chat_screen_header.dart';
@@ -36,6 +38,7 @@ class ChatDialogBox extends ConsumerStatefulWidget {
 
 class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
   late ScrollController messageController;
+  final FocusNode focusNode = FocusNode();
 
   @override
   void initState() {
@@ -176,7 +179,9 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
 
                       return GestureDetector(
                         onTap: () {
-                          FocusScope.of(context).unfocus();
+                          if (!kIsWeb) {
+                            FocusScope.of(context).unfocus();
+                          }
                         },
                         child: Container(
                           height: 530,
@@ -192,11 +197,15 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                                   showProfileScreen: (u) {
                                     currentScreen = ChatModalScreenType.userProfile;
                                     user = u;
-                                    setState(() {});
+                                    setState(
+                                      () {},
+                                    );
                                   },
                                   goToChatList: () {
                                     currentScreen = ChatModalScreenType.chatList;
-                                    setState(() {});
+                                    setState(
+                                      () {},
+                                    );
                                   },
                                 ),
                               ),

@@ -1,6 +1,5 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -215,10 +214,10 @@ class _DetailsTabViewState extends State<DetailsTabView> {
           ),
         ],
         // if (!AppConst.getPublicView()) ...[
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 10.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: CustomText(
-            title: "Property Requirements",
+            title: widget.isLeadView ? "Property Requirements" : 'Property Details',
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -304,11 +303,12 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                   buildRoomsText(widget.data.roomconfig, false),
                   context,
                 ),
-                buildInfoFields(
-                  'Additional Room',
-                  buildRoomsText(widget.data.roomconfig, true),
-                  context,
-                ),
+                if (widget.data.roomconfig?.additionalroom.length != 0)
+                  buildInfoFields(
+                    'Additional Room',
+                    buildRoomsText(widget.data.roomconfig, true),
+                    context,
+                  ),
               ],
               if (checkNotNUllItem(widget.data.propertyarea.superarea) && checkNotNUllItem(widget.data.propertyarea.unit))
                 buildInfoFields(

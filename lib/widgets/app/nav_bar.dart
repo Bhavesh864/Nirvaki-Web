@@ -3,6 +3,7 @@
 
 import 'package:beamer/beamer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,8 +18,11 @@ import 'package:yes_broker/riverpodstate/header_text_state.dart';
 import 'package:yes_broker/riverpodstate/selected_workitem.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
 import '../../Customs/custom_text.dart';
+import '../../constants/firebase/Hive/hive_methods.dart';
 import '../../constants/firebase/userModel/user_info.dart';
+import '../../constants/functions/navigation/navigation_functions.dart';
 import '../../constants/functions/time_formatter.dart';
+import '../../constants/methods/string_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
 import '../../screens/account_screens/Teams/team_screen.dart';
@@ -61,10 +65,7 @@ class _LargeScreenNavBarState extends ConsumerState<LargeScreenNavBar> {
           largeScreenView("${userData?.userfirstname ?? ""} ${userData?.userlastname ?? ""}", context, ref: ref),
           const Spacer(),
           StreamBuilder(
-              stream: notificationCollection
-                  .where("userId", arrayContains: AppConst.getAccessToken())
-                  .where('isRead', isEqualTo: false)
-                  .snapshots(includeMetadataChanges: true),
+              stream: notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).where('isRead', isEqualTo: false).snapshots(includeMetadataChanges: true),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   final notificationCount = snapshot.data!.docs.length;
@@ -220,11 +221,18 @@ PopupMenuItem popupMenuItem(
   );
 }
 
-String capitalizeFirstLetter(String input) {
-  if (input.isEmpty) {
-    return input;
-  }
-  return input[0].toUpperCase() + input.substring(1);
+PopupMenuItem popupMenuItemKamStyling(
+  String title,
+  String userId,
+) {
+  return PopupMenuItem<String>(
+    value: userId,
+    height: 30,
+    child: CustomText(
+      title: title,
+      size: 12,
+    ),
+  );
 }
 
 String getUrlText(String url, String name, String? selectedId, BuildContext context) {
@@ -534,8 +542,24 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
     }
   }
 
+  List<User> createdByuser = [];
+  void getdataFromLocalStorage() async {
+    List<User> retrievedUsers = await UserListPreferences.getUserList();
+    if (mounted) {
+      setState(() {
+        createdByuser = retrievedUsers;
+      });
+    }
+  }
+
+  User getNamesMatchWithid(id) {
+    final User user = createdByuser.firstWhere((element) => id == element.userId);
+    return user;
+  }
+
   @override
   void initState() {
+    getdataFromLocalStorage();
     super.initState();
     notification = notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).snapshots(includeMetadataChanges: true);
   }
@@ -609,11 +633,13 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                                 // tileColor: notificationData.isRead! ? Colors.transparent : AppColor.secondary,
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                 onTap: () {
-                                  // navigateBasedOnId(context, notificationData.linkedItemId!, ref);
+                                  navigateBasedOnId(context, notificationData.linkedItemId!, ref);
                                   if (!notificationData.isRead!) {
                                     markNotificationAsRead(notificationData);
                                   }
-                                  // Navigator.of(context).pop();
+                                  if (kIsWeb) {
+                                    Navigator.of(context).pop();
+                                  }
                                 },
                                 titleAlignment: ListTileTitleAlignment.top,
                                 leading: Container(
@@ -626,9 +652,11 @@ class NotificationDialogBoxState extends ConsumerState<NotificationDialogBox> {
                                   ),
                                   child: CircleAvatar(
                                     radius: 18,
-                                    backgroundImage: NetworkImage(
-                                      notificationData.imageUrl!.isNotEmpty && notificationData.imageUrl != null ? notificationData.imageUrl! : noImg,
-                                    ),
+                                    backgroundImage: NetworkImage(createdByuser.isEmpty
+                                        ? noImg
+                                        : getNamesMatchWithid(notificationData.createdUserId).image.isNotEmpty
+                                            ? getNamesMatchWithid(notificationData.createdUserId).image
+                                            : noImg),
                                   ),
                                 ),
                                 title: SizedBox(

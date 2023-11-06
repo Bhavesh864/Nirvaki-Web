@@ -13,6 +13,7 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/riverpodstate/add_member_state.dart';
 import '../../../../Customs/dropdown_field.dart';
+import '../../../../constants/firebase/Hive/hive_methods.dart';
 import '../../../../constants/utils/constants.dart';
 import '../../../../pages/Auth/signup/country_code_modal.dart';
 import '../../../../riverpodstate/user_data.dart';
@@ -26,6 +27,21 @@ class AddMemberScreen extends ConsumerStatefulWidget {
 }
 
 class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
+  List<User> managers = [];
+  void getdataFromLocalStorage() async {
+    List<User> retrievedUsers = await UserListPreferences.getUserList();
+    if (mounted) {
+      setState(() {
+        managers = retrievedUsers;
+      });
+    }
+  }
+
+  String getNamesMatchWithid(id) {
+    final User managerArr = managers.firstWhere((element) => id == element.userId);
+    return "${managerArr.userfirstname} ${managerArr.userlastname}";
+  }
+
   final key = GlobalKey<FormState>();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
@@ -170,6 +186,7 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
   @override
   void initState() {
     super.initState();
+    getdataFromLocalStorage();
     setEditDataToTextField();
   }
 
@@ -273,7 +290,11 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                                       margin: const EdgeInsets.all(5),
                                       child: CustomDropdownFormField<String>(
                                         label: "Manager",
-                                        value: isEdit ? editUser?.managerName : editManagerName,
+                                        value: isEdit
+                                            ? managers.isNotEmpty
+                                                ? getNamesMatchWithid(editUser?.managerid)
+                                                : ""
+                                            : editManagerName,
                                         isMandatory: true,
                                         items: userNames,
                                         onChanged: (value) {
@@ -295,7 +316,15 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                                   return Container(
                                     margin: const EdgeInsets.all(5),
                                     child: CustomDropdownFormField<String>(
-                                        label: "Manager", value: isEdit ? editUser?.managerName : editManagerName, isMandatory: true, items: const [], onChanged: (e) {}),
+                                        label: "Manager",
+                                        value: isEdit
+                                            ? managers.isNotEmpty
+                                                ? getNamesMatchWithid(editUser?.managerid)
+                                                : ""
+                                            : editManagerName,
+                                        isMandatory: true,
+                                        items: const [],
+                                        onChanged: (e) {}),
                                   );
                                 }),
                             Container(

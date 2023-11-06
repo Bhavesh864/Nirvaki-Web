@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -73,10 +74,13 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
                   ),
                 ),
                 child: ScrollConfiguration(
-                  behavior: const ScrollBehavior().copyWith(overscroll: false),
+                  behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+                    PointerDeviceKind.touch,
+                    PointerDeviceKind.mouse,
+                  }),
                   child: ListView(
                     shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
+                    // physics: const NeverScrollableScrollPhysics(),
                     addRepaintBoundaries: false,
                     children: List.generate(
                       widget.getCardDetails.length,

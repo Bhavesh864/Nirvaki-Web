@@ -10,7 +10,6 @@ import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/functions/navigation/navigation_functions.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/riverpodstate/user_data.dart';
-import 'package:yes_broker/widgets/app/nav_bar.dart';
 import 'package:yes_broker/widgets/todo/todo_filter_view.dart';
 import '../../Customs/custom_text.dart';
 import '../../Customs/loader.dart';
@@ -19,6 +18,7 @@ import '../../constants/app_constant.dart';
 import '../../constants/firebase/Hive/hive_methods.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/filterdataAccordingRole/data_according_role.dart';
+import '../../constants/methods/string_methods.dart';
 import '../../constants/utils/constants.dart';
 import '../../routes/routes.dart';
 import '../../widgets/calendar_view.dart';
@@ -73,7 +73,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   }
 
   void setCardDetails() {
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots(includeMetadataChanges: true);
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("cardType", whereNotIn: ["LD", "IN"]).snapshots(includeMetadataChanges: true);
   }
 
   void getDetails(User currentuser) async {
@@ -91,6 +91,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(userDataProvider);
     final size = MediaQuery.of(context).size;
+    final showClosed = ref.watch(showClosedTodoItemsProvider);
 
     return Container(
       color: Colors.white,
@@ -108,10 +109,8 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                 getDetails(user);
                 isUserLoaded = true;
               }
-
               final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
-              final List<CardDetails> todoItemsList =
-                  filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
+              final List<CardDetails> todoItemsList = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).toList();
 
               int compareDueDates(CardDetails a, CardDetails b) {
                 DateTime aDueDate = DateFormat('dd-MM-yy').parse(a.duedate!);
@@ -144,6 +143,23 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
 
               status = filterTodoList;
 
+              if (!showClosed) {
+                filterTodoList = filterTodoList.where((item) => item.status != 'Closed').toList();
+              } else {
+                filterTodoList.sort((a, b) {
+                  if (a.status == 'Closed' && b.status != 'Closed') {
+                    return 1; // 'Closed' items go to the end
+                  } else if (a.status != 'Closed' && b.status == 'Closed') {
+                    return -1; // 'Closed' items go to the end
+                  } else if (a.status == 'Inventory' && b.status == 'Lead') {
+                    return -1; // 'Inventory' goes before 'Lead'
+                  } else if (a.status == 'Lead' && b.status == 'Inventory') {
+                    return 1; // 'Inventory' goes before 'Lead'
+                  }
+                  return 0; // Maintain the existing order for other items
+                });
+              }
+
               final tableRowList = filterTodoList.map((e) {
                 return buildWorkItemRowTile(
                   e,
@@ -168,9 +184,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                             if (width! > 850)
                               TopSerachBar(
                                 onChanged: (value) {
-                                  setState(() {
-                                    // searchController.text = value;
-                                  });
+                                  setState(() {});
                                 },
                                 onToggleShowTable: () {
                                   setState(() {

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:yes_broker/constants/functions/datetime/date_time.dart';
+
+import '../methods/date_time_methods.dart';
 
 class TimeFormatter {
   static String formatFirestoreTimestamp(Timestamp? firestoreTimestamp, bool isSameWeek) {

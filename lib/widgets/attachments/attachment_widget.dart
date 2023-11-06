@@ -2,9 +2,9 @@
 // import 'dart:html';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
+import 'package:yes_broker/customs/text_utility.dart';
 
 import '../../Customs/custom_text.dart';
 import '../../Customs/loader.dart';
@@ -12,8 +12,8 @@ import '../../Customs/snackbar.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
 import '../../constants/firebase/detailsModels/lead_details.dart';
 import '../../constants/firebase/detailsModels/todo_details.dart';
-import '../../constants/functions/datetime/date_time.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
+import '../../constants/methods/date_time_methods.dart';
 import '../../constants/utils/constants.dart';
 import '../workItemDetail/tab_views/details_tab_view.dart';
 
@@ -106,10 +106,12 @@ class AttachmentWidgetState extends State<AttachmentWidget> {
                                   ),
                                   Column(
                                     children: [
-                                      CustomText(
-                                        title: attachment.title!,
-                                        size: 13,
+                                      AppText(
+                                        text: attachment.title!,
+                                        fontsize: 13,
                                         fontWeight: FontWeight.w400,
+                                        maxLines: 1,
+                                        textAlign: TextAlign.center,
                                       ),
                                       CustomText(
                                         title: 'Added ${formatMessageDate(attachment.createddate!.toDate())}',
