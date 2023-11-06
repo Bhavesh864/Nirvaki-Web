@@ -116,29 +116,6 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
     setState(() {});
   }
 
-  void showEnlargedImage(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          child: GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: SizedBox(
-              width: width,
-              height: 300,
-              child: Image.network(
-                widget.profilePic.isEmpty ? noImg : widget.profilePic,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -199,7 +176,7 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
                       GestureDetector(
                         onTap: () {
                           if (Responsive.isMobile(context)) {
-                            showEnlargedImage(context);
+                            showEnlargedImage(context, widget.profilePic);
                           }
                         },
                         child: Container(
@@ -434,4 +411,27 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
       ),
     );
   }
+}
+
+void showEnlargedImage(BuildContext context, picture) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: SizedBox(
+            width: width,
+            height: 300,
+            child: Image.network(
+              picture.isEmpty ? noImg : picture,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      );
+    },
+  );
 }

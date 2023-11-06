@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // import 'dart:html';
 
+import 'dart:developer';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
@@ -82,6 +84,7 @@ class AttachmentWidgetState extends State<AttachmentWidget> {
                                 builder: (context) {
                                   return AttachmentPreviewDialog(
                                     attachmentPath: attachment.path!,
+                                    attachmentTitle: attachment.title,
                                   );
                                 },
                               );

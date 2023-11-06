@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +18,7 @@ import '../../../Customs/responsive.dart';
 import '../../../Customs/text_utility.dart';
 import '../../../constants/app_constant.dart';
 import '../../../constants/functions/workitems_detail_methods.dart';
+import '../../../constants/methods/string_methods.dart';
 import '../../../constants/utils/colors.dart';
 import '../../../constants/utils/constants.dart';
 import '../../attachments/attachment_widget.dart';
@@ -23,19 +27,69 @@ import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class AttachmentPreviewDialog extends StatelessWidget {
   final String attachmentPath;
+  final String attachmentTitle;
 
   const AttachmentPreviewDialog({
     super.key,
     required this.attachmentPath,
+    required this.attachmentTitle,
   });
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      insetPadding: const EdgeInsets.all(15),
+      insetPadding: const EdgeInsets.all(0),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
       child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.8,
-        child: Image.network(attachmentPath),
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: InkWell(
+          mouseCursor: MaterialStateMouseCursor.textable,
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Stack(
+            children: [
+              Center(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.8,
+                  child: GestureDetector(onTap: () {}, child: Image.network(attachmentPath)),
+                ),
+              ),
+              Positioned(
+                top: 10,
+                right: 10,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AppText(
+                      text: capitalizeFirstLetter(attachmentTitle),
+                      fontsize: 18,
+                      fontWeight: FontWeight.w700,
+                      textColor: Colors.white,
+                    ),
+                    const SizedBox(width: 5),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

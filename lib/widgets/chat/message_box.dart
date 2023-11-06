@@ -1,7 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/number_symbols_data.dart';
 
 import 'package:yes_broker/chat/enums/message.enums.dart';
@@ -11,8 +14,11 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/riverpodstate/chat/message_selection_state.dart';
 
+import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/methods/date_time_methods.dart';
 import '../../constants/utils/constants.dart';
+import '../../screens/main_screens/chat_user_profile.dart';
+import '../workItemDetail/tab_views/details_tab_view.dart';
 
 // ignore: must_be_immutable
 class MessageBox extends ConsumerStatefulWidget {
@@ -177,46 +183,18 @@ class DisplayMessage extends StatelessWidget {
               color: isSender ? Colors.white : Colors.black,
             ),
           )
-        : CachedNetworkImage(
-            fit: BoxFit.cover,
-            height: 300,
-            width: 250,
-            imageUrl: message,
+        : GestureDetector(
+            onTap: () {
+              if (Responsive.isMobile(context)) {
+                showEnlargedImage(context, message);
+              }
+            },
+            child: CachedNetworkImage(
+              fit: BoxFit.cover,
+              height: 300,
+              width: 250,
+              imageUrl: message,
+            ),
           );
-    // : type == MessageEnum.audio
-    //     ? StatefulBuilder(builder: (context, setState) {
-    //         return IconButton(
-    //           constraints: const BoxConstraints(
-    //             minWidth: 100,
-    //           ),
-    //           onPressed: () async {
-    //             // if (isPlaying) {
-    //             //   await audioPlayer.pause();
-    //             //   setState(() {
-    //             //     isPlaying = false;
-    //             //   });
-    //             // } else {
-    //             //   await audioPlayer.play(UrlSource(message));
-    //             //   setState(() {
-    //             //     isPlaying = true;
-    //             //   });
-    //             // }
-    //           },
-    //           icon: Icon(
-    //             isPlaying ? Icons.pause_circle : Icons.play_circle,
-    //           ),
-    //         );
-    //       })
-    // : type == MessageEnum.video
-    //     ? VideoPlayerItem(
-    //         videoUrl: message,
-    //       )
-    //     : type == MessageEnum.gif
-    //         ? CachedNetworkImage(
-    //             imageUrl: message,
-    //           )
-    //         : CachedNetworkImage(
-    //             imageUrl: message,
-    //           );
   }
 }
