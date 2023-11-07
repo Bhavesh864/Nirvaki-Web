@@ -20,7 +20,13 @@ class TimeLineItem extends ConsumerStatefulWidget {
   final bool fromHome;
   final List<User> allUsersList;
 
-  const TimeLineItem({super.key, required this.index, required this.activitiesList, required this.fromHome, required this.allUsersList});
+  const TimeLineItem({
+    super.key,
+    required this.index,
+    required this.activitiesList,
+    required this.fromHome,
+    required this.allUsersList,
+  });
 
   @override
   ConsumerState<TimeLineItem> createState() => _TimeLineItemState();
