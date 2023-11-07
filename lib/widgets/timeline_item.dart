@@ -33,25 +33,9 @@ class TimeLineItem extends ConsumerStatefulWidget {
 }
 
 class _TimeLineItemState extends ConsumerState<TimeLineItem> {
-  List<User> allUsersList = [];
-  void getdataFromLocalStorage() async {
-    List<User> retrievedUsers = await UserListPreferences.getUserList();
-    if (mounted) {
-      setState(() {
-        allUsersList = retrievedUsers;
-      });
-    }
-  }
-
   User getNamesMatchWithid(id) {
-    final User userArr = allUsersList.firstWhere((element) => id == element.userId);
+    final User userArr = widget.allUsersList.firstWhere((element) => id == element.userId);
     return userArr;
-  }
-
-  @override
-  void initState() {
-    getdataFromLocalStorage();
-    super.initState();
   }
 
   @override
@@ -171,7 +155,7 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey, width: 1.0),
                 image: DecorationImage(
-                    image: NetworkImage(allUsersList.isNotEmpty
+                    image: NetworkImage(widget.allUsersList.isNotEmpty
                         ? getNamesMatchWithid(timeLine.createdby?.userid).image.isEmpty
                             ? noImg
                             : getNamesMatchWithid(timeLine.createdby?.userid).image
@@ -181,7 +165,7 @@ class _TimeLineItemState extends ConsumerState<TimeLineItem> {
               ),
             ),
             title: CustomText(
-              title: capitalizeFirstLetter(allUsersList.isNotEmpty ? getNamesMatchWithid(timeLine.createdby?.userid).userfirstname : ""),
+              title: capitalizeFirstLetter(widget.allUsersList.isNotEmpty ? getNamesMatchWithid(timeLine.createdby?.userid).userfirstname : ""),
               size: 12,
             ),
           )
