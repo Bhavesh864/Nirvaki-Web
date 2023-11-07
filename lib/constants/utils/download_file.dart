@@ -37,8 +37,8 @@ Future<void> downloadFile(String url, String type, BuildContext context, Functio
       // customSnackBar(context: context, text: 'Download Completed');
     });
   } catch (e) {
-    print(e);
     callback(false, "");
+    print(e);
     // customSnackBar(context: context, text: 'Download Failed');
 
     // setState(() {

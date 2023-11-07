@@ -10,14 +10,20 @@ import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/screens/main_screens/chat_list_screen.dart';
 import 'package:yes_broker/screens/main_screens/chat_user_profile.dart';
 import 'package:yes_broker/widgets/chat/group/leave_delete_group_button.dart';
 
 import '../../chat/controller/chat_controller.dart';
+import '../../chat/enums/message.enums.dart';
 import '../../chat/models/message.dart';
 
-class ChatScreenHeader extends StatefulWidget {
+class ChatScreenHeader extends ConsumerStatefulWidget {
+  final ChatItem? chatItem;
+  final User? user;
+  final Function? showProfileScreen;
+  final Function? goToChatList;
   final List<String>? selectedMessageList;
   final bool? selectedMode;
   final Function? removeAllItems;
