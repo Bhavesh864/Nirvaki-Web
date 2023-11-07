@@ -1,11 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
-import 'package:intl/number_symbols_data.dart';
+import 'package:intl/intl.dart';
 
 import 'package:yes_broker/chat/enums/message.enums.dart';
 import 'package:yes_broker/chat/models/message.dart';
@@ -14,11 +14,12 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/riverpodstate/chat/message_selection_state.dart';
 
-import '../../constants/functions/workitems_detail_methods.dart';
+import '../../Customs/snackbar.dart';
 import '../../constants/methods/date_time_methods.dart';
 import '../../constants/utils/constants.dart';
-import '../../screens/main_screens/chat_user_profile.dart';
-import '../workItemDetail/tab_views/details_tab_view.dart';
+import 'package:android_path_provider/android_path_provider.dart';
+import 'package:dio/dio.dart';
+import 'package:path_provider/path_provider.dart';
 
 // ignore: must_be_immutable
 class MessageBox extends ConsumerStatefulWidget {
@@ -186,7 +187,15 @@ class DisplayMessage extends StatelessWidget {
         : GestureDetector(
             onTap: () {
               if (Responsive.isMobile(context)) {
-                showEnlargedImage(context, message);
+                // showEnlargedImage(context, message);
+                showGeneralDialog(
+                    context: context,
+                    barrierDismissible: true,
+                    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                    transitionDuration: const Duration(milliseconds: 200),
+                    pageBuilder: (context, animation1, animation2) {
+                      return ImagePreview(url: message, type: type.type);
+                    });
               }
             },
             child: CachedNetworkImage(
@@ -196,5 +205,103 @@ class DisplayMessage extends StatelessWidget {
               imageUrl: message,
             ),
           );
+  }
+}
+
+class ImagePreview extends StatelessWidget {
+  final String url;
+  final String type;
+
+  const ImagePreview({super.key, required this.url, required this.type});
+
+  @override
+  Widget build(BuildContext context) {
+    // ==========image url
+    // var url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJFZGrn7lobuKicqmEKy7hHctB78YRu2eSjA&usqp=CAU";
+
+    // ==========video url
+    // var url = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4';
+
+    // ==========pdf url
+    // var url = 'http://englishonlineclub.com/pdf/iOS%20Programming%20-%20The%20Big%20Nerd%20Ranch%20Guide%20(6th%20Edition)%20[EnglishOnlineClub.com].pdf';
+    log('type----> ${type}');
+    Future<void> downloadFile() async {
+      Dio dio = Dio();
+      String? dir = "";
+      DateTime currentTime = DateTime.now();
+      final customFormat = DateFormat('yyyyMMddHHmmss');
+      String formattedDateTime = customFormat.format(currentTime);
+      log('formattedTime=====> $formattedDateTime');
+
+      try {
+        try {
+          dir = await AndroidPathProvider.downloadsPath;
+        } catch (e) {
+          final directory = await getExternalStorageDirectory();
+          dir = directory?.path;
+        }
+        if (type.contains('imgae')) {
+          dir = "$dir/$formattedDateTime.jpeg";
+        } else if (type.contains('video')) {
+          dir = "$dir/$formattedDateTime.mp4";
+        } else {
+          dir = "$dir/$formattedDateTime.pdf";
+        }
+
+        await dio.download(url, dir, onReceiveProgress: (rec, total) {
+          // setState(() {
+          //   downloading = true;
+          //   progressString = "${((rec / total) * 100).toStringAsFixed(0)}%";
+          // });
+          customSnackBar(context: context, text: 'Download Completed');
+        });
+      } catch (e) {
+        print(e);
+        customSnackBar(context: context, text: 'Download Failed');
+
+        // setState(() {
+        //   progressString = "Download failed";
+        // });
+      }
+    }
+
+    log('-----> $url');
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+            size: 22,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(
+              Icons.download,
+              color: Colors.white,
+              size: 22,
+            ),
+            onPressed: () {
+              downloadFile();
+            },
+          ),
+        ],
+      ),
+      body: Container(
+        color: Colors.black,
+        width: double.infinity,
+        height: double.infinity,
+        child: Image.network(
+          url,
+          fit: BoxFit.contain,
+        ),
+      ),
+    );
   }
 }
