@@ -380,13 +380,42 @@ class ChatRepository {
 
       if (value) {
         final data = await getLastMessage(docId, isGroupChat);
+        String contactMsg;
 
-        updateLastMessageInContactSubCollection(
-          docId,
-          data?["text"],
-          isGroupChat,
-          data?["timeSent"],
-        );
+        if (data != null) {
+          switch (data['type']) {
+            case 'text':
+              contactMsg = data["text"];
+              break;
+            case 'image':
+              contactMsg = '📷 Photo';
+              break;
+            case 'video':
+              contactMsg = '🎬 Video';
+              break;
+            case 'audio':
+              contactMsg = '🎵 Audio';
+              break;
+            case 'gif':
+              contactMsg = 'GIF';
+              break;
+            default:
+              contactMsg = 'GIF';
+          }
+          updateLastMessageInContactSubCollection(
+            docId,
+            contactMsg,
+            isGroupChat,
+            data["timeSent"],
+          );
+        } else {
+          updateLastMessageInContactSubCollection(
+            docId,
+            "You deleted this message",
+            isGroupChat,
+            Timestamp.now().millisecondsSinceEpoch,
+          );
+        }
       }
     } catch (e) {
       customSnackBar(

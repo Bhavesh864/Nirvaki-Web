@@ -8,6 +8,7 @@ import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/constants/functions/chat_group/group.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/custom_text.dart';
@@ -181,18 +182,23 @@ class _ChatScreenHeaderState extends ConsumerState<ChatScreenHeader> {
                     children: [
                       InkWell(
                         onTap: () {
-                          // final selectedMsg = widget.dataList!.firstWhere((element) => element.messageId == widget.selectedMessageList![0]);
-                          // print(chatItemId);
-                          // return;
+                          customConfirmationAlertDialog(
+                            context,
+                            () {
+                              ref.read(chatControllerProvider).deleteTextMessage(
+                                    context,
+                                    chatItemId,
+                                    isGroupChat,
+                                    widget.selectedMessageList!,
+                                  );
 
-                          ref.read(chatControllerProvider).deleteTextMessage(
-                                context,
-                                chatItemId,
-                                isGroupChat,
-                                widget.selectedMessageList!,
-                              );
-
-                          widget.removeAllItems!();
+                              widget.removeAllItems!();
+                              Navigator.of(context).pop();
+                            },
+                            'Delete message',
+                            'Are you sure want to delete?',
+                            'Delete for me',
+                          );
                         },
                         child: const Icon(
                           Icons.delete,

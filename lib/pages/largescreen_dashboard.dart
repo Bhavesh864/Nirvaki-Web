@@ -185,7 +185,7 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                       } else if (selectedVal == "Logout") {
                         customConfirmationAlertDialog(context, () {
                           userLogout(ref, context);
-                        }, 'Logout', 'Are you sure you want to logout?');
+                        }, 'Logout', 'Are you sure you want to logout?', 'Logout');
                       }
                     },
                   ),

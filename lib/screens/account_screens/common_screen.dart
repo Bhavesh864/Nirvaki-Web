@@ -95,7 +95,7 @@ class _CommonScreenState extends ConsumerState<CommonScreen> {
                                   ? customConfirmationAlertDialog(context, () {
                                       userLogout(ref, context);
                                       Navigator.of(AppConst.getOuterContext()!).pop();
-                                    }, 'Logout', 'Are you sure you want to logout?')
+                                    }, 'Logout', 'Are you sure you want to logout?', 'Logout')
                                   : onItemSelected(item);
                             },
                             selected: selectedItem?.id == item.id,
