@@ -91,6 +91,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                 initialValue: selectedDay,
                 onSelected: (value) {
                   setState(() {
+                    print(value);
                     selectedDay = value;
                   });
                 },
@@ -258,12 +259,8 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                   DateTime today = DateTime.now();
 
                   if (selectedDay == 'This Week') {
-                    // Calculate the start date of the current week (assuming Monday is the start of the week)
-                    DateTime startOfWeek = today.subtract(Duration(days: today.weekday - 1));
-
                     activities = activities.where((element) {
-                      DateTime activityDate = element.createdate!.toDate(); // Assuming the date is in string format
-                      return activityDate.isAfter(startOfWeek);
+                      return DateTime.now().difference(element.createdate!.toDate()).inDays < 7;
                     }).toList();
                   } else if (selectedDay == 'This Day') {
                     activities = activities.where((element) {
@@ -306,6 +303,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                                 index: index,
                                 activitiesList: activities,
                                 fromHome: widget.fromHome,
+                                allUsersList: allUsersList,
                               ),
                             );
                           },
@@ -346,6 +344,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                                   index: index,
                                   activitiesList: activities,
                                   fromHome: widget.fromHome,
+                                  allUsersList: allUsersList,
                                 ),
                               ),
                             );
