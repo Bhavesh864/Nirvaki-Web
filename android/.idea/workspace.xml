@@ -4,24 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="17f08cce-7733-4f31-9d91-0be8f8af29d7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/7.5/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.5/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.5/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.5/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.5/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.5/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Runner/GeneratedPluginRegistrant.m" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Runner/GeneratedPluginRegistrant.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/screens/account_screens/Teams/team_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/screens/account_screens/Teams/team_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/widgets/assigned_circular_images.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/widgets/assigned_circular_images.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/widgets/chat/message_box.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/widgets/chat/message_box.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/widgets/chat_modal_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/widgets/chat_modal_view.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/widgets/timeline_item.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/widgets/timeline_item.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/widgets/workItemDetail/Inventory_details_header.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/widgets/workItemDetail/Inventory_details_header.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/../windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../windows/flutter/generated_plugins.cmake" afterDir="false" />
-    </list>
+    <list default="true" id="17f08cce-7733-4f31-9d91-0be8f8af29d7" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
