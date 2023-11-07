@@ -126,9 +126,23 @@ class ChatRepository {
     bool isSender,
   ) async {
     try {
-      await firestore.collection('users').doc(AppConst.getAccessToken()).collection('chats').doc(recieverUserId).collection('messages').doc(messageId).update({'isSeen': true});
+      await firestore
+          .collection('users')
+          .doc(AppConst.getAccessToken())
+          .collection('chats')
+          .doc(recieverUserId)
+          .collection('messages')
+          .doc(messageId)
+          .update({'isSeen': true});
 
-      await firestore.collection('users').doc(recieverUserId).collection('chats').doc(AppConst.getAccessToken()).collection('messages').doc(messageId).update({'isSeen': true});
+      await firestore
+          .collection('users')
+          .doc(recieverUserId)
+          .collection('chats')
+          .doc(AppConst.getAccessToken())
+          .collection('messages')
+          .doc(messageId)
+          .update({'isSeen': true});
     } catch (e) {
       customSnackBar(
         context: context,
@@ -307,6 +321,77 @@ class ChatRepository {
           .set(
             message.toMap(),
           );
+    }
+  }
+
+  void _removeMessageFromMessagesSubCollection({
+    required String docId,
+    required List<String> messageId,
+    required bool isGroupChat,
+  }) async {
+    if (isGroupChat) {
+      for (var i = 0; i < messageId.length; i++) {
+        await firestore.collection('groups').doc(docId).collection('chats').doc(messageId[i]).delete();
+      }
+    } else {
+      print(docId);
+      // users -> sender id -> reciever id -> messages -> message id -> store message
+      for (var i = 0; i < messageId.length; i++) {
+        await firestore
+            .collection('users')
+            .doc(AppConst.getAccessToken())
+            .collection('chats')
+            .doc(docId)
+            .collection('messages')
+            .doc(
+              messageId[i],
+            )
+            .delete();
+      }
+
+      print('Successfullly Deleted ----------');
+
+      // users -> eciever id  -> sender id -> messages -> message id -> store message
+
+      // await firestore
+      //     .collection('users')
+      //     .doc(receiverId)
+      //     .collection('chats')
+      //     .doc(AppConst.getAccessToken())
+      //     .collection('messages')
+      //     .doc(
+      //       messageId,
+      //     )
+      //     .delete();
+    }
+  }
+
+  void deleteTextMessage({
+    required BuildContext context,
+    required List<String> messageId,
+    required String docId,
+    required bool isGroupChat,
+  }) async {
+    try {
+      // _saveDataToContactsSubCollection(
+      //   senderUserData: senderUser,
+      //   receiverUserData: receiverUserData,
+      //   message: message,
+      //   timestamp: timestamp,
+      //   receiverId: receiverId,
+      //   isGroupChat: isGroupChat,
+      // );
+
+      _removeMessageFromMessagesSubCollection(
+        docId: docId,
+        messageId: messageId,
+        isGroupChat: isGroupChat,
+      );
+    } catch (e) {
+      customSnackBar(
+        context: context,
+        text: e.toString(),
+      );
     }
   }
 

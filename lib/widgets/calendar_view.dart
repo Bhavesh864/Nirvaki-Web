@@ -161,6 +161,7 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                       child: SingleChildScrollView(
                         // physics: const NeverScrollableScrollPhysics(),
                         child: SfCalendar(
+                          initialSelectedDate: DateTime.now(),
                           initialDisplayDate: DateTime.now(),
                           headerHeight: 0,
                           onTap: (details) {
