@@ -279,21 +279,21 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                           });
                                         },
                                         onTap: () {
-                                          setstate(() {
-                                            if (selectedMessageList.isNotEmpty && selectedMode) {
-                                              if (selectedMessageList.contains(currentMessageId)) {
-                                                selectedMessageList.remove(currentMessageId);
-                                                if (selectedMessageList.isEmpty) {
-                                                  selectedMode = false;
-                                                }
-                                              } else if (selectedMode) {
-                                                selectedMessageList.add(currentMessageId);
+                                          // setstate(() {
+                                          if (selectedMessageList.isNotEmpty && selectedMode) {
+                                            if (selectedMessageList.contains(currentMessageId)) {
+                                              // selectedMessageList.remove(currentMessageId);
+                                              remove(currentMessageId);
+                                              if (selectedMessageList.isEmpty) {
+                                                selectedMode = false;
                                               }
-                                            } else {
-                                              selectedMode = false;
-                                              selectedMessageList = [];
+                                            } else if (selectedMode) {
+                                              add(currentMessageId);
                                             }
-                                          });
+                                          } else {
+                                            removeAll();
+                                          }
+                                          // });
                                         },
                                       ),
                                     ],

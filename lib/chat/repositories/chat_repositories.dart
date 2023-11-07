@@ -324,7 +324,7 @@ class ChatRepository {
     }
   }
 
-  void _removeMessageFromMessagesSubCollection({
+  Future<bool> _removeMessageFromMessagesSubCollection({
     required String docId,
     required List<String> messageId,
     required bool isGroupChat,
@@ -334,7 +334,6 @@ class ChatRepository {
         await firestore.collection('groups').doc(docId).collection('chats').doc(messageId[i]).delete();
       }
     } else {
-      print(docId);
       // users -> sender id -> reciever id -> messages -> message id -> store message
       for (var i = 0; i < messageId.length; i++) {
         await firestore
@@ -349,8 +348,6 @@ class ChatRepository {
             .delete();
       }
 
-      print('Successfullly Deleted ----------');
-
       // users -> eciever id  -> sender id -> messages -> message id -> store message
 
       // await firestore
@@ -364,6 +361,8 @@ class ChatRepository {
       //     )
       //     .delete();
     }
+
+    return true;
   }
 
   void deleteTextMessage({
@@ -373,25 +372,90 @@ class ChatRepository {
     required bool isGroupChat,
   }) async {
     try {
-      // _saveDataToContactsSubCollection(
-      //   senderUserData: senderUser,
-      //   receiverUserData: receiverUserData,
-      //   message: message,
-      //   timestamp: timestamp,
-      //   receiverId: receiverId,
-      //   isGroupChat: isGroupChat,
-      // );
-
-      _removeMessageFromMessagesSubCollection(
+      final value = await _removeMessageFromMessagesSubCollection(
         docId: docId,
         messageId: messageId,
         isGroupChat: isGroupChat,
       );
+
+      if (value) {
+        final data = await getLastMessage(docId, isGroupChat);
+
+        updateLastMessageInContactSubCollection(
+          docId,
+          data?["text"],
+          isGroupChat,
+          data?["timeSent"],
+        );
+      }
     } catch (e) {
       customSnackBar(
         context: context,
         text: e.toString(),
       );
+    }
+  }
+
+  void updateLastMessageInContactSubCollection(String docId, String lastMessage, bool isGroupChat, int timeSent) async {
+    try {
+      if (isGroupChat) {
+        await firestore.collection('groups').doc(docId).update({
+          'lastMessage': lastMessage,
+          'timeSent': timeSent,
+        });
+      } else {
+        await firestore
+            .collection('users')
+            .doc(AppConst.getAccessToken())
+            .collection('chats')
+            .doc(
+              docId,
+            )
+            .update({"lastMessage": lastMessage, "timeSent": timeSent});
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<Map<String, dynamic>?> getLastMessage(String docId, bool isGroupChat) async {
+    try {
+      if (isGroupChat) {
+        final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+            .collection('groups')
+            .doc(docId)
+            .collection('chats')
+            .orderBy(
+              'timeSent',
+              descending: true,
+            )
+            .limit(1)
+            .get();
+
+        if (querySnapshot.docs.isNotEmpty) {
+          final data = querySnapshot.docs.first.data() as Map<String, dynamic>;
+          return data;
+        }
+      } else {
+        final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(AppConst.getAccessToken())
+            .collection('chats')
+            .doc(docId)
+            .collection('messages')
+            .orderBy('timeSent', descending: true) // Order by timeSent in descending order
+            .limit(1) // Limit the result to one document
+            .get();
+
+        if (querySnapshot.docs.isNotEmpty) {
+          final data = querySnapshot.docs.first.data() as Map<String, dynamic>;
+          return data;
+        }
+      }
+      return null;
+    } catch (e) {
+      print('Error: $e');
+      return null;
     }
   }
 
