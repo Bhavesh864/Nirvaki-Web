@@ -21,6 +21,8 @@ import 'package:android_path_provider/android_path_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../constants/utils/download_file.dart';
+
 // ignore: must_be_immutable
 class MessageBox extends ConsumerStatefulWidget {
   final String message;
@@ -224,45 +226,47 @@ class ImagePreview extends StatelessWidget {
 
     // ==========pdf url
     // var url = 'http://englishonlineclub.com/pdf/iOS%20Programming%20-%20The%20Big%20Nerd%20Ranch%20Guide%20(6th%20Edition)%20[EnglishOnlineClub.com].pdf';
-
-    Future<void> downloadFile() async {
-      Dio dio = Dio();
-      String? dir = "";
-      DateTime currentTime = DateTime.now();
-      final customFormat = DateFormat('yyyyMMddHHmmss');
-      String formattedDateTime = customFormat.format(currentTime);
-
-      try {
-        try {
-          dir = await AndroidPathProvider.downloadsPath;
-        } catch (e) {
-          final directory = await getExternalStorageDirectory();
-          dir = directory?.path;
-        }
-        if (type.contains('image')) {
-          dir = "$dir/$formattedDateTime.jpeg";
-        } else if (type.contains('video')) {
-          dir = "$dir/$formattedDateTime.mp4";
-        } else {
-          dir = "$dir/$formattedDateTime.pdf";
-        }
-
-        await dio.download(url, dir, onReceiveProgress: (rec, total) {
-          // setState(() {
-          //   downloading = true;
-          //   progressString = "${((rec / total) * 100).toStringAsFixed(0)}%";
-          // });
-          customSnackBar(context: context, text: 'Download Completed');
-        });
-      } catch (e) {
-        print(e);
-        customSnackBar(context: context, text: 'Download Failed');
-
-        // setState(() {
-        //   progressString = "Download failed";
-        // });
-      }
-    }
+//
+//     Future<void> downloadFile() async {
+//       Dio dio = Dio();
+//       String? dir = "";
+//       DateTime currentTime = DateTime.now();
+//       final customFormat = DateFormat('yyyyMMddHHmmss');
+//       String formattedDateTime = customFormat.format(currentTime);
+//
+//       try {
+//         try {
+//           dir = await AndroidPathProvider.downloadsPath;
+//         } catch (e) {
+//           final directory = await getExternalStorageDirectory();
+//           dir = directory?.path;
+//         }
+//         if (type.contains('image')) {
+//           dir = "$dir/$formattedDateTime.jpeg";
+//         } else if (type.contains('video')) {
+//           dir = "$dir/$formattedDateTime.mp4";
+//         } else {
+//           dir = "$dir/$formattedDateTime.pdf";
+//         }
+//
+//         await dio.download(url, dir, onReceiveProgress: (rec, total) {
+//           // setState(() {
+//           //   downloading = true;
+//           //   progressString = "${((rec / total) * 100).toStringAsFixed(0)}%";
+//           // });
+//           // if(progressString == '100%'){}
+//           customSnackBar(context: context, text: 'Download Completed');
+//         });
+//       } catch (e) {
+//         print(e);
+//         customSnackBar(context: context, text: 'Download Failed');
+//
+//         // setState(() {
+//         //   downloading = false;
+//         //   progressString = "Download failed";
+//         // });
+//       }
+//     }
 
     return Scaffold(
       appBar: AppBar(
@@ -285,7 +289,27 @@ class ImagePreview extends StatelessWidget {
               size: 22,
             ),
             onPressed: () {
-              downloadFile();
+              downloadFile(
+                  url,
+                  type,
+                  context,
+                  (value, progress) => {
+                        if (value)
+                          {
+                            // setState(() {
+                            //   downloading = true;
+                            //   progressString = "${((rec / total) * 100).toStringAsFixed(0)}%";
+                            // });
+                            if (progress == "100%")
+                              {
+                                customSnackBar(context: context, text: 'Download Completed'),
+                              }
+                          }
+                        else
+                          {
+                            customSnackBar(context: context, text: 'Download Failed'),
+                          },
+                      });
             },
           ),
         ],
