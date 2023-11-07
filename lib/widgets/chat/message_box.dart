@@ -10,6 +10,7 @@ import 'package:yes_broker/chat/models/message.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/customs/responsive.dart';
+
 import '../../Customs/snackbar.dart';
 import '../../constants/methods/date_time_methods.dart';
 import '../../constants/utils/constants.dart';
@@ -227,6 +228,20 @@ class ImagePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    downloadProgress(value, progress) {
+      if (value) {
+        // setState(() {
+        //   downloading = true;
+        //   progressString = "${((rec / total) * 100).toStringAsFixed(0)}%";
+        // });
+        if (progress == "100%") {
+          customSnackBar(context: context, text: 'Download Completed');
+        }
+      } else {
+        customSnackBar(context: context, text: 'Download Failed');
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -249,26 +264,11 @@ class ImagePreview extends StatelessWidget {
             ),
             onPressed: () {
               downloadFile(
-                  url,
-                  type,
-                  context,
-                  (value, progress) => {
-                        if (value)
-                          {
-                            // setState(() {
-                            //   downloading = true;
-                            //   progressString = "${((rec / total) * 100).toStringAsFixed(0)}%";
-                            // });
-                            if (progress == "100%")
-                              {
-                                customSnackBar(context: context, text: 'Download Completed'),
-                              }
-                          }
-                        else
-                          {
-                            customSnackBar(context: context, text: 'Download Failed'),
-                          },
-                      });
+                url,
+                type,
+                context,
+                downloadProgress,
+              );
             },
           ),
         ],

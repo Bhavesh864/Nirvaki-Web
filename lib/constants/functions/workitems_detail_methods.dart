@@ -56,7 +56,7 @@ void showImageSliderCarousel(List<String> imageUrls, int initialIndex, BuildCont
                   return Builder(
                     builder: (BuildContext context) {
                       return ClipRRect(
-                        borderRadius: BorderRadius.circular(40),
+                        borderRadius: Responsive.isDesktop(context) ? BorderRadius.circular(40) : BorderRadius.circular(12),
                         child: Image.network(
                           url,
                           fit: BoxFit.cover,

@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 
-Future<void> downloadFile(String url, String type, BuildContext context, Function callback) async {
+Future<void> downloadFile(String url, String type, BuildContext context, Function callback, {String name = ""}) async {
   Dio dio = Dio();
   String? dir = "";
   DateTime currentTime = DateTime.now();
   final customFormat = DateFormat('yyyyMMddHHmmss');
   String formattedDateTime = customFormat.format(currentTime);
+  formattedDateTime = name + formattedDateTime;
 
   try {
     try {
@@ -29,21 +30,8 @@ Future<void> downloadFile(String url, String type, BuildContext context, Functio
     await dio.download(url, dir, onReceiveProgress: (rec, total) {
       var progress = "${((rec / total) * 100).toStringAsFixed(0)}%";
       callback(true, progress);
-      // setState(() {
-      //   downloading = true;
-      //   progressString = "${((rec / total) * 100).toStringAsFixed(0)}%";
-      // });
-      // if(progressString == '100%'){}
-      // customSnackBar(context: context, text: 'Download Completed');
     });
   } catch (e) {
     callback(false, "");
-    print(e);
-    // customSnackBar(context: context, text: 'Download Failed');
-
-    // setState(() {
-    //   downloading = false;
-    //   progressString = "Download failed";
-    // });
   }
 }
