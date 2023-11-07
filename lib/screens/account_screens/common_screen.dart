@@ -32,7 +32,6 @@ class CommonScreen extends ConsumerStatefulWidget {
 
 class _CommonScreenState extends ConsumerState<CommonScreen> {
   bool firstTime = false;
-
   @override
   void initState() {
     super.initState();

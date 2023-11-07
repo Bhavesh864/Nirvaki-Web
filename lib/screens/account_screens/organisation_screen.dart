@@ -630,8 +630,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                         child: Table(
                           children: [
                             TableRow(children: [
-                              buildInfoFields('Email address', broker.brokercompanyemail!, isPersonalDetailsEditing, emailController, context, validateEmail,
-                                  maxLength: 50),
+                              buildInfoFields('Email address', broker.brokercompanyemail!, isPersonalDetailsEditing, emailController, context, validateEmail, maxLength: 50),
                               // buildInfoFields('Phone ', broker.brokercompanynumber!, isPersonalDetailsEditing, phoneController, context),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -731,8 +730,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                                     try {
                                       List<String> words = str.split(' ');
                                       if (words.length > 3) {
-                                        String lastThreeWords =
-                                            words.contains("India") ? words.sublist(words.length - 3).join(' ') : words.sublist(words.length - 2).join(' ');
+                                        String lastThreeWords = words.contains("India") ? words.sublist(words.length - 3).join(' ') : words.sublist(words.length - 2).join(' ');
                                         String remainingWords =
                                             words.contains("India") ? words.sublist(0, words.length - 3).join(' ') : words.sublist(0, words.length - 2).join(' ');
                                         if (remainingWords.endsWith(',')) {
@@ -753,10 +751,8 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                                         }
                                         address1Controller.text = remainingWords;
                                         address2Controller.text = lastThreeWords;
-                                        final cityName =
-                                            lastThreeWordsList[0].endsWith(',') ? lastThreeWordsList[0].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[0];
-                                        final stateName =
-                                            lastThreeWordsList[1].endsWith(',') ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[1];
+                                        final cityName = lastThreeWordsList[0].endsWith(',') ? lastThreeWordsList[0].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[0];
+                                        final stateName = lastThreeWordsList[1].endsWith(',') ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[1];
                                         cityController.text = cityName;
                                         stateController.text = stateName;
                                         setState(() {

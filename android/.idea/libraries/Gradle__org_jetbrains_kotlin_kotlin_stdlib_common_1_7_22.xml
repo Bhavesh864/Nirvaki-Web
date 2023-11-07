@@ -1,6 +1,7 @@
 <component name="libraryTable">
   <library name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.7.22" type="kotlin.common">
     <CLASSES>
+<<<<<<< HEAD
       <root url="jar://$USER_HOME$/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.7.22/5dd2c9dcf64c94b46cf4bdb6fa4035b9bb726e2e/kotlin-stdlib-common-1.7.22.jar!/" />
     </CLASSES>
     <JAVADOC>
@@ -10,6 +11,15 @@
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.7.22/8cfc9df7b283b3f9c2fe6ea0192d6c2b6a8a2b37/kotlin-stdlib-common-1.7.22-sources.jar!/" />
       <root url="jar://$USER_HOME$/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.7.22/8cfc9df7b283b3f9c2fe6ea0192d6c2b6a8a2b37/kotlin-stdlib-common-1.7.22-sources.jar!/" />
+=======
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.7.22/5dd2c9dcf64c94b46cf4bdb6fa4035b9bb726e2e/kotlin-stdlib-common-1.7.22.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.7.22/5b8f86fea035328fc9e8c660773037a3401ce25f/kotlin-stdlib-common-1.7.22-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.7.22/8cfc9df7b283b3f9c2fe6ea0192d6c2b6a8a2b37/kotlin-stdlib-common-1.7.22-sources.jar!/" />
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
     </SOURCES>
   </library>
 </component>

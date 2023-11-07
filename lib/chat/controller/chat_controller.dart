@@ -67,6 +67,21 @@ class ChatController {
     // ref.read(messageReplyProvider.state).update((state) => null);
   }
 
+  void deleteTextMessage(
+    BuildContext context,
+    String docId,
+    bool isGroupChat,
+    List<String> messageId,
+  ) async {
+    // ignore: use_build_context_synchronously
+    chatRepository.deleteTextMessage(
+      context: context,
+      docId: docId,
+      isGroupChat: isGroupChat,
+      messageId: messageId,
+    );
+  }
+
   void sendFileMessage(
     BuildContext context,
     File? file,

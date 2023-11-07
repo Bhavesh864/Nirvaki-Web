@@ -3,6 +3,7 @@
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/9fb9c47886409cb10cbee112ae88fe1e/transformed/rules-1.4.0/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/9fb9c47886409cb10cbee112ae88fe1e/transformed/rules-1.4.0/AndroidManifest.xml" />
+<<<<<<< HEAD
       <root url="jar://$USER_HOME$/caches/transforms-3/9fb9c47886409cb10cbee112ae88fe1e/transformed/rules-1.4.0/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/caches/transforms-3/9fb9c47886409cb10cbee112ae88fe1e/transformed/rules-1.4.0/AndroidManifest.xml" />
     </CLASSES>
@@ -13,6 +14,14 @@
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.test/rules/1.4.0/8fc7982be2b0ff9db14ec70bd68a8e06271654d1/rules-1.4.0-sources.jar!/" />
       <root url="jar://$USER_HOME$/caches/modules-2/files-2.1/androidx.test/rules/1.4.0/8fc7982be2b0ff9db14ec70bd68a8e06271654d1/rules-1.4.0-sources.jar!/" />
+=======
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.test/rules/1.4.0/326d97acb2a9cf7cbff243e63d1d45fa354b8ec7/rules-1.4.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.test/rules/1.4.0/8fc7982be2b0ff9db14ec70bd68a8e06271654d1/rules-1.4.0-sources.jar!/" />
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
     </SOURCES>
   </library>
 </component>

@@ -1,11 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import 'package:yes_broker/chat/enums/message.enums.dart';
 import 'package:yes_broker/chat/models/message.dart';
@@ -17,9 +15,6 @@ import 'package:yes_broker/riverpodstate/chat/message_selection_state.dart';
 import '../../Customs/snackbar.dart';
 import '../../constants/methods/date_time_methods.dart';
 import '../../constants/utils/constants.dart';
-import 'package:android_path_provider/android_path_provider.dart';
-import 'package:dio/dio.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../../constants/utils/download_file.dart';
 
@@ -32,16 +27,24 @@ class MessageBox extends ConsumerStatefulWidget {
   final ChatMessage data;
   final bool isSeen;
   final MessageEnum messageType;
+  final List<String>? selectedMessageList;
+  final bool? selectedMode;
+  final Function? onLongPress;
+  final Function? onTap;
 
   const MessageBox({
     Key? key,
     required this.message,
+    this.currMessageIndex,
     required this.isSender,
     required this.isGroupChat,
     required this.data,
     required this.isSeen,
     required this.messageType,
-    this.currMessageIndex,
+    this.selectedMessageList,
+    this.selectedMode,
+    this.onLongPress,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -218,56 +221,6 @@ class ImagePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ==========image url
-    // var url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJFZGrn7lobuKicqmEKy7hHctB78YRu2eSjA&usqp=CAU";
-
-    // ==========video url
-    // var url = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4';
-
-    // ==========pdf url
-    // var url = 'http://englishonlineclub.com/pdf/iOS%20Programming%20-%20The%20Big%20Nerd%20Ranch%20Guide%20(6th%20Edition)%20[EnglishOnlineClub.com].pdf';
-//
-//     Future<void> downloadFile() async {
-//       Dio dio = Dio();
-//       String? dir = "";
-//       DateTime currentTime = DateTime.now();
-//       final customFormat = DateFormat('yyyyMMddHHmmss');
-//       String formattedDateTime = customFormat.format(currentTime);
-//
-//       try {
-//         try {
-//           dir = await AndroidPathProvider.downloadsPath;
-//         } catch (e) {
-//           final directory = await getExternalStorageDirectory();
-//           dir = directory?.path;
-//         }
-//         if (type.contains('image')) {
-//           dir = "$dir/$formattedDateTime.jpeg";
-//         } else if (type.contains('video')) {
-//           dir = "$dir/$formattedDateTime.mp4";
-//         } else {
-//           dir = "$dir/$formattedDateTime.pdf";
-//         }
-//
-//         await dio.download(url, dir, onReceiveProgress: (rec, total) {
-//           // setState(() {
-//           //   downloading = true;
-//           //   progressString = "${((rec / total) * 100).toStringAsFixed(0)}%";
-//           // });
-//           // if(progressString == '100%'){}
-//           customSnackBar(context: context, text: 'Download Completed');
-//         });
-//       } catch (e) {
-//         print(e);
-//         customSnackBar(context: context, text: 'Download Failed');
-//
-//         // setState(() {
-//         //   downloading = false;
-//         //   progressString = "Download failed";
-//         // });
-//       }
-//     }
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,

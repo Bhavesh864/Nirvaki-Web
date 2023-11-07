@@ -3,12 +3,19 @@
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/e32c9781801651fb6929220db8e1e7af/transformed/jetified-annotation-1.0.1/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/e32c9781801651fb6929220db8e1e7af/transformed/jetified-annotation-1.0.1/AndroidManifest.xml" />
+<<<<<<< HEAD
       <root url="jar://$USER_HOME$/caches/transforms-3/e32c9781801651fb6929220db8e1e7af/transformed/jetified-annotation-1.0.1/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/caches/transforms-3/e32c9781801651fb6929220db8e1e7af/transformed/jetified-annotation-1.0.1/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
       <root url="jar://$USER_HOME$/caches/modules-2/files-2.1/androidx.test/annotation/1.0.1/d922fcf4c7ae6c3b54012d21e594409c6c6ac156/annotation-1.0.1-sources.jar!/" />
+=======
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.test/annotation/1.0.1/d922fcf4c7ae6c3b54012d21e594409c6c6ac156/annotation-1.0.1-sources.jar!/" />
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
     </SOURCES>
   </library>
 </component>

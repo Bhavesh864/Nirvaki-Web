@@ -6,6 +6,10 @@ final messgeForwardModeProvider = StateNotifierProvider<MessageForwardMode, bool
 
 class MessageForwardMode extends StateNotifier<bool> {
   MessageForwardMode() : super(false);
+
+  void setForwardMode(bool currentState) {
+    state = currentState;
+  }
 }
 
 final selectedMessageProvider = StateNotifierProvider<SelectedMessage, List<int>>(
@@ -18,6 +22,16 @@ class SelectedMessage extends StateNotifier<List<int>> {
   void addIndex(int selectedValue) {
     List<int> currentState = state;
     currentState.add(selectedValue);
+    state = currentState;
+  }
+
+  void setToEmpty() {
+    state = [];
+  }
+
+  void removeIndex(int selectedValue) {
+    List<int> currentState = state;
+    currentState.remove(selectedValue);
     state = currentState;
   }
 }

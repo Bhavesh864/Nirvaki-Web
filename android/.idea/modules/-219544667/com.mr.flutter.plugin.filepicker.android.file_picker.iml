@@ -11,6 +11,10 @@
     <facet type="android" name="Android">
       <configuration>
         <option name="SELECTED_BUILD_VARIANT" value="debug" />
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
         <option name="ASSEMBLE_TASK_NAME" value="assembleDebug" />
         <option name="COMPILE_JAVA_TASK_NAME" value="compileDebugSources" />
         <afterSyncTasks>
@@ -21,6 +25,16 @@
         <option name="RES_FOLDER_RELATIVE_PATH" value="/src/main/res" />
         <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$USER_HOME$/.pub-cache/hosted/pub.dev/file_picker-5.3.3/android/src/main/res;file://$USER_HOME$/.pub-cache/hosted/pub.dev/file_picker-5.3.3/android/src/debug/res;file://$MODULE_DIR$/../../../../build/file_picker/generated/res/rs/debug;file://$MODULE_DIR$/../../../../build/file_picker/generated/res/resValues/debug" />
         <option name="TEST_RES_FOLDERS_RELATIVE_PATH" value="file://$USER_HOME$/.pub-cache/hosted/pub.dev/file_picker-5.3.3/android/src/androidTest/res;file://$USER_HOME$/.pub-cache/hosted/pub.dev/file_picker-5.3.3/android/src/androidTestDebug/res;file://$MODULE_DIR$/../../../../build/file_picker/generated/res/rs/androidTest/debug;file://$MODULE_DIR$/../../../../build/file_picker/generated/res/resValues/androidTest/debug" />
+<<<<<<< HEAD
+=======
+=======
+        <option name="ALLOW_USER_CONFIGURATION" value="false" />
+        <option name="MANIFEST_FILE_RELATIVE_PATH" value="/src/main/AndroidManifest.xml" />
+        <option name="RES_FOLDER_RELATIVE_PATH" value="/src/main/res" />
+        <option name="RES_FOLDERS_RELATIVE_PATH" value="" />
+        <option name="TEST_RES_FOLDERS_RELATIVE_PATH" value="" />
+>>>>>>> 673ddf558cc5fd73642e30a97ffcc859319b9145
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
         <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/src/main/assets" />
         <option name="PROJECT_TYPE" value="1" />
       </configuration>
