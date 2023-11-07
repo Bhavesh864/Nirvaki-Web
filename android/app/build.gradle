@@ -88,14 +88,14 @@ android {
             applicationIdSuffix ".dev"
             resValue "string", "app_name", "Nirvaki-dev"
             versionNameSuffix ".dev"
-            // flutter.target "lib/main_dev.dart"
+            flutter.target "lib/main_dev.dart"
         }
         prod {
             dimension "nirvaki"
             applicationIdSuffix ".prod"
             resValue "string", "app_name", "Nirvaki"
             versionNameSuffix ".prod"
-            // flutter.target "lib/main_prod.dart"
+            flutter.target "lib/main_prod.dart"
         }
     }
 }

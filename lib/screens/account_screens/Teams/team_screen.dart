@@ -9,6 +9,8 @@ import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/widgets/accounts/Teams/bottom_card.dart';
 import 'package:yes_broker/widgets/accounts/Teams/mobile_member_card.dart';
 import 'package:yes_broker/widgets/accounts/Teams/title_cards.dart';
+import '../../../constants/app_constant.dart';
+import '../../../constants/firebase/Hive/hive_methods.dart';
 import '../../../constants/firebase/userModel/user_info.dart';
 import '../../../riverpodstate/add_member_state.dart';
 import '../../../riverpodstate/user_data.dart';
@@ -18,11 +20,21 @@ final addMemberScreenStateProvider = StateNotifierProvider<AddMemberScreenStateN
   return AddMemberScreenStateNotifier();
 });
 
-class TeamScreen extends ConsumerWidget {
+class TeamScreen extends ConsumerStatefulWidget {
   const TeamScreen({super.key});
+  @override
+  ConsumerState<TeamScreen> createState() => TeamScreenState();
+}
+
+class TeamScreenState extends ConsumerState<TeamScreen> {
+  @override
+  void initState() {
+    super.initState();
+    getUserData(mounted, ref);
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final isAddMemberScreen = ref.watch(addMemberScreenStateProvider);
     final User? currentUserdata = ref.read(userDataProvider);
 
@@ -189,4 +201,14 @@ showAddMemberAlertDailogBox(BuildContext context) {
       );
     },
   );
+}
+
+getUserData(mounted, WidgetRef ref) async {
+  if (mounted) {
+    final User? user = ref.read(userDataProvider);
+    if (user != null) {
+      final List<User> userList = await User.getAllUsers(user);
+      UserListPreferences.saveUserList(userList);
+    }
+  }
 }

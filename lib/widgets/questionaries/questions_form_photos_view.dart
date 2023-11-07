@@ -51,8 +51,8 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
 
   void cancelEditingTodoName() {
     setState(() {
-      roomImages[isEditingTodoName]["title"] = todoNameEditingController.text;
-      selectedImagesTitleList[isEditingTodoName] = todoNameEditingController.text;
+      roomImages[isEditingTodoName]["title"] = todoNameEditingController.text.trim();
+      selectedImagesTitleList[isEditingTodoName] = todoNameEditingController.text.trim();
     });
     setState(() {
       isEditingTodoName = -1;
@@ -127,7 +127,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
 
     focusNode.addListener(() {
       if (!focusNode.hasFocus) {
-        if (todoNameEditingController.text != "") {
+        if (todoNameEditingController.text.trim() != "") {
           cancelEditingTodoName();
         } else {
           FocusScope.of(context).requestFocus(focusNode);
@@ -271,7 +271,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
                                             onFieldSubmitted: (newValue) {
                                               todoNameEditingController.text = newValue;
                                               Future.delayed(const Duration(milliseconds: 300)).then((value) => {
-                                                    if (newValue != "")
+                                                    if (newValue.trim() != "")
                                                       {cancelEditingTodoName(), FocusScope.of(context).requestFocus(focusNode)}
                                                     else
                                                       {FocusScope.of(context).requestFocus(focusNode), customSnackBar(context: context, text: 'Field cannot be empty')}

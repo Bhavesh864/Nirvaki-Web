@@ -14,8 +14,13 @@
           <stringArguments>
             <stringArg name="classpath">
               <args>
+<<<<<<< HEAD
+                <arg>$MODULE_DIR$/../../../../build/app/intermediates/compile_and_runtime_not_namespaced_r_class_jar/devDebug/R.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/0bc41b35ae023c228d1028a0b47ea31e/transformed/jetified-libs.jar</arg>
+=======
                 <arg>$MODULE_DIR$/../../../../build/app/intermediates/compile_and_runtime_not_namespaced_r_class_jar/debug/R.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/d5050cef6d74618fc8624d2c5731aa5d/transformed/jetified-libs.jar</arg>
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
                 <arg>$MODULE_DIR$/../../../../build/firebase_database/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/firebase_messaging/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/firebase_performance/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
@@ -42,6 +47,98 @@
                 <arg>$MODULE_DIR$/../../../../build/connectivity_plus/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/webview_flutter_android/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
                 <arg>$MODULE_DIR$/../../../../build/emoji_picker_flutter/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
+<<<<<<< HEAD
+                <arg>$USER_HOME$/caches/transforms-3/c78a753856842d0516f765d22c1f1b17/transformed/jetified-armeabi_v7a_debug-1.0.0-cdbeda788a293fa29665dc3fa3d6e63bd221cb0d.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/d6c2c023a764c08527ac4e41e7e06747/transformed/jetified-arm64_v8a_debug-1.0.0-cdbeda788a293fa29665dc3fa3d6e63bd221cb0d.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/0c95912ed53f82658a424598a83ae66d/transformed/jetified-x86_64_debug-1.0.0-cdbeda788a293fa29665dc3fa3d6e63bd221cb0d.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/17a0943bf848cb490885945def4ec076/transformed/jetified-x86_debug-1.0.0-cdbeda788a293fa29665dc3fa3d6e63bd221cb0d.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/53d90a88d3c83dd65c2e27c833bdf843/transformed/jetified-flutter_embedding_debug-1.0.0-cdbeda788a293fa29665dc3fa3d6e63bd221cb0d.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/ae3a4ebd0cd3bd73dfa3dbcdcf6cf561/transformed/jetified-firebase-analytics-ktx-21.3.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/6e51ab7dc19c30fe477c56ef5464fab8/transformed/jetified-firebase-crashlytics-ktx-18.4.3-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/2bb9cc5dbdb8dc655fe636645a05bd4b/transformed/jetified-firebase-crashlytics-18.4.3-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/c715a9bd2d1df014d332afd0e24ba7fb/transformed/jetified-firebase-sessions-1.0.2-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/b5372455fb6c866a67216af45a6b3251/transformed/jetified-firebase-common-ktx-20.3.3-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/19a8df6f0b5e847c5c2d3df405518c5f/transformed/jetified-firebase-analytics-21.3.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/3fda494756fb41a6f55a2cef124f4f67/transformed/jetified-play-services-measurement-api-21.3.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/3d30c6446490df8ca15b603eadffa629/transformed/jetified-firebase-installations-17.1.4-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/f22d512cc98b8fe7e2d677edb3784d55/transformed/jetified-firebase-datatransport-18.1.8-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/f91f4437472d6d7fe029a8bc7b5cefb6/transformed/jetified-firebase-common-20.3.3-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/c7fdeea2b73a1ae0440314366ebd6d2e/transformed/jetified-play-services-measurement-21.3.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/36672ae8d0b9421fefe6890ff5b41b12/transformed/jetified-play-services-measurement-sdk-21.3.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/3b5f5f2f0947cc1aaef00454fd6a196e/transformed/jetified-window-java-1.0.0-beta04-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/405fb60cab83ac410028c9d2bc576ad8/transformed/jetified-window-1.0.0-beta04-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/c5a50d97792cd2b040db0ab8c948c9e4/transformed/jetified-activity-1.7.2-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/c1965f21591038903e8a61f44163c231/transformed/jetified-play-services-measurement-impl-21.3.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/2d95d9468e336f0b91afe59b027f6203/transformed/jetified-play-services-stats-17.0.2-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/e415555e9eb8df72cccdbfcd83e7aa30/transformed/legacy-support-core-utils-1.0.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/b957144c32e21a6850ff7b08f6c1e0f4/transformed/loader-1.0.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/d376d9fca74a584a62b5591f01afe0d8/transformed/lifecycle-livedata-core-2.6.1-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/9fd0224f9f14bc2cffbe14e95841ef03/transformed/lifecycle-livedata-2.6.1-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/0548ebbf257b56b7ff2f4f2b3a12b1c9/transformed/lifecycle-viewmodel-2.6.1-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/1cd2d79bd09548b8ac4e5f08e2963a1b/transformed/jetified-lifecycle-viewmodel-savedstate-2.6.1-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/612a7b413dd371ba5d1f9c16af7d547a/transformed/jetified-kotlinx-coroutines-android-1.6.4.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/7c8f0d4aff1dad976ce791ebd3f1ac0c/transformed/jetified-datastore-preferences-1.0.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/929f1b891282f2048c7139ecbcf412ba/transformed/jetified-datastore-1.0.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/b2ff89c135772e3c5018927a0b9e57c9/transformed/jetified-datastore-preferences-core-1.0.0.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/17e7f1c23414c1e1670def0c6594fdda/transformed/jetified-datastore-core-1.0.0.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/2c6d4c3532958310932ddc47854d4b53/transformed/jetified-kotlinx-coroutines-core-jvm-1.6.4.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/3c3d921dfd3fef8a788672ecb86125e3/transformed/jetified-kotlinx-coroutines-play-services-1.6.4.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/b9075d0604cc10ffed96bd5348563dd3/transformed/jetified-firebase-installations-interop-17.1.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/4b1fbc252488c61e680efdaf9aee3bf6/transformed/jetified-play-services-tasks-18.0.2-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/7dbb0c31e8564c913c3cbbe370fc50e6/transformed/jetified-firebase-measurement-connector-19.0.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/d7f5d58c309dcd39bd5448a3d7d21fbb/transformed/jetified-play-services-ads-identifier-18.0.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/80cc052b4f7fe5c5ed9f9ecc0ed2356a/transformed/jetified-play-services-measurement-sdk-api-21.3.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/699a00ace2448347a5fac98f43c90628/transformed/jetified-play-services-measurement-base-21.3.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/c77a44fcf6ab6dd74c8136ae403b78a3/transformed/jetified-play-services-basement-18.1.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/26c60a27ff568f0954bd9d5e950547ba/transformed/fragment-1.1.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/abde6782cc91cc3ab19613bbe8d6dcd4/transformed/viewpager-1.0.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/972cb08d3b1af748d34e63c003d917c9/transformed/customview-1.0.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/20baab907634b82e65950e821ebeb4b4/transformed/jetified-core-ktx-1.10.1-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/599041f62d1f73bb1d3eff77e5f01101/transformed/core-1.10.1-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/ea59ad7d253cb91356f00a0212bd1c73/transformed/lifecycle-runtime-2.6.1-api.jar</arg>
+                <arg>$USER_HOME$/caches/modules-2/files-2.1/androidx.lifecycle/lifecycle-common-java8/2.6.1/2ad14aed781c4a73ed4dbb421966d408a0a06686/lifecycle-common-java8-2.6.1.jar</arg>
+                <arg>$USER_HOME$/caches/modules-2/files-2.1/androidx.lifecycle/lifecycle-common/2.6.1/10f354fdb64868baecd67128560c5a0d6312c495/lifecycle-common-2.6.1.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/87e4c7f403b70b64fd8b9499998b00ba/transformed/rules-1.2.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/72b0ac414914e9226b2e9648515d6b5e/transformed/espresso-core-3.2.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/8f0677d117b2603c6295e39206128fa8/transformed/runner-1.2.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/797365ed3c5491b90cdd2d34c06fe7aa/transformed/jetified-firebase-components-17.1.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/150ba3aff7afea227d1b91f245eaac1c/transformed/monitor-1.2.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/ee105ebaa9d740fc637fe0ec8d9d74a0/transformed/jetified-concurrent-futures-1.1.0.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/2d7b700a167a964d8ab326979936c799/transformed/jetified-transport-backend-cct-3.1.9-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/7c495d49e2165b25f597b156c9b9e8ec/transformed/jetified-firebase-encoders-json-18.0.1-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/ad76075150e7d47ee7c971be85261b80/transformed/jetified-transport-runtime-3.1.9-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/354093045666762549c0e6a1053734be/transformed/jetified-firebase-encoders-proto-16.0.0.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/8f04a6aaf32f2358a58449cfaac54c93/transformed/jetified-firebase-encoders-17.0.0.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/ab9c5ef003c4c012688f955c7e104471/transformed/jetified-transport-api-3.0.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/42c9f0d5512377a8028f16b2415d8afa/transformed/core-runtime-2.2.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/modules-2/files-2.1/androidx.arch.core/core-common/2.2.0/5e1b8b81dfd5f52c56a8d53b18ca759c19a301f3/core-common-2.2.0.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/9ad65bc7a07f3bd348bd19c23c7db57b/transformed/versionedparcelable-1.1.1-api.jar</arg>
+                <arg>$USER_HOME$/caches/modules-2/files-2.1/androidx.collection/collection/1.1.0/1f27220b47669781457de0d600849a5de0e89909/collection-1.1.0.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/159c41cba64282f2b9b078403a8429f3/transformed/jetified-savedstate-1.2.1-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/e874d1bffb32bec20e1d028474dc947d/transformed/documentfile-1.0.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/c43f2a5692eff07b4038c6189ab19ca3/transformed/localbroadcastmanager-1.1.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/16ba99507b3ad3ccbe523c183c11f3e1/transformed/print-1.0.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/3f0421f57616dabda305bc23c335eb61/transformed/jetified-annotation-jvm-1.7.0.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/7b07450ad14e016581867374c6e6d51a/transformed/jetified-kotlin-stdlib-jdk8-1.8.22.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/750bc0a59a914d9c932be6166bee79ad/transformed/jetified-kotlin-stdlib-jdk7-1.8.22.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/edb28befb06efcd993ba19413df3d863/transformed/jetified-annotation-experimental-1.3.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/1785f88b5c3fc17f397951b9be09644f/transformed/jetified-kotlin-stdlib-1.8.22.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/232dc2c4ba1c36f4690d1a8bd8f797ad/transformed/jetified-kotlin-stdlib-common-1.8.22.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/67909df5deb44aa31ec15bcd19c23d2e/transformed/jetified-annotations-13.0.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/8e5ae222edc41db7776bf06e4dace470/transformed/jetified-listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/4fb8ea9873ca0afaad2dfac134401770/transformed/jetified-tracing-1.0.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/6ac4f0e880edcefa92930a73faf50d52/transformed/jetified-firebase-annotations-16.2.0.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/b06ece8b4b3215e0f271b678572b9938/transformed/jetified-javax.inject-1.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/083046aeb294fb8686f97e4b56c3f182/transformed/jetified-error_prone_annotations-2.14.0.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/7795a0b126effb43e671615a5b420544/transformed/jetified-jsr305-3.0.2.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/416625c69c7d23f0c5cb94880ca71459/transformed/jetified-junit-4.12.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/64ece6772b12d2e63bf13dd35a7a999c/transformed/jetified-hamcrest-integration-1.3.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/c6dbf21660d3fe7dac482734d502b0dc/transformed/jetified-hamcrest-library-1.3.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/7e1eafed7188cec7949fe8f18e67c99c/transformed/jetified-hamcrest-core-1.3.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/2e157b4f3e5cf59d465b8433e28f58d1/transformed/jetified-kxml2-2.3.0.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/bb3262bee6490cb315d4a9816a923993/transformed/espresso-idling-resource-3.2.0-api.jar</arg>
+                <arg>$USER_HOME$/caches/transforms-3/5fe5a5fae7c36c849deb2fbc3f03e2d2/transformed/jetified-javawriter-2.1.1.jar</arg>
+=======
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/2ebc7f065bf67d58ad3b26c8a1b0a5d6/transformed/jetified-armeabi_v7a_debug-1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/04de8c595c30e0d04b8ea7d5d62fbc44/transformed/jetified-arm64_v8a_debug-1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/230797291da0dda1c48d075e564e6960/transformed/jetified-x86_64_debug-1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420.jar</arg>
@@ -132,13 +229,20 @@
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/2e157b4f3e5cf59d465b8433e28f58d1/transformed/jetified-kxml2-2.3.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/bb3262bee6490cb315d4a9816a923993/transformed/espresso-idling-resource-3.2.0-api.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/5fe5a5fae7c36c849deb2fbc3f03e2d2/transformed/jetified-javawriter-2.1.1.jar</arg>
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
                 <arg>$USER_HOME$/Library/Android/sdk/platforms/android-33/android.jar</arg>
                 <arg>$USER_HOME$/Library/Android/sdk/build-tools/30.0.3/core-lambda-stubs.jar</arg>
               </args>
             </stringArg>
+<<<<<<< HEAD
+            <stringArg name="destination" arg="$MODULE_DIR$/../../../../build/app/tmp/kotlin-classes/devDebug" />
+            <stringArg name="jvmTarget" arg="1.8" />
+            <stringArg name="moduleName" arg="app_devDebug" />
+=======
             <stringArg name="destination" arg="$MODULE_DIR$/../../../../build/app/tmp/kotlin-classes/debug" />
             <stringArg name="jvmTarget" arg="1.8" />
             <stringArg name="moduleName" arg="app_debug" />
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
             <stringArg name="apiVersion" arg="1.7" />
             <stringArg name="languageVersion" arg="1.7" />
           </stringArguments>
@@ -152,28 +256,67 @@
     </facet>
     <facet type="android" name="Android">
       <configuration>
+<<<<<<< HEAD
+        <option name="SELECTED_BUILD_VARIANT" value="devDebug" />
+        <option name="ASSEMBLE_TASK_NAME" value="assembleDevDebug" />
+        <option name="COMPILE_JAVA_TASK_NAME" value="compileDevDebugSources" />
+        <afterSyncTasks>
+          <task>generateDevDebugSources</task>
+        </afterSyncTasks>
+        <option name="ALLOW_USER_CONFIGURATION" value="false" />
+        <option name="MANIFEST_FILE_RELATIVE_PATH" value="/src/main/AndroidManifest.xml" />
+        <option name="RES_FOLDER_RELATIVE_PATH" value="/src/main/res" />
+        <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/../../../app/src/main/res;file://$MODULE_DIR$/../../../app/src/dev/res;file://$MODULE_DIR$/../../../app/src/debug/res;file://$MODULE_DIR$/../../../app/src/devDebug/res;file://$MODULE_DIR$/../../../../build/app/generated/crashlytics/res/dev/debug;file://$MODULE_DIR$/../../../../build/app/generated/res/rs/dev/debug;file://$MODULE_DIR$/../../../../build/app/generated/res/resValues/dev/debug" />
+        <option name="TEST_RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/../../../app/src/androidTest/res;file://$MODULE_DIR$/../../../app/src/androidTestDev/res;file://$MODULE_DIR$/../../../app/src/androidTestDebug/res;file://$MODULE_DIR$/../../../app/src/androidTestDevDebug/res;file://$MODULE_DIR$/../../../../build/app/generated/res/rs/androidTest/dev/debug;file://$MODULE_DIR$/../../../../build/app/generated/res/resValues/androidTest/dev/debug" />
+=======
         <option name="SELECTED_BUILD_VARIANT" value="debug" />
         <option name="ALLOW_USER_CONFIGURATION" value="false" />
         <option name="MANIFEST_FILE_RELATIVE_PATH" value="/src/main/AndroidManifest.xml" />
         <option name="RES_FOLDER_RELATIVE_PATH" value="/src/main/res" />
         <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/../../../app/src/main/res;file://$MODULE_DIR$/../../../app/src/debug/res;file://$MODULE_DIR$/../../../../build/app/generated/res/google-services/debug;file://$MODULE_DIR$/../../../../build/app/generated/crashlytics/res/debug;file://$MODULE_DIR$/../../../../build/app/generated/res/rs/debug;file://$MODULE_DIR$/../../../../build/app/generated/res/resValues/debug" />
         <option name="TEST_RES_FOLDERS_RELATIVE_PATH" value="" />
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
         <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/src/main/assets" />
       </configuration>
     </facet>
   </component>
+<<<<<<< HEAD
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="true">
+=======
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/../../../../build/app/intermediates/javac/debug/classes" />
     <output-test url="file://$MODULE_DIR$/../../../../build/app/intermediates/javac/debugUnitTest/classes" />
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../app/src/debug">
       <sourceFolder url="file://$MODULE_DIR$/../../../app/src/debug/res" type="java-resource" />
     </content>
+<<<<<<< HEAD
+    <content url="file://$MODULE_DIR$/../../../app/src/dev" />
+    <content url="file://$MODULE_DIR$/../../../app/src/devDebug" />
+=======
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
     <content url="file://$MODULE_DIR$/../../../app/src/main">
       <sourceFolder url="file://$MODULE_DIR$/../../../app/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../app/src/main/kotlin" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../app/src/main/res" type="java-resource" />
     </content>
+<<<<<<< HEAD
+    <content url="file://$MODULE_DIR$/../../../../build/app/generated/aidl_source_output_dir/devDebug/out" />
+    <content url="file://$MODULE_DIR$/../../../../build/app/generated/ap_generated_sources/devDebug/out">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../build/app/generated/ap_generated_sources/devDebug/out" isTestSource="false" generated="true" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../../../build/app/generated/crashlytics/res/dev/debug">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../build/app/generated/crashlytics/res/dev/debug" type="java-resource" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../../../build/app/generated/renderscript_source_output_dir/devDebug/out" />
+    <content url="file://$MODULE_DIR$/../../../../build/app/generated/res/resValues/dev/debug">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../build/app/generated/res/resValues/dev/debug" type="java-resource" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../../../build/app/generated/res/rs/dev/debug" />
+    <content url="file://$MODULE_DIR$/../../../../build/app/generated/source/buildConfig/dev/debug">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../build/app/generated/source/buildConfig/dev/debug" isTestSource="false" generated="true" />
+=======
     <content url="file://$MODULE_DIR$/../../../../build/app/generated/aidl_source_output_dir/debug/out" />
     <content url="file://$MODULE_DIR$/../../../../build/app/generated/ap_generated_sources/debug/out">
       <sourceFolder url="file://$MODULE_DIR$/../../../../build/app/generated/ap_generated_sources/debug/out" isTestSource="false" generated="true" />
@@ -191,10 +334,25 @@
     <content url="file://$MODULE_DIR$/../../../../build/app/generated/res/rs/debug" />
     <content url="file://$MODULE_DIR$/../../../../build/app/generated/source/buildConfig/debug">
       <sourceFolder url="file://$MODULE_DIR$/../../../../build/app/generated/source/buildConfig/debug" isTestSource="false" generated="true" />
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
     </content>
     <orderEntry type="jdk" jdkName="Android API 33, extension level 3 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="android.firebase_core.main" />
+<<<<<<< HEAD
+    <orderEntry type="module" module-name="dev.fluttercommunity.plus.network_info.android.network_info_plus.main" />
+    <orderEntry type="module" module-name="android.fluttercontactpicker.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.database.android.firebase_database.main" />
+    <orderEntry type="module" module-name="com.dexterous.flutterlocalnotifications.android.flutter_local_notifications.main" />
+    <orderEntry type="module" module-name="com.mr.flutter.plugin.filepicker.android.file_picker.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.pathprovider.android.path_provider_android.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.sharedpreferences.android.shared_preferences_android.main" />
+    <orderEntry type="module" module-name="com.example.integration_test.android.integration_test.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.imagepicker.android.image_picker_android.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebasemessaging.android.firebase_messaging.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.crashlytics.android.firebase_crashlytics.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.flutter_plugin_android_lifecycle.android.flutter_plugin_android_lifecycle.main" />
+=======
     <orderEntry type="module" module-name="android.network_info_plus.main" />
     <orderEntry type="module" module-name="android.fluttercontactpicker.main" />
     <orderEntry type="module" module-name="android.firebase_database.main" />
@@ -207,11 +365,23 @@
     <orderEntry type="module" module-name="android.firebase_messaging.main" />
     <orderEntry type="module" module-name="android.firebase_crashlytics.main" />
     <orderEntry type="module" module-name="android.flutter_plugin_android_lifecycle.main" />
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
     <orderEntry type="module" module-name="android.sqflite.main" />
     <orderEntry type="module" module-name="android.url_launcher_android.main" />
     <orderEntry type="module" module-name="android.google_maps_flutter_android.main" />
     <orderEntry type="module" module-name="android.flutter_file_downloader.main" />
     <orderEntry type="module" module-name="android.firebase_performance.main" />
+<<<<<<< HEAD
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.cloudfirestore.android.cloud_firestore.main" />
+    <orderEntry type="module" module-name="android.connectivity_plus.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.dynamiclinks.android.firebase_dynamic_links.main" />
+    <orderEntry type="module" module-name="android.webview_flutter_android.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.analytics.android.firebase_analytics.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.auth.android.firebase_auth.main" />
+    <orderEntry type="module" module-name="com.fintasys.emoji_picker_flutter.android.emoji_picker_flutter.main" />
+    <orderEntry type="module" module-name="io.flutter.plugins.firebase.storage.android.firebase_storage.main" />
+    <orderEntry type="library" name="Gradle: io.flutter:flutter_embedding_debug:1.0.0-cdbeda788a293fa29665dc3fa3d6e63bd221cb0d" level="project" />
+=======
     <orderEntry type="module" module-name="android.cloud_firestore.main" />
     <orderEntry type="module" module-name="android.connectivity_plus.main" />
     <orderEntry type="module" module-name="android.firebase_dynamic_links.main" />
@@ -221,6 +391,7 @@
     <orderEntry type="module" module-name="android.emoji_picker_flutter.main" />
     <orderEntry type="module" module-name="android.firebase_storage.main" />
     <orderEntry type="library" name="Gradle: io.flutter:flutter_embedding_debug:1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420" level="project" />
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
     <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-common:2.6.1" level="project" />
     <orderEntry type="library" name="Gradle: androidx.annotation:annotation-jvm:1.7.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.8.22" level="project" />
@@ -241,10 +412,17 @@
     <orderEntry type="library" name="Gradle: org.hamcrest:hamcrest-library:1.3" level="project" />
     <orderEntry type="library" name="Gradle: org.hamcrest:hamcrest-integration:1.3" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
+<<<<<<< HEAD
+    <orderEntry type="library" name="Gradle: io.flutter:armeabi_v7a_debug:1.0.0-cdbeda788a293fa29665dc3fa3d6e63bd221cb0d" level="project" />
+    <orderEntry type="library" name="Gradle: io.flutter:arm64_v8a_debug:1.0.0-cdbeda788a293fa29665dc3fa3d6e63bd221cb0d" level="project" />
+    <orderEntry type="library" name="Gradle: io.flutter:x86_64_debug:1.0.0-cdbeda788a293fa29665dc3fa3d6e63bd221cb0d" level="project" />
+    <orderEntry type="library" name="Gradle: io.flutter:x86_debug:1.0.0-cdbeda788a293fa29665dc3fa3d6e63bd221cb0d" level="project" />
+=======
     <orderEntry type="library" name="Gradle: io.flutter:armeabi_v7a_debug:1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420" level="project" />
     <orderEntry type="library" name="Gradle: io.flutter:arm64_v8a_debug:1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420" level="project" />
     <orderEntry type="library" name="Gradle: io.flutter:x86_64_debug:1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420" level="project" />
     <orderEntry type="library" name="Gradle: io.flutter:x86_debug:1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420" level="project" />
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-annotations:16.2.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.errorprone:error_prone_annotations:2.14.0" level="project" />
     <orderEntry type="library" name="Gradle: androidx.concurrent:concurrent-futures:1.1.0" level="project" />
@@ -254,7 +432,11 @@
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-encoders-proto:16.0.0" level="project" />
     <orderEntry type="library" name="Gradle: androidx.datastore:datastore-core:1.0.0" level="project" />
     <orderEntry type="library" name="Gradle: androidx.datastore:datastore-preferences-core:1.0.0" level="project" />
+<<<<<<< HEAD
+    <orderEntry type="library" name="Gradle: /Users/saurabhmehra/Projects/flutterProjects/broker_webappV1/build/app/intermediates/flutter/devDebug/libs.jar" level="project" />
+=======
     <orderEntry type="library" name="Gradle: /Users/saurabhmehra/flutterProject/broker_webappV1/build/app/intermediates/flutter/debug/libs.jar" level="project" />
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
     <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-runtime:2.6.1@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.fragment:fragment:1.1.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.core:core:1.10.1@aar" level="project" />

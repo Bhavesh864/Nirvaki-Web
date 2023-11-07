@@ -3,12 +3,25 @@
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/5438dbd051ec4872ecb36aae42942cfd/transformed/jetified-firebase-crashlytics-ktx-18.2.12/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/5438dbd051ec4872ecb36aae42942cfd/transformed/jetified-firebase-crashlytics-ktx-18.2.12/AndroidManifest.xml" />
+<<<<<<< HEAD
+      <root url="jar://$USER_HOME$/caches/transforms-3/5438dbd051ec4872ecb36aae42942cfd/transformed/jetified-firebase-crashlytics-ktx-18.2.12/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/caches/transforms-3/5438dbd051ec4872ecb36aae42942cfd/transformed/jetified-firebase-crashlytics-ktx-18.2.12/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.firebase/firebase-crashlytics-ktx/18.2.12/66bb4927d46644304f22838c646fe4db8326e883/firebase-crashlytics-ktx-18.2.12-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/caches/modules-2/files-2.1/com.google.firebase/firebase-crashlytics-ktx/18.2.12/66bb4927d46644304f22838c646fe4db8326e883/firebase-crashlytics-ktx-18.2.12-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.firebase/firebase-crashlytics-ktx/18.2.12/c2e041e07bf9c6ccf5ca6a9f9cc2534d4b298fe6/firebase-crashlytics-ktx-18.2.12-sources.jar!/" />
+      <root url="jar://$USER_HOME$/caches/modules-2/files-2.1/com.google.firebase/firebase-crashlytics-ktx/18.2.12/c2e041e07bf9c6ccf5ca6a9f9cc2534d4b298fe6/firebase-crashlytics-ktx-18.2.12-sources.jar!/" />
+=======
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.firebase/firebase-crashlytics-ktx/18.2.12/66bb4927d46644304f22838c646fe4db8326e883/firebase-crashlytics-ktx-18.2.12-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.firebase/firebase-crashlytics-ktx/18.2.12/c2e041e07bf9c6ccf5ca6a9f9cc2534d4b298fe6/firebase-crashlytics-ktx-18.2.12-sources.jar!/" />
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
     </SOURCES>
   </library>
 </component>

@@ -70,17 +70,17 @@ class _BottomCardMainState extends ConsumerState<BottomCardMain> {
                   child: Table(
                     children: [
                       TableRow(children: [
-                        AppText(text: '${user.userfirstname} ${user.userlastname}', fontsize: 12, fontWeight: FontWeight.bold),
+                        AppText(text: '${capitalizeFirstLetter(user.userfirstname)} ${capitalizeFirstLetter(user.userlastname)}', fontsize: 12, fontWeight: FontWeight.bold),
                         AppText(text: user.role, fontsize: 12, fontWeight: FontWeight.w400),
                         TableCell(
                           child: AppText(text: managers.isNotEmpty ? capitalizeFirstLetter(getNamesMatchWithid(user.managerid)) : "", fontsize: 12, fontWeight: FontWeight.w400),
                         ),
                         TableCell(
                           child: Container(
-                            width: 20, // Set the desired width for the edit container
-                            height: 20, // Set the desired heighdt for the edit container
+                            width: 20,
+                            height: 20,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10), // Set the desired border radius
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             child: IconButton(
                               tooltip: "Edit",

@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // import 'dart:html';
-
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_file_downloader/flutter_file_downloader.dart';
+import 'package:yes_broker/customs/text_utility.dart';
 
 import '../../Customs/custom_text.dart';
 import '../../Customs/loader.dart';
@@ -14,6 +14,7 @@ import '../../constants/firebase/detailsModels/todo_details.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/methods/date_time_methods.dart';
 import '../../constants/utils/constants.dart';
+import '../../constants/utils/download_file.dart';
 import '../workItemDetail/tab_views/details_tab_view.dart';
 
 class AttachmentWidget extends StatefulWidget {
@@ -36,13 +37,19 @@ class AttachmentWidget extends StatefulWidget {
 
 class AttachmentWidgetState extends State<AttachmentWidget> {
   bool isUploading = false;
-  void downloadFile(String url, String name) async {
-    FileDownloader.downloadFile(
-      url: url,
-      onDownloadCompleted: (String path) {
-        customSnackBar(context: context, text: 'FILE DOWNLOADED TO PATH: $path');
-      },
-    );
+
+  downloadProgress(value, progress) {
+    if (value) {
+      // setState(() {
+      //   downloading = true;
+      //   progressString = "${((rec / total) * 100).toStringAsFixed(0)}%";
+      // });
+      if (progress == "100%") {
+        customSnackBar(context: context, text: 'Download Completed');
+      }
+    } else {
+      customSnackBar(context: context, text: 'Download Failed');
+    }
   }
 
   @override
@@ -81,6 +88,7 @@ class AttachmentWidgetState extends State<AttachmentWidget> {
                                 builder: (context) {
                                   return AttachmentPreviewDialog(
                                     attachmentPath: attachment.path!,
+                                    attachmentTitle: attachment.title,
                                   );
                                 },
                               );
@@ -105,10 +113,12 @@ class AttachmentWidgetState extends State<AttachmentWidget> {
                                   ),
                                   Column(
                                     children: [
-                                      CustomText(
-                                        title: attachment.title!,
-                                        size: 13,
+                                      AppText(
+                                        text: attachment.title!,
+                                        fontsize: 13,
                                         fontWeight: FontWeight.w400,
+                                        maxLines: 1,
+                                        textAlign: TextAlign.center,
                                       ),
                                       CustomText(
                                         title: 'Added ${formatMessageDate(attachment.createddate!.toDate())}',
@@ -138,10 +148,10 @@ class AttachmentWidgetState extends State<AttachmentWidget> {
                                     //   anchorElement.download = 'Attachment file';
                                     //   anchorElement.click();
                                     // }
-                                    downloadFile(
-                                      attachment.path,
-                                      attachment.title,
-                                    );
+                                    //
+                                    if (!kIsWeb) {
+                                      downloadFile(attachment.path, 'image', context, downloadProgress, name: attachment.title.trim());
+                                    }
                                   },
                                 ),
                                 InkWell(

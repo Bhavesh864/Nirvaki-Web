@@ -79,6 +79,8 @@ Future<void> showFlutterNotification(RemoteMessage message) async {
   }
 }
 
+void setScheduleNotification() async {}
+
 /// Renders the example application.
 
 FirebaseMessaging messaging = FirebaseMessaging.instance;

@@ -435,3 +435,26 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
     );
   }
 }
+
+void showEnlargedImage(BuildContext context, picture) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: SizedBox(
+            width: width,
+            height: 300,
+            child: Image.network(
+              picture.isEmpty ? noImg : picture,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}

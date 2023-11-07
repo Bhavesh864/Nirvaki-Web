@@ -126,23 +126,9 @@ class ChatRepository {
     bool isSender,
   ) async {
     try {
-      await firestore
-          .collection('users')
-          .doc(AppConst.getAccessToken())
-          .collection('chats')
-          .doc(recieverUserId)
-          .collection('messages')
-          .doc(messageId)
-          .update({'isSeen': true});
+      await firestore.collection('users').doc(AppConst.getAccessToken()).collection('chats').doc(recieverUserId).collection('messages').doc(messageId).update({'isSeen': true});
 
-      await firestore
-          .collection('users')
-          .doc(recieverUserId)
-          .collection('chats')
-          .doc(AppConst.getAccessToken())
-          .collection('messages')
-          .doc(messageId)
-          .update({'isSeen': true});
+      await firestore.collection('users').doc(recieverUserId).collection('chats').doc(AppConst.getAccessToken()).collection('messages').doc(messageId).update({'isSeen': true});
     } catch (e) {
       customSnackBar(
         context: context,

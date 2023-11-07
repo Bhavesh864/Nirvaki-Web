@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,10 +10,12 @@ import 'package:yes_broker/chat/models/message.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/customs/responsive.dart';
-import 'package:yes_broker/riverpodstate/chat/message_selection_state.dart';
 
+import '../../Customs/snackbar.dart';
 import '../../constants/methods/date_time_methods.dart';
 import '../../constants/utils/constants.dart';
+
+import '../../constants/utils/download_file.dart';
 
 // ignore: must_be_immutable
 class MessageBox extends ConsumerStatefulWidget {
@@ -192,46 +196,101 @@ class DisplayMessage extends StatelessWidget {
               color: isSender ? Colors.white : Colors.black,
             ),
           )
-        : CachedNetworkImage(
-            fit: BoxFit.cover,
-            height: 300,
-            width: 250,
-            imageUrl: message,
+        : GestureDetector(
+            onTap: () {
+              if (Responsive.isMobile(context)) {
+                // showEnlargedImage(context, message);
+                showGeneralDialog(
+                    context: context,
+                    barrierDismissible: true,
+                    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                    transitionDuration: const Duration(milliseconds: 200),
+                    pageBuilder: (context, animation1, animation2) {
+                      return ImagePreview(url: message, type: type.type);
+                    });
+              }
+            },
+            child: CachedNetworkImage(
+              fit: BoxFit.cover,
+              height: 300,
+              width: 250,
+              imageUrl: message,
+            ),
           );
-    // : type == MessageEnum.audio
-    //     ? StatefulBuilder(builder: (context, setState) {
-    //         return IconButton(
-    //           constraints: const BoxConstraints(
-    //             minWidth: 100,
-    //           ),
-    //           onPressed: () async {
-    //             // if (isPlaying) {
-    //             //   await audioPlayer.pause();
-    //             //   setState(() {
-    //             //     isPlaying = false;
-    //             //   });
-    //             // } else {
-    //             //   await audioPlayer.play(UrlSource(message));
-    //             //   setState(() {
-    //             //     isPlaying = true;
-    //             //   });
-    //             // }
-    //           },
-    //           icon: Icon(
-    //             isPlaying ? Icons.pause_circle : Icons.play_circle,
-    //           ),
-    //         );
-    //       })
-    // : type == MessageEnum.video
-    //     ? VideoPlayerItem(
-    //         videoUrl: message,
-    //       )
-    //     : type == MessageEnum.gif
-    //         ? CachedNetworkImage(
-    //             imageUrl: message,
-    //           )
-    //         : CachedNetworkImage(
-    //             imageUrl: message,
-    //           );
+  }
+}
+
+class ImagePreview extends StatelessWidget {
+  final String url;
+  final String type;
+
+  const ImagePreview({super.key, required this.url, required this.type});
+
+  @override
+  Widget build(BuildContext context) {
+    downloadProgress(value, progress) {
+      if (value) {
+        // setState(() {
+        //   downloading = true;
+        //   progressString = "${((rec / total) * 100).toStringAsFixed(0)}%";
+        // });
+        if (progress == "100%") {
+          customSnackBar(context: context, text: 'Download Completed');
+        }
+      } else {
+        customSnackBar(context: context, text: 'Download Failed');
+      }
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+            size: 22,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(
+              Icons.download,
+              color: Colors.white,
+              size: 22,
+            ),
+            onPressed: () {
+              downloadFile(
+                url,
+                type,
+                context,
+                downloadProgress,
+              );
+            },
+          ),
+        ],
+      ),
+      body: Container(
+        color: Colors.black,
+        width: double.infinity,
+        height: double.infinity,
+        child: Image.network(
+          url,
+          fit: BoxFit.contain,
+          frameBuilder: (_, image, loadingBuilder, __) {
+            if (loadingBuilder == null) {
+              return const SizedBox(
+                height: 300,
+                child: Center(child: CircularProgressIndicator(color: Colors.white)),
+              );
+            }
+            return image;
+          },
+        ),
+      ),
+    );
   }
 }

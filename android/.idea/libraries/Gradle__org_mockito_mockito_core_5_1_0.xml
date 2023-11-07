@@ -2,12 +2,24 @@
   <library name="Gradle: org.mockito:mockito-core:5.1.0">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-core/5.1.0/93a80fa5a3b79e52bb199877cbf21d22a3137967/mockito-core-5.1.0.jar!/" />
+<<<<<<< HEAD
+      <root url="jar://$USER_HOME$/caches/modules-2/files-2.1/org.mockito/mockito-core/5.1.0/93a80fa5a3b79e52bb199877cbf21d22a3137967/mockito-core-5.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-core/5.1.0/7f5b16f97facb973429006846e8ee7a149e3c7e4/mockito-core-5.1.0-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/caches/modules-2/files-2.1/org.mockito/mockito-core/5.1.0/7f5b16f97facb973429006846e8ee7a149e3c7e4/mockito-core-5.1.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-core/5.1.0/5d71a6e46afaf9a59fbcaa05d1b0b76bad0cd52a/mockito-core-5.1.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/caches/modules-2/files-2.1/org.mockito/mockito-core/5.1.0/5d71a6e46afaf9a59fbcaa05d1b0b76bad0cd52a/mockito-core-5.1.0-sources.jar!/" />
+=======
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-core/5.1.0/7f5b16f97facb973429006846e8ee7a149e3c7e4/mockito-core-5.1.0-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-core/5.1.0/5d71a6e46afaf9a59fbcaa05d1b0b76bad0cd52a/mockito-core-5.1.0-sources.jar!/" />
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
     </SOURCES>
   </library>
 </component>

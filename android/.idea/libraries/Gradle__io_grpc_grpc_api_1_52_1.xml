@@ -1,6 +1,15 @@
 <component name="libraryTable">
   <library name="Gradle: io.grpc:grpc-api:1.52.1">
     <CLASSES>
+<<<<<<< HEAD
+      <root url="jar://$USER_HOME$/caches/modules-2/files-2.1/io.grpc/grpc-api/1.52.1/250130924e11e3a0dfb5f508130940a1729d497c/grpc-api-1.52.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/caches/modules-2/files-2.1/io.grpc/grpc-api/1.52.1/323547ed5b04807d1519560bfe6c7f1e5aa6663b/grpc-api-1.52.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/caches/modules-2/files-2.1/io.grpc/grpc-api/1.52.1/107140977d97c5a2b1745bad8b4c4732646cf103/grpc-api-1.52.1-sources.jar!/" />
+=======
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-api/1.52.1/250130924e11e3a0dfb5f508130940a1729d497c/grpc-api-1.52.1.jar!/" />
     </CLASSES>
     <JAVADOC>
@@ -8,6 +17,7 @@
     </JAVADOC>
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-api/1.52.1/107140977d97c5a2b1745bad8b4c4732646cf103/grpc-api-1.52.1-sources.jar!/" />
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
     </SOURCES>
   </library>
 </component>

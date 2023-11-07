@@ -10,6 +10,30 @@
         <option name="gradleJvm" value="Android Studio default JDK" />
         <option name="modules">
           <set>
+<<<<<<< HEAD
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/cloud_firestore-4.12.1/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/connectivity_plus-4.0.2/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/emoji_picker_flutter-1.6.1/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/file_picker-5.3.3/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_analytics-10.6.2/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_auth-4.12.0/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_core-2.20.0/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_crashlytics-3.4.2/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_database-10.3.2/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_dynamic_links-5.4.2/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_messaging-14.7.2/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_performance-0.9.3+2/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_storage-11.4.0/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_file_downloader-1.1.4/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_local_notifications-15.1.0+1/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.15/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/fluttercontactpicker-4.7.0/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/google_maps_flutter_android-2.5.1/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/image_picker_android-0.8.7+4/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/network_info_plus-4.0.2/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/path_provider_android-2.1.0/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences_android-2.2.0/android" />
+=======
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/cloud_firestore-4.10.0/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/connectivity_plus-4.0.2/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/emoji_picker_flutter-1.6.2/android" />
@@ -32,12 +56,17 @@
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/network_info_plus-4.1.0/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/path_provider_android-2.2.0/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences_android-2.2.1/android" />
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/sqflite-2.3.0/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/url_launcher_android-6.1.0/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/webview_flutter_android-3.12.0/android" />
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+<<<<<<< HEAD
+            <option value="$PROJECT_DIR$/../../flutter/packages/integration_test/android" />
+=======
             <option value="$PROJECT_DIR$/../../fluttersdk/flutter/packages/integration_test/android" />
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
           </set>
         </option>
       </GradleProjectSettings>

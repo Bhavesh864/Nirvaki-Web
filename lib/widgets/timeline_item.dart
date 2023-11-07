@@ -19,7 +19,6 @@ class TimeLineItem extends ConsumerStatefulWidget {
   final List<ActivityDetails> activitiesList;
   final bool fromHome;
   final List<User> allUsersList;
-
   const TimeLineItem({
     super.key,
     required this.index,

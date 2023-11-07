@@ -1,6 +1,15 @@
 <component name="libraryTable">
   <library name="Gradle: io.grpc:grpc-okhttp:1.52.1">
     <CLASSES>
+<<<<<<< HEAD
+      <root url="jar://$USER_HOME$/caches/modules-2/files-2.1/io.grpc/grpc-okhttp/1.52.1/aeef45c692943d6e5b5d6267dc826f3cec770437/grpc-okhttp-1.52.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/caches/modules-2/files-2.1/io.grpc/grpc-okhttp/1.52.1/27e27ee22572663cba8b14ef50ed02b948ee0ef6/grpc-okhttp-1.52.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/caches/modules-2/files-2.1/io.grpc/grpc-okhttp/1.52.1/b86568aee7399898ee6140dac2928636ec0bba31/grpc-okhttp-1.52.1-sources.jar!/" />
+=======
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-okhttp/1.52.1/aeef45c692943d6e5b5d6267dc826f3cec770437/grpc-okhttp-1.52.1.jar!/" />
     </CLASSES>
     <JAVADOC>
@@ -8,6 +17,7 @@
     </JAVADOC>
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-okhttp/1.52.1/b86568aee7399898ee6140dac2928636ec0bba31/grpc-okhttp-1.52.1-sources.jar!/" />
+>>>>>>> 516238d2c16da2bf1e9d7093212f79522a710892
     </SOURCES>
   </library>
 </component>
