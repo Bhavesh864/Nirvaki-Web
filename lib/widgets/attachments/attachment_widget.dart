@@ -148,6 +148,7 @@ class AttachmentWidgetState extends State<AttachmentWidget> {
                                     //   anchorElement.download = 'Attachment file';
                                     //   anchorElement.click();
                                     // }
+                                    //
                                     if (!kIsWeb) {
                                       downloadFile(attachment.path, 'image', context, downloadProgress, name: attachment.title.trim());
                                     }
