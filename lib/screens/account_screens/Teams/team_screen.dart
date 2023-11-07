@@ -27,20 +27,10 @@ class TeamScreen extends ConsumerStatefulWidget {
 }
 
 class TeamScreenState extends ConsumerState<TeamScreen> {
-  getUserData() async {
-    if (mounted) {
-      final User? user = await User.getUser(AppConst.getAccessToken());
-      if (user != null) {
-        final List<User> userList = await User.getAllUsers(user);
-        UserListPreferences.saveUserList(userList);
-      }
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    getUserData();
+    getUserData(mounted, ref);
   }
 
   @override
@@ -211,4 +201,14 @@ showAddMemberAlertDailogBox(BuildContext context) {
       );
     },
   );
+}
+
+getUserData(mounted, WidgetRef ref) async {
+  if (mounted) {
+    final User? user = ref.read(userDataProvider);
+    if (user != null) {
+      final List<User> userList = await User.getAllUsers(user);
+      UserListPreferences.saveUserList(userList);
+    }
+  }
 }

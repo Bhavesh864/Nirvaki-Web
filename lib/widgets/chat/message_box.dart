@@ -10,8 +10,6 @@ import 'package:yes_broker/chat/models/message.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/customs/responsive.dart';
-import 'package:yes_broker/riverpodstate/chat/message_selection_state.dart';
-
 import '../../Customs/snackbar.dart';
 import '../../constants/methods/date_time_methods.dart';
 import '../../constants/utils/constants.dart';
@@ -57,35 +55,43 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
   Future<void> getUserData(String userIds) async {
     final User? user = await User.getUser(userIds);
     userlist = user!;
-
-    // setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
-    final messgeForwardMode = ref.watch(messgeForwardModeProvider);
-    final selectedMessageIndex = ref.watch(selectedMessageProvider);
+    // final messgeForwardMode = ref.read(messgeForwardModeProvider);
+    // final selectedMessageIndex = ref.read(selectedMessageProvider);
 
-    return GestureDetector(
-      onLongPress: () {
-        ref.read(messgeForwardModeProvider.notifier).state = true;
-        ref.read(selectedMessageProvider.notifier).addIndex(widget.currMessageIndex!);
-      },
-      onTap: () {
-        ref.read(messgeForwardModeProvider.notifier).state = true;
-        ref.read(selectedMessageProvider.notifier).addIndex(widget.currMessageIndex!);
-      },
-      child: Stack(
-        children: [
-          // if (widget.isSender == true)
-          //   Positioned(
-          //     top: 8,
-          //     right: 0,
-          //     child: Image.asset('assets/images/messageTip.png'),
-          //   ),
-          Container(
-            color: messgeForwardMode && selectedMessageIndex.contains(widget.currMessageIndex) ? AppColor.primary.withOpacity(0.2) : null,
+    return Stack(
+      children: [
+        GestureDetector(
+          onLongPress: () {
+            widget.onLongPress!();
+          },
+          onTap: () {
+            widget.onTap!();
+          },
+          // onLongPress: () {
+          //   ref.read(messgeForwardModeProvider.notifier).setForwardMode(true);
+          //   ref.read(selectedMessageProvider.notifier).addIndex(widget.currMessageIndex!);
+          // },
+          // onTap: () {
+
+          //   if (selectedMessageIndex.isNotEmpty && messgeForwardMode) {
+          //     ref.read(messgeForwardModeProvider.notifier).setForwardMode(true);
+          //     if (selectedMessageIndex.contains(widget.currMessageIndex)) {
+          //       ref.read(selectedMessageProvider.notifier).removeIndex(widget.currMessageIndex!);
+          //     } else if (messgeForwardMode) {
+          //       ref.read(selectedMessageProvider.notifier).addIndex(widget.currMessageIndex!);
+          //     }
+          //   } else {
+          //     ref.read(messgeForwardModeProvider.notifier).setForwardMode(false);
+          //     ref.read(selectedMessageProvider.notifier).setToEmpty();
+          //   }
+          // },
+          child: Container(
+            color: widget.selectedMode! && widget.selectedMessageList!.contains(widget.data.messageId) ? AppColor.primary.withOpacity(0.2) : Colors.transparent,
             margin: const EdgeInsets.only(bottom: 6.0),
             padding: const EdgeInsets.all(8.0),
             alignment: widget.isSender ? Alignment.centerRight : Alignment.centerLeft,
@@ -162,8 +168,8 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
               ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
