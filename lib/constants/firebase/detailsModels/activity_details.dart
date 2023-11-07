@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
-final CollectionReference activityDetailsCollection =
-    FirebaseFirestore.instance.collection('activityDetails');
+final CollectionReference activityDetailsCollection = FirebaseFirestore.instance.collection('activityDetails');
 
 class ActivityDetails {
   String? activityId;
@@ -12,11 +12,13 @@ class ActivityDetails {
   String? managerid;
   String? userid;
   Createdby? createdby;
-  String? createdate;
+  Timestamp? createdate;
+  String? userImageUrl;
   Activitybody? activitybody;
 
   ActivityDetails(
       {this.activityId,
+      this.userImageUrl,
       this.activityStatus,
       this.itemtype,
       this.itemid,
@@ -27,9 +29,30 @@ class ActivityDetails {
       this.createdate,
       this.activitybody});
 
+  factory ActivityDetails.fromSnapshot(DocumentSnapshot snapshot) {
+    final json = snapshot.data() as Map<String, dynamic>;
+
+    return ActivityDetails(
+      activityId: json["activityId"],
+      userImageUrl: json["userImageUrl"],
+      activityStatus: json["activityStatus"],
+      itemid: json["itemid"],
+      itemtype: json["itemtype"],
+      userid: json["userid"],
+      activitybody: Activitybody.fromJson(json["activitybody"]),
+      brokerid: json["brokerid"],
+      managerid: json["managerid"],
+      createdby: Createdby.fromJson(json["createdby"]),
+      createdate: json["createdate"],
+    );
+  }
+
   ActivityDetails.fromJson(Map<String, dynamic> json) {
     if (json["ActivityID"] is String) {
       activityId = json["ActivityID"];
+    }
+    if (json["userImageUrl"] is String) {
+      userImageUrl = json["userImageUrl"];
     }
     if (json["ActivityStatus"] is String) {
       activityStatus = json["ActivityStatus"];
@@ -50,17 +73,13 @@ class ActivityDetails {
       userid = json["userid"];
     }
     if (json["createdby"] is Map) {
-      createdby = json["createdby"] == null
-          ? null
-          : Createdby.fromJson(json["createdby"]);
+      createdby = json["createdby"] == null ? null : Createdby.fromJson(json["createdby"]);
     }
-    if (json["createdate"] is String) {
+    if (json["createdate"] is Timestamp) {
       createdate = json["createdate"];
     }
     if (json["activitybody"] is Map) {
-      activitybody = json["activitybody"] == null
-          ? null
-          : Activitybody.fromJson(json["activitybody"]);
+      activitybody = json["activitybody"] == null ? null : Activitybody.fromJson(json["activitybody"]);
     }
   }
 
@@ -73,6 +92,7 @@ class ActivityDetails {
     data["brokerid"] = brokerid;
     data["managerid"] = managerid;
     data["userid"] = userid;
+    data["userImageUrl"] = userImageUrl;
     if (createdby != null) {
       data["createdby"] = createdby?.toJson();
     }
@@ -81,6 +101,43 @@ class ActivityDetails {
       data["activitybody"] = activitybody?.toJson();
     }
     return data;
+  }
+
+  //  -----------------------------Methods------------------------------------------------------------------->
+  static Future<List<ActivityDetails>> getactivity(String id) async {
+    try {
+      final QuerySnapshot querySnapshot = await activityDetailsCollection.where("itemid", isEqualTo: id).get();
+      final List<ActivityDetails> activitydetails = querySnapshot.docs.map((doc) {
+        final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        return ActivityDetails.fromJson(data);
+      }).toList();
+      return activitydetails;
+    } catch (error) {
+      // print('Failed to get Inventory items: $error');
+      return [];
+    }
+  }
+
+  static Future<void> addactivity(ActivityDetails activityDetails) async {
+    try {
+      await activityDetailsCollection.doc().set(activityDetails.toJson());
+      if (kDebugMode) {
+        print('Inventory item added successfully');
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to add Inventory item: $error');
+      }
+    }
+  }
+
+  static Future<void> updateTodoDetails(ActivityDetails item) async {
+    try {
+      await activityDetailsCollection.doc(item.activityId).update(item.toJson());
+      // print('Inventory item updated successfully');
+    } catch (error) {
+      // print('Failed to update Inventory item: $error');
+    }
   }
 }
 
@@ -91,12 +148,7 @@ class Activitybody {
   List<String>? chipoptions;
   Cardoptions? cardoptions;
 
-  Activitybody(
-      {this.activitytitle,
-      this.layouttype,
-      this.paragraphtext,
-      this.chipoptions,
-      this.cardoptions});
+  Activitybody({this.activitytitle, this.layouttype, this.paragraphtext, this.chipoptions, this.cardoptions});
 
   Activitybody.fromJson(Map<String, dynamic> json) {
     if (json["activitytitle"] is String) {
@@ -109,14 +161,10 @@ class Activitybody {
       paragraphtext = json["paragraphtext"];
     }
     if (json["chipoptions"] is List) {
-      chipoptions = json["chipoptions"] == null
-          ? null
-          : List<String>.from(json["chipoptions"]);
+      chipoptions = json["chipoptions"] == null ? null : List<String>.from(json["chipoptions"]);
     }
     if (json["cardoptions"] is Map) {
-      cardoptions = json["cardoptions"] == null
-          ? null
-          : Cardoptions.fromJson(json["cardoptions"]);
+      cardoptions = json["cardoptions"] == null ? null : Cardoptions.fromJson(json["cardoptions"]);
     }
   }
 
@@ -132,45 +180,6 @@ class Activitybody {
       data["cardoptions"] = cardoptions?.toJson();
     }
     return data;
-  }
-
-  //  -----------------------------Methods------------------------------------------------------------------->
-  static Future<List<ActivityDetails>> getTodoDetails(String id) async {
-    try {
-      final QuerySnapshot querySnapshot = await activityDetailsCollection.get();
-      final List<ActivityDetails> inventoryItems =
-          querySnapshot.docs.map((doc) {
-        final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        return ActivityDetails.fromJson(data);
-      }).toList();
-
-      return inventoryItems;
-    } catch (error) {
-      // print('Failed to get Inventory items: $error');
-      return [];
-    }
-  }
-
-  static Future<void> addTodoDetails(ActivityDetails inventory) async {
-    try {
-      await activityDetailsCollection
-          .doc(inventory.activityId)
-          .set(inventory.toJson());
-      // print('Inventory item added successfully');
-    } catch (error) {
-      // print('Failed to add Inventory item: $error');
-    }
-  }
-
-  static Future<void> updateTodoDetails(ActivityDetails item) async {
-    try {
-      await activityDetailsCollection
-          .doc(item.activityId)
-          .update(item.toJson());
-      // print('Inventory item updated successfully');
-    } catch (error) {
-      // print('Failed to update Inventory item: $error');
-    }
   }
 }
 
@@ -203,8 +212,7 @@ class Createdby {
   String? userlastname;
   String? userimage;
 
-  Createdby(
-      {this.userid, this.userfirstname, this.userlastname, this.userimage});
+  Createdby({this.userid, this.userfirstname, this.userlastname, this.userimage});
 
   Createdby.fromJson(Map<String, dynamic> json) {
     if (json["userid"] is String) {

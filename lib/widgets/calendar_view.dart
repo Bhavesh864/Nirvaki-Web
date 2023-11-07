@@ -1,217 +1,356 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import "package:rxdart/rxdart.dart";
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/Customs/loader.dart';
+import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/customs/responsive.dart';
+import 'package:yes_broker/riverpodstate/calendar_items/controller/calendar_controller.dart';
+import 'package:yes_broker/screens/main_screens/caledar_screen.dart';
+import 'package:yes_broker/widgets/assigned_circular_images.dart';
 
-class CustomCalendarView extends StatelessWidget {
+import '../constants/firebase/calenderModel/calender_model.dart';
+import '../constants/firebase/userModel/user_info.dart';
+import '../constants/functions/calendar/calendar_functions.dart';
+import '../constants/functions/navigation/navigation_functions.dart';
+import '../constants/functions/workitems_detail_methods.dart';
+import '../riverpodstate/user_data.dart';
+import 'calendar/event_data.dart';
+
+class CustomCalendarView extends ConsumerStatefulWidget {
   const CustomCalendarView({super.key});
 
   @override
+  ConsumerState<CustomCalendarView> createState() => _CustomCalendarViewState();
+}
+
+class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
+  late Stream<QuerySnapshot<Map<String, dynamic>>> calenderDetails;
+
+  @override
+  void initState() {
+    super.initState();
+    getCalenderDetailsfunc();
+    // mergeCalendarTodo();
+  }
+
+  void getCalenderDetailsfunc() {
+    final User? user = ref.read(userDataProvider);
+    calenderDetails = FirebaseFirestore.instance.collection('calenderDetails').where('brokerId', isEqualTo: user?.brokerId).snapshots(includeMetadataChanges: true);
+  }
+
+  mergeCalendarTodo() {
+    final User? currentUserdata = ref.read(userDataProvider);
+
+    Stream<List<CalendarModel>> calendarStream = calenderDetails.map((querySnapshot) {
+      List<CalendarModel> calendarList = [];
+      // ignore: unused_local_variable
+      for (var doc in querySnapshot.docs) {
+        CalendarModel calendarModel = CalendarModel();
+        calendarList.add(calendarModel);
+      }
+      return calendarList;
+    });
+
+    Stream<List<CardDetails>> cardDetailStream = calenderDetails.map((querySnapshot) {
+      List<CardDetails> cardList = [];
+      // ignore: unused_local_variable
+      for (var doc in querySnapshot.docs) {
+        CardDetails cardModel = CardDetails(workitemId: doc['workitemId'], status: 'NEW', createdate: Timestamp.now(), brokerid: currentUserdata?.brokerId);
+        cardList.add(cardModel);
+      }
+      return cardList;
+    });
+
+    final mergeList = Rx.combineLatest2<List<CalendarModel>, List<CardDetails>, List<dynamic>>(calendarStream, cardDetailStream, (calendarData, cardData) {
+      final list = [];
+
+      list.addAll(calendarData);
+      list.addAll(cardData);
+      return list;
+    });
+    return mergeList;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: const NeverScrollableScrollPhysics(),
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColor.secondary,
-          borderRadius: BorderRadius.circular(5),
-        ),
-        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-        child: Column(
-          children: [
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return StreamBuilder(
+      stream: mergeCalendarEventsAndTodo(ref),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Loader();
+        }
+        if (snapshot.hasData) {
+          List<CalendarItems> calenderList = snapshot.data!;
+          // List<CalendarModel> calenderList = dataList.map((doc) => CalendarModel.fromSnapshot(doc)).toList();
+
+          return Container(
+            decoration: BoxDecoration(
+              color: AppColor.secondary,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: Column(
               children: [
-                CustomText(
-                  title: 'Calendar',
-                  fontWeight: FontWeight.w600,
+                GestureDetector(
+                  onTap: () {
+                    if (Responsive.isMobile(context)) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return const CalendarScreen();
+                          },
+                        ),
+                      );
+                    }
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: Responsive.isMobile(context) ? 0 : 2.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const CustomText(
+                          title: 'Calendar',
+                          fontWeight: FontWeight.w600,
+                          size: 15,
+                        ),
+                        Row(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                showAddCalendarModal(
+                                  context: context,
+                                  isEdit: false,
+                                  ref: ref,
+                                );
+                              },
+                              child: const Icon(
+                                Icons.add,
+                                size: 24,
+                              ),
+                            ),
+                            const Icon(
+                              Icons.more_horiz,
+                              size: 24,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                Row(
-                  children: [
-                    Icon(Icons.add),
-                    Icon(Icons.more_horiz),
-                  ],
+                Expanded(
+                  flex: kIsWeb && !Responsive.isMobile(context) ? 1 : 0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColor.secondary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    margin: const EdgeInsets.only(top: 10, bottom: 6),
+                    height: Responsive.isMobile(context) ? 180 : height! * 0.25,
+                    child: ScrollConfiguration(
+                      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                      child: SingleChildScrollView(
+                        // physics: const NeverScrollableScrollPhysics(),
+                        child: SfCalendar(
+                          initialDisplayDate: DateTime.now(),
+                          headerHeight: 0,
+                          onTap: (details) {
+                            if (details.appointments == null) return;
+
+                            final CalendarItems event = details.appointments!.first;
+
+                            if (event.calenderType == 'Todo') {
+                              navigateBasedOnId(context, event.id!, ref);
+                              return;
+                            }
+
+                            showAddCalendarModal(
+                              context: context,
+                              isEdit: true,
+                              calendarModel: event,
+                              ref: ref,
+                            );
+                          },
+                          dataSource: EventDataSource(calenderList),
+                          view: CalendarView.timelineDay,
+                          timeSlotViewSettings: TimeSlotViewSettings(
+                            timeTextStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: 10,
+                              fontWeight: FontWeight.lerp(
+                                FontWeight.w400,
+                                FontWeight.w600,
+                                0.7,
+                              ),
+                            ),
+                            timelineAppointmentHeight: Responsive.isMobile(context) ? 70 : 60,
+                          ),
+                          backgroundColor: Colors.white,
+                          allowAppointmentResize: false,
+                          selectionDecoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.transparent,
+                            ),
+                          ),
+                          showDatePickerButton: false,
+                          viewHeaderHeight: 0,
+                          appointmentBuilder: (context, calendarAppointmentDetails) {
+                            final CalendarItems event = calendarAppointmentDetails.appointments.first;
+                            return Container(
+                              margin: const EdgeInsets.symmetric(vertical: 10),
+                              height: calendarAppointmentDetails.bounds.height,
+                              decoration: BoxDecoration(
+                                color: AppColor.secondary.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              padding: const EdgeInsets.only(left: 12),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        height: 4,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(20),
+                                          color: getColorForTaskType(''),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 6,
+                                      ),
+                                      Container(
+                                        constraints: const BoxConstraints(
+                                          maxWidth: 100,
+                                        ),
+                                        child: Text(
+                                          event.calenderTitle.toString(),
+                                          overflow: TextOverflow.ellipsis,
+                                          softWrap: true,
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  if (event.calenderType == 'Todo')
+                                    Padding(
+                                      padding: EdgeInsets.only(right: event.todoDetails!.assignedto!.length > 1 ? 0 : 8),
+                                      child: AssignedCircularImages(
+                                        cardData: event.todoDetails,
+                                        heightOfCircles: 20,
+                                        widthOfCircles: 20,
+                                      ),
+                                    )
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
-            Container(
-              margin: const EdgeInsets.only(top: 10),
-              height: 175,
-              child: SfCalendar(
-                headerHeight: 0,
-                view: CalendarView.timelineWeek,
-                timeSlotViewSettings:
-                    const TimeSlotViewSettings(startHour: 9, endHour: 18),
-                showTodayButton: true,
-                showNavigationArrow: true,
-                backgroundColor: Colors.white,
-              ),
-            ),
-          ],
-        ),
-      ),
+          );
+        }
+        return const SizedBox();
+      },
     );
   }
 }
 
-// import 'dart:math';
-// import 'package:flutter/material.dart';
-// import 'package:syncfusion_flutter_calendar/calendar.dart';
+class CalendarItems {
+  String? id;
+  String? calenderTitle;
+  String? calenderDescription;
+  String? calenderType;
+  String? userId;
+  String? brokerId;
+  String? managerId;
+  String? dueDate;
+  String? time;
+  CardDetails? todoDetails;
 
-// class CustomCalendarView extends StatefulWidget {
-//   CustomCalendarView({Key? key}) : super(key: key);
+  CalendarItems({
+    this.id,
+    this.calenderTitle,
+    this.calenderDescription,
+    this.calenderType,
+    this.userId,
+    this.brokerId,
+    this.managerId,
+    this.dueDate,
+    this.time,
+    this.todoDetails,
+  });
+}
 
-//   @override
-//   _CustomCalendarViewState createState() => _CustomCalendarViewState();
-// }
+Stream<List<CalendarItems>> mergeCalendarEventsAndTodo(WidgetRef ref) {
+  final calendarEventsList = ref.watch(calendarControllerProvider).calendarEvents();
+  final cardDetailsList = ref.watch(calendarControllerProvider).cardDetails(ref);
 
-// class _CustomCalendarViewState extends State<CustomCalendarView> {
-//   late MeetingDataSource _events;
-//   late List<Appointment> _shiftCollection;
+  final mergedStream = Rx.combineLatest2(
+    calendarEventsList,
+    cardDetailsList,
+    (List<CalendarModel>? calendarEvents, List<CardDetails>? todoItems) {
+      final calendarItems = <CalendarItems>[];
 
-//   late List<CalendarResource> _employeeCalendarResource;
+      if (calendarEvents != null) {
+        calendarItems.addAll(
+          calendarEvents.map(
+            (calendarItem) => CalendarItems(
+              id: calendarItem.id,
+              calenderTitle: calendarItem.calenderTitle,
+              calenderDescription: calendarItem.calenderDescription,
+              calenderType: calendarItem.calenderType,
+              userId: calendarItem.userId,
+              brokerId: calendarItem.brokerId,
+              managerId: calendarItem.managerId,
+              dueDate: calendarItem.dueDate,
+              time: calendarItem.time,
+            ),
+          ),
+        );
+      }
 
-//   @override
-//   void initState() {
-//     addResourceDetails();
-//     addAppointments();
-//     addSpecialRegions();
-//     _events = MeetingDataSource(_shiftCollection);
-//     super.initState();
-//   }
+      if (todoItems != null) {
+        calendarItems.addAll(
+          todoItems.map(
+            (todoItem) => CalendarItems(
+              id: todoItem.workitemId,
+              calenderTitle: todoItem.cardTitle,
+              calenderDescription: todoItem.cardDescription,
+              calenderType: "Todo",
+              userId: todoItem.brokerid,
+              brokerId: todoItem.brokerid,
+              managerId: todoItem.managerid,
+              dueDate: todoItem.duedate,
+              time: todoItem.dueTime,
+              todoDetails: todoItem,
+            ),
+          ),
+        );
+      }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return SafeArea(
-//         child: Scaffold(
-//             body: SfCalendar(
-//       view: CalendarView.timelineWorkWeek,
-//       firstDayOfWeek: 1,
-//       timeSlotViewSettings:
-//           const TimeSlotViewSettings(startHour: 9, endHour: 18),
-//       dataSource: _events,
-//     )));
-//   }
+      return calendarItems;
+    },
+  );
 
-//   void addAppointments() {
-//     var subjectCollection = [
-//       'General Meeting',
-//       'Plan Execution',
-//       'Project Plan',
-//       'Consulting',
-//       'Support',
-//       'Development Meeting',
-//       'Scrum',
-//       'Project Completion',
-//       'Release updates',
-//       'Performance Check'
-//     ];
-
-//     var colorCollection = [
-//       const Color(0xFF0F8644),
-//       const Color(0xFF8B1FA9),
-//       const Color(0xFFD20100),
-//       const Color(0xFFFC571D),
-//       const Color(0xFF85461E),
-//       const Color(0xFF36B37B),
-//       const Color(0xFF3D4FB5),
-//       const Color(0xFFE47C73),
-//       const Color(0xFF636363)
-//     ];
-
-//     _shiftCollection = <Appointment>[];
-//     for (var calendarResource in _employeeCalendarResource) {
-//       var employeeIds = [calendarResource.id];
-
-//       for (int j = 0; j < 365; j++) {
-//         for (int k = 0; k < 2; k++) {
-//           final DateTime date = DateTime.now().add(Duration(days: j + k));
-//           int startHour = 9 + Random().nextInt(6);
-//           startHour =
-//               startHour >= 13 && startHour <= 14 ? startHour + 1 : startHour;
-//           final DateTime _shiftStartTime =
-//               DateTime(date.year, date.month, date.day, startHour, 0, 0);
-//           _shiftCollection.add(Appointment(
-//               startTime: _shiftStartTime,
-//               endTime: _shiftStartTime.add(const Duration(hours: 1)),
-//               subject: subjectCollection[Random().nextInt(8)],
-//               color: colorCollection[Random().nextInt(8)],
-//               startTimeZone: '',
-//               endTimeZone: '',
-//               resourceIds: employeeIds));
-//         }
-//       }
-//     }
-//   }
-
-//   void addResourceDetails() {
-//     var nameCollection = [
-//       'John',
-//       'Bryan',
-//       'Robert',
-//       'Kenny',
-//       'Tia',
-//       'Theresa',
-//       'Edith',
-//       'Brooklyn',
-//       'James William',
-//       'Sophia',
-//       'Elena',
-//       'Stephen',
-//       'Zoey Addison',
-//       'Daniel',
-//       'Emilia',
-//       'Kinsley Elena',
-//       'Danieals',
-//       'William',
-//       'Addison',
-//       'Ruby'
-//     ];
-
-//     var userImages = [
-//       'images/People_Circle5.png',
-//       'images/People_Circle8.png',
-//       'images/People_Circle18.png',
-//       'images/People_Circle23.png',
-//       'images/People_Circle25.png',
-//       'images/People_Circle20.png',
-//       'images/People_Circle13.png',
-//       'images/People_Circle11.png',
-//       'images/People_Circle27.png',
-//       'images/People_Circle26.png',
-//       'images/People_Circle24.png',
-//       'images/People_Circle15.png',
-//     ];
-
-//     _employeeCalendarResource = <CalendarResource>[];
-//     for (var i = 0; i < nameCollection.length; i++) {
-//       _employeeCalendarResource.add(CalendarResource(
-//           id: '000' + i.toString(),
-//           displayName: nameCollection[i],
-//           color: Color.fromRGBO(Random().nextInt(255), Random().nextInt(255),
-//               Random().nextInt(255), 1),
-//           image:
-//               i < userImages.length ? ExactAssetImage(userImages[i]) : null));
-//     }
-//   }
-
-//   void addSpecialRegions() {
-//     final DateTime date = DateTime.now();
-//     // _specialTimeRegions = [
-//     //   TimeRegion(
-//     //       startTime: DateTime(date.year, date.month, date.day, 13, 0, 0),
-//     //       endTime: DateTime(date.year, date.month, date.day, 14, 0, 0),
-//     //       text: 'Lunch',
-//     //       resourceIds: _employeeCalendarResource.map((e) => e.id).toList(),
-//     //       recurrenceRule: 'FREQ=DAILY;INTERVAL=1',
-//     //       enablePointerInteraction: false)
-//     // ];
-//   }
-// }
-
-// class MeetingDataSource extends CalendarDataSource {
-//   MeetingDataSource(List<Appointment> shiftCollection) {
-//     appointments = shiftCollection;
-//   }
-// }
+  return mergedStream;
+}

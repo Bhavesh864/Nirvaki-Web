@@ -1,6 +1,8 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
-final CollectionReference usersCollection = FirebaseFirestore.instance.collection('leadDetails');
+final CollectionReference leadDetailsCollection = FirebaseFirestore.instance.collection('leadDetails');
 
 class LeadDetails {
   String? leadStatus;
@@ -13,12 +15,11 @@ class LeadDetails {
   Createdby? createdby;
   Timestamp? createdate;
   Propertyarea? propertyarea;
-
   String? updatedby;
   String? updatedate;
   List<double>? propertylocation;
-
   Customerinfo? customerinfo;
+  List<Attachments>? attachments;
   String? comments;
   String? leadcategory;
   String? leadType;
@@ -45,52 +46,109 @@ class LeadDetails {
   String? typeofhealthcare;
   String? approvedbeds;
   String? typeofschool;
-  String? hospitalrooms;
+  String? hospitalityrooms;
   String? preferredroadwidth;
+  String? preferredroadwidthAreaUnit;
+  String? furnishedStatus;
 
-  LeadDetails(
-      {this.leadStatus,
-      this.brokerid,
-      this.plotdetails,
-      this.leadTitle,
-      this.leadDescription,
-      this.leadId,
-      this.assignedto,
-      this.managerid,
-      this.createdby,
-      this.createdate,
-      this.propertylocation,
-      this.updatedby,
-      this.updatedate,
-      this.customerinfo,
-      this.comments,
-      this.leadcategory,
-      this.leadType,
-      this.leadsource,
-      this.propertycategory,
-      this.propertykind,
-      this.transactiontype,
-      this.availability,
-      this.villatype,
-      this.roomconfig,
-      this.possessiondate,
-      this.amenities,
-      this.reservedparking,
-      this.propertyarearange,
-      this.propertypricerange,
-      this.preferredlocality,
-      this.preferredlocation,
-      this.preferredpropertyfacing,
-      this.commericialtype,
-      this.typeofoffice,
-      this.typeofretail,
-      this.typeofhospitality,
-      this.typeofhealthcare,
-      this.approvedbeds,
-      this.propertyarea,
-      this.typeofschool,
-      this.hospitalrooms,
-      this.preferredroadwidth});
+  LeadDetails({
+    this.leadStatus,
+    this.brokerid,
+    this.plotdetails,
+    this.leadTitle,
+    this.leadDescription,
+    this.leadId,
+    this.assignedto,
+    this.managerid,
+    this.createdby,
+    this.createdate,
+    this.propertylocation,
+    this.updatedby,
+    this.updatedate,
+    this.customerinfo,
+    this.comments,
+    this.leadcategory,
+    this.leadType,
+    this.leadsource,
+    this.furnishedStatus,
+    this.propertycategory,
+    this.propertykind,
+    this.transactiontype,
+    this.attachments,
+    this.availability,
+    this.villatype,
+    this.roomconfig,
+    this.possessiondate,
+    this.amenities,
+    this.reservedparking,
+    this.propertyarearange,
+    this.propertypricerange,
+    this.preferredlocality,
+    this.preferredlocation,
+    this.preferredpropertyfacing,
+    this.commericialtype,
+    this.typeofoffice,
+    this.typeofretail,
+    this.typeofhospitality,
+    this.typeofhealthcare,
+    this.approvedbeds,
+    this.propertyarea,
+    this.typeofschool,
+    this.hospitalityrooms,
+    this.preferredroadwidth,
+    this.preferredroadwidthAreaUnit,
+  });
+
+  factory LeadDetails.fromSnapshot(DocumentSnapshot snapshot) {
+    final json = snapshot.data() as Map<String, dynamic>;
+    return LeadDetails(
+      leadTitle: json["leadTitle"],
+      leadDescription: json["leadDescription"],
+      leadId: json["leadId"],
+      furnishedStatus: json["furnishedStatus"],
+      leadStatus: json["leadStatus"],
+      brokerid: json["brokerid"],
+      assignedto: (json["assignedto"] as List<dynamic>?)?.map((e) => Assignedto.fromJson(e)).toList(),
+      managerid: json["managerid"],
+      createdby: Createdby.fromJson(json["createdby"]),
+      createdate: json["createdate"],
+      updatedby: json["updatedby"],
+      updatedate: json["updatedate"],
+      attachments: (json["attachments"] as List<dynamic>?)?.map((e) => Attachments.fromJson(e)).toList(),
+      customerinfo: Customerinfo.fromJson(json["customerinfo"]),
+      comments: json["comments"],
+      leadcategory: json["leadcategory"],
+      leadType: json["leadType"],
+      leadsource: json["leadsource"],
+      propertycategory: json["propertycategory"],
+      propertykind: json["propertykind"],
+      transactiontype: json["transactiontype"],
+      availability: json["availability"],
+      villatype: json["villatype"],
+      roomconfig: json["roomconfig"] == null ? null : Roomconfig.fromJson(json["roomconfig"]),
+      plotdetails: json["plotdetails"] == null ? null : Plotdetails.fromJson(json["plotdetails"]),
+      possessiondate: json["possessiondate"],
+      amenities: json["amenities"] == null ? null : List<String>.from(json["amenities"]),
+      reservedparking: json["reservedparking"] == null ? null : Reservedparking.fromJson(json["reservedparking"]),
+      propertyarea: json["propertyarea"] == null ? null : Propertyarea.fromJson(json["propertyarea"]),
+      preferredlocality: json["preferredlocality"] == null ? null : Preferredlocality.fromJson(json["preferredlocality"]),
+      propertypricerange: json["propertypricerange"] == null ? null : Propertypricerange.fromJson(json["propertypricerange"]),
+      preferredlocation: json["preferredlocation"] == null ? null : List<double>.from(json["preferredlocation"]),
+      propertyarearange: json["propertyarearange"] == null ? null : Propertyarearange.fromJson(json["propertyarearange"]),
+      propertylocation: json["propertylocation"] == null ? null : List<double>.from(json["propertylocation"]),
+      preferredpropertyfacing: json["preferredpropertyfacing"],
+      preferredroadwidth: json["preferredroadwidth"],
+      preferredroadwidthAreaUnit: json["preferredroadwidthAreaUnit"],
+      commericialtype: json["commericialtype"],
+      typeofoffice: json["typeofoffice"],
+      typeofretail: json["typeofretail"],
+      typeofhospitality: json["typeofhospitality"],
+      typeofhealthcare: json["typeofhealthcare"],
+      approvedbeds: json["approvedbeds"],
+      typeofschool: json["typeofschool"],
+      hospitalityrooms: json["hospitalityrooms"],
+    );
+  }
 
   LeadDetails.fromJson(Map<String, dynamic> json) {
     if (json["leadStatus"] is String) {
@@ -102,6 +160,9 @@ class LeadDetails {
     if (json["leadId"] is String) {
       leadId = json["leadId"];
     }
+    if (json["furnishedStatus"] is String) {
+      leadId = json["furnishedStatus"];
+    }
     if (json["leadTitle"] is String) {
       leadTitle = json["leadTitle"];
     }
@@ -109,7 +170,7 @@ class LeadDetails {
       propertyarea = json["propertyarea"] == null ? null : Propertyarea.fromJson(json["propertyarea"]);
     }
     if (json["leadDescription"] is String) {
-      leadId = json["leadDescription"];
+      leadDescription = json["leadDescription"];
     }
     if (json["assignedto"] is List) {
       assignedto = json["assignedto"] == null ? null : (json["assignedto"] as List).map((e) => Assignedto.fromJson(e)).toList();
@@ -122,6 +183,9 @@ class LeadDetails {
     }
     if (json["createdate"] is Timestamp) {
       createdate = json["createdate"];
+    }
+    if (json["attachments"] is List) {
+      attachments = json["attachments"] == null ? null : (json["attachments"] as List).map((e) => Attachments.fromJson(e)).toList();
     }
     if (json["updatedby"] is String) {
       updatedby = json["updatedby"];
@@ -213,11 +277,14 @@ class LeadDetails {
     if (json["typeofschool"] is String) {
       typeofschool = json["typeofschool"];
     }
-    if (json["hospitalrooms"] is String) {
-      hospitalrooms = json["hospitalrooms"];
+    if (json["hospitalityrooms"] is String) {
+      hospitalityrooms = json["hospitalityrooms"];
     }
     if (json["preferredroadwidth"] is String) {
       preferredroadwidth = json["preferredroadwidth"];
+    }
+    if (json["preferredroadwidthAreaUnit"] is String) {
+      preferredroadwidthAreaUnit = json["preferredroadwidthAreaUnit"];
     }
   }
 
@@ -244,8 +311,12 @@ class LeadDetails {
     if (customerinfo != null) {
       data["customerinfo"] = customerinfo?.toJson();
     }
+    if (attachments != null) {
+      data["attachments"] = attachments?.map((e) => e.toJson()).toList();
+    }
     data["comments"] = comments;
     data["leadcategory"] = leadcategory;
+    data["furnishedStatus"] = furnishedStatus;
     data["leadType"] = leadType;
     data["leadsource"] = leadsource;
     data["propertycategory"] = propertycategory;
@@ -286,27 +357,17 @@ class LeadDetails {
     data["typeofhealthcare"] = typeofhealthcare;
     data["approvedbeds"] = approvedbeds;
     data["typeofschool"] = typeofschool;
-    data["hospitalrooms"] = hospitalrooms;
+    data["hospitalityrooms"] = hospitalityrooms;
     data["preferredroadwidth"] = preferredroadwidth;
+    data["preferredroadwidthAreaUnit"] = preferredroadwidthAreaUnit;
     return data;
   }
 
 //  -----------------------------Methods------------------------------------------------------------------->
 
-  static Future<LeadDetails?> getLeadDetails(String id) async {
+  static Future<LeadDetails?> getLeadDetails(itemid) async {
     try {
-      final DocumentSnapshot documentSnapshot = await usersCollection.doc(id).get();
-      final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-      return LeadDetails.fromJson(data);
-    } catch (error) {
-      // print('Failed to get Inventory items: $error');
-      return null;
-    }
-  }
-
-  static Future<LeadDetails?> getLeadQuestion(itemid) async {
-    try {
-      final QuerySnapshot querySnapshot = await usersCollection.where("InventoryId", isEqualTo: itemid).get();
+      final QuerySnapshot querySnapshot = await leadDetailsCollection.where("leadId", isEqualTo: itemid).get();
       for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
         if (documentSnapshot.exists) {
           final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
@@ -315,17 +376,168 @@ class LeadDetails {
       }
       return null;
     } catch (error) {
-      print('Failed to get users: $error');
       return null;
     }
   }
 
   static Future<void> addLeadDetails(LeadDetails inventory) async {
     try {
-      await usersCollection.doc().set(inventory.toJson());
+      await leadDetailsCollection.doc().set(inventory.toJson());
       // print('Inventory item added successfully');
     } catch (error) {
       // print('Failed to add Inventory item: $error');
+    }
+  }
+
+  static Future<void> updateLeadDetails({required String id, required LeadDetails leadDetails}) async {
+    try {
+      QuerySnapshot querySnapshot = await leadDetailsCollection.where("leadId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update(leadDetails.toJson());
+      }
+      if (kDebugMode) {
+        print('lead item updated successfully');
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to update lead item: $error');
+      }
+    }
+  }
+
+  static Future<void> addAttachmentToItems({required String itemid, required Attachments newAttachment}) async {
+    try {
+      QuerySnapshot querySnapshot = await leadDetailsCollection.where("leadId", isEqualTo: itemid).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+
+        List<dynamic> existingAttachments = data['attachments'] ?? [];
+        existingAttachments.add(newAttachment.toJson());
+
+        await docSnapshot.reference.update({'attachments': existingAttachments});
+
+        if (kDebugMode) {
+          print('Attachment added successfully to item ${docSnapshot.id}');
+        }
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to add attachment to items: $error');
+      }
+    }
+  }
+
+  static Future<void> deleteAttachment({required String itemId, required String attachmentIdToDelete}) async {
+    try {
+      QuerySnapshot querySnapshot = await leadDetailsCollection.where("leadId", isEqualTo: itemId).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        QueryDocumentSnapshot docSnapshot = querySnapshot.docs.first;
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+        List<dynamic> existingAttachments = data['attachments'] ?? [];
+        List<dynamic> updatedAttachments = [];
+        for (var attachment in existingAttachments) {
+          if (attachment['id'] != attachmentIdToDelete) {
+            updatedAttachments.add(attachment);
+          }
+        }
+        await docSnapshot.reference.update({'attachments': updatedAttachments});
+        if (kDebugMode) {
+          print('Attachment deleted successfully from item $itemId');
+        }
+      } else {
+        if (kDebugMode) {
+          print('Item not found with InventoryId: $itemId');
+        }
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to delete attachment: $error');
+      }
+    }
+  }
+
+  static Future<void> updateInventoryDetails({required String id, required LeadDetails leadDetails}) async {
+    try {
+      QuerySnapshot querySnapshot = await leadDetailsCollection.where("leadId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update(leadDetails.toJson());
+      }
+      if (kDebugMode) {
+        print('lead item updated successfully');
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to update lead item: $error');
+      }
+    }
+  }
+
+  static Future<void> updatecardStatus({required String id, required String newStatus}) async {
+    try {
+      QuerySnapshot querySnapshot = await leadDetailsCollection.where("leadId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'leadStatus': newStatus});
+      }
+      if (kDebugMode) {
+        print('lead status update');
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to update card status: $error');
+      }
+    }
+  }
+
+  static Future<void> updateAssignUser({required String itemid, required List<Assignedto> assignedtoList}) async {
+    try {
+      QuerySnapshot querySnapshot = await leadDetailsCollection.where("leadId", isEqualTo: itemid).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+
+        List<Map<String, dynamic>> existingAssignToData = List<Map<String, dynamic>>.from(data['assignedto'] ?? []);
+
+        List<Map<String, dynamic>> newAssignToData = assignedtoList.map((assignedto) => assignedto.toJson()).toList();
+
+        existingAssignToData.addAll(newAssignToData);
+
+        await docSnapshot.reference.update({'assignedto': existingAssignToData});
+        if (kDebugMode) {
+          print('Updated the list of assigned users for ${docSnapshot.id}');
+        }
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to update assigned users: $error');
+      }
+    }
+  }
+
+  static Future<void> deleteInventoryAssignUser({required String itemId, required String userid}) async {
+    try {
+      QuerySnapshot querySnapshot = await leadDetailsCollection.where("leadId", isEqualTo: itemId).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        QueryDocumentSnapshot docSnapshot = querySnapshot.docs.first;
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+        List<dynamic> existinguser = data['assignedto'] ?? [];
+        List<dynamic> updateduser = [];
+        for (var user in existinguser) {
+          if (user['userid'] != userid) {
+            updateduser.add(user);
+          }
+        }
+        await docSnapshot.reference.update({'assignedto': updateduser});
+        if (kDebugMode) {
+          print('updated user from this inventory$itemId');
+        }
+      } else {
+        if (kDebugMode) {
+          print('Item not found with InventoryId: $itemId');
+        }
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to delete user: $error');
+      }
     }
   }
 }
@@ -376,17 +588,51 @@ class Propertyarea {
   }
 }
 
+class LocalityNames {
+  String? city;
+  String? state;
+  String? locality;
+  String? fullAddress;
+  LocalityNames({this.city, this.state, this.locality, this.fullAddress});
+  LocalityNames.fromJson(Map<String, dynamic> json) {
+    if (json["city"] is String) {
+      city = json["city"];
+    }
+    if (json["state"] is String) {
+      state = json["state"];
+    }
+    if (json["fullAddress"] is String) {
+      fullAddress = json["fullAddress"];
+    }
+
+    if (json["locality"] is String) {
+      locality = json["locality"];
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["city"] = city;
+    data["state"] = state;
+    data["locality"] = locality;
+    data["fullAddress"] = fullAddress;
+    return data;
+  }
+}
+
 class Preferredlocality {
   String? addressline1;
   String? addressline2;
   String? prefferedfloornumber;
   String? city;
   String? state;
+  String? locality;
+  List<LocalityNames>? listofLocality;
 
-  Preferredlocality({this.addressline1, this.addressline2, this.prefferedfloornumber, this.city, this.state});
+  Preferredlocality({this.addressline1, this.addressline2, this.prefferedfloornumber, this.city, this.state, this.locality, this.listofLocality});
   Preferredlocality.fromJson(Map<String, dynamic> json) {
-    if (json["Addressline1"] is String) {
-      addressline1 = json["Addressline1"];
+    if (json["addressline1"] is String) {
+      addressline1 = json["addressline1"];
     }
     if (json["addressline2"] is String) {
       addressline2 = json["addressline2"];
@@ -400,15 +646,25 @@ class Preferredlocality {
     if (json["state"] is String) {
       state = json["state"];
     }
+    if (json["listofLocality"] is List) {
+      listofLocality = json["listofLocality"] == null ? null : (json["listofLocality"] as List).map((e) => LocalityNames.fromJson(e)).toList();
+    }
+    if (json["locality"] is String) {
+      locality = json["locality"];
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data["Addressline1"] = addressline1;
+    data["addressline1"] = addressline1;
     data["addressline2"] = addressline2;
     data["prefferedfloornumber"] = prefferedfloornumber;
     data["city"] = city;
     data["state"] = state;
+    data["locality"] = locality;
+    if (listofLocality != null) {
+      data["listofLocality"] = listofLocality?.map((e) => e.toJson()).toList();
+    }
     return data;
   }
 }
@@ -604,6 +860,56 @@ class Createdby {
     data["userfirstname"] = userfirstname;
     data["userlastname"] = userlastname;
     data["userimage"] = userimage;
+    return data;
+  }
+}
+
+class Attachments {
+  String? id;
+  String? title;
+  String? type;
+  String? path;
+  String? createdby;
+  Timestamp? createddate;
+
+  Attachments({
+    this.id,
+    this.title,
+    this.type,
+    this.path,
+    this.createdby,
+    this.createddate,
+  });
+
+  Attachments.fromJson(Map<String, dynamic> json) {
+    if (json["title"] is String) {
+      title = json["title"];
+    }
+    if (json["id"] is String) {
+      id = json["id"];
+    }
+    if (json["type"] is String) {
+      type = json["type"];
+    }
+    if (json["path"] is String) {
+      path = json["path"];
+    }
+    if (json["createdby"] is String) {
+      createdby = json["createdby"];
+    }
+    if (json["createddate"] is Timestamp) {
+      createddate = json["createddate"];
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["title"] = title;
+    data["type"] = type;
+    data["path"] = path;
+    data["createdby"] = createdby;
+    data["createddate"] = createddate;
+    data["id"] = id;
     return data;
   }
 }

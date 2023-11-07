@@ -1,6 +1,7 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-final CollectionReference usersCollection = FirebaseFirestore.instance.collection('inventoryDetails');
+final CollectionReference inventoryDetailsCollection = FirebaseFirestore.instance.collection('inventoryDetails');
 
 class InventoryDetails {
   String? inventoryTitle;
@@ -47,7 +48,10 @@ class InventoryDetails {
   String? typeofhealthcare;
   String? approvedbeds;
   String? typeofschool;
-  String? hospitalrooms;
+  String? hospitalityrooms;
+  String? furnishedStatus;
+  String? widthofRoad;
+  String? widthOfRoadUnit;
 
   InventoryDetails(
       {required this.inventoryTitle,
@@ -67,6 +71,8 @@ class InventoryDetails {
       this.inventorycategory,
       this.inventoryType,
       this.inventorysource,
+      this.widthOfRoadUnit,
+      this.widthofRoad,
       this.propertycategory,
       this.propertykind,
       this.transactiontype,
@@ -94,17 +100,81 @@ class InventoryDetails {
       this.typeofhealthcare,
       this.approvedbeds,
       this.typeofschool,
-      this.hospitalrooms});
+      this.hospitalityrooms,
+      this.furnishedStatus});
+
+  factory InventoryDetails.fromSnapshot(DocumentSnapshot snapshot) {
+    final json = snapshot.data() as Map<String, dynamic>;
+    return InventoryDetails(
+      inventoryTitle: json["inventoryTitle"],
+      inventoryDescription: json["inventoryDescription"],
+      widthOfRoadUnit: json["widthOfRoadUnit"],
+      widthofRoad: json["widthofRoad"],
+      inventoryId: json["InventoryId"],
+      inventoryStatus: json["InventoryStatus"],
+      brokerid: json["brokerid"],
+      assignedto: (json["assignedto"] as List<dynamic>?)?.map((e) => Assignedto.fromJson(e)).toList(),
+      managerid: json["managerid"],
+      createdby: Createdby.fromJson(json["createdby"]),
+      createdate: json["createdate"],
+      updatedby: json["updatedby"],
+      updatedate: json["updatedate"],
+      furnishedStatus: json["furnishedStatus"],
+      attachments: (json["attachments"] as List<dynamic>?)?.map((e) => Attachments.fromJson(e)).toList(),
+      customerinfo: Customerinfo.fromJson(json["customerinfo"]),
+      comments: json["comments"],
+      inventorycategory: json["inventorycategory"],
+      inventoryType: json["inventoryType"],
+      inventorysource: json["inventorysource"],
+      propertycategory: json["propertycategory"],
+      propertykind: json["propertykind"],
+      transactiontype: json["transactiontype"],
+      availability: json["availability"],
+      villatype: json["villatype"],
+      roomconfig: json["roomconfig"] == null ? null : Roomconfig.fromJson(json["roomconfig"]),
+      plotdetails: json["plotdetails"] == null ? null : Plotdetails.fromJson(json["plotdetails"]),
+      possessiondate: json["possessiondate"],
+      amenities: json["amenities"] == null ? null : List<String>.from(json["amenities"]),
+      reservedparking: json["reservedparking"] == null ? null : Reservedparking.fromJson(json["reservedparking"]),
+      propertyarea: json["propertyarea"] == null ? null : Propertyarea.fromJson(json["propertyarea"]),
+      plotarea: json["plotarea"] == null ? null : Plotarea.fromJson(json["plotarea"]),
+      propertyprice: json["propertyprice"] == null ? null : Propertyprice.fromJson(json["propertyprice"]),
+      propertyrent: json["propertyrent"] == null ? null : Propertyrent.fromJson(json["propertyrent"]),
+      propertyaddress: json["propertyaddress"] == null ? null : Propertyaddress.fromJson(json["propertyaddress"]),
+      propertylocation: json["propertylocation"] == null ? null : List<double>.from(json["propertylocation"]),
+      propertyfacing: json["propertyfacing"],
+      propertyphotos: json["propertyphotos"] == null ? null : Propertyphotos.fromJson(json["propertyphotos"]),
+      commercialphotos: json["commercialphotos"] == null ? null : List<String>.from(json["commercialphotos"]),
+      propertyvideo: json["propertyvideo"],
+      commericialtype: json["commericialtype"],
+      typeofoffice: json["typeofoffice"],
+      typeofretail: json["typeofretail"],
+      typeofhospitality: json["typeofhospitality"],
+      typeofhealthcare: json["typeofhealthcare"],
+      approvedbeds: json["approvedbeds"],
+      typeofschool: json["typeofschool"],
+      hospitalityrooms: json["hospitalityrooms"],
+    );
+  }
 
   InventoryDetails.fromJson(Map<String, dynamic> json) {
     if (json["inventoryTitle"] is String) {
       inventoryTitle = json["inventoryTitle"];
+    }
+    if (json["widthofRoad"] is String) {
+      widthofRoad = json["widthofRoad"];
+    }
+    if (json["widthOfRoadUnit"] is String) {
+      widthOfRoadUnit = json["widthOfRoadUnit"];
     }
     if (json["inventoryDescription"] is String) {
       inventoryDescription = json["inventoryDescription"];
     }
     if (json["InventoryId"] is String) {
       inventoryId = json["InventoryId"];
+    }
+    if (json["furnishedStatus"] is String) {
+      inventoryId = json["furnishedStatus"];
     }
     if (json["InventoryStatus"] is String) {
       inventoryStatus = json["InventoryStatus"];
@@ -229,8 +299,8 @@ class InventoryDetails {
     if (json["typeofschool"] is String) {
       typeofschool = json["typeofschool"];
     }
-    if (json["hospitalrooms"] is String) {
-      hospitalrooms = json["hospitalrooms"];
+    if (json["hospitalityrooms"] is String) {
+      hospitalityrooms = json["hospitalityrooms"];
     }
   }
 
@@ -239,7 +309,10 @@ class InventoryDetails {
     data["inventoryTitle"] = inventoryTitle;
     data["inventoryDescription"] = inventoryDescription;
     data["InventoryId"] = inventoryId;
+    data["widthOfRoadUnit"] = widthOfRoadUnit;
+    data["widthofRoad"] = widthofRoad;
     data["InventoryStatus"] = inventoryStatus;
+    data["furnishedStatus"] = furnishedStatus;
     data["brokerid"] = brokerid;
     if (assignedto != null) {
       data["assignedto"] = assignedto?.map((e) => e.toJson()).toList();
@@ -312,7 +385,7 @@ class InventoryDetails {
     data["typeofhealthcare"] = typeofhealthcare;
     data["approvedbeds"] = approvedbeds;
     data["typeofschool"] = typeofschool;
-    data["hospitalrooms"] = hospitalrooms;
+    data["hospitalityrooms"] = hospitalityrooms;
     return data;
   }
 
@@ -320,7 +393,7 @@ class InventoryDetails {
 
   // static Future<InventoryDetails?> getInventoryDetails(String id) async {
   //   try {
-  //     final DocumentSnapshot documentSnapshot = await usersCollection.doc(id).get();
+  //     final DocumentSnapshot documentSnapshot = await inventoryDetailsCollection.doc(id).get();
   //     final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
   //     return InventoryDetails.fromJson(data);
   //   } catch (error) {
@@ -331,7 +404,7 @@ class InventoryDetails {
 
   static Future<InventoryDetails?> getInventoryDetails(itemid) async {
     try {
-      final QuerySnapshot querySnapshot = await usersCollection.where("InventoryId", isEqualTo: itemid).get();
+      final QuerySnapshot querySnapshot = await inventoryDetailsCollection.where("InventoryId", isEqualTo: itemid).get();
       for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
         if (documentSnapshot.exists) {
           final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
@@ -347,87 +420,213 @@ class InventoryDetails {
 
   static Future<void> addInventoryDetails(InventoryDetails inventory) async {
     try {
-      await usersCollection.doc().set(inventory.toJson());
+      await inventoryDetailsCollection.doc().set(inventory.toJson());
       // print('Inventory item added successfully');
     } catch (error) {
       // print('Failed to add Inventory item: $error');
     }
   }
 
-  static Future<void> updateInventoryDetails(InventoryDetails item) async {
+  static Future<void> updateInventoryDetails({required String id, required InventoryDetails inventoryDetails}) async {
     try {
-      await usersCollection.doc(item.inventoryId).update(item.toJson());
-      // print('Inventory item updated successfully');
+      QuerySnapshot querySnapshot = await inventoryDetailsCollection.where("InventoryId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update(inventoryDetails.toJson());
+      }
+      print('Inventory item updated successfully');
     } catch (error) {
-      // print('Failed to update Inventory item: $error');
+      print('Failed to update Inventory item: $error');
+    }
+  }
+
+  static Future<void> updatecardStatus({required String id, required String newStatus}) async {
+    try {
+      QuerySnapshot querySnapshot = await inventoryDetailsCollection.where("InventoryId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'InventoryStatus': newStatus});
+      }
+      print('inventory status update');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
+
+  static Future<void> addAttachmentToItems({required String itemid, required Attachments newAttachment}) async {
+    try {
+      QuerySnapshot querySnapshot = await inventoryDetailsCollection.where("InventoryId", isEqualTo: itemid).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+
+        List<dynamic> existingAttachments = data['attachments'] ?? [];
+        existingAttachments.add(newAttachment.toJson());
+
+        await docSnapshot.reference.update({'attachments': existingAttachments});
+
+        print('Attachment added successfully to item ${docSnapshot.id}');
+      }
+    } catch (error) {
+      print('Failed to add attachment to items: $error');
+    }
+  }
+
+  static Future<void> deleteAttachment({required String itemId, required String attachmentIdToDelete}) async {
+    try {
+      QuerySnapshot querySnapshot = await inventoryDetailsCollection.where("InventoryId", isEqualTo: itemId).get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        QueryDocumentSnapshot docSnapshot = querySnapshot.docs.first;
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+        List<dynamic> existingAttachments = data['attachments'] ?? [];
+        List<dynamic> updatedAttachments = [];
+        for (var attachment in existingAttachments) {
+          if (attachment['id'] != attachmentIdToDelete) {
+            updatedAttachments.add(attachment);
+          }
+        }
+        await docSnapshot.reference.update({'attachments': updatedAttachments});
+        print('Attachment deleted successfully from item $itemId');
+      } else {
+        print('Item not found with InventoryId: $itemId');
+      }
+    } catch (error) {
+      print('Failed to delete attachment: $error');
+    }
+  }
+
+  static Future<void> updateAssignUser({required String itemid, required List<Assignedto> assignedtoList}) async {
+    try {
+      QuerySnapshot querySnapshot = await inventoryDetailsCollection.where("InventoryId", isEqualTo: itemid).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+
+        List<Map<String, dynamic>> existingAssignToData = List<Map<String, dynamic>>.from(data['assignedto'] ?? []);
+
+        List<Map<String, dynamic>> newAssignToData = assignedtoList.map((assignedto) => assignedto.toJson()).toList();
+
+        existingAssignToData.addAll(newAssignToData);
+
+        await docSnapshot.reference.update({'assignedto': existingAssignToData});
+        print('Updated the list of assigned users for ${docSnapshot.id}');
+      }
+    } catch (error) {
+      print('Failed to update assigned users: $error');
+    }
+  }
+
+  static Future<void> deleteInventoryAssignUser({required String itemId, required String userid}) async {
+    try {
+      QuerySnapshot querySnapshot = await inventoryDetailsCollection.where("InventoryId", isEqualTo: itemId).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        QueryDocumentSnapshot docSnapshot = querySnapshot.docs.first;
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+        List<dynamic> existinguser = data['assignedto'] ?? [];
+        List<dynamic> updateduser = [];
+        for (var user in existinguser) {
+          if (user['userid'] != userid) {
+            updateduser.add(user);
+          }
+        }
+        await docSnapshot.reference.update({'assignedto': updateduser});
+        print('updated user from this inventory$itemId');
+      } else {
+        print('Item not found with InventoryId: $itemId');
+      }
+    } catch (error) {
+      print('Failed to delete user: $error');
     }
   }
 }
 
-class Propertyphotos {
-  List<String>? bedroom;
-  List<String>? bathroom;
-  List<String>? kitchen;
-  List<String>? pujaroom;
-  List<String>? servantroom;
-  List<String>? studyroom;
-  List<String>? officeroom;
-  List<String>? frontelevation;
+// class Propertyphotos {
+//   List<String>? bedroom;
+//   List<String>? bathroom;
+//   List<String>? kitchen;
+//   List<String>? pujaroom;
+//   List<String>? servantroom;
+//   List<String>? studyroom;
+//   List<String>? officeroom;
+//   List<String>? frontelevation;
 
-  Propertyphotos({this.bedroom, this.bathroom, this.kitchen, this.pujaroom, this.servantroom, this.studyroom, this.officeroom, this.frontelevation});
+//   Propertyphotos({this.bedroom, this.bathroom, this.kitchen, this.pujaroom, this.servantroom, this.studyroom, this.officeroom, this.frontelevation});
+
+//   Propertyphotos.fromJson(Map<String, dynamic> json) {
+//     if (json["bedroom"] is List) {
+//       bedroom = json["bedroom"] == null ? null : List<String>.from(json["bedroom"]);
+//     }
+//     if (json["bathroom"] is List) {
+//       bathroom = json["bathroom"] == null ? null : List<String>.from(json["bathroom"]);
+//     }
+//     if (json["kitchen"] is List) {
+//       kitchen = json["kitchen"] == null ? null : List<String>.from(json["kitchen"]);
+//     }
+//     if (json["pujaroom"] is List) {
+//       pujaroom = json["pujaroom"] == null ? null : List<String>.from(json["pujaroom"]);
+//     }
+//     if (json["servantroom"] is List) {
+//       servantroom = json["servantroom"] == null ? null : List<String>.from(json["servantroom"]);
+//     }
+//     if (json["studyroom"] is List) {
+//       studyroom = json["studyroom"] == null ? null : List<String>.from(json["studyroom"]);
+//     }
+//     if (json["officeroom"] is List) {
+//       officeroom = json["officeroom"] == null ? null : List<String>.from(json["officeroom"]);
+//     }
+//     if (json["frontelevation"] is List) {
+//       frontelevation = json["frontelevation"] == null ? null : List<String>.from(json["frontelevation"]);
+//     }
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = <String, dynamic>{};
+//     if (bedroom != null) {
+//       data["bedroom"] = bedroom;
+//     }
+//     if (bathroom != null) {
+//       data["bathroom"] = bathroom;
+//     }
+//     if (kitchen != null) {
+//       data["kitchen"] = kitchen;
+//     }
+//     if (pujaroom != null) {
+//       data["pujaroom"] = pujaroom;
+//     }
+//     if (servantroom != null) {
+//       data["servantroom"] = servantroom;
+//     }
+//     if (studyroom != null) {
+//       data["studyroom"] = studyroom;
+//     }
+//     if (officeroom != null) {
+//       data["officeroom"] = officeroom;
+//     }
+//     if (frontelevation != null) {
+//       data["frontelevation"] = frontelevation;
+//     }
+//     return data;
+//   }
+// }
+class Propertyphotos {
+  List<String>? imageUrl;
+  List<String>? imageTitle;
+
+  Propertyphotos({this.imageUrl, this.imageTitle});
 
   Propertyphotos.fromJson(Map<String, dynamic> json) {
-    if (json["bedroom"] is List) {
-      bedroom = json["bedroom"] == null ? null : List<String>.from(json["bedroom"]);
+    if (json["imageUrl"] is List) {
+      imageUrl = json["imageUrl"] == null ? null : List<String>.from(json["imageUrl"]);
     }
-    if (json["bathroom"] is List) {
-      bathroom = json["bathroom"] == null ? null : List<String>.from(json["bathroom"]);
-    }
-    if (json["kitchen"] is List) {
-      kitchen = json["kitchen"] == null ? null : List<String>.from(json["kitchen"]);
-    }
-    if (json["pujaroom"] is List) {
-      pujaroom = json["pujaroom"] == null ? null : List<String>.from(json["pujaroom"]);
-    }
-    if (json["servantroom"] is List) {
-      servantroom = json["servantroom"] == null ? null : List<String>.from(json["servantroom"]);
-    }
-    if (json["studyroom"] is List) {
-      studyroom = json["studyroom"] == null ? null : List<String>.from(json["studyroom"]);
-    }
-    if (json["officeroom"] is List) {
-      officeroom = json["officeroom"] == null ? null : List<String>.from(json["officeroom"]);
-    }
-    if (json["frontelevation"] is List) {
-      frontelevation = json["frontelevation"] == null ? null : List<String>.from(json["frontelevation"]);
+    if (json["imageTitle"] is List) {
+      imageTitle = json["imageTitle"] == null ? null : List<String>.from(json["imageTitle"]);
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (bedroom != null) {
-      data["bedroom"] = bedroom;
+    if (imageUrl != null) {
+      data["imageUrl"] = imageUrl;
     }
-    if (bathroom != null) {
-      data["bathroom"] = bathroom;
-    }
-    if (kitchen != null) {
-      data["kitchen"] = kitchen;
-    }
-    if (pujaroom != null) {
-      data["pujaroom"] = pujaroom;
-    }
-    if (servantroom != null) {
-      data["servantroom"] = servantroom;
-    }
-    if (studyroom != null) {
-      data["studyroom"] = studyroom;
-    }
-    if (officeroom != null) {
-      data["officeroom"] = officeroom;
-    }
-    if (frontelevation != null) {
-      data["frontelevation"] = frontelevation;
+    if (imageTitle != null) {
+      data["imageTitle"] = imageTitle;
     }
     return data;
   }
@@ -439,12 +638,17 @@ class Propertyaddress {
   String? floornumber;
   String? city;
   String? state;
+  String? locality;
+  String? fullAddress;
 
-  Propertyaddress({this.addressline1, this.addressline2, this.floornumber, this.city, this.state});
+  Propertyaddress({this.addressline1, this.addressline2, this.floornumber, this.city, this.state, this.locality, this.fullAddress});
 
   Propertyaddress.fromJson(Map<String, dynamic> json) {
     if (json["Addressline1"] is String) {
       addressline1 = json["Addressline1"];
+    }
+    if (json["fullAddress"] is String) {
+      fullAddress = json["fullAddress"];
     }
     if (json["addressline2"] is String) {
       addressline2 = json["addressline2"];
@@ -458,6 +662,9 @@ class Propertyaddress {
     if (json["state"] is String) {
       state = json["state"];
     }
+    if (json["locality"] is String) {
+      locality = json["locality"];
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -467,6 +674,8 @@ class Propertyaddress {
     data["floornumber"] = floornumber;
     data["city"] = city;
     data["state"] = state;
+    data["locality"] = locality;
+    data["fullAddress"] = fullAddress;
     return data;
   }
 }
@@ -709,17 +918,28 @@ class Customerinfo {
 }
 
 class Attachments {
+  String? id;
   String? title;
   String? type;
   String? path;
   String? createdby;
-  String? createddate;
+  Timestamp? createddate;
 
-  Attachments({this.title, this.type, this.path, this.createdby, this.createddate});
+  Attachments({
+    this.id,
+    this.title,
+    this.type,
+    this.path,
+    this.createdby,
+    this.createddate,
+  });
 
   Attachments.fromJson(Map<String, dynamic> json) {
     if (json["title"] is String) {
       title = json["title"];
+    }
+    if (json["id"] is String) {
+      id = json["id"];
     }
     if (json["type"] is String) {
       type = json["type"];
@@ -742,6 +962,7 @@ class Attachments {
     data["path"] = path;
     data["createdby"] = createdby;
     data["createddate"] = createddate;
+    data["id"] = id;
     return data;
   }
 }

@@ -1,50 +1,77 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/customs/custom_text.dart';
+import 'package:yes_broker/customs/responsive.dart';
+
+import '../constants/utils/constants.dart';
+import '../customs/text_utility.dart';
 
 //-------------------------------------------TextformField-------------------------------------->
 class CustomTextInput extends StatefulWidget {
   final TextEditingController controller;
   final String? labelText;
-  final double contentPadding;
+  final EdgeInsetsGeometry contentPadding;
+  final VoidCallback? ontap;
   final Widget? label;
   final bool enabled;
-  final String hintText;
+  final FocusNode? focusnode;
+  final String? hintText;
   final IconData? leftIcon;
   final bool? obscureText;
   final bool? readonly;
+  final bool? autofocus;
   final IconData? rightIcon;
-  final bool? indense;
+  final bool isDense;
   final String? initialvalue;
   final TextInputType? keyboardType;
   final int? maxLength;
   final int? maxLines;
   final int? minLines;
+  final Function(String text)? onFieldSubmitted;
   final TextStyle? hintstyle;
   final FormFieldValidator<String>? validator;
   final Function(String)? onChanged;
+  final void Function()? onEditingComplete;
+  final EdgeInsetsGeometry? margin;
+  final Iterable<String>? autofillHints;
+  final TextInputAction? textInputAction;
+  final bool onlyDigits;
 
   const CustomTextInput(
       {Key? key,
       required this.controller,
       this.labelText,
-      required this.hintText,
-      this.indense,
+      this.hintText,
+      this.isDense = true,
       this.leftIcon,
+      this.focusnode,
+      this.ontap,
       this.hintstyle = const TextStyle(color: Colors.grey),
       this.rightIcon,
       this.obscureText = false,
       this.keyboardType,
+      this.onEditingComplete,
       this.onChanged,
       this.maxLength,
       this.validator,
       this.initialvalue,
+      this.textInputAction,
       this.maxLines = 1,
       this.minLines = 1,
       this.readonly = false,
       this.label,
       this.enabled = true,
-      this.contentPadding = 0})
+      this.autofocus = false,
+      this.contentPadding = const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+      this.onFieldSubmitted,
+      this.autofillHints,
+      this.onlyDigits = false,
+      this.margin = const EdgeInsets.all(5)})
       : super(key: key);
 
   @override
@@ -62,39 +89,73 @@ class CustomTextInputState extends State<CustomTextInput> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 65,
+    return Container(
+      margin: widget.margin,
       child: TextFormField(
+        inputFormatters: widget.onlyDigits
+            ? <TextInputFormatter>[
+                // FilteringTextInputFormatter.digitsOnly,
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                LengthLimitingTextInputFormatter(10),
+              ]
+            : null,
+        autofocus: widget.autofocus!,
+        textInputAction: widget.textInputAction ?? TextInputAction.done,
+        focusNode: widget.focusnode,
+        autofillHints: widget.autofillHints,
         enabled: widget.enabled,
-        style: const TextStyle(
+        onTap: widget.ontap,
+        onFieldSubmitted: widget.onFieldSubmitted,
+        style: TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.w400,
+          fontFamily: GoogleFonts.dmSans().fontFamily,
+          fontSize: 12,
         ),
         controller: widget.controller,
         decoration: InputDecoration(
+          isDense: widget.isDense,
+          disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                color: AppColor.inputFieldBorderColor,
+              )),
           errorStyle: const TextStyle(height: 0),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(color: Colors.red, width: 1),
+          ),
           label: widget.label,
-          contentPadding: EdgeInsets.symmetric(vertical: widget.contentPadding, horizontal: 10),
+          counterText: "",
+          contentPadding: widget.contentPadding,
           labelText: widget.labelText,
           hintText: widget.hintText,
           hintStyle: widget.hintstyle,
-          prefixIcon: widget.leftIcon != null ? Icon(widget.leftIcon) : null,
+          prefixIcon: widget.leftIcon != null ? Icon(widget.leftIcon, color: Colors.black) : null,
           suffixIcon: widget.rightIcon != null
               ? IconButton(
-                  icon: Icon(widget.rightIcon),
-                  onPressed: () {
-                    setState(() {
-                      _obscureText = !_obscureText!;
-                    });
-                  },
+                  icon: Icon(
+                    widget.rightIcon,
+                    color: Colors.black,
+                  ),
+                  iconSize: 18,
+                  onPressed: widget.obscureText == true
+                      ? () {
+                          setState(() {
+                            _obscureText = !_obscureText!;
+                          });
+                        }
+                      : null,
                 )
               : null,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6),
-          ),
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                color: AppColor.inputFieldBorderColor,
+              )),
           // isDense: true,
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: BorderRadius.circular(10),
             borderSide: const BorderSide(
               color: AppColor.primary,
             ),
@@ -107,6 +168,7 @@ class CustomTextInputState extends State<CustomTextInput> {
         onChanged: widget.onChanged,
         validator: widget.validator,
         readOnly: widget.readonly!,
+        onEditingComplete: widget.onEditingComplete,
         initialValue: widget.initialvalue,
         maxLines: widget.maxLines,
         minLines: widget.minLines,
@@ -121,6 +183,7 @@ class CustomButton extends StatefulWidget {
   final String text;
   final bool? isBorder;
   final double? width;
+  final bool titleLeft;
   final VoidCallback onPressed;
   final Color buttonColor;
   final Color textColor;
@@ -132,6 +195,13 @@ class CustomButton extends StatefulWidget {
   final double? fontsize;
   final double height;
   final TextStyle? textStyle;
+  final Color? borderColor;
+  final EdgeInsets? padding;
+  final FontWeight fontWeight;
+  final double letterSpacing;
+  final TextAlign textAlign;
+  final bool? isAttachments;
+
   const CustomButton({
     Key? key,
     required this.text,
@@ -148,6 +218,13 @@ class CustomButton extends StatefulWidget {
     this.textStyle,
     this.width,
     this.isBorder = true,
+    this.borderColor = Colors.grey,
+    this.titleLeft = false,
+    this.fontWeight = FontWeight.w600,
+    this.letterSpacing = 0,
+    this.padding = const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
+    this.textAlign = TextAlign.center,
+    this.isAttachments = false,
   }) : super(key: key);
 
   @override
@@ -155,24 +232,24 @@ class CustomButton extends StatefulWidget {
 }
 
 class _CustomButtonState extends State<CustomButton> {
-  bool _isPressed = false;
+  bool isPressed = false;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapDown: (_) {
         setState(() {
-          _isPressed = true;
+          isPressed = true;
         });
       },
       onTapUp: (_) {
         setState(() {
-          _isPressed = false;
+          isPressed = false;
         });
         widget.onPressed();
       },
       onTapCancel: () {
         setState(() {
-          _isPressed = false;
+          isPressed = false;
         });
       },
       child: Opacity(
@@ -181,15 +258,15 @@ class _CustomButtonState extends State<CustomButton> {
           alignment: Alignment.center,
           height: widget.height,
           width: widget.width,
-          padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
+          padding: widget.padding,
           decoration: BoxDecoration(
-            border: widget.isBorder! ? Border.all(color: Colors.grey) : null,
-            // color: widget.buttonColor,
-            color: widget.buttonColor.withOpacity(_isPressed ? 0.8 : 1.0),
-            borderRadius: BorderRadius.circular(10),
+            border: widget.isBorder! ? Border.all(color: widget.borderColor!) : null,
+            color: widget.buttonColor,
+            // color: widget.buttonColor.withOpacity(isPressed ? 0.8 : 1.0),
+            borderRadius: BorderRadius.circular(8),
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: widget.titleLeft ? MainAxisAlignment.start : MainAxisAlignment.center,
             children: [
               if (widget.leftIcon != null)
                 Padding(
@@ -197,18 +274,44 @@ class _CustomButtonState extends State<CustomButton> {
                   child: Icon(
                     widget.leftIcon,
                     color: widget.lefticonColor,
+                    size: 24,
                   ),
                 ),
-              CustomText(
-                textAlign: TextAlign.center,
-                title: widget.text,
-                color: widget.textColor,
-                size: widget.fontsize!,
-              ),
+              if (widget.isAttachments == false) ...[
+                CustomText(
+                  textAlign: TextAlign.center,
+                  title: widget.text,
+                  color: widget.textColor,
+                  size: widget.fontsize!,
+                  letterSpacing: widget.letterSpacing,
+                  fontWeight: widget.fontWeight,
+                ),
+              ] else ...[
+                SizedBox(
+                  width: Responsive.isMobile(context) ? width! - 120 : 412,
+                  child: Text(
+                    widget.text,
+                    textAlign: widget.textAlign,
+                    style: TextStyle(
+                      color: widget.textColor,
+                      fontSize: widget.fontsize,
+                      letterSpacing: widget.letterSpacing,
+                      fontWeight: widget.fontWeight,
+                    ),
+                    softWrap: true,
+                    maxLines: 1,
+                  ),
+                ),
+              ],
+              if (widget.titleLeft)
+                const SizedBox(
+                  width: 10,
+                ),
               if (widget.rightIcon != null)
                 Icon(
                   widget.rightIcon,
                   color: widget.righticonColor,
+                  size: 18,
                 ),
             ],
           ),
@@ -281,6 +384,8 @@ class CustomCheckboxState extends State<CustomCheckbox> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Checkbox(
           checkColor: Colors.white,
@@ -298,7 +403,7 @@ class CustomCheckboxState extends State<CustomCheckbox> {
         if (widget.label != null)
           CustomText(
             title: widget.label!,
-            size: 16,
+            size: Responsive.isMobile(context) ? 14 : 16,
           ),
       ],
     );
@@ -341,7 +446,7 @@ class CustomChoiceChip extends StatelessWidget {
       ),
       selected: selected,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-      labelPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+      labelPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
       onSelected: onSelected,
       selectedColor: selectedColor,
       backgroundColor: bgcolor,
@@ -388,3 +493,163 @@ class CustomCheckboxListTile extends StatelessWidget {
 //   }
 //   print('No Image Selected');
 // }
+
+class MobileNumberInputField extends StatefulWidget {
+  final bool isEmpty;
+  final Function? onContactPick;
+  final bool isDense;
+  final String countryCode;
+  final String hintText;
+  final double? fontsize;
+  final bool? isMandatory;
+  final bool? showLabel;
+  final EdgeInsets? bottomMargin;
+  final TextEditingController controller;
+  final void Function() openModal;
+  final void Function(String) onChange;
+  final FormFieldValidator<String>? validator;
+  final EdgeInsetsGeometry contentPadding;
+  final bool? fromProfile;
+  final EdgeInsets? innnerContainerPadding;
+  final EdgeInsetsGeometry margin;
+
+  const MobileNumberInputField({
+    Key? key,
+    required this.isEmpty,
+    this.onContactPick,
+    this.isDense = true,
+    required this.countryCode,
+    required this.hintText,
+    this.fontsize = 14.0,
+    this.isMandatory = true,
+    this.showLabel = true,
+    this.bottomMargin = const EdgeInsets.only(bottom: 0),
+    required this.controller,
+    required this.openModal,
+    required this.onChange,
+    this.validator,
+    this.contentPadding = const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+    this.fromProfile = false,
+    this.innnerContainerPadding = const EdgeInsets.symmetric(vertical: 5),
+    this.margin = const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+  }) : super(key: key);
+
+  @override
+  State<MobileNumberInputField> createState() => _MobileNumberInputFieldState();
+}
+
+class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        if (widget.showLabel == true)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 8.0,
+                top: 2,
+              ),
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: widget.hintText,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        // fontWeight: FontWeight.w500//
+                      ),
+                    ),
+                    const TextSpan(text: " "),
+                    const TextSpan(
+                      text: '*',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        Container(
+          margin: widget.margin,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: !widget.isEmpty ? Colors.grey : Colors.red,
+              width: 1.0,
+            ),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          padding: EdgeInsets.symmetric(horizontal: Responsive.isMobile(context) ? 4 : 10.0),
+          child: Row(
+            children: [
+              InkWell(
+                onTap: widget.openModal,
+                child: Padding(
+                  // padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                  padding: widget.fromProfile == true
+                      ? const EdgeInsets.symmetric(horizontal: 5, vertical: 4)
+                      : EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: Responsive.isMobile(context) ? 8 : 0,
+                        ),
+                  child: Row(
+                    children: [
+                      AppText(
+                        text: widget.countryCode,
+                        fontsize: kIsWeb ? 14 : 12,
+                      ),
+                      const Icon(
+                        Icons.arrow_drop_down_outlined,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              if (widget.fromProfile == true) const SizedBox(width: 5),
+              Expanded(
+                child: TextFormField(
+                  maxLength: 10,
+                  onChanged: (value) {
+                    widget.onChange(value);
+                  },
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 12),
+                  controller: widget.controller,
+                  keyboardType: TextInputType.phone,
+                  validator: widget.validator,
+                  decoration: InputDecoration(
+                    isDense: widget.isDense,
+                    hintText: "Type here..",
+                    counterText: "",
+                    suffixIcon: widget.onContactPick != null
+                        ? GestureDetector(
+                            onTap: () {
+                              widget.onContactPick!();
+                            },
+                            child: const Icon(
+                              Icons.contact_phone_outlined,
+                              size: 20,
+                            ),
+                          )
+                        : null,
+                    hintStyle: const TextStyle(color: Colors.grey, fontSize: 12),
+                    contentPadding: widget.contentPadding,
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}

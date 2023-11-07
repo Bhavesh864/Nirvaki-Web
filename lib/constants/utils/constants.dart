@@ -1,31 +1,52 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
-double? height;
-double? width;
+import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/screens/account_screens/profile_screen.dart';
+
+double? height = 707;
+double? width = 1440;
 
 // App constants
+const noImg = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
 
-const GOOGLE_MAPS_APIKEY = 'AIzaSyD7KtQoq29-5TqELLdPBSQoqCD376-qGjA';
+// const GOOGLE_MAPS_APIKEY = 'AIzaSyD7KtQoq29-5TqELLdPBSQoqCD376-qGjA';
 
 class MenuItem {
   final String label;
   final IconData? iconData;
   final Widget screen;
+  final String nav;
 
   MenuItem({
+    this.nav = '',
     required this.label,
     this.iconData,
     required this.screen,
   });
 }
 
+class ProfileMenuItems {
+  final int id;
+  final String title;
+  final Widget screen;
+
+  ProfileMenuItems({
+    required this.title,
+    required this.screen,
+    required this.id,
+  });
+}
+
 class BottomBarItem {
   final String label;
+  final String nav;
   final IconData? iconData;
   final Widget screen;
 
   BottomBarItem({
     required this.label,
+    required this.nav,
     this.iconData,
     required this.screen,
   });
@@ -77,7 +98,7 @@ class WorkItemModal {
   });
 }
 
-final List<TodoItemModal> userData = [
+final List<TodoItemModal> fdsafdsffa = [
   TodoItemModal(
     image: "user1",
     name: "Riya Sharma",
@@ -191,24 +212,50 @@ List<WorkItemModal> workItemData = [
 Color taskStatusColor(String title) {
   switch (title) {
     case 'New':
-      return Colors.green;
-    case 'In progress':
-      return Colors.orangeAccent;
+      return const Color(0xFF268E15);
+    case 'In Progress':
+      return AppColor.locationfinalizedstatuscolor;
     case 'Location Finalised':
-      return Colors.orangeAccent;
+      return AppColor.locationfinalizedstatuscolor;
+    case "Token":
+      return AppColor.tokenstatuscolor;
+    case "Agreement":
+      return AppColor.agreementstatuscolor;
+    case "Negotiation":
+      return AppColor.negotiationstatuscolor;
+    case "Closed":
+      return Colors.grey.shade900;
     default:
       return Colors.blue;
   }
 }
 
-List dropDownListData = [
+List<String> dropDownStatusDataList = [
   'New',
+  'In Progress',
   'Location Finalised',
   'Negotiation',
   'Token',
   'Agreement',
   'Converted',
   'Closed',
+];
+
+List<String> todoDropDownList = [
+  'New',
+  'In Progress',
+  'Closed',
+];
+
+List<Map<String, dynamic>> dropDownDetailsList = [
+  {'title': 'Edit', 'icon': Icons.edit},
+  {'title': 'Preview Public View', 'icon': Icons.remove_red_eye_rounded},
+  // {'title': 'Delete', 'icon': Icons.delete_outline}
+];
+
+List<Map<String, dynamic>> dropDownDetailsList2 = [
+  {'title': 'Edit', 'icon': Icons.edit},
+  {'title': 'Disable Public View', 'icon': Icons.visibility_off}
 ];
 
 String defaultValue = "New";
@@ -228,7 +275,7 @@ final List<Map<String, dynamic>> inventoryFilterOtpion = [
   },
   {
     "title": 'Gym',
-    'selected': true,
+    'selected': false,
   },
   {
     "title": 'Gated Community',
@@ -236,11 +283,11 @@ final List<Map<String, dynamic>> inventoryFilterOtpion = [
   },
   {
     "title": 'Parking',
-    'selected': true,
+    'selected': false,
   },
   {
     "title": 'Washing Machine',
-    'selected': true,
+    'selected': false,
   },
   {
     "title": 'Dryer',
@@ -264,41 +311,85 @@ final List<Map<String, dynamic>> inventoryFilterOtpion = [
   },
 ];
 
-List<String> menuItems = [
-  'Profile',
-  'Team',
-  'Settings',
-  'Subscription',
-  'Help',
-  'Logout',
+List<String> inventoryDetailsOverviewItems = [
+  'Residential',
+  'Apartment',
+  'Floor Wise',
+  '3BHK + Study',
+  'Balcony',
+  'In house Gym',
+  '2 Car Parking',
+  'Pool',
+  'Power Backup',
+  'Power Backup',
+  'Power Backup',
+  'Power Backup',
+  'Power Backup',
+  'Power Backup',
+  'Power Backup',
 ];
 
+List<String> inventoryDetailsImageUrls = [
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdocsAtr24XQL5sydteSFs6VYwww-1bZQBOg&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHzKnIon6D6PeqCBGxlroFP-bQzAGTi8fUkg&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlt_j5QPoJpIFeO5ElGNRgoFQGYwM3Y7eotw&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZyIq1luTkp60-ZSjz98D6KW6g32vxDL8rsA&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQ1XKiCWaQNE_mEh7YXH7C8peeCk3QbeiXJA&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgZ3Sg7lP-k0OgUdnUtE0eNT7PmqmqklX8RA&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqxyJhTiyoXAk0KhLiBE6QBD2yyPyHHq1rfg&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlt_j5QPoJpIFeO5ElGNRgoFQGYwM3Y7eotw&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHzKnIon6D6PeqCBGxlroFP-bQzAGTi8fUkg&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgZ3Sg7lP-k0OgUdnUtE0eNT7PmqmqklX8RA&usqp=CAU',
+];
+
+List<ProfileMenuItems> profileMenuItems = [
+  ProfileMenuItems(title: "Profile", screen: const Center(child: ProfileScreen()), id: 1),
+  ProfileMenuItems(title: "Settings", screen: const Center(child: Text('Screen for Item 3')), id: 3),
+  ProfileMenuItems(title: "Subscription", screen: const Center(child: Text('Screen for Item 4')), id: 4),
+  ProfileMenuItems(title: "Help", screen: const Center(child: Text('Screen for Item 1')), id: 5),
+  ProfileMenuItems(title: "Logout", screen: const Center(child: Text('Screen for Item 1')), id: 6),
+];
+
+// List<String> MenuItems = [
+//   'Profile',
+//   'Team',
+//   'Settings',
+//   'Subscription',
+//   'Help',
+//   'Logout',
+// ];
 
 // final _questions = [
-  //   'Which Property Category does this inventory Fall under ?',
-  //   'What Category does this inventory belong to?',
-  //   'What is the specific type of Property?',
-  //   'From where did you source this inventory?',
-  //   'What kind of property would you like to list?',
-  // ];
+//   'Which Property Category does this inventory Fall under ?',
+//   'What Category does this inventory belong to?',
+//   'What is the specific type of Property?',
+//   'From where did you source this inventory?',
+//   'What kind of property would you like to list?',
+// ];
 
-  // List answers = [
-  //   ['Residential', 'Commercial'],
-  //   ['Rent', 'Sell'],
-  //   ['Direct', 'Broker'],
-  //   [
-  //     '99Acers',
-  //     'Magic Bricks',
-  //     'Housing.com',
-  //     'Social Media',
-  //     'Data Calling',
-  //     'Other',
-  //   ],
-  //   [
-  //     'Apartment',
-  //     'Independent House/Villa ',
-  //     'Builder Floor ',
-  //     'Plot',
-  //     'Farm House',
-  //   ],
-  // ];
+// List answers = [
+//   ['Residential', 'Commercial'],
+//   ['Rent', 'Sell'],
+//   ['Direct', 'Broker'],
+//   [
+//     '99Acers',
+//     'Magic Bricks',
+//     'Housing.com',
+//     'Social Media',
+//     'Data Calling',
+//     'Other',
+//   ],
+//   [
+//     'Apartment',
+//     'Independent House/Villa ',
+//     'Builder Floor ',
+//     'Plot',
+//     'Farm House',
+//   ],
+// ];
+
+class ItemCategory {
+  static String isInventory = "IN";
+  static String isLead = "LD";
+  static String isTodo = "TD";
+}

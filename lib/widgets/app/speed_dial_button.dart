@@ -1,32 +1,41 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:yes_broker/riverpodstate/arearange_state.dart';
 
-import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 import 'package:yes_broker/routes/routes.dart';
+import '../../constants/app_constant.dart';
 import '../../constants/utils/colors.dart';
+import '../../pages/add_inventory.dart' as inventory;
+import '../../pages/add_lead.dart' as lead;
+import '../../pages/add_todo.dart';
+import '../../riverpodstate/todo/linked_with_workItem.dart';
 
-class CustomSpeedDialButton extends StatelessWidget {
+class CustomSpeedDialButton extends ConsumerStatefulWidget {
   const CustomSpeedDialButton({super.key});
 
   @override
+  CustomSpeedDialButtonState createState() => CustomSpeedDialButtonState();
+}
+
+class CustomSpeedDialButtonState extends ConsumerState<CustomSpeedDialButton> {
+  @override
   Widget build(BuildContext context) {
     return SpeedDial(
-      animatedIcon: AnimatedIcons.add_event,
+      icon: Icons.add,
+      activeIcon: Icons.close,
       foregroundColor: Colors.white,
       backgroundColor: AppColor.primary,
-      overlayColor: Colors.black,
+      // overlayColor: Colors.black.withOpacity(0.2),
+      // renderOverlay: false,
       overlayOpacity: 0.4,
       children: [
         SpeedDialChild(
           onTap: () {
-            // Navigator.of(context).push(
-            //   MaterialPageRoute(
-            //     builder: (context) => const AddWorkItem(
-            //       isInventory: true,
-            //     ),
-            //   ),
-            // );
-            Navigator.of(context).pushNamed(AppRoutes.addInventory);
+            AppConst.getOuterContext()!.beamToNamed(AppRoutes.addInventory);
+            ref.read(inventory.myArrayProvider.notifier).resetState();
           },
           labelShadow: [
             const BoxShadow(
@@ -36,7 +45,7 @@ class CustomSpeedDialButton extends StatelessWidget {
             )
           ],
           child: const Icon(
-            MaterialSymbols.location_home_outlined,
+            inventoryIcon,
             color: Colors.white,
           ),
           label: 'Inventory',
@@ -45,14 +54,11 @@ class CustomSpeedDialButton extends StatelessWidget {
         ),
         SpeedDialChild(
           onTap: () {
-            // Navigator.of(context).push(
-            //   MaterialPageRoute(
-            //     builder: (context) => const AddWorkItem(
-            //       isInventory: false,
-            //     ),
-            //   ),
-            // );
-            Navigator.of(context).pushNamed(AppRoutes.addLead);
+            AppConst.getOuterContext()!.beamToNamed(AppRoutes.addLead);
+            ref.read(lead.myArrayProvider.notifier).resetState();
+            ref.read(defaultAreaRangeValuesNotifier.notifier).setRange(const RangeValues(100, 10000));
+            ref.read(areaRangeSelectorState.notifier).setRange(const RangeValues(100, 10000));
+            ref.read(selectedOptionNotifier.notifier).setRange("Sq ft");
           },
           labelShadow: [
             const BoxShadow(
@@ -62,7 +68,7 @@ class CustomSpeedDialButton extends StatelessWidget {
             )
           ],
           child: const Icon(
-            Icons.person_search_outlined,
+            leadIcon,
             color: Colors.white,
           ),
           label: 'Lead',
@@ -71,7 +77,9 @@ class CustomSpeedDialButton extends StatelessWidget {
         ),
         SpeedDialChild(
           onTap: () {
-            Navigator.of(context).pushNamed(AppRoutes.addTodo);
+            AppConst.getOuterContext()!.beamToNamed(AppRoutes.addTodo);
+            ref.read(myArrayProvider.notifier).resetState();
+            ref.read(linkedWithWorkItem.notifier).setgotToDetailsScreenState(false);
           },
           labelShadow: [
             const BoxShadow(
@@ -81,7 +89,7 @@ class CustomSpeedDialButton extends StatelessWidget {
             )
           ],
           child: const Icon(
-            Icons.task_outlined,
+            Icons.task,
             color: Colors.white,
           ),
           label: 'To-do',

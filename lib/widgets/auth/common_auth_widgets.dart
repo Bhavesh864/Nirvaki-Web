@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
@@ -90,7 +91,8 @@ class CustomForgetPassword extends StatelessWidget {
     return Center(
       child: InkWell(
         onTap: () {
-          Navigator.of(context).pushNamed(AppRoutes.forgetPassword);
+          // Navigator.of(context).pushNamed(AppRoutes.forgetPassword);
+          context.beamToNamed(AppRoutes.forgetPassword);
         },
         child: const CustomText(
           title: 'Forget password?',
@@ -102,24 +104,30 @@ class CustomForgetPassword extends StatelessWidget {
 }
 
 class CustomSignUpNow extends StatelessWidget {
-  const CustomSignUpNow({Key? key}) : super(key: key);
+  final Function onPressSignUp;
+  const CustomSignUpNow({Key? key, required this.onPressSignUp}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+    return Center(
+      child: Wrap(
+        // mainAxisAlignment: MainAxisAlignment.center,
+        alignment: WrapAlignment.center,
         children: [
-          CustomText(
-            title: 'Don’t Have an account?',
+          const CustomText(
+            title: 'Don’t Have an account?  ',
             color: Colors.grey,
+            size: 14,
           ),
-          SizedBox(
-            width: 10,
-          ),
-          CustomText(
-            title: 'Signup Now.',
-            color: AppColor.primary,
+          GestureDetector(
+            onTap: () {
+              onPressSignUp();
+            },
+            child: const CustomText(
+              title: 'Signup Now.',
+              color: AppColor.primary,
+              size: 14,
+            ),
           ),
         ],
       ),

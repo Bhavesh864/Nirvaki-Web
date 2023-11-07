@@ -1,26 +1,51 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
 
 final CollectionReference cardDetailsCollection = FirebaseFirestore.instance.collection('cardDetails');
 
+@HiveType(typeId: 1)
 class CardDetails {
+  @HiveField(0)
   String? cardType;
+  @HiveField(1)
   String? workitemId;
+  @HiveField(2)
   String? status;
+  @HiveField(3)
   String? cardCategory;
+  @HiveField(4)
   String? cardTitle;
+  @HiveField(5)
   String? cardDescription;
+  @HiveField(6)
   String? cardStatus;
+  @HiveField(7)
   String? brokerid;
+  @HiveField(8)
   String? managerid;
+  @HiveField(9)
   List<Assignedto>? assignedto;
+  @HiveField(10)
   Roomconfig? roomconfig;
+  @HiveField(11)
   Propertyarearange? propertyarearange;
+  @HiveField(12)
   Propertypricerange? propertypricerange;
+  @HiveField(13)
   String? duedate;
+  @HiveField(14)
   Createdby? createdby;
+  @HiveField(15)
   String? linkedItemType;
+  @HiveField(16)
   Customerinfo? customerinfo;
+  @HiveField(17)
   Timestamp? createdate;
+  @HiveField(18)
+  String? linkedItemId;
+  @HiveField(19)
+  String? dueTime;
   CardDetails(
       {this.cardType,
       required this.workitemId,
@@ -38,12 +63,17 @@ class CardDetails {
       this.propertyarearange,
       this.propertypricerange,
       this.duedate,
+      this.linkedItemId,
+      this.dueTime,
       this.createdby,
       this.customerinfo});
 
   CardDetails.fromJson(Map<String, dynamic> json) {
     if (json["cardType"] is String) {
       cardType = json["cardType"];
+    }
+    if (json["linkedItemId"] is String) {
+      linkedItemId = json["linkedItemId"];
     }
     if (json["linkedItemType"] is String) {
       linkedItemType = json["linkedItemType"];
@@ -90,12 +120,54 @@ class CardDetails {
     if (json["duedate"] is String) {
       duedate = json["duedate"];
     }
+    if (json["dueTime"] is String) {
+      dueTime = json["dueTime"];
+    }
     if (json["createdby"] is Map) {
       createdby = json["createdby"] == null ? null : Createdby.fromJson(json["createdby"]);
     }
     if (json["customerinfo"] is Map) {
       customerinfo = json["customerinfo"] == null ? null : Customerinfo.fromJson(json["customerinfo"]);
     }
+  }
+
+  factory CardDetails.fromSnapshot(DocumentSnapshot snapshot) {
+    final json = snapshot.data() as Map<String, dynamic>;
+
+    // final createdby = json["createdby"] as Map<String, dynamic>;
+    // final propertyarearange = json["propertyarearange"] as Map<String, dynamic>;
+    // final propertypricerange = json["propertypricerange"] as Map<String, dynamic>;
+    // final customerinfo = json["customerinfo"] as Map<String, dynamic>;
+
+    // final List<dynamic>? assignedtoList = json["assignedto"] as List<dynamic>?;
+    // List<Assignedto>? assignedtoList;
+
+    // if (assignedtoList != null) {
+    //   assignedtoList = assignedtoList.map((e) => Assignedto.fromJson(e)).toList();
+    // }
+
+    return CardDetails(
+      cardType: json["cardType"] as String?,
+      workitemId: json["workitemId"] as String,
+      status: json["Status"] as String,
+      cardCategory: json["cardCategory"] as String?,
+      brokerid: json["brokerid"] as String,
+      assignedto: (json["assignedto"] as List<dynamic>?)?.map((e) => Assignedto.fromJson(e)).toList(),
+      managerid: json["managerid"] as String?,
+      createdby: Createdby.fromJson(json["createdby"]),
+      createdate: json["createdate"] as Timestamp,
+      linkedItemId: json["linkedItemId"] as String?,
+      linkedItemType: json["linkedItemType"] as String?,
+      cardDescription: json["cardDescription"] as String?,
+      cardStatus: json["cardStatus"] as String?,
+      cardTitle: json["cardTitle"] as String?,
+      roomconfig: json["roomconfig"] == null ? null : Roomconfig.fromJson(json["roomconfig"]),
+      propertyarearange: json["propertyarearange"] == null ? null : Propertyarearange.fromJson(json['propertyarearange']),
+      propertypricerange: json["propertypricerange"] == null ? null : Propertypricerange.fromJson(json["propertypricerange"]),
+      duedate: json["duedate"] as String?,
+      dueTime: json["dueTime"] as String?,
+      customerinfo: json["customerinfo"] == null ? null : Customerinfo.fromJson(json["customerinfo"]),
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -111,6 +183,7 @@ class CardDetails {
     data["managerid"] = managerid;
     data["createdate"] = createdate;
     data["linkedItemType"] = linkedItemType;
+    data["linkedItemId"] = linkedItemId;
 
     if (assignedto != null) {
       data["assignedto"] = assignedto?.map((e) => e.toJson()).toList();
@@ -125,6 +198,7 @@ class CardDetails {
       data["propertypricerange"] = propertypricerange?.toJson();
     }
     data["duedate"] = duedate;
+    data["dueTime"] = dueTime;
     if (createdby != null) {
       data["createdby"] = createdby?.toJson();
     }
@@ -133,6 +207,26 @@ class CardDetails {
     }
     return data;
   }
+
+  // factory CardDetails.fromSnapshot(DocumentSnapshot snapshot) {
+  //   final json = snapshot.data() as Map<String, dynamic>;
+  //   return CardDetails(
+  //     cardType: json["cardType"],
+  //     workitemId: json["workitemId"],
+  //     status: json["status"],
+  //     cardCategory: json["cardCategory"],
+  //     brokerid: json["brokerid"],
+  //     assignedto: (json["assignedto"] as List<dynamic>?)?.map((e) => Assignedto.fromJson(e)).toList(),
+  //     managerid: json["managerid"],
+  //     createdby: Createdby.fromJson(json["createdby"]),
+  //     createdate: json["createdate"],
+  //     linkedItemId: json["linkedItemId"],
+  //     linkedItemType: json["linkedItemType"],
+  //     cardDescription: json["cardDescription"],
+  //     cardStatus: json["cardStatus"],
+  //     cardTitle: json["cardTitle"],
+  //   );
+  // }
 
   // -----------------------------Methods------------------------------------------------------------------->
 
@@ -145,7 +239,22 @@ class CardDetails {
     }
   }
 
-  // Get Inventory items added by the broker or employees under the broker
+  static Future<void> updateCardDetails({required String id, required CardDetails cardDetails}) async {
+    try {
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update(cardDetails.toJson());
+      }
+      if (kDebugMode) {
+        print('card item updated successfully');
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to update card item: $error');
+      }
+    }
+  }
+
   static Future<List<CardDetails>> getCardDetails() async {
     try {
       final QuerySnapshot querySnapshot = await cardDetailsCollection.orderBy("createdate", descending: true).get();
@@ -153,29 +262,233 @@ class CardDetails {
         final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         return CardDetails.fromJson(data);
       }).toList();
+      // final item = inventoryItems.where((item) {
+      //   return item.assignedto!.any((user) => user.userid == AppConst.getAccessToken());
+      // }).toList();
       return inventoryItems;
     } catch (error) {
-      // print('Failed to get Inventory items: $error');
+      if (kDebugMode) {
+        print('Failed to get Inventory items: $error');
+      }
       return [];
     }
   }
 
-  static Future<void> updateCardDetails(CardDetails item) async {
+  static Future<CardDetails?> getSingleCardByWorkItemId(String workItemId) async {
     try {
-      await cardDetailsCollection.doc(item.workitemId).update(item.toJson());
-      // print('Inventory item updated successfully');
+      final QuerySnapshot querySnapshot = await cardDetailsCollection.where('workitemId', isEqualTo: workItemId).get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final Map<String, dynamic> data = querySnapshot.docs.first.data() as Map<String, dynamic>;
+        return CardDetails.fromJson(data);
+      } else {
+        return null;
+      }
     } catch (error) {
-      // print('Failed to update Inventory item: $error');
+      if (kDebugMode) {
+        print('Failed to get CardDetails by workItemId: $error');
+      }
+      return null;
     }
   }
 
-  // Delete a Inventory item
+  static Future<List<CardDetails>> getcardByInventoryId(id) async {
+    try {
+      final QuerySnapshot querySnapshot = await cardDetailsCollection.where("linkedItemId", isEqualTo: id).get();
+      final List<CardDetails> inventoryItems = querySnapshot.docs.map((doc) {
+        final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        return CardDetails.fromJson(data);
+      }).toList();
+      return inventoryItems;
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to get Inventory items: $error');
+      }
+      return [];
+    }
+  }
+
+  static Future<void> updateCustomerInfoForLinkedToDos(String linkedItemId, Customerinfo newCustomerInfo) async {
+    try {
+      final QuerySnapshot querySnapshot = await cardDetailsCollection.where("linkedItemId", isEqualTo: linkedItemId).get();
+
+      for (final DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        if (documentSnapshot.exists) {
+          final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+          await documentSnapshot.reference.update({'customerinfo': newCustomerInfo.toJson()});
+          if (kDebugMode) {
+            print('Customer info updated for todo with ID: ${data["todoId"]}');
+          }
+        }
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to update customer info for linked to-do items: $error');
+      }
+    }
+  }
+
+  static Future<void> updateCardStatus({required String id, required String newStatus}) async {
+    try {
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();
+
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'Status': newStatus});
+      }
+
+      if (kDebugMode) {
+        print('Card status updated successfully for documents matching criteria.');
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to update card status: $error');
+      }
+    }
+  }
+
   static Future<void> deleteCardDetails(String id) async {
     try {
-      await cardDetailsCollection.doc(id).delete();
-      print("deleted successfully");
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.delete();
+      }
+      if (kDebugMode) {
+        print('cardTitle delete card');
+      }
     } catch (error) {
-      print('Failed to delete Inventory item: $error');
+      if (kDebugMode) {
+        print('Failed to update card status: $error');
+      }
+    }
+  }
+
+  static Future<void> updatecardTitle({required String id, required String cardTitle}) async {
+    try {
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'cardTitle': cardTitle});
+      }
+      if (kDebugMode) {
+        print('cardTitle update');
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to update card status: $error');
+      }
+    }
+  }
+
+  static Future<void> updateCardDate({required String id, required String duedate}) async {
+    try {
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'duedate': duedate});
+      }
+      print('carddate update');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
+
+  static Future<void> updateCardTime({required String id, required String dueTime}) async {
+    try {
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'dueTime': dueTime});
+      }
+      print('cardTime update');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
+
+  static Future<void> updateCardDescription({required String id, required String cardDescription}) async {
+    try {
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: id).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        await docSnapshot.reference.update({'cardDescription': cardDescription});
+      }
+      print('description update');
+    } catch (error) {
+      print('Failed to update card status: $error');
+    }
+  }
+
+  static Future<void> updateAssignUser({required String itemid, required List<Assignedto> assignedtoList}) async {
+    try {
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: itemid).get();
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+
+        List<Map<String, dynamic>> existingAssignToData = List<Map<String, dynamic>>.from(data['assignedto'] ?? []);
+
+        List<Map<String, dynamic>> newAssignToData = assignedtoList.map((assignedto) => assignedto.toJson()).toList();
+
+        existingAssignToData.addAll(newAssignToData);
+        await docSnapshot.reference.update({'assignedto': existingAssignToData});
+        print('Updated the list of assigned users for ${docSnapshot.id}');
+      }
+    } catch (error) {
+      print('Failed to update assigned users: $error');
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> getAssignUsersInCards({required String itemid}) async {
+    try {
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: itemid).get();
+      List<Map<String, dynamic>> assignedUsersList = [];
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+        List<Map<String, dynamic>> existingAssignToData = List<Map<String, dynamic>>.from(data['assignedto'] ?? []);
+        assignedUsersList.addAll(existingAssignToData);
+      }
+      return assignedUsersList;
+    } catch (error) {
+      print('Failed : $error');
+      return []; // Return an empty list in case of an error.
+    }
+  }
+
+  static Future<void> deleteCardAssignUser({required String itemId, required String userid}) async {
+    try {
+      QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: itemId).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        QueryDocumentSnapshot docSnapshot = querySnapshot.docs.first;
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+        List<dynamic> existinguser = data['assignedto'] ?? [];
+        List<dynamic> updateduser = [];
+        for (var user in existinguser) {
+          if (user['userid'] != userid) {
+            updateduser.add(user);
+          }
+        }
+        await docSnapshot.reference.update({'assignedto': updateduser});
+        print('updated user from this inventory$itemId');
+      } else {
+        print('Item not found with InventoryId: $itemId');
+      }
+    } catch (error) {
+      print('Failed to delete user: $error');
+    }
+  }
+
+  static Future<void> updateCustomerInfo({required List<String> itemIds, required Customerinfo newCustomerInfo}) async {
+    try {
+      for (String itemId in itemIds) {
+        QuerySnapshot querySnapshot = await cardDetailsCollection.where("workitemId", isEqualTo: itemId).get();
+        if (querySnapshot.docs.isNotEmpty) {
+          QueryDocumentSnapshot docSnapshot = querySnapshot.docs.first;
+          await docSnapshot.reference.update({'customerinfo': newCustomerInfo.toJson()});
+        } else {
+          if (kDebugMode) {
+            print('Item not found with todoId: $itemId');
+          }
+        }
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print('Failed to update customer information for some items: $error');
+      }
     }
   }
 }

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yes_broker/Customs/custom_fields.dart';
+import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/constants/firebase/questionModels/inventory_question.dart';
 
-import 'package:yes_broker/controllers/all_selected_ansers_provider.dart';
 import 'package:yes_broker/widgets/card/questions%20card/chip_button.dart';
 
-import '../../../Customs/custom_text.dart';
-import '../../../Customs/responsive.dart';
+import '../../../customs/custom_text.dart';
+import '../../../customs/responsive.dart';
 
 class ChipButtonCard extends StatelessWidget {
   final String question;
@@ -65,16 +63,10 @@ class ChipButtonCard extends StatelessWidget {
                 height: 10,
               ),
               data.length == currentIndex + 1
-                  ? Consumer(
-                      builder: (context, ref, child) {
-                        return CustomButton(
-                          text: 'Save',
-                          onPressed: () {
-                            ref.watch(allChipSelectedAnwersProvider.notifier).submitInventory();
-                          },
-                          height: 40,
-                        );
-                      },
+                  ? CustomButton(
+                      text: 'Save',
+                      onPressed: () {},
+                      height: 40,
                     )
                   : Container(),
             ],

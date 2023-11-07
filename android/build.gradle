@@ -1,4 +1,4 @@
-buildscript {
+    buildscript {
     ext.kotlin_version = '1.7.10'
     repositories {
         google()
@@ -6,11 +6,18 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.android.tools.build:gradle:7.3.1'
         // START: FlutterFire Configuration
-        classpath 'com.google.gms:google-services:4.3.14'
+        // classpath 'com.google.gms:google-services:4.3.14'
+        classpath 'com.google.firebase:perf-plugin:1.4.1'
         // END: FlutterFire Configuration
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
+<<<<<<< HEAD
+        // classpath 'com.google.firebase:firebase-plugins:1.1.0'
+=======
+        // classpath ('com.google.firebase:firebase-plugins:1.1.0')
+>>>>>>> 221a5af652848c3e1cae7655bf209ce669a5ad14
     }
 }
 

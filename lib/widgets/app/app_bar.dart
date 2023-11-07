@@ -1,64 +1,167 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:yes_broker/constants/utils/constants.dart';
-import '../../constants/utils/colors.dart';
-import '../../Customs/custom_text.dart';
-import '../../constants/utils/image_constants.dart';
 
-AppBar mobileAppBar(
-    BuildContext context, void Function(String) onOptionSelect) {
-  // final width = MediaQuery.of(context).size.width;
+import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
+import 'package:yes_broker/constants/utils/constants.dart';
+
+import '../../Customs/custom_text.dart';
+import '../../constants/app_constant.dart';
+import '../../constants/utils/colors.dart';
+import 'nav_bar.dart';
+
+AppBar mobileAppBar(User? user, BuildContext context, void Function(String) onOptionSelect, WidgetRef ref) {
+  final notificationCollection = FirebaseFirestore.instance.collection("notification");
 
   return AppBar(
     foregroundColor: Colors.black,
     scrolledUnderElevation: 0.0,
-    // toolbarHeight: 50,
     backgroundColor: Colors.white,
     title: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         ScreenTypeLayout.builder(
-          breakpoints:
-              const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
+          breakpoints: const ScreenBreakpoints(desktop: 1366, tablet: 768, watch: 360),
           mobile: (p0) => const CustomText(
-            title: 'YesBroker',
-            fontWeight: FontWeight.bold,
+            title: 'Nirvaki',
+            letterSpacing: 0.4,
+            fontWeight: FontWeight.w700,
             size: 16,
           ),
-          // tablet: (p0) => largeScreenView(),
-          // desktop: (p0) => largeScreenView(),
         ),
       ],
     ),
     actions: [
+      StreamBuilder(
+        stream: notificationCollection.where("userId", arrayContains: AppConst.getAccessToken()).where('isRead', isEqualTo: false).snapshots(includeMetadataChanges: true),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final notificationCount = snapshot.data!.docs.length;
+            return Stack(
+              children: [
+                InkWell(
+                  onTap: () {
+                    // Navigator.of(context).push(
+                    //   AppRoutes.createAnimatedRoute(
+                    //     const MobileNotificationScreen(),
+                    //   ),
+                    // );
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return const NotificationDialogBox();
+                      },
+                    );
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(top: 12.0, right: 3),
+                    child: Icon(
+                      Icons.notifications_none,
+                      size: 28,
+                    ),
+                  ),
+                ),
+                if (notificationCount > 0)
+                  Positioned(
+                    right: 0,
+                    top: 10,
+                    child: CircleAvatar(
+                      radius: 8,
+                      backgroundColor: Colors.red,
+                      child: Text(
+                        notificationCount.toString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 9,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )
+              ],
+            );
+          }
+          return const SizedBox();
+        },
+      ),
+      const SizedBox(width: 5),
       PopupMenuButton(
         onSelected: (value) {
           onOptionSelect(value);
         },
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
         color: Colors.white.withOpacity(1),
         offset: const Offset(200, 40),
-        itemBuilder: (context) => menuItems.map(
-          (e) {
-            return popupMenuItem(e, onOptionSelect);
-          },
-        ).toList(),
-        child: Container(
-          height: 30,
-          width: 30,
-          margin: const EdgeInsets.only(right: 10),
-          decoration: BoxDecoration(
-            image: const DecorationImage(image: AssetImage(profileImage)),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          // child: Text(width.toString()),
-        ),
+
+        itemBuilder: (context) {
+          if (user != null) {
+            addOrRemoveTeamAndOrganization(user);
+          }
+          return profileMenuItems.map(
+            (e) {
+              return appBarPopupMenuItem(e.title, onOptionSelect);
+            },
+          ).toList();
+        },
+        // child: Container(
+        //   height: 25,
+        //   width: 35,
+        //   margin: const EdgeInsets.all(10),
+        //   decoration: BoxDecoration(
+        //     image: DecorationImage(
+        //       fit: BoxFit.cover,
+        //       image: NetworkImage(
+        //         user?.image ?? noImg,
+        //       ),
+        //     ),
+        //     borderRadius: BorderRadius.circular(12),
+        //   ),
+        // ),
+        child: user?.image != '' && user?.image != null
+            ? Container(
+                height: 32,
+                width: 35,
+                margin: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  border: Border.all(width: 1, color: Colors.grey),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(user?.image ?? noImg),
+                  ),
+                  borderRadius: BorderRadius.circular(17.5),
+                ),
+              )
+            : Container(
+                height: 25,
+                width: 35,
+                margin: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: AppColor.primary,
+                  borderRadius: BorderRadius.circular(17.5),
+                ),
+                child: Center(
+                  child: Text(
+                    (user?.userfirstname.isNotEmpty == true ? user!.userfirstname[0].toUpperCase() : '') +
+                        (user?.userlastname.isNotEmpty == true ? user!.userlastname[0].toUpperCase() : ''),
+                    style: const TextStyle(
+                      letterSpacing: 1,
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
       ),
     ],
   );
 }
 
-PopupMenuItem popupMenuItem(
-    String title, void Function(String) onOptionSelect) {
+PopupMenuItem appBarPopupMenuItem(String title, void Function(String) onOptionSelect, {IconData icon = Icons.abc, bool showicon = false}) {
   return PopupMenuItem(
     onTap: () {
       onOptionSelect(title);
@@ -67,13 +170,28 @@ PopupMenuItem popupMenuItem(
     padding: const EdgeInsets.symmetric(vertical: 2),
     child: Center(
       child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 2),
         width: 200,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(
           color: AppColor.secondary,
           borderRadius: BorderRadius.circular(5),
         ),
-        child: Text(title),
+        child: Row(
+          children: [
+            if (showicon)
+              Padding(
+                padding: const EdgeInsets.only(right: 5.0),
+                child: Icon(icon),
+              ),
+            CustomText(
+              title: title,
+              letterSpacing: 0.4,
+              size: 13,
+              color: const Color(0xFF454545),
+            ),
+          ],
+        ),
       ),
     ),
   );
