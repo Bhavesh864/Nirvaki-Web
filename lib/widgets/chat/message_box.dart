@@ -224,14 +224,13 @@ class ImagePreview extends StatelessWidget {
 
     // ==========pdf url
     // var url = 'http://englishonlineclub.com/pdf/iOS%20Programming%20-%20The%20Big%20Nerd%20Ranch%20Guide%20(6th%20Edition)%20[EnglishOnlineClub.com].pdf';
-    log('type----> ${type}');
+
     Future<void> downloadFile() async {
       Dio dio = Dio();
       String? dir = "";
       DateTime currentTime = DateTime.now();
       final customFormat = DateFormat('yyyyMMddHHmmss');
       String formattedDateTime = customFormat.format(currentTime);
-      log('formattedTime=====> $formattedDateTime');
 
       try {
         try {
@@ -240,7 +239,7 @@ class ImagePreview extends StatelessWidget {
           final directory = await getExternalStorageDirectory();
           dir = directory?.path;
         }
-        if (type.contains('imgae')) {
+        if (type.contains('image')) {
           dir = "$dir/$formattedDateTime.jpeg";
         } else if (type.contains('video')) {
           dir = "$dir/$formattedDateTime.mp4";
@@ -264,8 +263,6 @@ class ImagePreview extends StatelessWidget {
         // });
       }
     }
-
-    log('-----> $url');
 
     return Scaffold(
       appBar: AppBar(
@@ -300,6 +297,15 @@ class ImagePreview extends StatelessWidget {
         child: Image.network(
           url,
           fit: BoxFit.contain,
+          frameBuilder: (_, image, loadingBuilder, __) {
+            if (loadingBuilder == null) {
+              return const SizedBox(
+                height: 300,
+                child: Center(child: CircularProgressIndicator(color: Colors.white)),
+              );
+            }
+            return image;
+          },
         ),
       ),
     );
