@@ -311,34 +311,6 @@ class ChatRepository {
     }
   }
 
-  // final snapshot = FirebaseFirestore.instance.collection("groups").doc(chatItem.id).collection("chats");
-  // // QuerySnapshot messagesSnapshot = await snapshot.get();
-  // // for (QueryDocumentSnapshot doc in messagesSnapshot.docs) {
-  // //   // Update each message document with the new field
-  // //   await snapshot.doc(doc.id).update({
-  // //     'deleteMsgUserId': []"], // Replace 'newField' with the actual field name
-  // //   });
-  // // }
-  // static Future<void> deleteMessagesAndAddUserToDeletedBy(List<String> messageIds, String userId) async {
-  //   try {
-  //     for (String messageId in messageIds) {
-  //       final messageReference = messagesCollection.doc(messageId);
-  //       final messageDocument = await messageReference.get();
-
-  //       if (messageDocument.exists) {
-  //         final List<String> deletedBy = List<String>.from(messageDocument.data()['deletedBy']);
-  //         deletedBy.add(userId);
-
-  //         await messageReference.update({
-  //           'deletedBy': deletedBy,
-  //         });
-  //       }
-  //     }
-  //   } catch (error) {
-  //     print('Failed to delete messages and add user to deletedBy: $error');
-  //   }
-  // }
-
   Future<bool> _removeMessageFromMessagesSubCollection({
     required String docId,
     required List<String> messageId,
@@ -400,11 +372,9 @@ class ChatRepository {
         messageId: messageId,
         isGroupChat: isGroupChat,
       );
-
       if (value) {
         final data = await getLastMessage(docId, isGroupChat);
         String contactMsg;
-
         if (data != null) {
           switch (data['type']) {
             case 'text':
@@ -434,7 +404,7 @@ class ChatRepository {
         } else {
           updateLastMessageInContactSubCollection(
             docId,
-            "You deleted this message",
+            "",
             isGroupChat,
             Timestamp.now().millisecondsSinceEpoch,
           );
@@ -448,15 +418,15 @@ class ChatRepository {
     }
   }
 
-  void updateLastMessageInContactSubCollection(String docId, String lastMessage, bool isGroupChat, int timeSent) async {
+  static void updateLastMessageInContactSubCollection(String docId, String lastMessage, bool isGroupChat, int timeSent) async {
     try {
       if (isGroupChat) {
-        await firestore.collection('groups').doc(docId).update({
+        await FirebaseFirestore.instance.collection('groups').doc(docId).update({
           'lastMessage': lastMessage,
           'timeSent': timeSent,
         });
       } else {
-        await firestore
+        await FirebaseFirestore.instance
             .collection('users')
             .doc(AppConst.getAccessToken())
             .collection('chats')

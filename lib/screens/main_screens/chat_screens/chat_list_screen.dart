@@ -279,10 +279,13 @@ class TestList extends ConsumerWidget {
                           child: ListTile(
                             title: Row(
                               children: [
-                                AppText(
-                                  text: capitalizeFirstLetter(chatItem.name),
-                                  fontsize: 15,
-                                  maxLines: 1,
+                                Expanded(
+                                  child: AppText(
+                                    text: capitalizeFirstLetter(chatItem.name),
+                                    fontsize: 15,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                                 SizedBox(
                                   width: 10,

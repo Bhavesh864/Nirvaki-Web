@@ -43,19 +43,14 @@ class _ChatUserProfileState extends ConsumerState<ChatUserProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        foregroundColor: Colors.black,
-        backgroundColor: AppColor.secondary,
-        iconTheme: const IconThemeData(size: 22),
-        actions: widget.isGroupChat
-            ? [
-                LeaveDeleteGroupPopupButton(
-                  contactId: widget.contactId,
-                  adminId: widget.adminId!,
-                ),
-              ]
-            : null,
-      ),
+      appBar: AppBar(foregroundColor: Colors.black, backgroundColor: AppColor.secondary, iconTheme: const IconThemeData(size: 22), actions: [
+        LeaveDeleteGroupPopupButton(
+          contactId: widget.contactId,
+          adminId: widget.adminId!,
+          chatItemName: widget.name,
+          isGroupChat: widget.isGroupChat,
+        )
+      ]),
       body: SafeArea(
         child: UserProfileBody(
           profilePic: widget.profilePic,
@@ -163,6 +158,7 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
                     children: [
                       Row(
                         mainAxisAlignment: Responsive.isMobile(context) ? MainAxisAlignment.center : MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           if (!Responsive.isMobile(context))
                             IconButton(
@@ -176,20 +172,35 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
                                 size: 20,
                               ),
                             ),
-                          AppText(
-                            text: widget.name,
-                            fontsize: 20,
-                            fontWeight: FontWeight.w600,
+                          SizedBox(
+                            width: 280,
+                            child: AppText(
+                              text: widget.name,
+                              fontsize: 20,
+                              textAlign: TextAlign.center,
+                              fontWeight: FontWeight.w600,
+                              softwrap: true,
+                            ),
                           ),
                           if (!Responsive.isMobile(context))
-                            IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: const Icon(
-                                Icons.close,
-                                size: 20,
-                              ),
+                            Row(
+                              children: [
+                                LeaveDeleteGroupPopupButton(
+                                  contactId: widget.contactId,
+                                  adminId: widget.adminId!,
+                                  chatItemName: widget.name,
+                                  isGroupChat: widget.isGroupChat,
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  icon: const Icon(
+                                    Icons.close,
+                                    size: 20,
+                                  ),
+                                ),
+                              ],
                             ),
                         ],
                       ),

@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:yes_broker/chat/repositories/chat_repositories.dart';
 
 import '../../../Customs/text_utility.dart';
 import '../../app_constant.dart';
@@ -107,7 +109,7 @@ void onDeleteGroup(BuildContext context, String contactId) {
   );
 }
 
-void onClearChat(BuildContext context, String userid, String username) {
+void onClearChat(BuildContext context, String docId, String username, bool isGroupChat) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -121,7 +123,7 @@ void onClearChat(BuildContext context, String userid, String username) {
             fontWeight: FontWeight.w500,
           ),
           content: AppText(
-            text: 'Delete chat with $username',
+            text: 'Clear all messages from $username',
             fontWeight: FontWeight.w600,
             fontsize: 16,
           ),
@@ -138,7 +140,21 @@ void onClearChat(BuildContext context, String userid, String username) {
               ),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () async {
+                Navigator.of(context).pop();
+                if (isGroupChat) {
+                  print(isGroupChat);
+                  await clearAllChatFromGroup(docId);
+                } else {
+                  await clearAllChatOneTOOneUserChat(docId);
+                }
+                ChatRepository.updateLastMessageInContactSubCollection(
+                  docId,
+                  "",
+                  isGroupChat,
+                  Timestamp.now().millisecondsSinceEpoch,
+                );
+              },
               child: const AppText(
                 text: 'Delete',
                 fontWeight: FontWeight.w500,
@@ -151,6 +167,26 @@ void onClearChat(BuildContext context, String userid, String username) {
       );
     },
   );
+}
+
+Future<void> clearAllChatFromGroup(String docId) async {
+  print("object");
+  final messagesCollection = FirebaseFirestore.instance.collection('groups').doc(docId).collection('chats');
+  final messagesSnapshot = await messagesCollection.get();
+  for (var messageDoc in messagesSnapshot.docs) {
+    final List<dynamic> deletedBy = List<dynamic>.from(messageDoc.data()['deleteMsgUserId']);
+    deletedBy.add(AppConst.getAccessToken());
+    await messageDoc.reference.update({
+      'deleteMsgUserId': deletedBy,
+    });
+  }
+}
+
+Future<void> clearAllChatOneTOOneUserChat(String docId) async {
+  final collection = await FirebaseFirestore.instance.collection('users').doc(AppConst.getAccessToken()).collection('chats').doc(docId).collection('messages').get();
+  for (QueryDocumentSnapshot doc in collection.docs) {
+    await doc.reference.delete();
+  }
 }
 
 void customConfirmationAlertDialog(

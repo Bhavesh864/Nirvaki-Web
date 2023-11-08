@@ -48,7 +48,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   @override
   void initState() {
     super.initState();
-    setCardDetails();
+
     if (!kIsWeb) {
       final token = UserHiveMethods.getdata("token");
       if (token != null) {
@@ -57,6 +57,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
       }
       ref.read(chatControllerProvider).setUserState(true);
     }
+    setCardDetails();
   }
 
   getUserData(token) async {
@@ -73,7 +74,7 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   }
 
   void setCardDetails() {
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("cardType", whereNotIn: ["LD", "IN"]).snapshots(includeMetadataChanges: true);
+    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots(includeMetadataChanges: true);
   }
 
   void getDetails(User currentuser) async {
@@ -109,8 +110,10 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                 getDetails(user);
                 isUserLoaded = true;
               }
+              print(snapshot.data?.docs.length);
               final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
-              final List<CardDetails> todoItemsList = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).toList();
+              final List<CardDetails> todoItemsList =
+                  filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
 
               int compareDueDates(CardDetails a, CardDetails b) {
                 DateTime aDueDate = DateFormat('dd-MM-yy').parse(a.duedate!);

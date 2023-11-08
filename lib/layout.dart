@@ -166,9 +166,10 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
   }
 
   Widget _buildDesktopLayout(bool isAuthenticated) {
+    // final brokerid = ref.watch(userDataProvider)?.brokerId;
+    // final id = UserHiveMethods.addData(key: "brokerId", data: brokerid);
     if (isAuthenticated) {
       Navigator.pop(context);
-
       return const LargeScreen();
     } else {
       final location = Beamer.of(context).currentBeamLocation.state.routeInformation.location!;

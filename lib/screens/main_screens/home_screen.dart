@@ -61,10 +61,11 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void setCardDetails() async {
-    // final brokerid = UserHiveMethods.getdata("brokerId");
+    final brokerid = ref.read(userDataProvider)?.brokerId;
+    print(brokerid);
     cardDetails = FirebaseFirestore.instance
         .collection('cardDetails')
-        // .where("brokerid", isEqualTo: brokerid ?? "")
+        // .where("brokerid", isEqualTo: brokerid)
         .where("Status", isNotEqualTo: "Closed")
         .snapshots(includeMetadataChanges: true);
   }
@@ -124,9 +125,10 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               getDetails(user);
               isUserLoaded = true;
             }
+            print(snapshot.data?.docs.length);
+
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
-            final List<CardDetails> todoItems =
-                filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
+            final List<CardDetails> todoItems = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
             int compareDueDates(CardDetails a, CardDetails b) {
               DateTime aDueDate = DateFormat('dd-MM-yy').parse(a.duedate!);
               DateTime bDueDate = DateFormat('dd-MM-yy').parse(b.duedate!);
@@ -134,8 +136,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             }
 
             todoItems.sort(compareDueDates);
-            final List<CardDetails> workItems =
-                filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
+            final List<CardDetails> workItems = filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
             workItems.sort((a, b) => b.createdate!.compareTo(a.createdate!));
             bool isDataEmpty = workItems.isEmpty && todoItems.isEmpty;
             return Container(

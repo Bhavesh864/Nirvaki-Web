@@ -63,9 +63,11 @@ class MobileTodoScreenState extends ConsumerState<MobileTodoScreen> {
   }
 
   void setCardDetails() {
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("cardType", whereNotIn: ["IN", "LD"])
-        // .orderBy("createdate", descending: true)
-        .snapshots(includeMetadataChanges: true);
+    final brokerid = UserHiveMethods.getdata("brokerId");
+    cardDetails = FirebaseFirestore.instance
+        .collection('cardDetails')
+        .where("brokerid", isEqualTo: brokerid)
+        .where("cardType", whereNotIn: ["IN", "LD"]).snapshots(includeMetadataChanges: true);
   }
 
   void getDetails(User currentuser) async {
