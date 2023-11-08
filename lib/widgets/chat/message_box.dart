@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:ui';
-
+// import 'dart:html';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,7 +14,6 @@ import 'package:yes_broker/customs/responsive.dart';
 import '../../Customs/snackbar.dart';
 import '../../constants/methods/date_time_methods.dart';
 import '../../constants/utils/constants.dart';
-
 import '../../constants/utils/download_file.dart';
 
 // ignore: must_be_immutable
@@ -61,8 +60,6 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
-    // final messgeForwardMode = ref.read(messgeForwardModeProvider);
-    // final selectedMessageIndex = ref.read(selectedMessageProvider);
 
     return Stack(
       children: [
@@ -73,24 +70,6 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
           onTap: () {
             widget.onTap!();
           },
-          // onLongPress: () {
-          //   ref.read(messgeForwardModeProvider.notifier).setForwardMode(true);
-          //   ref.read(selectedMessageProvider.notifier).addIndex(widget.currMessageIndex!);
-          // },
-          // onTap: () {
-
-          //   if (selectedMessageIndex.isNotEmpty && messgeForwardMode) {
-          //     ref.read(messgeForwardModeProvider.notifier).setForwardMode(true);
-          //     if (selectedMessageIndex.contains(widget.currMessageIndex)) {
-          //       ref.read(selectedMessageProvider.notifier).removeIndex(widget.currMessageIndex!);
-          //     } else if (messgeForwardMode) {
-          //       ref.read(selectedMessageProvider.notifier).addIndex(widget.currMessageIndex!);
-          //     }
-          //   } else {
-          //     ref.read(messgeForwardModeProvider.notifier).setForwardMode(false);
-          //     ref.read(selectedMessageProvider.notifier).setToEmpty();
-          //   }
-          // },
           child: Container(
             color: widget.selectedMode! && widget.selectedMessageList!.contains(widget.data.messageId) ? AppColor.primary.withOpacity(0.2) : Colors.transparent,
             margin: const EdgeInsets.only(bottom: 6.0),
@@ -103,7 +82,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                 if (!widget.isSender && widget.isGroupChat) ...[
                   CircleAvatar(
                     radius: 14,
-                    backgroundImage: NetworkImage(widget.data.profilePic == '' ? noImg : widget.data.profilePic),
+                    backgroundImage: NetworkImage(widget.data.profilePic.isEmpty ? noImg : widget.data.profilePic),
                   ),
                 ],
                 // Image.asset('assets/images/receiveMsgTip.png'),
@@ -139,6 +118,8 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                           message: widget.message,
                           type: widget.data.type,
                           isSender: widget.isSender,
+                          isSelectedMode: widget.selectedMode!,
+                          onTap: widget.onTap!,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -179,12 +160,16 @@ class DisplayMessage extends StatelessWidget {
   final String message;
   final MessageEnum type;
   final bool isSender;
+  final bool isSelectedMode;
+  final Function onTap;
 
   const DisplayMessage({
     Key? key,
     required this.message,
     required this.type,
     required this.isSender,
+    required this.isSelectedMode,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -200,14 +185,20 @@ class DisplayMessage extends StatelessWidget {
             onTap: () {
               if (Responsive.isMobile(context)) {
                 // showEnlargedImage(context, message);
-                showGeneralDialog(
-                    context: context,
-                    barrierDismissible: true,
-                    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-                    transitionDuration: const Duration(milliseconds: 200),
-                    pageBuilder: (context, animation1, animation2) {
-                      return ImagePreview(url: message, type: type.type);
-                    });
+                if (!isSelectedMode) {
+                  showGeneralDialog(
+                      context: context,
+                      barrierDismissible: true,
+                      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                      transitionDuration: const Duration(milliseconds: 200),
+                      pageBuilder: (context, animation1, animation2) {
+                        return ImagePreview(url: message, type: type.type);
+                      });
+                } else {
+                  onTap();
+                }
+              } else {
+                onTap();
               }
             },
             child: CachedNetworkImage(
@@ -263,12 +254,20 @@ class ImagePreview extends StatelessWidget {
               size: 22,
             ),
             onPressed: () {
-              downloadFile(
-                url,
-                type,
-                context,
-                downloadProgress,
-              );
+              if (!kIsWeb) {
+                downloadFile(
+                  url,
+                  type,
+                  context,
+                  downloadProgress,
+                );
+              } else {
+                // if (kIsWeb) {
+                //   AnchorElement anchorElement = AnchorElement(href: url);
+                //   anchorElement.download = 'Attachment file';
+                //   anchorElement.click();
+                // }
+              }
             },
           ),
         ],

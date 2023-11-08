@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/constants/app_constant.dart';
-import 'package:yes_broker/constants/firebase/Hive/hive_methods.dart';
 import 'package:yes_broker/constants/functions/chat_group/group.dart';
 
 import 'package:yes_broker/constants/utils/colors.dart';
@@ -11,7 +10,6 @@ import 'package:yes_broker/riverpodstate/user_data.dart';
 import 'package:yes_broker/screens/account_screens/screens_state.dart';
 import 'package:yes_broker/widgets/app/nav_bar.dart';
 
-import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/auth/auth_functions.dart';
 import 'Teams/team_screen.dart';
 

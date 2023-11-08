@@ -1,13 +1,13 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/screens/main_screens/add_group_member_screen.dart';
-import 'package:yes_broker/screens/main_screens/chat_list_screen.dart';
-import 'package:yes_broker/screens/main_screens/chat_user_profile.dart';
-import 'package:yes_broker/screens/main_screens/create_group_screen.dart';
+import 'package:yes_broker/screens/main_screens/chat_screens/chat_list_screen.dart';
+import 'package:yes_broker/screens/main_screens/chat_screens/chat_user_profile.dart';
+import 'package:yes_broker/screens/main_screens/chat_screens/create_group_screen.dart';
 import 'package:yes_broker/widgets/chat/group/newchat_newgroup_popup.dart';
 import '../Customs/custom_text.dart';
 import '../chat/controller/chat_controller.dart';
@@ -37,6 +37,9 @@ class ChatDialogBox extends ConsumerStatefulWidget {
 class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
   late ScrollController messageController;
   final FocusNode focusNode = FocusNode();
+
+  List<String> selectedMessageList = [];
+  bool selectedMode = false;
 
   @override
   void initState() {
@@ -152,186 +155,250 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                 ],
                 if (currentScreen == ChatModalScreenType.chatScreen)
                   StreamBuilder(
-                    stream: isGroupChat
-                        ? ref.read(chatControllerProvider).groupChatStream(
-                              chatItemId,
-                            )
-                        : ref.read(chatControllerProvider).chatStream(
-                              chatItemId,
-                            ),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return Text('Error ${snapshot.error}');
-                      }
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Loader();
-                      }
-
-                      SchedulerBinding.instance.addPostFrameCallback((_) {
-                        messageController.animateTo(
-                          messageController.position.maxScrollExtent,
-                          duration: const Duration(milliseconds: 50),
-                          curve: Curves.ease,
-                        );
-                      });
-
-                      return GestureDetector(
-                        onTap: () {
-                          if (!kIsWeb) {
-                            FocusScope.of(context).unfocus();
-                          }
-                        },
-                        child: Container(
-                          height: 530,
-                          margin: const EdgeInsets.only(top: 10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.only(bottom: 5),
-                                child: ChatScreenHeader(
-                                  chatItem: chatItem,
-                                  user: user,
-                                  showProfileScreen: (u) {
-                                    currentScreen = ChatModalScreenType.userProfile;
-                                    user = u;
-                                    setState(
-                                      () {},
-                                    );
-                                  },
-                                  goToChatList: () {
-                                    currentScreen = ChatModalScreenType.chatList;
-                                    setState(
-                                      () {},
-                                    );
-                                  },
-                                ),
+                      stream: isGroupChat
+                          ? ref.read(chatControllerProvider).groupChatStream(
+                                chatItemId,
+                              )
+                          : ref.read(chatControllerProvider).chatStream(
+                                chatItemId,
                               ),
-                              Divider(
-                                height: 1,
-                                thickness: 0.5,
-                                color: Colors.grey.shade400,
-                              ),
-                              if (isGroupChat && snapshot.data!.isEmpty)
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                                  child: Chip(
-                                    shape: const StadiumBorder(),
-                                    // backgroundColor: Colors.grey.shade200,
-                                    backgroundColor: AppColor.chipGreyColor,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Text('Error ${snapshot.error}');
+                        }
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Loader();
+                        }
 
-                                    label: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-                                      child: Text(
-                                        chatItem!.groupCreatedBy!,
-                                        style: const TextStyle(
-                                          color: Colors.black45,
-                                          fontSize: 12,
+                        if (snapshot.hasData) {
+                          SchedulerBinding.instance.addPostFrameCallback((_) {
+                            messageController.animateTo(
+                              messageController.position.maxScrollExtent,
+                              duration: const Duration(milliseconds: 50),
+                              curve: Curves.ease,
+                            );
+                          });
+
+                          return StatefulBuilder(builder: (context, setstate) {
+                            remove(String id) {
+                              setstate(
+                                () {
+                                  selectedMessageList.remove(id);
+                                  if (selectedMessageList.isEmpty) {
+                                    selectedMode = false;
+                                  }
+                                },
+                              );
+                            }
+
+                            removeAll() {
+                              setstate(
+                                () {
+                                  selectedMessageList = [];
+                                  selectedMode = false;
+                                },
+                              );
+                            }
+
+                            add(String id) {
+                              setstate(
+                                () {
+                                  selectedMessageList.add(id);
+                                },
+                              );
+                            }
+
+                            toggleSelectedMode(bool k) {
+                              setstate(
+                                () {
+                                  selectedMode = k;
+                                },
+                              );
+                            }
+
+                            return Container(
+                              height: 530,
+                              margin: const EdgeInsets.only(top: 10),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(bottom: 5),
+                                    child: ChatScreenHeader(
+                                      chatItem: chatItem,
+                                      user: user,
+                                      showProfileScreen: (u) {
+                                        currentScreen = ChatModalScreenType.userProfile;
+                                        user = u;
+                                        setState(() {});
+                                      },
+                                      goToChatList: () {
+                                        currentScreen = ChatModalScreenType.chatList;
+                                        if (selectedMode) {
+                                          removeAll();
+                                        }
+                                        setState(() {});
+                                      },
+                                      selectedMessageList: selectedMessageList,
+                                      selectedMode: selectedMode,
+                                      toggleSelectedMode: toggleSelectedMode,
+                                      removeAllItems: removeAll,
+                                      removeItem: remove,
+                                      dataList: snapshot.data,
+                                    ),
+                                  ),
+                                  Divider(
+                                    height: 1,
+                                    thickness: 0.5,
+                                    color: Colors.grey.shade400,
+                                  ),
+                                  if (isGroupChat && snapshot.data!.isEmpty)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 10, bottom: 10),
+                                      child: Chip(
+                                        shape: const StadiumBorder(),
+                                        // backgroundColor: Colors.grey.shade200,
+                                        backgroundColor: AppColor.chipGreyColor,
+
+                                        label: Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+                                          child: Text(
+                                            chatItem!.groupCreatedBy!,
+                                            style: const TextStyle(
+                                              color: Colors.black45,
+                                              fontSize: 12,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              Expanded(
-                                child: ScrollConfiguration(
-                                  behavior: const ScrollBehavior().copyWith(overscroll: false),
-                                  child: ListView.builder(
-                                    physics: const ClampingScrollPhysics(),
-                                    controller: messageController,
-                                    itemCount: snapshot.data!.length + 1,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      if (index == snapshot.data!.length) {
-                                        return Container();
-                                      }
-                                      final messageData = snapshot.data![index];
-                                      final isSender = messageData.senderId == AppConst.getAccessToken();
+                                  Expanded(
+                                    child: ScrollConfiguration(
+                                      behavior: const ScrollBehavior().copyWith(overscroll: false),
+                                      child: ListView.builder(
+                                        physics: const ClampingScrollPhysics(),
+                                        controller: messageController,
+                                        itemCount: snapshot.data!.length + 1,
+                                        itemBuilder: (BuildContext context, int index) {
+                                          if (index == snapshot.data!.length) {
+                                            return Container();
+                                          }
+                                          final messageData = snapshot.data![index];
+                                          final currentMessageId = messageData.messageId;
+                                          final isSender = messageData.senderId == AppConst.getAccessToken();
 
-                                      final bool isFirstMessageOfNewDay = index == 0 ||
-                                          !isSameDay(
-                                            messageData.timeSent.toDate(),
-                                            snapshot.data![index - 1].timeSent.toDate(),
+                                          final bool isFirstMessageOfNewDay = index == 0 ||
+                                              !isSameDay(
+                                                messageData.timeSent.toDate(),
+                                                snapshot.data![index - 1].timeSent.toDate(),
+                                              );
+
+                                          final bool isNewWeek = DateTime.now().difference(messageData.timeSent.toDate()).inDays >= 7;
+                                          final String messageDay = getMessageDay(messageData.timeSent.toDate(), isNewWeek);
+
+                                          if (!isSender && !messageData.isSeen && !isGroupChat) {
+                                            ref.read(chatControllerProvider).setChatMessageSeen(
+                                                  context,
+                                                  chatItemId,
+                                                  messageData.messageId,
+                                                  isSender,
+                                                );
+                                          }
+
+                                          return Column(
+                                            children: [
+                                              if (isGroupChat && index == 0)
+                                                Padding(
+                                                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                                                  child: Chip(
+                                                    shape: const StadiumBorder(),
+                                                    // backgroundColor: Colors.grey.shade200,
+                                                    backgroundColor: AppColor.chipGreyColor,
+
+                                                    label: Padding(
+                                                      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+                                                      child: Text(
+                                                        chatItem!.groupCreatedBy!,
+                                                        style: const TextStyle(
+                                                          color: Colors.black45,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              if (isFirstMessageOfNewDay) ...[
+                                                Padding(
+                                                  padding: const EdgeInsets.only(top: 10.0, bottom: 10),
+                                                  child: Chip(
+                                                    shape: const StadiumBorder(),
+                                                    // backgroundColor: Colors.grey.shade200,
+                                                    backgroundColor: AppColor.chipGreyColor,
+
+                                                    label: Padding(
+                                                      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+                                                      child: Text(
+                                                        messageDay,
+                                                        style: const TextStyle(
+                                                          color: Colors.black45,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                              MessageBox(
+                                                isGroupChat: isGroupChat,
+                                                message: messageData.text,
+                                                isSender: isSender,
+                                                data: messageData,
+                                                isSeen: messageData.isSeen,
+                                                messageType: messageData.type,
+                                                selectedMessageList: selectedMessageList,
+                                                selectedMode: selectedMode,
+                                                onLongPress: () {
+                                                  setstate(() {
+                                                    selectedMode = true;
+                                                    selectedMessageList.add(currentMessageId);
+                                                  });
+                                                },
+                                                onTap: () {
+                                                  // setstate(() {
+                                                  if (selectedMessageList.isNotEmpty && selectedMode) {
+                                                    if (selectedMessageList.contains(currentMessageId)) {
+                                                      // selectedMessageList.remove(currentMessageId);
+                                                      remove(currentMessageId);
+                                                      if (selectedMessageList.isEmpty) {
+                                                        selectedMode = false;
+                                                      }
+                                                    } else if (selectedMode) {
+                                                      add(currentMessageId);
+                                                    }
+                                                  } else {
+                                                    removeAll();
+                                                  }
+                                                  // });
+                                                },
+                                              ),
+                                            ],
                                           );
-
-                                      final bool isNewWeek = DateTime.now().difference(messageData.timeSent.toDate()).inDays >= 7;
-                                      final String messageDay = getMessageDay(messageData.timeSent.toDate(), isNewWeek);
-
-                                      if (!isSender && !messageData.isSeen && !isGroupChat) {
-                                        ref.read(chatControllerProvider).setChatMessageSeen(
-                                              context,
-                                              chatItemId,
-                                              messageData.messageId,
-                                              isSender,
-                                            );
-                                      }
-
-                                      return Column(
-                                        children: [
-                                          if (isGroupChat && index == 0)
-                                            Padding(
-                                              padding: const EdgeInsets.only(top: 10, bottom: 10),
-                                              child: Chip(
-                                                shape: const StadiumBorder(),
-                                                // backgroundColor: Colors.grey.shade200,
-                                                backgroundColor: AppColor.chipGreyColor,
-
-                                                label: Padding(
-                                                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-                                                  child: Text(
-                                                    chatItem!.groupCreatedBy!,
-                                                    style: const TextStyle(
-                                                      color: Colors.black45,
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          if (isFirstMessageOfNewDay) ...[
-                                            Padding(
-                                              padding: const EdgeInsets.only(top: 10.0, bottom: 10),
-                                              child: Chip(
-                                                shape: const StadiumBorder(),
-                                                // backgroundColor: Colors.grey.shade200,
-                                                backgroundColor: AppColor.chipGreyColor,
-
-                                                label: Padding(
-                                                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-                                                  child: Text(
-                                                    messageDay,
-                                                    style: const TextStyle(
-                                                      color: Colors.black45,
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                          MessageBox(
-                                            isGroupChat: isGroupChat,
-                                            message: messageData.text,
-                                            isSender: isSender,
-                                            data: messageData,
-                                            isSeen: messageData.isSeen,
-                                            messageType: messageData.type,
-                                          ),
-                                        ],
-                                      );
-                                    },
+                                        },
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  const Divider(height: 1.0),
+                                  ChatInput(
+                                    revceiverId: chatItemId,
+                                    isGroupChat: isGroupChat,
+                                  ),
+                                ],
                               ),
-                              const Divider(height: 1.0),
-                              ChatInput(
-                                revceiverId: chatItemId,
-                                isGroupChat: isGroupChat,
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                            );
+                          });
+                        }
+                        return const SizedBox();
+                      }),
                 if (currentScreen == ChatModalScreenType.userProfile)
                   UserProfileBody(
                     profilePic: profilePic,

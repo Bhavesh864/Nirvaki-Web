@@ -12,8 +12,9 @@ import 'package:yes_broker/constants/functions/chat_group/group.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/custom_text.dart';
-import 'package:yes_broker/screens/main_screens/chat_list_screen.dart';
-import 'package:yes_broker/screens/main_screens/chat_user_profile.dart';
+import 'package:yes_broker/screens/main_screens/chat_screens/chat_forward_screen.dart';
+import 'package:yes_broker/screens/main_screens/chat_screens/chat_list_screen.dart';
+import 'package:yes_broker/screens/main_screens/chat_screens/chat_user_profile.dart';
 import 'package:yes_broker/widgets/chat/group/leave_delete_group_button.dart';
 
 import '../../chat/controller/chat_controller.dart';
@@ -90,8 +91,6 @@ class _ChatScreenHeaderState extends ConsumerState<ChatScreenHeader> {
                       onTap: () {
                         if (Responsive.isMobile(context)) {
                           Navigator.of(context).pop();
-                          // ref.read(messgeForwardModeProvider.notifier).setForwardMode(false);
-                          // ref.read(selectedMessageProvider.notifier).setToEmpty();
                         } else {
                           widget.goToChatList!();
                         }
@@ -247,8 +246,15 @@ class _ChatScreenHeaderState extends ConsumerState<ChatScreenHeader> {
                           width: 20,
                         ),
                       ],
-                      const InkWell(
-                        child: Icon(
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (ctx) => const ChatForwardScreen(),
+                            ),
+                          );
+                        },
+                        child: const Icon(
                           Icons.shortcut,
                           size: 22,
                         ),

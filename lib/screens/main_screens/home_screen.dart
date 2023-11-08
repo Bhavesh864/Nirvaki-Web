@@ -26,7 +26,7 @@ import '../../riverpodstate/user_data.dart';
 import '../../widgets/app/speed_dial_button.dart';
 import '../../widgets/chat_modal_view.dart';
 import '../account_screens/common_screen.dart';
-import 'chat_list_screen.dart';
+import 'chat_screens/chat_list_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -125,7 +125,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               isUserLoaded = true;
             }
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
-            final List<CardDetails> todoItems = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
+            final List<CardDetails> todoItems =
+                filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
             int compareDueDates(CardDetails a, CardDetails b) {
               DateTime aDueDate = DateFormat('dd-MM-yy').parse(a.duedate!);
               DateTime bDueDate = DateFormat('dd-MM-yy').parse(b.duedate!);
@@ -133,7 +134,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             }
 
             todoItems.sort(compareDueDates);
-            final List<CardDetails> workItems = filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
+            final List<CardDetails> workItems =
+                filterItem.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN" || item.cardType == "LD").toList();
             workItems.sort((a, b) => b.createdate!.compareTo(a.createdate!));
             bool isDataEmpty = workItems.isEmpty && todoItems.isEmpty;
             return Container(

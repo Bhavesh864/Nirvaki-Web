@@ -10,7 +10,7 @@ import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 
-import '../../../screens/main_screens/chat_list_screen.dart';
+import '../../../screens/main_screens/chat_screens/chat_list_screen.dart';
 
 // ignore: must_be_immutable
 class GroupUserList extends ConsumerStatefulWidget {

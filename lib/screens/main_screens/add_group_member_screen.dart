@@ -13,7 +13,7 @@ import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/customs/responsive.dart';
 
 import '../../riverpodstate/user_data.dart';
-import 'chat_list_screen.dart';
+import 'chat_screens/chat_list_screen.dart';
 
 // ignore: must_be_immutable
 class AddGroupMembers extends ConsumerStatefulWidget {
