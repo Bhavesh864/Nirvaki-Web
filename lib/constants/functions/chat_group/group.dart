@@ -9,44 +9,48 @@ void onLeaveGroup(BuildContext context, String contactId) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return AlertDialog(
-        title: const AppText(
-          text: 'Leave Group',
-          fontsize: 20,
-          fontWeight: FontWeight.w500,
-        ),
-        content: const AppText(
-          text: 'Are you sure you want to leave the group?',
-          fontWeight: FontWeight.w600,
-          fontsize: 16,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const AppText(
-              text: 'Cancel',
-              fontWeight: FontWeight.w500,
-              fontsize: 16,
-              textColor: AppColor.primary,
-            ),
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: const AppText(
+            text: 'Leave Group',
+            fontsize: 20,
+            fontWeight: FontWeight.w500,
           ),
-          TextButton(
-            onPressed: () {
-              Group.deleteMember(groupId: contactId, memberIdToDelete: AppConst.getAccessToken());
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-            },
-            child: const AppText(
-              text: 'Leave',
-              fontWeight: FontWeight.w500,
-              fontsize: 16,
-              textColor: AppColor.primary,
-            ),
+          content: const AppText(
+            text: 'Are you sure you want to leave the group?',
+            fontWeight: FontWeight.w600,
+            fontsize: 16,
           ),
-        ],
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const AppText(
+                text: 'Cancel',
+                fontWeight: FontWeight.w500,
+                fontsize: 16,
+                textColor: AppColor.primary,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Group.deleteMember(groupId: contactId, memberIdToDelete: AppConst.getAccessToken());
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+              child: const AppText(
+                text: 'Leave',
+                fontWeight: FontWeight.w500,
+                fontsize: 16,
+                textColor: AppColor.primary,
+              ),
+            ),
+          ],
+        ),
       );
     },
   );
@@ -56,44 +60,94 @@ void onDeleteGroup(BuildContext context, String contactId) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return AlertDialog(
-        title: const AppText(
-          text: 'Delete Group',
-          fontsize: 20,
-          fontWeight: FontWeight.w500,
-        ),
-        content: const AppText(
-          text: 'Are you sure you want to delete the group?',
-          fontWeight: FontWeight.w600,
-          fontsize: 16,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const AppText(
-              text: 'Cancel',
-              fontWeight: FontWeight.w500,
-              fontsize: 16,
-              textColor: AppColor.primary,
-            ),
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: const AppText(
+            text: 'Delete Group',
+            fontsize: 20,
+            fontWeight: FontWeight.w500,
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-              Group.deleteGroup(contactId);
-            },
-            child: const AppText(
-              text: 'Delete',
-              fontWeight: FontWeight.w500,
-              fontsize: 16,
-              textColor: AppColor.primary,
-            ),
+          content: const AppText(
+            text: 'Are you sure you want to delete the group?',
+            fontWeight: FontWeight.w600,
+            fontsize: 16,
           ),
-        ],
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const AppText(
+                text: 'Cancel',
+                fontWeight: FontWeight.w500,
+                fontsize: 16,
+                textColor: AppColor.primary,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                Group.deleteGroup(contactId);
+              },
+              child: const AppText(
+                text: 'Delete',
+                fontWeight: FontWeight.w500,
+                fontsize: 16,
+                textColor: AppColor.primary,
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+void onClearChat(BuildContext context, String userid, String username) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: const AppText(
+            text: 'Clear Chat',
+            fontsize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+          content: AppText(
+            text: 'Delete chat with $username',
+            fontWeight: FontWeight.w600,
+            fontsize: 16,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const AppText(
+                text: 'Cancel',
+                fontWeight: FontWeight.w500,
+                fontsize: 16,
+                textColor: AppColor.primary,
+              ),
+            ),
+            TextButton(
+              onPressed: () {},
+              child: const AppText(
+                text: 'Delete',
+                fontWeight: FontWeight.w500,
+                fontsize: 16,
+                textColor: AppColor.red,
+              ),
+            ),
+          ],
+        ),
       );
     },
   );

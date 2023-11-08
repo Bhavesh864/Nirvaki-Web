@@ -16,13 +16,11 @@
             android:name="screenCaptureProcessors"
             android:value="com.google.firebase.testlab.screenshot.FirebaseScreenCaptureProcessor" />
     </instrumentation>
-    
        <application
          android:label="@string/app_name"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
-
             android:exported="true"
             android:showWhenLocked="true"
             android:turnScreenOn="true"
@@ -73,7 +71,6 @@
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="brokr-in" 
         /> 
-         
     </application>
     <!-- Provide required visibility configuration for API level 30 and above -->
    <queries>

@@ -33,6 +33,8 @@ class LeaveDeleteGroupPopupButton extends StatelessWidget {
           onLeaveGroup(context, contactId);
         } else if (value == 'delete_group') {
           onDeleteGroup(context, contactId);
+        } else if (value == "clear_chat") {
+          onClearChat(context, contactId, "manish");
         }
       },
       itemBuilder: (BuildContext context) {
@@ -50,6 +52,24 @@ class LeaveDeleteGroupPopupButton extends StatelessWidget {
                 ),
                 Icon(
                   Icons.exit_to_app,
+                  size: 14,
+                ),
+              ],
+            ),
+          ),
+          const PopupMenuItem<String>(
+            value: 'clear_chat',
+            child: Row(
+              children: [
+                CustomText(
+                  title: 'Clear Chat',
+                  size: 13,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Icon(
+                  Icons.delete_outline,
                   size: 14,
                 ),
               ],

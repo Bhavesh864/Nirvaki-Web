@@ -153,9 +153,7 @@ class ContactInformation extends StatelessWidget {
               ),
               paddingHorizontal: 3,
             ),
-            title: Container(
-              height: 30,
-              alignment: Alignment.center,
+            title: SizedBox(
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: CustomText(

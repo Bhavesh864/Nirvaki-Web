@@ -2,6 +2,7 @@
 // ignore: depend_on_referenced_packages
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:rxdart/rxdart.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -239,7 +240,15 @@ class TestList extends ConsumerWidget {
                 return Column(
                   children: [
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async {
+                        // final snapshot = FirebaseFirestore.instance.collection("groups").doc(chatItem.id).collection("chats");
+                        // QuerySnapshot messagesSnapshot = await snapshot.get();
+                        // for (QueryDocumentSnapshot doc in messagesSnapshot.docs) {
+                        //   // Update each message document with the new field
+                        //   await snapshot.doc(doc.id).update({
+                        //     'deleteMsgUserId': []"], // Replace 'newField' with the actual field name
+                        //   });
+                        // }
                         selectedUserIds.update(
                           (state) => chatItem.membersUid,
                         );
@@ -270,9 +279,10 @@ class TestList extends ConsumerWidget {
                           child: ListTile(
                             title: Row(
                               children: [
-                                CustomText(
-                                  title: capitalizeFirstLetter(chatItem.name),
-                                  size: 15,
+                                AppText(
+                                  text: capitalizeFirstLetter(chatItem.name),
+                                  fontsize: 15,
+                                  maxLines: 1,
                                 ),
                                 SizedBox(
                                   width: 10,

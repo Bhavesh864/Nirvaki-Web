@@ -1,7 +1,9 @@
 import 'package:beamer/beamer.dart';
+import 'package:cron/cron.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -42,6 +44,7 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
     }
   }
 
+  final cron = Cron();
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);

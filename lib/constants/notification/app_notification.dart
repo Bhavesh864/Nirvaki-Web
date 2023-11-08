@@ -148,7 +148,7 @@ Future<void> setupInteractedMessage() async {
 void _handleMessage(RemoteMessage message) {
   if (message.data['type'] == 'chat') {
     // Navigator.pushNamed(context, '/chat',
-    //   arguments: ChatArguments(message),
+    // arguments: ChatArguments(message),
     // );
   }
 }
