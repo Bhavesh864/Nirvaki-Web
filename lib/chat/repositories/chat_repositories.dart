@@ -126,9 +126,23 @@ class ChatRepository {
     bool isSender,
   ) async {
     try {
-      await firestore.collection('users').doc(AppConst.getAccessToken()).collection('chats').doc(recieverUserId).collection('messages').doc(messageId).update({'isSeen': true});
+      await firestore
+          .collection('users')
+          .doc(AppConst.getAccessToken())
+          .collection('chats')
+          .doc(recieverUserId)
+          .collection('messages')
+          .doc(messageId)
+          .update({'isSeen': true});
 
-      await firestore.collection('users').doc(recieverUserId).collection('chats').doc(AppConst.getAccessToken()).collection('messages').doc(messageId).update({'isSeen': true});
+      await firestore
+          .collection('users')
+          .doc(recieverUserId)
+          .collection('chats')
+          .doc(AppConst.getAccessToken())
+          .collection('messages')
+          .doc(messageId)
+          .update({'isSeen': true});
     } catch (e) {
       customSnackBar(
         context: context,
@@ -518,6 +532,7 @@ class ChatRepository {
     required User senderUser,
     required bool isGroupChat,
     required String profilePic,
+    MessageEnum? messageType,
   }) async {
     try {
       final Timestamp timestamp = Timestamp.now();
@@ -530,10 +545,32 @@ class ChatRepository {
 
       var messageId = const Uuid().v1();
 
+      String contactMsg;
+
+      switch (messageType) {
+        case MessageEnum.text:
+          contactMsg = message;
+          break;
+        case MessageEnum.image:
+          contactMsg = '📷 Photo';
+          break;
+        case MessageEnum.video:
+          contactMsg = '🎬 Video';
+          break;
+        case MessageEnum.audio:
+          contactMsg = '🎵 Audio';
+          break;
+        case MessageEnum.gif:
+          contactMsg = 'GIF';
+          break;
+        default:
+          contactMsg = 'GIF';
+      }
+
       _saveDataToContactsSubCollection(
         senderUserData: senderUser,
         receiverUserData: receiverUserData,
-        message: message,
+        message: contactMsg,
         timestamp: timestamp,
         receiverId: receiverId,
         isGroupChat: isGroupChat,
@@ -546,7 +583,7 @@ class ChatRepository {
         messageId: messageId,
         revceiverUsername: '${receiverUserData?.userfirstname} ${receiverUserData?.userlastname}',
         username: '${senderUser.userfirstname} ${senderUser.userlastname}',
-        messageType: MessageEnum.text,
+        messageType: messageType ?? MessageEnum.text,
         isGroupChat: isGroupChat,
         profilePic: profilePic,
       );

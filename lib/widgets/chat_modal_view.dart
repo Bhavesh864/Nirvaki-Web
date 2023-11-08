@@ -10,12 +10,15 @@ import 'package:yes_broker/screens/main_screens/chat_screens/chat_user_profile.d
 import 'package:yes_broker/screens/main_screens/chat_screens/create_group_screen.dart';
 import 'package:yes_broker/widgets/chat/group/newchat_newgroup_popup.dart';
 import '../Customs/custom_text.dart';
+import '../Customs/text_utility.dart';
 import '../chat/controller/chat_controller.dart';
 import '../constants/app_constant.dart';
 import '../constants/methods/date_time_methods.dart';
 import '../constants/utils/colors.dart';
+import '../riverpodstate/chat/message_selection_state.dart';
 import 'chat/chat_input.dart';
 import 'chat/chat_screen_header.dart';
+import 'chat/group/newgroup_user_list.dart';
 import 'chat/message_box.dart';
 
 enum ChatModalScreenType {
@@ -25,6 +28,7 @@ enum ChatModalScreenType {
   newChat,
   createNewGroup,
   addNewMember,
+  messageForward,
 }
 
 class ChatDialogBox extends ConsumerStatefulWidget {
@@ -57,6 +61,26 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
   ChatItem? chatItem;
   User? user;
   bool alreadySelectedUser = false;
+
+  void onPressSendButton(List<String> selectedUsers, List<ChatItem> groupChatList) {
+    for (var userId in selectedUsers) {
+      for (var msgData in ref.read(selectedMessageProvider)) {
+        ref.read(chatControllerProvider).sendTextMessage(
+              context,
+              msgData.text,
+              userId,
+              groupChatList.firstWhere((element) => element.id == userId).isGroupChat,
+              messageType: msgData.type,
+            );
+      }
+    }
+
+    ref.read(selectedMessageProvider.notifier).setToEmpty();
+    currentScreen = ChatModalScreenType.chatList;
+    selectedMessageList = [];
+    selectedMode = false;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -180,38 +204,12 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                           });
 
                           return StatefulBuilder(builder: (context, setstate) {
-                            remove(String id) {
-                              setstate(
-                                () {
-                                  selectedMessageList.remove(id);
-                                  if (selectedMessageList.isEmpty) {
-                                    selectedMode = false;
-                                  }
-                                },
-                              );
-                            }
-
                             removeAll() {
                               setstate(
                                 () {
                                   selectedMessageList = [];
                                   selectedMode = false;
-                                },
-                              );
-                            }
-
-                            add(String id) {
-                              setstate(
-                                () {
-                                  selectedMessageList.add(id);
-                                },
-                              );
-                            }
-
-                            toggleSelectedMode(bool k) {
-                              setstate(
-                                () {
-                                  selectedMode = k;
+                                  ref.read(selectedMessageProvider.notifier).setToEmpty();
                                 },
                               );
                             }
@@ -239,11 +237,21 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                                         }
                                         setState(() {});
                                       },
+                                      goToForwardScreen: () {
+                                        currentScreen = ChatModalScreenType.messageForward;
+                                        setState(() {});
+                                      },
                                       selectedMessageList: selectedMessageList,
                                       selectedMode: selectedMode,
-                                      toggleSelectedMode: toggleSelectedMode,
+                                      toggleSelectedMode: (bool k) {
+                                        setstate(
+                                          () {
+                                            selectedMode = k;
+                                          },
+                                        );
+                                      },
                                       removeAllItems: removeAll,
-                                      removeItem: remove,
+                                      // removeItem: remove,
                                       dataList: snapshot.data,
                                     ),
                                   ),
@@ -361,19 +369,21 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                                                   setstate(() {
                                                     selectedMode = true;
                                                     selectedMessageList.add(currentMessageId);
+                                                    ref.read(selectedMessageProvider.notifier).addMessage(messageData);
                                                   });
                                                 },
                                                 onTap: () {
                                                   // setstate(() {
                                                   if (selectedMessageList.isNotEmpty && selectedMode) {
                                                     if (selectedMessageList.contains(currentMessageId)) {
-                                                      // selectedMessageList.remove(currentMessageId);
-                                                      remove(currentMessageId);
+                                                      selectedMessageList.remove(currentMessageId);
                                                       if (selectedMessageList.isEmpty) {
                                                         selectedMode = false;
                                                       }
+                                                      ref.read(selectedMessageProvider.notifier).removeMessge(messageData);
                                                     } else if (selectedMode) {
-                                                      add(currentMessageId);
+                                                      selectedMessageList.add(currentMessageId);
+                                                      ref.read(selectedMessageProvider.notifier).addMessage(messageData);
                                                     }
                                                   } else {
                                                     removeAll();
@@ -468,7 +478,139 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                         setState(() {});
                       },
                     ),
-                  )
+                  ),
+                if (currentScreen == ChatModalScreenType.messageForward)
+                  StreamBuilder(
+                    stream: mergeChatContactsAndGroups(ref),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Loader();
+                      }
+                      if (snapshot.hasData) {
+                        final filterUser = snapshot.data!;
+
+                        final List<String> selectedUsers = [];
+                        List<ChatItem> groupChatList = [];
+
+                        void toggleUse(ChatItem user) {
+                          if (selectedUsers.contains(user.id)) {
+                            selectedUsers.remove(user.id);
+                            groupChatList.remove(user);
+                          } else {
+                            if (selectedUsers.length == 5) {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text("Limit Reached"),
+                                    content: const Text("You can only share with up to 5 chats."),
+                                    actions: [
+                                      TextButton(
+                                        child: const Text("OK"),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            } else {
+                              selectedUsers.add(user.id);
+                              groupChatList.add(user);
+                            }
+                          }
+                        }
+
+                        return Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    currentScreen = ChatModalScreenType.chatScreen;
+                                    setState(() {});
+                                  },
+                                  icon: const Icon(
+                                    Icons.arrow_back,
+                                    size: 22,
+                                  ),
+                                ),
+                                const AppText(
+                                  text: 'Forward to...',
+                                  fontsize: 15,
+                                  textColor: Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  icon: const Icon(
+                                    Icons.close,
+                                    size: 22,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            StatefulBuilder(
+                              builder: (context, setstate) {
+                                return Container(
+                                  height: 440,
+                                  margin: const EdgeInsets.only(top: 5),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                  child: GroupAndUsersMergedListToForward(
+                                      users: filterUser,
+                                      selectedUser: selectedUsers,
+                                      toggleUser: (user) {
+                                        setstate(
+                                          () {
+                                            toggleUse(user);
+                                          },
+                                        );
+                                      }),
+                                );
+                              },
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  onPressSendButton(selectedUsers, groupChatList);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                child: const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    AppText(
+                                      text: 'Send',
+                                      textColor: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                      fontsize: 17,
+                                    ),
+                                    SizedBox(width: 8.0),
+                                    Icon(
+                                      Icons.send,
+                                      size: 20,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+
+                      return const SizedBox();
+                    },
+                  ),
               ],
             ),
           ),

@@ -2,7 +2,6 @@
 // ignore: depend_on_referenced_packages
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:rxdart/rxdart.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,10 +14,10 @@ import 'package:yes_broker/chat/models/chat_group.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
-import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/screens/main_screens/chat_screens/chat_screen.dart';
 import 'package:yes_broker/screens/main_screens/chat_screens/create_group_screen.dart';
+
 import '../../../Customs/responsive.dart';
 import '../../../constants/methods/string_methods.dart';
 import '../../../constants/utils/colors.dart';
@@ -299,11 +298,32 @@ class TestList extends ConsumerWidget {
                             ),
                             subtitle: Padding(
                               padding: const EdgeInsets.only(top: 6.0),
-                              child: Text(
-                                chatItem.lastMessage,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 12),
+                              child: Row(
+                                children: [
+                                  if (isSender && !chatItem.isGroupChat) ...[
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 5),
+                                      child: Icon(
+                                        chatItem.lastMessageIsSeen ? Icons.done_all : Icons.done,
+                                        color: chatItem.lastMessageIsSeen ? Colors.blue : Colors.grey,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 4,
+                                    ),
+                                  ],
+                                  Container(
+                                    constraints: BoxConstraints(
+                                      maxWidth: Responsive.isMobile(context) ? 150 : 300,
+                                    ),
+                                    child: Text(
+                                      chatItem.lastMessage,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             leading: Container(

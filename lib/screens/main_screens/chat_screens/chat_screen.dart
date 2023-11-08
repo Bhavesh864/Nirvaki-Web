@@ -63,7 +63,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     return WillPopScope(
       onWillPop: () async {
         ref.read(selectedMessageProvider.notifier).setToEmpty();
-
         return true; // Allow navigation back
       },
       child: Scaffold(
@@ -118,6 +117,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                           selectedMode = false;
                         },
                       );
+                      ref.read(selectedMessageProvider.notifier).setToEmpty();
                     }
 
                     add(String id) {
@@ -151,7 +151,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                 selectedMode: selectedMode,
                                 toggleSelectedMode: toggleSelectedMode,
                                 removeAllItems: removeAll,
-                                removeItem: remove,
+                                // removeItem: remove,
                                 dataList: snapshot.data,
                               ),
                             ),

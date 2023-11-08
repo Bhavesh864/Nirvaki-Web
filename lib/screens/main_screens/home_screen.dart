@@ -22,6 +22,7 @@ import '../../constants/firebase/Hive/hive_methods.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/filterdataAccordingRole/data_according_role.dart';
 import '../../constants/methods/string_methods.dart';
+import '../../riverpodstate/chat/message_selection_state.dart';
 import '../../riverpodstate/user_data.dart';
 import '../../widgets/app/speed_dial_button.dart';
 import '../../widgets/chat_modal_view.dart';
@@ -313,6 +314,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                           ),
                           onPressed: () {
                             showChatDialog();
+                            ref.read(selectedMessageProvider.notifier).setToEmpty();
                           },
                         ),
                       );

@@ -47,12 +47,7 @@ class ChatController {
     return chatRepository.getGroupChatStream(groupId);
   }
 
-  void sendTextMessage(
-    BuildContext context,
-    String text,
-    String receiverId,
-    bool isGroupChat,
-  ) async {
+  void sendTextMessage(BuildContext context, String text, String receiverId, bool isGroupChat, {MessageEnum? messageType}) async {
     final User? user = await User.getUser(AppConst.getAccessToken());
     // ignore: use_build_context_synchronously
     chatRepository.sendTextMessage(
@@ -62,6 +57,7 @@ class ChatController {
       senderUser: user!,
       isGroupChat: isGroupChat,
       profilePic: user.image,
+      messageType: messageType,
       // messageReply: messageReply,
     );
     // ref.read(messageReplyProvider.state).update((state) => null);
