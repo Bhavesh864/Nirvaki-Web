@@ -6,13 +6,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/chat/controller/group_controller.dart';
-import 'package:yes_broker/chat/enums/message.enums.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
-import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/customs/text_utility.dart';
 import 'package:yes_broker/riverpodstate/chat/message_selection_state.dart';
@@ -40,6 +37,7 @@ class ChatForwardScreen extends ConsumerStatefulWidget {
 class _ChatForwardScreenState extends ConsumerState<ChatForwardScreen> {
   final groupNameController = TextEditingController();
   List<String> selectedUsers = [];
+  List<ChatItem> groupChatList = [];
   File? groupIcon;
   Uint8List? groupIconWeb;
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
@@ -47,6 +45,7 @@ class _ChatForwardScreenState extends ConsumerState<ChatForwardScreen> {
   void toggleUse(ChatItem user) {
     if (selectedUsers.contains(user.id)) {
       selectedUsers.remove(user.id);
+      groupChatList.remove(user);
     } else {
       if (selectedUsers.length == 5) {
         showDialog(
@@ -68,6 +67,7 @@ class _ChatForwardScreenState extends ConsumerState<ChatForwardScreen> {
         );
       } else {
         selectedUsers.add(user.id);
+        groupChatList.add(user);
       }
     }
   }
@@ -87,33 +87,21 @@ class _ChatForwardScreenState extends ConsumerState<ChatForwardScreen> {
   }
 
   void onPressSendButton() {
-    // print(ref.read(selectedMessageProvider));
+    for (var userId in selectedUsers) {
+      for (var msgData in ref.read(selectedMessageProvider)) {
+        ref.read(chatControllerProvider).sendTextMessage(
+              context,
+              msgData.text,
+              userId,
+              groupChatList.firstWhere((element) => element.id == userId).isGroupChat,
+              messageType: msgData.type,
+            );
+      }
+    }
 
-    print(selectedUsers);
-    // selectedUsers.map((userId) => {
-    //       ref.read(selectedMessageProvider).map((msgData) => {
-    //             if (msgData.type == MessageEnum.text)
-    //               {
-    //                 ref.read(chatControllerProvider).sendTextMessage(
-    //                       context,
-    //                       msgData.text,
-    //                       userId,
-    //                       widget.isGroupChat,
-    //                     ),
-    //               }
-    //             else
-    //               {
-    //                 ref.read(chatControllerProvider).sendFileMessage(
-    //                       context,
-    //                       file,
-    //                       widget.revceiverId,
-    //                       messageEnum,
-    //                       widget.isGroupChat,
-    //                       webImage,
-    //                     ),
-    //               }
-    //           }),
-    //     });
+    ref.read(selectedMessageProvider.notifier).setToEmpty();
+    Navigator.of(context).pop();
+    Navigator.of(context).pop();
   }
 
   @override
@@ -192,7 +180,7 @@ class _ChatForwardScreenState extends ConsumerState<ChatForwardScreen> {
                         ),
                       ),
                       const AppText(
-                        text: 'New Chat',
+                        text: 'Forward to...',
                         fontsize: 15,
                         textColor: Colors.black,
                         fontWeight: FontWeight.w600,
@@ -208,64 +196,28 @@ class _ChatForwardScreenState extends ConsumerState<ChatForwardScreen> {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: () async {
-                            XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
-                            if (image != null) {
-                              var f = await image.readAsBytes();
-
-                              setState(() {
-                                groupIconWeb = f;
-                              });
-                            }
-                          },
-                          child: CircleAvatar(
-                            backgroundImage: groupIconWeb != null ? MemoryImage(groupIconWeb!) : null,
-                            radius: 25,
-                            child: groupIconWeb != null
-                                ? null
-                                : const Icon(
-                                    Icons.camera_alt_outlined,
-                                    size: 22,
-                                  ),
+                  StatefulBuilder(
+                    builder: (context, setstate) {
+                      return Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 5),
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
                           ),
+                          child: GroupAndUsersMergedListToForward(
+                              users: filterUser,
+                              selectedUser: selectedUsers,
+                              toggleUser: (user) {
+                                setstate(
+                                  () {
+                                    toggleUse(user);
+                                  },
+                                );
+                              }),
                         ),
-                        SizedBox(
-                          width: 250,
-                          child: CustomTextInput(
-                            controller: groupNameController,
-                            labelText: 'Group Name',
-                          ),
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                  StatefulBuilder(builder: (context, setstate) {
-                    return Expanded(
-                      child: Container(
-                        margin: const EdgeInsets.only(top: 5),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        child: GroupAndUsersMergedListToForward(
-                            users: filterUser,
-                            selectedUser: selectedUsers,
-                            toggleUser: (user) {
-                              setstate(
-                                () {
-                                  toggleUse(user);
-                                },
-                              );
-                            }),
-                      ),
-                    );
-                  }),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                     child: ElevatedButton(
@@ -281,14 +233,14 @@ class _ChatForwardScreenState extends ConsumerState<ChatForwardScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           AppText(
-                            text: 'Create Group',
+                            text: 'Send',
                             textColor: Colors.white,
                             fontWeight: FontWeight.w500,
                             fontsize: 17,
                           ),
                           SizedBox(width: 8.0),
                           Icon(
-                            Icons.group_add_outlined,
+                            Icons.send,
                             size: 20,
                           ),
                         ],

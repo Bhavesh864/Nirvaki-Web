@@ -12,6 +12,7 @@ import '../constants/functions/auth/auth_functions.dart';
 import '../constants/utils/colors.dart';
 import '../constants/utils/constants.dart';
 
+import '../riverpodstate/chat/message_selection_state.dart';
 import '../routes/routes.dart';
 import '../screens/account_screens/Teams/team_screen.dart';
 import '../screens/account_screens/common_screen.dart';
@@ -73,6 +74,7 @@ class _SmallScreenState extends ConsumerState<SmallScreen> with WidgetsBindingOb
           ref.read(mobileBottomIndexProvider.notifier).update((state) => value),
           ref.read(selectedProfileItemProvider.notifier).setSelectedItem(null),
           ref.read(desktopSideBarIndexProvider.notifier).update((state) => value),
+          if (value == 4) {ref.read(selectedMessageProvider.notifier).setToEmpty()}
         },
         currentIndex: currentIndex,
         selectedFontSize: 0,

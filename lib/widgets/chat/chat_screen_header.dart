@@ -20,16 +20,17 @@ import 'package:yes_broker/widgets/chat/group/leave_delete_group_button.dart';
 import '../../chat/controller/chat_controller.dart';
 import '../../chat/enums/message.enums.dart';
 import '../../chat/models/message.dart';
+import '../../riverpodstate/chat/message_selection_state.dart';
 
 class ChatScreenHeader extends ConsumerStatefulWidget {
   final ChatItem? chatItem;
   final User? user;
   final Function? showProfileScreen;
   final Function? goToChatList;
+  final Function? goToForwardScreen;
   final List<String>? selectedMessageList;
   final bool? selectedMode;
   final Function? removeAllItems;
-  final Function? removeItem;
   final Function? toggleSelectedMode;
   final List<ChatMessage>? dataList;
 
@@ -39,10 +40,10 @@ class ChatScreenHeader extends ConsumerStatefulWidget {
     this.user,
     this.showProfileScreen,
     this.goToChatList,
+    this.goToForwardScreen,
     this.selectedMessageList,
     this.selectedMode,
     this.removeAllItems,
-    this.removeItem,
     this.toggleSelectedMode,
     this.dataList,
   }) : super(key: key);
@@ -74,8 +75,6 @@ class _ChatScreenHeaderState extends ConsumerState<ChatScreenHeader> {
     final String name = widget.chatItem?.name ?? '${widget.user?.userfirstname} ${widget.user?.userlastname}';
     final String profilePic = widget.chatItem?.profilePic ?? widget.user?.image ?? '';
     final String adminId = widget.chatItem?.adminId ?? '';
-    // final messgeForwardMode = ref.watch(messgeForwardModeProvider);
-    // final selectedMessageIndex = ref.watch(selectedMessageProvider);
 
     return StreamBuilder(
         stream: FirebaseFirestore.instance.collection('users').doc(chatItemId).snapshots(includeMetadataChanges: true),
@@ -94,6 +93,7 @@ class _ChatScreenHeaderState extends ConsumerState<ChatScreenHeader> {
                         } else {
                           widget.goToChatList!();
                         }
+                        ref.read(selectedMessageProvider.notifier).setToEmpty();
                       },
                       child: const Padding(
                         padding: EdgeInsets.all(12),
@@ -253,11 +253,15 @@ class _ChatScreenHeaderState extends ConsumerState<ChatScreenHeader> {
                       ],
                       InkWell(
                         onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (ctx) => const ChatForwardScreen(),
-                            ),
-                          );
+                          if (Responsive.isMobile(context)) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (ctx) => const ChatForwardScreen(),
+                              ),
+                            );
+                          } else {
+                            widget.goToForwardScreen!();
+                          }
                         },
                         child: const Icon(
                           Icons.shortcut,
