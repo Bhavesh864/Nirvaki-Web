@@ -267,6 +267,7 @@ class ChatRepository {
       isSeen: false,
       senderName: username,
       profilePic: profilePic,
+      deleteMsgUserId: [],
       // repliedMessage: repliedMessage,
       // repliedTo: repliedTo,
       // repliedMessageType: repliedMessageType,
@@ -310,6 +311,34 @@ class ChatRepository {
     }
   }
 
+  // final snapshot = FirebaseFirestore.instance.collection("groups").doc(chatItem.id).collection("chats");
+  // // QuerySnapshot messagesSnapshot = await snapshot.get();
+  // // for (QueryDocumentSnapshot doc in messagesSnapshot.docs) {
+  // //   // Update each message document with the new field
+  // //   await snapshot.doc(doc.id).update({
+  // //     'deleteMsgUserId': []"], // Replace 'newField' with the actual field name
+  // //   });
+  // // }
+  // static Future<void> deleteMessagesAndAddUserToDeletedBy(List<String> messageIds, String userId) async {
+  //   try {
+  //     for (String messageId in messageIds) {
+  //       final messageReference = messagesCollection.doc(messageId);
+  //       final messageDocument = await messageReference.get();
+
+  //       if (messageDocument.exists) {
+  //         final List<String> deletedBy = List<String>.from(messageDocument.data()['deletedBy']);
+  //         deletedBy.add(userId);
+
+  //         await messageReference.update({
+  //           'deletedBy': deletedBy,
+  //         });
+  //       }
+  //     }
+  //   } catch (error) {
+  //     print('Failed to delete messages and add user to deletedBy: $error');
+  //   }
+  // }
+
   Future<bool> _removeMessageFromMessagesSubCollection({
     required String docId,
     required List<String> messageId,
@@ -317,7 +346,15 @@ class ChatRepository {
   }) async {
     if (isGroupChat) {
       for (var i = 0; i < messageId.length; i++) {
-        await firestore.collection('groups').doc(docId).collection('chats').doc(messageId[i]).delete();
+        final messageReference = firestore.collection('groups').doc(docId).collection('chats').doc(messageId[i]);
+        final messageDocument = await messageReference.get();
+        if (messageDocument.exists) {
+          final List<dynamic> deletedBy = List<dynamic>.from(messageDocument.data()?['deleteMsgUserId']);
+          deletedBy.add(AppConst.getAccessToken());
+          await messageReference.update({
+            'deleteMsgUserId': deletedBy,
+          });
+        }
       }
     } else {
       // users -> sender id -> reciever id -> messages -> message id -> store message
@@ -366,13 +403,42 @@ class ChatRepository {
 
       if (value) {
         final data = await getLastMessage(docId, isGroupChat);
+        String contactMsg;
 
-        updateLastMessageInContactSubCollection(
-          docId,
-          data?["text"],
-          isGroupChat,
-          data?["timeSent"],
-        );
+        if (data != null) {
+          switch (data['type']) {
+            case 'text':
+              contactMsg = data["text"];
+              break;
+            case 'image':
+              contactMsg = '📷 Photo';
+              break;
+            case 'video':
+              contactMsg = '🎬 Video';
+              break;
+            case 'audio':
+              contactMsg = '🎵 Audio';
+              break;
+            case 'gif':
+              contactMsg = 'GIF';
+              break;
+            default:
+              contactMsg = 'GIF';
+          }
+          updateLastMessageInContactSubCollection(
+            docId,
+            contactMsg,
+            isGroupChat,
+            data["timeSent"],
+          );
+        } else {
+          updateLastMessageInContactSubCollection(
+            docId,
+            "You deleted this message",
+            isGroupChat,
+            Timestamp.now().millisecondsSinceEpoch,
+          );
+        }
       }
     } catch (e) {
       customSnackBar(

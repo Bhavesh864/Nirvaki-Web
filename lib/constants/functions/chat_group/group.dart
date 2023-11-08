@@ -153,7 +153,13 @@ void onClearChat(BuildContext context, String userid, String username) {
   );
 }
 
-void customConfirmationAlertDialog(BuildContext context, void Function() onConfirmPress, String title, String content) {
+void customConfirmationAlertDialog(
+  BuildContext context,
+  void Function() onConfirmPress,
+  String title,
+  String content,
+  String cofirmText,
+) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -182,8 +188,8 @@ void customConfirmationAlertDialog(BuildContext context, void Function() onConfi
           ),
           TextButton(
             onPressed: onConfirmPress,
-            child: const AppText(
-              text: 'Logout',
+            child: AppText(
+              text: cofirmText,
               fontWeight: FontWeight.w500,
               fontsize: 16,
               textColor: AppColor.primary,

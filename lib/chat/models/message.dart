@@ -13,6 +13,7 @@ class ChatMessage {
   final String messageId;
   final bool isSeen;
   final String profilePic;
+  final List<dynamic> deleteMsgUserId;
   // final String repliedMessage;
   // final String repliedTo;
   // final MessageEnum repliedMessageType;
@@ -27,6 +28,7 @@ class ChatMessage {
     required this.messageId,
     required this.isSeen,
     required this.profilePic,
+    required this.deleteMsgUserId,
   });
 
   Map<String, dynamic> toMap() {
@@ -40,6 +42,7 @@ class ChatMessage {
       'messageId': messageId,
       'isSeen': isSeen,
       'profilePic': profilePic,
+      'deleteMsgUserId': deleteMsgUserId,
     };
   }
 
@@ -57,6 +60,7 @@ class ChatMessage {
       // repliedTo: map['repliedTo'] ?? '',
       // repliedMessageType: (map['repliedMessageType'] as String).toEnum(),
       profilePic: map['profilePic'] as String,
+      deleteMsgUserId: map['deleteMsgUserId'] ?? [],
     );
   }
 }

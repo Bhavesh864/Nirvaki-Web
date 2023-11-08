@@ -12,6 +12,7 @@ import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/chat/controller/group_controller.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/customs/snackbar.dart';
@@ -81,7 +82,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
     if (groupNameController.text.trim().isNotEmpty) {
       ref.read(groupControllerProvider).createGroup(
             context,
-            groupNameController.text.trim(),
+            removeExtraSpaces(groupNameController.text),
             groupIcon,
             ref.read(selectedGroupUsers),
             groupIconWeb,
@@ -211,6 +212,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                               child: CustomTextInput(
                                 controller: groupNameController,
                                 labelText: 'Group Name',
+                                maxLength: 50,
                               ),
                             ),
                           ],

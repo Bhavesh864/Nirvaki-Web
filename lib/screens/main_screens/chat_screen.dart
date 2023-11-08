@@ -262,40 +262,41 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                           ),
                                         ),
                                       ],
-                                      MessageBox(
-                                        currMessageIndex: index,
-                                        isGroupChat: isGroupChat,
-                                        message: messageData.text,
-                                        isSender: isSender,
-                                        data: messageData,
-                                        isSeen: messageData.isSeen,
-                                        messageType: messageData.type,
-                                        selectedMessageList: selectedMessageList,
-                                        selectedMode: selectedMode,
-                                        onLongPress: () {
-                                          setstate(() {
-                                            selectedMode = true;
-                                            selectedMessageList.add(currentMessageId);
-                                          });
-                                        },
-                                        onTap: () {
-                                          // setstate(() {
-                                          if (selectedMessageList.isNotEmpty && selectedMode) {
-                                            if (selectedMessageList.contains(currentMessageId)) {
-                                              // selectedMessageList.remove(currentMessageId);
-                                              remove(currentMessageId);
-                                              if (selectedMessageList.isEmpty) {
-                                                selectedMode = false;
+                                      if (isGroupChat && !messageData.deleteMsgUserId.contains(AppConst.getAccessToken()) || !isGroupChat)
+                                        MessageBox(
+                                          currMessageIndex: index,
+                                          isGroupChat: isGroupChat,
+                                          message: messageData.text,
+                                          isSender: isSender,
+                                          data: messageData,
+                                          isSeen: messageData.isSeen,
+                                          messageType: messageData.type,
+                                          selectedMessageList: selectedMessageList,
+                                          selectedMode: selectedMode,
+                                          onLongPress: () {
+                                            setstate(() {
+                                              selectedMode = true;
+                                              selectedMessageList.add(currentMessageId);
+                                            });
+                                          },
+                                          onTap: () {
+                                            // setstate(() {
+                                            if (selectedMessageList.isNotEmpty && selectedMode) {
+                                              if (selectedMessageList.contains(currentMessageId)) {
+                                                // selectedMessageList.remove(currentMessageId);
+                                                remove(currentMessageId);
+                                                if (selectedMessageList.isEmpty) {
+                                                  selectedMode = false;
+                                                }
+                                              } else if (selectedMode) {
+                                                add(currentMessageId);
                                               }
-                                            } else if (selectedMode) {
-                                              add(currentMessageId);
+                                            } else {
+                                              removeAll();
                                             }
-                                          } else {
-                                            removeAll();
-                                          }
-                                          // });
-                                        },
-                                      ),
+                                            // });
+                                          },
+                                        ),
                                     ],
                                   );
                                 },
