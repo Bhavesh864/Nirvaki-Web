@@ -66,6 +66,7 @@ class _ChatInputState extends ConsumerState<ChatInput> {
             messageController.text.trim(),
             widget.revceiverId,
             widget.isGroupChat,
+            messageType: MessageEnum.text,
           );
     }
     messageController.clear();

@@ -502,8 +502,10 @@ class ChatRepository {
     required User senderUser,
     required bool isGroupChat,
     required String profilePic,
-    MessageEnum? messageType,
+    required MessageEnum? messageType,
   }) async {
+    print(messageType);
+
     try {
       final Timestamp timestamp = Timestamp.now();
       User? receiverUserData;
