@@ -151,11 +151,16 @@ class _ChatScreenHeaderState extends ConsumerState<ChatScreenHeader> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    AppText(
-                                      text: name,
-                                      textColor: const Color.fromRGBO(44, 44, 46, 1),
-                                      fontWeight: FontWeight.w600,
-                                      fontsize: 16,
+                                    SizedBox(
+                                      width: 200,
+                                      child: AppText(
+                                        text: name,
+                                        textColor: const Color.fromRGBO(44, 44, 46, 1),
+                                        fontWeight: FontWeight.w600,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        fontsize: 16,
+                                      ),
                                     ),
                                     if (!isGroupChat) ...[
                                       AppText(
@@ -281,11 +286,13 @@ class _ChatScreenHeaderState extends ConsumerState<ChatScreenHeader> {
                     ],
                   ),
                 ] else ...[
-                  if (isGroupChat)
-                    LeaveDeleteGroupPopupButton(
-                      contactId: chatItemId,
-                      adminId: adminId,
-                    ),
+                  // if (isGroupChat)
+                  // LeaveDeleteGroupPopupButton(
+                  //   contactId: chatItemId,
+                  //   adminId: adminId,
+                  //   chatItemName: name,
+                  //   isGroupChat: isGroupChat,
+                  // ),
                 ],
               ],
             );

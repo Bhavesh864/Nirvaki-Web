@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/Customs/text_utility.dart';
 
 import 'package:yes_broker/chat/controller/chat_controller.dart';
 import 'package:yes_broker/constants/app_constant.dart';
@@ -225,15 +226,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                           shape: const StadiumBorder(),
                                           // backgroundColor: Colors.grey.shade200,
                                           backgroundColor: AppColor.chipGreyColor,
-
                                           label: Padding(
                                             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-                                            child: Text(
-                                              chatItem!.groupCreatedBy!,
-                                              style: const TextStyle(
-                                                color: Colors.black45,
-                                                fontSize: 12,
-                                              ),
+                                            child: AppText(
+                                              text: chatItem!.groupCreatedBy!,
+                                              fontsize: 12,
+                                              textColor: Colors.black45,
                                             ),
                                           ),
                                         ),
@@ -245,7 +243,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                           shape: const StadiumBorder(),
                                           // backgroundColor: Colors.grey.shade200,
                                           backgroundColor: AppColor.chipGreyColor,
-
                                           label: Padding(
                                             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
                                             child: Text(

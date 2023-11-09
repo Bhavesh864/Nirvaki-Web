@@ -9,6 +9,7 @@ import 'package:yes_broker/constants/firebase/send_notification.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/widgets/questionaries/assign_user.dart';
 import '../app_constant.dart';
+import '../firebase/Methods/add_activity.dart';
 import '../firebase/userModel/user_info.dart';
 
 List<User>? user;
@@ -62,8 +63,11 @@ void submitAssignUser(String id, BuildContext context, List<User> users, User cu
       lead.LeadDetails.updateAssignUser(itemid: id, assignedtoList: assign);
     }
     CardDetails.updateAssignUser(itemid: id, assignedtoList: assigncard);
-
     final typeofWorkitem = calculateTypeOfWorkitem(id);
+    final userNames = user?.map((user) => "${user.userfirstname} ${user.userlastname}").join(", ");
+    if (userNames!.isNotEmpty) {
+      submitActivity(itemid: id, activitytitle: "$typeofWorkitem assigned to $userNames", user: currentuserdata);
+    }
     for (var user in users) {
       notifyToUser(
           assignedto: user.userId,

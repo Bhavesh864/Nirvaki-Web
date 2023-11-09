@@ -33,10 +33,13 @@ class _GroupUserListState extends ConsumerState<GroupUserList> {
   List<User> userlist = [];
 
   Future<void> getUserData(List userIds) async {
-    final List<User> user = await User.getListOfUsersByIds(userIds);
-    userlist = user;
-
-    setState(() {});
+    // if (mounted) {
+    if (userlist.isEmpty) {
+      final List<User> user = await User.getListOfUsersByIds(userIds);
+      userlist = user;
+      setState(() {});
+    }
+    // }
   }
 
   @override
@@ -47,13 +50,10 @@ class _GroupUserListState extends ConsumerState<GroupUserList> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final userSnapshot = snapshot.data?.docs;
-
           getUserData(userSnapshot?[0]["membersUid"]);
-
           if (userlist.isNotEmpty) {
             final adminUser = userlist.firstWhere((user) => user.userId == widget.adminId);
             userlist.removeWhere((user) => user.userId == widget.adminId);
-
             userlist.insert(0, adminUser);
           }
 

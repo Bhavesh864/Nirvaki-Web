@@ -90,7 +90,6 @@ class InventoryListingScreenState extends ConsumerState<InventoryListingScreen> 
               getDetails(user);
               isUserLoaded = true;
             }
-            print(snapshot.data?.docs.length);
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
             final List<CardDetails> inventoryList = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType == "IN").toList();
             inventoryList.sort((a, b) => b.createdate!.compareTo(a.createdate!));

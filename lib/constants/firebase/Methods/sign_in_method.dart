@@ -1,17 +1,22 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/riverpodstate/user_data.dart';
 import '../../app_constant.dart';
 import '../Hive/hive_methods.dart';
 import '../userModel/user_info.dart' as userinfo;
 
-Future<String?> signinMethod({required email, required password}) async {
+Future<String?> signinMethod({required email, required password, required WidgetRef ref}) async {
   String res = 'Something went wrong';
   try {
     final authResult = await userinfo.auth.signInWithEmailAndPassword(email: email, password: password);
     final uid = authResult.user?.uid;
     UserHiveMethods.addData(key: "token", data: uid);
     final userinfo.User? user = await userinfo.User.getUser(uid!);
-    UserHiveMethods.addData(key: "brokerId", data: user?.brokerId);
-    print("+++++++++++++++++++++++++${UserHiveMethods.getdata("brokerId")}");
+    // UserHiveMethods.addData(key: "brokerId", data: user?.brokerId);
+    if (user != null) {
+      ref.read(userDataProvider.notifier).storeUserData(user);
+    }
+    // print("+++++++++++++++++++++++++${UserHiveMethods.getdata("brokerId")}");
     AppConst.setAccessToken(uid);
     res = "success";
     return res;

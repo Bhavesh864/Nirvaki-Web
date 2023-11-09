@@ -33,7 +33,7 @@ class LoginScreenState extends ConsumerState<LoginScreen> {
       setState(() {
         isloading = true;
       });
-      signinMethod(email: emailcontroller.text.trim(), password: passwordcontroller.text.trim()).then((value) => {
+      signinMethod(email: emailcontroller.text.trim(), password: passwordcontroller.text.trim(), ref: ref).then((value) => {
             if (value == 'success')
               {
                 // if (auth.currentUser?.emailVerified == true)
