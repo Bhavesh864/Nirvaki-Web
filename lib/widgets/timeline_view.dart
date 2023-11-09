@@ -58,7 +58,7 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
 
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 1)).then((value) => {getdataFromLocalStorage()});
+    Future.delayed(const Duration(seconds: 2)).then((value) => {getdataFromLocalStorage()});
     super.initState();
     setactivity();
   }

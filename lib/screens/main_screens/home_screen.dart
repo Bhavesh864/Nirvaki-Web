@@ -127,7 +127,6 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               isUserLoaded = true;
             }
             print(snapshot.data?.docs.length);
-
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
             final List<CardDetails> todoItems = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
             int compareDueDates(CardDetails a, CardDetails b) {
