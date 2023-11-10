@@ -67,9 +67,14 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
     });
   }
 
-  Future<void> selectImage() async {
+  Future<void> selectImage(context) async {
     List<XFile>? pickedImages = await ImagePicker().pickMultiImage(imageQuality: 60);
     List list = [];
+    var newLength = pickedImages.length + selectedImagesUrlList.length;
+    if (newLength > 10) {
+      customSnackBar(context: context, text: 'Cannot add more than 10 Images');
+      return;
+    }
     if (pickedImages.isNotEmpty) {
       for (var i = 0; i < pickedImages.length; i++) {
         var webUrl = await pickedImages[i].readAsBytes();
@@ -358,7 +363,7 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
                         child: GestureDetector(
                           onLongPress: () {},
                           onTap: () {
-                            selectImage();
+                            selectImage(context);
                           },
                           child: Column(
                             children: [
