@@ -4,66 +4,21 @@
     <facet type="kotlin-language" name="Kotlin">
       <configuration version="5" platform="JVM 1.8" allPlatforms="JVM [1.8]" useProjectSettings="false">
         <additionalVisibleModuleNames>:network_info_plus:main</additionalVisibleModuleNames>
-        <compilerSettings>
-          <option name="additionalArguments" value="-Xallow-no-source-files" />
-        </compilerSettings>
+        <compilerSettings />
         <compilerArguments>
           <flagArguments>
+            <flagArg name="allowNoSourceFiles" arg="true" />
             <flagArg name="noReflect" arg="true" />
             <flagArg name="noStdlib" arg="true" />
           </flagArguments>
           <stringArguments>
-            <stringArg name="classpath">
-              <args>
-                <arg>$MODULE_DIR$/../../../../build/network_info_plus/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/bb3149bffa363e8a20b3c202c6d96631/transformed/jetified-flutter_embedding_debug-1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.lifecycle/lifecycle-common-java8/2.2.0/cd3478503da69b1a7e0319bd2d1389943db9b364/lifecycle-common-java8-2.2.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/26c60a27ff568f0954bd9d5e950547ba/transformed/fragment-1.1.0-api.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/abde6782cc91cc3ab19613bbe8d6dcd4/transformed/viewpager-1.0.0-api.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/b957144c32e21a6850ff7b08f6c1e0f4/transformed/loader-1.0.0-api.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/d6278bf37e713a47b1d0e243841d9123/transformed/jetified-activity-1.0.0-api.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/972cb08d3b1af748d34e63c003d917c9/transformed/customview-1.0.0-api.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/e0a8859f5fdc193f2099c64f497fe609/transformed/core-1.6.0-api.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/54f544dde360b9f45dc2da9cf7737b67/transformed/lifecycle-runtime-2.2.0-api.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/12aaa18f381abd7d38651134b1a3780b/transformed/jetified-savedstate-1.0.0-api.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/2cbbdb8b1f71452035f46fed3c404a0e/transformed/lifecycle-livedata-2.0.0-api.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/6722b2093f6e14e66c6446c5850727df/transformed/lifecycle-livedata-core-2.0.0-api.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.lifecycle/lifecycle-common/2.2.0/4ef09a745007778eef83b92f8f23987a8ea59496/lifecycle-common-2.2.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/b81ee96aa04812fa1fae9ad823555434/transformed/core-runtime-2.0.0-api.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.arch.core/core-common/2.1.0/b3152fc64428c9354344bd89848ecddc09b6f07e/core-common-2.1.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/9ad65bc7a07f3bd348bd19c23c7db57b/transformed/versionedparcelable-1.1.1-api.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.collection/collection/1.1.0/1f27220b47669781457de0d600849a5de0e89909/collection-1.1.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/a17cd129aad26665c91ae35d31739b6c/transformed/lifecycle-viewmodel-2.1.0-api.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.annotation/annotation/1.2.0/57136ff68ee784c6e19db34ed4a175338fadfde1/annotation-1.2.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/94e4572379772d8b8c81b791f50be659/transformed/jetified-annotation-experimental-1.1.0-api.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/4fb8ea9873ca0afaad2dfac134401770/transformed/jetified-tracing-1.0.0-api.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/3b5f5f2f0947cc1aaef00454fd6a196e/transformed/jetified-window-java-1.0.0-beta04-api.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/405fb60cab83ac410028c9d2bc576ad8/transformed/jetified-window-1.0.0-beta04-api.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/ca3a015e02612b12c9847b27ce44b90a/transformed/jetified-kotlinx-coroutines-android-1.5.2.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/06a373f167ab55fbeaed75f30c5966a0/transformed/jetified-kotlinx-coroutines-core-jvm-1.5.2.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/21c372c7e9f62e7072a5e7290dbab05b/transformed/jetified-kotlin-stdlib-jdk8-1.5.30.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/da736de3468f5ad4800f002b79335e79/transformed/jetified-kotlin-stdlib-jdk7-1.5.30.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/5a6d5bbdd0c3bd1fc3e8598f42e4a1dc/transformed/jetified-kotlin-stdlib-1.7.22.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/7220dbbcc39d5e257314d47511a03ff3/transformed/jetified-kotlin-stdlib-common-1.7.22.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/transforms-3/67909df5deb44aa31ec15bcd19c23d2e/transformed/jetified-annotations-13.0.jar</arg>
-                <arg>$USER_HOME$/Library/Android/sdk/platforms/android-33/android.jar</arg>
-                <arg>$USER_HOME$/Library/Android/sdk/build-tools/30.0.3/core-lambda-stubs.jar</arg>
-              </args>
-            </stringArg>
             <stringArg name="destination" arg="$MODULE_DIR$/../../../../build/network_info_plus/tmp/kotlin-classes/debugUnitTest" />
             <stringArg name="jvmTarget" arg="1.8" />
-            <stringArg name="moduleName" arg="network_info_plus_debug" />
+            <stringArg name="moduleName" arg="network_info_plus_debugUnitTest" />
             <stringArg name="apiVersion" arg="1.7" />
-            <stringArg name="languageVersion" arg="1.7" />
+            <stringArg name="languageVersion" arg="1.9" />
           </stringArguments>
           <arrayArguments>
-            <arrayArg name="friendPaths">
-              <args>
-                <arg>$MODULE_DIR$/../../../../build/network_info_plus/tmp/kotlin-classes/debug</arg>
-                <arg>$MODULE_DIR$/../../../../build/network_info_plus/intermediates/javac/debug/classes</arg>
-                <arg>$MODULE_DIR$/../../../../build/network_info_plus/intermediates/compile_library_classes_jar/debug/classes.jar</arg>
-              </args>
-            </arrayArg>
             <arrayArg name="pluginClasspaths" />
             <arrayArg name="pluginOptions" />
           </arrayArguments>

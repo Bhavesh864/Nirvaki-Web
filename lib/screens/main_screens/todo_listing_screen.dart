@@ -48,15 +48,12 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   @override
   void initState() {
     super.initState();
-
-    if (!kIsWeb) {
-      final token = UserHiveMethods.getdata("token");
-      if (token != null) {
-        AppConst.setAccessToken(token);
-        getUserData(token);
-      }
-      ref.read(chatControllerProvider).setUserState(true);
+    final token = UserHiveMethods.getdata("token");
+    if (token != null) {
+      AppConst.setAccessToken(token);
+      getUserData(token);
     }
+    ref.read(chatControllerProvider).setUserState(true);
     setCardDetails();
   }
 
@@ -74,7 +71,12 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
   }
 
   void setCardDetails() {
-    cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots(includeMetadataChanges: true);
+    final brokerid = UserHiveMethods.getdata("brokerId");
+    if (brokerid != null) {
+      cardDetails = FirebaseFirestore.instance.collection('cardDetails').where("brokerid", isEqualTo: brokerid).snapshots(includeMetadataChanges: true);
+    } else {
+      cardDetails = FirebaseFirestore.instance.collection('cardDetails').orderBy("createdate", descending: true).snapshots(includeMetadataChanges: true);
+    }
   }
 
   void getDetails(User currentuser) async {
@@ -93,7 +95,6 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
     final user = ref.watch(userDataProvider);
     final size = MediaQuery.of(context).size;
     final showClosed = ref.watch(showClosedTodoItemsProvider);
-
     return Container(
       color: Colors.white,
       child: StreamBuilder(
@@ -110,7 +111,6 @@ class TodoListingScreenState extends ConsumerState<TodoListingScreen> {
                 getDetails(user);
                 isUserLoaded = true;
               }
-              print(snapshot.data?.docs.length);
               final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
               final List<CardDetails> todoItemsList =
                   filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();

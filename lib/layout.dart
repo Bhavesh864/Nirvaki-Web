@@ -10,6 +10,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:yes_broker/chat/controller/chat_controller.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
+import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/pages/Auth/login/login_screen.dart';
 import 'package:yes_broker/pages/largescreen_dashboard.dart';
 import 'package:yes_broker/pages/smallscreen_dashboard.dart';
@@ -167,6 +168,8 @@ class _LayoutViewState extends ConsumerState<LayoutView> with WidgetsBindingObse
 
   Widget _buildDesktopLayout(bool isAuthenticated) {
     // final brokerid = ref.watch(userDataProvider)?.brokerId;
+    // print(brokerid);
+    // print(isAuthenticated);
     // final id = UserHiveMethods.addData(key: "brokerId", data: brokerid);
     if (isAuthenticated) {
       Navigator.pop(context);

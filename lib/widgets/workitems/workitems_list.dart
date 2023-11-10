@@ -16,6 +16,7 @@ class WorkItemsList extends ConsumerStatefulWidget {
   final bool headerShow;
   final String title;
   final List<CardDetails> getCardDetails;
+  final ScrollController? scrollercontroller;
 
   const WorkItemsList({
     super.key,
@@ -23,6 +24,7 @@ class WorkItemsList extends ConsumerStatefulWidget {
     required this.title,
     required this.getCardDetails,
     this.isScrollable = true,
+    this.scrollercontroller,
   });
 
   @override
@@ -230,6 +232,7 @@ class WorkItemsListState extends ConsumerState<WorkItemsList> {
               child: ScrollConfiguration(
                 behavior: const ScrollBehavior().copyWith(scrollbars: false),
                 child: ListView.builder(
+                  controller: widget.scrollercontroller,
                   itemCount: widget.getCardDetails.length,
                   shrinkWrap: true,
                   addRepaintBoundaries: false,

@@ -28,7 +28,7 @@ apply plugin: 'com.google.firebase.firebase-perf'
 // END: FlutterFire Configuration
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-apply plugin: 'com.google.firebase.crashlytics'
+//apply plugin: 'com.google.firebase.crashlytics'
 android {
     namespace "com.example.yes_broker"
     compileSdkVersion 33
@@ -46,6 +46,14 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+         dev {
+        java.srcDirs += 'src/dev/java'
+        res.srcDirs += 'src/dev/res'
+       }
+         prod {
+        java.srcDirs += 'src/prod/java'
+        res.srcDirs += 'src/prod/res'
+       }
     }
 
     defaultConfig {
@@ -85,6 +93,7 @@ android {
       productFlavors {
         dev {
             dimension "nirvaki"
+            resValue "string", "google_services_file", "dev/google-services.json"
             applicationIdSuffix ".dev"
             resValue "string", "app_name", "Nirvaki-dev"
             versionNameSuffix ".dev"
@@ -92,12 +101,14 @@ android {
         }
         prod {
             dimension "nirvaki"
+            resValue "string", "google_services_file", "prod/google-services.json"
             applicationIdSuffix ".prod"
             resValue "string", "app_name", "Nirvaki"
             versionNameSuffix ".prod"
             flutter.target "lib/main_prod.dart"
         }
     }
+    
 }
 
 flutter {

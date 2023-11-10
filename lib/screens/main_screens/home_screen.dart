@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
+import 'package:yes_broker/constants/user_role.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/customs/loader.dart';
@@ -37,7 +38,12 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class HomeScreenState extends ConsumerState<HomeScreen> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  DocumentSnapshot? lastDocument;
+  List<CardDetails> carddetailsssss = [];
+  bool isMoreData = true;
   late Stream<QuerySnapshot<Map<String, dynamic>>> cardDetails;
+  final scrollercontroller = ScrollController();
   bool isUserLoaded = false;
   List<User> userList = [];
   int currentPage = 1; // Add this variable for tracking the current page
@@ -58,17 +64,99 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
     if (kIsWeb) {
       ref.read(chatControllerProvider).setUserState(true);
     }
+    // paginateData();
+
+    // scrollercontroller.addListener(() {
+    //   if (scrollercontroller.position.pixels == scrollercontroller.position.maxScrollExtent) {
+    //     paginateData();
+    //   }
+    // });
     setCardDetails();
   }
 
+  bool loading = false;
+  late Stream<QuerySnapshot<Map<String, dynamic>>> querySnapshot;
+  // void paginateData() async {
+  //   if (isMoreData) {
+  //     setState(() {
+  //       loading = true;
+  //     });
+  //     if (lastDocument == null) {
+  //       querySnapshot = FirebaseFirestore.instance.collection('cardDetails').limit(15).snapshots();
+  //     } else {
+  //       querySnapshot = FirebaseFirestore.instance.collection('cardDetails').limit(15).startAfterDocument(lastDocument!).snapshots();
+  //     }
+  //     await querySnapshot.forEach((element) {
+  //       lastDocument = element.docs.last;
+  //     });
+
+  //     carddetailsssss.addAll(document.docs.map((e) => CardDetails.fromSnapshot(e)).toList());
+  //     // lastDocument = querySnapshot.last;
+  //     // carddetailsssss.addAll(querySnapshot.docs.map((e) => CardDetails.fromSnapshot(e)).toList());
+  //     // loading = false;
+  //     // print("carddetailsssss.length  ${carddetailsssss.length}");
+  //     // setState(() {});
+  //     // if (querySnapshot.docs.length < 15) {
+  //     //   isMoreData = false;
+  //     // } else {
+  //     //   print("no more data");
+  //     // }
+  //   }
+  //   if (scrollercontroller.position.pixels == scrollercontroller.position.maxScrollExtent) {
+  //     print("call");
+  //   } else {
+  //     print("dontcall");
+  //   }
+  //   // setCardDetails();
+  // }
+
+  // void paginateData() async {
+  //   if (isMoreData && !loading) {
+  //     setState(() {
+  //       loading = true;
+  //     });
+
+  //     Query query;
+
+  //     if (lastDocument == null) {
+  //       query = FirebaseFirestore.instance.collection('cardDetails').limit(15);
+  //     } else {
+  //       query = FirebaseFirestore.instance.collection('cardDetails').limit(15).startAfterDocument(lastDocument!);
+  //     }
+
+  //     try {
+  //       QuerySnapshot querySnapshot = await query.get();
+  //       if (querySnapshot.docs.isNotEmpty) {
+  //         lastDocument = querySnapshot.docs.last;
+  //         carddetailsssss.addAll(querySnapshot.docs.map((e) => CardDetails.fromSnapshot(e)).toList());
+  //       } else {
+  //         isMoreData = false; // No more data to load
+  //       }
+  //     } catch (e) {
+  //       print("Error loading data: $e");
+  //     } finally {
+  //       setState(() {
+  //         loading = false;
+  //       });
+  //     }
+  //   }
+  // }
+
   void setCardDetails() async {
-    final brokerid = ref.read(userDataProvider)?.brokerId;
-    print(brokerid);
-    cardDetails = FirebaseFirestore.instance
-        .collection('cardDetails')
-        // .where("brokerid", isEqualTo: brokerid)
-        .where("Status", isNotEqualTo: "Closed")
-        .snapshots(includeMetadataChanges: true);
+    final brokerid = UserHiveMethods.getdata("brokerId");
+    if (brokerid != null) {
+      cardDetails = FirebaseFirestore.instance
+          .collection('cardDetails')
+          .where("brokerid", isEqualTo: brokerid)
+          // .where("Status", isNotEqualTo: "Closed")
+          .snapshots(includeMetadataChanges: true);
+    } else {
+      cardDetails = FirebaseFirestore.instance
+          .collection('cardDetails')
+          // .where("brokerid", isEqualTo: brokerid)
+          .orderBy("createdate", descending: true)
+          .snapshots(includeMetadataChanges: true);
+    }
   }
 
   getUserData(token) async {
@@ -126,7 +214,6 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               getDetails(user);
               isUserLoaded = true;
             }
-            print(snapshot.data?.docs.length);
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
             final List<CardDetails> todoItems = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
             int compareDueDates(CardDetails a, CardDetails b) {
@@ -156,7 +243,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                               padding: const EdgeInsets.only(right: 8.0),
                               child: WorkItemsList(
                                 title: "To do",
-                                getCardDetails: todoItems,
+                                getCardDetails: todoItems.where((item) => item.status != 'Closed').toList(),
+                                scrollercontroller: scrollercontroller,
                               ),
                             ),
                           )
@@ -169,6 +257,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                           child: WorkItemsList(
                             title: "Work Items",
                             getCardDetails: workItems,
+                            scrollercontroller: scrollercontroller,
                           ),
                         ),
                       )

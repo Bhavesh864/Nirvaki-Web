@@ -42,9 +42,6 @@ Widget buildInventoryQuestions(
     bool isChecked,
     Function(bool) isCheckedUpdate,
     WidgetRef ref) {
-  if (isPlotSelected) {
-    selectedValues.removeWhere((element) => element["id"] == 14);
-  }
   if (question.questionOptionType == 'chip') {
     return Column(
       children: [
@@ -469,8 +466,7 @@ Widget buildInventoryQuestions(
             question.questionTitle == 'Rent' ||
             question.questionTitle == 'Listing Price' ||
             question.questionTitle.contains('Floor Number') ||
-            question.questionTitle.contains('Property Area') ||
-            question.questionId == 22;
+            question.questionTitle.contains('Property Area');
         final isvalidationtrue = question.questionTitle.contains('First') ||
             question.questionTitle.contains('Property Area') ||
             question.questionTitle.contains('Mobile') ||
@@ -478,7 +474,6 @@ Widget buildInventoryQuestions(
             question.questionTitle == 'Listing Price';
         final isEmail = question.questionTitle.contains("Email");
         final video = question.questionTitle.contains("Video");
-
         int maxLength = 30;
         switch (question.questionTitle) {
           case "Email":
@@ -493,7 +488,9 @@ Widget buildInventoryQuestions(
           default:
             maxLength = 30;
         }
-
+        if (question.questionId == 22) {
+          maxLength = 2;
+        }
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,

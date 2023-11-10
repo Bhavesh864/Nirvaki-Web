@@ -57,6 +57,7 @@ class ContactInformation extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Icon(
                   Icons.apartment_outlined,
@@ -65,11 +66,14 @@ class ContactInformation extends StatelessWidget {
                 const SizedBox(
                   width: 5,
                 ),
-                CustomText(
-                  title: customerinfo.companyname,
-                  size: 12,
-                  fontWeight: FontWeight.w400,
-                  color: const Color(0xFFA8A8A8),
+                Expanded(
+                  child: CustomText(
+                    title: customerinfo.companyname,
+                    size: 12,
+                    softWrap: true,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xFFA8A8A8),
+                  ),
                 ),
               ],
             ),

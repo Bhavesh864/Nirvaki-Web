@@ -178,11 +178,7 @@ class _CustomDropdownFormFieldState<T> extends State<CustomDropdownFormField<T>>
               ),
               if (widget.isMandatory)
                 const TextSpan(
-                  text: ' ',
-                ),
-              if (widget.isMandatory)
-                const TextSpan(
-                  text: '*',
+                  text: ' *',
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,

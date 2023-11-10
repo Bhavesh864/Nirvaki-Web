@@ -9,13 +9,14 @@ Future<String?> signinMethod({required email, required password, required Widget
   String res = 'Something went wrong';
   try {
     final authResult = await userinfo.auth.signInWithEmailAndPassword(email: email, password: password);
+
     final uid = authResult.user?.uid;
     UserHiveMethods.addData(key: "token", data: uid);
     final userinfo.User? user = await userinfo.User.getUser(uid!);
-    // UserHiveMethods.addData(key: "brokerId", data: user?.brokerId);
-    if (user != null) {
-      ref.read(userDataProvider.notifier).storeUserData(user);
-    }
+    UserHiveMethods.addData(key: "brokerId", data: user?.brokerId);
+    // if (user != null) {
+    //   ref.read(userDataProvider.notifier).storeUserData(user);
+    // }
     // print("+++++++++++++++++++++++++${UserHiveMethods.getdata("brokerId")}");
     AppConst.setAccessToken(uid);
     res = "success";
