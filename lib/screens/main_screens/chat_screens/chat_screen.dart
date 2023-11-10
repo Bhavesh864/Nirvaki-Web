@@ -16,6 +16,7 @@ import 'package:yes_broker/widgets/chat/chat_input.dart';
 import 'package:yes_broker/widgets/chat/chat_screen_header.dart';
 import 'package:yes_broker/widgets/chat/message_box.dart';
 
+import '../../../chat/models/message.dart';
 import '../../../constants/methods/date_time_methods.dart';
 import '../../../constants/utils/colors.dart';
 import '../../../riverpodstate/chat/message_selection_state.dart';
@@ -64,7 +65,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     return WillPopScope(
       onWillPop: () async {
         ref.read(selectedMessageProvider.notifier).setToEmpty();
-        return true; // Allow navigation back
+        return true;
       },
       child: Scaffold(
         body: SafeArea(
@@ -89,7 +90,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               }
 
               if (snapshot.hasData) {
-                if (snapshot.data!.length > 3) {
+                List<ChatMessage> messagesList = snapshot.data!;
+
+                if (messagesList.length > 3) {
                   SchedulerBinding.instance.addPostFrameCallback((_) {
                     messageController.animateTo(
                       messageController.position.maxScrollExtent,
@@ -98,6 +101,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     );
                   });
                 }
+
+                if (isGroupChat) {
+                  messagesList = messagesList.where((element) => !element.deleteMsgUserId.contains(AppConst.getAccessToken())).toList();
+                }
+
                 return StatefulBuilder(
                   builder: (context, setstate) {
                     remove(String id) {
@@ -162,7 +170,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                               color: Colors.grey.shade400,
                             ),
                           ],
-                          if (isGroupChat && snapshot.data!.isEmpty)
+                          if (isGroupChat && messagesList.isEmpty)
                             Padding(
                               padding: const EdgeInsets.only(top: 10, bottom: 10),
                               child: Chip(
@@ -188,14 +196,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                               child: ListView.builder(
                                 physics: const ClampingScrollPhysics(),
                                 controller: messageController,
-                                itemCount: snapshot.data!.length + 1,
+                                itemCount: messagesList.length + 1,
                                 itemBuilder: (BuildContext context, int index) {
-                                  if (index == snapshot.data!.length) {
+                                  if (index == messagesList.length) {
                                     return Container(
                                       height: 10,
                                     );
                                   }
-                                  final messageData = snapshot.data![index];
+                                  final messageData = messagesList[index];
                                   final currentMessageId = messageData.messageId;
                                   final isSender = messageData.senderId == AppConst.getAccessToken();
 
@@ -211,7 +219,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                   final bool isFirstMessageOfNewDay = index == 0 ||
                                       !isSameDay(
                                         messageData.timeSent.toDate(),
-                                        snapshot.data![index - 1].timeSent.toDate(),
+                                        messagesList[index - 1].timeSent.toDate(),
                                       );
 
                                   final bool isNewWeek = DateTime.now().difference(messageData.timeSent.toDate()).inDays >= 7;
@@ -256,45 +264,44 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                         ),
                                       ),
                                     ],
-                                    if (isGroupChat && !messageData.deleteMsgUserId.contains(AppConst.getAccessToken()) || !isGroupChat)
-                                      MessageBox(
-                                        currMessageIndex: index,
-                                        isGroupChat: isGroupChat,
-                                        message: messageData.text,
-                                        isSender: isSender,
-                                        data: messageData,
-                                        isSeen: messageData.isSeen,
-                                        messageType: messageData.type,
-                                        selectedMessageList: selectedMessageList,
-                                        selectedMode: selectedMode,
-                                        onLongPress: () {
-                                          setstate(() {
-                                            selectedMode = true;
-                                            selectedMessageList.add(currentMessageId);
-                                            ref.read(selectedMessageProvider.notifier).addMessage(messageData);
-                                          });
-                                        },
-                                        onTap: () {
-                                          // setstate(() {
-                                          if (selectedMessageList.isNotEmpty && selectedMode) {
-                                            if (selectedMessageList.contains(currentMessageId)) {
-                                              // selectedMessageList.remove(currentMessageId);
-                                              remove(currentMessageId);
-                                              if (selectedMessageList.isEmpty) {
-                                                selectedMode = false;
-                                              }
-                                              ref.read(selectedMessageProvider.notifier).removeMessge(messageData);
-                                            } else if (selectedMode) {
-                                              add(currentMessageId);
-                                              ref.read(selectedMessageProvider.notifier).addMessage(messageData);
+                                    MessageBox(
+                                      currMessageIndex: index,
+                                      isGroupChat: isGroupChat,
+                                      message: messageData.text,
+                                      isSender: isSender,
+                                      data: messageData,
+                                      isSeen: messageData.isSeen,
+                                      messageType: messageData.type,
+                                      selectedMessageList: selectedMessageList,
+                                      selectedMode: selectedMode,
+                                      onLongPress: () {
+                                        setstate(() {
+                                          selectedMode = true;
+                                          selectedMessageList.add(currentMessageId);
+                                          ref.read(selectedMessageProvider.notifier).addMessage(messageData);
+                                        });
+                                      },
+                                      onTap: () {
+                                        // setstate(() {
+                                        if (selectedMessageList.isNotEmpty && selectedMode) {
+                                          if (selectedMessageList.contains(currentMessageId)) {
+                                            // selectedMessageList.remove(currentMessageId);
+                                            remove(currentMessageId);
+                                            if (selectedMessageList.isEmpty) {
+                                              selectedMode = false;
                                             }
-                                          } else {
-                                            removeAll();
-                                            ref.read(selectedMessageProvider.notifier).setToEmpty();
+                                            ref.read(selectedMessageProvider.notifier).removeMessge(messageData);
+                                          } else if (selectedMode) {
+                                            add(currentMessageId);
+                                            ref.read(selectedMessageProvider.notifier).addMessage(messageData);
                                           }
-                                          // });
-                                        },
-                                      ),
+                                        } else {
+                                          removeAll();
+                                          ref.read(selectedMessageProvider.notifier).setToEmpty();
+                                        }
+                                        // });
+                                      },
+                                    ),
                                   ]);
                                 },
                               ),

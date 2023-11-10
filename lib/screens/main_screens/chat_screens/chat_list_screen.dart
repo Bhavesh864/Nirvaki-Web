@@ -303,7 +303,7 @@ class TestList extends ConsumerWidget {
                               padding: const EdgeInsets.only(top: 6.0),
                               child: Row(
                                 children: [
-                                  if (isSender && !chatItem.isGroupChat) ...[
+                                  if (isSender && !chatItem.isGroupChat && chatItem.lastMessage.isNotEmpty) ...[
                                     Padding(
                                       padding: const EdgeInsets.only(left: 5),
                                       child: Icon(

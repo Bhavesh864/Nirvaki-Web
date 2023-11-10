@@ -9,7 +9,9 @@ import 'package:yes_broker/chat/enums/message.enums.dart';
 import 'package:yes_broker/chat/models/message.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
+import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/customs/responsive.dart';
+import 'package:yes_broker/widgets/chat/videoplayer.dart';
 
 import '../../Customs/snackbar.dart';
 import '../../constants/methods/date_time_methods.dart';
@@ -51,6 +53,7 @@ class MessageBox extends ConsumerStatefulWidget {
 
 class _MessageBoxState extends ConsumerState<MessageBox> {
   User? userlist;
+  bool isDownloading = false;
 
   Future<void> getUserData(String userIds) async {
     final User? user = await User.getUser(userIds);
@@ -142,6 +145,61 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                                 color: widget.isSeen ? Colors.blue : Colors.white,
                               ),
                             ),
+                          if (widget.data.type == MessageEnum.video) ...[
+                            const Spacer(),
+                            StatefulBuilder(builder: (context, setstate) {
+                              if (isDownloading) {
+                                return const CustomText(
+                                  title: 'Donwloading...',
+                                  color: Colors.white,
+                                );
+                              } else {
+                                return InkWell(
+                                  onTap: () {
+                                    if (!kIsWeb) {
+                                      setstate(() {
+                                        isDownloading = true;
+                                      });
+                                      downloadFile(
+                                          widget.message,
+                                          widget.data.type.type,
+                                          context,
+                                          (value, progress) => {
+                                                if (value)
+                                                  {
+                                                    if (progress == "100%")
+                                                      {
+                                                        customSnackBar(context: context, text: 'Download Completed'),
+                                                        setstate(() {
+                                                          isDownloading = false;
+                                                        }),
+                                                      },
+                                                  }
+                                                else
+                                                  {
+                                                    customSnackBar(context: context, text: 'Download Failed'),
+                                                    setstate(() {
+                                                      isDownloading = false;
+                                                    }),
+                                                  }
+                                              });
+                                    } else {
+                                      // if (kIsWeb) {
+                                      //   AnchorElement anchorElement = AnchorElement(href: url);
+                                      //   anchorElement.download = 'Attachment file';
+                                      //   anchorElement.click();
+                                      // }
+                                    }
+                                  },
+                                  child: const Icon(
+                                    Icons.download,
+                                    color: Colors.white,
+                                    size: 22,
+                                  ),
+                                );
+                              }
+                            }),
+                          ]
                         ],
                       ),
                     ],
@@ -174,6 +232,7 @@ class DisplayMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('message $message =------------');
     return type == MessageEnum.text
         ? Text(
             message,
@@ -181,41 +240,46 @@ class DisplayMessage extends StatelessWidget {
               color: isSender ? Colors.white : Colors.black,
             ),
           )
-        : GestureDetector(
-            onTap: () {
-              if (Responsive.isMobile(context)) {
-                // showEnlargedImage(context, message);
-                if (!isSelectedMode) {
-                  showGeneralDialog(
-                      context: context,
-                      barrierDismissible: true,
-                      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-                      transitionDuration: const Duration(milliseconds: 200),
-                      pageBuilder: (context, animation1, animation2) {
-                        return ImagePreview(url: message, type: type.type);
-                      });
-                } else {
-                  onTap();
-                }
-              } else {
-                onTap();
-              }
-            },
-            child: CachedNetworkImage(
-              fit: BoxFit.cover,
-              height: 300,
-              width: 250,
-              imageUrl: message,
-            ),
-          );
+        : type == MessageEnum.image
+            ? GestureDetector(
+                onTap: () {
+                  if (Responsive.isMobile(context)) {
+                    // showEnlargedImage(context, message);
+                    if (!isSelectedMode) {
+                      showGeneralDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                          transitionDuration: const Duration(milliseconds: 200),
+                          pageBuilder: (context, animation1, animation2) {
+                            return ImagePreview(url: message, type: type.type);
+                          });
+                    } else {
+                      onTap();
+                    }
+                  } else {
+                    onTap();
+                  }
+                },
+                child: CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  height: 300,
+                  width: 250,
+                  imageUrl: message,
+                ),
+              )
+            : type == MessageEnum.video
+                ? VideoPlayerItem(videoUrl: message)
+                : const Text('Unable to load!.');
   }
 }
 
 class ImagePreview extends StatelessWidget {
   final String url;
   final String type;
+  final bool? isDownload;
 
-  const ImagePreview({super.key, required this.url, required this.type});
+  const ImagePreview({super.key, required this.url, required this.type, this.isDownload = true});
 
   @override
   Widget build(BuildContext context) {
@@ -246,31 +310,33 @@ class ImagePreview extends StatelessWidget {
             Navigator.of(context).pop();
           },
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.download,
-              color: Colors.white,
-              size: 22,
-            ),
-            onPressed: () {
-              if (!kIsWeb) {
-                downloadFile(
-                  url,
-                  type,
-                  context,
-                  downloadProgress,
-                );
-              } else {
-                // if (kIsWeb) {
-                //   AnchorElement anchorElement = AnchorElement(href: url);
-                //   anchorElement.download = 'Attachment file';
-                //   anchorElement.click();
-                // }
-              }
-            },
-          ),
-        ],
+        actions: isDownload == true
+            ? <Widget>[
+                IconButton(
+                  icon: const Icon(
+                    Icons.download,
+                    color: Colors.white,
+                    size: 22,
+                  ),
+                  onPressed: () {
+                    if (!kIsWeb) {
+                      downloadFile(
+                        url,
+                        type,
+                        context,
+                        downloadProgress,
+                      );
+                    } else {
+                      // if (kIsWeb) {
+                      //   AnchorElement anchorElement = AnchorElement(href: url);
+                      //   anchorElement.download = 'Attachment file';
+                      //   anchorElement.click();
+                      // }
+                    }
+                  },
+                ),
+              ]
+            : [],
       ),
       body: Container(
         color: Colors.black,

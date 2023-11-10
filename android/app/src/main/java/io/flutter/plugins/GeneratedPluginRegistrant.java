@@ -21,6 +21,11 @@ public final class GeneratedPluginRegistrant {
       Log.e(TAG, "Error registering plugin android_path_provider, com.mix1009.android_path_provider.AndroidPathProviderPlugin", e);
     }
     try {
+      flutterEngine.getPlugins().add(new com.lazyarts.vikram.cached_video_player.CachedVideoPlayerPlugin());
+    } catch(Exception e) {
+      Log.e(TAG, "Error registering plugin cached_video_player, com.lazyarts.vikram.cached_video_player.CachedVideoPlayerPlugin", e);
+    }
+    try {
       flutterEngine.getPlugins().add(new io.flutter.plugins.firebase.firestore.FlutterFirebaseFirestorePlugin());
     } catch(Exception e) {
       Log.e(TAG, "Error registering plugin cloud_firestore, io.flutter.plugins.firebase.firestore.FlutterFirebaseFirestorePlugin", e);

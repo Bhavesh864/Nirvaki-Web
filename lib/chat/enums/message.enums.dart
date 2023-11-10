@@ -3,7 +3,8 @@ enum MessageEnum {
   image('image'),
   audio('audio'),
   video('video'),
-  gif('gif');
+  gif('gif'),
+  file('file');
 
   const MessageEnum(this.type);
   final String type;
@@ -25,6 +26,8 @@ extension ConvertMessage on String {
         return MessageEnum.gif;
       case 'video':
         return MessageEnum.video;
+      case 'file':
+        return MessageEnum.file;
       default:
         return MessageEnum.text;
     }
