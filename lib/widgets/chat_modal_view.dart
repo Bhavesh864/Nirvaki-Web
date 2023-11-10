@@ -12,6 +12,7 @@ import 'package:yes_broker/widgets/chat/group/newchat_newgroup_popup.dart';
 import '../Customs/custom_text.dart';
 import '../Customs/text_utility.dart';
 import '../chat/controller/chat_controller.dart';
+import '../chat/models/message.dart';
 import '../constants/app_constant.dart';
 import '../constants/methods/date_time_methods.dart';
 import '../constants/utils/colors.dart';
@@ -195,13 +196,21 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                         }
 
                         if (snapshot.hasData) {
-                          SchedulerBinding.instance.addPostFrameCallback((_) {
-                            messageController.animateTo(
-                              messageController.position.maxScrollExtent,
-                              duration: const Duration(milliseconds: 50),
-                              curve: Curves.ease,
-                            );
-                          });
+                          List<ChatMessage> messagesList = snapshot.data!;
+
+                          if (messagesList.length > 3) {
+                            SchedulerBinding.instance.addPostFrameCallback((_) {
+                              messageController.animateTo(
+                                messageController.position.maxScrollExtent,
+                                duration: const Duration(milliseconds: 50),
+                                curve: Curves.ease,
+                              );
+                            });
+                          }
+
+                          if (isGroupChat) {
+                            messagesList = messagesList.where((element) => !element.deleteMsgUserId.contains(AppConst.getAccessToken())).toList();
+                          }
 
                           return StatefulBuilder(builder: (context, setstate) {
                             removeAll() {
@@ -223,44 +232,43 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                                   Container(
                                     margin: const EdgeInsets.only(bottom: 5),
                                     child: ChatScreenHeader(
-                                      chatItem: chatItem,
-                                      user: user,
-                                      showProfileScreen: (u) {
-                                        currentScreen = ChatModalScreenType.userProfile;
-                                        user = u;
-                                        setState(() {});
-                                      },
-                                      goToChatList: () {
-                                        currentScreen = ChatModalScreenType.chatList;
-                                        if (selectedMode) {
-                                          removeAll();
-                                        }
-                                        setState(() {});
-                                      },
-                                      goToForwardScreen: () {
-                                        currentScreen = ChatModalScreenType.messageForward;
-                                        setState(() {});
-                                      },
-                                      selectedMessageList: selectedMessageList,
-                                      selectedMode: selectedMode,
-                                      toggleSelectedMode: (bool k) {
-                                        setstate(
-                                          () {
-                                            selectedMode = k;
-                                          },
-                                        );
-                                      },
-                                      removeAllItems: removeAll,
-                                      // removeItem: remove,
-                                      dataList: snapshot.data,
-                                    ),
+                                        chatItem: chatItem,
+                                        user: user,
+                                        showProfileScreen: (u) {
+                                          currentScreen = ChatModalScreenType.userProfile;
+                                          user = u;
+                                          setState(() {});
+                                        },
+                                        goToChatList: () {
+                                          currentScreen = ChatModalScreenType.chatList;
+                                          if (selectedMode) {
+                                            removeAll();
+                                          }
+                                          setState(() {});
+                                        },
+                                        goToForwardScreen: () {
+                                          currentScreen = ChatModalScreenType.messageForward;
+                                          setState(() {});
+                                        },
+                                        selectedMessageList: selectedMessageList,
+                                        selectedMode: selectedMode,
+                                        toggleSelectedMode: (bool k) {
+                                          setstate(
+                                            () {
+                                              selectedMode = k;
+                                            },
+                                          );
+                                        },
+                                        removeAllItems: removeAll,
+                                        // removeItem: remove,
+                                        dataList: messagesList),
                                   ),
                                   Divider(
                                     height: 1,
                                     thickness: 0.5,
                                     color: Colors.grey.shade400,
                                   ),
-                                  if (isGroupChat && snapshot.data!.isEmpty)
+                                  if (isGroupChat && messagesList.isEmpty)
                                     Padding(
                                       padding: const EdgeInsets.only(top: 10, bottom: 10),
                                       child: Chip(
@@ -286,19 +294,19 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                                       child: ListView.builder(
                                         physics: const ClampingScrollPhysics(),
                                         controller: messageController,
-                                        itemCount: snapshot.data!.length + 1,
+                                        itemCount: messagesList.length + 1,
                                         itemBuilder: (BuildContext context, int index) {
-                                          if (index == snapshot.data!.length) {
+                                          if (index == messagesList.length) {
                                             return Container();
                                           }
-                                          final messageData = snapshot.data![index];
+                                          final messageData = messagesList[index];
                                           final currentMessageId = messageData.messageId;
                                           final isSender = messageData.senderId == AppConst.getAccessToken();
 
                                           final bool isFirstMessageOfNewDay = index == 0 ||
                                               !isSameDay(
                                                 messageData.timeSent.toDate(),
-                                                snapshot.data![index - 1].timeSent.toDate(),
+                                                messagesList[index - 1].timeSent.toDate(),
                                               );
 
                                           final bool isNewWeek = DateTime.now().difference(messageData.timeSent.toDate()).inDays >= 7;
@@ -373,22 +381,22 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                                                   });
                                                 },
                                                 onTap: () {
-                                                  // setstate(() {
-                                                  if (selectedMessageList.isNotEmpty && selectedMode) {
-                                                    if (selectedMessageList.contains(currentMessageId)) {
-                                                      selectedMessageList.remove(currentMessageId);
-                                                      if (selectedMessageList.isEmpty) {
-                                                        selectedMode = false;
+                                                  setstate(() {
+                                                    if (selectedMessageList.isNotEmpty && selectedMode) {
+                                                      if (selectedMessageList.contains(currentMessageId)) {
+                                                        selectedMessageList.remove(currentMessageId);
+                                                        if (selectedMessageList.isEmpty) {
+                                                          selectedMode = false;
+                                                        }
+                                                        ref.read(selectedMessageProvider.notifier).removeMessge(messageData);
+                                                      } else if (selectedMode) {
+                                                        selectedMessageList.add(currentMessageId);
+                                                        ref.read(selectedMessageProvider.notifier).addMessage(messageData);
                                                       }
-                                                      ref.read(selectedMessageProvider.notifier).removeMessge(messageData);
-                                                    } else if (selectedMode) {
-                                                      selectedMessageList.add(currentMessageId);
-                                                      ref.read(selectedMessageProvider.notifier).addMessage(messageData);
+                                                    } else {
+                                                      removeAll();
                                                     }
-                                                  } else {
-                                                    removeAll();
-                                                  }
-                                                  // });
+                                                  });
                                                 },
                                               ),
                                             ],

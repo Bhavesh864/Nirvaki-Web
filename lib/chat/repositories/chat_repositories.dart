@@ -386,8 +386,10 @@ class ChatRepository {
         messageId: messageId,
         isGroupChat: isGroupChat,
       );
+
       if (value) {
         final data = await getLastMessage(docId, isGroupChat);
+
         String contactMsg;
         if (data != null) {
           switch (data['type']) {
@@ -465,8 +467,11 @@ class ChatRepository {
               'timeSent',
               descending: true,
             )
+            // .where('deletedUserId', arrayContains: AppConst.getAccessToken())
             .limit(1)
             .get();
+
+        // deletedUserId > currentUserId >
 
         if (querySnapshot.docs.isNotEmpty) {
           final data = querySnapshot.docs.first.data() as Map<String, dynamic>;
@@ -502,7 +507,7 @@ class ChatRepository {
     required User senderUser,
     required bool isGroupChat,
     required String profilePic,
-    MessageEnum? messageType,
+    required MessageEnum? messageType,
   }) async {
     try {
       final Timestamp timestamp = Timestamp.now();

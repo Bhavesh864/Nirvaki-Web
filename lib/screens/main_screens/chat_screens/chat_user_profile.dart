@@ -13,6 +13,7 @@ import 'package:yes_broker/widgets/chat/group/group_user_list.dart';
 import 'package:yes_broker/widgets/chat/group/leave_delete_group_button.dart';
 
 import '../../../constants/firebase/userModel/user_info.dart';
+import '../../../widgets/chat/message_box.dart';
 import 'chat_list_screen.dart';
 import 'create_group_screen.dart';
 
@@ -210,7 +211,19 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
                       GestureDetector(
                         onTap: () {
                           if (Responsive.isMobile(context)) {
-                            showEnlargedImage(context);
+                            // showEnlargedImage(context);
+                            showGeneralDialog(
+                                context: context,
+                                barrierDismissible: true,
+                                barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                                transitionDuration: const Duration(milliseconds: 200),
+                                pageBuilder: (context, animation1, animation2) {
+                                  return ImagePreview(
+                                    url: widget.profilePic,
+                                    type: "image",
+                                    isDownload: false,
+                                  );
+                                });
                           }
                         },
                         child: Container(

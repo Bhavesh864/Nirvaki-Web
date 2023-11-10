@@ -1,8 +1,9 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, use_build_context_synchronously
 import 'dart:io';
 
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:flutter/foundation.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,6 +14,22 @@ import 'package:yes_broker/Customs/responsive.dart';
 import '../../chat/controller/chat_controller.dart';
 import '../../chat/enums/message.enums.dart';
 import '../../chat/pick_methods.dart';
+
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
+
+Future<File> convertPlatformFileToFile(PlatformFile platformFile) async {
+  final fileBytes = platformFile.bytes;
+  final fileName = platformFile.name;
+
+  if (fileBytes != null) {
+    final file = File(fileName);
+    await file.writeAsBytes(fileBytes);
+    return file;
+  }
+
+  throw Exception("Failed to convert PlatformFile to File");
+}
 
 class ChatInput extends ConsumerStatefulWidget {
   final String revceiverId;
@@ -66,6 +83,7 @@ class _ChatInputState extends ConsumerState<ChatInput> {
             messageController.text.trim(),
             widget.revceiverId,
             widget.isGroupChat,
+            messageType: MessageEnum.text,
           );
     }
     messageController.clear();
@@ -163,23 +181,40 @@ class _ChatInputState extends ConsumerState<ChatInput> {
               ),
               InkWell(
                 onTap: () async {
-                  // showModalBottomSheet(
-                  //   backgroundColor: Colors.transparent,
-                  //   context: context,
-                  //   builder: (builder) => bottomSheet(context),
-                  // );
-                  if (kIsWeb) {
-                    XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
-                    if (image != null) {
-                      var f = await image.readAsBytes();
+                  if (!Responsive.isMobile(context)) {
+                    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any, allowMultiple: false);
+                    // final file = await convertPlatformFileToFile(result!.files[0]);
+                    // print(result!.files[0].name.split(''));
 
-                      sendFileMessage(null, MessageEnum.image, f);
-                    }
+                    return;
+
+                    // sendFileMessage(file, MessageEnum.video, null);
+
+                    // XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                    // if (image != null) {
+                    //   var f = await image.readAsBytes();
+
+                    //   sendFileMessage(null, MessageEnum.image, f);
+                    // }
                   } else {
-                    final image = await pickImageFromGallery(context);
-
-                    sendFileMessage(image!, MessageEnum.image, null);
+                    showModalBottomSheet(
+                      backgroundColor: Colors.transparent,
+                      context: context,
+                      builder: (builder) => bottomSheet(context),
+                    );
                   }
+                  // if (kIsWeb) {
+                  //   XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                  //   if (image != null) {
+                  //     var f = await image.readAsBytes();
+
+                  //     sendFileMessage(null, MessageEnum.image, f);
+                  //   }
+                  // } else {
+                  //   final image = await pickImageFromGallery(context);
+
+                  //   sendFileMessage(image!, MessageEnum.image, null);
+                  // }
                 },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5.0),
@@ -218,87 +253,180 @@ class _ChatInputState extends ConsumerState<ChatInput> {
     );
   }
 
-  // Widget bottomSheet(context) {
-  //   return SizedBox(
-  //     height: 180,
-  //     width: MediaQuery.of(context).size.width,
-  //     child: Card(
-  //       margin: const EdgeInsets.all(18.0),
-  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-  //       child: Padding(
-  //         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-  //         child: Column(
-  //           children: [
-  //             Row(
-  //               mainAxisAlignment: MainAxisAlignment.center,
-  //               children: [
-  //                 iconCreation(Icons.insert_drive_file, Colors.indigo, "Document", context),
-  //                 const SizedBox(
-  //                   width: 40,
-  //                 ),
-  //                 iconCreation(Icons.camera_alt, Colors.pink, "Camera", context),
-  //                 const SizedBox(
-  //                   width: 40,
-  //                 ),
-  //                 iconCreation(Icons.insert_photo, Colors.purple, "Gallery", context),
-  //               ],
-  //             ),
-  //             const SizedBox(
-  //               height: 30,
-  //             ),
-  //             // Row(
-  //             //   mainAxisAlignment: MainAxisAlignment.center,
-  //             //   children: [
-  //             //     iconCreation(Icons.headset, Colors.orange, "Audio", context),
-  //             //     const SizedBox(
-  //             //       width: 40,
-  //             //     ),
-  //             //     iconCreation(Icons.location_pin, Colors.teal, "Location", context),
-  //             //     const SizedBox(
-  //             //       width: 40,
-  //             //     ),
-  //             //     iconCreation(Icons.person, Colors.blue, "Contact", context),
-  //             //   ],
-  //             // ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+  Widget bottomSheet(context) {
+    return SizedBox(
+      height: 250,
+      width: MediaQuery.of(context).size.width,
+      child: Card(
+        margin: const EdgeInsets.all(18.0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  iconCreation(Icons.folder, Colors.indigo, "Files", context),
+                  // iconCreation(Icons.insert_drive_file, Colors.indigo, "Document", context),
+                  const SizedBox(
+                      // width: 40,
+                      ),
+                  iconCreation(Icons.insert_photo, Colors.purple, "Gallery", context),
+                  const SizedBox(
+                      // width: 40,
+                      ),
+                  iconCreation(Icons.camera_alt, Colors.pink, "Camera", context),
+                ],
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  // iconCreation(Icons.headset, Colors.orange, "Audio", context),
+                  const SizedBox(
+                    width: 30,
+                  ),
+                  // iconCreation(Icons.location_pin, Colors.teal, "Location", context),
+                  iconCreation(Icons.headset, Colors.orange, "Video", context),
+                  // iconCreation(Icons.person, Colors.blue, "Contact", context),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-  // Widget iconCreation(IconData icons, Color color, String text, BuildContext context) {
-  //   return InkWell(
-  //     onTap: () async {
-  //       if (text == 'Gallery') {
-  //         final image = await pickImageFromGallery(context);
-  //         sendFileMessage(image!, MessageEnum.image);
-  //       }
-  //     },
-  //     child: Column(
-  //       children: [
-  //         CircleAvatar(
-  //           radius: 25,
-  //           backgroundColor: color,
-  //           child: Icon(
-  //             icons,
-  //             // semanticLabel: "Help",
-  //             size: 25,
-  //             color: Colors.white,
-  //           ),
-  //         ),
-  //         const SizedBox(
-  //           height: 5,
-  //         ),
-  //         Text(
-  //           text,
-  //           style: const TextStyle(
-  //             fontSize: 12,
-  //             // fontWeight: FontWeight.w100,
-  //           ),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
+  Widget iconCreation(IconData icons, Color color, String text, BuildContext context) {
+    return InkWell(
+      onTap: () async {
+        Navigator.of(context).pop();
+
+        if (text == 'Gallery') {
+          final File? image = await pickImageFromGaller(context);
+          if (image != null) {
+            sendFileMessage(image, MessageEnum.image, null);
+          }
+        }
+        if (text == 'Video') {
+          final File? image = await pickVideoFromGallery(context);
+          if (image != null) {
+            sendFileMessage(image, MessageEnum.video, null);
+          }
+        }
+        if (text == 'Camera') {
+          XFile? image = await ImagePicker().pickImage(source: ImageSource.camera);
+
+          if (image != null) {
+            sendFileMessage(File(image.path), MessageEnum.image, null);
+          }
+        } else if (text == 'Files') {
+          final file = await pickDocument(context);
+
+          if (file != null) {
+            sendFileMessage(file, MessageEnum.file, null);
+          }
+        }
+      },
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 25,
+            backgroundColor: color,
+            child: Icon(
+              icons,
+              // semanticLabel: "Help",
+              size: 25,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Text(
+            text,
+            style: const TextStyle(
+              fontSize: 12,
+              // fontWeight: FontWeight.w100,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+Future<File?> pickDocument(BuildContext context) async {
+  final FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+  if (result != null) {
+    final PlatformFile platformFile = result.files.single;
+
+    // Check the size of the document
+    if (platformFile.size > 50 * 1024 * 1024) {
+      print('not possible');
+      // 50MB limit
+      // Handle the size limit exceeded
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("File Size Limit Exceeded"),
+            content: const Text("The selected document is too large. Please choose a smaller document."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+      return null;
+    }
+
+    return File(platformFile.path!);
+  }
+
+  return null;
+}
+
+Future<File?> pickImageFromGaller(BuildContext context) async {
+  final imagePicker = ImagePicker();
+  final XFile? image = await imagePicker.pickImage(source: ImageSource.gallery);
+
+  if (image != null) {
+    final File imageFile = File(image.path);
+
+    if (await imageFile.length() > 10 * 1024 * 1024) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("File Size Limit Exceeded"),
+            content: const Text("The selected image is too large. Please choose a smaller image less than 10MB."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+      return null;
+    }
+
+    return imageFile;
+  }
+
+  return null;
 }
