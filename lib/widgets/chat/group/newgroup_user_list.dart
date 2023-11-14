@@ -131,11 +131,15 @@ class GroupAndUsersMergedListToForward extends StatelessWidget {
               ),
               title: Row(
                 children: [
-                  AppText(
-                    text: user.name,
-                    textColor: const Color.fromRGBO(44, 44, 46, 1),
-                    fontWeight: FontWeight.w500,
-                    fontsize: 16,
+                  Expanded(
+                    child: AppText(
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      text: user.name,
+                      textColor: const Color.fromRGBO(44, 44, 46, 1),
+                      fontWeight: FontWeight.w500,
+                      fontsize: 16,
+                    ),
                   ),
                   const SizedBox(
                     width: 10,

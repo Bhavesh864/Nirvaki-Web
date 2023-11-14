@@ -441,7 +441,7 @@ Widget buildInventoryQuestions(
             ),
             LabelTextInputField(
               onChanged: (newvalue) {
-                notify.add({"id": 28, "item": newvalue.trim()});
+                notify.add({"id": 28, "item": removeExtraSpaces(newvalue)});
               },
               inputController: address1controller,
               labelText: "Address1",
@@ -449,7 +449,7 @@ Widget buildInventoryQuestions(
             ),
             LabelTextInputField(
               onChanged: (newvalue) {
-                notify.add({"id": 29, "item": newvalue.trim()});
+                notify.add({"id": 29, "item": removeExtraSpaces(newvalue)});
               },
               inputController: address2controller,
               labelText: "Address2",

@@ -179,7 +179,7 @@ Future<String> submitLeadAndCardDetails(state, bool isEdit, WidgetRef ref) async
   bool isResidential = propertyCategory == "Residential";
   var title = isResidential ? "" : commericialtype;
   String city = listofLocality[0].city.toString();
-
+  print(currentUserdata?.managerid);
   final cards.CardDetails card = cards.CardDetails(
       workitemId: isEdit ? existingLeadId : idForNewLead,
       status: isEdit ? existingCardStatus : "New",

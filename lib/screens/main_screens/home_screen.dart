@@ -38,15 +38,19 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class HomeScreenState extends ConsumerState<HomeScreen> {
-  DocumentSnapshot? lastDocument;
-  List<CardDetails> carddetailsssss = [];
-  bool isMoreData = true;
+  DocumentSnapshot? lastDocumentForWorkItem;
+  DocumentSnapshot? lastDocumentForTodo;
+  List<CardDetails> workItemCards = [];
+  List<CardDetails> todoItemCards = [];
+  bool isMoreDataForWorkItem = true;
+  bool isMoreDataForTodo = true;
   late Stream<QuerySnapshot<Map<String, dynamic>>> cardDetails;
-  final scrollercontroller = ScrollController();
+  final workItemScrollController = ScrollController();
+  final todoScrollController = ScrollController();
   bool isUserLoaded = false;
   List<User> userList = [];
-  int currentPage = 1; // Add this variable for tracking the current page
-  int pageSize = 20;
+  // int currentPage = 1;
+  // int pageSize = 20;
   @override
   void initState() {
     super.initState();
@@ -63,79 +67,142 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
     if (kIsWeb) {
       ref.read(chatControllerProvider).setUserState(true);
     }
-    // paginateData();
-
-    // scrollercontroller.addListener(() {
-    //   if (scrollercontroller.position.pixels == scrollercontroller.position.maxScrollExtent) {
-    //     paginateData();
+    // workItemData();
+    // todoItemData();
+    // workItemScrollController.addListener(() {
+    //   if (workItemScrollController.position.pixels == workItemScrollController.position.maxScrollExtent) {
+    //     workItemData();
     //   }
     // });
+    // todoScrollController.addListener(() {
+    //   if (todoScrollController.position.pixels == todoScrollController.position.maxScrollExtent) {
+    //     todoItemData();
+    //   }
+    // });
+
     setCardDetails();
   }
 
-  bool loading = false;
+  bool workItemLoading = false;
+  bool todoItemLoading = false;
   late Stream<QuerySnapshot<Map<String, dynamic>>> querySnapshot;
-  // void paginateData() async {
-  //   if (isMoreData) {
+
+  // void workItemData() async {
+  //   final brokerid = UserHiveMethods.getdata("brokerId");
+  //   final user = await UserListPreferences.getSingleUser(AppConst.getAccessToken());
+  //   final userList = await UserListPreferences.getUserList();
+
+  //   if (isMoreDataForWorkItem && !workItemLoading) {
   //     setState(() {
-  //       loading = true;
+  //       workItemLoading = true;
   //     });
-  //     if (lastDocument == null) {
-  //       querySnapshot = FirebaseFirestore.instance.collection('cardDetails').limit(15).snapshots();
-  //     } else {
-  //       querySnapshot = FirebaseFirestore.instance.collection('cardDetails').limit(15).startAfterDocument(lastDocument!).snapshots();
-  //     }
-  //     await querySnapshot.forEach((element) {
-  //       lastDocument = element.docs.last;
-  //     });
-
-  //     carddetailsssss.addAll(document.docs.map((e) => CardDetails.fromSnapshot(e)).toList());
-  //     // lastDocument = querySnapshot.last;
-  //     // carddetailsssss.addAll(querySnapshot.docs.map((e) => CardDetails.fromSnapshot(e)).toList());
-  //     // loading = false;
-  //     // print("carddetailsssss.length  ${carddetailsssss.length}");
-  //     // setState(() {});
-  //     // if (querySnapshot.docs.length < 15) {
-  //     //   isMoreData = false;
-  //     // } else {
-  //     //   print("no more data");
-  //     // }
-  //   }
-  //   if (scrollercontroller.position.pixels == scrollercontroller.position.maxScrollExtent) {
-  //     print("call");
-  //   } else {
-  //     print("dontcall");
-  //   }
-  //   // setCardDetails();
-  // }
-
-  // void paginateData() async {
-  //   if (isMoreData && !loading) {
-  //     setState(() {
-  //       loading = true;
-  //     });
-
   //     Query query;
-
-  //     if (lastDocument == null) {
-  //       query = FirebaseFirestore.instance.collection('cardDetails').limit(15);
+  //     if (lastDocumentForWorkItem == null) {
+  //       // if (brokerid != null) {
+  //       if (user?.role == UserRole.manager) {
+  //         // final List<User> users = await User.getAllUsers(user!);
+  //         // final List<User> userRelatedBYmanager = userList.where((element) => element.managerid == user?.userId).toList();
+  //         // fetch data according to manager or employe set assigned to fields to get
+  //         query = FirebaseFirestore.instance
+  //             .collection('cardDetails')
+  //             .where("assignedto", arrayContains: user?.userId)
+  //             .orderBy("createdate", descending: true)
+  //             .where("cardType", whereIn: ["IN", "LD"]).limit(10);
+  //       } else {
+  //         query = FirebaseFirestore.instance
+  //             .collection('cardDetails')
+  //             .where("brokerid", isEqualTo: brokerid)
+  //             .orderBy("createdate", descending: true)
+  //             .where("cardType", whereIn: ["IN", "LD"]).limit(10);
+  //       }
+  //       // } else {
+  //       //   query = FirebaseFirestore.instance.collection('cardDetails').where("cardType", whereIn: ["IN", "LD"]).orderBy("createdate", descending: true).limit(10);
+  //       // }
   //     } else {
-  //       query = FirebaseFirestore.instance.collection('cardDetails').limit(15).startAfterDocument(lastDocument!);
+  //       if (user?.role == UserRole.manager) {
+  //         query = FirebaseFirestore.instance
+  //             .collection('cardDetails')
+  //             .where("assignedto", arrayContains: user?.userId)
+  //             .orderBy("createdate", descending: true)
+  //             .where("cardType", whereIn: ["IN", "LD"])
+  //             .limit(10)
+  //             .startAfterDocument(lastDocumentForWorkItem!);
+  //       } else {
+  //         query = FirebaseFirestore.instance
+  //             .collection('cardDetails')
+  //             .where("brokerid", isEqualTo: brokerid)
+  //             .orderBy("createdate", descending: true)
+  //             .where("cardType", whereIn: ["IN", "LD"])
+  //             .limit(10)
+  //             .startAfterDocument(lastDocumentForWorkItem!);
+  //       }
   //     }
-
   //     try {
   //       QuerySnapshot querySnapshot = await query.get();
   //       if (querySnapshot.docs.isNotEmpty) {
-  //         lastDocument = querySnapshot.docs.last;
-  //         carddetailsssss.addAll(querySnapshot.docs.map((e) => CardDetails.fromSnapshot(e)).toList());
+  //         lastDocumentForWorkItem = querySnapshot.docs.last;
+  //         // print("querySnapshot.docs.length======>${querySnapshot.docs.length}");
+  //         // if (user != null) {
+  //         // final filterItem = filtercards(snapshot: querySnapshot, ref: ref, userList: userList, currentUser: user);
+  //         workItemCards.addAll(querySnapshot.docs.map((e) => CardDetails.fromSnapshot(e)).toList());
+  //         // }
   //       } else {
-  //         isMoreData = false; // No more data to load
+  //         isMoreDataForWorkItem = false;
   //       }
   //     } catch (e) {
-  //       print("Error loading data: $e");
+  //       print("Error workItemLoading data: $e");
   //     } finally {
   //       setState(() {
-  //         loading = false;
+  //         workItemLoading = false;
+  //       });
+  //     }
+  //   }
+  // }
+
+  // void todoItemData() async {
+  //   final brokerid = UserHiveMethods.getdata("brokerId");
+  //   final user = await UserListPreferences.getSingleUser(AppConst.getAccessToken());
+  //   if (isMoreDataForTodo && !todoItemLoading) {
+  //     setState(() {
+  //       todoItemLoading = true;
+  //     });
+  //     Query query;
+  //     if (lastDocumentForTodo == null) {
+  //       // if (brokerid != null) {
+  //       query = FirebaseFirestore.instance
+  //           .collection('cardDetails')
+  //           .where("brokerid", isEqualTo: brokerid)
+  //           .orderBy("createdate", descending: true)
+  //           .where("cardType", whereIn: ["Task", "Follow Up", "Reminder"]).limit(10);
+  //       // } else {
+  //       //   query = FirebaseFirestore.instance.collection('cardDetails').where("cardType", whereIn: ["IN", "LD"]).orderBy("createdate", descending: true).limit(10);
+  //       // }
+  //     } else {
+  //       query = FirebaseFirestore.instance
+  //           .collection('cardDetails')
+  //           .where("brokerid", isEqualTo: brokerid)
+  //           .orderBy("createdate", descending: true)
+  //           .where("cardType", whereIn: ["Task", "Follow Up", "Reminder"])
+  //           .limit(10)
+  //           .startAfterDocument(lastDocumentForTodo!);
+  //     }
+  //     try {
+  //       QuerySnapshot querySnapshot = await query.get();
+  //       if (querySnapshot.docs.isNotEmpty) {
+  //         lastDocumentForTodo = querySnapshot.docs.last;
+  //         // print(querySnapshot.docs.length);
+  //         if (user != null) {
+  //           // final filterItem = filtercards(snapshot: querySnapshot, ref: ref, userList: userList, currentUser: user);
+  //           todoItemCards.addAll(querySnapshot.docs.map((e) => CardDetails.fromSnapshot(e)).toList());
+  //         }
+  //       } else {
+  //         isMoreDataForTodo = false;
+  //       }
+  //     } catch (e) {
+  //       print("Error TodoItemLoading data: $e");
+  //     } finally {
+  //       setState(() {
+  //         todoItemLoading = false;
   //       });
   //     }
   //   }
@@ -195,9 +262,211 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   @override
+  void dispose() {
+    workItemScrollController.dispose();
+    todoScrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // print(workItemCards.length);
     final user = ref.watch(userDataProvider);
     Size size = MediaQuery.of(context).size;
+    // return ListView.builder(
+    //   itemCount: workItemCards.length,
+    //   controller: scrollercontroller,
+    //   itemBuilder: (context, index) {
+    //     return Text(workItemCards[index].cardTitle!);
+    //   },
+    // );
+    // return Scaffold(
+    //   body: Container(
+    //     margin: const EdgeInsets.only(top: 10, left: 8),
+    //     child: Row(
+    //       children: [
+    //         // if (isDataEmpty) ...[
+    //         //   Expanded(
+    //         //     flex: size.width > 1340 ? 5 : 6,
+    //         //     child: const EmptyWorkItemList(),
+    //         //   ),
+    //         // ] else ...[
+    //         size.width > 1200
+    //             ? Expanded(
+    //                 flex: size.width > 1340 ? 3 : 5,
+    //                 child: Padding(
+    //                   padding: const EdgeInsets.only(right: 8.0),
+    //                   child: WorkItemsList(
+    //                     title: "To do",
+    //                     getCardDetails: todoItemCards.where((item) => item.status != 'Closed').toList(),
+    //                     scrollercontroller: todoScrollController,
+    //                     loading: todoItemLoading,
+    //                   ),
+    //                 ),
+    //               )
+    //             : Container(),
+    //         if (!Responsive.isMobile(context))
+    //           Expanded(
+    //             flex: size.width > 1340 ? 3 : 5,
+    //             child: Padding(
+    //               padding: const EdgeInsets.only(right: 8.0),
+    //               child: WorkItemsList(
+    //                 title: "Work Items",
+    //                 getCardDetails: workItemCards,
+    //                 scrollercontroller: workItemScrollController,
+    //                 loading: workItemLoading,
+    //               ),
+    //             ),
+    //           ),
+    //         // ],
+    //         // size.width >= 850
+    //         //     ?
+    //         Expanded(
+    //           flex: size.width > 1340 ? 4 : 6,
+    //           child: Padding(
+    //             padding: const EdgeInsets.only(right: 6.0),
+    //             child: Column(
+    //               crossAxisAlignment: CrossAxisAlignment.start,
+    //               children: [
+    //                 if (Responsive.isMobile(context))
+    //                   Container(
+    //                       margin: const EdgeInsets.only(left: 10, bottom: 6),
+    //                       color: Colors.white,
+    //                       child: AppText(
+    //                         letterspacing: 0.4,
+    //                         text: "Welcome, ${capitalizeFirstLetter(user!.userfirstname)}",
+    //                         fontWeight: FontWeight.w600,
+    //                         fontsize: 16,
+    //                       )),
+    //                 Expanded(
+    //                   flex: Responsive.isMobile(context) ? 0 : 3,
+    //                   child: const CustomCalendarView(),
+    //                 ),
+    //                 const SizedBox(
+    //                   height: 10,
+    //                 ),
+    //                 Expanded(
+    //                   flex: 5,
+    //                   child: Container(
+    //                     padding: const EdgeInsets.only(bottom: 8),
+    //                     decoration: BoxDecoration(
+    //                       color: AppColor.secondary,
+    //                       borderRadius: BorderRadius.circular(20),
+    //                     ),
+    //                     child: Column(
+    //                       crossAxisAlignment: CrossAxisAlignment.start,
+    //                       children: [
+    //                         const Padding(
+    //                           padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
+    //                           child: CustomText(
+    //                             title: 'Timeline',
+    //                             fontWeight: FontWeight.w600,
+    //                             size: 15,
+    //                           ),
+    //                         ),
+    //                         Expanded(
+    //                           child: Container(
+    //                             margin: const EdgeInsets.symmetric(horizontal: 10),
+    //                             child: CustomTimeLineView(
+    //                               itemIds: workItemCards.map((card) => card.workitemId).toList(),
+    //                               fromHome: true,
+    //                             ),
+    //                           ),
+    //                         ),
+    //                       ],
+    //                     ),
+    //                   ),
+    //                 ),
+    //               ],
+    //             ),
+    //           ),
+    //         ),
+    //         // : const SizedBox.shrink(),
+    //       ],
+    //     ),
+    //   ),
+    //   floatingActionButton: !AppConst.getPublicView()
+    //       ? Column(
+    //           mainAxisAlignment: MainAxisAlignment.end,
+    //           children: [
+    //             const CustomSpeedDialButton(),
+    //             const SizedBox(
+    //               height: 10,
+    //             ),
+    //             StreamBuilder(
+    //               stream: mergeChatContactsAndGroups(ref),
+    //               builder: (context, snapshot) {
+    //                 if (snapshot.hasData) {
+    //                   final chatItems = snapshot.data!;
+
+    //                   final unseenChatItems = chatItems.where((chatItem) {
+    //                     final isSender = chatItem.lastMessageSenderId == AppConst.getAccessToken();
+    //                     return !isSender && !chatItem.lastMessageIsSeen;
+    //                   }).toList();
+
+    //                   final badgeCount = unseenChatItems.length;
+
+    //                   return Stack(
+    //                     alignment: Alignment.topRight,
+    //                     children: [
+    //                       CircleAvatar(
+    //                         radius: 28,
+    //                         backgroundColor: AppColor.primary,
+    //                         child: IconButton(
+    //                           icon: const Icon(
+    //                             Icons.chat_outlined,
+    //                             color: Colors.white,
+    //                             size: 24,
+    //                           ),
+    //                           onPressed: () {
+    //                             showChatDialog();
+    //                           },
+    //                         ),
+    //                       ),
+    //                       if (badgeCount > 0)
+    //                         Positioned(
+    //                           top: -5,
+    //                           left: 0,
+    //                           child: Container(
+    //                             padding: const EdgeInsets.all(7),
+    //                             decoration: const BoxDecoration(
+    //                               shape: BoxShape.circle,
+    //                               color: Colors.red,
+    //                             ),
+    //                             child: Text(
+    //                               badgeCount.toString(),
+    //                               style: const TextStyle(
+    //                                 color: Colors.white,
+    //                                 fontSize: 12,
+    //                               ),
+    //                             ),
+    //                           ),
+    //                         ),
+    //                     ],
+    //                   );
+    //                 } else {
+    //                   return CircleAvatar(
+    //                     radius: 28,
+    //                     backgroundColor: AppColor.primary,
+    //                     child: IconButton(
+    //                       icon: const Icon(
+    //                         Icons.chat_outlined,
+    //                         color: Colors.white,
+    //                         size: 24,
+    //                       ),
+    //                       onPressed: () {
+    //                         showChatDialog();
+    //                         ref.read(selectedMessageProvider.notifier).setToEmpty();
+    //                       },
+    //                     ),
+    //                   );
+    //                 }
+    //               },
+    //             ),
+    //           ],
+    //         )
+    //       : null,
+    // );
     return Scaffold(
       body: StreamBuilder(
         stream: cardDetails,
@@ -243,7 +512,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                               child: WorkItemsList(
                                 title: "To do",
                                 getCardDetails: todoItems.where((item) => item.status != 'Closed').toList(),
-                                scrollercontroller: scrollercontroller,
+                                // scrollercontroller: scrollercontroller,
                               ),
                             ),
                           )
@@ -256,7 +525,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                           child: WorkItemsList(
                             title: "Work Items",
                             getCardDetails: workItems,
-                            scrollercontroller: scrollercontroller,
+                            // scrollercontroller: scrollercontroller,
                           ),
                         ),
                       )

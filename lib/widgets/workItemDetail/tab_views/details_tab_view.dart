@@ -1,5 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -204,60 +205,72 @@ class _DetailsTabViewState extends State<DetailsTabView> {
           ),
           SizedBox(
             height: 200,
-            child: ListView.builder(
-              physics: const ScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemCount: widget.data.propertyphotos == null ? inventoryDetailsImageUrls.length : allImages.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    showImageSliderCarousel(
-                      widget.data.propertyphotos == null ? inventoryDetailsImageUrls : allImages,
-                      index,
-                      context,
-                    );
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.all(10),
-                        height: 130,
-                        width: 150,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 1.0,
+            child: ScrollConfiguration(
+              behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+                PointerDeviceKind.touch,
+                PointerDeviceKind.mouse,
+              }),
+              child: ListView.builder(
+                physics: const ScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                itemCount: widget.data.propertyphotos == null ? inventoryDetailsImageUrls.length : allImages.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      showImageSliderCarousel(
+                        widget.data.propertyphotos == null ? inventoryDetailsImageUrls : allImages,
+                        index,
+                        context,
+                      );
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.all(10),
+                          height: 120,
+                          width: 150,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              widget.data.propertyphotos == null ? inventoryDetailsImageUrls[index] : '${allImages[index]}.png',
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Icon(
+                                  Icons.error_outline,
+                                  size: 50,
+                                  color: Colors.red,
+                                );
+                              },
+                              loadingBuilder: (context, child, loadingProgress) {
+                                return loadingProgress == null ? child : const Loader();
+                              },
+                            ),
                           ),
                         ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
-                            widget.data.propertyphotos == null ? inventoryDetailsImageUrls[index] : '${allImages[index]}.png',
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return const Icon(
-                                Icons.error_outline,
-                                size: 50,
-                                color: Colors.red,
-                              );
-                            },
-                            loadingBuilder: (context, child, loadingProgress) {
-                              return loadingProgress == null ? child : const Loader();
-                            },
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            constraints: const BoxConstraints(maxWidth: 145),
+                            child: CustomText(
+                              softWrap: true,
+                              title: widget.data.propertyphotos == null ? 'Front Elevation' : allTitles[index],
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: CustomText(
-                          title: widget.data.propertyphotos == null ? 'Front Elevation' : allTitles[index],
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
           ),
           const Divider(
@@ -711,6 +724,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                           }
 
                           return ListView(
+                            physics: const NeverScrollableScrollPhysics(),
                             children: [
                               player,
                               const VideoPositionIndicator(),

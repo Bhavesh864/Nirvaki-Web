@@ -26,6 +26,7 @@ import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
 import '../../constants/utils/colors.dart';
 import '../../constants/utils/constants.dart';
+import '../../constants/validation/basic_validation.dart';
 import '../../riverpodstate/selected_workitem.dart';
 import '../../widgets/app/nav_bar.dart';
 import '../../widgets/workItemDetail/assignment_widget.dart';
@@ -66,10 +67,8 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
       });
     }
     // todoArray = [];
-    todoDetails = FirebaseFirestore.instance
-        .collection('todoDetails')
-        .where('todoId', isEqualTo: workItemId.isEmpty ? widget.todoId : workItemId)
-        .snapshots(includeMetadataChanges: true);
+    todoDetails =
+        FirebaseFirestore.instance.collection('todoDetails').where('todoId', isEqualTo: workItemId.isEmpty ? widget.todoId : workItemId).snapshots(includeMetadataChanges: true);
     // for (var i = 0; i < todoDetails; i++) {
     //   ele = todoDetails[i];
     //   userDeatil = FirebaseFirestore.instance.collection(where id =  ele.userId)
@@ -209,11 +208,11 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                   return GestureDetector(
                     onTap: () {
                       if (isEditingTodoName) {
-                        TodoDetails.updatetodoName(id: data.todoId!, todoName: todoNameEditingController.text.trim()).then((value) => setState(() {
+                        TodoDetails.updatetodoName(id: data.todoId!, todoName: removeExtraSpaces(todoNameEditingController.text.trim())).then((value) => setState(() {
                               isEditingTodoName = false;
                               todoNameEditingController.clear();
                             }));
-                        CardDetails.updatecardTitle(id: data.todoId!, cardTitle: todoNameEditingController.text.trim());
+                        CardDetails.updatecardTitle(id: data.todoId!, cardTitle: removeExtraSpaces(todoNameEditingController.text.trim()));
                         cancelEditingTodoName();
                       } else if (iseditingTodoDescription) {
                         cancelEditingTodoDescription();
@@ -252,11 +251,11 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                                     maxLength: 100,
                                                     onFieldSubmitted: (newValue) {
                                                       if (newValue.isNotEmpty) {
-                                                        TodoDetails.updatetodoName(id: data.todoId!, todoName: newValue).then((value) => setState(() {
+                                                        TodoDetails.updatetodoName(id: data.todoId!, todoName: removeExtraSpaces(newValue.trim())).then((value) => setState(() {
                                                               isEditingTodoName = false;
                                                               todoNameEditingController.clear();
                                                             }));
-                                                        CardDetails.updatecardTitle(id: data.todoId!, cardTitle: newValue);
+                                                        CardDetails.updatecardTitle(id: data.todoId!, cardTitle: removeExtraSpaces(newValue.trim()));
                                                       } else {
                                                         customSnackBar(context: context, text: "Enter the task name");
                                                       }
@@ -466,9 +465,9 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                             ElevatedButton(
                                               onPressed: () {
                                                 if (todoDescriptionEditingController.text.isNotEmpty) {
-                                                  TodoDetails.updateTodoDescription(id: data.todoId!, todoDescription: todoDescriptionEditingController.text)
+                                                  TodoDetails.updateTodoDescription(id: data.todoId!, todoDescription: todoDescriptionEditingController.text.trim())
                                                       .then((value) => cancelEditingTodoDescription());
-                                                  CardDetails.updateCardDescription(id: data.todoId!, cardDescription: todoDescriptionEditingController.text);
+                                                  CardDetails.updateCardDescription(id: data.todoId!, cardDescription: todoDescriptionEditingController.text.trim());
                                                 } else {
                                                   customSnackBar(context: context, text: "Enter the Description");
                                                 }
