@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:path/path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:yes_broker/chat/models/chat_group.dart';
+import 'package:yes_broker/riverpodstate/chat/message_sending_loader.dart';
 
 import '../../Customs/snackbar.dart';
 import '../../constants/app_constant.dart';
@@ -270,6 +273,8 @@ class ChatRepository {
     required MessageEnum messageType,
     required bool isGroupChat,
     required String profilePic,
+    String? fileName,
+    String? fileSize,
   }) async {
     final message = ChatMessage(
       senderId: AppConst.getAccessToken(),
@@ -282,6 +287,8 @@ class ChatRepository {
       senderName: username,
       profilePic: profilePic,
       deleteMsgUserId: [],
+      fileName: fileName ?? '',
+      fileSize: fileSize ?? '',
       // repliedMessage: repliedMessage,
       // repliedTo: repliedTo,
       // repliedMessageType: repliedMessageType,
@@ -408,6 +415,10 @@ class ChatRepository {
             case 'gif':
               contactMsg = 'GIF';
               break;
+            case 'file':
+              contactMsg = '📁 Document';
+              break;
+
             default:
               contactMsg = 'GIF';
           }
@@ -535,6 +546,9 @@ class ChatRepository {
         case MessageEnum.audio:
           contactMsg = '🎵 Audio';
           break;
+        case MessageEnum.file:
+          contactMsg = '📁 Document';
+          break;
         case MessageEnum.gif:
           contactMsg = 'GIF';
           break;
@@ -570,6 +584,18 @@ class ChatRepository {
     }
   }
 
+  String main(url) {
+    String fileNameWithExtension = basename(url);
+    print('File Name with Extension: $fileNameWithExtension');
+    return fileNameWithExtension;
+
+    // String fileNameWithoutExtension = basenameWithoutExtension(url);
+    // print('File Name without Extension: $fileNameWithoutExtension');
+
+    // String fileExtension = extension(url);
+    // print('File Extension: $fileExtension');
+  }
+
   void sendFileMessage({
     required BuildContext context,
     required File? file,
@@ -583,6 +609,31 @@ class ChatRepository {
     try {
       var timeSent = Timestamp.now();
       var messageId = const Uuid().v1();
+
+      int? fileSizeInBytes;
+      double? fileSizeInKB;
+
+      if (messageEnum == MessageEnum.file) {
+        fileSizeInBytes = await file?.length();
+        fileSizeInKB = fileSizeInBytes! / 1024;
+        if (fileSizeInBytes <= 0) {
+          // ignore: use_build_context_synchronously
+          customSnackBar(context: context, text: 'File size should be atleast 1kb');
+          return;
+        }
+      }
+
+      // Get the size of the file in bytes
+
+      // // Convert bytes to kilobytes
+      // double fileSizeInKB = fileSizeInBytes / 1024;
+
+      // // Convert bytes to megabytes
+      // double fileSizeInMB = fileSizeInKB / 1024;
+
+      // print('File Size: $fileSizeInBytes bytes');
+      // print('File Size: $fileSizeInKB KB');
+      // print('File Size: $fileSizeInMB MB');
 
       String imageUrl = await ref.read(commonFirebaseStorageRepositoryProvider).storeFileToFirebase(
             'chat/${messageEnum.type}/${senderUserData.userId}/$recieverUserId/$messageId',
@@ -611,6 +662,9 @@ class ChatRepository {
         case MessageEnum.gif:
           contactMsg = 'GIF';
           break;
+        case MessageEnum.file:
+          contactMsg = '📁 Document';
+          break;
         default:
           contactMsg = 'GIF';
       }
@@ -633,9 +687,13 @@ class ChatRepository {
         revceiverUsername: '${recieverUserData?.userfirstname} ${recieverUserData?.userlastname}',
         isGroupChat: isGroupChat,
         profilePic: senderUserData.image,
+        fileName: messageEnum != MessageEnum.text && !kIsWeb ? main(file!.path) : '',
+        fileSize: '${fileSizeInKB?.toStringAsFixed(2)} KB',
       );
+      ref.read(messageSendingProvider.notifier).state = false;
     } catch (e) {
       customSnackBar(context: context, text: e.toString());
+      ref.read(messageSendingProvider.notifier).state = false;
     }
   }
 }

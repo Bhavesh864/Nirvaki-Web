@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // import 'dart:html';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +12,8 @@ import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
 import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/customs/responsive.dart';
+import 'package:yes_broker/customs/text_utility.dart';
 import 'package:yes_broker/widgets/chat/videoplayer.dart';
-
 import '../../Customs/snackbar.dart';
 import '../../constants/methods/date_time_methods.dart';
 import '../../constants/utils/constants.dart';
@@ -51,9 +52,32 @@ class MessageBox extends ConsumerStatefulWidget {
   ConsumerState<MessageBox> createState() => _MessageBoxState();
 }
 
-class _MessageBoxState extends ConsumerState<MessageBox> {
+class _MessageBoxState extends ConsumerState<MessageBox> with SingleTickerProviderStateMixin {
   User? userlist;
   bool isDownloading = false;
+  bool isDownloaded = false;
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    )..repeat();
+
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   Future<void> getUserData(String userIds) async {
     final User? user = await User.getUser(userIds);
@@ -123,11 +147,14 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                           isSender: widget.isSender,
                           isSelectedMode: widget.selectedMode!,
                           onTap: widget.onTap!,
+                          fileName: widget.data.fileName,
+                          fileSize: widget.data.fileSize,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Row(
                         mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             formatTimestamp(widget.data.timeSent.toDate()),
@@ -145,26 +172,51 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                                 color: widget.isSeen ? Colors.blue : Colors.white,
                               ),
                             ),
-                          if (widget.data.type == MessageEnum.video) ...[
-                            const Spacer(),
+                          if (widget.data.type == MessageEnum.video || widget.data.type == MessageEnum.file) ...[
+                            if (Responsive.isMobile(context)) ...[
+                              const Spacer()
+                            ] else ...[
+                              const SizedBox(
+                                width: 135,
+                              )
+                            ],
                             StatefulBuilder(builder: (context, setstate) {
                               if (isDownloading) {
-                                return const CustomText(
-                                  title: 'Donwloading...',
-                                  color: Colors.white,
+                                return AnimatedBuilder(
+                                  animation: _controller,
+                                  builder: (context, child) {
+                                    return Transform.translate(
+                                      offset: Offset(0.0, _animation.value * 8.0), // Adjust the bounce height
+                                      child: const Icon(
+                                        Icons.download,
+                                        size: 22.0,
+                                        color: Colors.white, // Customize color as needed
+                                      ),
+                                    );
+                                  },
                                 );
+                                // return const CustomText(
+                                //   title: 'Donwloading...',
+                                //   color: Colors.white,
+                                // );
                               } else {
-                                return InkWell(
-                                  onTap: () {
-                                    if (!kIsWeb) {
-                                      setstate(() {
-                                        isDownloading = true;
-                                      });
-                                      downloadFile(
-                                          widget.message,
-                                          widget.data.type.type,
-                                          context,
-                                          (value, progress) => {
+                                return isDownloaded
+                                    ? const Icon(
+                                        Icons.done,
+                                        color: Colors.white,
+                                        size: 22,
+                                      )
+                                    : InkWell(
+                                        onTap: () {
+                                          if (!kIsWeb) {
+                                            setstate(() {
+                                              isDownloading = true;
+                                            });
+                                            downloadFile(
+                                              widget.message,
+                                              widget.data.type.type,
+                                              context,
+                                              (value, progress) => {
                                                 if (value)
                                                   {
                                                     if (progress == "100%")
@@ -172,6 +224,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                                                         customSnackBar(context: context, text: 'Download Completed'),
                                                         setstate(() {
                                                           isDownloading = false;
+                                                          isDownloaded = true;
                                                         }),
                                                       },
                                                   }
@@ -182,21 +235,23 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                                                       isDownloading = false;
                                                     }),
                                                   }
-                                              });
-                                    } else {
-                                      // if (kIsWeb) {
-                                      //   AnchorElement anchorElement = AnchorElement(href: url);
-                                      //   anchorElement.download = 'Attachment file';
-                                      //   anchorElement.click();
-                                      // }
-                                    }
-                                  },
-                                  child: const Icon(
-                                    Icons.download,
-                                    color: Colors.white,
-                                    size: 22,
-                                  ),
-                                );
+                                              },
+                                              name: widget.data.fileName!,
+                                            );
+                                          } else {
+                                            // if (kIsWeb) {
+                                            //   AnchorElement anchorElement = AnchorElement(href: widget.message);
+                                            //   anchorElement.download = 'Attachment file';
+                                            //   anchorElement.click();
+                                            // }
+                                          }
+                                        },
+                                        child: const Icon(
+                                          Icons.download,
+                                          color: Colors.white,
+                                          size: 22,
+                                        ),
+                                      );
                               }
                             }),
                           ]
@@ -216,6 +271,8 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
 
 class DisplayMessage extends StatelessWidget {
   final String message;
+  final String? fileName;
+  final String? fileSize;
   final MessageEnum type;
   final bool isSender;
   final bool isSelectedMode;
@@ -224,6 +281,8 @@ class DisplayMessage extends StatelessWidget {
   const DisplayMessage({
     Key? key,
     required this.message,
+    this.fileName,
+    this.fileSize,
     required this.type,
     required this.isSender,
     required this.isSelectedMode,
@@ -232,7 +291,6 @@ class DisplayMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('message $message =------------');
     return type == MessageEnum.text
         ? Text(
             message,
@@ -270,7 +328,105 @@ class DisplayMessage extends StatelessWidget {
               )
             : type == MessageEnum.video
                 ? VideoPlayerItem(videoUrl: message)
-                : const Text('Unable to load!.');
+                : Container(
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 98, 122, 240),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: ListTile(
+                      minLeadingWidth: 0,
+                      leading: const Icon(
+                        Icons.insert_drive_file,
+                        size: 30,
+                        color: Colors.white,
+                      ),
+                      titleAlignment: ListTileTitleAlignment.center,
+                      title: AppText(
+                        text: fileName!,
+                        textColor: Colors.white,
+                        fontsize: 15,
+                        softwrap: true,
+                        overflow: TextOverflow.ellipsis,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      subtitle: CustomText(
+                        title: fileSize!,
+                        size: 12,
+                        color: Colors.white,
+                      ),
+                    ),
+                  );
+
+    // if (type == MessageEnum.text) {
+    //   return Text(
+    //     message,
+    //     style: TextStyle(
+    //       color: isSender ? Colors.white : Colors.black,
+    //     ),
+    //   );
+    // }
+
+    // if (type == MessageEnum.image) {
+    //   return GestureDetector(
+    //     onTap: () {
+    //       if (Responsive.isMobile(context)) {
+    //         // showEnlargedImage(context, message);
+    //         if (!isSelectedMode) {
+    //           showGeneralDialog(
+    //               context: context,
+    //               barrierDismissible: true,
+    //               barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    //               transitionDuration: const Duration(milliseconds: 200),
+    //               pageBuilder: (context, animation1, animation2) {
+    //                 return ImagePreview(url: message, type: type.type);
+    //               });
+    //         } else {
+    //           onTap();
+    //         }
+    //       } else {
+    //         onTap();
+    //       }
+    //     },
+    //     child: CachedNetworkImage(
+    //       fit: BoxFit.cover,
+    //       height: 300,
+    //       width: 250,
+    //       imageUrl: message,
+    //     ),
+    //   );
+    // }
+    // if (type == MessageEnum.video) return VideoPlayerItem(videoUrl: message);
+
+    // if (type == MessageEnum.file) {
+    //   return Container(
+    //     decoration: BoxDecoration(
+    //       color: const Color.fromARGB(255, 98, 122, 240),
+    //       borderRadius: BorderRadius.circular(5),
+    //     ),
+    //     child: ListTile(
+    //       minLeadingWidth: 0,
+    //       leading: const Icon(
+    //         Icons.insert_drive_file,
+    //         size: 30,
+    //         color: Colors.white,
+    //       ),
+    //       titleAlignment: ListTileTitleAlignment.center,
+    //       title: AppText(
+    //         text: fileName!,
+    //         textColor: Colors.white,
+    //         fontsize: 15,
+    //         softwrap: true,
+    //         overflow: TextOverflow.ellipsis,
+    //         fontWeight: FontWeight.w600,
+    //       ),
+    //       subtitle: CustomText(
+    //         title: fileSize!,
+    //         size: 12,
+    //         color: Colors.white,
+    //       ),
+    //     ),
+    //   );
+    // }
   }
 }
 

@@ -14,6 +14,8 @@ class ChatMessage {
   final bool isSeen;
   final String profilePic;
   final List<dynamic> deleteMsgUserId;
+  final String? fileName;
+  final String? fileSize;
   // final String repliedMessage;
   // final String repliedTo;
   // final MessageEnum repliedMessageType;
@@ -29,6 +31,8 @@ class ChatMessage {
     required this.isSeen,
     required this.profilePic,
     required this.deleteMsgUserId,
+    this.fileName,
+    this.fileSize,
   });
 
   Map<String, dynamic> toMap() {
@@ -43,6 +47,8 @@ class ChatMessage {
       'isSeen': isSeen,
       'profilePic': profilePic,
       'deleteMsgUserId': deleteMsgUserId,
+      'fileName': fileName,
+      'fileSize': fileSize,
     };
   }
 
@@ -61,6 +67,8 @@ class ChatMessage {
       // repliedMessageType: (map['repliedMessageType'] as String).toEnum(),
       profilePic: map['profilePic'] as String,
       deleteMsgUserId: map['deleteMsgUserId'] ?? [],
+      fileName: map['fileName'] ?? '',
+      fileSize: map['fileSize'] ?? '',
     );
   }
 }
