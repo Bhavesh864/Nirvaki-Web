@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yes_broker/Customs/loader.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 
 import 'package:yes_broker/chat/controller/chat_controller.dart';
@@ -11,6 +12,7 @@ import 'package:yes_broker/constants/firebase/chat_services.dart';
 import 'package:yes_broker/constants/firebase/userModel/user_info.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
 import 'package:yes_broker/customs/responsive.dart';
+import 'package:yes_broker/riverpodstate/chat/message_sending_loader.dart';
 import 'package:yes_broker/screens/main_screens/chat_screens/chat_list_screen.dart';
 import 'package:yes_broker/widgets/chat/chat_input.dart';
 import 'package:yes_broker/widgets/chat/chat_screen_header.dart';
@@ -203,6 +205,46 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                       height: 10,
                                     );
                                   }
+
+                                  // if (isMessageSending && index == messagesList.length + 1) {
+                                  //   return Container(
+                                  //     margin: const EdgeInsets.only(bottom: 6.0),
+                                  //     padding: const EdgeInsets.all(8.0),
+                                  //     alignment: Alignment.centerRight,
+                                  //     child: Row(
+                                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                                  //       mainAxisAlignment: MainAxisAlignment.end,
+                                  //       children: [
+                                  //         // Image.asset('assets/images/receiveMsgTip.png'),
+                                  //         Container(
+                                  //           constraints: BoxConstraints(
+                                  //             maxWidth: width! * 3 / 4,
+                                  //           ),
+                                  //           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                  //           decoration: const BoxDecoration(
+                                  //             color: AppColor.primary,
+                                  //             borderRadius: BorderRadius.only(
+                                  //               topLeft: Radius.circular(8),
+                                  //               topRight: Radius.circular(0),
+                                  //               bottomLeft: Radius.circular(8),
+                                  //               bottomRight: Radius.circular(8),
+                                  //             ),
+                                  //           ),
+                                  //           child: const Column(
+                                  //             crossAxisAlignment: CrossAxisAlignment.start,
+                                  //             children: [
+                                  //               CircularProgressIndicator(
+                                  //                 color: Colors.amber,
+                                  //               ),
+                                  //               SizedBox(height: 4),
+                                  //             ],
+                                  //           ),
+                                  //         ),
+                                  //       ],
+                                  //     ),
+                                  //   );
+                                  // }
+
                                   final messageData = messagesList[index];
                                   final currentMessageId = messageData.messageId;
                                   final isSender = messageData.senderId == AppConst.getAccessToken();

@@ -10,7 +10,7 @@ Future<void> downloadFile(String url, String type, BuildContext context, Functio
   DateTime currentTime = DateTime.now();
   final customFormat = DateFormat('yyyyMMddHHmmss');
   String formattedDateTime = customFormat.format(currentTime);
-  formattedDateTime = name + formattedDateTime;
+  formattedDateTime = formattedDateTime + name;
 
   try {
     try {
@@ -19,13 +19,15 @@ Future<void> downloadFile(String url, String type, BuildContext context, Functio
       final directory = await getExternalStorageDirectory();
       dir = directory?.path;
     }
-    if (type.contains('image')) {
-      dir = "$dir/$formattedDateTime.jpeg";
-    } else if (type.contains('video')) {
-      dir = "$dir/$formattedDateTime.mp4";
-    } else {
-      dir = "$dir/$formattedDateTime.pdf";
-    }
+    dir = "$dir/$formattedDateTime";
+    print(dir);
+
+    // if (type.contains('image')) {
+    // } else if (type.contains('video')) {
+    //   dir = "$dir/$formattedDateTime.mp4";
+    // } else {
+    //   dir = "$dir/$formattedDateTime.pdf";
+    // }
 
     await dio.download(url, dir, onReceiveProgress: (rec, total) {
       var progress = "${((rec / total) * 100).toStringAsFixed(0)}%";

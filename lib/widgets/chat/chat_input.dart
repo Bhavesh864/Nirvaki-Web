@@ -3,29 +3,30 @@ import 'dart:io';
 
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:yes_broker/Customs/loader.dart';
 import 'package:yes_broker/Customs/responsive.dart';
+import 'package:yes_broker/Customs/snackbar.dart';
+import 'package:yes_broker/constants/utils/colors.dart';
 
 import '../../chat/controller/chat_controller.dart';
 import '../../chat/enums/message.enums.dart';
 import '../../chat/pick_methods.dart';
+import '../../riverpodstate/chat/message_sending_loader.dart';
 
-import 'dart:io';
-import 'package:file_picker/file_picker.dart';
-
-Future<File> convertPlatformFileToFile(PlatformFile platformFile) async {
+Future<Uint8List> convertPlatformFileToFile(PlatformFile platformFile) async {
   final fileBytes = platformFile.bytes;
   final fileName = platformFile.name;
 
   if (fileBytes != null) {
-    final file = File(fileName);
-    await file.writeAsBytes(fileBytes);
-    return file;
+    final file = File(platformFile.name);
+
+    return file.readAsBytes();
+    // return file;
   }
 
   throw Exception("Failed to convert PlatformFile to File");
@@ -45,10 +46,33 @@ class ChatInput extends ConsumerStatefulWidget {
   ConsumerState<ChatInput> createState() => _ChatInputState();
 }
 
-class _ChatInputState extends ConsumerState<ChatInput> {
+class _ChatInputState extends ConsumerState<ChatInput> with SingleTickerProviderStateMixin {
   final TextEditingController messageController = TextEditingController();
   bool isShowEmojiContainer = false;
   FocusNode focusNode = FocusNode();
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+      // reverseDuration: const Duration(seconds: 1),
+    )..repeat();
+
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut, // Use a different curve for the upward motion
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   void hideEmojiContainer() {
     setState(() {
@@ -95,6 +119,7 @@ class _ChatInputState extends ConsumerState<ChatInput> {
     MessageEnum messageEnum,
     Uint8List? webImage,
   ) {
+    ref.read(messageSendingProvider.notifier).state = true;
     ref.read(chatControllerProvider).sendFileMessage(
           context,
           file,
@@ -121,6 +146,8 @@ class _ChatInputState extends ConsumerState<ChatInput> {
 
   @override
   Widget build(BuildContext context) {
+    final isMessageSending = ref.watch(messageSendingProvider);
+
     return Column(
       children: [
         Container(
@@ -179,63 +206,85 @@ class _ChatInputState extends ConsumerState<ChatInput> {
                   ),
                 ),
               ),
-              InkWell(
-                onTap: () async {
-                  if (!Responsive.isMobile(context)) {
-                    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any, allowMultiple: false);
-                    // final file = await convertPlatformFileToFile(result!.files[0]);
-                    // print(result!.files[0].name.split(''));
+              if (isMessageSending) ...[
+                Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: AnimatedBuilder(
+                    animation: _controller,
+                    builder: (context, child) {
+                      return Transform.translate(
+                        offset: Offset(0.0, -_animation.value * 13.0), // Adjust the bounce height
+                        child: const Icon(
+                          Icons.upload,
+                          size: 32.0,
+                          color: AppColor.primary, // Customize color as needed
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ] else ...[
+                InkWell(
+                  onTap: () async {
+                    if (!Responsive.isMobile(context)) {
+                      // FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any, allowMultiple: false);
+                      // print(result!.files[0].name.split(''));
 
-                    return;
+                      // final Uint8List file = await convertPlatformFileToFile(result.files[0]);
 
-                    // sendFileMessage(file, MessageEnum.video, null);
+                      // // return;
 
-                    // XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
-                    // if (image != null) {
-                    //   var f = await image.readAsBytes();
+                      // print(file);
 
-                    //   sendFileMessage(null, MessageEnum.image, f);
+                      // sendFileMessage(null, MessageEnum.video, file);
+
+                      XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                      if (image != null) {
+                        var f = await image.readAsBytes();
+
+                        sendFileMessage(null, MessageEnum.image, f);
+                      }
+                    } else {
+                      showModalBottomSheet(
+                        backgroundColor: Colors.transparent,
+                        context: context,
+                        builder: (builder) => bottomSheet(context),
+                      );
+                    }
+                    // if (kIsWeb) {
+                    //   XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                    //   if (image != null) {
+                    //     var f = await image.readAsBytes();
+
+                    //     sendFileMessage(null, MessageEnum.image, f);
+                    //   }
+                    // } else {
+                    //   final image = await pickImageFromGallery(context);
+
+                    //   sendFileMessage(image!, MessageEnum.image, null);
                     // }
-                  } else {
-                    showModalBottomSheet(
-                      backgroundColor: Colors.transparent,
-                      context: context,
-                      builder: (builder) => bottomSheet(context),
-                    );
-                  }
-                  // if (kIsWeb) {
-                  //   XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
-                  //   if (image != null) {
-                  //     var f = await image.readAsBytes();
-
-                  //     sendFileMessage(null, MessageEnum.image, f);
-                  //   }
-                  // } else {
-                  //   final image = await pickImageFromGallery(context);
-
-                  //   sendFileMessage(image!, MessageEnum.image, null);
-                  // }
-                },
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5.0),
-                  child: Icon(
-                    Icons.attach_file_rounded,
-                    size: 16,
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5.0),
+                    child: Icon(
+                      Icons.attach_file_rounded,
+                      size: 16,
+                    ),
                   ),
                 ),
-              ),
-              InkWell(
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12),
-                  child: Icon(
-                    Icons.send_outlined,
-                    size: 16,
+                InkWell(
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    child: Icon(
+                      Icons.send_outlined,
+                      size: 16,
+                    ),
                   ),
+                  onTap: () {
+                    sendTextMessage();
+                  },
                 ),
-                onTap: () {
-                  sendTextMessage();
-                },
-              ),
+              ]
             ],
           ),
         ),
@@ -267,8 +316,8 @@ class _ChatInputState extends ConsumerState<ChatInput> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  iconCreation(Icons.folder, Colors.indigo, "Files", context),
-                  // iconCreation(Icons.insert_drive_file, Colors.indigo, "Document", context),
+                  // iconCreation(Icons.folder, Colors.indigo, "Files", context),
+                  iconCreation(Icons.insert_drive_file, Colors.indigo, "Document", context),
                   const SizedBox(
                       // width: 40,
                       ),
@@ -321,10 +370,12 @@ class _ChatInputState extends ConsumerState<ChatInput> {
         if (text == 'Camera') {
           XFile? image = await ImagePicker().pickImage(source: ImageSource.camera);
 
-          if (image != null) {
+          if (image != null && await image.length() > 10 * 1024 * 1024) {
             sendFileMessage(File(image.path), MessageEnum.image, null);
+          } else {
+            customSnackBar(context: context, text: 'Image should be less then 10MB');
           }
-        } else if (text == 'Files') {
+        } else if (text == 'Document') {
           final file = await pickDocument(context);
 
           if (file != null) {
@@ -368,7 +419,6 @@ Future<File?> pickDocument(BuildContext context) async {
 
     // Check the size of the document
     if (platformFile.size > 50 * 1024 * 1024) {
-      print('not possible');
       // 50MB limit
       // Handle the size limit exceeded
       showDialog(
