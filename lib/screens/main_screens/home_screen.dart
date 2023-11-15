@@ -38,7 +38,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class HomeScreenState extends ConsumerState<HomeScreen> {
-  DocumentSnapshot? lastDocumentForWorkItem;
+  QueryDocumentSnapshot<Object?>? lastDocumentForWorkItem;
   DocumentSnapshot? lastDocumentForTodo;
   List<CardDetails> workItemCards = [];
   List<CardDetails> todoItemCards = [];
@@ -67,16 +67,21 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
     if (kIsWeb) {
       ref.read(chatControllerProvider).setUserState(true);
     }
-    // workItemData();
-    // todoItemData();
     // workItemScrollController.addListener(() {
     //   if (workItemScrollController.position.pixels == workItemScrollController.position.maxScrollExtent) {
-    //     workItemData();
+    //     // workItemData();
+    //     setState(() {
+    //       // workItemLoading = true;
+    //     });
+    //   } else {
+    //     // setState(() {
+    //     //   workItemLoading = false;
+    //     // });
     //   }
     // });
     // todoScrollController.addListener(() {
     //   if (todoScrollController.position.pixels == todoScrollController.position.maxScrollExtent) {
-    //     todoItemData();
+    //     // todoItemData();
     //   }
     // });
 
@@ -99,53 +104,54 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   //     Query query;
   //     if (lastDocumentForWorkItem == null) {
   //       // if (brokerid != null) {
-  //       if (user?.role == UserRole.manager) {
-  //         // final List<User> users = await User.getAllUsers(user!);
-  //         // final List<User> userRelatedBYmanager = userList.where((element) => element.managerid == user?.userId).toList();
-  //         // fetch data according to manager or employe set assigned to fields to get
-  //         query = FirebaseFirestore.instance
-  //             .collection('cardDetails')
-  //             .where("assignedto", arrayContains: user?.userId)
-  //             .orderBy("createdate", descending: true)
-  //             .where("cardType", whereIn: ["IN", "LD"]).limit(10);
-  //       } else {
-  //         query = FirebaseFirestore.instance
-  //             .collection('cardDetails')
-  //             .where("brokerid", isEqualTo: brokerid)
-  //             .orderBy("createdate", descending: true)
-  //             .where("cardType", whereIn: ["IN", "LD"]).limit(10);
-  //       }
+  //       // if (user?.role == UserRole.manager) {
+  //       //   // final List<User> users = await User.getAllUsers(user!);
+  //       //   // final List<User> userRelatedBYmanager = userList.where((element) => element.managerid == user?.userId).toList();
+  //       //   // fetch data according to manager or employe set assigned to fields to get
+  //       //   query = FirebaseFirestore.instance
+  //       //       .collection('cardDetails')
+  //       //       .where("assignedto", arrayContains: user?.userId)
+  //       //       .orderBy("createdate", descending: true)
+  //       //       .where("cardType", whereIn: ["IN", "LD"]).limit(10);
+  //       // } else {
+  //       query = FirebaseFirestore.instance
+  //           .collection('cardDetails')
+  //           .where("brokerid", isEqualTo: brokerid)
+  //           .orderBy("createdate", descending: true)
+  //           .where("cardType", whereIn: ["IN", "LD"]).limit(10);
+  //       // }
   //       // } else {
   //       //   query = FirebaseFirestore.instance.collection('cardDetails').where("cardType", whereIn: ["IN", "LD"]).orderBy("createdate", descending: true).limit(10);
   //       // }
   //     } else {
-  //       if (user?.role == UserRole.manager) {
-  //         query = FirebaseFirestore.instance
-  //             .collection('cardDetails')
-  //             .where("assignedto", arrayContains: user?.userId)
-  //             .orderBy("createdate", descending: true)
-  //             .where("cardType", whereIn: ["IN", "LD"])
-  //             .limit(10)
-  //             .startAfterDocument(lastDocumentForWorkItem!);
-  //       } else {
-  //         query = FirebaseFirestore.instance
-  //             .collection('cardDetails')
-  //             .where("brokerid", isEqualTo: brokerid)
-  //             .orderBy("createdate", descending: true)
-  //             .where("cardType", whereIn: ["IN", "LD"])
-  //             .limit(10)
-  //             .startAfterDocument(lastDocumentForWorkItem!);
-  //       }
+  //       // if (user?.role == UserRole.manager) {
+  //       //   query = FirebaseFirestore.instance
+  //       //       .collection('cardDetails')
+  //       //       .where("assignedto", arrayContains: user?.userId)
+  //       //       .orderBy("createdate", descending: true)
+  //       //       .where("cardType", whereIn: ["IN", "LD"])
+  //       //       .limit(10)
+  //       //       .startAfterDocument(lastDocumentForWorkItem!);
+  //       // } else {
+  //       query = FirebaseFirestore.instance
+  //           .collection('cardDetails')
+  //           .where("brokerid", isEqualTo: brokerid)
+  //           .orderBy("createdate", descending: true)
+  //           .where("cardType", whereIn: ["IN", "LD"])
+  //           .limit(10)
+  //           .startAfterDocument(lastDocumentForWorkItem!);
+  //       // }
   //     }
   //     try {
   //       QuerySnapshot querySnapshot = await query.get();
   //       if (querySnapshot.docs.isNotEmpty) {
   //         lastDocumentForWorkItem = querySnapshot.docs.last;
   //         // print("querySnapshot.docs.length======>${querySnapshot.docs.length}");
-  //         // if (user != null) {
-  //         // final filterItem = filtercards(snapshot: querySnapshot, ref: ref, userList: userList, currentUser: user);
-  //         workItemCards.addAll(querySnapshot.docs.map((e) => CardDetails.fromSnapshot(e)).toList());
-  //         // }
+  //         if (user != null) {
+  //           final filterWorkItem = filtercards(snapshot: querySnapshot, ref: ref, userList: userList, currentUser: user);
+  //           // print(filterItem.length);
+  //           workItemCards.addAll(filterWorkItem.map((e) => CardDetails.fromSnapshot(e)).toList());
+  //         }
   //       } else {
   //         isMoreDataForWorkItem = false;
   //       }
@@ -158,55 +164,105 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   //     }
   //   }
   // }
+  void workItemData() async {
+    final brokerid = UserHiveMethods.getdata("brokerId");
+    final user = await UserListPreferences.getSingleUser(AppConst.getAccessToken());
+    if (isMoreDataForWorkItem && !workItemLoading) {
+      setState(() {
+        workItemLoading = true;
+      });
+      Query query;
+      if (lastDocumentForWorkItem == null) {
+        // if (brokerid != null) {
+        query = FirebaseFirestore.instance
+            .collection('cardDetails')
+            .where("brokerid", isEqualTo: brokerid)
+            .orderBy("createdate", descending: true)
+            .where("cardType", whereIn: ["IN", "LD"]);
+        // } else {
+        //   query = FirebaseFirestore.instance.collection('cardDetails').where("cardType", whereIn: ["IN", "LD"]).orderBy("createdate", descending: true).limit(10);
+        // }
+      } else {
+        query = FirebaseFirestore.instance
+            .collection('cardDetails')
+            .where("brokerid", isEqualTo: brokerid)
+            .orderBy("createdate", descending: true)
+            .where("cardType", whereIn: ["IN", "LD"]);
+        // .limit(10).
+        // .startAfterDocument(lastDocumentForWorkItem!);
+      }
+      try {
+        QuerySnapshot querySnapshot = await query.get();
+        if (querySnapshot.docs.isNotEmpty) {
+          // lastDocumentForWorkItem = querySnapshot.docs.last;
+          // print(querySnapshot.docs.length);
+          if (user != null) {
+            final filterItem = filtercards(snapshot: querySnapshot, ref: ref, userList: userList, currentUser: user);
 
-  // void todoItemData() async {
-  //   final brokerid = UserHiveMethods.getdata("brokerId");
-  //   final user = await UserListPreferences.getSingleUser(AppConst.getAccessToken());
-  //   if (isMoreDataForTodo && !todoItemLoading) {
-  //     setState(() {
-  //       todoItemLoading = true;
-  //     });
-  //     Query query;
-  //     if (lastDocumentForTodo == null) {
-  //       // if (brokerid != null) {
-  //       query = FirebaseFirestore.instance
-  //           .collection('cardDetails')
-  //           .where("brokerid", isEqualTo: brokerid)
-  //           .orderBy("createdate", descending: true)
-  //           .where("cardType", whereIn: ["Task", "Follow Up", "Reminder"]).limit(10);
-  //       // } else {
-  //       //   query = FirebaseFirestore.instance.collection('cardDetails').where("cardType", whereIn: ["IN", "LD"]).orderBy("createdate", descending: true).limit(10);
-  //       // }
-  //     } else {
-  //       query = FirebaseFirestore.instance
-  //           .collection('cardDetails')
-  //           .where("brokerid", isEqualTo: brokerid)
-  //           .orderBy("createdate", descending: true)
-  //           .where("cardType", whereIn: ["Task", "Follow Up", "Reminder"])
-  //           .limit(10)
-  //           .startAfterDocument(lastDocumentForTodo!);
-  //     }
-  //     try {
-  //       QuerySnapshot querySnapshot = await query.get();
-  //       if (querySnapshot.docs.isNotEmpty) {
-  //         lastDocumentForTodo = querySnapshot.docs.last;
-  //         // print(querySnapshot.docs.length);
-  //         if (user != null) {
-  //           // final filterItem = filtercards(snapshot: querySnapshot, ref: ref, userList: userList, currentUser: user);
-  //           todoItemCards.addAll(querySnapshot.docs.map((e) => CardDetails.fromSnapshot(e)).toList());
-  //         }
-  //       } else {
-  //         isMoreDataForTodo = false;
-  //       }
-  //     } catch (e) {
-  //       print("Error TodoItemLoading data: $e");
-  //     } finally {
-  //       setState(() {
-  //         todoItemLoading = false;
-  //       });
-  //     }
-  //   }
-  // }
+            lastDocumentForWorkItem = filterItem.last;
+            workItemCards.addAll(filterItem.map((e) => CardDetails.fromSnapshot(e)).toList());
+          }
+        } else {
+          isMoreDataForWorkItem = false;
+        }
+      } catch (e) {
+        print("Error TodoItemLoading data: $e");
+      } finally {
+        setState(() {
+          workItemLoading = false;
+        });
+      }
+    }
+  }
+
+  void todoItemData() async {
+    final brokerid = UserHiveMethods.getdata("brokerId");
+    final user = await UserListPreferences.getSingleUser(AppConst.getAccessToken());
+    if (isMoreDataForTodo && !todoItemLoading) {
+      setState(() {
+        todoItemLoading = true;
+      });
+      Query query;
+      if (lastDocumentForTodo == null) {
+        // if (brokerid != null) {
+        query = FirebaseFirestore.instance
+            .collection('cardDetails')
+            .where("brokerid", isEqualTo: brokerid)
+            .orderBy("createdate", descending: true)
+            .where("cardType", whereIn: ["Task", "Follow Up", "Reminder"]).limit(10);
+        // } else {
+        //   query = FirebaseFirestore.instance.collection('cardDetails').where("cardType", whereIn: ["IN", "LD"]).orderBy("createdate", descending: true).limit(10);
+        // }
+      } else {
+        query = FirebaseFirestore.instance
+            .collection('cardDetails')
+            .where("brokerid", isEqualTo: brokerid)
+            .orderBy("createdate", descending: true)
+            .where("cardType", whereIn: ["Task", "Follow Up", "Reminder"])
+            .limit(10)
+            .startAfterDocument(lastDocumentForTodo!);
+      }
+      try {
+        QuerySnapshot querySnapshot = await query.get();
+        if (querySnapshot.docs.isNotEmpty) {
+          lastDocumentForTodo = querySnapshot.docs.last;
+          // print(querySnapshot.docs.length);
+          if (user != null) {
+            final filterItem = filtercards(snapshot: querySnapshot, ref: ref, userList: userList, currentUser: user);
+            todoItemCards.addAll(filterItem.map((e) => CardDetails.fromSnapshot(e)).toList());
+          }
+        } else {
+          isMoreDataForTodo = false;
+        }
+      } catch (e) {
+        print("Error TodoItemLoading data: $e");
+      } finally {
+        setState(() {
+          todoItemLoading = false;
+        });
+      }
+    }
+  }
 
   void setCardDetails() async {
     final brokerid = UserHiveMethods.getdata("brokerId");
@@ -234,6 +290,9 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
         UserHiveMethods.addData(key: "brokerId", data: user.brokerId);
         final List<User> userList = await User.getAllUsers(user);
         UserListPreferences.saveUserList(userList);
+        getDetails(user);
+        // workItemData();
+        // todoItemData();
       }
     }
   }
@@ -273,13 +332,6 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
     // print(workItemCards.length);
     final user = ref.watch(userDataProvider);
     Size size = MediaQuery.of(context).size;
-    // return ListView.builder(
-    //   itemCount: workItemCards.length,
-    //   controller: scrollercontroller,
-    //   itemBuilder: (context, index) {
-    //     return Text(workItemCards[index].cardTitle!);
-    //   },
-    // );
     // return Scaffold(
     //   body: Container(
     //     margin: const EdgeInsets.only(top: 10, left: 8),
@@ -478,10 +530,10 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             // final source = (snapshot.data!.metadata.isFromCache) ? "local cache" : "server";
             // print("Data fetched from $source}");
             if (user == null) return const Loader();
-            if (!isUserLoaded) {
-              getDetails(user);
-              isUserLoaded = true;
-            }
+            // if (!isUserLoaded) {
+            //   getDetails(user);
+            //   isUserLoaded = true;
+            // }
             final filterItem = filterCardsAccordingToRole(snapshot: snapshot, ref: ref, userList: userList, currentUser: user);
             final List<CardDetails> todoItems = filterItem!.map((doc) => CardDetails.fromSnapshot(doc)).where((item) => item.cardType != "IN" && item.cardType != "LD").toList();
             int compareDueDates(CardDetails a, CardDetails b) {
@@ -512,7 +564,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                               child: WorkItemsList(
                                 title: "To do",
                                 getCardDetails: todoItems.where((item) => item.status != 'Closed').toList(),
-                                // scrollercontroller: scrollercontroller,
+                                scrollercontroller: todoScrollController,
+                                loading: todoItemLoading,
                               ),
                             ),
                           )
@@ -525,7 +578,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                           child: WorkItemsList(
                             title: "Work Items",
                             getCardDetails: workItems,
-                            // scrollercontroller: scrollercontroller,
+                            scrollercontroller: workItemScrollController,
+                            loading: workItemLoading,
                           ),
                         ),
                       )

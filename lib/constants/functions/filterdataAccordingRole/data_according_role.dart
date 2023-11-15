@@ -32,7 +32,7 @@ Iterable<QueryDocumentSnapshot<Map<String, dynamic>>>? filterCardsAccordingToRol
 
 Iterable<QueryDocumentSnapshot<Object?>> filtercards({required QuerySnapshot<Object?> snapshot, required WidgetRef ref, required List<User> userList, required User currentUser}) {
   final userRole = currentUser.role;
-  final currentUserId = AppConst.getAccessToken();
+  final currentUserId = currentUser.userId;
   final filterItem = snapshot.docs.where((item) {
     final assignedTo = item["assignedto"] as List<dynamic>?;
     switch (userRole) {

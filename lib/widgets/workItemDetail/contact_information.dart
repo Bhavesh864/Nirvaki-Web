@@ -141,7 +141,7 @@ class ContactInformation extends StatelessWidget {
           ),
           minLeadingWidth: 0,
         ),
-        if (customerinfo?.email != null)
+        if (customerinfo?.email != null && customerinfo?.email.isNotEmpty)
           ListTile(
             onTap: () {
               openEmailApp(customerinfo?.email);

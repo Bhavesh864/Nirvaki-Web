@@ -204,7 +204,7 @@ class _DetailsTabViewState extends State<DetailsTabView> {
             fontWeight: FontWeight.w700,
           ),
           SizedBox(
-            height: 200,
+            height: 210,
             child: ScrollConfiguration(
               behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
                 PointerDeviceKind.touch,
@@ -224,12 +224,10 @@ class _DetailsTabViewState extends State<DetailsTabView> {
                       );
                     },
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
                           margin: const EdgeInsets.all(10),
-                          height: 120,
+                          height: 130,
                           width: 150,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),

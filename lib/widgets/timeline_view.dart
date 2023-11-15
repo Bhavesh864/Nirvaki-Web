@@ -65,8 +65,9 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
 
   void setactivity() {
     final workitemId = ref.read(selectedWorkItemId);
+    final brokerid = UserHiveMethods.getdata("brokerId");
     activityDetails = widget.fromHome
-        ? FirebaseFirestore.instance.collection('activityDetails').snapshots(includeMetadataChanges: true)
+        ? FirebaseFirestore.instance.collection('activityDetails').where("brokerid", isEqualTo: brokerid).snapshots(includeMetadataChanges: true)
         : FirebaseFirestore.instance.collection('activityDetails').where('itemid', isEqualTo: workitemId).snapshots(includeMetadataChanges: true);
   }
 
@@ -90,7 +91,6 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
                 initialValue: selectedDay,
                 onSelected: (value) {
                   setState(() {
-                    print(value);
                     selectedDay = value;
                   });
                 },
@@ -153,7 +153,6 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
               ),
               CustomDropDown(
                 initialValue: seleteduserName,
-
                 onSelected: (value) {
                   if (value == 'All') {
                     setState(() {
@@ -247,10 +246,11 @@ class CustomTimeLineViewState extends ConsumerState<CustomTimeLineView> {
               }
               if (snapshot.hasData) {
                 final datalist = snapshot.data?.docs;
+                print(datalist?.length);
                 List<ActivityDetails> activities = datalist!.map((e) => ActivityDetails.fromSnapshot(e)).toList();
-                if (widget.fromHome) {
-                  activities = activities.where((activity) => widget.itemIds!.contains(activity.itemid)).toList();
-                }
+                // if (widget.fromHome) {
+                //   activities = activities.where((activity) => widget.itemIds!.contains(activity.itemid)).toList();
+                // }
                 if (selectedUserid.isNotEmpty) {
                   activities = activities.where((element) => selectedUserid == element.userid).toList();
                 }
