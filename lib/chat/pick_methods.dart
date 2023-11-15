@@ -24,7 +24,6 @@ Future<File?> pickVideoFromGallery(BuildContext context) async {
   File? video;
   try {
     final pickedVideo = await ImagePicker().pickVideo(source: ImageSource.gallery);
-
     if (pickedVideo != null) {
       video = File(pickedVideo.path);
     }

@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'dart:typed_data';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/chat/models/chat_group.dart';
@@ -84,7 +84,7 @@ class ChatController {
     String recieverUserId,
     MessageEnum messageEnum,
     bool isGroupChat,
-    Uint8List? webImages,
+    FilePickerResult? webImages,
   ) async {
     // ref.read(userDataAuthProvider).whenData(
     final User? user = await User.getUser(AppConst.getAccessToken());

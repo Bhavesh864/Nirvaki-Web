@@ -320,7 +320,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                             ),
                           ),
                           SizedBox(
-                            width: 250,
+                            width: 400,
                             child: CustomTextInput(
                               controller: groupNameController,
                               labelText: 'Group Name',

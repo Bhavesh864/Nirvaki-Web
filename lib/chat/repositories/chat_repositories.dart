@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -599,7 +599,7 @@ class ChatRepository {
   void sendFileMessage({
     required BuildContext context,
     required File? file,
-    Uint8List? webImage,
+    FilePickerResult? webImage,
     required String recieverUserId,
     required User senderUserData,
     required ProviderRef ref,
@@ -613,9 +613,19 @@ class ChatRepository {
       int? fileSizeInBytes;
       double? fileSizeInKB;
 
-      if (messageEnum == MessageEnum.file) {
-        fileSizeInBytes = await file?.length();
-        fileSizeInKB = fileSizeInBytes! / 1024;
+      if (file != null) {
+        if (messageEnum == MessageEnum.file) {
+          fileSizeInBytes = await file.length();
+          fileSizeInKB = fileSizeInBytes / 1024;
+          if (fileSizeInBytes <= 0) {
+            // ignore: use_build_context_synchronously
+            customSnackBar(context: context, text: 'File size should be atleast 1kb');
+            return;
+          }
+        }
+      } else {
+        fileSizeInBytes = webImage!.files.first.size;
+        fileSizeInKB = webImage.files.first.size / 1024;
         if (fileSizeInBytes <= 0) {
           // ignore: use_build_context_synchronously
           customSnackBar(context: context, text: 'File size should be atleast 1kb');
@@ -635,10 +645,21 @@ class ChatRepository {
       // print('File Size: $fileSizeInKB KB');
       // print('File Size: $fileSizeInMB MB');
 
+      // if (kIsWeb) {
+      //   await referenceImagesToUpload.putData(
+      //     fileToUpload.bytes!,
+      //   );
+      // } else {
+      //   await referenceImagesToUpload.putFile(
+      //     File(fileToUpload.path!),
+      //   );
+      // }
+      // final downloadUrl = await referenceImagesToUpload.getDownloadURL();
+
       String imageUrl = await ref.read(commonFirebaseStorageRepositoryProvider).storeFileToFirebase(
             'chat/${messageEnum.type}/${senderUserData.userId}/$recieverUserId/$messageId',
             file,
-            webImage,
+            webImage?.files.first.bytes,
           );
 
       User? recieverUserData;
@@ -687,7 +708,7 @@ class ChatRepository {
         revceiverUsername: '${recieverUserData?.userfirstname} ${recieverUserData?.userlastname}',
         isGroupChat: isGroupChat,
         profilePic: senderUserData.image,
-        fileName: messageEnum != MessageEnum.text && !kIsWeb ? main(file!.path) : '',
+        fileName: messageEnum != MessageEnum.text && !kIsWeb ? main(file!.path) : webImage?.files.first.name,
         fileSize: '${fileSizeInKB?.toStringAsFixed(2)} KB',
       );
       ref.read(messageSendingProvider.notifier).state = false;

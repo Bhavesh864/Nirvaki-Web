@@ -210,8 +210,9 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          if (Responsive.isMobile(context)) {
-                            // showEnlargedImage(context);
+                          // if (Responsive.isMobile(context)) {
+                          // showEnlargedImage(context);
+                          if (widget.profilePic.isNotEmpty) {
                             showGeneralDialog(
                                 context: context,
                                 barrierDismissible: true,
@@ -225,6 +226,7 @@ class _UserProfileBodyState extends ConsumerState<UserProfileBody> {
                                   );
                                 });
                           }
+                          // }
                         },
                         child: Container(
                           decoration: BoxDecoration(

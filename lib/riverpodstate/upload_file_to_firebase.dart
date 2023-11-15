@@ -17,8 +17,8 @@ class CommonFirebaseStorageRepository {
 
   Future<String> storeFileToFirebase(String ref, File? file, Uint8List? webImage) async {
     if (kIsWeb) {
-      final metaData = SettableMetadata(contentType: 'image/jpeg');
-      UploadTask uploadTask = firebaseStorage.ref().child(ref).putData(webImage!, metaData);
+      // final metaData = SettableMetadata(contentType: 'image/jpeg');
+      UploadTask uploadTask = firebaseStorage.ref().child(ref).putData(webImage!);
       TaskSnapshot snap = await uploadTask;
 
       String downloadUrl = await snap.ref.getDownloadURL();

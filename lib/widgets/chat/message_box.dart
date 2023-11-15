@@ -14,6 +14,7 @@ import 'package:yes_broker/customs/custom_text.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/customs/text_utility.dart';
 import 'package:yes_broker/widgets/chat/videoplayer.dart';
+
 import '../../Customs/snackbar.dart';
 import '../../constants/methods/date_time_methods.dart';
 import '../../constants/utils/constants.dart';
@@ -32,6 +33,7 @@ class MessageBox extends ConsumerStatefulWidget {
   final bool? selectedMode;
   final Function? onLongPress;
   final Function? onTap;
+  // final Function? onOpenFullImage;
 
   const MessageBox({
     Key? key,
@@ -46,6 +48,7 @@ class MessageBox extends ConsumerStatefulWidget {
     this.selectedMode,
     this.onLongPress,
     this.onTap,
+    // this.onOpenFullImage,
   }) : super(key: key);
 
   @override
@@ -164,7 +167,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> with SingleTickerProvid
                               fontSize: 10,
                             ),
                           ),
-                          if (widget.isSender)
+                          if (widget.isSender) ...[
                             Padding(
                               padding: const EdgeInsets.only(left: 5),
                               child: Icon(
@@ -172,6 +175,11 @@ class _MessageBoxState extends ConsumerState<MessageBox> with SingleTickerProvid
                                 color: widget.isSeen ? Colors.blue : Colors.white,
                               ),
                             ),
+                          ] else ...[
+                            const SizedBox(
+                              width: 15,
+                            ),
+                          ],
                           if (widget.data.type == MessageEnum.video || widget.data.type == MessageEnum.file) ...[
                             if (Responsive.isMobile(context)) ...[
                               const Spacer()
@@ -186,11 +194,11 @@ class _MessageBoxState extends ConsumerState<MessageBox> with SingleTickerProvid
                                   animation: _controller,
                                   builder: (context, child) {
                                     return Transform.translate(
-                                      offset: Offset(0.0, _animation.value * 8.0), // Adjust the bounce height
-                                      child: const Icon(
+                                      offset: Offset(0.0, _animation.value * 8.0),
+                                      child: Icon(
                                         Icons.download,
                                         size: 22.0,
-                                        color: Colors.white, // Customize color as needed
+                                        color: widget.isSender ? AppColor.primary : Colors.white,
                                       ),
                                     );
                                   },
@@ -201,9 +209,9 @@ class _MessageBoxState extends ConsumerState<MessageBox> with SingleTickerProvid
                                 // );
                               } else {
                                 return isDownloaded
-                                    ? const Icon(
+                                    ? Icon(
                                         Icons.done,
-                                        color: Colors.white,
+                                        color: widget.isSender ? Colors.white : Colors.black,
                                         size: 22,
                                       )
                                     : InkWell(
@@ -246,9 +254,9 @@ class _MessageBoxState extends ConsumerState<MessageBox> with SingleTickerProvid
                                             // }
                                           }
                                         },
-                                        child: const Icon(
+                                        child: Icon(
                                           Icons.download,
-                                          color: Colors.white,
+                                          color: widget.isSender ? Colors.white : Colors.black,
                                           size: 22,
                                         ),
                                       );
@@ -277,6 +285,7 @@ class DisplayMessage extends StatelessWidget {
   final bool isSender;
   final bool isSelectedMode;
   final Function onTap;
+  final Function? onOpenFullImage;
 
   const DisplayMessage({
     Key? key,
@@ -287,6 +296,7 @@ class DisplayMessage extends StatelessWidget {
     required this.isSender,
     required this.isSelectedMode,
     required this.onTap,
+    this.onOpenFullImage,
   }) : super(key: key);
 
   @override
@@ -301,9 +311,14 @@ class DisplayMessage extends StatelessWidget {
         : type == MessageEnum.image
             ? GestureDetector(
                 onTap: () {
-                  if (Responsive.isMobile(context)) {
-                    // showEnlargedImage(context, message);
-                    if (!isSelectedMode) {
+                  // if (Responsive.isMobile(context)) {
+                  // showEnlargedImage(context, message);
+                  // if(kIsWeb){
+
+                  // }
+
+                  if (!isSelectedMode) {
+                    if (message.isNotEmpty) {
                       showGeneralDialog(
                           context: context,
                           barrierDismissible: true,
@@ -312,12 +327,13 @@ class DisplayMessage extends StatelessWidget {
                           pageBuilder: (context, animation1, animation2) {
                             return ImagePreview(url: message, type: type.type);
                           });
-                    } else {
-                      onTap();
                     }
                   } else {
                     onTap();
                   }
+                  // } else {
+                  //   onTap();
+                  // }
                 },
                 child: CachedNetworkImage(
                   fit: BoxFit.cover,

@@ -20,7 +20,10 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
 
   @override
   void initState() {
-    videoPlayerController = CachedVideoPlayerController.network(widget.videoUrl)..initialize().then((value) => {videoPlayerController.setVolume(1)});
+    videoPlayerController = CachedVideoPlayerController.network(widget.videoUrl)
+      ..initialize().then(
+        (value) => {videoPlayerController.setVolume(1)},
+      );
     super.initState();
   }
 

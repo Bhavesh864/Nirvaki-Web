@@ -30,6 +30,7 @@ enum ChatModalScreenType {
   createNewGroup,
   addNewMember,
   messageForward,
+  photoFullView,
 }
 
 class ChatDialogBox extends ConsumerStatefulWidget {
@@ -62,6 +63,7 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
   ChatItem? chatItem;
   User? user;
   bool alreadySelectedUser = false;
+  String imageUrl = '';
 
   void onPressSendButton(List<String> selectedUsers, List<ChatItem> groupChatList) {
     for (var userId in selectedUsers) {
@@ -111,6 +113,7 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
               vertical: currentScreen == ChatModalScreenType.chatList ? 20 : 0,
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (currentScreen == ChatModalScreenType.chatList) ...[
                   Padding(
@@ -365,6 +368,13 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                                                 ),
                                               ],
                                               MessageBox(
+                                                // onOpenFullImage: () {
+                                                //   print('object');
+                                                //   setState(() {
+                                                //     currentScreen = ChatModalScreenType.photoFullView;
+                                                //     imageUrl = messageData.text;
+                                                //   });
+                                                // },
                                                 isGroupChat: isGroupChat,
                                                 message: messageData.text,
                                                 isSender: isSender,
@@ -619,6 +629,7 @@ class _ChatDialogBoxState extends ConsumerState<ChatDialogBox> {
                       return const SizedBox();
                     },
                   ),
+                if (currentScreen == ChatModalScreenType.photoFullView) ImagePreview(url: imageUrl, type: 'image'),
               ],
             ),
           ),

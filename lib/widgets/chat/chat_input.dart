@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:yes_broker/Customs/loader.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/constants/utils/colors.dart';
@@ -20,7 +19,6 @@ import '../../riverpodstate/chat/message_sending_loader.dart';
 
 Future<Uint8List> convertPlatformFileToFile(PlatformFile platformFile) async {
   final fileBytes = platformFile.bytes;
-  final fileName = platformFile.name;
 
   if (fileBytes != null) {
     final file = File(platformFile.name);
@@ -117,7 +115,7 @@ class _ChatInputState extends ConsumerState<ChatInput> with SingleTickerProvider
   void sendFileMessage(
     File? file,
     MessageEnum messageEnum,
-    Uint8List? webImage,
+    FilePickerResult? webImage,
   ) {
     ref.read(messageSendingProvider.notifier).state = true;
     ref.read(chatControllerProvider).sendFileMessage(
@@ -227,8 +225,10 @@ class _ChatInputState extends ConsumerState<ChatInput> with SingleTickerProvider
                 InkWell(
                   onTap: () async {
                     if (!Responsive.isMobile(context)) {
-                      // FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any, allowMultiple: false);
-                      // print(result!.files[0].name.split(''));
+                      FilePickerResult? result = await FilePicker.platform.pickFiles(
+                        type: FileType.any,
+                        allowMultiple: false,
+                      );
 
                       // final Uint8List file = await convertPlatformFileToFile(result.files[0]);
 
@@ -236,14 +236,18 @@ class _ChatInputState extends ConsumerState<ChatInput> with SingleTickerProvider
 
                       // print(file);
 
-                      // sendFileMessage(null, MessageEnum.video, file);
+                      // final File file = File(result!.files.first.name);
 
-                      XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
-                      if (image != null) {
-                        var f = await image.readAsBytes();
+                      // print(result!.files.first.bytes);
 
-                        sendFileMessage(null, MessageEnum.image, f);
-                      }
+                      sendFileMessage(null, MessageEnum.file, result);
+
+                      // XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                      // if (image != null) {
+                      //   var f = await image.readAsBytes();
+
+                      //   sendFileMessage(null, MessageEnum.image, f);
+                      // }
                     } else {
                       showModalBottomSheet(
                         backgroundColor: Colors.transparent,
