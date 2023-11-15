@@ -30,6 +30,26 @@ Iterable<QueryDocumentSnapshot<Map<String, dynamic>>>? filterCardsAccordingToRol
   return filterItem;
 }
 
+Iterable<QueryDocumentSnapshot<Object?>> filtercards({required QuerySnapshot<Object?> snapshot, required WidgetRef ref, required List<User> userList, required User currentUser}) {
+  final userRole = currentUser.role;
+  final currentUserId = currentUser.userId;
+  final filterItem = snapshot.docs.where((item) {
+    final assignedTo = item["assignedto"] as List<dynamic>?;
+    switch (userRole) {
+      case UserRole.broker:
+        return item["brokerid"] == currentUserId;
+      case UserRole.manager:
+        final hasAssignedToManager = assignedTo?.any((user) => user["userid"] == currentUserId || userList.any((userinfo) => user["userid"] == userinfo.userId)) ?? false;
+        return hasAssignedToManager;
+      case UserRole.employee:
+        return assignedTo?.any((user) => user["userid"] == currentUserId) ?? false;
+      default:
+        return false;
+    }
+  });
+  return filterItem;
+}
+
 // this function use filter User According to role and show data according to role in future builder
 // ---------------------------------FUTURE BUILDER----------------------------->
 Iterable<CardDetails>? filterCardsAccordingToRoleInFutureBuilder(

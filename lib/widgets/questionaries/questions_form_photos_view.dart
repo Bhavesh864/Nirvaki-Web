@@ -10,6 +10,7 @@ import 'package:yes_broker/Customs/custom_text.dart';
 import 'package:yes_broker/Customs/responsive.dart';
 import 'package:yes_broker/Customs/snackbar.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
+import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/riverpodstate/all_selected_ansers_provider.dart';
 import '../../customs/text_utility.dart';
 
@@ -51,9 +52,10 @@ class PhotosViewFormState extends ConsumerState<PhotosViewForm> {
 
   void cancelEditingTodoName() {
     setState(() {
-      roomImages[isEditingTodoName]["title"] = todoNameEditingController.text.trim();
-      selectedImagesTitleList[isEditingTodoName] = todoNameEditingController.text.trim();
+      roomImages[isEditingTodoName]["title"] = removeExtraSpaces(todoNameEditingController.text);
+      selectedImagesTitleList[isEditingTodoName] = removeExtraSpaces(todoNameEditingController.text);
     });
+    print(roomImages);
     setState(() {
       isEditingTodoName = -1;
       todoNameEditingController.clear();

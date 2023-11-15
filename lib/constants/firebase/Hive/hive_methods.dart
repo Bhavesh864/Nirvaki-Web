@@ -41,4 +41,19 @@ class UserListPreferences {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_key);
   }
+
+  static Future<User?> getSingleUser(String userId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final userMapList = prefs.getStringList(_key);
+    if (userMapList == null) return null;
+
+    final userMap = userMapList.firstWhere(
+      (userMap) {
+        final user = User.fromMap(jsonDecode(userMap));
+        return user.userId == userId;
+      },
+    );
+
+    return User.fromMap(jsonDecode(userMap));
+  }
 }
