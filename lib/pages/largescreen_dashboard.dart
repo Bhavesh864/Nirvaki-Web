@@ -177,11 +177,8 @@ class LargeScreenState extends ConsumerState<LargeScreen> {
                         if (profile.id == 2) {
                           ref.read(addMemberScreenStateProvider.notifier).setAddMemberScreenState(false);
                         }
-                        setState(
-                          () {
-                            beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[7].nav);
-                          },
-                        );
+
+                        beamerKey.currentState?.routerDelegate.beamToNamed(sideBarItems[7].nav);
                       } else if (selectedVal == "Logout") {
                         customConfirmationAlertDialog(context, () {
                           userLogout(ref, context);

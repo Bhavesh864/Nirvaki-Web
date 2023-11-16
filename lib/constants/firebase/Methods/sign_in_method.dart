@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yes_broker/riverpodstate/user_data.dart';
 import '../../app_constant.dart';
 import '../Hive/hive_methods.dart';
 import '../userModel/user_info.dart' as userinfo;

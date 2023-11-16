@@ -10,7 +10,6 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:yes_broker/chat/controller/chat_controller.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/utils/constants.dart';
-import 'package:yes_broker/customs/loader.dart';
 import 'package:yes_broker/pages/Auth/login/login_screen.dart';
 import 'package:yes_broker/pages/largescreen_dashboard.dart';
 import 'package:yes_broker/pages/smallscreen_dashboard.dart';

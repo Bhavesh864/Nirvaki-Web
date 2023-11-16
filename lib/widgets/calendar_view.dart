@@ -164,6 +164,7 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                           initialSelectedDate: DateTime.now(),
                           initialDisplayDate: DateTime.now(),
                           headerHeight: 0,
+
                           onTap: (details) {
                             if (details.appointments == null) return;
 
@@ -203,7 +204,7 @@ class _CustomCalendarViewState extends ConsumerState<CustomCalendarView> {
                             ),
                           ),
                           showDatePickerButton: false,
-                          viewHeaderHeight: 0,
+                          // viewHeaderHeight: 0,
                           appointmentBuilder: (context, calendarAppointmentDetails) {
                             final CalendarItems event = calendarAppointmentDetails.appointments.first;
                             return Container(

@@ -47,6 +47,14 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
   final _lastNameController = TextEditingController();
   final _mobileController = TextEditingController();
   final _emailController = TextEditingController();
+
+  final _firstNameFocusNode = FocusNode();
+  final _lastNameFocusNode = FocusNode();
+  final _mobileFocusNode = FocusNode();
+  final _emailFocusNode = FocusNode();
+  final _managerFocusNode = FocusNode();
+  final _roleFocusNode = FocusNode();
+
   User? manager;
   bool loading = false;
   String? editManagerName;
@@ -231,23 +239,29 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                             SizedBox(height: height! * 0.04),
                             LabelTextInputField(
                               labelText: "First Name",
+                              focusNode: _firstNameFocusNode,
                               maxLength: 30,
                               inputController: _firstNameController,
                               validator: (value) => validateForNameField(value: value?.trim(), props: "First Name"),
                               isMandatory: true,
+                              onFieldSubmitted: (p0) => FocusScope.of(context).requestFocus(_lastNameFocusNode),
                             ),
                             const SizedBox(height: 4),
                             LabelTextInputField(
+                              focusNode: _lastNameFocusNode,
                               maxLength: 30,
                               labelText: "Last Name",
+                              isMandatory: true,
                               inputController: _lastNameController,
                               validator: (value) => _lastNameController.text != "" ? validateForNameField(value: value?.trim(), props: "Last Name") : null,
+                              onFieldSubmitted: (p0) => FocusScope.of(context).requestFocus(_mobileFocusNode),
                             ),
                             const SizedBox(height: 4),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 MobileNumberInputField(
+                                  focusNode: _mobileFocusNode,
                                   fromProfile: true,
                                   controller: _mobileController,
                                   hintText: "Mobile",
@@ -257,6 +271,7 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                                   },
                                   countryCode: mobileCountryCode,
                                   onChange: (value) {},
+                                  onFieldSubmitted: (p0) => FocusScope.of(context).requestFocus(_emailFocusNode),
                                 ),
                                 if (mobileNoValidation != '')
                                   Padding(
@@ -274,62 +289,67 @@ class AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                             ),
                             LabelTextInputField(
                               isMandatory: true,
+                              focusNode: _emailFocusNode,
                               labelText: "Email",
                               maxLength: 50,
                               inputController: _emailController,
                               readyOnly: isEdit ? true : false,
                               validator: (value) => validateEmail(value),
+                              onFieldSubmitted: (p0) => FocusScope.of(context).requestFocus(_managerFocusNode),
                             ),
                             FutureBuilder(
-                                future: User.getAllUsers(currentUserData!),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    final filter = snapshot.data?.where((element) => element.userId != editUser?.userId && element.role != UserRole.employee).toList();
-                                    final List<String> userNames = filter!.map((user) => "${user.userfirstname} ${user.userlastname}").toList();
-                                    return Container(
-                                      margin: const EdgeInsets.all(5),
-                                      child: CustomDropdownFormField<String>(
-                                        label: "Manager",
-                                        value: isEdit
-                                            ? managers.isNotEmpty
-                                                ? getNamesMatchWithid(editUser?.managerid)
-                                                : ""
-                                            : editManagerName,
-                                        isMandatory: true,
-                                        items: userNames,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            editManagerName = value;
-                                            User selectedUser = snapshot.data!.firstWhere((user) => '${user.userfirstname} ${user.userlastname}' == value);
-                                            manager = selectedUser;
-                                          });
-                                        },
-                                        validator: (value) {
-                                          if (value == null) {
-                                            return 'Please select Manager';
-                                          }
-                                          return null;
-                                        },
-                                      ),
-                                    );
-                                  }
+                              future: User.getAllUsers(currentUserData!),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  final filter = snapshot.data?.where((element) => element.userId != editUser?.userId && element.role != UserRole.employee).toList();
+                                  final List<String> userNames = filter!.map((user) => "${user.userfirstname} ${user.userlastname}").toList();
                                   return Container(
                                     margin: const EdgeInsets.all(5),
                                     child: CustomDropdownFormField<String>(
-                                        label: "Manager",
-                                        value: isEdit
-                                            ? managers.isNotEmpty
-                                                ? getNamesMatchWithid(editUser?.managerid)
-                                                : ""
-                                            : editManagerName,
-                                        isMandatory: true,
-                                        items: const [],
-                                        onChanged: (e) {}),
+                                      focusNode: _managerFocusNode,
+                                      label: "Manager",
+                                      value: isEdit
+                                          ? managers.isNotEmpty
+                                              ? getNamesMatchWithid(editUser?.managerid)
+                                              : ""
+                                          : editManagerName,
+                                      isMandatory: true,
+                                      items: userNames,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          editManagerName = value;
+                                          User selectedUser = snapshot.data!.firstWhere((user) => '${user.userfirstname} ${user.userlastname}' == value);
+                                          manager = selectedUser;
+                                        });
+                                      },
+                                      validator: (value) {
+                                        if (value == null) {
+                                          return 'Please select Manager';
+                                        }
+                                        return null;
+                                      },
+                                    ),
                                   );
-                                }),
+                                }
+                                return Container(
+                                  margin: const EdgeInsets.all(5),
+                                  child: CustomDropdownFormField<String>(
+                                      label: "Manager",
+                                      value: isEdit
+                                          ? managers.isNotEmpty
+                                              ? getNamesMatchWithid(editUser?.managerid)
+                                              : ""
+                                          : editManagerName,
+                                      isMandatory: true,
+                                      items: const [],
+                                      onChanged: (e) {}),
+                                );
+                              },
+                            ),
                             Container(
                               margin: const EdgeInsets.all(5),
                               child: CustomDropdownFormField<String>(
+                                focusNode: _roleFocusNode,
                                 label: "Role",
                                 value: isEdit ? editUser?.role : role,
                                 isMandatory: true,

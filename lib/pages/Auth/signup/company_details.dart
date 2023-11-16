@@ -42,6 +42,9 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
   final FocusNode mobileNumberFocusNode = FocusNode();
   final FocusNode whatsappNumberFocusNode = FocusNode();
   final FocusNode locationFocusNode = FocusNode();
+  final FocusNode address1FocusNode = FocusNode();
+  final FocusNode address2FocusNode = FocusNode();
+  final FocusNode registerAsFocusNode = FocusNode();
 
   void submitSignupForm(SelectedSignupItems notify) {
     final isvalid = key.currentState?.validate();
@@ -409,6 +412,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                       });
                                     });
                                   },
+                                  onFieldSubmitted: (p0) => FocusScope.of(context).requestFocus(address1FocusNode),
                                 ),
                                 if (placesList.isNotEmpty)
                                   Container(
@@ -419,6 +423,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                   ),
                                 LabelTextInputField(
                                   labelText: 'Address 1',
+                                  focusNode: address1FocusNode,
                                   // margin: const EdgeInsets.all(7),
                                   isMandatory: true,
                                   maxLength: 150,
@@ -427,22 +432,26 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                   onChanged: (value) {
                                     notify.add({"id": 10, "item": value.trim()});
                                   },
+                                  onFieldSubmitted: (p0) => FocusScope.of(context).requestFocus(address2FocusNode),
                                 ),
                                 LabelTextInputField(
                                   labelText: 'Address 2',
                                   maxLength: 150,
                                   isMandatory: true,
+                                  focusNode: address2FocusNode,
                                   inputController: address2controller,
                                   validator: (value) => validateForNormalFeild(value: value, props: "Addressline 2"),
                                   onChanged: (value) {
                                     notify.add({"id": 15, "item": value.trim()});
                                   },
+                                  onFieldSubmitted: (p0) => FocusScope.of(context).requestFocus(registerAsFocusNode),
                                 ),
                                 Container(
                                   margin: const EdgeInsets.symmetric(horizontal: 6),
                                   child: Column(
                                     children: [
                                       CustomDropdownFormField<String>(
+                                        focusNode: registerAsFocusNode,
                                         label: "Register As",
                                         value: registerAs,
                                         isMandatory: true,

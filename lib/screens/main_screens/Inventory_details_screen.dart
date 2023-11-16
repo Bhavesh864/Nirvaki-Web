@@ -123,7 +123,7 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                         child: SingleChildScrollView(
                           child: Container(
-                            padding: const EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 10),
+                            padding: const EdgeInsets.only(left: 15, top: 20, bottom: 20, right: 10),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -270,12 +270,23 @@ class InventoryDetailsScreenState extends ConsumerState<InventoryDetailsScreen> 
                                   height: 30,
                                 ),
                                 if (currentSelectedTab == 0)
-                                  DetailsTabView(
-                                    id: data.inventoryId!,
-                                    data: data,
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 15.0),
+                                    child: DetailsTabView(
+                                      id: data.inventoryId!,
+                                      data: data,
+                                    ),
                                   ),
-                                if (currentSelectedTab == 1) ActivityTabView(details: data),
-                                if (currentSelectedTab == 2) TodoTabView(id: data.inventoryId!),
+                                if (currentSelectedTab == 1)
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 15.0),
+                                    child: ActivityTabView(details: data),
+                                  ),
+                                if (currentSelectedTab == 2)
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 15.0),
+                                    child: TodoTabView(id: data.inventoryId!),
+                                  ),
                               ],
                             ),
                           ),

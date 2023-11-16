@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -138,21 +139,24 @@ class CustomDropdownFormField<T> extends StatefulWidget {
   final double labelFontSize;
   final FontWeight? labelFontWeight;
   final bool isMandatory;
+  final FocusNode? focusNode;
+
   const CustomDropdownFormField({
-    super.key,
+    Key? key,
     required this.label,
+    this.hintText,
     required this.value,
     required this.items,
     required this.onChanged,
     this.validator,
     this.righticon,
-    this.hintText,
     this.hintStyle = const TextStyle(color: Colors.grey),
     this.title,
     this.labelFontSize = 16,
     this.labelFontWeight,
     this.isMandatory = false,
-  });
+    this.focusNode,
+  }) : super(key: key);
 
   @override
   State<CustomDropdownFormField<T>> createState() => _CustomDropdownFormFieldState<T>();
@@ -190,6 +194,7 @@ class _CustomDropdownFormFieldState<T> extends State<CustomDropdownFormField<T>>
         ),
         const SizedBox(height: 4),
         DropdownButtonFormField<T>(
+          focusNode: widget.focusNode,
           value: widget.value,
           isExpanded: true,
           borderRadius: BorderRadius.circular(10),

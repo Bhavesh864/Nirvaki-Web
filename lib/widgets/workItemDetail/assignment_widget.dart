@@ -101,10 +101,13 @@ class AssignmentWidgetState extends ConsumerState<AssignmentWidget> {
                                 : noImg),
                         Text(
                           assigned.isNotEmpty
-                              ? capitalizeFirstLetter("${getNamesMatchWithid(widget.createdBy).userfirstname} ${getNamesMatchWithid(widget.createdBy).userlastname}")
+                              ? capitalizeFirstLetter(
+                                  "${getNamesMatchWithid(widget.createdBy).userfirstname} ${getNamesMatchWithid(widget.createdBy).userlastname}",
+                                )
                               : "",
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
+                          softWrap: true,
                           style: const TextStyle(
                             color: AppColor.primary,
                             fontSize: 14,

@@ -344,9 +344,9 @@ List<String> inventoryDetailsImageUrls = [
 
 List<ProfileMenuItems> profileMenuItems = [
   ProfileMenuItems(title: "Profile", screen: const Center(child: ProfileScreen()), id: 1),
-  ProfileMenuItems(title: "Settings", screen: const Center(child: Text('Screen for Item 3')), id: 3),
-  ProfileMenuItems(title: "Subscription", screen: const Center(child: Text('Screen for Item 4')), id: 4),
-  ProfileMenuItems(title: "Help", screen: const Center(child: Text('Screen for Item 1')), id: 5),
+  ProfileMenuItems(title: "Settings", screen: const Center(child: Text('Coming Soon...')), id: 3),
+  ProfileMenuItems(title: "Subscription", screen: const Center(child: Text('Coming Soon...')), id: 4),
+  ProfileMenuItems(title: "Help", screen: const Center(child: Text('Coming Soon...')), id: 5),
   ProfileMenuItems(title: "Logout", screen: const Center(child: Text('Screen for Item 1')), id: 6),
 ];
 
