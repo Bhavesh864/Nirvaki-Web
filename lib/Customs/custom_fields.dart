@@ -512,6 +512,8 @@ class MobileNumberInputField extends StatefulWidget {
   final bool? fromProfile;
   final EdgeInsets? innnerContainerPadding;
   final EdgeInsetsGeometry margin;
+  final FocusNode? focusNode;
+  final void Function(String)? onFieldSubmitted;
 
   const MobileNumberInputField({
     Key? key,
@@ -532,6 +534,8 @@ class MobileNumberInputField extends StatefulWidget {
     this.fromProfile = false,
     this.innnerContainerPadding = const EdgeInsets.symmetric(vertical: 5),
     this.margin = const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+    this.focusNode,
+    this.onFieldSubmitted,
   }) : super(key: key);
 
   @override
@@ -614,6 +618,8 @@ class _MobileNumberInputFieldState extends State<MobileNumberInputField> {
               if (widget.fromProfile == true) const SizedBox(width: 5),
               Expanded(
                 child: TextFormField(
+                  onFieldSubmitted: widget.onFieldSubmitted,
+                  focusNode: widget.focusNode,
                   maxLength: 10,
                   onChanged: (value) {
                     widget.onChange(value);

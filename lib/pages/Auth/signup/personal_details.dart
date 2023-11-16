@@ -27,6 +27,11 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
   final TextEditingController lastnamecontroller = TextEditingController();
   final TextEditingController mobilenumbercontroller = TextEditingController();
   final TextEditingController whatsupnumbercontroller = TextEditingController();
+  final FocusNode firstNameFocusNode = FocusNode();
+  final FocusNode lastNameFocusNode = FocusNode();
+  final FocusNode mobileNumberFocusNode = FocusNode();
+  final FocusNode whatsappNumberFocusNode = FocusNode();
+
   String selectedCountryCode = '+91';
   String whatsappCountryCode = '+91';
   bool isMobileEmpty = false;
@@ -168,21 +173,29 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
                                   height: 10,
                                 ),
                                 LabelTextInputField(
+                                  focusNode: firstNameFocusNode,
                                   labelText: 'First Name',
                                   isMandatory: true,
                                   maxLength: 30,
                                   inputController: firstnamecontroller,
                                   validator: (value) => validateForNameField(props: "First Name", value: value!.trim()),
+                                  onFieldSubmitted: (value) {
+                                    FocusScope.of(context).requestFocus(lastNameFocusNode);
+                                  },
                                   onChanged: (value) {
                                     notify.add({"id": 3, "item": removeExtraSpaces(value)});
                                   },
                                 ),
                                 LabelTextInputField(
+                                  focusNode: lastNameFocusNode,
                                   labelText: 'Last Name',
                                   maxLength: 30,
                                   isMandatory: true,
                                   inputController: lastnamecontroller,
                                   validator: (value) => validateForNameField(props: "Last Name", value: value!.trim()),
+                                  onFieldSubmitted: (value) {
+                                    FocusScope.of(context).requestFocus(mobileNumberFocusNode);
+                                  },
                                   onChanged: (value) {
                                     notify.add({"id": 4, "item": removeExtraSpaces(value)});
                                   },
@@ -199,6 +212,14 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
                                 // ),
                                 MobileNumberInputField(
                                   fromProfile: true,
+                                  focusNode: mobileNumberFocusNode,
+                                  onFieldSubmitted: (value) {
+                                    if (!isChecked) {
+                                      FocusScope.of(context).requestFocus(whatsappNumberFocusNode);
+                                    } else {
+                                      navigateTopage(notify);
+                                    }
+                                  },
                                   controller: mobilenumbercontroller,
                                   hintText: 'Mobile Number',
                                   isEmpty: isMobileEmpty,
@@ -232,6 +253,12 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
                                 if (!isChecked) ...[
                                   MobileNumberInputField(
                                     fromProfile: true,
+                                    focusNode: whatsappNumberFocusNode,
+                                    onFieldSubmitted: (value) {
+                                      if (!isChecked) {
+                                        navigateTopage(notify);
+                                      }
+                                    },
                                     controller: whatsupnumbercontroller,
                                     hintText: 'Whatsapp Number',
                                     isEmpty: isWhatsEmpty,
