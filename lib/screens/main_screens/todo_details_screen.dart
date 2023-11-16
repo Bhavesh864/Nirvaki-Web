@@ -21,6 +21,7 @@ import 'package:yes_broker/widgets/assigned_circular_images.dart';
 import 'package:yes_broker/widgets/attachments/attachment_widget.dart';
 import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
+import '../../constants/firebase/Methods/add_activity.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/userModel/user_info.dart';
 import '../../constants/functions/workitems_detail_methods.dart';
@@ -295,8 +296,9 @@ class TodoDetailsScreenState extends ConsumerState<TodoDetailsScreen> with Ticke
                                               TodoDetails.updatecardStatus(id: data.todoId!, newStatus: value);
                                               currentStatus = value;
                                               setState(() {});
+                                              submitActivity(itemid: data.todoId, activitytitle: "Todo status changed to $value", user: user!);
                                               notifyToUser(
-                                                  currentuserdata: user!,
+                                                  currentuserdata: user,
                                                   itemid: data.todoId!,
                                                   assignedto: data.assignedto,
                                                   content: "${data.todoId} Todo status changed to $value",

@@ -13,7 +13,8 @@ import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/google_places_model.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/customs/snackbar.dart';
-import 'package:yes_broker/riverpodstate/sign_up_state.dart';
+import 'package:yes_broker/pages/Auth/signup/sign_common_screen.dart';
+import 'package:yes_broker/riverpodstate/signup/sign_up_state.dart';
 import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
 import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/screens/account_screens/profile_screen.dart';
@@ -37,6 +38,11 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
   final key = GlobalKey<FormState>();
   var isloading = false;
   TextEditingController controller = TextEditingController();
+  final FocusNode companyNameFocusNode = FocusNode();
+  final FocusNode logoFocusNode = FocusNode();
+  final FocusNode mobileNumberFocusNode = FocusNode();
+  final FocusNode whatsappNumberFocusNode = FocusNode();
+  final FocusNode locationFocusNode = FocusNode();
 
   void submitSignupForm(SelectedSignupItems notify) {
     final isvalid = key.currentState?.validate();
@@ -210,270 +216,287 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(selectedItemForsignup.notifier);
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                height: MediaQuery.of(context).size.height,
-                padding: const EdgeInsets.symmetric(vertical: 0),
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(authBgImage),
-                    fit: BoxFit.cover,
-                    colorFilter: ColorFilter.mode(
-                      Colors.black12,
-                      BlendMode.darken,
-                    ),
-                  ),
-                ),
-                child: Center(
-                  child: Card(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                      constraints: BoxConstraints(
-                        minHeight: 0,
-                        maxHeight: Responsive.isMobile(context) ? height! * 0.8 : height! * 1,
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: Center(
+        child: Card(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+            constraints: BoxConstraints(
+              minHeight: 0,
+              maxHeight: Responsive.isMobile(context) ? height! * 0.8 : height! * 1,
+            ),
+            width: Responsive.isMobile(context) ? width! * 0.9 : 600,
+            child: Form(
+              key: key,
+              child: ScrollConfiguration(
+                behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(top: 20.0),
+                        child: DetailsHeaderWidget(isPersonalDetails: false),
                       ),
-                      width: Responsive.isMobile(context) ? width! * 0.9 : 600,
-                      child: Form(
-                        key: key,
-                        child: ScrollConfiguration(
-                          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.only(top: 20.0),
-                                  child: DetailsHeaderWidget(isPersonalDetails: false),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 20),
-                                  child: Text(
-                                    "Tell Us About Your Company",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Responsive.isMobile(context) ? 18 : 24,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                // const SizedBox(
-                                //   height: 10,
-                                // ),
-                                LabelTextInputField(
-                                  // margin: const EdgeInsets.all(7),
-                                  labelText: 'Company Name',
-                                  isMandatory: true,
-                                  maxLength: 100,
-                                  inputController: companynamecontroller,
-                                  validator: (value) => validateForNormalFeild(value: value, props: "Company Name"),
-                                  onChanged: (value) {
-                                    notify.add({"id": 7, "item": value.trim()});
-                                  },
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    selectImage().then((value) => {
-                                          if (!value.contains('Image size'))
-                                            {
-                                              uploadImageToFirebases(value).then((url) {
-                                                if (url != "") {
-                                                  final notify = ref.read(selectedItemForsignup.notifier);
-                                                  notify.add({"id": 14, "item": url});
-                                                }
-                                              })
-                                            }
-                                          else
-                                            {customSnackBar(context: context, text: value.toString())}
-                                        });
-                                  },
-                                  child: LabelTextInputField(
-                                    inputController: uploadLogocontroller,
-                                    isMandatory: true,
-                                    readyOnly: true,
-                                    labelText: "Upload Logo",
-                                    rightIcon: Icons.publish,
-                                    isDatePicker: true,
-                                  ),
-                                ),
-                                // CustomTextInput(
-                                //   margin: const EdgeInsets.all(7),
-                                //   labelText: 'Mobile',
-                                //   onlyDigits: true,
-                                //   controller: mobilenumbercontroller,
-                                //   validator: (value) => validateForMobileNumberFeild(value: value, props: "Mobile Number"),
-                                //   onChanged: (value) {
-                                //     notify.add({"id": 8, "item": value.trim()});
-                                //   },
-                                // ),
-                                MobileNumberInputField(
-                                  fromProfile: true,
-                                  fontsize: 14,
-                                  controller: mobilenumbercontroller,
-                                  hintText: 'Mobile Number',
-                                  isEmpty: isMobileEmpty,
-                                  openModal: () => openModal(true),
-                                  countryCode: selectedCountryCode,
-                                  onChange: (value) {
-                                    notify.add({"id": 8, "item": "$selectedCountryCode ${value.trim()}"});
-                                  },
-                                ),
-                                if (isMobileEmpty)
-                                  const Padding(
-                                    padding: EdgeInsets.only(left: 15.0, bottom: 5),
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: AppText(
-                                        text: 'Please enter Mobile Number',
-                                        textColor: Colors.red,
-                                        fontsize: 12,
-                                      ),
-                                    ),
-                                  ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 8.0),
-                                  child: CustomCheckbox(
-                                    value: isChecked,
-                                    label: 'Use Same Number For Whatsapp',
-                                    onChanged: (value) {
-                                      setState(() {
-                                        isChecked = value;
-                                      });
-                                      if (!value) {
-                                        whatsupnumbercontroller.text = "";
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Text(
+                          "Tell Us About Your Company",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: Responsive.isMobile(context) ? 18 : 24,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      // const SizedBox(
+                      //   height: 10,
+                      // ),
+                      LabelTextInputField(
+                        // margin: const EdgeInsets.all(7),
+                        focusNode: companyNameFocusNode,
+                        labelText: 'Company Name',
+                        isMandatory: true,
+                        maxLength: 100,
+                        inputController: companynamecontroller,
+                        validator: (value) => validateForNormalFeild(value: value, props: "Company Name"),
+                        onFieldSubmitted: (value) => FocusScope.of(context).requestFocus(logoFocusNode),
+                        onChanged: (value) {
+                          notify.add({"id": 7, "item": value.trim()});
+                        },
+                      ),
+                      LabelTextInputField(
+                        focusNode: logoFocusNode,
+                        inputController: uploadLogocontroller,
+                        validator: (value) => validateLogoField(value: value, props: 'company logo'),
+                        onFieldSubmitted: (value) => FocusScope.of(context).requestFocus(mobileNumberFocusNode),
+                        isMandatory: true,
+                        readyOnly: true,
+                        labelText: "Upload Logo",
+                        rightIcon: Icons.publish,
+                        isDatePicker: true,
+                        onTap: () {
+                          selectImage().then((value) => {
+                                if (!value.contains('Image size'))
+                                  {
+                                    uploadImageToFirebases(value).then((url) {
+                                      if (url != "") {
+                                        final notify = ref.read(selectedItemForsignup.notifier);
+                                        notify.add({"id": 14, "item": url});
                                       }
-                                    },
-                                  ),
-                                ),
-                                if (!isChecked)
-                                  MobileNumberInputField(
-                                    // margin: const EdgeInsets.all(7),
-                                    fromProfile: true,
-                                    hintText: 'Whatsapp Number',
-                                    isMandatory: true,
-                                    openModal: () => openModal(false),
-                                    countryCode: selectedCountryCode,
-                                    controller: whatsupnumbercontroller,
-                                    onChange: (value) {
-                                      notify.add({"id": 9, "item": value.trim()});
-                                    },
-                                    isEmpty: isWhatsappEmpty,
-                                  ),
-                                if (isWhatsappEmpty && !isChecked)
-                                  const Padding(
-                                    padding: EdgeInsets.only(left: 15.0, bottom: 5),
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: AppText(
-                                        text: 'Please enter Whatsapp Number',
-                                        textColor: Colors.red,
-                                        fontsize: 12,
-                                      ),
-                                    ),
-                                  ),
-                                LabelTextInputField(
-                                  labelText: 'Search your location',
-                                  // margin: const EdgeInsets.all(7),
-                                  inputController: statecontroller,
-                                  isMandatory: true,
-                                  validator: (value) => validateForNormalFeild(value: value, props: "Search Location"),
-                                  onChanged: (value) {
-                                    getPlaces(value).then((places) {
-                                      // print(places);
-                                      final descriptions = places.predictions?.map((prediction) => prediction.description) ?? [];
-                                      setState(() {
-                                        placesList = descriptions.toList();
-                                      });
-                                    });
-                                  },
-                                ),
-                                if (placesList.isNotEmpty)
-                                  Container(
-                                    constraints: const BoxConstraints(maxHeight: 200),
-                                    decoration: BoxDecoration(border: Border.all(color: Colors.grey, width: 0.8), borderRadius: BorderRadius.circular(8)),
-                                    margin: const EdgeInsets.symmetric(horizontal: 7),
-                                    child: _buildPlacesList(notify),
-                                  ),
-                                LabelTextInputField(
-                                  labelText: 'Address 1',
-                                  // margin: const EdgeInsets.all(7),
-                                  isMandatory: true,
-                                  maxLength: 150,
-                                  inputController: address1controller,
-                                  validator: (value) => validateForNormalFeild(value: value, props: "Addressline 1"),
-                                  onChanged: (value) {
-                                    notify.add({"id": 10, "item": value.trim()});
-                                  },
-                                ),
-                                LabelTextInputField(
-                                  labelText: 'Address 2',
-                                  maxLength: 150,
-                                  isMandatory: true,
-                                  inputController: address2controller,
-                                  validator: (value) => validateForNormalFeild(value: value, props: "Addressline 2"),
-                                  onChanged: (value) {
-                                    notify.add({"id": 15, "item": value.trim()});
-                                  },
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.symmetric(horizontal: 6),
-                                  child: Column(
-                                    children: [
-                                      CustomDropdownFormField<String>(
-                                        label: "Register As",
-                                        value: registerAs,
-                                        isMandatory: true,
-                                        items: dropdownitem,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            registerAs = value;
-                                          });
-                                          notify.add({"id": 13, "item": value});
-                                        },
-                                        validator: (value) {
-                                          if (value == null) {
-                                            return 'Please select role';
-                                          }
-                                          return null;
-                                        },
-                                      ),
-                                      // DropDownField(
-                                      //     title: "Register As",
-                                      //     defaultValues: "Broker",
-                                      //     optionsList: dropdownitem,
-                                      //     onchanged: (value) {
-                                      //       notify.add({"id": 13, "item": value});
-                                      //     }),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.only(bottom: 10.0),
-                                  margin: const EdgeInsets.only(top: 20),
-                                  alignment: Alignment.centerRight,
-                                  child: isloading
-                                      ? const Center(child: CircularProgressIndicator.adaptive())
-                                      : CustomButton(
-                                          text: 'Save',
-                                          letterSpacing: 0.5,
-                                          fontWeight: FontWeight.w700,
-                                          onPressed: () => submitSignupForm(notify),
-                                          width: 73,
-                                          height: 39,
-                                        ),
-                                ),
-                              ],
+                                    })
+                                  }
+                                else
+                                  {customSnackBar(context: context, text: value.toString())}
+                              });
+                        },
+                      ),
+                      // CustomTextInput(
+                      //   margin: const EdgeInsets.all(7),
+                      //   labelText: 'Mobile',
+                      //   onlyDigits: true,
+                      //   controller: mobilenumbercontroller,
+                      //   validator: (value) => validateForMobileNumberFeild(value: value, props: "Mobile Number"),
+                      //   onChanged: (value) {
+                      //     notify.add({"id": 8, "item": value.trim()});
+                      //   },
+                      // ),
+                      MobileNumberInputField(
+                        fromProfile: true,
+                        focusNode: mobileNumberFocusNode,
+                        fontsize: 14,
+                        controller: mobilenumbercontroller,
+                        onFieldSubmitted: (value) {
+                          if (!isChecked) {
+                            FocusScope.of(context).requestFocus(whatsappNumberFocusNode);
+                          } else {
+                            FocusScope.of(context).requestFocus(locationFocusNode);
+                          }
+                        },
+                        hintText: 'Mobile Number',
+                        isEmpty: isMobileEmpty,
+                        openModal: () => openModal(true),
+                        countryCode: selectedCountryCode,
+                        onChange: (value) {
+                          notify.add({"id": 8, "item": "$selectedCountryCode ${value.trim()}"});
+                        },
+                      ),
+                      if (isMobileEmpty)
+                        const Padding(
+                          padding: EdgeInsets.only(left: 15.0, bottom: 5),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: AppText(
+                              text: 'Please enter Mobile Number',
+                              textColor: Colors.red,
+                              fontsize: 12,
                             ),
                           ),
                         ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: CustomCheckbox(
+                          value: isChecked,
+                          label: 'Use Same Number For Whatsapp',
+                          onChanged: (value) {
+                            setState(() {
+                              isChecked = value;
+                            });
+                            if (!value) {
+                              whatsupnumbercontroller.text = "";
+                            }
+                          },
+                        ),
                       ),
-                    ),
+                      if (!isChecked)
+                        MobileNumberInputField(
+                          // margin: const EdgeInsets.all(7),
+                          focusNode: whatsappNumberFocusNode,
+                          fromProfile: true,
+                          hintText: 'Whatsapp Number',
+                          isMandatory: true,
+                          openModal: () => openModal(false),
+                          onFieldSubmitted: (value) {
+                            FocusScope.of(context).requestFocus(locationFocusNode);
+                          },
+                          countryCode: selectedCountryCode,
+                          controller: whatsupnumbercontroller,
+                          onChange: (value) {
+                            notify.add({"id": 9, "item": value.trim()});
+                          },
+                          isEmpty: isWhatsappEmpty,
+                        ),
+                      if (isWhatsappEmpty && !isChecked)
+                        const Padding(
+                          padding: EdgeInsets.only(left: 15.0, bottom: 5),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: AppText(
+                              text: 'Please enter Whatsapp Number',
+                              textColor: Colors.red,
+                              fontsize: 12,
+                            ),
+                          ),
+                        ),
+                      LabelTextInputField(
+                        labelText: 'Search your location',
+                        focusNode: locationFocusNode,
+                        // margin: const EdgeInsets.all(7),
+                        inputController: statecontroller,
+                        isMandatory: true,
+                        validator: (value) => validateForNormalFeild(value: value, props: "Search Location"),
+                        onChanged: (value) {
+                          getPlaces(value).then((places) {
+                            // print(places);
+                            final descriptions = places.predictions?.map((prediction) => prediction.description) ?? [];
+                            setState(() {
+                              placesList = descriptions.toList();
+                            });
+                          });
+                        },
+                      ),
+                      if (placesList.isNotEmpty)
+                        Container(
+                          constraints: const BoxConstraints(maxHeight: 200),
+                          decoration: BoxDecoration(border: Border.all(color: Colors.grey, width: 0.8), borderRadius: BorderRadius.circular(8)),
+                          margin: const EdgeInsets.symmetric(horizontal: 7),
+                          child: _buildPlacesList(notify),
+                        ),
+                      LabelTextInputField(
+                        labelText: 'Address 1',
+                        // margin: const EdgeInsets.all(7),
+                        isMandatory: true,
+                        maxLength: 150,
+                        inputController: address1controller,
+                        validator: (value) => validateForNormalFeild(value: value, props: "Addressline 1"),
+                        onChanged: (value) {
+                          notify.add({"id": 10, "item": value.trim()});
+                        },
+                      ),
+                      LabelTextInputField(
+                        labelText: 'Address 2',
+                        maxLength: 150,
+                        isMandatory: true,
+                        inputController: address2controller,
+                        validator: (value) => validateForNormalFeild(value: value, props: "Addressline 2"),
+                        onChanged: (value) {
+                          notify.add({"id": 15, "item": value.trim()});
+                        },
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 6),
+                        child: Column(
+                          children: [
+                            CustomDropdownFormField<String>(
+                              label: "Register As",
+                              value: registerAs,
+                              isMandatory: true,
+                              items: dropdownitem,
+                              onChanged: (value) {
+                                setState(() {
+                                  registerAs = value;
+                                });
+                                notify.add({"id": 13, "item": value});
+                              },
+                              validator: (value) {
+                                if (value == null) {
+                                  return 'Please select role';
+                                }
+                                return null;
+                              },
+                            ),
+                            // DropDownField(
+                            //     title: "Register As",
+                            //     defaultValues: "Broker",
+                            //     optionsList: dropdownitem,
+                            //     onchanged: (value) {
+                            //       notify.add({"id": 13, "item": value});
+                            //     }),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.only(bottom: 10.0),
+                            margin: const EdgeInsets.only(top: 20),
+                            alignment: Alignment.centerLeft,
+                            child: CustomButton(
+                              text: 'Back',
+                              letterSpacing: 0.5,
+                              fontWeight: FontWeight.w700,
+                              onPressed: () {
+                                ref.read(changeScreenIndex.notifier).update(1);
+                              },
+                              width: 73,
+                              height: 39,
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(bottom: 10.0),
+                            margin: const EdgeInsets.only(top: 20),
+                            alignment: Alignment.centerRight,
+                            child: isloading
+                                ? const Center(child: CircularProgressIndicator.adaptive())
+                                : CustomButton(
+                                    text: 'Save',
+                                    letterSpacing: 0.5,
+                                    fontWeight: FontWeight.w700,
+                                    onPressed: () => submitSignupForm(notify),
+                                    width: 73,
+                                    height: 39,
+                                  ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ),

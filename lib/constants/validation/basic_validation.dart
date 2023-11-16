@@ -44,6 +44,13 @@ String? validateForNormalFeild({required String? value, required String? props})
   return null;
 }
 
+String? validateLogoField({required String? value, required String? props}) {
+  if (value == null || value.isEmpty) {
+    return 'Please upload your $props';
+  }
+  return null;
+}
+
 String? validateForNameField({required String? value, required String? props}) {
   final RegExp nameRegExp = RegExp(r'^[a-zA-Z\s]+$');
 
