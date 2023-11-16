@@ -15,6 +15,7 @@ import '../../Customs/custom_chip.dart';
 import '../../Customs/custom_text.dart';
 import '../../Customs/snackbar.dart';
 import '../../constants/app_constant.dart';
+import '../../constants/firebase/Methods/add_activity.dart';
 import '../../constants/firebase/detailsModels/card_details.dart';
 import '../../constants/firebase/detailsModels/inventory_details.dart';
 import '../../constants/firebase/userModel/user_info.dart';
@@ -289,8 +290,9 @@ class _HeaderChipsState extends ConsumerState<HeaderChips> {
                 currentStatus = value;
                 setState(() {});
                 final item = calculateTypeOfWorkitem(widget.id);
+                submitActivity(itemid: widget.id, activitytitle: "$item status changed to $value", user: user!);
                 notifyToUser(
-                  currentuserdata: user!,
+                  currentuserdata: user,
                   itemid: widget.id,
                   assignedto: widget.inventoryDetails.assignedto,
                   content: "${widget.id} $item status changed to $value",

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import 'package:yes_broker/Customs/custom_text.dart';
+import 'package:yes_broker/constants/firebase/Methods/add_activity.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/card_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/inventory_details.dart';
 import 'package:yes_broker/constants/firebase/detailsModels/lead_details.dart';
@@ -118,8 +119,9 @@ class CardHeaderState extends ConsumerState<CardHeader> {
                       }
                       setState(() {});
                       final item = calculateTypeOfWorkitem(cardData.workitemId!);
+                      submitActivity(itemid: cardData.workitemId, activitytitle: "$item status changed to $value", user: user!);
                       notifyToUser(
-                        currentuserdata: user!,
+                        currentuserdata: user,
                         itemid: cardData.workitemId!,
                         assignedto: cardData.assignedto,
                         content: "${cardData.workitemId} $item status changed to $value",

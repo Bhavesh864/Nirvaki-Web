@@ -6,6 +6,7 @@ import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 import 'package:yes_broker/pages/Auth/login/login_screen.dart';
 import 'package:yes_broker/pages/Auth/signup/personal_details.dart';
 import 'package:yes_broker/pages/Auth/set_new_password.dart';
+import 'package:yes_broker/pages/Auth/signup/sign_common_screen.dart';
 import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
 import 'package:yes_broker/pages/add_todo.dart';
 import 'package:yes_broker/pages/edit_todo.dart';
@@ -150,8 +151,8 @@ class AppRoutes {
   static const String loginScreen = '/login_screen';
   static const String singupscreen = '/signup_screen';
   static const String setNewPassword = '/setNewPassword';
-  static const String personalDetailsScreen = '/personal_details_screen';
-  static const String companyDetailsScreen = '/company_details_screen';
+  // static const String personalDetailsScreen = '/personal_details_screen';
+  // static const String companyDetailsScreen = '/company_details_screen';
 
   static const String workItemFilterScreen = '/workitem_filter_screen';
   static const String inventoryDetailsScreen = '/inventory_details_screen';
@@ -168,11 +169,11 @@ class AppRoutes {
   static Map<String, WidgetBuilder> routesTable = {
     homeScreen: (context) => Responsive.isMobile(context) ? const SmallScreen() : const LargeScreen(),
     loginScreen: (context) => const LoginScreen(),
-    singupscreen: (context) => const SignUpScreen(),
+    singupscreen: (context) => const SignUpCommonScreen(),
     forgetPassword: (context) => const ForgetPassword(),
     setNewPassword: (context) => const ChangePasswordPage(),
-    personalDetailsScreen: (context) => const PersonalDetailsAuthScreen(),
-    companyDetailsScreen: (context) => const CompanyDetailsAuthScreen(),
+    // personalDetailsScreen: (context) => const PersonalDetailsAuthScreen(),
+    // companyDetailsScreen: (context) => const CompanyDetailsAuthScreen(),
     addInventory: (context) => const AddInventory(),
     addLead: (context) => const AddLead(),
     addTodo: (context) => const AddTodo(),
@@ -217,10 +218,10 @@ final routerDelegate = BeamerDelegate(
       AppRoutes.editTodo: (p0, p1, data) {
         return const EditTodo();
       },
-      AppRoutes.singupscreen: (p0, p1, p2) => const SignUpScreen(),
+      AppRoutes.singupscreen: (p0, p1, p2) => const SignUpCommonScreen(),
       AppRoutes.forgetPassword: (p0, p1, p2) => const ForgetPassword(),
-      AppRoutes.personalDetailsScreen: (p0, p1, p2) => const PersonalDetailsAuthScreen(),
-      AppRoutes.companyDetailsScreen: (p0, p1, p2) => const CompanyDetailsAuthScreen(),
+      // AppRoutes.personalDetailsScreen: (p0, p1, p2) => const PersonalDetailsAuthScreen(),
+      // AppRoutes.companyDetailsScreen: (p0, p1, p2) => const CompanyDetailsAuthScreen(),
     },
   ),
 );
