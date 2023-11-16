@@ -84,6 +84,23 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
   final TextEditingController passwordcontroller = TextEditingController();
   final TextEditingController reenteredpasswordcontroller = TextEditingController();
 
+  void setDataToTextField() {
+    final editUser = ref.read(selectedItemForsignup);
+    // if (isEdit) {
+    if (editUser.any((element) => element["id"] == 1)) {
+      emailcontroller.text = editUser.firstWhere((element) => element["id"] == 1)['item'] ?? "";
+    }
+    if (editUser.any((element) => element["id"] == 2)) {
+      reenteredpasswordcontroller.text = passwordcontroller.text = editUser.firstWhere((element) => element["id"] == 2)['item'] ?? "";
+    }
+  }
+
+  @override
+  void initState() {
+    setDataToTextField();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(selectedItemForsignup.notifier);

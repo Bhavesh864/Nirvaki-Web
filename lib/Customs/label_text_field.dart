@@ -27,12 +27,12 @@ class LabelTextInputField extends StatelessWidget {
   final FocusNode? focusNode;
   final int? maxLength;
   final void Function()? onEditingComplete;
+  final void Function(String)? onFieldSubmitted;
 
   const LabelTextInputField({
     Key? key,
     required this.labelText,
     this.labelFontWeight = FontWeight.w500,
-    this.margin = const EdgeInsets.symmetric(horizontal: 7, vertical: 0),
     this.hintText = 'Type here..',
     this.isDropDown = false,
     this.rightIcon = Icons.calendar_month_outlined,
@@ -47,9 +47,11 @@ class LabelTextInputField extends StatelessWidget {
     this.onlyDigits = false,
     this.readyOnly = false,
     this.isPhoneNumberField = false,
+    this.margin = const EdgeInsets.symmetric(horizontal: 7, vertical: 0),
     this.focusNode,
-    this.onEditingComplete,
     this.maxLength,
+    this.onEditingComplete,
+    this.onFieldSubmitted,
   }) : super(key: key);
 
   @override
@@ -88,6 +90,7 @@ class LabelTextInputField extends StatelessWidget {
             ),
           ),
           CustomTextInput(
+            onFieldSubmitted: onFieldSubmitted,
             onlyDigits: onlyDigits,
             margin: margin,
             focusnode: focusNode,

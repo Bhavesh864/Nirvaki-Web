@@ -158,6 +158,55 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
     );
   }
 
+  void setDataToTextField() {
+    final editUser = ref.read(selectedItemForsignup);
+    // if (isEdit) {
+    if (editUser.any((element) => element["id"] == 7)) {
+      companynamecontroller.text = editUser.firstWhere((element) => element["id"] == 7)['item'] ?? "";
+    }
+    if (editUser.any((element) => element["id"] == 14)) {
+      uploadLogocontroller.text = editUser.firstWhere((element) => element["id"] == 14)['item'] ?? "";
+    }
+    if (editUser.any((element) => element["id"] == 8)) {
+      List<String>? splitString = editUser.firstWhere((element) => element["id"] == 8)["item"].split(' ');
+      if (splitString!.length == 1) {
+        mobilenumbercontroller.text = splitString[0];
+      }
+      if (splitString.length == 2) {
+        selectedCountryCode = splitString[0];
+        mobilenumbercontroller.text = splitString[1];
+      }
+    }
+    if (editUser.any((element) => element["id"] == 9)) {
+      List<String>? splitString = editUser.firstWhere((element) => element["id"] == 9)["item"].split(' ');
+      if (splitString!.length == 1) {
+        whatsupnumbercontroller.text = splitString[0];
+      }
+      if (splitString.length == 2) {
+        selectedwhatsappCountryCode = splitString[0];
+        whatsupnumbercontroller.text = splitString[1];
+      }
+    }
+    if (editUser.any((element) => element["id"] == 11)) {
+      address1controller.text = editUser.firstWhere((element) => element["id"] == 11)['item'] ?? "";
+    }
+    if (editUser.any((element) => element["id"] == 15)) {
+      address2controller.text = editUser.firstWhere((element) => element["id"] == 15)['item'] ?? "";
+    }
+    if (editUser.any((element) => element["id"] == 13)) {
+      registerAs = editUser.firstWhere((element) => element["id"] == 13)['item'] ?? "";
+    }
+    if (editUser.any((element) => element["id"] == 16)) {
+      statecontroller.text = editUser.firstWhere((element) => element["id"] == 16)['item'] ?? "";
+    }
+  }
+
+  @override
+  void initState() {
+    setDataToTextField();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(selectedItemForsignup.notifier);
@@ -475,6 +524,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                 final stateName = lastThreeWordsList[1].endsWith(',') ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[1];
                 notify.add({"id": 12, "item": cityName});
                 notify.add({"id": 11, "item": stateName});
+                notify.add({"id": 16, "item": placesList[index]});
                 setState(() {
                   placesList = [];
                 });
