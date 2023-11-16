@@ -11,7 +11,6 @@ import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/widgets/auth/common_auth_widgets.dart';
 import '../../../constants/firebase/Methods/sign_in_method.dart';
 import '../../../constants/utils/image_constants.dart';
-import '../signup/sign_common_screen.dart';
 import '../signup/signup_screen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -185,7 +184,6 @@ class LoginScreenState extends ConsumerState<LoginScreen> {
                         CustomSignUpNow(
                           onPressSignUp: () {
                             ref.read(selectedItemForsignup.notifier).emptyAllFields();
-                            ref.read(changeScreenIndex.notifier).update(0);
                             context.beamToNamed(AppRoutes.singupscreen);
                           },
                         ),

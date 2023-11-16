@@ -3,13 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yes_broker/pages/Auth/signup/company_details.dart';
 import 'package:yes_broker/pages/Auth/signup/personal_details.dart';
 import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
-import 'package:yes_broker/riverpodstate/signup/change_screen_index.dart';
 
 import '../../../constants/utils/image_constants.dart';
-
-final changeScreenIndex = StateNotifierProvider<ChangeScreenIndex, int>((ref) {
-  return ChangeScreenIndex();
-});
 
 class SignUpCommonScreen extends ConsumerStatefulWidget {
   const SignUpCommonScreen({super.key});
@@ -20,35 +15,70 @@ class SignUpCommonScreen extends ConsumerStatefulWidget {
 }
 
 class SignUpCommonScreenState extends ConsumerState<SignUpCommonScreen> {
-  PageController? pageController;
   int currentScreenIndex = 0;
+  PageController? pageController;
+
   @override
   void initState() {
-    pageController = PageController(initialPage: currentScreenIndex);
+    pageController = PageController(initialPage: 0);
     super.initState();
   }
 
-  final List<Widget> screens = [
-    const SignUpScreen(),
-    const PersonalDetailsAuthScreen(),
-    const CompanyDetailsAuthScreen(),
-  ];
+  // Initialize the screens list in the constructor
+  late final List<Widget> screens = _buildScreensList();
+
+  // final List<Widget> screens = [
+  //   SignUpScreen(
+  //     pageController: pageController,
+  //   ),
+  //   const PersonalDetailsAuthScreen(),
+  //   const CompanyDetailsAuthScreen(),
+  // ];
 
   void nextScreen() {
-    if (currentScreenIndex < screens.length - 1) {
-      setState(() {
-        currentScreenIndex++;
-        pageController!.nextPage(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-      });
-    } else {}
+    // if (currentScreenIndex < screens.length - 1) {
+    setState(() {
+      currentScreenIndex++;
+      pageController!.nextPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    });
+    // } else {}
+  }
+
+  void previousScreen() {
+    // if (currentScreenIndex < screens.length - 1) {
+    setState(() {
+      currentScreenIndex--;
+      pageController!.previousPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    });
+    // } else {}
+  }
+
+  List<Widget> _buildScreensList() {
+    return [
+      SignUpScreen(
+        goToNextScreen: nextScreen,
+        goToPreviousScreen: previousScreen,
+      ),
+      PersonalDetailsAuthScreen(
+        goToNextScreen: nextScreen,
+        goToPreviousScreen: previousScreen,
+      ),
+      CompanyDetailsAuthScreen(
+        goToNextScreen: nextScreen,
+        goToPreviousScreen: previousScreen,
+      ),
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
-    final currentIndex = ref.watch(changeScreenIndex);
+    // final currentIndex = ref.watch(changeScreenIndex);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -74,7 +104,7 @@ class SignUpCommonScreenState extends ConsumerState<SignUpCommonScreen> {
                 scrollDirection: Axis.horizontal,
                 itemCount: screens.length,
                 itemBuilder: (context, index) {
-                  return screens[currentIndex];
+                  return screens[currentScreenIndex];
                 },
               ),
             ),

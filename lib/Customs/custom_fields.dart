@@ -41,11 +41,13 @@ class CustomTextInput extends StatefulWidget {
   final Iterable<String>? autofillHints;
   final TextInputAction? textInputAction;
   final bool onlyDigits;
+  final Function? onFieldFocusLost;
 
   const CustomTextInput(
       {Key? key,
       required this.controller,
       this.labelText,
+      this.onFieldFocusLost,
       this.hintText,
       this.isDense = true,
       this.leftIcon,
@@ -85,7 +87,31 @@ class CustomTextInputState extends State<CustomTextInput> {
   void initState() {
     super.initState();
     _obscureText = widget.obscureText;
+    widget.focusnode?.addListener(_onFocusChange);
   }
+
+  void _onFocusChange() {
+    if (!widget.focusnode!.hasFocus) {
+      // If the field loses focus, validate the input
+      // If the field loses focus, notify the parent widget to trigger validation
+      widget.onFieldFocusLost?.call();
+    }
+  }
+
+  // void _validate() {
+  //   if (widget.validator != null) {
+  //     String? error = widget.validator!(widget.controller.text);
+  //     if (error != null) {
+  //       // If there is an error, show it to the user
+  //       // ScaffoldMessenger.of(context).showSnackBar(
+  //       //   SnackBar(
+  //       //     content: Text(error),
+  //       //   ),
+  //       // );
+  //       widget.formKey?.currentState?.validate();
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +141,6 @@ class CustomTextInputState extends State<CustomTextInput> {
         controller: widget.controller,
         decoration: InputDecoration(
           isDense: widget.isDense,
-
           disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(
@@ -167,7 +192,9 @@ class CustomTextInputState extends State<CustomTextInput> {
         maxLength: widget.maxLength,
         keyboardType: widget.keyboardType,
         onChanged: widget.onChanged,
-        validator: widget.validator,
+        validator: (v) {
+          return widget.validator!(v);
+        },
         readOnly: widget.readonly!,
         onEditingComplete: widget.onEditingComplete,
         initialValue: widget.initialvalue,
@@ -175,6 +202,12 @@ class CustomTextInputState extends State<CustomTextInput> {
         minLines: widget.minLines,
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    widget.focusnode?.removeListener(_onFocusChange);
+    super.dispose();
   }
 }
 

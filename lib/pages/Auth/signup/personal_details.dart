@@ -1,24 +1,27 @@
-import 'package:beamer/beamer.dart';
-import 'package:flutter/foundation.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:yes_broker/Customs/text_utility.dart';
+import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/customs/label_text_field.dart';
 import 'package:yes_broker/customs/responsive.dart';
-import 'package:yes_broker/pages/Auth/signup/sign_common_screen.dart';
-import 'package:yes_broker/riverpodstate/signup/sign_up_state.dart';
 import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
-import 'package:yes_broker/constants/validation/basic_validation.dart';
-import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/widgets/auth/details_header.dart';
+
 import '../../../Customs/custom_fields.dart';
 import '../../../constants/utils/constants.dart';
-import '../../../constants/utils/image_constants.dart';
-import 'company_details.dart';
 import 'country_code_modal.dart';
 
 class PersonalDetailsAuthScreen extends ConsumerStatefulWidget {
-  const PersonalDetailsAuthScreen({super.key});
+  final Function goToNextScreen;
+  final Function goToPreviousScreen;
+
+  const PersonalDetailsAuthScreen({
+    super.key,
+    required this.goToNextScreen,
+    required this.goToPreviousScreen,
+  });
   @override
   PersonalDetailsAuthScreenState createState() => PersonalDetailsAuthScreenState();
 }
@@ -42,7 +45,7 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
   final key = GlobalKey<FormState>();
   var isloading = false;
 
-  void navigateTopage(SelectedSignupItems notify) {
+  void navigateTopage() {
     final isvalid = key.currentState?.validate();
     if (mobilenumbercontroller.text.trim() == "" || mobilenumbercontroller.text.length < 10) {
       setState(() {
@@ -76,7 +79,7 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
     if (isvalid!) {
       // if (kIsWeb) {
       // context.beamToNamed(AppRoutes.companyDetailsScreen);
-      ref.read(changeScreenIndex.notifier).update(2);
+      widget.goToNextScreen();
       // } else {
       //   Navigator.push(
       //     context,
@@ -245,7 +248,7 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
                               if (!isChecked) {
                                 FocusScope.of(context).requestFocus(whatsappNumberFocusNode);
                               } else {
-                                navigateTopage(notify);
+                                navigateTopage();
                               }
                             },
                             controller: mobilenumbercontroller,
@@ -284,7 +287,7 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
                               focusNode: whatsappNumberFocusNode,
                               onFieldSubmitted: (value) {
                                 if (!isChecked) {
-                                  navigateTopage(notify);
+                                  navigateTopage();
                                 }
                               },
                               controller: whatsupnumbercontroller,
@@ -331,7 +334,7 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
                                   letterSpacing: 0.5,
                                   fontWeight: FontWeight.w700,
                                   onPressed: () {
-                                    ref.read(changeScreenIndex.notifier).update(0);
+                                    widget.goToPreviousScreen();
                                   },
                                   width: 73,
                                   height: 39,
@@ -346,7 +349,9 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
                                   text: 'Next',
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: 1,
-                                  onPressed: () => navigateTopage(notify),
+                                  onPressed: () {
+                                    navigateTopage();
+                                  },
                                   width: 73,
                                   height: 39,
                                 ),

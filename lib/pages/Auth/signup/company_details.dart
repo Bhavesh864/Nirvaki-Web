@@ -1,34 +1,41 @@
-import 'dart:io';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:beamer/beamer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+
 import 'package:yes_broker/Customs/label_text_field.dart';
 import 'package:yes_broker/Customs/text_utility.dart';
 import 'package:yes_broker/constants/app_constant.dart';
 import 'package:yes_broker/constants/firebase/google_places_model.dart';
+import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/customs/responsive.dart';
 import 'package:yes_broker/customs/snackbar.dart';
-import 'package:yes_broker/pages/Auth/signup/sign_common_screen.dart';
-import 'package:yes_broker/riverpodstate/signup/sign_up_state.dart';
 import 'package:yes_broker/pages/Auth/signup/signup_screen.dart';
-import 'package:yes_broker/constants/validation/basic_validation.dart';
+import 'package:yes_broker/riverpodstate/signup/sign_up_state.dart';
 import 'package:yes_broker/screens/account_screens/profile_screen.dart';
+
 import '../../../Customs/custom_fields.dart';
 import '../../../constants/utils/constants.dart';
-import '../../../constants/utils/image_constants.dart';
 import '../../../customs/dropdown_field.dart';
 import '../../../widgets/auth/details_header.dart';
-import 'package:http/http.dart' as http;
-
 import 'country_code_modal.dart';
 
 class CompanyDetailsAuthScreen extends ConsumerStatefulWidget {
-  const CompanyDetailsAuthScreen({super.key});
+  final Function goToNextScreen;
+  final Function goToPreviousScreen;
+
+  const CompanyDetailsAuthScreen({
+    super.key,
+    required this.goToNextScreen,
+    required this.goToPreviousScreen,
+  });
   @override
   CompanyDetailsAuthScreenState createState() => CompanyDetailsAuthScreenState();
 }
@@ -472,7 +479,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                               letterSpacing: 0.5,
                               fontWeight: FontWeight.w700,
                               onPressed: () {
-                                ref.read(changeScreenIndex.notifier).update(1);
+                                widget.goToPreviousScreen();
                               },
                               width: 73,
                               height: 39,

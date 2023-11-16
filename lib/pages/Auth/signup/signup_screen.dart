@@ -1,30 +1,34 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:beamer/beamer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:yes_broker/Customs/snackbar.dart';
 
+import 'package:yes_broker/Customs/snackbar.dart';
+import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/responsive.dart';
-import 'package:yes_broker/pages/Auth/signup/personal_details.dart';
-import 'package:yes_broker/pages/Auth/signup/sign_common_screen.dart';
-
 import 'package:yes_broker/riverpodstate/signup/sign_up_state.dart';
-
-import 'package:yes_broker/constants/validation/basic_validation.dart';
 import 'package:yes_broker/routes/routes.dart';
 import 'package:yes_broker/widgets/auth/common_auth_widgets.dart';
-import '../../../customs/custom_text.dart';
+
 import '../../../constants/utils/colors.dart';
+import '../../../customs/custom_text.dart';
 
 final selectedItemForsignup = StateNotifierProvider<SelectedSignupItems, List<Map<String, dynamic>>>((ref) {
   return SelectedSignupItems();
 });
 
 class SignUpScreen extends ConsumerStatefulWidget {
-  const SignUpScreen({super.key});
+  final Function goToNextScreen;
+  final Function goToPreviousScreen;
+
+  const SignUpScreen({
+    super.key,
+    required this.goToNextScreen,
+    required this.goToPreviousScreen,
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -48,10 +52,6 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
       return "Password do not match";
     }
     return null;
-  }
-
-  void navigateTopage(SelectedSignupItems notify) async {
-    ref.read(changeScreenIndex.notifier).update(1);
   }
 
   Future<bool> checkIfEmailInUse(String emailAddress) async {
@@ -126,6 +126,9 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                       child: CustomTextInput(
                           focusnode: emailFocusNode,
                           controller: emailcontroller,
+                          onFieldFocusLost: () {
+                            key.currentState?.validate();
+                          },
                           labelText: 'Email address',
                           validator: validateEmail,
                           maxLength: 50,
@@ -142,6 +145,9 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                     CustomTextInput(
                       focusnode: passwordFocusNode,
                       controller: passwordcontroller,
+                      onFieldFocusLost: () {
+                        key.currentState?.validate();
+                      },
                       labelText: 'Password',
                       validator: validateSignupPassword,
                       obscureText: true,
@@ -159,6 +165,9 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                     ),
                     const SizedBox(height: 15),
                     CustomTextInput(
+                      onFieldFocusLost: () {
+                        key.currentState?.validate();
+                      },
                       focusnode: reEnteredpasswordFocusNode,
                       controller: reenteredpasswordcontroller,
                       labelText: 'Re-enter Password',
@@ -166,7 +175,9 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                       onChanged: (value) {
                         notify.add({"id": 2, "item": value.trim()});
                       },
-                      onFieldSubmitted: (_) async => await checkGoToNextScreen(context, notify),
+                      onFieldSubmitted: (_) async {
+                        await checkGoToNextScreen(context);
+                      },
                       maxLength: 30,
                       rightIcon: Icons.remove_red_eye,
                       validator: validateReenteredPassword,
@@ -180,7 +191,7 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                             child: CustomButton(
                               text: 'Sign up',
                               onPressed: () async {
-                                await checkGoToNextScreen(context, notify);
+                                await checkGoToNextScreen(context);
                               },
                               height: 40.0,
                             ),
@@ -222,14 +233,14 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
     );
   }
 
-  Future<void> checkGoToNextScreen(BuildContext context, SelectedSignupItems notify) async {
+  Future<void> checkGoToNextScreen(BuildContext context) async {
     final isvalid = key.currentState?.validate();
     if (isvalid!) {
       if (await checkIfEmailInUse(emailcontroller.text)) {
         // ignore: use_build_context_synchronously
         customSnackBar(context: context, text: "This email is already exists");
       } else {
-        navigateTopage(notify);
+        widget.goToNextScreen();
       }
     }
   }
