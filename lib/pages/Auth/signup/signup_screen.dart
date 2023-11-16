@@ -1,7 +1,10 @@
 import 'package:beamer/beamer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:yes_broker/Customs/snackbar.dart';
 
 import 'package:yes_broker/customs/custom_fields.dart';
 import 'package:yes_broker/customs/responsive.dart';
@@ -47,27 +50,56 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
     return null;
   }
 
-  void navigateTopage(SelectedSignupItems notify) {
-    final isvalid = key.currentState?.validate();
-    if (isvalid!) {
-      if (kIsWeb) {
-        context.beamToNamed(AppRoutes.personalDetailsScreen);
+  void navigateTopage(SelectedSignupItems notify) async {
+    // if (isvalid!) {
+    if (kIsWeb) {
+      context.beamToNamed(AppRoutes.personalDetailsScreen);
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return const PersonalDetailsAuthScreen();
+          },
+        ),
+      );
+      // }
+    }
+  }
+
+  Future<bool> checkIfEmailInUse(String emailAddress) async {
+    try {
+      final list = await FirebaseAuth.instance.fetchSignInMethodsForEmail(emailAddress);
+      if (list.isNotEmpty) {
+        return true;
       } else {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return const PersonalDetailsAuthScreen();
-            },
-          ),
-        );
+        return false;
       }
+    } catch (error) {
+      return true;
     }
   }
 
   final TextEditingController emailcontroller = TextEditingController();
   final TextEditingController passwordcontroller = TextEditingController();
   final TextEditingController reenteredpasswordcontroller = TextEditingController();
+
+  void setDataToTextField() {
+    final editUser = ref.read(selectedItemForsignup);
+    // if (isEdit) {
+    if (editUser.any((element) => element["id"] == 1)) {
+      emailcontroller.text = editUser.firstWhere((element) => element["id"] == 1)['item'] ?? "";
+    }
+    if (editUser.any((element) => element["id"] == 2)) {
+      reenteredpasswordcontroller.text = passwordcontroller.text = editUser.firstWhere((element) => element["id"] == 2)['item'] ?? "";
+    }
+  }
+
+  @override
+  void initState() {
+    setDataToTextField();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +190,7 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                             onChanged: (value) {
                               notify.add({"id": 2, "item": value.trim()});
                             },
-                            onFieldSubmitted: (_) => navigateTopage(notify),
+                            onFieldSubmitted: (_) async => await checkGoToNextScreen(context, notify),
                             maxLength: 30,
                             rightIcon: Icons.remove_red_eye,
                             validator: validateReenteredPassword,
@@ -171,7 +203,9 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                                   width: w,
                                   child: CustomButton(
                                     text: 'Sign up',
-                                    onPressed: () => navigateTopage(notify),
+                                    onPressed: () async {
+                                      await checkGoToNextScreen(context, notify);
+                                    },
                                     height: 40.0,
                                   ),
                                 ),
@@ -213,5 +247,17 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> checkGoToNextScreen(BuildContext context, SelectedSignupItems notify) async {
+    final isvalid = key.currentState?.validate();
+    if (isvalid!) {
+      if (await checkIfEmailInUse(emailcontroller.text)) {
+        // ignore: use_build_context_synchronously
+        customSnackBar(context: context, text: "This email is already exists");
+      } else {
+        navigateTopage(notify);
+      }
+    }
   }
 }

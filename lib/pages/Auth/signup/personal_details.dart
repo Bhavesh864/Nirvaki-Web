@@ -112,6 +112,43 @@ class PersonalDetailsAuthScreenState extends ConsumerState<PersonalDetailsAuthSc
     );
   }
 
+  void setDataToTextField() {
+    final editUser = ref.read(selectedItemForsignup);
+    // if (isEdit) {
+    if (editUser.any((element) => element["id"] == 3)) {
+      firstnamecontroller.text = editUser.firstWhere((element) => element["id"] == 3)['item'] ?? "";
+    }
+    if (editUser.any((element) => element["id"] == 4)) {
+      lastnamecontroller.text = editUser.firstWhere((element) => element["id"] == 4)['item'] ?? "";
+    }
+    if (editUser.any((element) => element["id"] == 5)) {
+      List<String>? splitString = editUser.firstWhere((element) => element["id"] == 5)["item"].split(' ');
+      if (splitString!.length == 1) {
+        mobilenumbercontroller.text = splitString[0];
+      }
+      if (splitString.length == 2) {
+        selectedCountryCode = splitString[0];
+        mobilenumbercontroller.text = splitString[1];
+      }
+    }
+    if (editUser.any((element) => element["id"] == 6)) {
+      List<String>? splitString = editUser.firstWhere((element) => element["id"] == 6)["item"].split(' ');
+      if (splitString!.length == 1) {
+        whatsupnumbercontroller.text = splitString[0];
+      }
+      if (splitString.length == 2) {
+        whatsappCountryCode = splitString[0];
+        whatsupnumbercontroller.text = splitString[1];
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    setDataToTextField();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final notify = ref.read(selectedItemForsignup.notifier);
