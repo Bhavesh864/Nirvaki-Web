@@ -81,6 +81,12 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
       reenteredpasswordcontroller.text = passwordcontroller.text = editUser.firstWhere((element) => element["id"] == 2)['item'] ?? "";
     }
   }
+// git remote add origin https://github.com/manishchayal14/broker_webappV1.git
+
+  // git remote set-url origin https://github.com/manishchayal14/broker_webappV1.git
+
+//    git remote remove origin
+// git remote add origin https://github.com/manishchayal14/broker_webappV1.git
 
   @override
   void initState() {
