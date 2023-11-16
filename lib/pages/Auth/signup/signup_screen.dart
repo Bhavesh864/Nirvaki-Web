@@ -34,6 +34,9 @@ class SignUpScreen extends ConsumerStatefulWidget {
 class SignUpScreenState extends ConsumerState<SignUpScreen> {
   final key = GlobalKey<FormState>();
   var isloading = false;
+  final FocusNode emailFocusNode = FocusNode();
+  final FocusNode passwordFocusNode = FocusNode();
+  final FocusNode reEnteredpasswordFocusNode = FocusNode();
 
   String? validateReenteredPassword(String? value) {
     if (value == null || value.trim().isEmpty) {
@@ -128,10 +131,14 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                           Container(
                             margin: const EdgeInsets.only(bottom: 5),
                             child: CustomTextInput(
+                                focusnode: emailFocusNode,
                                 controller: emailcontroller,
                                 labelText: 'Email address',
                                 validator: validateEmail,
                                 maxLength: 50,
+                                onFieldSubmitted: (_) {
+                                  FocusScope.of(context).requestFocus(passwordFocusNode);
+                                },
                                 onChanged: (value) {
                                   notify.add({"id": 1, "item": value.trim()});
                                 }),
@@ -140,11 +147,15 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                             height: 10,
                           ),
                           CustomTextInput(
+                            focusnode: passwordFocusNode,
                             controller: passwordcontroller,
                             labelText: 'Password',
                             validator: validateSignupPassword,
                             obscureText: true,
                             maxLength: 30,
+                            onFieldSubmitted: (value) {
+                              FocusScope.of(context).requestFocus(reEnteredpasswordFocusNode);
+                            },
                             // rightIcon: Icons.remove_red_eye,
                           ),
                           Container(
@@ -155,12 +166,14 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                           ),
                           const SizedBox(height: 15),
                           CustomTextInput(
+                            focusnode: reEnteredpasswordFocusNode,
                             controller: reenteredpasswordcontroller,
                             labelText: 'Re-enter Password',
                             obscureText: true,
                             onChanged: (value) {
                               notify.add({"id": 2, "item": value.trim()});
                             },
+                            onFieldSubmitted: (_) async => await checkGoToNextScreen(context, notify),
                             maxLength: 30,
                             rightIcon: Icons.remove_red_eye,
                             validator: validateReenteredPassword,
@@ -174,15 +187,7 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
                                   child: CustomButton(
                                     text: 'Sign up',
                                     onPressed: () async {
-                                      final isvalid = key.currentState?.validate();
-                                      if (isvalid!) {
-                                        if (await checkIfEmailInUse(emailcontroller.text)) {
-                                          // ignore: use_build_context_synchronously
-                                          customSnackBar(context: context, text: "This email is already exists");
-                                        } else {
-                                          navigateTopage(notify);
-                                        }
-                                      }
+                                      await checkGoToNextScreen(context, notify);
                                     },
                                     height: 40.0,
                                   ),
@@ -225,5 +230,17 @@ class SignUpScreenState extends ConsumerState<SignUpScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> checkGoToNextScreen(BuildContext context, SelectedSignupItems notify) async {
+    final isvalid = key.currentState?.validate();
+    if (isvalid!) {
+      if (await checkIfEmailInUse(emailcontroller.text)) {
+        // ignore: use_build_context_synchronously
+        customSnackBar(context: context, text: "This email is already exists");
+      } else {
+        navigateTopage(notify);
+      }
+    }
   }
 }

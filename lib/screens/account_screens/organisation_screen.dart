@@ -299,9 +299,33 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
   @override
   void initState() {
     super.initState();
-    uploadProfile.addListener(() => setState(() {
-          isPhotoUploading = false;
-        }));
+    uploadProfile.addListener(
+      () => setState(() {
+        isPhotoUploading = false;
+      }),
+    );
+  }
+
+  void updateOrganisationName(BrokerInfo broker) {
+    if (formKey.currentState!.validate()) {
+      updateBrokerInfo(
+              brokerId: broker.brokerid,
+              role: broker.role,
+              companyName: removeExtraSpaces(companyNameController.text.trim()),
+              mobile: broker.brokercompanynumber,
+              whatsapp: broker.brokercompanywhatsapp,
+              email: broker.brokercompanyemail,
+              image: uploadProfile.value != '' ? uploadProfile.value : broker.brokerlogo,
+              companyAddress: broker.brokercompanyaddress)
+          .then(
+        (value) => {
+          cancelEditingFullName(),
+          profilePhoto = null,
+          webProfile = null,
+          uploadProfile.value = '',
+        },
+      );
+    }
   }
 
   @override
@@ -385,9 +409,12 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                                     : 180,
                             child: CustomTextInput(
                               controller: companyNameController,
-                              onFieldSubmitted: (newValue) {},
+                              onFieldSubmitted: (value) => updateOrganisationName(broker),
                               maxLength: 100,
-                              validator: (value) => validateForNameField(props: "Organization Name", value: value!.trim()),
+                              validator: (value) => validateForOraganizationNameField(
+                                props: "Organization Name",
+                                value: value!.trim(),
+                              ),
                             ),
                             // child: buildInfoFields('Organization Name', broker.companyname!, isNameEditing, companyNameController, context,
                             //     (value) => validateForNameField(props: "Organization Name", value: value?.trim()),
@@ -447,23 +474,7 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                       // if (Responsive.isMobile(context)) ...[
                       InkWell(
                         onTap: () {
-                          if (formKey.currentState!.validate()) {
-                            updateBrokerInfo(
-                                    brokerId: broker.brokerid,
-                                    role: broker.role,
-                                    companyName: removeExtraSpaces(companyNameController.text.trim()),
-                                    mobile: broker.brokercompanynumber,
-                                    whatsapp: broker.brokercompanywhatsapp,
-                                    email: broker.brokercompanyemail,
-                                    image: uploadProfile.value != '' ? uploadProfile.value : broker.brokerlogo,
-                                    companyAddress: broker.brokercompanyaddress)
-                                .then((value) => {
-                                      cancelEditingFullName(),
-                                      profilePhoto = null,
-                                      webProfile = null,
-                                      uploadProfile.value = '',
-                                    });
-                          }
+                          updateOrganisationName(broker);
                         },
                         child: const Padding(
                           padding: EdgeInsets.all(5),
@@ -630,7 +641,8 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                         child: Table(
                           children: [
                             TableRow(children: [
-                              buildInfoFields('Email address', broker.brokercompanyemail!, isPersonalDetailsEditing, emailController, context, validateEmail, maxLength: 50),
+                              buildInfoFields('Email address', broker.brokercompanyemail!, isPersonalDetailsEditing, emailController, context, validateEmail,
+                                  maxLength: 50),
                               // buildInfoFields('Phone ', broker.brokercompanynumber!, isPersonalDetailsEditing, phoneController, context),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -730,7 +742,8 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                                     try {
                                       List<String> words = str.split(' ');
                                       if (words.length > 3) {
-                                        String lastThreeWords = words.contains("India") ? words.sublist(words.length - 3).join(' ') : words.sublist(words.length - 2).join(' ');
+                                        String lastThreeWords =
+                                            words.contains("India") ? words.sublist(words.length - 3).join(' ') : words.sublist(words.length - 2).join(' ');
                                         String remainingWords =
                                             words.contains("India") ? words.sublist(0, words.length - 3).join(' ') : words.sublist(0, words.length - 2).join(' ');
                                         if (remainingWords.endsWith(',')) {
@@ -751,8 +764,10 @@ class _CustomCompanyDetailsCard extends ConsumerState<CustomCompanyDetailsCard> 
                                         }
                                         address1Controller.text = remainingWords;
                                         address2Controller.text = lastThreeWords;
-                                        final cityName = lastThreeWordsList[0].endsWith(',') ? lastThreeWordsList[0].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[0];
-                                        final stateName = lastThreeWordsList[1].endsWith(',') ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[1];
+                                        final cityName =
+                                            lastThreeWordsList[0].endsWith(',') ? lastThreeWordsList[0].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[0];
+                                        final stateName =
+                                            lastThreeWordsList[1].endsWith(',') ? lastThreeWordsList[1].replaceFirst(RegExp(r',\s*$'), '') : lastThreeWordsList[1];
                                         cityController.text = cityName;
                                         stateController.text = stateName;
                                         setState(() {

@@ -56,6 +56,18 @@ String? validateForNameField({required String? value, required String? props}) {
   return null;
 }
 
+String? validateForOraganizationNameField({required String? value, required String? props}) {
+  final RegExp nameRegExp = RegExp(r'^[a-zA-Z0-9\s]+$');
+
+  if (value == null || value.isEmpty) {
+    return 'Please enter your $props';
+  }
+  if (!nameRegExp.hasMatch(value)) {
+    return 'Invalid $props';
+  }
+  return null;
+}
+
 String removeExtraSpaces(String input) {
   List<String> words = input.split(' ').where((word) => word.isNotEmpty).toList();
   String output = words.join(' ');

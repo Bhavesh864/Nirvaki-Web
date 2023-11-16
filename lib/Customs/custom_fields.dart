@@ -115,6 +115,7 @@ class CustomTextInputState extends State<CustomTextInput> {
         controller: widget.controller,
         decoration: InputDecoration(
           isDense: widget.isDense,
+
           disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(
