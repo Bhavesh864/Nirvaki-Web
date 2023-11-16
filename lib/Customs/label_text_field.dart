@@ -28,6 +28,7 @@ class LabelTextInputField extends StatelessWidget {
   final int? maxLength;
   final void Function()? onEditingComplete;
   final void Function(String)? onFieldSubmitted;
+  final Function? onTap;
 
   const LabelTextInputField({
     Key? key,
@@ -52,6 +53,7 @@ class LabelTextInputField extends StatelessWidget {
     this.maxLength,
     this.onEditingComplete,
     this.onFieldSubmitted,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -90,15 +92,18 @@ class LabelTextInputField extends StatelessWidget {
             ),
           ),
           CustomTextInput(
+            ontap: () {
+              onTap!();
+            },
             onFieldSubmitted: onFieldSubmitted,
             onlyDigits: onlyDigits,
             margin: margin,
             focusnode: focusNode,
-            enabled: isDropDown
-                ? false
-                : isDatePicker
-                    ? false
-                    : true,
+            // enabled: isDropDown
+            //     ? false
+            //     : isDatePicker
+            //         ? false
+            //         : true,
             rightIcon: isDropDown
                 ? Icons.arrow_drop_down_sharp
                 : isDatePicker

@@ -235,7 +235,8 @@ class _CustomButtonState extends State<CustomButton> {
   bool isPressed = false;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
+      borderRadius: BorderRadius.circular(8),
       onTapDown: (_) {
         setState(() {
           isPressed = true;

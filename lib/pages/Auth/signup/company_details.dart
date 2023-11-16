@@ -37,6 +37,11 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
   final key = GlobalKey<FormState>();
   var isloading = false;
   TextEditingController controller = TextEditingController();
+  final FocusNode companyNameFocusNode = FocusNode();
+  final FocusNode logoFocusNode = FocusNode();
+  final FocusNode mobileNumberFocusNode = FocusNode();
+  final FocusNode whatsappNumberFocusNode = FocusNode();
+  final FocusNode locationFocusNode = FocusNode();
 
   void submitSignupForm(SelectedSignupItems notify) {
     final isvalid = key.currentState?.validate();
@@ -215,16 +220,27 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                 // ),
                                 LabelTextInputField(
                                   // margin: const EdgeInsets.all(7),
+                                  focusNode: companyNameFocusNode,
                                   labelText: 'Company Name',
                                   isMandatory: true,
                                   maxLength: 100,
                                   inputController: companynamecontroller,
                                   validator: (value) => validateForNormalFeild(value: value, props: "Company Name"),
+                                  onFieldSubmitted: (value) => FocusScope.of(context).requestFocus(logoFocusNode),
                                   onChanged: (value) {
                                     notify.add({"id": 7, "item": value.trim()});
                                   },
                                 ),
-                                GestureDetector(
+                                LabelTextInputField(
+                                  focusNode: logoFocusNode,
+                                  inputController: uploadLogocontroller,
+                                  validator: (value) => validateLogoField(value: value, props: 'company logo'),
+                                  onFieldSubmitted: (value) => FocusScope.of(context).requestFocus(mobileNumberFocusNode),
+                                  isMandatory: true,
+                                  readyOnly: true,
+                                  labelText: "Upload Logo",
+                                  rightIcon: Icons.publish,
+                                  isDatePicker: true,
                                   onTap: () {
                                     selectImage().then((value) => {
                                           if (!value.contains('Image size'))
@@ -240,14 +256,6 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                             {customSnackBar(context: context, text: value.toString())}
                                         });
                                   },
-                                  child: LabelTextInputField(
-                                    inputController: uploadLogocontroller,
-                                    isMandatory: true,
-                                    readyOnly: true,
-                                    labelText: "Upload Logo",
-                                    rightIcon: Icons.publish,
-                                    isDatePicker: true,
-                                  ),
                                 ),
                                 // CustomTextInput(
                                 //   margin: const EdgeInsets.all(7),
@@ -261,8 +269,16 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                 // ),
                                 MobileNumberInputField(
                                   fromProfile: true,
+                                  focusNode: mobileNumberFocusNode,
                                   fontsize: 14,
                                   controller: mobilenumbercontroller,
+                                  onFieldSubmitted: (value) {
+                                    if (!isChecked) {
+                                      FocusScope.of(context).requestFocus(whatsappNumberFocusNode);
+                                    } else {
+                                      FocusScope.of(context).requestFocus(locationFocusNode);
+                                    }
+                                  },
                                   hintText: 'Mobile Number',
                                   isEmpty: isMobileEmpty,
                                   openModal: () => openModal(true),
@@ -301,10 +317,14 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                 if (!isChecked)
                                   MobileNumberInputField(
                                     // margin: const EdgeInsets.all(7),
+                                    focusNode: whatsappNumberFocusNode,
                                     fromProfile: true,
                                     hintText: 'Whatsapp Number',
                                     isMandatory: true,
                                     openModal: () => openModal(false),
+                                    onFieldSubmitted: (value) {
+                                      FocusScope.of(context).requestFocus(locationFocusNode);
+                                    },
                                     countryCode: selectedCountryCode,
                                     controller: whatsupnumbercontroller,
                                     onChange: (value) {
@@ -326,6 +346,7 @@ class CompanyDetailsAuthScreenState extends ConsumerState<CompanyDetailsAuthScre
                                   ),
                                 LabelTextInputField(
                                   labelText: 'Search your location',
+                                  focusNode: locationFocusNode,
                                   // margin: const EdgeInsets.all(7),
                                   inputController: statecontroller,
                                   isMandatory: true,
